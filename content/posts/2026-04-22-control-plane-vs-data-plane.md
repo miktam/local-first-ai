@@ -61,4 +61,4 @@ However, the true danger—the "Thinking Tax" that can melt a system—is reveal
 
 ---
 **Evidence Reference:** 
-[Link to tasks/chronos/scientific_log.md - Experiment 002 Implementation]
+[Experiment 002 Implementation](https://github.com/miktam/local-first-ai/blob/main/tasks/chronos/scientific_log.md#experiment-002---managing-the-ai-thinking-tax-control-plane-vs-data-plane)

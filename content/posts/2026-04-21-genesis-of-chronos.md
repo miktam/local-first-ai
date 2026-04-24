@@ -31,4 +31,4 @@ This is not a blog of opinions. It is a log of observations.
 
 ---
 **Evidence Reference:** 
-[Link to tasks/chronos/scientific_log.md - Experiment 001 Activation]
+[Experiment 001 Activation](https://github.com/miktam/local-first-ai/blob/main/tasks/chronos/scientific_log.md#experiment-001---the-verification-of-veracity-activation)
