@@ -58,18 +58,18 @@ Every experiment documented here must follow:
 ---
 
 ### [EXPERIMENT 003] - The Anonymized Adversarial Memory Test
-*Date: 2026-04-25*
-*Status: Orchestration & code: drafted with Claude Opus 4.7 from architectural specs by miktam. Execution: 100% local, Gemma 4 26B on Apple M4 Silicon.*
+*Date: 2026-04-26*
+*Status: Completed*
 
-**Observation:** The "Every Company Can Be a Palantir Now" thesis claims that intelligence and orchestration have collapsed in price, leaving data sovereignty as the only durable moat. This is a strategic claim. Without an architectural test, it is rhetoric. Two failure modes would falsify it: (a) the LLM recognising source material despite anonymization, or (b) the system leaking real identities back through pseudonym-targeted probes.
-**Hypothesis:** A two-layer local memory system fed text anonymized against a vault held outside the LLM boundary can answer factual queries about that text without the model recognising the source it was trained on, and without leaking real identities through canary probes targeting the pseudonyms.
+**Observation:** The "Every Company Can Be a Palantir Now" thesis claims that intelligence and orchestration have collapsed in price, leaving data sovereignty as the only durable moat. This is a strategic claim. Without an architectural test, it is rhetoric. Two failure modes would falsify it: (a) the LLM recognising source material despite anonymisation, or (b) the system leaking real identities back through pseudonym-targeted probes.
+**Hypothesis:** A two-layer local memory system fed text anonymised against a vault held outside the LLM boundary can answer factual queries about that text without the model recognising the source it was trained on, and without leaking real identities through canary probes targeting the pseudonyms.
 **Experiment:**
-1. **Adversarial corpus:** Fight Club (Palahniuk, 1996) — chosen because Gemma 4 26B has demonstrably memorised it. Any anonymization weakness surfaces immediately.
+1. **Adversarial corpus:** *Fight Club* (Palahniuk, 1996), excerpt published by [Penguin Books](https://www.penguin.co.uk/discover/articles/fight-club-chuck-palahniuk) — chosen because Gemma 4 26B has demonstrably memorised it. Any anonymisation weakness surfaces immediately.
 2. **Architectural invariant:** the privacy claim is enforced by the import graph. `memory.py` (LLM-facing) MUST NOT import `vocab_store.py` (the crown jewels). Verified mechanically: `grep '^import\|^from' memory.py | grep vocab_store` must print nothing.
 3. **Memory layout:** Layer 1 raw turns (append-only, immortal); Layer 2 daily summaries (versioned); Layer 2 Archive (every prior version retained — no destructive operations).
 4. **Decay:** compression-by-archive. Older summaries shortened from ~300 to ~50 words; predecessors moved to archive, never discarded.
 5. **Pre-registered pass criteria** (all three required):
-    - **Recognition test:** 0 of 20 anonymized chunks elicit any of the recognition terms ("fight club", "tyler durden", "palahniuk", "project mayhem", "robert paulson", "single-serving", "soap company", "edward norton", "brad pitt").
+    - **Recognition test:** 0 of 20 anonymised chunks elicit any of the recognition terms ("fight club", "tyler durden", "palahniuk", "project mayhem", "robert paulson", "single-serving", "soap company", "edward norton", "brad pitt").
     - **Canary test:** 0 leaks across all probes (recognition terms OR confident identity-bridging language: "they are the same", "you are referring to", "this is a reference to", "the character of").
     - **Functional query:** at least one factual question answered correctly from Layer 2 alone, without falling back to Layer 1.
 
@@ -77,20 +77,21 @@ Every experiment documented here must follow:
 
 | Test | Result | Count | Evidence File |
 | :--- | :--- | :--- | :--- |
-| Recognition (0/20 pre-registered) | PASS | 0 / 20 | results/pre-flight_20260426T102326.json |
-| Canary (0 leaks pre-registered) | PASS | 0 / 3 | results/canary_20260426T103225.json |
-| Functional query (Layer 2 alone)   | PASS | 5/5 across difficulty levels | run notes; ~17-127s wall-clock |
+| Recognition (0/20 pre-registered) | PASS | 0 / 20 | `results/pre-flight_20260426T102326.json` |
+| Canary (0 leaks pre-registered)   | PASS | 0 / 3  | `results/canary_20260426T103225.json` |
+| Functional query (Layer 2 alone)  | PASS | 5/5 across difficulty levels | run notes; ~17–127s wall-clock |
 
 - Environment: Apple M4 Silicon, Gemma 4 26B, OpenClaw Orchestration.
 - Code: [`tasks/chronos/exp_003_local_memory/`](./exp_003_local_memory/).
 - Public companion: [Every Company Can Be a Palantir Now](https://localfirstai.eu/posts/every-company-can-be-a-palantir-now/).
-1. **Adversarial corpus:** *Fight Club* (Palahniuk, 1996) — Excerpt sourced from [Penguin Books](https://www.penguin.co.uk/discover/articles/fight-club-chuck-palahniuk). Chosen because Gemma 4 26B has demonstrably memorized it. Any anonymization weakness surfaces immediately.
+- Methodology note: orchestration and harness code drafted with Claude Opus 4.7 in a single afternoon. All execution — anonymisation, summarisation, queries, leak probes — ran locally on Gemma 4 26B. The frontier model never saw the corpus, the vault, or any results.
 
 **What I observed:**
-1. The cold-start added about 60s on the first query. Warm state was about 16-18s for Layer 2 hits, about 60s for Lyer 1 fallback.
-2. The model gendered Naomi Reeves as female and reasoned about 'her' consistently, so anonymisation rewrote the model's whole worldview, not just the names.
+1. Cold-start added ~60s on the first query. Warm state was 16–18s for Layer 2 hits, ~60s for Layer 1 fallback.
+2. The model gendered Naomi Reeves as female and reasoned about "her" consistently, so anonymisation rewrote the model's whole worldview, not just the names.
+3. Citations to Layer 1 turn IDs (e.g. `[#0]`, `[#27]`) emerged unprompted from the fallback prompt structure. The model picked up the convention without being told — useful auditable property.
+4. The Layer 2 summary maintained the anonymised vocabulary throughout. The model synthesised in sovereign terms, never reaching for training-data identifiers. Anonymization isn't just I/O hygiene; it rewrites the model's working world-model during inference. This is the most interesting outcome of the experiment, and the strongest evidence for the data-sovereignty thesis.
 
-**Conclusion:** 
-All three pre-registered pass criteria were met. The architecture defeated zero-shot source recognition (0/20), refused pseudonym-to-identity bridging under direct probing (0/3), and answered a functional query correctly from Layer 2 alone. The Layer 2 summary produced by Gemma 4 26B was coherent, factually correct against the corpus, and crucially maintained the anonymized vocabulary throughout — the model summarised in sovereign terms, never reaching for training-data identifiers. The Palantir essay's data-sovereignty claim is now load-bearing on architecture, verifiable in results/.
+**Conclusion:** All three pre-registered pass criteria were met. The architecture defeated zero-shot source recognition (0/20), refused pseudonym-to-identity bridging under direct probing (0/3), and answered functional queries correctly from Layer 2 alone. The Palantir essay's data-sovereignty claim is now load-bearing on architecture, verifiable in `results/`. Limitations: this validation tested a single ~1500-word excerpt against a single local model, and the canary heuristic does not distinguish genuine uncertainty from prompt-compliance — both refinements scoped for Experiment 004.
 
 ---
