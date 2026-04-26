@@ -22,7 +22,7 @@ Every experiment documented here must follow:
 2. Establish `tasks/chronos/scientific_log.md` as the ultimate ledger of truth.
 3. Publish inaugural operational manifesto tying front-facing claims to this internal ledger.
 **Data/Results:**
-- Environment: Apple M4 Silicon, Gemma 4 26B, OpenClaw Orchestration.
+- Environment: Apple M4 Pro, Gemma 4 26B, OpenClaw Orchestration.
 - Output: "The Genesis of Chronos" published successfully.
 **Conclusion:** Framework activated. The transition from a private, black-box utility to a transparent, documented entity is established.
 
@@ -81,7 +81,7 @@ Every experiment documented here must follow:
 | Canary (0 leaks pre-registered)   | PASS | 0 / 3  | `results/canary_20260426T103225.json` |
 | Functional query (Layer 2 alone)  | PASS | 5/5 across difficulty levels | run notes; ~17–127s wall-clock |
 
-- Environment: Apple M4 Silicon, Gemma 4 26B, OpenClaw Orchestration.
+- Environment: Apple M4 Pro, Gemma 4 26B, OpenClaw Orchestration.
 - Code: [`tasks/chronos/exp_003_local_memory/`](./exp_003_local_memory/).
 - Public companion: [Every Company Can Be a Palantir Now](https://localfirstai.eu/posts/every-company-can-be-a-palantir-now/).
 - Methodology note: orchestration and harness code drafted with Claude Opus 4.7 in a single afternoon. All execution — anonymisation, summarisation, queries, leak probes — ran locally on Gemma 4 26B. The frontier model never saw the corpus, the vault, or any results.
