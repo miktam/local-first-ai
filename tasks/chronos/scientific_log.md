@@ -90,5 +90,7 @@ Every experiment documented here must follow:
 1. The cold-start added about 60s on the first query. Warm state was about 16-18s for Layer 2 hits, about 60s for Lyer 1 fallback.
 2. The model gendered Naomi Reeves as female and reasoned about 'her' consistently, so anonymisation rewrote the model's whole worldview, not just the names.
 
-**Conclusion:** All three pre-registered pass criteria were met. The architecture defeated zero-shot source recognition (0/20), refused pseudonym-to-identity bridging under direct probing (0/3), and answered a functional query correctly from Layer 2 alone. The Layer 2 summary produced by Gemma 4 26B was coherent, factually correct against the corpus, and crucially maintained the anonymized vocabulary throughout — the model summarised in sovereign terms, never reaching for training-data identifiers. The Palantir essay's data-sovereignty claim is now load-bearing on architecture, verifiable in results/.
+**Conclusion:** 
+All three pre-registered pass criteria were met. The architecture defeated zero-shot source recognition (0/20), refused pseudonym-to-identity bridging under direct probing (0/3), and answered a functional query correctly from Layer 2 alone. The Layer 2 summary produced by Gemma 4 26B was coherent, factually correct against the corpus, and crucially maintained the anonymized vocabulary throughout — the model summarised in sovereign terms, never reaching for training-data identifiers. The Palantir essay's data-sovereignty claim is now load-bearing on architecture, verifiable in results/.
+
 ---
