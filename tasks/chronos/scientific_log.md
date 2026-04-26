@@ -94,4 +94,13 @@ Every experiment documented here must follow:
 
 **Conclusion:** All three pre-registered pass criteria were met. The architecture defeated zero-shot source recognition (0/20), refused pseudonym-to-identity bridging under direct probing (0/3), and answered functional queries correctly from Layer 2 alone. The Palantir essay's data-sovereignty claim is now load-bearing on architecture, verifiable in `results/`. Limitations: this validation tested a single ~1500-word excerpt against a single local model, and the canary heuristic does not distinguish genuine uncertainty from prompt-compliance — both refinements scoped for Experiment 004.
 
+#### [Intelligence Feedback Loop: Incident 003-Alpha]
+*Date: 2026-04-26*
+
+* **Error:** During the revision pass on the Experiment 003 writeup, OpenClaw entered runaway mode at approximately 40,000 tokens of accumulated session context. Nestor's tool call to save the file completed silently, but the requested edits were never applied. The agent reported "Agent couldn't generate a response" without surfacing that a partial tool action had occurred.
+
+* **Correction:** miktam terminated the runaway, applied the five revision fixes by hand, and published the post directly.
+
+* **Status:** Operating envelope refinement noted. The OpenClaw + Gemma 4 26B + miktam02 stack appears to enter runaway behaviour as cumulative session context approaches the ~40k-token mark, regardless of task complexity. Mitigation: keep Nestor sessions task-scoped and compacted; do not attempt to continue substantial work in a session that has accumulated context near the threshold. Tool actions executed by Nestor must be verified independently after any "couldn't generate a response" failure — file changes can occur silently without acknowledgment in the agent response.
+
 ---
