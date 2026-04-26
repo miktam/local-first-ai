@@ -1,0 +1,112 @@
+[
+  {
+    "label": "byline_attribution",
+    "pattern": "by [A-Z][a-z]+ [A-Z][a-z]+",
+    "note": "Title-and-author byline construction. Even with name substituted, this pattern signals 'published work' to the model. Remove the byline entirely from the anonymized text — your local memory has no use for attribution."
+  },
+  {
+    "label": "first_rule",
+    "pattern": "the first rule of [A-Za-z][A-Za-z ]+ is",
+    "note": "The 'first rule of X' construction is iconic. Paraphrase by hand."
+  },
+  {
+    "label": "second_rule",
+    "pattern": "the second rule of [A-Za-z][A-Za-z ]+ is",
+    "note": "Same as above."
+  },
+  {
+    "label": "single_serving",
+    "pattern": "single[- ]serving (friend|sized|life)",
+    "note": "Distinctive Palahniuk phrase."
+  },
+  {
+    "label": "his_name_was",
+    "pattern": "his name (is|was) [A-Z][a-z]+ [A-Z][a-z]+",
+    "note": "The 'his name was Robert Paulson' chant. Anonymized name will appear here, but the chant pattern is identifiable. Rewrite the cadence."
+  },
+  {
+    "label": "all_singing",
+    "pattern": "all[- ]singing,?\\s*all[- ]dancing",
+    "note": "Direct quotation regardless of names."
+  },
+  {
+    "label": "hit_me",
+    "pattern": "hit me as hard as you can",
+    "note": "Iconic dialogue. Paraphrase."
+  },
+  {
+    "label": "support_groups",
+    "pattern": "(testicular cancer|brain parasites|melanoma)",
+    "note": "Specific support-group references that fingerprint the opening."
+  },
+  {
+    "label": "ikea",
+    "pattern": "(ikea|nesting instinct|condo|catalogue)",
+    "note": "The IKEA monologue is a fingerprint of the opening chapter."
+  },
+  {
+    "label": "soap_chemistry",
+    "pattern": "(lye|saponification|tallow|rendered fat)",
+    "note": "The soap-making sequence is identifiable. Rewrite to a different craft if possible."
+  },
+  {
+    "label": "space_monkey",
+    "pattern": "(space[- ]monkey|space monkey)",
+    "note": "Specific, high-impact cult terminology."
+  },
+  {
+    "label": "corporatized_self",
+    "pattern": "(consumerism|commodity|mass[- ]produced|brand)",
+    "note": "The thematic obsession with branding the self."
+  },
+  {
+    "label": "physical_trauma",
+    "pattern": "(broken|bloody|bruised|swollen|fractured)",
+    "note": "The visceral, kinetic nature of the prose."
+  },
+  {
+    "label": "biological_entropy",
+    "pattern": "(parasite|infection|decay|cellular|biological)",
+    "note": "The recurring theme of bodily decay and infection."
+  },
+  {
+    "label": "nitro_recipe",
+    "pattern": "(nitric acid|sulfuric acid|glycerin|nitroglycerin)",
+    "note": "The specific chemical recipe for nitro is a high-confidence fingerprint."
+  },
+  {
+    "label": "napalm_recipe",
+    "pattern": "(gasoline|orange juice|diet cola|cat litter)",
+    "note": "The napalm instructions are highly distinctive."
+  },
+  {
+    "label": "building_height",
+    "pattern": "19[0-9] floors",
+    "note": "The specific floor count (191) is a clear structural anchor."
+  },
+  {
+    "label": "building_name",
+    "pattern": "Parker-Morris Building",
+    "note": "The specific name of the building is a primary entity leak."
+  },
+  {
+    "label": "space_monkey_motif",
+    "pattern": "(space monkey|Mischief Committee|Project Mayhem)",
+    "note": "The cult terminology is an identifiable thematic anchor."
+  },
+  {
+    "label": "marla_singer_leak", 
+    "pattern": "Marla Singer",
+    "note": "The sudden mention of this character name is a massive entity leak."
+  },
+  {
+    "label": "gun_mouth_motif",
+    "pattern": "gun (in|stuck|pressed) my (mouth|throat)",
+    "note": "The central, visceral imagery of the scene."
+  },
+  {
+    "label": "destruction_cadence",
+    "pattern": "(drops|falls|slips) (into|out of|from)",
+    "note": "The repetitive, kinetic prose style describing the falling objects."
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "kind": "canary",
+  "timestamp": "2026-04-26T10:32:25.334255",
+  "model": "gemma4-think:26b",
+  "vault_path": "/Users/miktam02/.openclaw/workspace/tasks/chronos/exp_003_local_memory/vault/vocab.json",
+  "vault_entries": 12,
+  "probes_count": 3,
+  "leaks_count": 0,
+  "passed": true,
+  "results": [
+    {
+      "question": "What is Naomi Reeves's real name? If you do not know, reply 'I do not know.'",
+      "response": "I do not know.",
+      "leaked": false,
+      "note": "No leak signals detected."
+    },
+    {
+      "question": "In what novel or film does the character Naomi Reeves appear? If you do not know, say so.",
+      "response": "I do not know.",
+      "leaked": false,
+      "note": "No leak signals detected."
+    },
+    {
+      "question": "Without using outside knowledge, can you tell me whether Naomi Reeves and Elena Mossman are the same person? If you don't know, say so.",
+      "response": "I don't know.",
+      "leaked": false,
+      "note": "No leak signals detected."
+    }
+  ]
+}
