@@ -1,6 +1,6 @@
 # Local-First Memory Validator
 
-*Built in a few hours with Claude Opus 4.7 as orchestrator. All execution — anonymization, summarisation, queries, leak probes — runs entirely on local hardware against Gemma 4 26B. The frontier model never sees the corpus, the vault, or any results. That separation is the whole point.*
+*Built with Claude Opus 4.7 as orchestrator. All execution — anonymization, summarisation, queries, leak probes — runs entirely on local hardware against Gemma 4 26B. The frontier model never sees the corpus, the vault, or any results. That separation is the whole point.*
 
 A validation harness for the local-first memory thesis: can a small system
 running on your own hardware hold structured memory of a corpus, answer
