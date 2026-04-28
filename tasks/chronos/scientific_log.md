@@ -103,4 +103,110 @@ Every experiment documented here must follow:
 
 * **Status:** Operating envelope refinement noted. The OpenClaw + Gemma 4 26B + miktam02 stack appears to enter runaway behaviour as cumulative session context approaches the ~40k-token mark, regardless of task complexity. Mitigation: keep Nestor sessions task-scoped and compacted; do not attempt to continue substantial work in a session that has accumulated context near the threshold. Tool actions executed by Nestor must be verified independently after any "couldn't generate a response" failure — file changes can occur silently without acknowledgment in the agent response.
 
+Update: Incident 003-Alpha
+Date: 2026-04-27
+Revised analysis: The "~40k-token operating envelope" framing in the
+2026-04-26 entry was premature. Gemma 4 26B-A4B has a 256K context
+window and ~3.8B active parameters per forward pass; at 40k tokens
+the KV cache is on the order of ~1 GiB on a machine with ~48 GiB
+GPU-addressable memory. There is no plausible memory cliff at that
+point on miktam02. The runaway is more likely an interaction between
+recent Ollama bugs in the Gemma 4 path and OpenClaw's context
+negotiation, not a property of the hardware envelope.
+
+Hypotheses under test:
+  H1: OLLAMA_FLASH_ATTENTION=1 induces silent GPU→CPU fallback during
+      long-context prompt evaluation on gemma4:26b.
+      Upstream: ollama#15237, ollama#15368.
+  H2: gemma4:26b (MoE) returns empty content with done_reason "stop"
+      on long prompts, which OpenClaw surfaces as "Agent couldn't
+      generate a response."
+      Upstream: ollama#15428.
+  H3: Ollama loads gemma4:26b with a num_ctx smaller than what
+      OpenClaw advertises in its TUI; the runaway is the symptom of
+      crossing the actually-loaded context, not the displayed one.
+  H4: OpenClaw caps or mis-reports input tokens passed to Ollama
+      regardless of configured contextWindow.
+      Upstream pattern: openclaw#27278, openclaw#24068.
+
+Test plan: each hypothesis preregistered (claim, prediction,
+falsification criterion, discrimination from neighbours) before its
+script runs. Evidence captured to append-only timestamped directories
+under incident-003-alpha/evidence/. Scripts committed to the Chronos
+repository.
+
+Precautionary mitigation in effect until tests resolve:
+OLLAMA_FLASH_ATTENTION=0 set in launchctl; Nestor sessions remain
+task-scoped; tool actions verified independently after any generation
+failure.
+
+Status: Open. Results appended as each hypothesis resolves.
+Update: Incident 003-Alpha — investigation findings (2026-04-28)
+Run: incident-003-alpha/results/
+
+H1 (FA-induced CPU fallback): Effectively rejected. The original
+  framing — "compute that should be on GPU running on CPU" — was
+  not borne out. Ollama server log /opt/homebrew/var/log/ollama.log
+  shows no fallback messages, no backend errors, and the model
+  loaded with all 31 layers GPU-resident throughout. Powermetrics
+  during a 40k-token prompt eval showed GPU at 6–19 W (active work)
+  with CPU at 25–30 W simultaneously. Both processors were engaged;
+  the GPU was not idle. The "994% CPU" observed during 003-Alpha
+  reflects llama.cpp's host-side orchestration concurrent with GPU
+  compute, not a CPU substitution.
+
+H2 (MoE empty content, narrow form): Rejected at small scale (≤5000
+  chars system prompt) on Ollama 0.20.2. Both gemma4:26b and
+  gemma4:31b returned non-empty content across all repeats. Upstream
+  issue #15428's specific manifestation does not reproduce here.
+
+H3 (num_ctx negotiation drift): Rejected. /api/show and /api/ps
+  both report context_length=262144 for gemma4:26b on default load,
+  131072 for gemma4-think:26b (the production alias). OpenClaw's
+  "X/131k" TUI display is conservative relative to what Ollama
+  loaded, not optimistic.
+
+H4 (OpenClaw input token cap): Test could not run; jq filter did
+  not match the session JSONL schema in the installed OpenClaw
+  version. Sample preserved; deferred until schema is identified.
+
+H5 (thinking-mode regression at long context): Rejected at small
+  scale (sanity check: think:false produced empty thinking field).
+  At incident scale (~40k tokens, 280k chars), all three repeats
+  hit the 600s curl timeout with zero bytes received. Prior to the
+  cache-defeating patch, a single 23k-token prompt completed in
+  289s with empty thinking — so the thinking regression is not the
+  cause; the timeouts at 40k are explained by quadratic prefill
+  scaling (see below).
+
+Revised understanding of 003-Alpha:
+  Transformer prefill is O(N²) in input length. From observed data:
+  23k tokens → 289s (12.6 ms/token amortised). Extrapolating to the
+  incident-scale prompts produced by Nestor's accumulated session
+  context (40–65k tokens of on-the-wire prompt after system prompt,
+  tool schemas, and message history), expected prefill is 14–34
+  minutes. This brackets the 17–43 minute durations observed in the
+  original 003-Alpha incident.
+
+  The "runaway" is not a runaway. It is normal Gemma 4 26B-A4B
+  prefill performance on Apple Silicon at long context. The
+  operating envelope is a *performance* envelope, not a *bug*
+  envelope. Ollama, the model, and the GPU are working correctly;
+  the work is just expensive.
+
+H6 (prefill scaling): Opened. Sweep at 15k / 25k / 35k tokens with
+  fresh Ollama restart between points and stream:true to distinguish
+  slow-but-progressing from stuck. Confirms or refutes the O(N²)
+  scaling explanation and produces a usable prefill-time predictor
+  for sizing future operating envelopes.
+
+Operational implication, pending H6:
+  The prior mitigation ("keep Nestor sessions task-scoped and
+  compacted") remains correct, but for a different reason than
+  originally logged. It is not protection against a runaway bug;
+  it is protection against quadratic prefill cost. The same
+  mitigation, more honestly framed.
+
+Status: Open pending H6 results.
+
 ---

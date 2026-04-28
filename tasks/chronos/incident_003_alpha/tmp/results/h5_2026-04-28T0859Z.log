@@ -1,0 +1,35 @@
+[08:59:19] Hypothesis: H5 — thinking regression at long context
+[08:59:19] Model: gemma4-think:26b
+[08:59:19] Incident scale: ~40000 tokens
+[08:59:19] Per-request timeout: 600s
+[08:59:19] Repeats: 3 (each with a unique seeded prompt)
+[08:59:19] Evidence: /Users/miktam02/.openclaw/workspace/tasks/chronos/incident_003_alpha/evidence/2026-04-28T08-59-19Z-H5
+[08:59:20] Powermetrics available: sampling per repeat
+[08:59:20] ── Sanity check: small prompt, think:false ──
+[08:59:22] Sanity: content_len=3, thinking_len=0, inline_think_tags=0
+[08:59:22] ── Repeat 1/3 ──
+[08:59:22] Prompt 1:   280000 bytes (seed=r1-2026-04-28T08-59-19Z)
+[09:09:22]   request failed/timed out after 600s
+curl: (28) Operation timed out after 600011 milliseconds with 0 bytes received
+[09:09:22]   Waiting for powermetrics to finish
+[09:11:25]   GPU windowed[0..602s]=2650mW, CPU=25201mW
+[09:11:25] ── Repeat 2/3 ──
+[09:11:26] Prompt 2:   280000 bytes (seed=r2-2026-04-28T08-59-19Z)
+[09:21:26]   request failed/timed out after 600s
+curl: (28) Operation timed out after 600006 milliseconds with 0 bytes received
+[09:21:26]   Waiting for powermetrics to finish
+[09:23:29]   GPU windowed[0..602s]=438mW, CPU=9059mW
+[09:23:29] ── Repeat 3/3 ──
+[09:23:29] Prompt 3:   280000 bytes (seed=r3-2026-04-28T08-59-19Z)
+[09:33:29]   request failed/timed out after 600s
+curl: (28) Operation timed out after 600008 milliseconds with 0 bytes received
+[09:33:29]   Waiting for powermetrics to finish
+[09:35:32]   GPU windowed[0..602s]=750mW, CPU=9066mW
+[09:35:32] ── Summary ──
+[09:35:32] thinking_hits=0 / 3
+[09:35:32] timeouts=3 / 3
+[09:35:32] completions=0 / 3
+[09:35:32] total_thinking_chars=0
+[09:35:32] sanity_leaked=false
+[09:35:32] Per-repeat detail: /Users/miktam02/.openclaw/workspace/tasks/chronos/incident_003_alpha/evidence/2026-04-28T08-59-19Z-H5/per_repeat.tsv
+{"hypothesis_id":"H5","status":"inconclusive","evidence_dir":"/Users/miktam02/.openclaw/workspace/tasks/chronos/incident_003_alpha/evidence/2026-04-28T08-59-19Z-H5","summary":"Runaway-consistent: 3/3 timed out at 600s, no completions; thinking content not directly observable"}
