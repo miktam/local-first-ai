@@ -1,0 +1,48 @@
+[11:10:21] Hypothesis: H6 — prefill scaling on gemma4-think:26b
+[11:10:21] Sizes: 15000 25000 35000 tokens
+[11:10:21] Per-request timeout: 1800s
+[11:10:21] Evidence: /Users/miktam02/.openclaw/workspace/tasks/chronos/incident_003_alpha/evidence/2026-04-28T11-10-21Z-H6
+[11:10:22] Powermetrics available: sampling per size
+[11:10:22] ── Size: 15000 tokens ──
+[11:10:22] Restarting Ollama
+[11:10:22] Restarting Ollama via launchctl (/Users/miktam02/Library/LaunchAgents/com.ollama.serve.plist)
+[11:10:27]   Prompt:   105000 bytes (seed=size15000-2026-04-28T11-10-21Z)
+[11:10:27]   Streaming request (timeout 1800s)
+[11:12:37]   curl exit: 0 (elapsed 130s)
+[11:12:37]   Waiting for powermetrics to finish
+  powermetrics_stop: killall via sudo not authorised; waiting for sampler to finish
+[11:18:36]   Stream events: 2
+[11:18:37]   prompt_eval=15330 tokens in 128137.623417ms (8.359 ms/tok)
+[11:18:37]   eval=6 tokens in 213.675541ms
+[11:18:37]   ttfb=130018ms ttft=130018ms total=130049.394583ms
+[11:18:37]   GPU windowed=5392mW, CPU=25347mW
+[11:18:37] ── Size: 25000 tokens ──
+[11:18:37] Restarting Ollama
+[11:18:37] Restarting Ollama via launchctl (/Users/miktam02/Library/LaunchAgents/com.ollama.serve.plist)
+[11:18:42]   Prompt:   175000 bytes (seed=size25000-2026-04-28T11-10-21Z)
+[11:18:42]   Streaming request (timeout 1800s)
+[11:24:29]   curl exit: 0 (elapsed 347s)
+[11:24:29]   Waiting for powermetrics to finish
+  powermetrics_stop: killall via sudo not authorised; waiting for sampler to finish
+[11:24:29]   Stream events: 2
+[11:24:29]   prompt_eval=25511 tokens in 344483.999458ms (13.503 ms/tok)
+[11:24:29]   eval=6 tokens in 277.437293ms
+[11:24:29]   ttfb=346501ms ttft=346501ms total=346540.893292ms
+[11:24:29]   GPU windowed=8828mW, CPU=25322mW
+[11:24:29] ── Size: 35000 tokens ──
+[11:24:29] Restarting Ollama
+[11:24:29] Restarting Ollama via launchctl (/Users/miktam02/Library/LaunchAgents/com.ollama.serve.plist)
+[11:24:34]   Prompt:   245000 bytes (seed=size35000-2026-04-28T11-10-21Z)
+[11:24:34]   Streaming request (timeout 1800s)
+[11:43:22]   curl exit: 0 (elapsed 1128s)
+[11:43:22]   Waiting for powermetrics to finish
+[11:43:22]   Stream events: 2
+[11:43:22]   prompt_eval=35694 tokens in 1125069.420916ms (31.52 ms/tok)
+[11:43:22]   eval=6 tokens in 528.414876ms
+[11:43:22]   ttfb=1127476ms ttft=1127476ms total=1127552.102708ms
+[11:43:22]   GPU windowed=1581mW, CPU=10867mW
+[11:43:22] ── Curve fit ──
+[11:43:22] Completed sizes: 15000 25000 35000
+[11:43:22] Failed at: none
+[11:43:22] Fit: a=8.355e-04 worst_residual=0.516 n_points=3
+{"hypothesis_id":"H6","status":"inconclusive","evidence_dir":"/Users/miktam02/.openclaw/workspace/tasks/chronos/incident_003_alpha/evidence/2026-04-28T11-10-21Z-H6","summary":"All sizes completed but O(N²) fit poor (worst residual 0.516); see fit details"}

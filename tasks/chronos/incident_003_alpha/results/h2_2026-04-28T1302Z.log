@@ -1,0 +1,30 @@
+[13:02:23] Hypothesis: H2 — MoE empty content on long prompts
+[13:02:23] Evidence: /Users/miktam02/.openclaw/workspace/tasks/chronos/incident_003_alpha/evidence/2026-04-28T13-02-23Z-H2
+[13:02:23] Model available: gemma4:26b
+[13:02:23] Model available: gemma4:31b
+[13:02:23] [gemma4:26b] size=200 repeat=1
+[13:02:27] [gemma4:26b] size=200 repeat=2
+[13:02:29] [gemma4:26b] size=200 repeat=3
+[13:02:32] [gemma4:26b] size=1000 repeat=1
+[13:02:34] [gemma4:26b] size=1000 repeat=2
+[13:02:36] [gemma4:26b] size=1000 repeat=3
+[13:02:39] [gemma4:26b] size=2000 repeat=1
+[13:02:42] [gemma4:26b] size=2000 repeat=2
+[13:02:44] [gemma4:26b] size=2000 repeat=3
+[13:02:46] [gemma4:26b] size=5000 repeat=1
+[13:02:52] [gemma4:26b] size=5000 repeat=2
+[13:02:57] [gemma4:26b] size=5000 repeat=3
+[13:03:00] [gemma4:31b] size=200 repeat=1
+[13:03:14] [gemma4:31b] size=200 repeat=2
+[13:03:26] [gemma4:31b] size=200 repeat=3
+[13:03:34] [gemma4:31b] size=1000 repeat=1
+[13:03:42] [gemma4:31b] size=1000 repeat=2
+[13:03:54] [gemma4:31b] size=1000 repeat=3
+[13:04:02] [gemma4:31b] size=2000 repeat=1
+[13:04:13] [gemma4:31b] size=2000 repeat=2
+[13:04:20] [gemma4:31b] size=2000 repeat=3
+[13:04:26] [gemma4:31b] size=5000 repeat=1
+[13:04:40] [gemma4:31b] size=5000 repeat=2
+[13:04:47] [gemma4:31b] size=5000 repeat=3
+[13:04:56] Results written to /Users/miktam02/.openclaw/workspace/tasks/chronos/incident_003_alpha/evidence/2026-04-28T13-02-23Z-H2/results.tsv
+{"hypothesis_id":"H2","status":"rejected","evidence_dir":"/Users/miktam02/.openclaw/workspace/tasks/chronos/incident_003_alpha/evidence/2026-04-28T13-02-23Z-H2","summary":"26b returned non-empty content across all sizes and repeats"}

@@ -209,4 +209,109 @@ Operational implication, pending H6:
 
 Status: Open pending H6 results.
 
+Update: Incident 003-Alpha — root cause identified
+Date: 2026-04-28
+Run: incident-003-alpha/results/
+
+Root cause:
+  Prefill performance on gemma4-think:26b on miktam02 degrades
+  super-linearly with input length. Past a threshold somewhere
+  between 25k and 35k tokens of on-the-wire prompt, per-token
+  prefill cost rises faster than O(N²), and both GPU and CPU
+  utilisation drop simultaneously — the signature of a memory
+  bandwidth bottleneck, not a compute bottleneck. The "runaway"
+  observed in 003-Alpha is real prefill that has crossed this
+  threshold, not a bug, deadlock, or stuck state.
+
+H6 (prefill scaling): Supported with revision.
+  The clean O(N²) prediction was rejected; a super-quadratic curve
+  with a cliff between 25k and 35k tokens fits the observed data.
+  Measurements at three points on a freshly-restarted Ollama with
+  gemma4-think:26b, num_ctx=131072, think:false, stream:true:
+
+    N tokens   prefill   ms/tok   GPU win   CPU win
+    15330      128 s     8.36     5.4 W     25.3 W
+    25511      344 s     13.50    8.8 W     25.3 W
+    35694      1125 s    31.52    1.6 W     10.9 W
+
+  ms/tok rising 2.33× for a 1.40× size increase between 25k and 35k
+  is far above the linear-in-N rise that O(N²) predicts. GPU
+  dropping from 8.8 W to 1.6 W with simultaneous CPU drop from 25.3 W
+  to 10.9 W indicates compute waiting on memory, not throttled or
+  fallen back. Evidence:
+  evidence/2026-04-28T11-10-21Z-H6/sizes.tsv
+
+H1 (FA-induced CPU fallback): Rejected.
+  Ollama server log shows no fallback messages, no backend errors,
+  full GPU residency throughout. The 994% CPU observed in 003-Alpha
+  is host-side llama.cpp orchestration concurrent with GPU compute,
+  not a CPU substitution.
+
+H2 (MoE empty content, narrow): Rejected.
+  Cross-architecture sweep at sizes {200, 1000, 2000, 5000} chars,
+  three repeats per cell, both gemma4:26b and gemma4:31b. All cells
+  returned non-empty content. Evidence:
+  evidence/2026-04-28T13-02-23Z-H2/results.tsv
+
+H3 (num_ctx negotiation drift): Rejected.
+  /api/show reports 262144; default-load /api/ps reports 262144;
+  explicit num_ctx=65536 is honoured exactly. Drift = 0. Evidence:
+  evidence/2026-04-28T13-02-09Z-H3/run.json
+
+H4 (OpenClaw input token cap): Closed without further test execution.
+  Behavioural evidence rules out the strong form: the user's
+  `/compact` workflow only makes sense if long prompts are actually
+  being shipped to Ollama. If H4 (strong) were true, the model would
+  never receive long prompts and compaction would be unnecessary.
+  H6 directly confirms long prompts reach the model. The session-
+  data analysis originally planned is unevaluable on this system
+  (most session JSONL files are .deleted or .reset). Closure
+  rationale: evidence/2026-04-28T13-02-09Z-H4/CLOSURE.md
+
+H5 (thinking regression at long context): Rejected.
+  Sanity check confirmed think:false suppresses thinking output at
+  small scale. The 40k-token timeouts initially attributed to
+  thinking re-engagement are now attributed to H6 prefill cost.
+
+Operating envelope (revised, measurement-grounded):
+  Hard ceiling: keep on-the-wire prompts below 25,000 tokens. Above
+  this and below ~30k, prefill stays super-linear but tractable
+  (≤6 minutes). Above ~30k tokens (precise threshold not yet
+  measured; cliff confirmed between 25k and 35k), prefill enters
+  the bandwidth-bound regime and wall time grows pathologically.
+  The OpenClaw TUI's accumulated-context counter is a reasonable
+  proxy if multiplied by ~1.2 to account for system prompt and
+  tool schema overhead — practical session ceiling around 20k
+  displayed tokens.
+
+  This is a property of the model + runtime + hardware combination,
+  not a bug to fix locally. Mitigations:
+    - Task-scoped sessions (already in practice, retained).
+    - Pre-emptive `/compact` near 18-20k displayed tokens.
+    - Stream output where the failure mode tolerates partial responses.
+    - Watchdog that aborts after N minutes without a streamed token,
+      to bound worst-case wall time.
+
+Empirically observed mitigation:
+  The user has been triggering `/compact` whenever Nestor became
+  unresponsive throughout the past several weeks. This drops the
+  on-the-wire prompt back below the cliff and restores normal
+  behaviour. The mitigation list above is the proactive version
+  of that same intervention — applied at 18-20k displayed tokens
+  rather than after the runaway has manifested.
+
+Sudoers diagnostic note:
+  During the H6 run, sudo -n killall powermetrics failed inside the
+  test script even though the NOPASSWD rule was correctly installed
+  and visible in `sudo -nl` from miktam02's interactive shell. The
+  test still produced clean data — the windowed-mean discards
+  trailing idle samples — but each size waited the full sampler cap
+  unnecessarily. Root cause not yet identified; suspected
+  environment-inheritance difference between interactive shell and
+  bash-script invocation. Filed as a follow-up.
+
+Status: Closed. The original 003-Alpha incident is understood and
+the operating envelope is defined by measurement.
+
 ---
+
