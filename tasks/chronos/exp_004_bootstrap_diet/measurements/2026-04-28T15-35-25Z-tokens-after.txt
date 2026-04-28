@@ -1,0 +1,33 @@
+Mode: estimate (chars/token=7)
+
+Per-file overhead (sorted by token cost):
+
+FILE          BYTES  CHARS  TOK_EST  TOK_EXACT  
+IDENTITY.md   2455   2436   348      -          
+MEMORY.md     1825   1808   258      -          
+SOUL.md       1673   1665   237      -          
+USER.md       1508   1492   213      -          
+AGENTS.md     1194   1176   168      -          
+TOOLS.md      860    851    121      -          
+HEARTBEAT.md  168    168    24       -          
+
+Tracked files total:
+  bytes  : 9683
+  chars  : 9596
+  tokens : ~1369 (estimated)
+
+System prompt baseline (assembled by OpenClaw, not in workspace):
+  chars  : 11000
+  tokens : ~1571
+
+Bootstrap overhead per turn (tracked files + system prompt):
+  ~2940 tokens
+
+  At the conservative cliff (25k tokens), this leaves room for
+  ~22060 tokens of conversation history.
+  At the practical ceiling (35k tokens), ~32060 tokens.
+  (Cliff measured at 25-35k on-the-wire tokens in incident_003_alpha.)
+
+Files with no entries above are not loaded for this turn.
+Update SYSTEM_PROMPT_CHARS_BASELINE if you have a recent
+prompt.submitted record showing a different size.
