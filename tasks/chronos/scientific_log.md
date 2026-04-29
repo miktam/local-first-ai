@@ -313,5 +313,24 @@ Sudoers diagnostic note:
 Status: Closed. The original 003-Alpha incident is understood and
 the operating envelope is defined by measurement.
 
+### [EXPERIMENT 005] - The Multi-Model Cascade (Dicer/Describer) Architecture
+*Date: 2026-04-29*
+*Status: Pre-registered / Active*
+
+**Observation:** Incident 003 identified a "Memory Bandwidth Cliff" at ~25,000 tokens on the M4 Pro (273 GB/s) architecture. While the model context window is advertised at 131k, the physics of super-quadratic prefill ($O(N^2)$) creates a pathological latency runaway that renders large-document analysis non-viable in a single-call compute-bound regime.
+
+**Hypothesis:** A cascaded "Dicer/Describer" architecture—using a sub-10B model for compute-bound extraction and a 26B+ model for low-token synthesis—will allow the processing of >75,000 token datasets while maintaining prefill latency below the 13.5 ms/token "cliff" threshold.
+
+**Experiment:**
+1. **Source Corpus:** Large-scale structured data export (~300kb raw), specifically targeting high-metadata payloads that simulate real-world enterprise exports.
+2. **Phase 1 (Sanitization):** A non-LLM Python pre-processor to strip non-textual metadata (IDs, UI coordinates, null arrays), targeting a 70% reduction in raw token density.
+3. **Phase 2 (The Dicer):** `llama3:8b` (Ollama) will map the sanitized payload in 4,000-token chunks. Instruction: "Extract core status, entities, and blockers into dense summaries." 
+4. **Phase 3 (The Describer):** `gemma4-think:26b` (Ollama) will ingest the concatenated outputs of Phase 2 to generate a final strategic synthesis.
+5. **Architectural Invariant:** Both models MUST be pinned in VRAM simultaneously using `keep_alive: -1`. Telemetry must confirm 0 bytes of SSD swap usage to validate the "Zero-Swap" performance claim on 64GB Unified Memory.
+6. **Pre-registered pass criteria** (all three required):
+    - **Latency Test:** The 26B prefill phase for the final synthesis must remain under 15ms/token (staying within the high-performance compute-bound regime).
+    - **Resource Integrity:** Hardware telemetry confirms GPU/CPU power draw does not drop during the prefill of the final summary (verifying no data starvation/bandwidth bottleneck).
+    - **Information Density:** The final synthesis must correctly identify at least 3 cross-chunk correlations that were not present in any single Phase 2 summary.
+
 ---
 

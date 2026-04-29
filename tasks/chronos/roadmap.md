@@ -19,17 +19,28 @@ To build and maintain a public-facing blog written from the perspective of Nesto
 - [x] Draft and finalize post: "The Control Plane and the Data Plane: Managing the AI Thinking Tax"
 - [x] Establish the `scientific_log.md` verification ledger
 - [x] Implement Nestor-authored Git commits for verified task execution
+- [x] **Execute Experiment 003:** Validated Anonymized Adversarial Memory (Data Sovereignty)
+- [x] **Incident 003-Alpha Resolution:** Identified the 25k–35k token "Memory Cliff" for Gemma 4 26B on M4 Pro.
+- [x] **Drafted/Published:** "Every Company Can Be a Palantir Now" (Data Sovereignty thesis).
 
 ## Current Focus
-Transitioning from structural foundation to continuous publication. The immediate focus is executing the "Intelligence Feedback Loop" pillar, demonstrating the AI's capacity for self-correction based on documented engineering reviews.
+Transitioning from infrastructure setup to **Operating Envelope Management**. Following the H6 prefill scaling results, the immediate priority is codifying system limits to maintain high-throughput local operations and refining the multi-layer memory architecture.
 
 ## Technical Deployment Plan
-- **Engine:** Hugo (Static Site Generator) for minimal footprint and maximum speed.
-- **Workflow:** Nestor generates Markdown (`.md`) files and `scientific_log.md` updates within the workspace. Verified changes are committed using `--author="Nestor <nestor@chronos.local>"`.
-- **Deployment:** Human engineer (`miktam02` / Andrei) manually uploads the generated content/site to the chosen domain.
-- **Constraint:** The architecture must be lightweight, privacy-centric, and completely tethered to local operations.
+- **Engine:** Hugo (Static Site Generator).
+- **Workflow:** Nestor generates `.md` content and `scientific_log.md` updates. Verified changes committed via `--author="Nestor <nestor@chronos.local>"`.
+- **Constraint:** Architecture must strictly honor the **<25,000 token prefill limit** to avoid super-quadratic performance degradation (Incident 003-Alpha).
+- **Security Invariant:** `memory.py` must remain decoupled from `vocab_store.py` (verified via import graph checks).
 
 ## Pending Tasks
-- [ ] **Content Execution:** Draft the third blog post, focusing on "The Intelligence Feedback Loop." This will utilize **Incident 002-Alpha** (the mathematical correction from the Thinking Tax benchmark) as the primary, verifiable case study.
-- [ ] **Content Execution:** Draft "The Silicon Sentinel" post, exploring the security, thermals, and privacy of running Gemma 4 26B on local Apple M4 hardware.
-- [ ] **Infrastructure/Experimentation:** Define **Experiment 003**. Based on the 1200-second timeout discovered in Experiment 002, explore asynchronous handling or establishing a "Complexity Ceiling" for deep reasoning tasks.
+
+### 🛠️ Infrastructure & Experimentation
+- [ ] **Establish "Complexity Ceiling" (Experiment 004):** Refine canary heuristics to distinguish genuine model uncertainty from prompt-compliance when probing anonymized vaults.
+- [ ] **Implementation:** Automate a pre-emptive `/compact` watchdog in the orchestration layer that triggers when cumulative session context hits 20k tokens.
+- [ ] **Environment Fix:** Resolve the `sudo -n killall powermetrics` environment inheritance issue for non-interactive test scripts.
+- [ ] **Memory Management:** Implement "Compression-by-Archive" for Layer 2 daily summaries (decaying old summaries from ~300 to ~50 words).
+
+### ✍️ Content Execution
+- [ ] **The Intelligence Feedback Loop:** Draft a post detailing **Incident 003-Alpha** as a case study in AI hardware profiling and the transition from "bug hunting" to "performance envelope identification."
+- [ ] **The Silicon Sentinel:** Draft a deep dive into the **M4 Pro thermal/power profile** using the wattage data gathered during the H6 Prefill Sweep.
+- [ ] **Technical Tutorial:** Document the "Sovereign Memory" architecture (the separation of `memory.py` and `vocab_store.py`) for the LocalFirstAI community.
