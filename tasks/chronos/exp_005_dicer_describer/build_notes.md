@@ -5,3 +5,214 @@
 - Corpus is 8 years (2018-04-21 onward), not 11 as initially framed.
 - Several record types are partial: cycling stopped Oct 2023, swimming stopped Sep 2021, sleeping wrist temp / environmental audio / walking steadiness all started 2021–2023. Dicer must respect manifest date ranges or it will route to empty.
 - Multi-source recording (watch + phone + Balbus STEP + Health) creates a deduplication problem for total-style queries. Not solved in Phase 0 indexer; flag in any answer involving sums.
+
+## 2026-05-01 — first end-to-end cascade run
+
+**Query:** "How has my resting heart rate changed since 2018?"
+
+**Outcome:** Grounded answer; every cited number matches monthly_aggregates.json.
+End-to-end works on first attempt; no Dicer output rejection, no retry needed.
+
+**Wall-clock surprises:**
+- Dicer (gemma4:e4b): 27.45s. Heavier than expected for a "small fast" routing
+  model. Suspect cold-start dominates first call. Need warm-cache measurement.
+- Extractor: 0.072s. Negligible, as expected.
+- Describer (gemma4:26b): 136.67s for 96 monthly rows. Sets the rhythm of the
+  build week — ~2 min per query.
+
+**Behavioural observations:**
+- Describer answer is grounded and specific but flat — lists numbers without
+  surfacing the trend arc (RHR ~55 → 47 by 2020, drift back to ~57 by 2022,
+  stable since). Synthesis-quality issue, not routing issue.
+- Dicer chose monthly aggregation, single slice, no date range — exactly the
+  fixture pattern. e4b followed the few-shot example faithfully.
+- format: "json" did not produce malformed output. ADR-001 strict-validation
+  contract held without retries.
+
+**Open questions surfaced:**
+- Cold-start vs steady-state Dicer cost.
+- Whether "tell the arc, not just the numbers" is a Describer prompt issue
+  or a model capability ceiling.
+- Whether 2 minutes per query is a Phase 0 bottleneck worth fixing or just
+  the cost of doing business.
+
+## 2026-05-01 — second run, same query
+
+**Wall-clock:**
+- Dicer cold: 27.45s (run 1) → warm: 5.47s (run 2). Cold-start theory confirmed.
+- Describer: 136.67s → 129.80s. Stable; not cache-dependent at the model level.
+
+**Schema violation observed:**
+- Run 2 attempt 0: Dicer emitted a label > 40 chars. ADR-001 retry path
+  triggered cleanly; attempt 1 succeeded. First real evidence that strict
+  validation catches and recovers from e4b's tight-constraint violations.
+- Suggests the 40-char cap on `label` is borderline tight; consider revisiting
+  if violation rate stays elevated across the build week.
+
+**Describer non-determinism:**
+- Identical query and slice produced meaningfully different answers across
+  two runs.
+- Run 1 cited 5 distinct datapoints; run 2 cited 3 and used softer language
+  ("stayed relatively low") that's more inferential than the data warrants.
+- Implications for Phase 1: single-shot scoring is unreliable. Either set
+  temperature=0 for deterministic decoding, or run N trials per query and
+  report distribution. Decision deferred but flagged.
+
+## 2026-05-01 — three-run variance characterisation
+
+Same query, same slice (96 monthly RHR rows), three runs.
+
+| Run | Cited points | Notable |
+|-----|-------------:|---------|
+| 1 | 5 | Cold start, 164s total. Mentioned 2022 peak, both recent months, range. |
+| 2 | 3 | Schema retry on label cap. Skipped 2022 peak. Soft inferential language. |
+| 3 | 5 | Fastest run (102s), full arc 2018→2020 trough→2022 peak→2026 plateau. |
+
+Architectural claim holds across all three: numbers cited are real, no
+hallucination, slice round-trips correctly, retry recovered from constraint
+violation. Synthesis quality varies. Implications:
+
+- Phase 1 cannot score answers single-shot. Either temperature=0 (loses the
+  occasional good run 1/3 in exchange for stability) or N-of-M with quality
+  distribution reported.
+- Variance bounds may matter more than means. A cascade that's great half the
+  time and weak half the time has a different value proposition than one
+  that's mediocre every time.
+
+## 2026-05-01 — model size reality check
+
+`gemma4:e4b` is 9.6 GB on disk, `gemma4:26b` is 17 GB. The Dicer is ~56% the
+Describer's size, not order-of-magnitude smaller. This explains the warm Dicer
+cost (~3–5s rather than sub-second) and means the cascade's compute savings
+come from "small model produces small output (JSON plan)" more than "small
+model is fundamentally fast." If Phase 1 wants a true fast-router, candidates
+are smaller models in the same family or a Qwen 3.5b-class model.
+
+## 2026-05-01 — workout query exposed slice-volume problem
+
+**Query:** "Look at my workout patterns over the last few years..."
+
+**What happened:** Dicer routed correctly (workouts-only, all activity types,
+monthly aggregation — matched fixture pattern). But omitted `max_rows`. The
+extractor returned all 4,460 workouts. Describer hit the 300s timeout
+generating synthesis from 53,536 lines of JSON.
+
+**Architectural lesson:** The Dicer's job is not just "what data does the
+question want" — it's also "what data can the Describer actually consume."
+Slice volume is a load-bearing routing decision, not an afterthought.
+
+**Fix attempted:** Added volume guidance to Dicer prompt (see commit), raised
+Describer timeout to 1800s, added clean timeout handling so partial state
+gets logged.
+
+**Open question:** Does e4b reliably follow defensive volume guidance from
+the prompt, or does enforcement need to live in the orchestrator? Re-run
+will tell us.
+
+## 2026-05-01 — context-window truncation, prompt guidance ignored
+
+**Query:** workout signature probe, second attempt with volume guidance
+in Dicer prompt.
+
+**What happened:**
+- Dicer ignored the prose volume guidance. No max_rows field on the
+  workouts slice. Few-shot fixtures (which don't show max_rows) won
+  over the prose section that told it to set one.
+- Slice bundle was 717,827 tokens. gemma4:26b has a 262,144 ctx limit.
+  Ollama truncated 63% of the input silently (only a WARN in the log).
+- Truncation kept the first 262k tokens and dropped the rest. With
+  Apple's chronological ordering, this means the Describer sees
+  2018-2020 and never sees 2021-2026 in this query.
+
+**Architectural lessons:**
+- Prompt-as-defence is unreliable for e4b. Defensive constraints belong
+  in the orchestrator, not the system prompt.
+- Ollama truncates silently. Without watching the log we'd have gotten
+  back a confident answer based on partial data and not known. The
+  orchestrator should compute approximate token count before calling the
+  Describer and refuse if it exceeds context (or downsample).
+- Few-shot examples teach behaviour more reliably than prose
+  instructions, at least for e4b. Update fixtures to show max_rows.
+
+**Decision implication:** Volume enforcement moves to the orchestrator.
+Dicer prompt guidance stays as a hint but is no longer load-bearing.
+
+## 2026-05-01 — schema-meaning gap, not just prompt issue
+
+Reviewing the Dicer's output: rationale says "A monthly aggregation provides a
+good trend overview without being overwhelming." The Dicer chose monthly
+*because* it understood volume mattered. The problem is that the extractor
+doesn't actually aggregate workouts when aggregation_level="monthly" — that
+field only affects record_types (monthly vs daily vs raw). For workouts, the
+extractor returns every row regardless.
+
+The Dicer obeyed the schema. The schema doesn't deliver what it promises.
+
+**Decision:** extend the extractor to aggregate workouts by month/day when
+the Dicer asks for it, matching the schema's implicit contract. Keep
+prose-guidance updates secondary — the real fix is making the architecture
+honest, not patching prompts to work around it.
+
+## 2026-05-01 — Dicer output-format unreliability
+
+Two distinct failure modes observed for gemma4:e4b producing structured JSON:
+
+1. Schema violations inside valid JSON (e.g. label > 40 chars). Recoverable
+   by ADR-001's retry path. Observed in run 20260501T113735Z.
+2. Output-format violations: model wraps valid JSON in markdown code fences
+   (```json ... ```). Not recoverable by retry alone — second attempt also
+   wrapped in fences. Observed in run 20260501T134013Z.
+
+Format violations are unrelated to the JSON's correctness; the content is
+fine, only the wrapper is wrong. Adding a normalisation step (strip code
+fences before parsing) handles this without weakening ADR-001's strict-
+validation contract on the actual plan structure. ADR-001 amendment to follow.
+
+Pattern recognised: e4b is unreliable at strict structured output. Across
+three documented runs, three distinct ways the output deviated from the
+schema — label too long, fences around JSON, or correct. Phase 1 should
+either pin temperature=0, switch to a stricter constrained-decoding mode,
+or accept that retry+normalise is permanent overhead.
+
+## 2026-05-01 — urllib.urlopen timeout is per-read, not connect-only
+
+Streaming Describer call failed at 30s with "timed out" before any byte
+arrived. Cause: urllib.request.urlopen(req, timeout=30) treats `timeout`
+as a per-read deadline, not a connect-only deadline. On a streaming
+endpoint where the server holds the connection open while the model
+thinks, this means urllib aborts at 30s if the model hasn't produced
+its first token yet. 26b on the workout bundle takes longer than 30s
+to start emitting tokens.
+
+Fix: set urlopen timeout to DESCRIBER_IDLE_TIMEOUT_S (90s) so that
+urllib's read deadline aligns with our queue-based idle policy.
+The queue idle timeout remains the real enforcement; urllib's now
+redundant rather than premature.
+
+## 2026-05-01 — re-encountering the memory bandwidth cliff (cf. Incident 003)
+
+Workout query failed at the Describer because the on-the-wire prompt
+exceeded the 25K-token soft ceiling identified in Incident 003 (April 28).
+The token guard's 200K limit was an order of magnitude too high — it was
+protecting the model's *advertised context window*, not the *cliff zone*.
+
+Bundle was 21K tokens. Add the describer prompt (~1K), the chat template,
+and the user-message scaffolding, and we land in the 25-30K cliff zone.
+At that size, prefill becomes memory-bandwidth-bound; both GPU and CPU
+power drop while the KV cache crawls across the bus. No tokens emerge
+in tractable wall-clock.
+
+Mitigation per Incident 003 is to keep on-the-wire prompts below 22K
+tokens with margin. Phase 0 needs:
+
+1. Token guard limit dropped from 200K → 22K.
+2. Workout monthly aggregation capped further (347 rows → ~100 rows).
+3. Server-side cancellation: when our client abandons a streaming call,
+   Ollama keeps the runner spinning at ~900% CPU. Wedges the model.
+   Phase 0 cannot recover from this without an ollama serve restart.
+   Worth investigating whether Ollama exposes a cancel API.
+
+Bigger lesson: the cliff isn't a Phase 0 obstacle, it's a Phase 0
+*constraint that should have been built in from the start*. The
+findings from Incident 003 weren't propagated into cascade.py's
+defaults. They are now.

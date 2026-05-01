@@ -5,53 +5,24 @@ extract.py — Deterministic slice extractor for Experiment 005 Phase 0.
 Reads a Dicer routing plan (validated against routing_plan.schema.json) and
 produces the slice the Describer ingests. No LLM in this step. Pure parse + IO.
 
-Inputs
-------
-  --plan        Path to a JSON file containing a routing plan, OR `-` for stdin.
-  --index-dir   Directory containing manifest.json, monthly_aggregates.json,
-                daily_aggregates.jsonl, workouts.jsonl. Default: ./index
-  --export      Path to export.xml (only required if any slice uses
-                aggregation_level='raw').
-  --routes      Path to workout-routes/ (only required if any slice's workouts
-                filter sets include_routes=true).
+Aggregation semantics
+---------------------
+aggregation_level affects BOTH record_types and workouts:
 
-Output
-------
-  A single JSON object on stdout, matching the shape:
+  - record_types:
+      "monthly" → reads from monthly_aggregates.json
+      "daily"   → reads from daily_aggregates.jsonl
+      "raw"     → streams matching records from export.xml
 
-    {
-      "kind": "slice_bundle" | "question",
-      ... (see below)
-    }
+  - workouts:
+      "monthly" → groups by (activity_type, YYYY-MM); counts + duration/distance/energy sums
+      "daily"   → groups by (activity_type, YYYY-MM-DD); same aggregations
+      "raw"     → returns each workout row as-is from workouts.jsonl
 
-  For kind="slice_bundle":
-    - "slices": one entry per Plan.slices entry, in the same order.
-    - Each entry contains the resolved data plus metadata:
-        {
-          "label": "...",                        # passed through
-          "record_types": [...],                  # echoed from plan
-          "date_range": {"start": ..., "end": ...} | null,
-          "aggregation_level": "monthly" | "daily" | "raw",
-          "records": [ ... extracted rows ... ],
-          "workouts": [ ... extracted workouts ... ] | null,
-          "truncated": true | false,
-          "row_count": <int>
-        }
-
-  For kind="question": passed through from the plan with no extraction.
-
-Validation
-----------
-Strict. Plans that fail JSON Schema validation, reference unknown record types,
-or use HKWorkoutActivityType values not in the manifest are rejected with a
-non-zero exit code and a structured error to stderr. No repair, no fuzzy match.
+This delivers on the schema's implicit contract: when the Dicer asks for
+"monthly" it gets monthly-grouped data, not raw rows mislabelled as monthly.
 
 Per ADR-001: the extractor is the enforcement boundary. Failure is data.
-
-Run
----
-  python3 extract.py --plan plan.json --index-dir index/
-  cat plan.json | python3 extract.py --plan - --index-dir index/
 """
 
 from __future__ import annotations
@@ -59,10 +30,9 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from collections import defaultdict
-from datetime import date, datetime
+from datetime import date
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 from xml.etree.ElementTree import iterparse
 
 
@@ -83,12 +53,8 @@ class ExtractError(Exception):
 
 
 # ---------------------------------------------------------------------------
-# Schema validation (lightweight, no external deps)
+# Schema validation
 # ---------------------------------------------------------------------------
-#
-# We don't ship jsonschema as a dep for one validation. The schema is small
-# enough to enforce its key invariants by hand. Missing fields, wrong types,
-# enum violations, and the discriminated union are all checked here.
 
 VALID_AGG = {"monthly", "daily", "raw"}
 MAX_SLICES = 8
@@ -101,7 +67,6 @@ def _require(cond: bool, code: str, msg: str, **details: Any) -> None:
 
 
 def validate_plan(obj: Any) -> dict[str, Any]:
-    """Validate against routing_plan.schema.json. Returns the validated dict."""
     _require(isinstance(obj, dict), "schema/not_object",
              "Top-level value is not a JSON object.")
     kind = obj.get("kind")
@@ -113,17 +78,14 @@ def validate_plan(obj: Any) -> dict[str, Any]:
         _require(isinstance(q, str) and 1 <= len(q) <= 400,
                  "schema/bad_question",
                  "Question must be a string of length 1–400.")
-        # 'reason' optional, string ≤300
         if "reason" in obj:
             _require(isinstance(obj["reason"], str) and len(obj["reason"]) <= 300,
                      "schema/bad_reason", "reason must be a string ≤300 chars.")
-        # No other fields permitted
         _extra = set(obj) - {"kind", "question", "reason"}
         _require(not _extra, "schema/extra_fields",
                  f"Unexpected fields on question: {sorted(_extra)}")
         return obj
 
-    # kind == "plan"
     slices = obj.get("slices")
     _require(isinstance(slices, list), "schema/no_slices",
              "Plan must have a 'slices' array.")
@@ -218,12 +180,7 @@ def _validate_slice(sl: Any, i: int) -> None:
              f"Slice {i}: unexpected fields: {sorted(_extra)}", slice_index=i)
 
 
-# ---------------------------------------------------------------------------
-# Manifest checks (semantic validation, beyond schema)
-# ---------------------------------------------------------------------------
-
 def validate_against_manifest(plan: dict[str, Any], manifest: dict[str, Any]) -> None:
-    """Reject plans that reference record types or activity types not in the corpus."""
     if plan["kind"] != "plan":
         return
 
@@ -243,12 +200,9 @@ def validate_against_manifest(plan: dict[str, Any], manifest: dict[str, Any]) ->
                      slice_index=i, value=at,
                      hint="See manifest.json workouts.by_type for valid values.")
 
-        # raw extraction needs export.xml — caller must have provided it
-        # (check happens at extract time when we know the path)
-
 
 # ---------------------------------------------------------------------------
-# Date helpers
+# Helpers
 # ---------------------------------------------------------------------------
 
 def _parse_date(s: str) -> date | None:
@@ -273,12 +227,25 @@ def _short_type(t: str) -> str:
     return t
 
 
+def _safe_add(acc: float | None, v: Any) -> float | None:
+    """Sum that treats None as 'unknown'; returns None only if both are None."""
+    if v is None:
+        return acc
+    try:
+        fv = float(v)
+    except (TypeError, ValueError):
+        return acc
+    if acc is None:
+        return fv
+    return acc + fv
+
+
 # ---------------------------------------------------------------------------
-# Extractors per aggregation_level
+# Records extractors
 # ---------------------------------------------------------------------------
 
-def extract_monthly(slice_spec: dict[str, Any], monthly: dict[str, Any]) -> list[dict[str, Any]]:
-    """Pull from monthly_aggregates.json. Filters to slice's record_types and date_range."""
+def extract_records_monthly(slice_spec: dict[str, Any],
+                            monthly: dict[str, Any]) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     types = slice_spec.get("record_types", [])
     dr = slice_spec.get("date_range")
@@ -286,7 +253,6 @@ def extract_monthly(slice_spec: dict[str, Any], monthly: dict[str, Any]) -> list
     for t in types:
         per_month = monthly.get(t, {})
         for month_key in sorted(per_month.keys()):
-            # month_key is "YYYY-MM"; treat first of month for range comparison
             try:
                 d = date.fromisoformat(month_key + "-01")
             except ValueError:
@@ -298,9 +264,8 @@ def extract_monthly(slice_spec: dict[str, Any], monthly: dict[str, Any]) -> list
     return out
 
 
-def extract_daily(slice_spec: dict[str, Any],
-                  daily_path: Path) -> list[dict[str, Any]]:
-    """Stream daily_aggregates.jsonl and filter."""
+def extract_records_daily(slice_spec: dict[str, Any],
+                          daily_path: Path) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     types = set(slice_spec.get("record_types", []))
     dr = slice_spec.get("date_range")
@@ -317,18 +282,13 @@ def extract_daily(slice_spec: dict[str, Any],
     return out
 
 
-def extract_raw(slice_spec: dict[str, Any], export_xml: Path) -> list[dict[str, Any]]:
-    """Stream export.xml and filter to matching records.
-
-    Heavy operation. Only invoked when aggregation_level='raw'. Honors max_rows.
-    """
+def extract_records_raw(slice_spec: dict[str, Any],
+                        export_xml: Path) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     types = set(slice_spec.get("record_types", []))
     dr = slice_spec.get("date_range")
     cap = slice_spec.get("max_rows", MAX_ROWS_CEILING)
 
-    # Match against the SHORT form (manifest uses short names) by stripping
-    # HK prefixes from the XML's full type strings on the fly.
     context = iterparse(str(export_xml), events=("end",))
     for _ev, elem in context:
         if elem.tag == "Record":
@@ -356,27 +316,13 @@ def extract_raw(slice_spec: dict[str, Any], export_xml: Path) -> list[dict[str, 
     return out
 
 
-def extract_workouts(slice_spec: dict[str, Any],
-                     workouts_path: Path,
-                     routes_dir: Path | None) -> list[dict[str, Any]]:
-    """Stream workouts.jsonl and filter."""
-    if "workouts" not in slice_spec:
-        return []
+# ---------------------------------------------------------------------------
+# Workouts extractors
+# ---------------------------------------------------------------------------
 
-    wf = slice_spec["workouts"]
-    activity_types = set(wf.get("activity_types", []))  # empty = all
-    include_routes = wf.get("include_routes", False)
-    dr = slice_spec.get("date_range")
-    cap = slice_spec.get("max_rows", MAX_ROWS_CEILING)
-
-    # Routes inventory: filename → full path. Built once if needed.
-    routes_index: dict[str, str] = {}
-    if include_routes and routes_dir and routes_dir.exists():
-        for p in routes_dir.iterdir():
-            if p.is_file():
-                routes_index[p.name] = str(p)
-
-    out: list[dict[str, Any]] = []
+def _iter_workouts(workouts_path: Path,
+                   activity_types: set[str],
+                   dr: dict[str, str] | None):
     with workouts_path.open("r", encoding="utf-8") as f:
         for line in f:
             row = json.loads(line)
@@ -385,14 +331,80 @@ def extract_workouts(slice_spec: dict[str, Any],
             d = _parse_date(row.get("start", ""))
             if not _in_range(d, dr):
                 continue
-            if include_routes and routes_index:
-                # Apple's routes are typically named route_YYYY-MM-DD_HH.MM.SSm.gpx
-                start = row.get("start", "")[:10]
-                hits = [v for k, v in routes_index.items() if start in k]
-                row = {**row, "route_files": hits}
-            out.append(row)
-            if len(out) >= cap:
-                break
+            yield row, d
+
+
+def extract_workouts_aggregated(slice_spec: dict[str, Any],
+                                workouts_path: Path,
+                                granularity: str) -> list[dict[str, Any]]:
+    """Group workouts by (activity_type, period). granularity in {monthly, daily}."""
+    if "workouts" not in slice_spec:
+        return []
+    wf = slice_spec["workouts"]
+    activity_types = set(wf.get("activity_types", []))
+    dr = slice_spec.get("date_range")
+
+    bucket: dict[tuple[str, str], dict[str, Any]] = {}
+
+    for row, d in _iter_workouts(workouts_path, activity_types, dr):
+        if d is None:
+            continue
+        period = d.strftime("%Y-%m") if granularity == "monthly" else d.isoformat()
+        key = (row["type"], period)
+        agg = bucket.get(key)
+        if agg is None:
+            agg = {
+                "activity_type": row["type"],
+                "period": period,
+                "count": 0,
+                "duration_total": None,
+                "distance_total": None,
+                "energy_total": None,
+                "duration_unit": row.get("duration_unit"),
+                "distance_unit": row.get("distance_unit"),
+                "energy_unit": row.get("energy_unit"),
+            }
+            bucket[key] = agg
+        agg["count"] += 1
+        agg["duration_total"] = _safe_add(agg["duration_total"], row.get("duration"))
+        agg["distance_total"] = _safe_add(agg["distance_total"], row.get("distance"))
+        agg["energy_total"] = _safe_add(agg["energy_total"], row.get("energy"))
+
+    out: list[dict[str, Any]] = []
+    for (_at, _period), agg in sorted(bucket.items()):
+        for k in ("duration_total", "distance_total", "energy_total"):
+            if isinstance(agg[k], float):
+                agg[k] = round(agg[k], 3)
+        out.append(agg)
+    return out
+
+
+def extract_workouts_raw(slice_spec: dict[str, Any],
+                         workouts_path: Path,
+                         routes_dir: Path | None) -> list[dict[str, Any]]:
+    if "workouts" not in slice_spec:
+        return []
+    wf = slice_spec["workouts"]
+    activity_types = set(wf.get("activity_types", []))
+    include_routes = wf.get("include_routes", False)
+    dr = slice_spec.get("date_range")
+    cap = slice_spec.get("max_rows", MAX_ROWS_CEILING)
+
+    routes_index: dict[str, str] = {}
+    if include_routes and routes_dir and routes_dir.exists():
+        for p in routes_dir.iterdir():
+            if p.is_file():
+                routes_index[p.name] = str(p)
+
+    out: list[dict[str, Any]] = []
+    for row, _d in _iter_workouts(workouts_path, activity_types, dr):
+        if include_routes and routes_index:
+            start = row.get("start", "")[:10]
+            hits = [v for k, v in routes_index.items() if start in k]
+            row = {**row, "route_files": hits}
+        out.append(row)
+        if len(out) >= cap:
+            break
     return out
 
 
@@ -405,7 +417,7 @@ def execute_plan(plan: dict[str, Any],
                  export_xml: Path | None,
                  routes_dir: Path | None) -> dict[str, Any]:
     if plan["kind"] == "question":
-        return plan  # passthrough
+        return plan
 
     manifest_path = index_dir / "manifest.json"
     monthly_path = index_dir / "monthly_aggregates.json"
@@ -430,21 +442,29 @@ def execute_plan(plan: dict[str, Any],
         records: list[dict[str, Any]] = []
         if sl.get("record_types"):
             if agg == "monthly":
-                records = extract_monthly(sl, monthly)
+                records = extract_records_monthly(sl, monthly)
             elif agg == "daily":
-                records = extract_daily(sl, daily_path)
+                records = extract_records_daily(sl, daily_path)
             elif agg == "raw":
                 if export_xml is None:
                     raise ExtractError("io/raw_needs_export",
                                        f"Slice {i} uses aggregation_level='raw' but "
                                        "--export was not provided.", slice_index=i)
-                records = extract_raw(sl, export_xml)
-
+                records = extract_records_raw(sl, export_xml)
         truncated_records = len(records) >= cap
         records = records[:cap]
 
-        workouts = extract_workouts(sl, workouts_path, routes_dir) \
-            if "workouts" in sl else None
+        workouts: list[dict[str, Any]] | None = None
+        truncated_workouts = False
+        if "workouts" in sl:
+            if agg == "monthly":
+                workouts = extract_workouts_aggregated(sl, workouts_path, "monthly")
+            elif agg == "daily":
+                workouts = extract_workouts_aggregated(sl, workouts_path, "daily")
+            else:
+                workouts = extract_workouts_raw(sl, workouts_path, routes_dir)
+            truncated_workouts = len(workouts) >= cap
+            workouts = workouts[:cap]
 
         out_slices.append({
             "label": sl.get("label"),
@@ -453,7 +473,7 @@ def execute_plan(plan: dict[str, Any],
             "aggregation_level": agg,
             "records": records,
             "workouts": workouts,
-            "truncated": truncated_records,
+            "truncated": truncated_records or truncated_workouts,
             "row_count": len(records) + (len(workouts) if workouts else 0),
         })
 
@@ -473,16 +493,13 @@ def main() -> int:
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--plan", required=True,
                    help="Path to routing plan JSON, or '-' for stdin.")
-    p.add_argument("--index-dir", type=Path, default=Path("index"),
-                   help="Directory with manifest.json etc. Default: ./index")
+    p.add_argument("--index-dir", type=Path, default=Path("index"))
     p.add_argument("--export", type=Path, default=None,
-                   help="Path to export.xml; required only for raw slices.")
+                   help="Path to export.xml; required only for raw record_types slices.")
     p.add_argument("--routes", type=Path, default=None,
-                   help="Path to workout-routes/; required only when "
-                        "include_routes=true.")
+                   help="Path to workout-routes/; required only when include_routes=true.")
     args = p.parse_args()
 
-    # Load plan
     if args.plan == "-":
         raw = sys.stdin.read()
     else:
