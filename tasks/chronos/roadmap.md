@@ -22,25 +22,30 @@ To build and maintain a public-facing blog written from the perspective of Nesto
 - [x] **Execute Experiment 003:** Validated Anonymized Adversarial Memory (Data Sovereignty)
 - [x] **Incident 003-Alpha Resolution:** Identified the 25k–35k token "Memory Cliff" for Gemma 4 26B on M4 Pro.
 - [x] **Drafted/Published:** "Every Company Can Be a Palantir Now" (Data Sovereignty thesis).
+- [x] **Exp 005 (Phase 0):** Build and validate "Dicer Describer" Cascade (Health Corpus).
+- [x] **Incident 005-Alpha:** Root-cause schema-meaning gaps and "zombie" prefill runners.
 
 ## Current Focus
-Transitioning from infrastructure setup to **Operating Envelope Management**. Following the H6 prefill scaling results, the immediate priority is codifying system limits to maintain high-throughput local operations and refining the multi-layer memory architecture.
+Refining the **Dicer Describer** architecture. Following the 2026-05-01 "Workout Query" failure, the focus has shifted from prompt-engineering to **architectural honesty**. The immediate priority is moving defensive constraints (volume, timeout, and token-guards) out of LLM prompts and into the orchestrator logic.
 
 ## Technical Deployment Plan
 - **Engine:** Hugo (Static Site Generator).
-- **Workflow:** Nestor generates `.md` content and `scientific_log.md` updates. Verified changes committed via `--author="Nestor <nestor@chronos.local>"`.
-- **Constraint:** Architecture must strictly honor the **<25,000 token prefill limit** to avoid super-quadratic performance degradation (Incident 003-Alpha).
-- **Security Invariant:** `memory.py` must remain decoupled from `vocab_store.py` (verified via import graph checks).
+- **Workflow:** Nestor generates content via OpenClaw; symlinked to `~/REPOS/local-first-ai` for version control.
+- **Cascade:** Dicer (`gemma4:e4b`) plans → Extractor (`json`) → Describer (`gemma4:26b`) synthesizes.
+- **Hardware Invariant:** Prefill context must remain **< 22,000 tokens** to avoid memory-bandwidth saturation.
+- **Strict Validation:** ADR-001 contract with code-fence normalization for unreliable structured output.
 
 ## Pending Tasks
 
 ### 🛠️ Infrastructure & Experimentation
-- [ ] **Establish "Complexity Ceiling" (Experiment 004):** Refine canary heuristics to distinguish genuine model uncertainty from prompt-compliance when probing anonymized vaults.
-- [ ] **Implementation:** Automate a pre-emptive `/compact` watchdog in the orchestration layer that triggers when cumulative session context hits 20k tokens.
-- [ ] **Environment Fix:** Resolve the `sudo -n killall powermetrics` environment inheritance issue for non-interactive test scripts.
-- [ ] **Memory Management:** Implement "Compression-by-Archive" for Layer 2 daily summaries (decaying old summaries from ~300 to ~50 words).
+- [ ] **Orchestrator Hardening:** Move `max_rows` and `aggregation_level` enforcement from Dicer prompts to hard-coded logic in `cascade.py`.
+- [ ] **Context Watchdog:** Implement a pre-check that refuses or auto-downsamples Extractor output if token count exceeds 22k.
+- [ ] **Process Management:** Investigate Ollama API for server-side cancellation to kill "zombie" processes during timeouts.
+- [ ] **Environment Fix:** Resolve `sudo -n killall powermetrics` inheritance for automated power-profile logging.
+- [ ] **Exp 006:** Evaluate **Qwen 2.5/3.5b** as a more deterministic alternative to `e4b` for the Dicer role.
 
 ### ✍️ Content Execution
-- [ ] **The Intelligence Feedback Loop:** Draft a post detailing **Incident 003-Alpha** as a case study in AI hardware profiling and the transition from "bug hunting" to "performance envelope identification."
-- [ ] **The Silicon Sentinel:** Draft a deep dive into the **M4 Pro thermal/power profile** using the wattage data gathered during the H6 Prefill Sweep.
-- [ ] **Technical Tutorial:** Document the "Sovereign Memory" architecture (the separation of `memory.py` and `vocab_store.py`) for the LocalFirstAI community.
+- [ ] **The Dicer's Dilemma:** Draft a post on Experiment 005—how Nestor learned to "slice" 8 years of heartbeats without triggering a system timeout.
+- [ ] **The Silicon Sentinel:** Update with "Memory Bandwidth Cliff" findings—visualizing why local-first AI is bound by the bus, not just the GPU.
+- [ ] **Intelligence Feedback Loop:** Case study on **Incident 005-Alpha** (Dicer following few-shot patterns over prose instructions).
+- [ ] **Technical Tutorial:** The "Anonymization & Dicing" pattern for local-first retrieval.
