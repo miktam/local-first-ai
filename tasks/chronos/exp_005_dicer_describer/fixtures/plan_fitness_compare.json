@@ -1,0 +1,18 @@
+{
+  "kind": "plan",
+  "rationale": "User asked to compare fitness in 2019 to now. Two slices with the same record types, different date ranges; daily granularity to allow within-year variability.",
+  "slices": [
+    {
+      "label": "2019 baseline",
+      "record_types": ["RestingHeartRate", "VO2Max", "WalkingHeartRateAverage", "HeartRateVariabilitySDNN"],
+      "date_range": { "start": "2019-01-01", "end": "2019-12-31" },
+      "aggregation_level": "daily"
+    },
+    {
+      "label": "recent year",
+      "record_types": ["RestingHeartRate", "VO2Max", "WalkingHeartRateAverage", "HeartRateVariabilitySDNN"],
+      "date_range": { "start": "2025-04-01", "end": "2026-03-24" },
+      "aggregation_level": "daily"
+    }
+  ]
+}

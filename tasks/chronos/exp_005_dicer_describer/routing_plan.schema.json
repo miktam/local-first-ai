@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chronos.local/exp_005/routing_plan.schema.json",
+  "title": "Dicer routing plan",
+  "description": "Structured output from the Dicer (gemma4:e4b). The Dicer returns EITHER a routing plan (kind=plan) OR a clarifying question to the user (kind=question), never both. Validated hard; malformed output is rejected and logged.",
+
+  "type": "object",
+  "oneOf": [
+    { "$ref": "#/$defs/Plan" },
+    { "$ref": "#/$defs/Question" }
+  ],
+
+  "$defs": {
+
+    "Plan": {
+      "type": "object",
+      "required": ["kind", "slices"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "plan" },
+        "slices": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/Slice" },
+          "description": "One or more slices the Describer will receive. Multiple slices allowed in a single plan to handle compound queries (e.g. comparing 2019 to 2024) without round-tripping the Dicer."
+        },
+        "rationale": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "One or two sentences from the Dicer explaining why these slices answer the query. Logged for debugging; not seen by the Describer."
+        }
+      }
+    },
+
+    "Question": {
+      "type": "object",
+      "required": ["kind", "question"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "question" },
+        "question": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 400,
+          "description": "Single clarifying question to ask the user. Used when the query is ambiguous enough that any routing plan would be a guess."
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "What about the query is ambiguous, in the Dicer's words. Logged for debugging."
+        }
+      }
+    },
+
+    "Slice": {
+      "type": "object",
+      "required": ["aggregation_level"],
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "Short human-readable label for this slice (e.g. '2019 baseline', 'recent year'). The Describer sees this; helps it distinguish slices in a compound query."
+        },
+        "record_types": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "description": "Record type names exactly as they appear in manifest.json (e.g. 'RestingHeartRate', 'VO2Max'). Empty or omitted if this slice is workouts-only. Validated against the manifest at extraction time; unknown types fail the plan."
+        },
+        "workouts": {
+          "$ref": "#/$defs/WorkoutFilter"
+        },
+        "date_range": {
+          "$ref": "#/$defs/DateRange",
+          "description": "Optional. If omitted, the slice covers the full history of the requested types/workouts."
+        },
+        "aggregation_level": {
+          "enum": ["monthly", "daily", "raw"],
+          "description": "How the extractor should shape the slice. 'monthly' reads from monthly_aggregates.json (smallest, fits in any prompt). 'daily' reads from daily_aggregates.jsonl (per-day stats). 'raw' streams matching records from export.xml (largest; only when raw values are required). The Dicer should prefer the coarsest level that answers the query."
+        },
+        "max_rows": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5000,
+          "description": "Optional safety cap on extracted rows. The extractor enforces this; if exceeded, the slice is truncated and the truncation flagged to the Describer."
+        }
+      },
+
+      "anyOf": [
+        { "required": ["record_types"] },
+        { "required": ["workouts"] }
+      ]
+    },
+
+    "WorkoutFilter": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "activity_types": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "description": "HKWorkoutActivityType values exactly as in manifest.json workouts.by_type (e.g. 'HKWorkoutActivityTypeFencing'). Empty or omitted means all activity types."
+        },
+        "include_routes": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, the extractor includes pointers to GPX route files (by filename) for matched workouts. Phase 0 does not parse GPX content; the Describer only sees filenames."
+        }
+      }
+    },
+
+    "DateRange": {
+      "type": "object",
+      "required": ["start", "end"],
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "type": "string",
+          "format": "date",
+          "description": "Inclusive start date, ISO 8601 (YYYY-MM-DD). Local time as recorded by Apple Health; no timezone conversion."
+        },
+        "end": {
+          "type": "string",
+          "format": "date",
+          "description": "Inclusive end date, ISO 8601 (YYYY-MM-DD)."
+        }
+      }
+    }
+
+  }
+}

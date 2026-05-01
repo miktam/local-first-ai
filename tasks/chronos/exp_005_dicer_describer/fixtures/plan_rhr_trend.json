@@ -1,0 +1,11 @@
+{
+  "kind": "plan",
+  "rationale": "User asked about resting heart rate trend since 2018. Single record type, full history, monthly granularity is the right level of detail for a trend question.",
+  "slices": [
+    {
+      "label": "RHR full history",
+      "record_types": ["RestingHeartRate"],
+      "aggregation_level": "monthly"
+    }
+  ]
+}

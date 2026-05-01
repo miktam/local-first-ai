@@ -115,8 +115,8 @@ These are the things Phase 0 needs to *answer*, not pre-register against. Findin
 
 In order, smallest dependency first:
 
-1. **Routing-plan schema.** Pin the JSON shape the Dicer must produce. Lives in `routing_plan.schema.json` once written.
-2. **Extractor.** Reads a routing plan, pulls the slice from `export.xml` (raw) or `daily_aggregates.jsonl` (aggregated), writes JSONL the Describer can ingest.
+1. ~~**Routing-plan schema.**~~ **Done 2026-04-30** — see `routing_plan.schema.json` and `ADR-001-routing-plan-schema.md`.
+2. ~~**Extractor.**~~ **Done 2026-04-30** — see `extract.py` and `fixtures/`. Validated against four canonical plans (single, compound, workouts-only, question passthrough) and two failure cases (unknown record type, inverted date range). Strict validation contract holds; rejections exit 2 with structured error JSON.
 3. **Dicer prompt.** System instructions plus the manifest, designed so the model produces routing plans the extractor can consume without retries.
 4. **Describer prompt.** System instructions for synthesis-from-slice, including the clarifying-question protocol.
 5. **First seed prompt run.** Tier 1, #1 (resting heart rate trend) — see [`seed_prompts.md`](./seed_prompts.md). Log to `build_notes.md`.
