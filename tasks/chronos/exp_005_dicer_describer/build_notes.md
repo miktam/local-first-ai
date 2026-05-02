@@ -355,3 +355,41 @@ the design question. Two framings:
 Phase 1 decision. B preserves architectural cleanliness; A matches
 user expectation. For Phase 0, statelessness is the right default —
 users restate fully on retry, ambiguity reduction is observable.
+
+
+## 2026-05-02 — VO2/RHR query overflowed the cliff guard
+
+**Query:** "What were my best years for VO2 max and resting heart rate?"
+
+**Outcome:** Describer first-byte timeout at 600s. Ollama runner wedged
+at 903% CPU; required `kill <ollama serve pid>` to recover.
+
+**What happened:**
+- Dicer chose `aggregation_level: "daily"` for both metrics over full
+  history. Bundle was 75,770 estimated tokens before the guard touched it.
+- Cliff guard fired correctly: downsampled to 21,989 tokens (under the
+  22K ceiling). Both slices truncated to ~400 rows each.
+- Describer received the 22K bundle, sat for 10 minutes, produced no
+  first byte.
+
+**Three findings:**
+
+1. **22K was inside the cliff zone for this prompt.** Either token
+   estimate undercounts JSON-heavy content, or thinking-phase token
+   generation expands effective KV utilisation past prefill estimate,
+   or cliff onset varies by prompt shape. Phase 1 needs cliff
+   measurement specifically on thinking-model prefill+generation, not
+   just prefill.
+
+2. **e4b ignored prose aggregation guidance.** dicer_prompt says
+   "Prefer monthly for trends spanning years." Dicer chose daily.
+   This is the second confirmed instance of e4b copying fixture
+   patterns over following prose (first was max_rows on workouts
+   yesterday). Pattern: few-shot beats prose for e4b on routing
+   constraints. Fixture update is the right fix.
+
+3. **Streaming-cancel does not work in Ollama 0.20.2.** When the
+   client closes the connection, the runner keeps spinning. Phase 0
+   reliability ceiling: one cliff hit per ollama serve restart.
+   Worth investigating in Phase 1; possibly a candidate to file
+   upstream.
