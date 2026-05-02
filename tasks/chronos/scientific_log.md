@@ -316,7 +316,7 @@ the operating envelope is defined by measurement.
 ## Experiment 005 — Multi-Model Cascade (Dicer / Describer): Phase 0 (build)
 
 **Date pre-registered:** 2026-04-29
-**Status:** Phase 0 (build, no falsifiable claim yet)
+**Status:** Phase 0 closed 2026-05-02 — see cascade_pattern.md for the architectural deliverable; Phase 1 pre-registration pending.
 **Subdirectory:** [`tasks/chronos/exp_005_dicer_describer/`](./exp_005_dicer_describer/)
 
 **Strategic anchor.** Tests the demand-signal asymmetry argument [TODO: link to Fang-discussion thread / forthcoming post]. The thesis being explored: a developer's full personal context, held privately and accessed by a local two-stage cascade (small Dicer routes; larger Describer synthesises), can be competitive with a frontier model that does not see the same context. The Hobbesian counter to be falsified in Phase 1: *local intelligence is structurally so much weaker than frontier intelligence that data sovereignty has to be surrendered to access useful capability — a delegation analogous to the state's monopoly on violence.*
@@ -336,9 +336,35 @@ the operating envelope is defined by measurement.
 
 **Honest framing.** Phase 0 is a build, not an experiment. It is logged here because the next falsifiable experiment in Chronos depends on what this build reveals; logging the build separately preserves the contract that experiments come with pre-registered criteria, while still putting the work on the public record. The build itself produces a tool, not a result.
 
-**Result.** *(Filled in after build week: observed failure modes, surprises, candidate Phase 1 hypotheses.)*
+**Result (Phase 0 closed 2026-05-02).** Build week ran 2026-04-29 to 2026-05-02 against the Apple Watch corpus (7.7M records, 8 years, ~3.5GB raw HealthKit XML). Cascade reached working state on three of the four load-bearing behaviours by close of build, with the fourth (compound multi-metric trend over full history) bounded by the memory bandwidth cliff identified in [Incident 003](https://localfirstai.eu/posts/incident_003_alpha_post/). The architectural deliverable lives at [`exp_005_dicer_describer/cascade_pattern.md`](./exp_005_dicer_describer/cascade_pattern.md); failure modes and dated observations live at [`exp_005_dicer_describer/build_notes.md`](./exp_005_dicer_describer/build_notes.md).
+ 
+Working behaviours (each demonstrated end-to-end, traced to disk):
+ 
+- **Single-slice trend grounding.** RHR query produced grounded answers across three runs with verifiable numbers from `monthly_aggregates.json`. Answer quality varied across runs — same data, same slice, different coverage — establishing that single-shot scoring is unreliable for Phase 1.
+- **Workouts with cliff-aware coarsening.** 4,460 raw workout sessions reduced to 62 yearly aggregates by the extractor's per-slice cap; bundle 4,415 tokens, well below the 22K ceiling. Describer surfaced fencing as a personal-signature activity with three years of volume data — the first piece of demand-signal evidence from a working cascade run.
+- **Clarifying-question protocol.** Ambiguous query (*"What were my best fitness years?"*) produced a structured `kind: question` from the Dicer in 3.7s, with three concrete disambiguation options grounded in record types present in the manifest. ADR-001's discriminated-union design exercised end-to-end. Demand-signal evidence in the *clarification* shape: a frontier model without manifest access cannot ask grounded questions of this kind.
+Failure modes surfaced (each documented with mitigation):
+ 
+- **Cliff overflow despite the bundle guard.** A multi-metric daily-resolution query overflowed at 75K tokens; the guard correctly downsampled to 21,989 tokens; the Describer still produced no first byte in 600s. ADR-002's 22K ceiling is over-confident for some prompt shapes — possibly because thinking-phase generation expands effective KV utilisation past the prefill estimate. Phase 1 needs cliff measurement on thinking models specifically.
+- **Streaming-cancel does not work in Ollama 0.20.2.** Abandoned streaming requests wedge the runner at 903% CPU; recovery requires `ollama serve` restart. Phase 0 reliability ceiling: one cliff hit per restart. Worth investigating upstream.
+- **Small-model prose ignored.** `gemma4:e4b` reliably copied fixture patterns over prose instructions across two distinct constraints (`max_rows`, aggregation level). Few-shot beats prose for this model class. Captured as a Phase 0 finding; fixture-update is the right fix.
+- **Output-format violations.** `gemma4:e4b` occasionally wrapped valid JSON in markdown code fences despite Ollama's `format: json`. Mitigation: protocol-level normalisation (strip outer fences) before strict validation, captured in [ADR-001 amendment](./exp_005_dicer_describer/ADR-001-routing-plan-schema.md).
+- **Synthesis variance.** Same query, same slice, three different answers across three runs — all grounded, none hallucinated, but coverage and arc-telling varied. Architectural claim (data sovereignty + grounding) is robust across runs; synthesis claim is variance-bounded. Phase 1 must use N-of-M sampling, not single-shot.
+- **Stateless cascade does not compose follow-ups.** A user fragment answering a prior clarifying question produced a *second* clarifying question because the Dicer received it without context. Architecture is doing the right thing; user contract is the design question for Phase 1.
+Architectural artefacts produced during Phase 0:
+ 
+- [`cascade_pattern.md`](./exp_005_dicer_describer/cascade_pattern.md) — pattern document with problem framing, architecture, invariants, prior-art positioning, and a structural recipe.
+- [`ADR-001-routing-plan-schema.md`](./exp_005_dicer_describer/ADR-001-routing-plan-schema.md) — Dicer output schema; discriminated union of plan/question; strict validation; ADR-001 amendment for output normalisation.
+- [`ADR-002-cliff-aware-ceilings.md`](./exp_005_dicer_describer/ADR-002-cliff-aware-ceilings.md) — operational ceilings derived from Incident 003; cites the cliff as the binding constraint that shapes the cascade.
+- Working code: `build_index.py`, `extract.py`, `cascade.py`, `dicer_prompt.md`, `describer_prompt.md`, fixtures.
+- [`build_notes.md`](./exp_005_dicer_describer/build_notes.md) — six dated entries from 2026-05-01 and 2026-05-02 with raw findings.
+Candidate Phase 1 hypotheses (three open questions, listed for the next experiment to pre-register against):
+ 
+1. **The cliff on thinking models.** [Incident 003](https://localfirstai.eu/posts/incident_003_alpha_post/) characterised prefill latency on a non-thinking 35K-token input. Phase 0 hit a cliff at ~22K with thinking-phase generation in play. The mechanism plausibly differs — prefill plus initial-thinking-token KV expansion — and the operational ceiling depends on the answer. Phase 1 candidate: replicate Incident 003's three-size sweep with a thinking-model Describer to measure where *generation-aware* effective KV crosses the bandwidth cliff.
+2. **Cascade competitiveness against frontier.** The Hobbesian counter — *"local intelligence is structurally so much weaker than frontier intelligence that data sovereignty must be surrendered to access useful capability"* — was deferred from Phase 0 pre-registration. Phase 0 produced two surfaces of demand-signal evidence (in answers, in clarifying questions). Phase 1 candidate: compare the cascade against Claude Opus 4.7 on a query class drawn from the corpus, with a synthetic shadow corpus enabling parity comparison without sharing real health data.
+3. **Synthesis stability under N-of-M sampling.** Phase 0's three-RHR-run variance and the VO2/RHR cliff hit together imply that single-shot scoring conflates quality variance with reliability. Phase 1's evaluation rubric needs both axes: distribution of answer quality across N samples, *and* completion-within-budget reliability. The rubric design itself is candidate work for Phase 1 pre-registration.
+Phase 0 produced no falsifiable result by design — its purpose was to make Phase 1 pre-registration grounded in observation rather than speculation. The deliverable is the architecture and the three hypotheses above. Phase 1's experiment-shape design begins from this base.
 
----
 
 ---
 
