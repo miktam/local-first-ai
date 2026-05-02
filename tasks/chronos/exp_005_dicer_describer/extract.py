@@ -19,10 +19,27 @@ aggregation_level affects BOTH record_types and workouts:
       "daily"   → groups by (activity_type, YYYY-MM-DD); same aggregations
       "raw"     → returns each workout row as-is from workouts.jsonl
 
-This delivers on the schema's implicit contract: when the Dicer asks for
-"monthly" it gets monthly-grouped data, not raw rows mislabelled as monthly.
+Cliff-aware row caps (per ADR-002)
+----------------------------------
+Per Incident 003 (April 28, 2026), prefill goes super-quadratic between
+25K and 35K on-the-wire tokens on the local stack (gemma4:26b on miktam02).
+Slices that push the on-the-wire prompt into that zone cause prefill stalls
+of many minutes and can wedge the Ollama runner.
+
+To keep the architecture below the cliff, the extractor enforces caps that
+bound any single slice's contribution to the bundle:
+
+  - AGG_WORKOUT_ROW_CAP = 200    # ~15 activity types × ~13 months max
+  - AGG_RECORD_DAILY_CAP = 1500  # ~4 years of one type, or proportional
+  - RAW_DEFAULT_CAP via existing max_rows mechanism (already in schema)
+
+These are tighter than the schema's MAX_ROWS_CEILING (5000) — they are the
+*operational* ceilings for Phase 0, applied silently when a slice would
+otherwise exceed them. The slice's `truncated` flag is set so the
+Describer knows.
 
 Per ADR-001: the extractor is the enforcement boundary. Failure is data.
+Per ADR-002: cliff awareness is now part of that enforcement.
 """
 
 from __future__ import annotations
@@ -58,7 +75,12 @@ class ExtractError(Exception):
 
 VALID_AGG = {"monthly", "daily", "raw"}
 MAX_SLICES = 8
-MAX_ROWS_CEILING = 5000
+MAX_ROWS_CEILING = 5000  # absolute schema ceiling
+
+# Cliff-aware operational caps (ADR-002). Applied silently when the
+# Dicer's plan would otherwise exceed them.
+AGG_WORKOUT_ROW_CAP = 200
+AGG_RECORD_DAILY_CAP = 1500
 
 
 def _require(cond: bool, code: str, msg: str, **details: Any) -> None:
@@ -228,7 +250,6 @@ def _short_type(t: str) -> str:
 
 
 def _safe_add(acc: float | None, v: Any) -> float | None:
-    """Sum that treats None as 'unknown'; returns None only if both are None."""
     if v is None:
         return acc
     try:
@@ -337,7 +358,6 @@ def _iter_workouts(workouts_path: Path,
 def extract_workouts_aggregated(slice_spec: dict[str, Any],
                                 workouts_path: Path,
                                 granularity: str) -> list[dict[str, Any]]:
-    """Group workouts by (activity_type, period). granularity in {monthly, daily}."""
     if "workouts" not in slice_spec:
         return []
     wf = slice_spec["workouts"]
@@ -409,6 +429,86 @@ def extract_workouts_raw(slice_spec: dict[str, Any],
 
 
 # ---------------------------------------------------------------------------
+# Cliff-aware downsamplers (ADR-002)
+# ---------------------------------------------------------------------------
+
+def _coarsen_workout_aggregates_to_yearly(rows: list[dict[str, Any]]
+                                          ) -> list[dict[str, Any]]:
+    """If monthly workout aggregation is too dense, fall back to yearly.
+
+    Groups by (activity_type, YYYY) and re-sums.
+    """
+    if not rows:
+        return rows
+    bucket: dict[tuple[str, str], dict[str, Any]] = {}
+    for r in rows:
+        period = r["period"][:4]  # YYYY
+        key = (r["activity_type"], period)
+        agg = bucket.get(key)
+        if agg is None:
+            agg = {
+                "activity_type": r["activity_type"],
+                "period": period,
+                "count": 0,
+                "duration_total": None,
+                "distance_total": None,
+                "energy_total": None,
+                "duration_unit": r.get("duration_unit"),
+                "distance_unit": r.get("distance_unit"),
+                "energy_unit": r.get("energy_unit"),
+            }
+            bucket[key] = agg
+        agg["count"] += r.get("count", 0)
+        agg["duration_total"] = _safe_add(agg["duration_total"], r.get("duration_total"))
+        agg["distance_total"] = _safe_add(agg["distance_total"], r.get("distance_total"))
+        agg["energy_total"] = _safe_add(agg["energy_total"], r.get("energy_total"))
+    out = []
+    for (_at, _y), agg in sorted(bucket.items()):
+        for k in ("duration_total", "distance_total", "energy_total"):
+            if isinstance(agg[k], float):
+                agg[k] = round(agg[k], 3)
+        out.append(agg)
+    return out
+
+
+def _apply_cliff_caps(slice_out: dict[str, Any]) -> bool:
+    """Apply ADR-002 caps to a slice's records and workouts. Returns True if
+    anything was truncated or coarsened.
+    """
+    truncated = False
+
+    # Records: cap daily at AGG_RECORD_DAILY_CAP. Monthly is naturally bounded
+    # (~96 months × few types) so usually no cap needed; if it does exceed,
+    # fall through to the same cap.
+    records = slice_out.get("records") or []
+    if len(records) > AGG_RECORD_DAILY_CAP:
+        slice_out["records"] = records[:AGG_RECORD_DAILY_CAP]
+        truncated = True
+
+    # Workouts: aggregated form. If still over cap after monthly grouping,
+    # coarsen to yearly. If still over, hard-truncate.
+    workouts = slice_out.get("workouts")
+    agg_level = slice_out.get("aggregation_level")
+    if workouts and agg_level in ("monthly", "daily"):
+        if len(workouts) > AGG_WORKOUT_ROW_CAP:
+            coarsened = _coarsen_workout_aggregates_to_yearly(workouts)
+            if len(coarsened) <= AGG_WORKOUT_ROW_CAP:
+                slice_out["workouts"] = coarsened
+                slice_out["_workout_coarsened_to"] = "yearly"
+            else:
+                slice_out["workouts"] = coarsened[:AGG_WORKOUT_ROW_CAP]
+                slice_out["_workout_coarsened_to"] = "yearly+truncated"
+            truncated = True
+
+    if truncated:
+        slice_out["row_count"] = (
+            len(slice_out.get("records") or [])
+            + len(slice_out.get("workouts") or [])
+        )
+    return truncated
+
+
+# ---------------------------------------------------------------------------
 # Orchestration
 # ---------------------------------------------------------------------------
 
@@ -466,7 +566,7 @@ def execute_plan(plan: dict[str, Any],
             truncated_workouts = len(workouts) >= cap
             workouts = workouts[:cap]
 
-        out_slices.append({
+        slice_out = {
             "label": sl.get("label"),
             "record_types": sl.get("record_types", []),
             "date_range": sl.get("date_range"),
@@ -475,7 +575,13 @@ def execute_plan(plan: dict[str, Any],
             "workouts": workouts,
             "truncated": truncated_records or truncated_workouts,
             "row_count": len(records) + (len(workouts) if workouts else 0),
-        })
+        }
+
+        # Cliff-aware caps (ADR-002): applied after extraction, before output.
+        if _apply_cliff_caps(slice_out):
+            slice_out["truncated"] = True
+
+        out_slices.append(slice_out)
 
     return {
         "kind": "slice_bundle",

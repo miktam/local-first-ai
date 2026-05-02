@@ -216,3 +216,142 @@ Bigger lesson: the cliff isn't a Phase 0 obstacle, it's a Phase 0
 *constraint that should have been built in from the start*. The
 findings from Incident 003 weren't propagated into cascade.py's
 defaults. They are now.
+
+## 2026-05-02 — RHR run with streaming + thinking visible (success)
+
+**Wall-clock decomposition (RHR query, 96 monthly rows, 3.4K tokens bundle):**
+- Dicer: 31s (cold start; warm should be ~3-5s).
+- Extractor: 0.07s.
+- Describer: 127s total. First content token at 78s.
+- Thinking-to-answer ratio: 19:1 (6,411 chars thinking, 336 chars answer).
+
+**Cascade behaviour (working as designed):**
+- Cliff guard: 3,366 tokens, well under 22K. No truncation.
+- Streaming exposed the Describer's deliberation in real time. Thinking
+  visible from t=0; content arrived at t=78s; full answer by t=127s.
+- ADR-001 strict validation passed without retry; no normalisation needed.
+
+**Synthesis quality observation (most important):**
+The Describer's thinking trace shows the describer_prompt is actively
+shaping the answer. The model:
+- Restated constraints from the prompt
+- Drafted, self-corrected, redrafted four times
+- Caught a misstatement ("dropped to" → "reached a low of")
+- Verified every cited number against the slice
+
+The result is a meaningfully better answer than yesterday's non-streaming
+runs — traces an arc instead of listing numbers, uses careful language,
+respects what the data does and doesn't show.
+
+**Implication for Phase 1:** thinking traces are evaluable. The thinking
+content itself is potentially scoreable (does the model reason against
+the prompt? does it self-correct? does it verify?), independent of the
+final answer. This adds a measurement axis that wasn't on the table
+before today.
+
+## 2026-05-02 — workout query succeeds with ADR-002 caps
+
+**Wall-clock decomposition:**
+- Dicer: 4.3s (warm).
+- Extractor: 0.09s (coarsening included).
+- Describer: 90s total, first content at 51s. Thinking-to-answer 8:1
+  (4,836 chars thinking, 588 chars answer).
+
+**Cascade behaviour (working as designed per ADR-002):**
+- Extractor coarsened workouts from monthly (347 rows yesterday) to
+  yearly (62 rows today). 4,460 raw sessions → 62 yearly aggregates.
+- Cliff guard: 4,415 tokens. 5x below the 22K ceiling. No bundle-level
+  truncation needed.
+- Where yesterday wedged Ollama at 900% CPU for an hour, today
+  produced a grounded answer in 94 seconds.
+
+**Demand-signal surfacing (architectural claim evidence):**
+The Describer named fencing with three specific year-volume datapoints
+(2021: 6,502 min; 2024: 3,937 min; 2025: 6,225 min). This is exactly
+the kind of personal-context-grounded answer a frontier model with no
+data access cannot produce. First piece of evidence for the
+demand-signal asymmetry hypothesis from a working cascade run.
+
+**Two limitations exposed:**
+1. The Describer claimed "data was truncated" — but the cliff cap
+   produced *coarsening* (yearly aggregation), not truncation. Slices
+   include `_workout_coarsened_to: yearly` annotation, but the
+   describer_prompt doesn't yet teach the model the distinction.
+   Update describer_prompt to handle coarsening as a different shape
+   of partial data.
+2. The Describer surfaced "a significant shift in 2025 toward
+   functional strength training and mixed cardio." Genuine pattern
+   or artefact (new source, classification change)? Worth verifying
+   manually — it's the kind of plausible-sounding claim that exposes
+   whether the cascade can distinguish behavioural shifts from
+   measurement shifts. Phase 1 candidate measurement.
+
+## 2026-05-02 — clarifying-question protocol working end-to-end
+
+**Query:** "What were my best fitness years?"
+
+**Outcome:** Dicer returned kind="question" with three concrete
+disambiguating options (training volume, peak physiological metrics,
+activity-type consistency). Each option is grounded in record types
+present in dicer_view.json. Total cascade wall-clock: 3.7s. Describer
+not called.
+
+**Significance:**
+- ADR-001's discriminated union (plan-or-question) is now exercised
+  end-to-end. The Dicer's question branch was defensible on paper but
+  unproven before today. Architecture now has full coverage.
+- The clarifying question is well-formed: specific, options-not-prose,
+  each option corresponds to a plan the Dicer could have produced.
+  Better than I expected from e4b on a routing-quality task.
+- Latency argument concretised: ambiguous query cost 3.7s. The
+  Describer (90+s, much more compute) was correctly never invoked.
+  This is the cascade's value proposition working — small fast model
+  handles routing decisions that would have been wasted on the big
+  model.
+
+**Demand-signal note:**
+The three options the Dicer offered are themselves a hint of the
+moat. A frontier model without access to dicer_view would have to
+ask much more generic clarifying questions ("what do you mean by
+fitness?"). Because the Dicer sees what data actually exists, its
+clarifications can be *concrete suggestions about what to compute*,
+not abstract requests for definitions. Worth filing as a separate
+demand-signal touchpoint: even the question-asking benefits from
+local context.
+
+## 2026-05-02 — clarification-of-clarification, stateless cascade
+
+After the Dicer asked for clarification on "best fitness years", I
+answered "By peak physiological metrics." The Dicer asked a *second*
+clarifying question, requesting which metric (running speed, max HR,
+VO2 max, or general summary).
+
+Two findings:
+
+**Finding 1: cascade is stateless.** Confirmed by inspection of
+cascade.py — no turn history is passed between calls. The Dicer
+received the fragment with no memory of its own prior question.
+This is architecturally clean (deterministic Dicer, fully observable
+traces, no hidden state) but means user fragments don't compose
+across turns.
+
+**Finding 2: the Dicer asked the right second question anyway.**
+Without any context that "peak physiological metrics" was a follow-up,
+e4b correctly identified that the noun phrase itself contains multiple
+distinct metrics and asked which one. All four offered options grounded
+in real record types in dicer_view.
+
+Cost of a clarification chain so far: 3.7s + 4.1s = 7.8s.
+Cost of the alternative (Describer routing on bad context, then
+producing a wrong answer): would have been 90s+ minimum.
+
+The architecture is doing the right thing; the *user contract* is
+the design question. Two framings:
+
+  A) Add turn-history to make follow-ups work.
+  B) Keep Dicer stateless; orchestrator fuses follow-up fragments
+     with prior question context before calling Dicer.
+
+Phase 1 decision. B preserves architectural cleanliness; A matches
+user expectation. For Phase 0, statelessness is the right default —
+users restate fully on retry, ambiguity reduction is observable.

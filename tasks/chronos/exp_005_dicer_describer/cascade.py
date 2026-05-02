@@ -5,14 +5,20 @@ cascade.py — Phase 0 orchestrator for Experiment 005.
 End-to-end run for one user query:
     1. Send query + Dicer prompt + dicer_view.json to gemma4:e4b via Ollama.
     2. Normalise the Dicer's output (strip markdown code fences if present)
-       per the ADR-001 amendment: normalisation at the protocol boundary is
-       distinct from repair of plan content.
+       per ADR-001 amendment.
     3. Validate via extract.py (strict; ADR-001).
-    4. Token-guard the bundle.
-    5. STREAM query + Describer prompt + slice_bundle to gemma4:26b. Reader
-       thread parses NDJSON; main thread enforces idle timeout via
-       queue.get(timeout=...).
+    4. Token-guard the bundle below the cliff (ADR-002, Incident 003).
+    5. STREAM query + Describer prompt + slice_bundle to gemma4:26b.
     6. Print the final answer; log everything to runs/<timestamp>/.
+
+Cliff awareness (ADR-002 / Incident 003)
+----------------------------------------
+On miktam02, prefill latency on gemma4:26b goes super-quadratic between
+25K and 35K on-the-wire tokens. We treat 22K as the operational ceiling
+on the *whole composed prompt* (system + user + bundle), giving margin
+under the cliff zone documented in Incident 003. The extractor enforces
+per-slice caps; this guard catches anything that still exceeds at the
+bundle level.
 """
 
 from __future__ import annotations
@@ -34,12 +40,19 @@ OLLAMA_URL = "http://localhost:11434/api/chat"
 DICER_MODEL = "gemma4:e4b"
 DESCRIBER_MODEL = "gemma4:26b"
 
-DICER_RETRY_LIMIT = 1                    # ADR-001
-DICER_TIMEOUT_S = 120                    # warm: ~3-5s; cold: ~30s
-DESCRIBER_IDLE_TIMEOUT_S = 90            # max gap between any two streamed events
-DESCRIBER_TOTAL_BUDGET_S = 1800          # absolute ceiling
-DESCRIBER_CONTEXT_LIMIT_TOKENS = 200_000 # under 26b's 262k ceiling
-CHARS_PER_TOKEN = 4
+DICER_RETRY_LIMIT = 1                       # ADR-001
+DICER_TIMEOUT_S = 120                       # warm: ~3-5s; cold: ~30s
+
+# Streaming Describer (ADR-002): on-the-wire prompt must stay below the
+# memory-bandwidth cliff identified in Incident 003 (April 28, 2026).
+# Cliff onset 25K-35K tokens; we cap at 22K with margin.
+DESCRIBER_CONTEXT_LIMIT_TOKENS = 22_000
+
+DESCRIBER_FIRST_BYTE_TIMEOUT_S = 600        # prefill of ~22K can take minutes
+DESCRIBER_IDLE_TIMEOUT_S = 90               # max gap between any two events once started
+DESCRIBER_TOTAL_BUDGET_S = 1800             # absolute ceiling
+
+CHARS_PER_TOKEN = 4                         # rough heuristic for English-ish JSON
 
 
 # ---------------------------------------------------------------------------
@@ -73,11 +86,15 @@ def call_ollama_blocking(model: str, system: str, user: str, *,
 
 
 # ---------------------------------------------------------------------------
-# Ollama client — streaming with idle timeout (Describer)
+# Ollama client — streaming with first-byte + idle + total timeouts
 # ---------------------------------------------------------------------------
 
+class StreamFirstByteTimeout(Exception):
+    """No bytes from server within DESCRIBER_FIRST_BYTE_TIMEOUT_S."""
+
+
 class StreamIdleTimeout(Exception):
-    """No streamed events for longer than DESCRIBER_IDLE_TIMEOUT_S."""
+    """No streamed events for longer than DESCRIBER_IDLE_TIMEOUT_S after stream started."""
 
 
 class StreamTotalTimeout(Exception):
@@ -85,9 +102,6 @@ class StreamTotalTimeout(Exception):
 
 
 def _stream_reader(resp, q: queue.Queue) -> None:
-    """Read NDJSON lines from the response, parse, push events onto q.
-    Sends a sentinel None on EOF or error.
-    """
     try:
         for raw in resp:
             line = raw.strip()
@@ -107,10 +121,22 @@ def _stream_reader(resp, q: queue.Queue) -> None:
 
 
 def call_ollama_streaming(model: str, system: str, user: str, *,
+                          first_byte_timeout_s: float,
                           idle_timeout_s: float,
                           total_budget_s: float,
                           show_thinking: bool = False
                           ) -> dict[str, Any]:
+    """Stream a chat completion. Three timeouts:
+
+    - first_byte: from request send until any event arrives. Allows for
+      long prefill on local hardware.
+    - idle: between consecutive events once streaming has begun.
+    - total: absolute ceiling regardless of progress.
+
+    urllib's `timeout` parameter is a per-read deadline; we set it to
+    first_byte_timeout to cover the prefill wait, then rely on our
+    queue.get(timeout=...) for idle enforcement once events start.
+    """
     payload = {
         "model": model,
         "messages": [
@@ -124,7 +150,7 @@ def call_ollama_streaming(model: str, system: str, user: str, *,
         OLLAMA_URL, data=data,
         headers={"Content-Type": "application/json"},
     )
-    resp = urllib.request.urlopen(req, timeout=DESCRIBER_IDLE_TIMEOUT_S)
+    resp = urllib.request.urlopen(req, timeout=first_byte_timeout_s)
 
     q: queue.Queue = queue.Queue()
     reader = threading.Thread(target=_stream_reader, args=(resp, q), daemon=True)
@@ -132,6 +158,7 @@ def call_ollama_streaming(model: str, system: str, user: str, *,
 
     thinking_chunks: list[str] = []
     content_chunks: list[str] = []
+    first_event_at: float | None = None
     first_thinking_at: float | None = None
     first_content_at: float | None = None
     started = time.time()
@@ -146,16 +173,28 @@ def call_ollama_streaming(model: str, system: str, user: str, *,
             if remaining_total <= 0:
                 raise StreamTotalTimeout(f"exceeded total budget {total_budget_s}s")
 
-            wait = min(idle_timeout_s, remaining_total)
+            # First-byte phase uses the long timeout; subsequent waits use idle.
+            if first_event_at is None:
+                wait = min(first_byte_timeout_s, remaining_total)
+            else:
+                wait = min(idle_timeout_s, remaining_total)
+
             try:
                 obj = q.get(timeout=wait)
             except queue.Empty:
-                raise StreamIdleTimeout(f"no events for {idle_timeout_s}s")
+                if first_event_at is None:
+                    raise StreamFirstByteTimeout(
+                        f"no first byte within {first_byte_timeout_s}s")
+                raise StreamIdleTimeout(
+                    f"no events for {idle_timeout_s}s after stream started")
 
             if obj is None:
                 break
             if "_error" in obj:
                 raise OSError(f"stream reader error: {obj['_error']}")
+
+            if first_event_at is None:
+                first_event_at = time.time() - started
 
             msg = obj.get("message", {})
             t = msg.get("thinking", "")
@@ -198,6 +237,7 @@ def call_ollama_streaming(model: str, system: str, user: str, *,
     return {
         "thinking": "".join(thinking_chunks),
         "content": "".join(content_chunks),
+        "first_event_at": first_event_at,
         "first_thinking_at": first_thinking_at,
         "first_content_at": first_content_at,
         "total_seconds": round(time.time() - started, 3),
@@ -206,20 +246,11 @@ def call_ollama_streaming(model: str, system: str, user: str, *,
 
 
 # ---------------------------------------------------------------------------
-# Dicer output normalisation (boundary fix; ADR-001 amendment)
+# Dicer output normalisation (ADR-001 amendment)
 # ---------------------------------------------------------------------------
 
 def normalise_dicer_output(raw: str) -> str:
-    """Strip markdown code fences around the JSON body if present.
-
-    Thinking models (gemma4:e4b observed) sometimes wrap valid JSON in
-    ```json ... ``` even when format=json is requested. The wrapping is a
-    protocol-level deviation, not a content error. Stripping it preserves
-    ADR-001's strict-validation contract on the actual plan structure.
-
-    No content rewriting — only outer-fence removal. If the body inside the
-    fences is malformed JSON, downstream validation still rejects it.
-    """
+    """Strip markdown code fences around the JSON body if present."""
     s = raw.strip()
     if s.startswith("```"):
         first_nl = s.find("\n")
@@ -276,6 +307,13 @@ def estimate_tokens(s: str) -> int:
 def guard_bundle_size(bundle: dict[str, Any],
                       describer_prompt: str,
                       query: str) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Bundle-level cliff guard. Per-slice caps live in extract.py.
+
+    This catches: compound queries that fit each slice individually but
+    overflow when concatenated. Downsamples slices proportionally with
+    a minimum floor of 20 rows per slice so the Describer always sees
+    something representative.
+    """
     composed = (
         describer_prompt + "\n\n" + query + "\n\n"
         + json.dumps(bundle, ensure_ascii=False)
@@ -334,9 +372,9 @@ def guard_bundle_size(bundle: dict[str, Any],
             "truncated": s.get("truncated", False),
         })
     bundle["_orchestrator_note"] = (
-        "Slices were truncated by the orchestrator to fit the Describer's "
-        "context window. Coverage is partial; do not assume the slice contains "
-        "the entire requested period."
+        "Slices were truncated by the orchestrator to stay below the "
+        "memory-bandwidth cliff (ADR-002). Coverage is partial; flag any "
+        "totals or completeness claims accordingly."
     )
     return bundle, report
 
@@ -354,6 +392,7 @@ def call_describer(query: str, describer_prompt: str,
         + "Answer the question using only the data above."
     )
     return call_ollama_streaming(DESCRIBER_MODEL, describer_prompt, user,
+                                 first_byte_timeout_s=DESCRIBER_FIRST_BYTE_TIMEOUT_S,
                                  idle_timeout_s=DESCRIBER_IDLE_TIMEOUT_S,
                                  total_budget_s=DESCRIBER_TOTAL_BUDGET_S,
                                  show_thinking=show_thinking)
@@ -386,6 +425,11 @@ def run_once(query: str, here: Path, *, export_xml: Path | None,
         "query": query,
         "timestamp": timestamp,
         "models": {"dicer": DICER_MODEL, "describer": DESCRIBER_MODEL},
+        "limits": {
+            "describer_context_limit_tokens": DESCRIBER_CONTEXT_LIMIT_TOKENS,
+            "describer_first_byte_timeout_s": DESCRIBER_FIRST_BYTE_TIMEOUT_S,
+            "describer_idle_timeout_s": DESCRIBER_IDLE_TIMEOUT_S,
+        },
         "stages": {},
     }
 
@@ -415,7 +459,6 @@ def run_once(query: str, here: Path, *, export_xml: Path | None,
             return trace
         dicer_seconds = time.time() - t0
 
-        # Save the RAW Dicer output for forensics, then normalise for the extractor.
         (run_dir / f"dicer_output_attempt_{attempt}.json").write_text(
             plan_text_raw, encoding="utf-8")
         plan_text = normalise_dicer_output(plan_text_raw)
@@ -463,7 +506,7 @@ def run_once(query: str, here: Path, *, export_xml: Path | None,
             json.dumps(trace, indent=2, ensure_ascii=False), encoding="utf-8")
         return trace
 
-    # ---- Stage 2.5: Token guard ----
+    # ---- Stage 2.5: Cliff-aware bundle-level guard ----
     guarded_bundle, guard_report = guard_bundle_size(bundle, describer_prompt, query)
     trace["stages"]["guard"] = guard_report
     if guard_report["truncated"]:
@@ -475,6 +518,18 @@ def run_once(query: str, here: Path, *, export_xml: Path | None,
     try:
         record = call_describer(query, describer_prompt, guarded_bundle,
                                 show_thinking=show_thinking)
+    except StreamFirstByteTimeout as e:
+        describer_seconds = time.time() - t0
+        trace["error"] = "describer/first_byte_timeout"
+        trace["message"] = (
+            f"Describer produced no first byte after {describer_seconds:.1f}s. "
+            f"Likely cliff hit despite guard. Bundle size: "
+            f"{guard_report.get('initial_estimated_tokens')} tokens. {e}"
+        )
+        trace["stages"]["describer_seconds"] = round(describer_seconds, 3)
+        (run_dir / "trace.json").write_text(
+            json.dumps(trace, indent=2, ensure_ascii=False), encoding="utf-8")
+        return trace
     except StreamIdleTimeout as e:
         describer_seconds = time.time() - t0
         trace["error"] = "describer/idle_timeout"
@@ -512,6 +567,7 @@ def run_once(query: str, here: Path, *, export_xml: Path | None,
     trace["kind"] = "answer"
     trace["answer"] = answer
     trace["stages"]["describer_seconds"] = round(describer_seconds, 3)
+    trace["stages"]["describer_first_event_at"] = record.get("first_event_at")
     trace["stages"]["describer_first_thinking_at"] = record.get("first_thinking_at")
     trace["stages"]["describer_first_content_at"] = record.get("first_content_at")
     trace["stages"]["thinking_chars"] = len(thinking)
