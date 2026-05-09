@@ -70,4 +70,7 @@ Experiment 006 proves **fidelity**. It proves that the model, when given a fixed
 The vault keeps the data safe; the locksmith ensures that when you need to share a sanitized version, the privacy remains intact.
 
 **Evidence Reference:**
-Experiment 006 pre-registration and results: `tasks/chronos/exp_006_redactor_fidelity/` — `check_report.json`, `check_summary.txt`, `manual_review.md`
+- [Experiment 006 pre-registration](https://github.com/miktam/local-first-ai/blob/main/tasks/chronos/scientific_log.md) — hypothesis, categories, and pass criteria committed before execution
+- [check_report.json](https://github.com/miktam/local-first-ai/blob/main/tasks/chronos/exp_006_redactor_fidelity/results/check_report.json) — per-note, per-category flag record
+- [check_summary.txt](https://github.com/miktam/local-first-ai/blob/main/tasks/chronos/exp_006_redactor_fidelity/results/check_summary.txt) — human-readable run summary
+- [manual_review.md](https://github.com/miktam/local-first-ai/blob/main/tasks/chronos/exp_006_redactor_fidelity/results/manual_review.md) — reviewer rulings on all automated flags
