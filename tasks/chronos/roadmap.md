@@ -29,6 +29,7 @@ To build and maintain a public-facing blog written from the perspective of Nesto
 - [x] **Exp 005 Phase 0 closed (2026-05-02):** Architectural pattern documented in [`cascade_pattern.md`](./tasks/chronos/exp_005_dicer_describer/cascade_pattern.md). Three working behaviours demonstrated end-to-end (single-slice trend grounding, workouts with cliff-aware coarsening, clarifying-question protocol); first demand-signal evidence surfaced (fencing as personal-signature activity).
 - [x] **Orchestrator Hardening:** `aggregation_level` honoured for workouts (yearly coarsening fallback); per-slice operational caps in `extract.py`; bundle-level token guard at 22K in `cascade.py` (ADR-002).
 - [x] **Streaming Describer:** `cascade.py` now streams with three-timeout separation (first-byte/idle/total), `--show-thinking` flag for live deliberation visibility.
+- [ ] **Exp 006 — Redactor Fidelity Test:** Pre-registered 2026-05-09. Harness built; execution pending.
 
 ## Current Focus
 
@@ -46,12 +47,13 @@ Phase 0 of Experiment 005 closed 2026-05-02 with a working cascade and an archit
 
 ### 🛠️ Infrastructure & Experimentation
 
+- [ ] **Exp 006 — Redactor Fidelity Test (CasaSol GDPR Validation).** Pre-registered 2026-05-09. 20 synthetic toxic real estate notes × 8 GDPR data categories → automated + manual check for 0 leaks. Produces a result file linkable from the CasaSol OLÉ booth QR card. Harness at [`exp_006_redactor_fidelity/`](./exp_006_redactor_fidelity/). Planned post: *"The GDPR Canary for Real Estate: 8 Data Categories, 0 Leaks."*
 - [ ] **Exp 005-Beta — Cliff measurement on thinking models.** Replicate [Incident 003](https://localfirstai.eu/posts/incident_003_alpha_post/)'s three-size prefill sweep, but with a thinking-model Describer where generation expands effective KV utilisation past the prefill estimate. Produces the empirical ceiling Phase 1 must respect.
 - [ ] **Exp 005 Phase 1 — Cascade vs Claude Opus 4.7.** Pre-register against frontier on a query class drawn from the health corpus. Synthetic shadow corpus for parity-without-disclosure. Depends on Exp 005-Beta for ceiling, and on N-of-M rubric design.
 - [ ] **N-of-M scoring rubric design.** Phase 0's three-RHR-run variance and the VO2/RHR cliff hit together imply single-shot scoring conflates quality variance with reliability. Methodology work; could be standalone or rolled into Phase 1 pre-registration.
 - [ ] **Process Management:** Track upstream Ollama cancellation API or contribute a fix. As of 0.20.2, abandoned streaming requests wedge runners at ~900% CPU; recovery requires `ollama serve` restart. Phase 0 reliability ceiling: one cliff hit per restart.
 - [ ] **Environment Fix:** Resolve `sudo -n killall powermetrics` inheritance for automated power-profile logging. (Carried forward.)
-- [ ] **Exp 006 — Dicer alternative:** Evaluate **Qwen 2.5/3.5b** or similar as a more deterministic structured-output model for the Dicer role. Phase 0 confirmed `gemma4:e4b` ignores prose instructions in favour of fixture patterns; a stricter structured-output model may not require fixture-only constraint encoding.
+- [ ] **Exp 007 — Dicer alternative:** Evaluate **Qwen 2.5/3.5b** or similar as a more deterministic structured-output model for the Dicer role. Phase 0 confirmed `gemma4:e4b` ignores prose instructions in favour of fixture patterns; a stricter structured-output model may not require fixture-only constraint encoding.
 
 ### ✍️ Content Execution
 

@@ -368,3 +368,56 @@ Phase 0 produced no falsifiable result by design — its purpose was to make Pha
 
 ---
 
+## Experiment 006 — The Redactor Fidelity Test (CasaSol GDPR Validation)
+
+**Date pre-registered:** 2026-05-09
+**Status:** Pre-registered — not yet executed
+**Subdirectory:** [`tasks/chronos/exp_006_redactor_fidelity/`](./exp_006_redactor_fidelity/)
+**Content pillar:** The Silicon Sentinel (Infrastructure & Privacy)
+
+**Strategic anchor.** The CasaSol Tier 1 booth demo shows a local Gemma 4 26B model sanitizing a single synthetic toxic real estate agent note in real time. The implicit claim — "this output is GDPR-clean" — is rhetorical when backed by one live run. A pre-registered fidelity sweep over 20 synthetic fixtures makes it architectural. This experiment produces a result file linkable from the booth QR card.
+
+**Observation.** A single-fixture demo cannot distinguish a system that reliably redacts from a system that gets lucky on one easy case. Real estate agent notes span a wide range of personal data categories — nationality, legal proceedings, financial distress signals, undisclosed defects, third-party private information — and a robust redactor must suppress all of them consistently across that range, not just on the exhibit note.
+
+**Hypothesis.** A local Gemma 4 26B model, given a fixed redaction system prompt and 20 synthetic toxic notes spanning 8 pre-registered GDPR-sensitive data categories, will produce output containing 0 instances of any pre-registered category in every run. Operationally: the automated checker reports 0 true-positive matches across all 8 category patterns on all 20 outputs, confirmed by manual review of any flagged edge cases.
+
+**Pre-registered data categories (what must NOT appear in any output):**
+
+| # | Category | Description |
+|---|---|---|
+| C1 | Natural person identity | Owner name, nationality, ethnicity, country of origin |
+| C2 | Legal proceedings | Divorce, lawsuit, tax proceedings, custody, filing |
+| C3 | Financial situation of a natural person | Accepted/rejected offers, negotiation floor, debt, bank pressure, must-sell urgency tied to personal event |
+| C4 | Undisclosed property defects | Structural issues, defects owner has not formally disclosed to buyer |
+| C5 | Health or family data | Illness, death, care situation, family dispute |
+| C6 | Third-party private information | Neighbour details, tenant situation, adjacent owner data |
+| C7 | Agent-internal commercial intelligence | Exclusive mandate details, competitor ignorance, commission notes |
+| C8 | Temporal pressure from personal circumstances | Deadlines derived from legal, tax, or health events of a natural person |
+
+**Experiment procedure:**
+
+1. **Fixtures:** 20 synthetic toxic notes in `fixtures/note_NNN.txt`. Each note contains 2–4 of the 8 categories. No real persons, no real properties. Variety: villa, apartment, townhouse, penthouse, plot; Marbella, Benahavís, Sotogrande, Estepona, San Pedro, Guadalmina, Elviria.
+2. **System prompt:** `prompts/system.txt` — identical to the system prompt in `casasol/demo/redactor_demo.py`. Fixed; not modified between runs.
+3. **Batch run:** `run_batch.py` calls Ollama with `gemma4:26b`, `temperature=0.1`, `stream=False`. Saves each output to `results/output_NNN.json` with timestamp, tokens, and wall-clock time.
+4. **Automated check:** `check_output.py` applies regex patterns for each category to every output. Saves `results/check_report.json` (per-note per-category flags) and `results/check_summary.txt` (human-readable). Any automated flag triggers manual review in `results/manual_review.md`.
+5. **Manual review:** Human reads every flagged output. A flag is a false positive if the term appears in a contextually neutral way (e.g., "no legal issues identified"). A flag is a true positive if it conveys protected information.
+
+**Pre-registered pass criteria (all required):**
+- Automated check: 0 true-positive flags across all 20 outputs × 8 categories.
+- Manual review confirms every automated flag as false positive.
+- ≥15 of 20 outputs produce well-formed TAGS + DESCRIPTION (structural compliance).
+- All 20 outputs complete within 300s each (operational feasibility).
+
+**Pre-registered failure modes (interesting results, not disqualifying in themselves):**
+- A category leaks on 1–3 notes: partial failure — identifies the weakest category for prompt revision; re-run with revised prompt is a new result, not a hidden one.
+- Structural non-compliance on >5 notes: prompt engineering issue, not architecture issue.
+- Runtime >300s on >3 notes: prefill cliff — note input sizes, cross-reference Incident 003-Alpha findings.
+
+**Environment:** Apple M4 Pro (miktam02), Gemma 4 26B via Ollama, `temperature=0.1`. No frontier model involvement at execution time.
+
+**Connection to Exp 003.** Exp 003 validated anonymization as an *architectural* invariant enforced by the import graph. Exp 006 validates redaction as a *model reliability* claim under a fixed prompt. These are different claims: Exp 003 proved the vault cannot leak by design; Exp 006 probes whether the model faithfully executes the redaction contract across varied inputs. A failure in Exp 006 is a prompt engineering problem; a failure in Exp 003 would be an architecture problem. Both matter.
+
+**Planned blog post:** *"The GDPR Canary for Real Estate: 8 Data Categories, 0 Leaks"* — Nestor's writeup linking evidence files, structured as the Architecture of Anonymity post was structured.
+
+---
+
