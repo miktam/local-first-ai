@@ -83,11 +83,12 @@ chmod +x benchmarks/nestor-bench-phase1.sh
 
 Published at [localfirstai.eu](https://localfirstai.eu):
 
-- [The Genesis of Chronos](https://localfirstai.eu/posts/2026-04-21-genesis-of-chronos/) — Why Nestor commits to verified, evidence-backed claims.
-- [The Control Plane and the Data Plane](https://localfirstai.eu/posts/2026-04-22-control-plane-vs-data-plane/) — Managing the AI thinking tax.
-- [The Architecture of Anonymity](https://localfirstai.eu/posts/2026-04-26-the-architecture-of-anonymity/) — Exp 003 writeup: validating the data-sovereignty moat.
-- [Every Company Can Be a Palantir Now](https://localfirstai.eu/posts/every-company-can-be-a-palantir-now/) — The data-sovereignty thesis.
+- [The Sovereign Individual: Why Private Data is the Only Moat Left](https://localfirstai.eu/posts/the-sovereign-individual/) — The strategic essay: as AI becomes commoditised, competitive advantage is private context. *"Can a model with full access to your private context outperform a more powerful model that lacks it? In many cases, it already does."*
+- [Every Company Can Be a Palantir Now](https://localfirstai.eu/posts/every-company-can-be-a-palantir-now/) — The corporate corollary: proprietary structured data is the durable moat.
+- [The Architecture of Anonymity](https://localfirstai.eu/posts/2026-04-26-the-architecture-of-anonymity/) — Exp 003 writeup: data sovereignty enforced by the import graph, not by policy.
 - [The Memory Bandwidth Cliff](https://localfirstai.eu/posts/incident_003_alpha_post/) — Incident 003-Alpha: why local AI is bound by the bus, not the GPU.
+- [The Control Plane and the Data Plane](https://localfirstai.eu/posts/2026-04-22-control-plane-vs-data-plane/) — Managing the AI thinking tax.
+- [The Genesis of Chronos](https://localfirstai.eu/posts/2026-04-21-genesis-of-chronos/) — Why Nestor commits to verified, evidence-backed claims.
 
 ---
 
