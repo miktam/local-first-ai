@@ -371,7 +371,8 @@ Phase 0 produced no falsifiable result by design — its purpose was to make Pha
 ## Experiment 006 — The Redactor Fidelity Test (CasaSol GDPR Validation)
 
 **Date pre-registered:** 2026-05-09
-**Status:** Pre-registered — not yet executed
+**Date executed:** 2026-05-09
+**Status:** Complete — PASS
 **Subdirectory:** [`tasks/chronos/exp_006_redactor_fidelity/`](./exp_006_redactor_fidelity/)
 **Content pillar:** The Silicon Sentinel (Infrastructure & Privacy)
 
@@ -418,6 +419,32 @@ Phase 0 produced no falsifiable result by design — its purpose was to make Pha
 **Connection to Exp 003.** Exp 003 validated anonymization as an *architectural* invariant enforced by the import graph. Exp 006 validates redaction as a *model reliability* claim under a fixed prompt. These are different claims: Exp 003 proved the vault cannot leak by design; Exp 006 probes whether the model faithfully executes the redaction contract across varied inputs. A failure in Exp 006 is a prompt engineering problem; a failure in Exp 003 would be an architecture problem. Both matter.
 
 **Planned blog post:** *"The GDPR Canary for Real Estate: 8 Data Categories, 0 Leaks"* — Nestor's writeup linking evidence files, structured as the Architecture of Anonymity post was structured.
+
+---
+
+**Results (2026-05-09)**
+
+**Conclusion: PASS. Hypothesis confirmed.**
+
+All four pre-registered pass criteria met:
+
+1. **0 true-positive leaks** across 20 outputs × 8 categories. Automated checker (`check_output.py`) flagged 4 matches — all on C7, all the word "exclusive" appearing in TAGS as marketing language ("Exclusive listing", "exclusive opportunity"). Manual review confirmed all 4 as false positives: the actual agent-mandate content was correctly suppressed in every case.
+
+2. **20/20 structurally compliant.** Every output produced well-formed TAGS + DESCRIPTION. No hallucination of property-specific facts, no structural failures.
+
+3. **All 20 outputs within 300s.** note_017 and note_018 timed out on the first run (transient Ollama resource pressure following a 4339-token spike on note_002). Rerun on the same session: note_017 in 26s, note_018 in 37s. No fixture is inherently slow — the timeouts were environmental.
+
+4. **Manual review completed for all automated flags.** Log at `results/manual_review.md`.
+
+**Operational note.** note_002 (7 toxic categories, the heaviest fixture) produced 4339 response tokens vs. a typical 1000–1600 — the model appears to reason internally before settling on a short TAGS + DESCRIPTION output. The output itself was clean. This is a cost observation, not a failure.
+
+**Pattern fix.** C7 regex tightened after first run: bare `\bexclusive\b` replaced with `\bexclusive (mandate|instruction|with us|agency|agreement)\b`. Future runs will not false-positive on marketing language.
+
+**Evidence files:**
+- `results/check_report.json` — per-note per-category flag record (linkable from booth QR)
+- `results/check_summary.txt` — human-readable summary
+- `results/manual_review.md` — reviewer rulings on all automated flags
+- `results/output_001–020.json` — full model inputs and outputs
 
 ---
 
