@@ -1,5 +1,7 @@
 # Experiment 005 — Multi-Model Cascade (Dicer / Describer)
 
+> **Terminology (2026-05-10):** Dicer → Router, Describer → Reducer. File names preserved as the canonical experiment artefact; see [`../scientific_log.md`](../scientific_log.md) for the alias note.
+
 **Phase 0 — build first. Falsifiable experiment design follows the build.**
 
 Pre-registered in [`../scientific_log.md`](../scientific_log.md) on 2026-04-29.
