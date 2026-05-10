@@ -12,7 +12,7 @@ This repo accompanies the blog at [localfirstai.eu](https://localfirstai.eu) and
 |---|---|
 | Machine | Mac Mini M4 Pro, 64 GB unified memory |
 | Primary model | `gemma4:26b` (MoE, 25.8B active params, Q4_K_M) |
-| Dicer model | `gemma4:e4b` (fast routing layer) |
+| Router model | `gemma4:e4b` (fast routing layer) |
 | Runtime | Ollama 0.20.2 |
 | Orchestration | OpenClaw → Nestor (local AI agent) |
 | Operating ceiling | **< 22,000 tokens on-wire** (see Incident 003-Alpha) |
@@ -33,7 +33,7 @@ Roadmap and pending experiments: [`tasks/chronos/roadmap.md`](./tasks/chronos/ro
 | [002](./tasks/chronos/experiments/) | Control Plane vs Data Plane | Complete | Thinking mode is flat at ~38 t/s until it isn't — unconstrained prompts trigger runaway |
 | [003](./tasks/chronos/exp_003_local_memory/) | Anonymized Adversarial Memory | Complete | 0/20 source recognition, 0/3 identity leaks on Fight Club corpus — data-sovereignty moat is architectural |
 | [004](./tasks/chronos/exp_004_bootstrap_diet/) | Bootstrap Diet | Complete | OpenClaw session hygiene |
-| [005](./tasks/chronos/exp_005_dicer_describer/) | Dicer / Describer Cascade | Phase 0 closed | Working two-model cascade over 8-year Apple Watch corpus; three load-bearing behaviours demonstrated |
+| [005](./tasks/chronos/exp_005_dicer_describer/) | Router / Reducer Cascade | Phase 0 closed | Working two-model cascade over 8-year Apple Watch corpus; three load-bearing behaviours demonstrated |
 | [006](./tasks/chronos/exp_006_redactor_fidelity/) | Redactor Fidelity (GDPR) | Complete | 0/20 × 8 categories — zero true-positive leaks across all pre-registered GDPR categories |
 
 ### Incidents
@@ -73,7 +73,7 @@ chmod +x benchmarks/nestor-bench-phase1.sh
 
 3. **Data sovereignty is an architectural property, not a policy.** An anonymization boundary enforced by the import graph — not by a prompt or a config flag — defeated source recognition (0/20) and identity bridging (0/3) on a corpus the model has memorised. The moat is the architecture. (Exp 003)
 
-4. **A two-model cascade extends the operating envelope.** Dicer (`gemma4:e4b`) routes in ~3–4s. Describer (`gemma4:26b`) synthesises only what fits below the 22K cliff. The cascade made an 8-year health corpus queryable on local hardware without hitting the bandwidth cliff on normal queries. (Exp 005)
+4. **A two-model cascade extends the operating envelope.** Router (`gemma4:e4b`) routes in ~3–4s. Reducer (`gemma4:26b`) synthesises only what fits below the 22K cliff. The cascade made an 8-year health corpus queryable on local hardware without hitting the bandwidth cliff on normal queries. (Exp 005)
 
 5. **The 22K ceiling is a property of the hardware, not a bug.** Memory bandwidth saturates during prefill on the M4 Pro's unified memory architecture. Mitigations: cliff-aware coarsening in the extractor, hard token budgets in the cascade, streaming watchdog for booth/production use.
 

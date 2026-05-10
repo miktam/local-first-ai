@@ -313,7 +313,9 @@ Sudoers diagnostic note:
 Status: Closed. The original 003-Alpha incident is understood and
 the operating envelope is defined by measurement.
 
-## Experiment 005 — Multi-Model Cascade (Dicer / Describer): Phase 0 (build)
+## Experiment 005 — Multi-Model Cascade (Router / Reducer): Phase 0 (build)
+
+> **Terminology note (2026-05-10):** The two-model roles were originally named Dicer (Router) and Describer (Reducer). All occurrences of Dicer/Describer in this entry are the historical names used during the experiment run.
 
 **Date pre-registered:** 2026-04-29
 **Status:** Phase 0 closed 2026-05-02 — see cascade_pattern.md for the architectural deliverable; Phase 1 pre-registration pending.
