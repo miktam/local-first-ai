@@ -448,5 +448,203 @@ All four pre-registered pass criteria met:
 - `results/manual_review.md` — reviewer rulings on all automated flags
 - `results/output_001–020.json` — full model inputs and outputs
 
+## [EXPERIMENT 007] — The Silicon Wager: Mac Mini M4 Pro vs MacBook Pro Max 5
+
+*Date pre-registered: 2026-05-29*
+*Status: Pre-registered — awaiting execution*
+*Subdirectory: `tasks/chronos/exp_007_hardware_comparison/`*
+
+---
+
+### Observation
+
+A second Apple Silicon machine has entered the operational environment: MacBook Pro Max 5. The Mac Mini M4 Pro (`miktam02`) has been the sole benchmark baseline for every Chronos experiment to date. All performance envelopes — the 22K token cliff, the ~41 t/s generation ceiling, the super-quadratic prefill curve above 25K tokens — were measured on that hardware and treated as architectural constants. They are not constants. They are properties of one chip at one thermal state under one memory configuration. The MacBook Pro Max 5 carries a different die, different unified memory bandwidth, and a different thermal envelope. Every operating ceiling logged in Chronos is potentially wrong for this machine.
+
+A secondary question follows from Exp 005: the Router/Reducer cascade was built and validated entirely on the Mini, against the Apple Watch corpus. If the MacBook Pro Max 5 has a higher prefill cliff threshold, the Reducer's 22K bundle ceiling could be extended — and the cascade's failure mode on multi-metric compound queries (Exp 005 Phase 0: cliff hit at ~22K with thinking-phase generation in play) may not be a ceiling at all on the new hardware. The Watch corpus is the natural fixture for Phase D: it is real, personal, already indexed, and its failure modes are documented. Using it here means Phase D produces demand-signal evidence alongside hardware numbers — two outputs from one run.
+
+---
+
+### Hypothesis
+
+**H0 (null):** Generation throughput (t/s) and the prefill-cliff threshold are statistically indistinguishable between the Mac Mini M4 Pro and the MacBook Pro Max 5 under identical model, runtime, and context conditions.
+
+**H1 (primary):** The MacBook Pro Max 5 yields materially higher generation throughput and/or a higher prefill cliff threshold than the Mac Mini M4 Pro, due to increased memory bandwidth in the Max 5 die.
+
+**H2 (alternative):** Throughput is equivalent at moderate context lengths (< 15K tokens), but the cliff threshold differs — the Max 5 tolerates a larger on-wire prompt before entering the bandwidth-bound regime.
+
+**H3 (adversarial):** Sustained laptop thermals degrade MacBook Pro Max 5 performance relative to the Mac Mini's passive-cooling steady state. Generation throughput starts above the Mini's baseline but decays measurably across a sustained workload.
+
+**H4 (cascade):** The Router/Reducer cascade over the Apple Watch corpus produces consistent, grounded answers on both machines, with answer quality independent of hardware — only latency differs. If H4 holds, the cascade is hardware-portable; if it fails, the failure mode is latency-induced (timeout or cliff hit), not model quality.
+
+**Falsification criteria:**
+- H1 rejected if MacBook Pro Max 5 gen t/s falls within ±5% of the Mini's ~41 t/s baseline across ≥ 4 of 5 context sizes in Phase A.
+- H3 rejected if throughput variance across a 90-minute sustained run is < 3 t/s peak-to-trough.
+- H4 rejected if ≥ 2 of 4 Watch queries produce hallucinated or ungrounded answers on either machine (same rubric as Exp 005 Phase 0).
+
+---
+
+### Experiment
+
+**Model:** `gemma4:26b` (Q4\_K\_M, MoE, ~25.8B active params) — identical to all prior Chronos benchmarks.
+
+**Runtime:** Ollama 0.20.2 on both machines. `OLLAMA_FLASH_ATTENTION=0` (per Incident 003-Alpha mitigation, applied uniformly). `think: false` throughout unless Phase D explicitly exercises thinking-mode Reducer (scoped below).
+
+**Design principle — separation of layers.** Phases A, B, C measure raw Ollama on synthetic padding prompts: apples-to-apples hardware, no cascade stack in the path, failure is unambiguously hardware or runtime. Phase D introduces the full Router/Reducer cascade over real Watch data. A failure in Phase D is diagnosable against Phase A baselines — if gen t/s matches Phase A but the answer is wrong, the problem is the cascade, not the chip.
+
+---
+
+**Protocol:**
+
+1. **Phase A — Generation sweep (both machines, alternating, 3 repeats per cell).**
+   Context sizes: 4K, 8K, 15K, 25K, 35K tokens on-wire. Synthetic padding prompts (committed to `fixtures/padding/`). For each cell: fresh Ollama restart, 60s idle, then prompt injection. Capture `eval_count`, `eval_duration`, `prompt_eval_duration` from Ollama's `/api/generate` response stream. Derived metrics: `gen_tps = eval_count / (eval_duration / 1e9)`, `prefill_ms_per_token = prompt_eval_duration / prompt_token_count`.
+
+2. **Phase B — Prefill cliff localisation (both machines).**
+   Fine-grained sweep between 20K and 40K tokens (nine points, 2.5K spacing). Cliff defined as the smallest N where `prefill_ms_per_token` exceeds 2× its value at 15K tokens. Purpose: establish whether the cliff onset differs between machines and, if so, by how much — this is the number that changes the cascade's operational ceiling.
+
+3. **Phase C — Thermal endurance (MacBook Pro Max 5 only, 90-minute sustained run).**
+   Continuous generation at fixed 8K context. Sample gen\_tps every 5 minutes. Capture `powermetrics` fan RPM, die temperature, GPU/CPU power draw at each interval. The Mini has no thermal throttle path in typical operation; the laptop does. This phase answers whether the MacBook Pro Max 5 is a production machine or a development machine for sustained Nestor sessions.
+
+4. **Phase D — Router/Reducer cascade, mixed corpus: Apple Watch + CasaSol (both machines, 3 repeats per query per machine).**
+
+   Three queries from the Watch corpus (baselines known from Exp 005 Phase 0); one from CasaSol real estate data (new, no prior baseline — the stress test and the publishable output).
+
+   **Watch queries (Exp 005 baselines apply):**
+   - **Q1 (single-slice trend):** RHR monthly trend, last 12 months. Exp 005 baseline: grounded answers in 16–18s warm.
+   - **Q2 (workout summary):** Fencing session volume by year, full history. Exp 005 baseline: 62-row yearly aggregate, well below 22K ceiling.
+   - **Q4 (ambiguous — clarifying-question protocol):** "What were my best fitness years?" Exp 005 baseline: Router returns `kind: question` in ~3.7s. Tests whether Router latency differs between machines on a routing-only task.
+
+   **CasaSol query (new — replaces the VO2/RHR compound query as the cliff stress test):**
+   - **Q3 (Nota Simple vs Catastro mismatch):** Given a set of CasaSol property records, cross-reference Nota Simple surface area against Catastro registered area and classify each discrepancy: < 10% (notary-correctable), ≥ 10% (Article 199 mandatory amendment), or classification conflict (Urbano/Rústico mismatch). Router slices by Referencia Catastral; Reducer synthesises the mismatch report per property.
+
+   Rationale for substitution: the VO2/RHR query was chosen purely as a high-token-pressure stress test. The Nota Simple vs Catastro query is the same shape — multi-source, high bundle pressure, Router/Reducer split — but the output is a real deliverable for CasaSol operations. If the Max 5's higher cliff threshold (confirmed by Phase B) makes Q3 tractable, the result is publishable as evidence for the Palantir thesis, not just a benchmark number. If it cliffs on the Mini but not the Max 5, that is the finding.
+
+   **Pre-requisite:** CasaSol property index must exist before Phase D runs. If not yet ingested, Phase D is deferred and logged as a pre-registration dependency. Watch queries Q1, Q2, Q4 run regardless.
+
+   **Grounding rubric (pre-registered):**
+   - Q1, Q2: answer cites ≥ 1 numeric value traceable to `monthly_aggregates.json` or `yearly_aggregates.json`. No metric value present that is not in the index.
+   - Q3: Reducer output classifies ≥ 80% of properties in the input set with a correct discrepancy category (verified manually against source records). No Referencia Catastral cited that is not in the input bundle. Mini timeout (> 600s) is an acceptable result — replicates known cliff behaviour. MacBook Pro Max 5 completion within 600s is the success criterion if Phase B confirms a higher cliff.
+   - Q4: Router returns `kind: question` with ≥ 2 disambiguation options grounded in record types present in the manifest, within 10s.
+
+   3 repeats per query per machine to capture synthesis variance (Exp 005 finding: same query, same data, different coverage across runs).
+
+---
+
+**Pre-registered pass criteria (all required for H1 to be supported):**
+
+- Gen t/s on MacBook Pro Max 5 exceeds Mac Mini M4 Pro by ≥ 5% at ≥ 3 of 5 context sizes in Phase A.
+- Prefill cliff threshold on MacBook Pro Max 5 is ≥ 20% higher (in tokens) than the Mini's measured ~25K cliff.
+- Phase C thermal decay < 5 t/s peak-to-trough over 90 minutes (otherwise H3 partially confirmed and H1 qualified).
+
+**Pre-registered pass criteria for H4:**
+- Q1 and Q2: ≥ 2 of 3 repeats grounded on both machines.
+- Q3 (Nota Simple vs Catastro): ≥ 2 of 3 repeats classify ≥ 80% of properties correctly on MacBook Pro Max 5, within 600s (if Phase B confirms higher cliff). Mini timeout is expected and not scored against H4. If CasaSol index is not yet available, Q3 is deferred — H4 assessed on Q1, Q2, Q4 only.
+- Q4: Router returns `kind: question` on ≥ 2 of 3 repeats, both machines, within 10s.
+
+**Controls:**
+
+- Both machines on AC power throughout.
+- Wi-Fi disabled during collection (removes interrupt contention).
+- No other foreground applications.
+- Ollama server restarted between each Phase A/B size cell; `ollama ps` verified clean.
+- Synthetic padding prompts committed to `fixtures/padding/` before first run — not modified after.
+- Watch corpus index (`monthly_aggregates.json`, `yearly_aggregates.json`, `workout_yearly.json`) identical on both machines — rsync'd from Mini, checksum verified.
+- All raw JSON responses written to append-only timestamped evidence directories before any derived metric is computed.
+
+---
+
+### Data / Results
+
+*[To be filled upon execution. Tables pre-registered below as empty shells — results appended without editing structure.]*
+
+**Phase A — Generation throughput**
+
+| Context (tokens) | Mini gen t/s | MBP Max 5 gen t/s | Delta % | Mini prefill ms/tok | MBP prefill ms/tok |
+|---|---|---|---|---|---|
+| 4K  | | | | | |
+| 8K  | | | | | |
+| 15K | | | | | |
+| 25K | | | | | |
+| 35K | | | | | |
+
+**Phase B — Cliff localisation**
+
+| Context (tokens) | Mini prefill ms/tok | MBP Max 5 prefill ms/tok | Cliff triggered (Mini) | Cliff triggered (MBP) |
+|---|---|---|---|---|
+| 20K   | | | | |
+| 22.5K | | | | |
+| 25K   | | | | |
+| 27.5K | | | | |
+| 30K   | | | | |
+| 32.5K | | | | |
+| 35K   | | | | |
+| 37.5K | | | | |
+| 40K   | | | | |
+
+**Phase C — Thermal endurance (MacBook Pro Max 5)**
+
+| Elapsed (min) | gen t/s | Die temp (°C) | GPU power (W) | CPU power (W) | Fan RPM |
+|---|---|---|---|---|---|
+| 0  | | | | | |
+| 5  | | | | | |
+| 10 | | | | | |
+| 15 | | | | | |
+| 20 | | | | | |
+| 25 | | | | | |
+| 30 | | | | | |
+| 45 | | | | | |
+| 60 | | | | | |
+| 75 | | | | | |
+| 90 | | | | | |
+
+**Phase D — Router/Reducer cascade, mixed corpus (Watch + CasaSol)**
+
+| Query | Machine | Run | Grounded | Completion time (s) | Router kind | Notes |
+|---|---|---|---|---|---|---|
+| Q1 RHR trend          | Mini      | 1 | | | | |
+| Q1 RHR trend          | Mini      | 2 | | | | |
+| Q1 RHR trend          | Mini      | 3 | | | | |
+| Q1 RHR trend          | MBP Max 5 | 1 | | | | |
+| Q1 RHR trend          | MBP Max 5 | 2 | | | | |
+| Q1 RHR trend          | MBP Max 5 | 3 | | | | |
+| Q2 Fencing vol        | Mini      | 1 | | | | |
+| Q2 Fencing vol        | Mini      | 2 | | | | |
+| Q2 Fencing vol        | Mini      | 3 | | | | |
+| Q2 Fencing vol        | MBP Max 5 | 1 | | | | |
+| Q2 Fencing vol        | MBP Max 5 | 2 | | | | |
+| Q2 Fencing vol        | MBP Max 5 | 3 | | | | |
+| Q3 Nota Simple/Catastro | Mini      | 1 | | | | |
+| Q3 Nota Simple/Catastro | Mini      | 2 | | | | |
+| Q3 Nota Simple/Catastro | Mini      | 3 | | | | |
+| Q3 Nota Simple/Catastro | MBP Max 5 | 1 | | | | |
+| Q3 Nota Simple/Catastro | MBP Max 5 | 2 | | | | |
+| Q3 Nota Simple/Catastro | MBP Max 5 | 3 | | | | |
+| Q4 Best years         | Mini      | 1 | | | | |
+| Q4 Best years         | Mini      | 2 | | | | |
+| Q4 Best years         | Mini      | 3 | | | | |
+| Q4 Best years         | MBP Max 5 | 1 | | | | |
+| Q4 Best years         | MBP Max 5 | 2 | | | | |
+| Q4 Best years         | MBP Max 5 | 3 | | | | |
+
+---
+
+### Conclusion
+
+*[To be written after execution. Pre-registered framing below.]*
+
+**If H1 and H4 both supported:** The MacBook Pro Max 5 is a materially stronger inference machine for this stack. The Router/Reducer cascade's operational ceiling must be re-stated as hardware-specific. Q3 (Nota Simple vs Catastro mismatch) — the cliff stress test — completes on the Max 5 where it times out on the Mini. That result is directly publishable as CasaSol evidence for the Palantir thesis: a local model with proprietary property data, running on the right hardware, producing a GDPR-clean mismatch report that no frontier model without that data could generate. Exp 005 Phase 1 pre-registration must be updated to reflect the new bundle ceiling.
+
+**If H0 holds and H4 holds:** Generation throughput is memory-bandwidth-bound in a regime where M4 Pro and Max 5 are similar enough that the die difference is not decisive at Q4\_K\_M quantisation. The Chronos operating envelopes are portable across this hardware class. Q3 either completes on both machines or times out on both — either way, the cascade is hardware-portable and the Mini remains the production anchor.
+
+**If H1 holds but H4 fails on Q3:** Phase B's higher cliff threshold on the Max 5 did not translate to cascade tractability — the Reducer's effective KV footprint during generation still exceeds the bandwidth ceiling at Q3's bundle size. The Nota Simple vs Catastro query requires tighter cliff-aware coarsening in the extractor, targeting a lower ceiling than the raw Phase B prefill threshold suggests. This is the most operationally useful failure mode: it closes the gap between synthetic benchmark and production CasaSol behaviour, and defines the next extractor constraint to engineer.
+
+**If H3 is confirmed:** The Mini is the production machine for sustained Nestor sessions; the MacBook Pro Max 5 is a capable development environment but thermally constrained under the load profiles that matter for long Reducer calls. Cascade design should prefer Mini-resident Reducer calls for production workloads.
+
+Evidence directory: `exp_007_hardware_comparison/evidence/`
+Scripts: `bench_phase_a.sh`, `bench_phase_b.sh`, `bench_phase_c.py`, `bench_phase_d.py`
+Watch corpus index: rsync from `miktam02:~/local-first-ai/tasks/chronos/exp_005_dicer_describer/index/`
+CasaSol index: pre-requisite — must exist before Phase D Q3 runs. If absent, Q3 deferred; logged as dependency in evidence directory.
+
+---
+
 ---
 

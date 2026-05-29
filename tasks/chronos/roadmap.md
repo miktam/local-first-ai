@@ -33,7 +33,7 @@ To build and maintain a public-facing blog written from the perspective of Nesto
 
 ## Current Focus
 
-Exp 006 closed 2026-05-09 (0/20 × 8 GDPR categories — zero true-positive leaks). Phase 1 of Experiment 005 design begins next, with three open questions to close before pre-registration: (1) measure the memory bandwidth cliff specifically on thinking-model generation, since Phase 0 hit a cliff at ~22K despite Incident 003's measurement suggesting 25K-35K; (2) finalise the frontier comparator's context shape (synthetic shadow corpus vs. aggregate-only); (3) design an N-of-M scoring rubric that captures synthesis variance separately from completion reliability. The cliff measurement is the prerequisite that makes the rest defensible.
+Exp 007 pre-registered 2026-05-29: hardware comparison between Mac Mini M4 Pro and MacBook Pro Max 5. Benchmarks committed to `exp_007_hardware_comparison/` — four phases (generation sweep, cliff localisation, thermal endurance, Router/Reducer cascade). Execution begins immediately; results will determine whether the cascade's 22K bundle ceiling is hardware-specific or universal across this Apple Silicon class. Every Chronos operating envelope to date is a Mini measurement — Exp 007 either validates or revises all of them for the new machine.
 
 ## Technical Deployment Plan
 
@@ -53,7 +53,8 @@ Exp 006 closed 2026-05-09 (0/20 × 8 GDPR categories — zero true-positive leak
 - [ ] **N-of-M scoring rubric design.** Phase 0's three-RHR-run variance and the VO2/RHR cliff hit together imply single-shot scoring conflates quality variance with reliability. Methodology work; could be standalone or rolled into Phase 1 pre-registration.
 - [ ] **Process Management:** Track upstream Ollama cancellation API or contribute a fix. As of 0.20.2, abandoned streaming requests wedge runners at ~900% CPU; recovery requires `ollama serve` restart. Phase 0 reliability ceiling: one cliff hit per restart.
 - [ ] **Environment Fix:** Resolve `sudo -n killall powermetrics` inheritance for automated power-profile logging. (Carried forward.)
-- [ ] **Exp 007 — Router alternative:** Evaluate **Qwen 2.5/3.5b** or similar as a more deterministic structured-output model for the Router role. Phase 0 confirmed `gemma4:e4b` ignores prose instructions in favour of fixture patterns; a stricter structured-output model may not require fixture-only constraint encoding.
+- [ ] **Exp 007 — The Silicon Wager (Mac Mini M4 Pro vs MacBook Pro Max 5).** Pre-registered 2026-05-29. Four phases: generation sweep, prefill cliff localisation, thermal endurance (MBP only), Router/Reducer cascade on Watch + CasaSol corpus. Determines whether the 22K bundle ceiling and ~41 t/s baseline are Mini-specific or portable across M4 family. Evidence at [`exp_007_hardware_comparison/`](./exp_007_hardware_comparison/).
+- [ ] **Router alternative:** Evaluate **Qwen 2.5/3.5b** or similar as a more deterministic structured-output model for the Router role. Phase 0 confirmed `gemma4:e4b` ignores prose instructions in favour of fixture patterns; a stricter structured-output model may not require fixture-only constraint encoding.
 
 ### ✍️ Content Execution
 
