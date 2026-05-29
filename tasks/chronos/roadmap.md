@@ -33,7 +33,7 @@ To build and maintain a public-facing blog written from the perspective of Nesto
 
 ## Current Focus
 
-Exp 007 pre-registered 2026-05-29: hardware comparison between Mac Mini M4 Pro and MacBook Pro Max 5. Benchmarks committed to `exp_007_hardware_comparison/` — four phases (generation sweep, cliff localisation, thermal endurance, Router/Reducer cascade). Execution begins immediately; results will determine whether the cascade's 22K bundle ceiling is hardware-specific or universal across this Apple Silicon class. Every Chronos operating envelope to date is a Mini measurement — Exp 007 either validates or revises all of them for the new machine.
+Exp 007 Phase A+B complete on both machines (2026-05-29). H1 and H2 confirmed: MBP cliff onset at ~45K tokens vs Mini ~18K (2.5× difference); MBP gen t/s +200–370% vs Mini. New operational ceilings: Mini <18K tokens, MBP <40K tokens. The cascade ADR-002 ceiling (22K) is safe on MBP; Mini ceiling tightened. Phase C (thermal endurance, MBP) and Phase D (cascade, both machines) pending. Exp 008 (flash attention + q8_0 KV cache) pre-registered — tests whether flags push Mini cliff from 18K to 35K+.
 
 ## Technical Deployment Plan
 
@@ -53,7 +53,9 @@ Exp 007 pre-registered 2026-05-29: hardware comparison between Mac Mini M4 Pro a
 - [ ] **N-of-M scoring rubric design.** Phase 0's three-RHR-run variance and the VO2/RHR cliff hit together imply single-shot scoring conflates quality variance with reliability. Methodology work; could be standalone or rolled into Phase 1 pre-registration.
 - [ ] **Process Management:** Track upstream Ollama cancellation API or contribute a fix. As of 0.20.2, abandoned streaming requests wedge runners at ~900% CPU; recovery requires `ollama serve` restart. Phase 0 reliability ceiling: one cliff hit per restart.
 - [ ] **Environment Fix:** Resolve `sudo -n killall powermetrics` inheritance for automated power-profile logging. (Carried forward.)
-- [ ] **Exp 007 — The Silicon Wager (Mac Mini M4 Pro vs MacBook Pro Max 5).** Pre-registered 2026-05-29. Four phases: generation sweep, prefill cliff localisation, thermal endurance (MBP only), Router/Reducer cascade on Watch + CasaSol corpus. Determines whether the 22K bundle ceiling and ~41 t/s baseline are Mini-specific or portable across M4 family. Evidence at [`exp_007_hardware_comparison/`](./exp_007_hardware_comparison/).
+- [x] **Exp 007 Phase A+B — The Silicon Wager (Mac Mini M4 Pro vs MacBook Pro Max 5).** Complete 2026-05-29. Mini cliff: ~18K tokens. MBP cliff: ~45K tokens (2.5× higher). MBP gen t/s +200–370% vs Mini at matched context sizes. H1 and H2 confirmed. Evidence at [`exp_007_hardware_comparison/evidence/`](./exp_007_hardware_comparison/evidence/).
+- [ ] **Exp 007 Phase C — Thermal endurance (MBP, 90 min sustained).** Fan audible during Phase B at 110K tokens. Phase C quantifies thermal decay under sustained load.
+- [ ] **Exp 007 Phase D — Router/Reducer cascade (Watch + CasaSol, both machines).** Tests H4: cascade portability. CasaSol Q3 (Nota Simple vs Catastro) deferred pending CasaSol index.
 - [ ] **Exp 008 — Flash Attention + q8_0 KV Cache.** Pre-registered 2026-05-29. Tests whether `OLLAMA_FLASH_ATTENTION=1` + `OLLAMA_KV_CACHE_TYPE=q8_0` pushes the prefill cliff from Exp 007's ~20K token onset to ≥30K. If H1 confirmed, ADR-002 bundle ceiling can be revised upward. Evidence at [`exp_008_flash_attention/`](./exp_008_flash_attention/).
 - [ ] **Router alternative:** Evaluate **Qwen 2.5/3.5b** or similar as a more deterministic structured-output model for the Router role. Phase 0 confirmed `gemma4:e4b` ignores prose instructions in favour of fixture patterns; a stricter structured-output model may not require fixture-only constraint encoding.
 

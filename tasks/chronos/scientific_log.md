@@ -451,7 +451,7 @@ All four pre-registered pass criteria met:
 ## [EXPERIMENT 007] — The Silicon Wager: Mac Mini M4 Pro vs MacBook Pro Max 5
 
 *Date pre-registered: 2026-05-29*
-*Status: Pre-registered — awaiting execution*
+*Status: Phase A+B complete (both machines, 2026-05-29). Phase C+D pending.*
 *Subdirectory: `tasks/chronos/exp_007_hardware_comparison/`*
 
 ---
@@ -652,7 +652,23 @@ A secondary question follows from Exp 005: the Router/Reducer cascade was built 
 
 ### Conclusion
 
-*[To be written after execution. Pre-registered framing below.]*
+**Interim conclusion (Phase A+B, 2026-05-29) — H1 and H2 confirmed. H3 and H4 pending.**
+
+**H1 confirmed.** MBP cliff onset between 40K–50K tokens vs Mini onset between 15K–20K — a 2.5× difference, well above the pre-registered 20% threshold for H1. The MBP at 35K (1.243 ms/tok) is still below the Mini's baseline at 4K (3.033 ms/tok). MBP gen t/s inside its own cliff (~43 t/s at 50K) exceeds the Mini's baseline gen t/s (~25 t/s at 15K). The die difference is decisive.
+
+**H2 confirmed.** Gen t/s improvement at 15K: +201% (75.45 vs 25.08). At 25K: +370% (66.44 vs 14.12). Both well above the pre-registered 10% threshold.
+
+**Revised operational ceilings (measurement-grounded):**
+- Mac Mini M4 Pro: **< 18K tokens on-wire** (cliff onset ~17–20K)
+- MacBook Pro M4 Max 5: **< 40K tokens on-wire** (cliff onset ~43–50K)
+
+**Cliff shape finding (not pre-registered, emergent):** The Mini cliff above onset is linear at ~0.95 ms/tok per 1K tokens. The MBP cliff above onset is ~20× flatter at ~0.03–0.05 ms/tok per 1K tokens. The Mini cliff is a sharp wall; the MBP cliff is a gentle ramp. Cascade ADR-002's 22K ceiling is safe on MBP; Mini ceiling must be tightened to 18K.
+
+**H3 (thermal):** Anecdotal evidence during Phase B — fan audible and chassis warm at 110K-token prefill cells. Not quantified. Phase C (90-min sustained run) required to assess.
+
+**H4 (cascade portability):** Phase D pending.
+
+**[Pre-registered framings below — to be resolved after Phase C+D.]*
 
 **If H1 and H4 both supported:** The MacBook Pro Max 5 is a materially stronger inference machine for this stack. The Router/Reducer cascade's operational ceiling must be re-stated as hardware-specific. Q3 (Nota Simple vs Catastro mismatch) — the cliff stress test — completes on the Max 5 where it times out on the Mini. That result is directly publishable as CasaSol evidence for the Palantir thesis: a local model with proprietary property data, running on the right hardware, producing a GDPR-clean mismatch report that no frontier model without that data could generate. Exp 005 Phase 1 pre-registration must be updated to reflect the new bundle ceiling.
 
