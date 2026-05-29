@@ -178,13 +178,14 @@ def run(machine: str, baseline_ms: float, sizes: list[str]) -> None:
 
         valid = [r["metrics"] for r in cell_records if "metrics" in r]
         if valid:
-            pre_vals = [m["prefill_ms_per_tok"] for m in valid if m.get("prefill_ms_per_tok") is not None]
-            mean_pre = round(sum(pre_vals) / len(pre_vals), 3) if pre_vals else None
-            cliff_hit = mean_pre is not None and mean_pre > cliff_threshold
+            # Rep 1 only for cliff detection: reps 2+ are KV-cache hits (near-zero
+            # prefill on identical prompt) and must not pollute the cliff signal.
+            cold_pre = valid[0].get("prefill_ms_per_tok") if valid else None
+            cliff_hit = cold_pre is not None and cold_pre > cliff_threshold
             row = {
                 "size_key": size_key,
                 "prompt_tokens": valid[0].get("prompt_tokens"),
-                "mean_prefill_ms_per_tok": mean_pre,
+                "cold_prefill_ms_per_tok": cold_pre,  # rep 1 only — authoritative
                 "cliff_triggered": cliff_hit,
                 "n": len(valid),
             }
@@ -192,9 +193,9 @@ def run(machine: str, baseline_ms: float, sizes: list[str]) -> None:
             if cliff_hit and cliff_confirmed_at is None:
                 cliff_confirmed_at = size_key
                 print(f"           → CLIFF ONSET CONFIRMED at {size_key} "
-                      f"({mean_pre} ms/tok > threshold {cliff_threshold:.3f})\n")
+                      f"(rep1 prefill={cold_pre} ms/tok > threshold {cliff_threshold:.3f})\n")
             else:
-                print(f"           → mean prefill={mean_pre} ms/tok  cliff={cliff_hit}\n")
+                print(f"           → rep1 prefill={cold_pre} ms/tok  cliff={cliff_hit}\n")
 
     summary = {
         "machine": machine, "model": MODEL,
@@ -209,11 +210,11 @@ def run(machine: str, baseline_ms: float, sizes: list[str]) -> None:
 
     print("\n=== Phase B Summary ===")
     print(f"Baseline: {baseline_ms} ms/tok at 15K  |  Cliff threshold: {cliff_threshold:.3f} ms/tok")
-    print(f"{'Size':8}  {'Tokens':8}  {'Prefill ms/tok':16}  {'Cliff':6}")
+    print(f"{'Size':8}  {'Tokens':8}  {'Rep1 prefill ms/tok':21}  {'Cliff':6}")
     for row in summary_rows:
         flag = "YES ***" if row.get("cliff_triggered") else "no"
         print(f"{row['size_key']:8}  {str(row.get('prompt_tokens','?')):8}  "
-              f"{str(row.get('mean_prefill_ms_per_tok','?')):16}  {flag}")
+              f"{str(row.get('cold_prefill_ms_per_tok','?')):21}  {flag}")
     if cliff_confirmed_at:
         print(f"\nCliff onset: {cliff_confirmed_at}")
     else:

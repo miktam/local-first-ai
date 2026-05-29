@@ -1,0 +1,80 @@
+[
+  {
+    "experiment": "007",
+    "phase": "A",
+    "machine": "mini",
+    "size_key": "35k",
+    "repeat": 1,
+    "timestamp": "2026-05-29T12:40:33.170373+00:00",
+    "model": "gemma4:26b",
+    "metrics": {
+      "gen_tps": 14.71,
+      "prefill_ms_per_tok": 22.655,
+      "prompt_tokens": 23338,
+      "gen_tokens": 128,
+      "wall_seconds": 539.679,
+      "load_duration_ms": 1743.7
+    },
+    "ollama_raw": {
+      "total_duration": 539498715250,
+      "load_duration": 1743691542,
+      "prompt_eval_count": 23338,
+      "prompt_eval_duration": 528733606625,
+      "eval_count": 128,
+      "eval_duration": 8702094754,
+      "done_reason": "length"
+    }
+  },
+  {
+    "experiment": "007",
+    "phase": "A",
+    "machine": "mini",
+    "size_key": "35k",
+    "repeat": 2,
+    "timestamp": "2026-05-29T12:40:42.406124+00:00",
+    "model": "gemma4:26b",
+    "metrics": {
+      "gen_tps": 15.1,
+      "prefill_ms_per_tok": 0.003,
+      "prompt_tokens": 23338,
+      "gen_tokens": 128,
+      "wall_seconds": 9.233,
+      "load_duration_ms": 207.9
+    },
+    "ollama_raw": {
+      "total_duration": 9062115125,
+      "load_duration": 207930583,
+      "prompt_eval_count": 23338,
+      "prompt_eval_duration": 70002167,
+      "eval_count": 128,
+      "eval_duration": 8475894504,
+      "done_reason": "length"
+    }
+  },
+  {
+    "experiment": "007",
+    "phase": "A",
+    "machine": "mini",
+    "size_key": "35k",
+    "repeat": 3,
+    "timestamp": "2026-05-29T12:40:51.653589+00:00",
+    "model": "gemma4:26b",
+    "metrics": {
+      "gen_tps": 15.1,
+      "prefill_ms_per_tok": 0.003,
+      "prompt_tokens": 23338,
+      "gen_tokens": 128,
+      "wall_seconds": 9.245,
+      "load_duration_ms": 201.2
+    },
+    "ollama_raw": {
+      "total_duration": 9075349833,
+      "load_duration": 201229000,
+      "prompt_eval_count": 23338,
+      "prompt_eval_duration": 72713250,
+      "eval_count": 128,
+      "eval_duration": 8474330783,
+      "done_reason": "length"
+    }
+  }
+]

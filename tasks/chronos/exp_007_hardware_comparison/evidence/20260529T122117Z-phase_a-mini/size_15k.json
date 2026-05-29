@@ -1,0 +1,80 @@
+[
+  {
+    "experiment": "007",
+    "phase": "A",
+    "machine": "mini",
+    "size_key": "15k",
+    "repeat": 1,
+    "timestamp": "2026-05-29T12:26:25.400979+00:00",
+    "model": "gemma4:26b",
+    "metrics": {
+      "gen_tps": 28.72,
+      "prefill_ms_per_tok": 5.841,
+      "prompt_tokens": 10014,
+      "gen_tokens": 128,
+      "wall_seconds": 64.813,
+      "load_duration_ms": 1650.1
+    },
+    "ollama_raw": {
+      "total_duration": 64768688334,
+      "load_duration": 1650111125,
+      "prompt_eval_count": 10014,
+      "prompt_eval_duration": 58491550084,
+      "eval_count": 128,
+      "eval_duration": 4456989796,
+      "done_reason": "length"
+    }
+  },
+  {
+    "experiment": "007",
+    "phase": "A",
+    "machine": "mini",
+    "size_key": "15k",
+    "repeat": 2,
+    "timestamp": "2026-05-29T12:26:30.194539+00:00",
+    "model": "gemma4:26b",
+    "metrics": {
+      "gen_tps": 28.88,
+      "prefill_ms_per_tok": 0.006,
+      "prompt_tokens": 10014,
+      "gen_tokens": 128,
+      "wall_seconds": 4.792,
+      "load_duration_ms": 144.4
+    },
+    "ollama_raw": {
+      "total_duration": 4750613333,
+      "load_duration": 144433333,
+      "prompt_eval_count": 10014,
+      "prompt_eval_duration": 55492083,
+      "eval_count": 128,
+      "eval_duration": 4431701007,
+      "done_reason": "length"
+    }
+  },
+  {
+    "experiment": "007",
+    "phase": "A",
+    "machine": "mini",
+    "size_key": "15k",
+    "repeat": 3,
+    "timestamp": "2026-05-29T12:26:35.055312+00:00",
+    "model": "gemma4:26b",
+    "metrics": {
+      "gen_tps": 28.39,
+      "prefill_ms_per_tok": 0.005,
+      "prompt_tokens": 10014,
+      "gen_tokens": 128,
+      "wall_seconds": 4.86,
+      "load_duration_ms": 143.7
+    },
+    "ollama_raw": {
+      "total_duration": 4818761625,
+      "load_duration": 143654833,
+      "prompt_eval_count": 10014,
+      "prompt_eval_duration": 51900000,
+      "eval_count": 128,
+      "eval_duration": 4508893501,
+      "done_reason": "length"
+    }
+  }
+]

@@ -1,0 +1,80 @@
+[
+  {
+    "experiment": "007",
+    "phase": "A",
+    "machine": "mini",
+    "size_key": "25k",
+    "repeat": 1,
+    "timestamp": "2026-05-29T12:30:19.462419+00:00",
+    "model": "gemma4:26b",
+    "metrics": {
+      "gen_tps": 23.8,
+      "prefill_ms_per_tok": 9.263,
+      "prompt_tokens": 16679,
+      "gen_tokens": 128,
+      "wall_seconds": 161.842,
+      "load_duration_ms": 1670.4
+    },
+    "ollama_raw": {
+      "total_duration": 161763936542,
+      "load_duration": 1670409417,
+      "prompt_eval_count": 16679,
+      "prompt_eval_duration": 154496759708,
+      "eval_count": 128,
+      "eval_duration": 5378612329,
+      "done_reason": "length"
+    }
+  },
+  {
+    "experiment": "007",
+    "phase": "A",
+    "machine": "mini",
+    "size_key": "25k",
+    "repeat": 2,
+    "timestamp": "2026-05-29T12:30:25.249814+00:00",
+    "model": "gemma4:26b",
+    "metrics": {
+      "gen_tps": 24.0,
+      "prefill_ms_per_tok": 0.004,
+      "prompt_tokens": 16679,
+      "gen_tokens": 128,
+      "wall_seconds": 5.786,
+      "load_duration_ms": 149.2
+    },
+    "ollama_raw": {
+      "total_duration": 5707619875,
+      "load_duration": 149174166,
+      "prompt_eval_count": 16679,
+      "prompt_eval_duration": 60710375,
+      "eval_count": 128,
+      "eval_duration": 5334056580,
+      "done_reason": "length"
+    }
+  },
+  {
+    "experiment": "007",
+    "phase": "A",
+    "machine": "mini",
+    "size_key": "25k",
+    "repeat": 3,
+    "timestamp": "2026-05-29T12:30:31.042206+00:00",
+    "model": "gemma4:26b",
+    "metrics": {
+      "gen_tps": 23.92,
+      "prefill_ms_per_tok": 0.004,
+      "prompt_tokens": 16679,
+      "gen_tokens": 128,
+      "wall_seconds": 5.791,
+      "load_duration_ms": 138.5
+    },
+    "ollama_raw": {
+      "total_duration": 5717022958,
+      "load_duration": 138549458,
+      "prompt_eval_count": 16679,
+      "prompt_eval_duration": 65084000,
+      "eval_count": 128,
+      "eval_duration": 5351899206,
+      "done_reason": "length"
+    }
+  }
+]

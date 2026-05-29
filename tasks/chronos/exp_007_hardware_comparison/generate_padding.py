@@ -10,7 +10,7 @@ Usage:
     python3 generate_padding.py          # generate all sizes
     python3 generate_padding.py --verify # print expected char counts only
 
-Target token → char conversion: 4 chars ≈ 1 token (Gemma tokenizer, English prose).
+Target token → char conversion: 6 chars ≈ 1 token (calibrated from Phase A results).
 """
 
 import argparse
@@ -69,7 +69,7 @@ SIZES = {
     "pad_40k":  40_000,
 }
 
-CHARS_PER_TOKEN = 4
+CHARS_PER_TOKEN = 6  # calibrated from Phase A: Gemma tokenizer on this corpus ~6 chars/token
 
 
 def generate_text(target_tokens: int) -> str:
