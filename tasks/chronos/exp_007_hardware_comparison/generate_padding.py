@@ -67,6 +67,15 @@ SIZES = {
     "pad_35k":  35_000,
     "pad_37500": 37_500,
     "pad_40k":  40_000,
+    # Extended range for MBP cliff localisation (MBP Phase B did not cliff at 40K)
+    "pad_50k":   50_000,
+    "pad_60k":   60_000,
+    "pad_70k":   70_000,
+    "pad_80k":   80_000,
+    "pad_90k":   90_000,
+    "pad_100k": 100_000,
+    "pad_110k": 110_000,
+    "pad_120k": 120_000,
 }
 
 CHARS_PER_TOKEN = 6  # calibrated from Phase A: Gemma tokenizer on this corpus ~6 chars/token

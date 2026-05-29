@@ -51,6 +51,15 @@ SIZES = {
     "35k":   "pad_35k.txt",
     "37500": "pad_37500.txt",
     "40k":   "pad_40k.txt",
+    # Extended range for MBP cliff localisation
+    "50k":   "pad_50k.txt",
+    "60k":   "pad_60k.txt",
+    "70k":   "pad_70k.txt",
+    "80k":   "pad_80k.txt",
+    "90k":   "pad_90k.txt",
+    "100k":  "pad_100k.txt",
+    "110k":  "pad_110k.txt",
+    "120k":  "pad_120k.txt",
 }
 
 INSTRUCTION = "\n\nWrite a one-sentence summary of the text above."
