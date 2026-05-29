@@ -554,43 +554,54 @@ A secondary question follows from Exp 005: the Router/Reducer cascade was built 
 
 ### Data / Results
 
-*[To be filled upon execution. Tables pre-registered below as empty shells — results appended without editing structure.]*
-
 **Phase A — Generation throughput**
 
-*Mini: run 2026-05-29. MBP Max 5: pending.*
-*Note: rep 1 prefill only — reps 2+ are KV-cache hits on identical prompt (near-zero, not real measurements).*
+*Both machines run 2026-05-29. Rep 1 prefill only — reps 2+ are KV-cache hits (near-zero, not real measurements).*
 
-| Actual tokens | Mini rep1 prefill ms/tok | MBP Max 5 prefill ms/tok | Mini mean gen t/s | MBP gen t/s |
+| Actual tokens | Mini rep1 prefill ms/tok | MBP rep1 prefill ms/tok | Mini mean gen t/s | MBP mean gen t/s |
 |---|---|---|---|---|
-| ~4K  (4,019)  | 3.033  | | 34.76 | |
-| ~8K  (8,012)  | 4.870  | | 31.38 | |
-| ~15K (15,011) | 8.316  | | 25.08 | |
-| ~25K (24,993) | 24.154 | | 14.40 | |
-| ~35K (34,995) | 33.752 | | 10.75 | |
+| ~4K  (4,019 / 4,020)   | 3.033  | 0.801 | 34.76 | 79.98* |
+| ~8K  (8,012 / 8,013)   | 4.870  | 0.777 | 31.38 | 84.01  |
+| ~15K (15,011 / 15,012) | 8.316  | 0.884 | 25.08 | 75.52  |
+| ~25K (24,993 / 24,994) | 24.154 | 1.057 | 14.40 | 66.68  |
+| ~35K (34,995 / 34,996) | 33.752 | 1.243 | 10.75 | 57.85  |
 
-*Evidence: `evidence/20260529T130052Z-phase_a-mini/summary.json`*
+*MBP 4K rep 1 includes cold model load; steady-state is ~92 t/s.*
+*MBP at 35K (1.243 ms/tok) is still below Mini's baseline at 4K (3.033 ms/tok).*
+
+*Evidence: `evidence/20260529T130052Z-phase_a-mini/` · `evidence/20260529T184636Z-phase_a-mbp/`*
 
 **Phase B — Cliff localisation**
 
-*Mini: run 2026-05-29. MBP Max 5: pending.*
-*Baseline: 8.316 ms/tok at 15,011 tokens. Cliff threshold: 16.632 ms/tok (2×).*
-*Cliff onset confirmed at 20K (first tested point). Actual onset between 15K–20K — Phase B did not test below 20K.*
-*Above 20K: slope is linear at ~0.95 ms/tok per 1K tokens (not super-quadratic within the cliff regime).*
+*Mini: baseline 8.316 ms/tok, cliff threshold 16.632 ms/tok. Cliff onset between 15K–20K.*
+*MBP: baseline 0.884 ms/tok, cliff threshold 1.768 ms/tok. Cliff onset between 40K–50K.*
+*Mini cliff slope (above onset): ~0.95 ms/tok per 1K tokens (linear).*
+*MBP cliff slope (above onset): ~0.03–0.05 ms/tok per 1K tokens — ~20× flatter than Mini.*
+*New operational ceilings: Mini <18K tokens · MBP <40K tokens.*
 
-| Actual tokens | Mini rep1 prefill ms/tok | MBP Max 5 prefill ms/tok | Cliff (Mini) | Cliff (MBP) |
+| Actual tokens | Mini rep1 prefill ms/tok | MBP rep1 prefill ms/tok | Cliff (Mini) | Cliff (MBP) |
 |---|---|---|---|---|
-| 20,005 | 19.352 | | YES | |
-| 22,502 | 22.010 | | YES | |
-| 24,993 | 24.235 | | YES | |
-| 27,500 | 26.597 | | YES | |
-| 29,996 | 28.945 | | YES | |
-| 32,493 | 31.350 | | YES | |
-| 34,995 | 33.767 | | YES | |
-| 37,482 | 36.109 | | YES | |
-| 39,991 | 38.493 | | YES | |
+| 20,005 / 20,006 | 19.352 | 0.965 | YES | no |
+| 22,502 / 22,503 | 22.010 | 1.015 | YES | no |
+| 24,993 / 24,994 | 24.235 | 1.065 | YES | no |
+| 27,500 / 27,501 | 26.597 | 1.108 | YES | no |
+| 29,996 / 29,997 | 28.945 | 1.143 | YES | no |
+| 32,493 / 32,494 | 31.350 | 1.192 | YES | no |
+| 34,995 / 34,996 | 33.767 | 1.329 | YES | no |
+| 37,482 / 37,483 | 36.109 | 1.336 | YES | no |
+| 39,991 / 39,992 | 38.493 | 1.381 | YES | no |
+| ~50K  (49,974)  | —      | 1.929 | —   | YES |
+| ~60K  (59,971)  | —      | 1.930 | —   | YES |
+| ~70K  (69,959)  | —      | 2.291 | —   | YES |
+| ~80K  (79,950)  | —      | 2.819 | —   | YES |
+| ~90K  (89,940)  | —      | 2.690 | —   | YES |
+| ~100K (99,937)  | —      | 3.238 | —   | YES |
+| ~110K (109,919) | —      | 3.228 | —   | YES |
+| ~120K (119,912) | —      | 3.826 | —   | YES |
 
-*Evidence: `evidence/20260529T134341Z-phase_b-mini/summary.json`*
+*90K/110K non-monotonic dips (~0.13/0.01 ms/tok) attributed to thermal variance during 60s idle between cells.*
+
+*Evidence: `evidence/20260529T134341Z-phase_b-mini/` · `evidence/20260529T191226Z-phase_b-mbp/`*
 
 **Phase C — Thermal endurance (MacBook Pro Max 5)**
 
