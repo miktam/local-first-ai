@@ -10,12 +10,13 @@ This repo accompanies the blog at [localfirstai.eu](https://localfirstai.eu) and
 
 | Component | Value |
 |---|---|
-| Machine | Mac Mini M4 Pro, 64 GB unified memory |
+| Primary machine | Mac Mini M4 Pro (`miktam02`), 64 GB unified memory |
+| Secondary machine | MacBook Pro M4 Max 5 — under benchmark (Exp 007) |
 | Primary model | `gemma4:26b` (MoE, 25.8B active params, Q4_K_M) |
 | Router model | `gemma4:e4b` (fast routing layer) |
 | Runtime | Ollama 0.20.2 |
 | Orchestration | OpenClaw → Nestor (local AI agent) |
-| Operating ceiling | **< 22,000 tokens on-wire** (see Incident 003-Alpha) |
+| Operating ceiling | **< 20,000 tokens on-wire** (Exp 007 Phase A/B — revised from Incident 003's ~25K) |
 
 ---
 
@@ -35,6 +36,8 @@ Roadmap and pending experiments: [`tasks/chronos/roadmap.md`](./tasks/chronos/ro
 | [004](./tasks/chronos/exp_004_bootstrap_diet/) | Bootstrap Diet | Complete | OpenClaw session hygiene |
 | [005](./tasks/chronos/exp_005_dicer_describer/) | Router / Reducer Cascade | Phase 0 closed | Working two-model cascade over 8-year Apple Watch corpus; three load-bearing behaviours demonstrated |
 | [006](./tasks/chronos/exp_006_redactor_fidelity/) | Redactor Fidelity (GDPR) | Complete | 0/20 × 8 categories — zero true-positive leaks across all pre-registered GDPR categories |
+| [007](./tasks/chronos/exp_007_hardware_comparison/) | Mac Mini vs MacBook Pro Max 5 | In progress | Phase A/B on Mini complete: cliff at ~20K tokens; MBP benchmarks running in parallel |
+| [008](./tasks/chronos/exp_008_flash_attention/) | Flash Attention + q8_0 KV Cache | Pre-registered | Tests whether FA + KV cache quantization pushes the 20K cliff to ≥30K tokens |
 
 ### Incidents
 
@@ -67,7 +70,7 @@ chmod +x benchmarks/nestor-bench-phase1.sh
 
 ## Key findings (cumulative)
 
-1. **Generation speed is flat on Apple Silicon — until it isn't.** gen_tps holds at ~41 t/s from 4K to 130K context. The cliff is in *prefill*, not generation: above ~25K tokens on-wire, prefill goes super-quadratic. At 35K tokens, prefill takes 18 minutes. This is the dominant constraint for production local AI on this hardware. (Incident 003-Alpha)
+1. **Generation speed is flat on Apple Silicon — until it isn't.** The cliff is in *prefill*, not generation: past ~20K tokens on-wire, prefill goes super-quadratic on `gemma4:26b`. At 35K tokens, prefill takes ~20 minutes. Incident 003-Alpha first measured this on `gemma4-think:26b` at ~25K; Exp 007 refined the onset to ~20K on the production model. This is the dominant constraint for production local AI on this hardware. (Incident 003-Alpha, Exp 007)
 
 2. **Thinking mode is the wrong default.** Without constraints, a simple task generates 10,000–25,000 hidden thinking tokens. At 38 t/s that's 4–11 minutes per response with zero quality improvement. The fix is architectural: `think=false` by default, explicit thinking only where it earns its cost. (Exp 002)
 
