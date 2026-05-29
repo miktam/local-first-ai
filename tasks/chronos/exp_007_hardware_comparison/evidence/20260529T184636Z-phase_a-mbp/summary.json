@@ -1,0 +1,44 @@
+{
+  "machine": "mbp",
+  "model": "gemma4:26b",
+  "num_predict": 128,
+  "idle_seconds": 60,
+  "started": "20260529T184636Z",
+  "sizes": [
+    {
+      "size_key": "4k",
+      "prompt_tokens": 4020,
+      "mean_gen_tps": 79.98,
+      "mean_prefill_ms_per_tok": 0.285,
+      "n": 3
+    },
+    {
+      "size_key": "8k",
+      "prompt_tokens": 8013,
+      "mean_gen_tps": 84.01,
+      "mean_prefill_ms_per_tok": 0.261,
+      "n": 3
+    },
+    {
+      "size_key": "15k",
+      "prompt_tokens": 15012,
+      "mean_gen_tps": 75.52,
+      "mean_prefill_ms_per_tok": 0.296,
+      "n": 3
+    },
+    {
+      "size_key": "25k",
+      "prompt_tokens": 24994,
+      "mean_gen_tps": 66.68,
+      "mean_prefill_ms_per_tok": 0.353,
+      "n": 3
+    },
+    {
+      "size_key": "35k",
+      "prompt_tokens": 34996,
+      "mean_gen_tps": 57.85,
+      "mean_prefill_ms_per_tok": 0.415,
+      "n": 3
+    }
+  ]
+}
