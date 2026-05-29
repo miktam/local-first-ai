@@ -646,5 +646,116 @@ CasaSol index: pre-requisite — must exist before Phase D Q3 runs. If absent, Q
 
 ---
 
+## [EXPERIMENT 008] — Flash Attention + q8_0 KV Cache: Does It Push the Cliff?
+
+*Date pre-registered: 2026-05-29*
+*Status: Pre-registered — awaiting execution*
+*Subdirectory: `tasks/chronos/exp_008_flash_attention/`*
+
+---
+
+### Observation
+
+Exp 007 Phase A/B established the prefill cliff on Mac Mini M4 Pro at **~20K tokens** under default Ollama settings (`OLLAMA_FLASH_ATTENTION=0`, fp16 KV cache). Incident 003-Alpha had previously measured the cliff between 25K–35K tokens using `gemma4-think:26b`; Exp 007 re-measured with `gemma4:26b` and found onset at 20K. Both experiments confirm the root cause: **memory bandwidth saturation**, not compute.
+
+Two Ollama flags directly address memory bandwidth consumption:
+
+1. **`OLLAMA_FLASH_ATTENTION=1`** — enables flash attention, a memory-efficient attention kernel that reduces peak memory bandwidth for the attention operation by tiling the computation to avoid materialising the full attention matrix.
+2. **`OLLAMA_KV_CACHE_TYPE=q8_0`** — quantizes the KV cache from fp16 (2 bytes/element) to 8-bit (1 byte/element), halving the memory footprint of the KV cache and proportionally reducing the bandwidth required to read it during each forward pass.
+
+If the Exp 007 cliff is purely bandwidth-bound on the KV cache, `q8_0` should roughly double the cliff threshold. If flash attention provides additional relief, the combined effect could push the ceiling from ~20K to ~35K+ tokens — a substantial operational improvement for the Router/Reducer cascade.
+
+**Connection to Incident 003-Alpha:** H1 (FA-induced CPU fallback) was rejected in Incident 003 on `gemma4-think:26b` at small scale (≤5K chars). Exp 008 re-examines FA at production-scale prompts (up to 40K tokens) with `gemma4:26b`, now paired with `q8_0` as a co-variable. If FA causes instability at scale, Exp 008 will surface it.
+
+---
+
+### Hypothesis
+
+**H1 (primary):** `OLLAMA_FLASH_ATTENTION=1` + `OLLAMA_KV_CACHE_TYPE=q8_0` raises the prefill cliff threshold from ~20K tokens (Exp 007 baseline) to ≥30K tokens on Mac Mini M4 Pro.
+
+**H2 (throughput):** Gen t/s at medium context (15K–25K tokens) improves by ≥10% vs Exp 007 baseline due to reduced KV cache bandwidth pressure during autoregressive decoding.
+
+**H3 (instability):** FA causes silent generation failures, empty responses, or wedged runners under production-scale prompts (>15K tokens) — re-testing Incident 003-Alpha H1 at scale.
+
+**H0 (null):** Prefill cliff threshold and gen t/s are statistically indistinguishable from Exp 007 baseline. Flags have no measurable effect on this hardware.
+
+**Falsification criteria:**
+- H1 rejected if cliff threshold ≤20K with flags active (same as Exp 007 without flags).
+- H2 rejected if gen t/s at 15K and 25K sizes falls within ±10% of Exp 007 values.
+- H3 confirmed if ≥1 of 5 Phase A cells produces empty response, timeout, or wedged runner.
+
+---
+
+### Experiment
+
+**Protocol:** Same Phase A (5 sizes: 4K, 8K, 15K, 25K, 35K, 3 repeats) and Phase B (cliff sweep 20K–40K, 2.5K spacing, 2 repeats) as Exp 007. Ollama started via `start_ollama_flags.sh` with `OLLAMA_FLASH_ATTENTION=1 OLLAMA_KV_CACHE_TYPE=q8_0`. Brew services Ollama stopped before starting the flagged instance.
+
+**Fixtures:** Shared from `exp_007_hardware_comparison/fixtures/padding/` — same files, no duplication.
+
+**Baseline:** Phase A rep 1 prefill at 15K tokens from **this experiment** (not Exp 007) — flags change absolute prefill numbers; baseline must be measured under the same conditions being tested.
+
+**Machines:** Mac Mini M4 Pro first (direct comparison to Exp 007). MacBook Pro Max 5 second (once MBP Exp 007 Phase A/B complete, for cross-machine comparison with flags).
+
+**Controls:**
+- AC power throughout.
+- Wi-Fi disabled during collection.
+- Same `gemma4:26b` model weights as Exp 007.
+- Same `num_ctx=131072`, `temperature=0.0`, `num_predict` values as Exp 007.
+- 60s idle between size cells (model unloaded via `keep_alive=0` + `ollama stop`).
+
+---
+
+### Pre-registered pass criteria
+
+- **H1 supported:** Cliff threshold ≥30K tokens (Exp 007 cliff was at 20K).
+- **H2 supported:** Gen t/s at 15K and 25K each ≥10% above Exp 007 rep 1 values (25.08 and 14.12 t/s respectively).
+- **H3 confirmed:** ≥1 Phase A cell fails with empty/timeout/wedge (operationally disqualifying if confirmed — flags would be rejected for production use).
+
+---
+
+### Data / Results
+
+*[To be filled upon execution.]*
+
+**Phase A — Generation throughput (FA + q8_0)**
+
+| Size | Actual tokens | Rep1 prefill ms/tok | Mean gen t/s | Exp 007 gen t/s | Delta |
+|------|--------------|---------------------|--------------|-----------------|-------|
+| 4k   | | | | 34.76 | |
+| 8k   | | | | 31.38 | |
+| 15k  | | | | 25.08 | |
+| 25k  | | | | 14.40 | |
+| 35k  | | | | 10.75 | |
+
+**Phase B — Cliff localisation (FA + q8_0)**
+
+| Size | Actual tokens | Rep1 prefill ms/tok | Cliff triggered | Exp 007 result |
+|------|--------------|---------------------|-----------------|----------------|
+| 20k  | | | | YES (19.352 ms/tok) |
+| 22500 | | | | YES |
+| 25k  | | | | YES |
+| 27500 | | | | YES |
+| 30k  | | | | YES |
+| 32500 | | | | |
+| 35k  | | | | |
+| 37500 | | | | |
+| 40k  | | | | |
+
+---
+
+### Conclusion
+
+*[To be written after execution.]*
+
+**If H1 supported:** The q8_0 KV cache quantization is the primary mechanism — halving KV cache bandwidth materially raises the operational ceiling. The cascade's 22K bundle ceiling can be revised upward. Document the new ceiling and update ADR-002.
+
+**If H0 holds:** The cliff is not purely KV cache bandwidth-bound; other factors (compute, memory controller latency, or Ollama overhead) dominate. Flags provide no operational benefit. Default settings remain correct.
+
+**If H3 confirmed:** FA is disqualified for production use on this hardware/model combination. Run with `OLLAMA_FLASH_ATTENTION=0 OLLAMA_KV_CACHE_TYPE=q8_0` only and re-test.
+
+Evidence directory: `exp_008_flash_attention/evidence/`
+Scripts: `bench_phase_a.py`, `bench_phase_b.py`, `start_ollama_flags.sh`
+Fixtures: shared from `exp_007_hardware_comparison/fixtures/padding/`
+
 ---
 
