@@ -1,0 +1,44 @@
+{
+  "machine": "mini",
+  "model": "gemma4:26b",
+  "num_predict": 128,
+  "idle_seconds": 60,
+  "started": "20260529T130052Z",
+  "sizes": [
+    {
+      "size_key": "4k",
+      "prompt_tokens": 4019,
+      "mean_gen_tps": 34.76,
+      "mean_prefill_ms_per_tok": 1.018,
+      "n": 3
+    },
+    {
+      "size_key": "8k",
+      "prompt_tokens": 8012,
+      "mean_gen_tps": 31.38,
+      "mean_prefill_ms_per_tok": 1.627,
+      "n": 3
+    },
+    {
+      "size_key": "15k",
+      "prompt_tokens": 15011,
+      "mean_gen_tps": 25.02,
+      "mean_prefill_ms_per_tok": 2.775,
+      "n": 3
+    },
+    {
+      "size_key": "25k",
+      "prompt_tokens": 24993,
+      "mean_gen_tps": 14.4,
+      "mean_prefill_ms_per_tok": 8.054,
+      "n": 3
+    },
+    {
+      "size_key": "35k",
+      "prompt_tokens": 34995,
+      "mean_gen_tps": 10.75,
+      "mean_prefill_ms_per_tok": 11.252,
+      "n": 3
+    }
+  ]
+}

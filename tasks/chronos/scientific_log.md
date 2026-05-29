@@ -558,27 +558,39 @@ A secondary question follows from Exp 005: the Router/Reducer cascade was built 
 
 **Phase A — Generation throughput**
 
-| Context (tokens) | Mini gen t/s | MBP Max 5 gen t/s | Delta % | Mini prefill ms/tok | MBP prefill ms/tok |
-|---|---|---|---|---|---|
-| 4K  | | | | | |
-| 8K  | | | | | |
-| 15K | | | | | |
-| 25K | | | | | |
-| 35K | | | | | |
+*Mini: run 2026-05-29. MBP Max 5: pending.*
+*Note: rep 1 prefill only — reps 2+ are KV-cache hits on identical prompt (near-zero, not real measurements).*
+
+| Actual tokens | Mini rep1 prefill ms/tok | MBP Max 5 prefill ms/tok | Mini mean gen t/s | MBP gen t/s |
+|---|---|---|---|---|
+| ~4K  (4,019)  | 3.033  | | 34.76 | |
+| ~8K  (8,012)  | 4.870  | | 31.38 | |
+| ~15K (15,011) | 8.316  | | 25.08 | |
+| ~25K (24,993) | 24.154 | | 14.40 | |
+| ~35K (34,995) | 33.752 | | 10.75 | |
+
+*Evidence: `evidence/20260529T130052Z-phase_a-mini/summary.json`*
 
 **Phase B — Cliff localisation**
 
-| Context (tokens) | Mini prefill ms/tok | MBP Max 5 prefill ms/tok | Cliff triggered (Mini) | Cliff triggered (MBP) |
+*Mini: run 2026-05-29. MBP Max 5: pending.*
+*Baseline: 8.316 ms/tok at 15,011 tokens. Cliff threshold: 16.632 ms/tok (2×).*
+*Cliff onset confirmed at 20K (first tested point). Actual onset between 15K–20K — Phase B did not test below 20K.*
+*Above 20K: slope is linear at ~0.95 ms/tok per 1K tokens (not super-quadratic within the cliff regime).*
+
+| Actual tokens | Mini rep1 prefill ms/tok | MBP Max 5 prefill ms/tok | Cliff (Mini) | Cliff (MBP) |
 |---|---|---|---|---|
-| 20K   | | | | |
-| 22.5K | | | | |
-| 25K   | | | | |
-| 27.5K | | | | |
-| 30K   | | | | |
-| 32.5K | | | | |
-| 35K   | | | | |
-| 37.5K | | | | |
-| 40K   | | | | |
+| 20,005 | 19.352 | | YES | |
+| 22,502 | 22.010 | | YES | |
+| 24,993 | 24.235 | | YES | |
+| 27,500 | 26.597 | | YES | |
+| 29,996 | 28.945 | | YES | |
+| 32,493 | 31.350 | | YES | |
+| 34,995 | 33.767 | | YES | |
+| 37,482 | 36.109 | | YES | |
+| 39,991 | 38.493 | | YES | |
+
+*Evidence: `evidence/20260529T134341Z-phase_b-mini/summary.json`*
 
 **Phase C — Thermal endurance (MacBook Pro Max 5)**
 
