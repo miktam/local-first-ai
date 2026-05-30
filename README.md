@@ -11,7 +11,7 @@ This repo accompanies the blog at [localfirstai.eu](https://localfirstai.eu) and
 | Component | Value |
 |---|---|
 | Primary machine | Mac Mini M4 Pro (`miktam02`), 64 GB unified memory |
-| Secondary machine | MacBook Pro M4 Max 5 — under benchmark (Exp 007) |
+| Secondary machine | MacBook Pro M5 Max — under benchmark (Exp 007) |
 | Primary model | `gemma4:26b` (MoE, 25.8B active params, Q4_K_M) |
 | Router model | `gemma4:e4b` (fast routing layer) |
 | Runtime | Ollama 0.20.2 |
@@ -37,7 +37,7 @@ Roadmap and pending experiments: [`tasks/chronos/roadmap.md`](./tasks/chronos/ro
 | [004](./tasks/chronos/exp_004_bootstrap_diet/) | Bootstrap Diet | Complete | OpenClaw session hygiene |
 | [005](./tasks/chronos/exp_005_dicer_describer/) | Router / Reducer Cascade | Phase 0 closed | Working two-model cascade over 8-year Apple Watch corpus; three load-bearing behaviours demonstrated |
 | [006](./tasks/chronos/exp_006_redactor_fidelity/) | Redactor Fidelity (GDPR) | Complete | 0/20 × 8 categories — zero true-positive leaks across all pre-registered GDPR categories |
-| [007](./tasks/chronos/exp_007_hardware_comparison/) | Mac Mini vs MacBook Pro Max 5 | Phase A+B complete | Mini cliff ~18K, MBP cliff ~45K (2.5×); MBP gen t/s +200–370%; H1+H2 confirmed |
+| [007](./tasks/chronos/exp_007_hardware_comparison/) | Mac Mini vs MacBook Pro M5 Max | Phase A+B complete | Mini cliff ~18K, MBP cliff ~45K (2.5×); MBP gen t/s +200–370%; H1+H2 confirmed |
 | [008](./tasks/chronos/exp_008_flash_attention/) | Flash Attention + q8_0 KV Cache | Pre-registered | Tests whether FA + KV cache quantization pushes the 20K cliff to ≥30K tokens |
 
 ### Incidents
@@ -71,7 +71,7 @@ chmod +x benchmarks/nestor-bench-phase1.sh
 
 ## Key findings (cumulative)
 
-1. **The prefill cliff is real — and hardware-specific.** On Mac Mini M4 Pro (`gemma4:26b`), prefill degrades sharply past ~18K tokens: at 35K tokens, prefill takes 20 minutes. On MacBook Pro M4 Max 5, the cliff onset is at ~45K tokens — 2.5× higher — and the slope above it is 20× gentler. The bottleneck is memory bandwidth, not compute. The right machine for long-context local inference is not interchangeable. (Incident 003-Alpha, Exp 007)
+1. **The prefill cliff is real — and hardware-specific.** On Mac Mini M4 Pro (`gemma4:26b`), prefill degrades sharply past ~18K tokens: at 35K tokens, prefill takes 20 minutes. On MacBook Pro M5 Max, the cliff onset is at ~45K tokens — 2.5× higher — and the slope above it is 20× gentler. The bottleneck is memory bandwidth, not compute. The right machine for long-context local inference is not interchangeable. (Incident 003-Alpha, Exp 007)
 
 2. **Thinking mode is the wrong default.** Without constraints, a simple task generates 10,000–25,000 hidden thinking tokens. At 38 t/s that's 4–11 minutes per response with zero quality improvement. The fix is architectural: `think=false` by default, explicit thinking only where it earns its cost. (Exp 002)
 
@@ -81,7 +81,7 @@ chmod +x benchmarks/nestor-bench-phase1.sh
 
 5. **The 22K ceiling is a property of the hardware, not a bug.** Memory bandwidth saturates during prefill on the M4 Pro's unified memory architecture. Mitigations: cliff-aware coarsening in the extractor, hard token budgets in the cascade, streaming watchdog for booth/production use.
 
-6. **The M4 Max 5 die is in a different performance class for inference.** At 25K tokens, MBP gen t/s is 66 vs Mini's 14 — a 4.7× difference on the same model weights and quantisation. MBP at 35K tokens (1.24 ms/tok prefill) is still well below the Mini's baseline at 4K tokens (3.03 ms/tok). The cascade's 22K bundle ceiling — set for the Mini — is comfortably safe on the MBP, which can handle ~40K before hitting its own cliff. (Exp 007)
+6. **The M5 Max die is in a different performance class for inference.** At 25K tokens, MBP gen t/s is 66 vs Mini's 14 — a 4.7× difference on the same model weights and quantisation. MBP at 35K tokens (1.24 ms/tok prefill) is still well below the Mini's baseline at 4K tokens (3.03 ms/tok). The cascade's 22K bundle ceiling — set for the Mini — is comfortably safe on the MBP, which can handle ~40K before hitting its own cliff. (Exp 007)
 
 7. **A fixed redaction prompt reliably produces GDPR-clean output.** 20 synthetic toxic real estate notes spanning 8 pre-registered GDPR categories — 0 true-positive leaks in any output. The local 26B model with `temperature=0.1` and a structured system prompt passes all four pre-registered criteria: zero leaks, full structural compliance (TAGS + DESCRIPTION), all 20 within 300s. (Exp 006)
 
