@@ -73,7 +73,7 @@ chmod +x benchmarks/nestor-bench-phase1.sh
 
 1. **The prefill cliff is real — and hardware-specific.** On Mac Mini M4 Pro (`gemma4:26b`), prefill degrades sharply past ~18K tokens: at 35K tokens, prefill takes 20 minutes. On MacBook Pro M5 Max, the cliff onset is at ~45K tokens — 2.5× higher — and the slope above it is 20× gentler. The bottleneck is memory bandwidth, not compute. The right machine for long-context local inference is not interchangeable. (Incident 003-Alpha, Exp 007)
 
-2. **Thinking mode is the wrong default.** Without constraints, a simple task generates 10,000–25,000 hidden thinking tokens. At 38 t/s that's 4–11 minutes per response with zero quality improvement. The fix is architectural: `think=false` by default, explicit thinking only where it earns its cost. (Exp 002)
+2. **Thinking mode must be an explicit choice, not a default.** `gemma4:26b` has thinking capability built in. Without constraints, a simple task generates 10,000–25,000 hidden thinking tokens — at 38 t/s that's 4–11 minutes per response with zero quality gain. The architectural fix: a separate `gemma4-think:26b` Ollama alias with `think: true` and a hard 128K context cap. Thinking is only available when you deliberately reach for it by name. (Exp 002)
 
 3. **Data sovereignty is an architectural property, not a policy.** An anonymization boundary enforced by the import graph — not by a prompt or a config flag — defeated source recognition (0/20) and identity bridging (0/3) on a corpus the model has memorised. The moat is the architecture. (Exp 003)
 
