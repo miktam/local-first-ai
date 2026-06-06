@@ -1,0 +1,45 @@
+{
+  "findings": [
+    {
+      "title": "Unverified Data Layer Integrity",
+      "severity": "high",
+      "gap_ref": "The queryable corpus is 58 enriched listings across three agencies (Agency A, Agency B, Agency C) in SQLite + ChromaDB",
+      "detail": "The core RAG architecture relies on a specific, multi-source dataset that is currently unverified. Without evidence of the full 58-listing corpus or the presence of all three agencies, the retrieval accuracy and the reliability of the vector database schema cannot be validated.",
+      "action": "Provide a data manifest or ingestion log that explicitly maps the 58 listings to their respective agencies and confirms their presence in ChromaDB."
+    },
+    {
+      "title": "Undocumented Model Regression Risk",
+      "severity": "high",
+      "gap_ref": "swap Reducer model from qwen3.5:30b to gemma4:26b",
+      "detail": "Changing the core inference engine without an Architectural Decision Record (ADR) is a major risk to system stability. This 'silent' swap introduces unmanaged variables regarding output quality, latency, and prompt compatibility.",
+      "action": "Create an ADR documenting the rationale for the model swap, including a benchmark comparison of the Reducer's performance between Qwen and Gemma."
+    },
+    {
+      "title": "Unverified Integration Bridge",
+      "severity": "medium",
+      "gap_ref": "Foundational MCP ↔ Claude Desktop bridge is proven",
+      "detail": "The claim of a 'proven' bridge is unsupported by any integration tests or connection logs. If this interface is a critical path for user interaction, the lack of evidence suggests a high risk of deployment failure.",
+      "action": "Commit an integration test suite or a connection handshake log demonstrating successful communication between the MCP filters and the Claude Desktop environment."
+    },
+    {
+      "title": "Shadow Monitoring Architecture",
+      "severity": "medium",
+      "gap_ref": "Adversarial Watcher — staged intention-vs-implementation gap pipeline",
+      "detail": "The existence of an 'Adversarial Watcher' in the codebase without mention in the project commitments indicates 'shadow architecture.' This makes the system's monitoring and security posture impossible to audit or maintain.",
+      "action": "Formally document the Adversarial Watcher's role, its operational logic, and its integration within the existing pipeline in the project's technical documentation."
+    },
+    {
+      "title": "Undocumented External Data Dependencies",
+      "severity": "medium",
+      "gap_ref": "upgrade SNCZI to T10/T100/T500 peligrosidad via INSPIRE WMS",
+      "detail": "The integration of SNCZI/INSPIRE WMS is a significant expansion of the data ingestion surface area that is currently invisible to the project's high-level design. This creates unmanaged technical debt and potential for unmonitored breaking changes from external WMS updates.",
+      "action": "Update the system architecture diagram and data flow documentation to include the SNCZI/INSPIRE WMS integration and its impact on the processing pipeline."
+    }
+  ],
+  "summary": "The project is currently operating with significant 'shadow architecture' and unverified data claims, creating high risks for regression and integration failure. We are seeing critical logic changes (model swaps) and new data dependencies being implemented without corresponding architectural documentation or validation.",
+  "duration_s": 53.60319900512695,
+  "tokens": {
+    "prompt_tokens": 1024,
+    "completion_tokens": 1868
+  }
+}

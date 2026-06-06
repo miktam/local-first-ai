@@ -1,0 +1,70 @@
+{
+  "underevidenced": [
+    {
+      "claim": "Registration secured for Startup OLÉ Marbella",
+      "status": "done",
+      "severity": "medium",
+      "reason": "No legal or registration documents found in the artefacts to verify business registration."
+    },
+    {
+      "claim": "Foundational MCP ↔ Claude Desktop bridge is proven",
+      "status": "done",
+      "severity": "low",
+      "reason": "While MCP search filters are present, there is no specific artefact demonstrating the Claude Desktop bridge connection/proof."
+    },
+    {
+      "claim": "The queryable corpus is 58 enriched listings across three agencies (Agency A, Agency B, Agency C) in SQLite + ChromaDB",
+      "status": "done",
+      "severity": "medium",
+      "reason": "Artefacts show Agency C listings and processing, but there is no evidence of the full 58-listing corpus or the presence of Agency A/Agency B data in the provided logs."
+    },
+    {
+      "claim": "Ship Records of Processing Activities (RoPA) with the appliance",
+      "status": "pending",
+      "severity": "low",
+      "reason": "Status is pending, but no draft or template for RoPA was found in the artefacts."
+    }
+  ],
+  "underdocumented": [
+    {
+      "artefact": "Adversarial Watcher — staged intention-vs-implementation gap pipeline",
+      "date": "unknown",
+      "note": "No mention of an 'Adversarial Watcher' or gap pipeline in the commitments."
+    },
+    {
+      "artefact": "DPA §11.3 — Málaga confirmed, jurisdiction note updated",
+      "date": "unknown",
+      "note": "Related to data protection, but the specific update to jurisdiction is not a stated commitment."
+    },
+    {
+      "artefact": "DPA v1.0-template — complete §10, §11, Annex A, witnessing clause",
+      "date": "unknown",
+      "note": "The existence of a Data Processing Agreement template is not explicitly committed to in the documentation provided."
+    },
+    {
+      "artefact": "import cv2 inside detect_qr for --no-blur safety",
+      "date": "unknown",
+      "note": "Technical implementation detail not mentioned in commitments."
+    },
+    {
+      "artefact": "rebuild ES/PL/RU HTML with CADA translations",
+      "date": "unknown",
+      "note": "Multilingual support for ES/PL/RU is not mentioned in the project commitments."
+    },
+    {
+      "artefact": "upgrade SNCZI to T10/T100/T500 peligrosidad via INSPIRE WMS",
+      "date": "unknown",
+      "note": "Specific technical integration with SNCZI/INSPIRE is not in the high-level commitments."
+    },
+    {
+      "artefact": "swap Reducer model from qwen3.5:35b to gemma4:26b",
+      "date": "unknown",
+      "note": "Model architecture changes are not documented in the commitments."
+    }
+  ],
+  "duration_s": 25.93823218345642,
+  "tokens": {
+    "prompt_tokens": 2104,
+    "completion_tokens": 741
+  }
+}
