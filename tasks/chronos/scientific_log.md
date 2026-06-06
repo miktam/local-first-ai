@@ -798,3 +798,112 @@ Fixtures: shared from `exp_007_hardware_comparison/fixtures/padding/`
 
 ---
 
+## Experiment 009 — Adversarial Project Critic (Local vs. Frontier)
+
+**Date pre-registered:** 2026-06-06
+**Date executed:** 2026-06-06
+**Status:** Complete — FAIL (50% overlap, 50% false-positive rate)
+**Subdirectory:** [`tasks/chronos/exp_009_adversarial_critic/`](./exp_009_adversarial_critic/)
+**Content pillar:** The Silicon Sentinel (Infrastructure & Privacy)
+
+---
+
+### Hypothesis
+
+**Primary:** A local gemma4:26b adversarial critic, given the same project context (recent commits, BUILD_LOG, BRIEF, TODO), identifies ≥60% of the high-severity issues that a Claude Sonnet adversarial critic identifies.
+
+**Secondary:** The local critic has a false-positive rate (issues flagged by gemma4 but not Claude) of ≤30%.
+
+**Null hypothesis:** The local critic identifies <40% of Claude-flagged high-severity issues — not useful as a standalone QA gate.
+
+---
+
+### Design
+
+Three adversarial personas applied in sequence by both critics to the same fixed context bundle:
+
+| Persona | Question |
+|---------|----------|
+| Sceptical investor | Is the moat real or just marketing copy? |
+| DPO / AEPD auditor | Will the compliance architecture survive a real audit? |
+| Competing engineer | How would I replicate this in a weekend? |
+
+Fixed JSON output schema across both critics — `holds_up`, `weak`, `missing` per persona, plus `top_actions` and `severity_counts`. Hypothesis, personas, and schema committed before execution.
+
+**Context inputs (identical for both critics):**
+1. `git log --oneline -20`
+2. Last 100 lines of `BUILD_LOG.md`
+3. First 80 lines of `BRIEF.md`
+4. First 80 lines of `strategy/TODO.md`
+
+**Target project:** CasaSol (local-first AI property intelligence, Costa del Sol real estate)
+
+---
+
+### Experiment
+
+**Option A — Claude Sonnet 4.6:** slash command `/critic` in Claude Code; inline context collection; JSON output saved manually to results.
+
+**Option B — gemma4:26b:** `critic.py --project ~/REPOS/casasol`; Ollama API; JSON output saved automatically with token stats.
+
+**Token accounting:**
+
+| Metric | Claude Sonnet 4.6 | gemma4:26b |
+|--------|------------------|------------|
+| Input tokens | ~4,750 (est, chars÷4) | 8,966 (exact, Ollama API) |
+| Output tokens | ~1,170 (est, words×1.3) | 902 (exact) |
+| Runtime | inline | 84.7 s |
+| Speed | — | 28.7 tok/s |
+| Issues raised | 18 | 18 |
+
+---
+
+### Results
+
+**Overlap scoring (Claude HIGH-severity issues — 3 total):**
+
+| # | Claude high-severity issue | gemma4 match? |
+|---|---------------------------|---------------|
+| H1 | VLM witnessing pipeline not in any commit — moat claim unimplemented | NO |
+| H2 | No DPA template — hard gate on any pilot SOW | YES (exact) |
+| H3 | No revenue model / pricing anywhere | PARTIAL (unit economics angle) |
+
+**Overlap rate:** ~50% (1 certain + 1 partial / 3) — below ≥60% threshold → **H1 rejected**
+
+**False positive rate:** ~50% (~9 of 18 gemma4 issues not in Claude) — above ≤30% threshold → **secondary criterion FAIL**
+
+**Overall verdict: FAIL**
+
+---
+
+### Key Finding
+
+gemma4 matched the DPO/compliance layer near-perfectly (DPA, DSAR, DPIA — 3/3 near-matches). It failed on the most important engineering finding: the VLM witnessing pipeline is described in the BRIEF as the primary moat component but does not exist in any commit. The corpus is built from text seed files.
+
+Claude caught this by cross-referencing a BUILD_LOG claim ("witnessing reframe — image capture is core MVP") against the git commit history (no VLM code). gemma4 accepted the claim as implemented and critiqued its replicability instead.
+
+The distinction: **pattern-matching on what is present vs. detecting the gap between documented intent and implemented reality.**
+
+gemma4's ~50% false-positive rate is not noise — on review, most are valid gaps Claude did not explore (filesystem crypto isolation, labor scalability, Redactor PII audit rate). Two critics with different search strategies.
+
+---
+
+### Conclusion
+
+gemma4:26b is viable as a compliance-layer QA gate. It catches the known-document-type gaps (DPA, DSAR, DPIA) reliably and at zero marginal cost. It is not viable as a replacement for frontier-model review when the most critical failures are impl-vs-docs gaps — cases where the model must reason about what is absent from the codebase, not just what is described in documentation.
+
+Practical split: run gemma4 on every significant commit as a compliance and pattern-coverage check. Run Claude periodically (before demos, before pilots, before external review) for implementation integrity checks.
+
+---
+
+### Evidence
+
+- `exp_009_adversarial_critic/HYPOTHESIS.md` — pre-registered hypothesis (git timestamp is proof)
+- `exp_009_adversarial_critic/results/claude_20260606_134500.json` — Option A output
+- `exp_009_adversarial_critic/results/gemma4_26b_20260606T131205.json` — Option B output
+- `exp_009_adversarial_critic/EXECUTION_LOG.md` — step-by-step run record, scoring, observations
+- `exp_009_adversarial_critic/critic.py` — Option B script (reusable against any project)
+- `exp_009_adversarial_critic/compare.py` — comparison harness
+
+---
+

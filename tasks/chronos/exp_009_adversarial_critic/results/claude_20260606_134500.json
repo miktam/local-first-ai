@@ -1,0 +1,74 @@
+{
+  "ts": "2026-06-06T13:45:00+00:00",
+  "critic": "claude-sonnet-4-6",
+  "project": "/Users/miktam02/REPOS/casasol",
+  "duration_s": null,
+  "tokens": {
+    "input_tokens": "~4750 (est: ~19000 context chars ÷ 4)",
+    "output_tokens": "~1170 (est: ~900 words × 1.3)",
+    "note": "estimates only — exact session usage visible via /cost in Claude Code"
+  },
+  "personas": {
+    "investor": {
+      "holds_up": [
+        "Information-asymmetry claim ('smaller model with private context beats bigger model without') survives engineering scrutiny where privacy-first alone would not",
+        "CADA regulatory tailwind is specific: named articles (Recital 10, Art. 30, Art. 41), concrete procurement timeline 2028-2029 — not vague ESG-compliance rhetoric",
+        "Three agencies already in corpus (Drumelia, Idealista, KDTeam) — traction is real, not hypothetical"
+      ],
+      "weak": [
+        "Witnessed corpus moat depends on in-person photography as a competitive barrier — but any competitor can send their own photographers; the moat is the data already collected, not the collection mechanism",
+        "Market-size numbers on the CADA slide (38% CAGR, 13.5% adoption, 70% non-EU control) appear without source citations — no trail in BUILD_LOG or TODO",
+        "OLÉ funnel has two warm leads (KDTeam, Habisben) and zero conversion to LOI or pilot; if booth produces warm discussions but no deal, there is no documented plan B"
+      ],
+      "missing": [
+        "Revenue model is entirely absent from BRIEF, BUILD_LOG, and TODO — no pricing, no ARR target, no CAC model; no investor or pilot conversation can proceed without a number",
+        "Competitive response model is missing: what happens when Idealista launches an on-premise appliance SKU?",
+        "Network-effect mechanism for Phase 4 (GC6 federated Reducer across 50+ agencies) is not defined — each agency that succeeds has reason to in-source the Reducer themselves"
+      ]
+    },
+    "dpo": {
+      "holds_up": [
+        "GDPR-by-design (zero data egress, processing on-premise) genuinely reduces the legal surface — not a claim, an architecture",
+        "Face/plate blur at ingestion specified in witnessing reframe — right engineering control for Art. 9",
+        "Controller/processor split correctly framed in BRIEF §1"
+      ],
+      "weak": [
+        "Blur implementation status unclear — witnessing pipeline exists in documentation but not in any committed code; demo image capture without blur implementation is a potential Art. 9 event without a DPIA",
+        "No DPA template for the agency-to-CasaSol relationship exists — an agency's legal team will not sign a pilot SOW without one; this is a hard gate",
+        "Inference log (logs/inference.jsonl) stores raw query text indefinitely with no retention policy — if a buyer query contains personal data, there is no deletion trigger"
+      ],
+      "missing": [
+        "No DSAR (Data Subject Access Request) procedure — reset_demo.py handles demo entries but there is no general fulfillment path for buyer query history deletion",
+        "Spanish compliance pack (8 artifacts, A4 executive summaries) is listed as P0 but not done — if requested at OLÉ by a lawyer contact it doesn't exist",
+        "No documented Legitimate Interest Assessment (LIA) for the witnessed corpus — whether in-person photographed listings require a separate LIA from existing text-enrichment lawful basis is unresolved"
+      ]
+    },
+    "engineer": {
+      "holds_up": [
+        "Append-only JSONL inference log with exact token counts is a genuine operational advantage — most local-inference competitors don't instrument this",
+        "SQLite + ChromaDB dual-store is the right architectural split — structured queries on SQLite, semantic retrieval on ChromaDB",
+        "Makefile + dist/ FTP pipeline shows deployment discipline for a one-person project"
+      ],
+      "weak": [
+        "Core stack (Ollama + Gemma 4 26B + ChromaDB + SQLite) is entirely open-source and documented — a competing agency tech team reaches functional parity in a day following Ollama quickstart",
+        "No schema versioning for the 15-field Reducer output — if a field is added, all existing enriched records are silently incompatible with no migration path",
+        "MCP server has no authentication, no HMAC signing, no session management — any device on the demo venue LAN can query the endpoint"
+      ],
+      "missing": [
+        "Witnessing pipeline (photo → VLM → 15-field extraction) is described as core MVP and the second moat component, but no VLM integration code exists in any commit — the corpus is built from text seed files",
+        "No model pinning — ollama pull silently changes the model version; the inference log records only a string label, not a model hash; Reducer output can drift between booth prep and booth day",
+        "No concurrency model — mcp_server.py likely runs single-threaded (FastMCP default); three concurrent demo queries at a busy booth is a plausible failure scenario with no tested fallback"
+      ]
+    }
+  },
+  "top_actions": [
+    "Define a pricing model before OLÉ — without a number, no lead converts; even a placeholder (€X/month per appliance) unblocks the commercial conversation",
+    "Write DPA template + DSAR procedure — two documents, ~3 hours, hard gates on any paid pilot agreement",
+    "Retire or implement the VLM witnessing claim for the booth — deck and BRIEF market in-person witnessing as the second moat component but corpus is text-seed only; tag it as Phase 2 or implement a basic VLM stub before June 17"
+  ],
+  "severity_counts": {
+    "high": 3,
+    "medium": 9,
+    "low": 3
+  }
+}
