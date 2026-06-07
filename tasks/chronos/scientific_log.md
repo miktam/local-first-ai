@@ -946,3 +946,121 @@ Practical split: run gemma4 on every significant commit as a compliance and patt
 
 ---
 
+## [EXPERIMENT 010] — Flash Attention vs q8_0 KV Cache: Factorial Isolation
+
+*Date pre-registered: 2026-06-07*
+*Status: Pre-registered — awaiting execution*
+*Subdirectory: `tasks/chronos/exp_010_fa_isolation/`*
+
+---
+
+### Observation
+
+Exp 008 produced an unexpected result: removing both `OLLAMA_FLASH_ATTENTION=1` and `OLLAMA_KV_CACHE_TYPE=q8_0` eliminated the 20K prefill cliff entirely and improved gen t/s by up to 148% at 35K tokens. The flags that were believed to help (by reducing memory bandwidth pressure) were in fact causing the cliff.
+
+Exp 008 tested one diagonal of the 2×2 factorial:
+
+| | fp16 KV | q8_0 KV |
+|---|---|---|
+| **FA=0** | Exp 008 ✓ — no cliff to 40K | **← Condition C (this exp)** |
+| **FA=1** | **← Condition B (this exp)** | Exp 007 ✓ — cliff at 20K |
+
+Two conditions remain unmeasured. Running them isolates whether the cliff is caused by FA=1 alone, q8_0 alone, or requires both flags together (interaction effect).
+
+**Why either flag might hurt performance on Apple Silicon:**
+
+- **Flash Attention (FA=1):** The Metal kernel for flash attention on Apple Silicon may have suboptimal behaviour for the MoE architecture of gemma4:26b. FA tiles the KV computation to reduce peak bandwidth, but tiling introduces synchronisation overhead. If the M4 Pro's unified memory controller is not the bottleneck (which the Exp 008 result implies), the tiling overhead becomes net negative. Incident 003-Alpha observed FA causing CPU fallback at scale — this may be the same mechanism at a milder severity.
+
+- **q8_0 KV quantization:** Quantizing/dequantizing the KV cache on every attention head adds per-token compute. With fp16, the KV values are used as-is; with q8_0, each element must be scaled back to fp16 representation before the attention dot product. On Apple Silicon's unified memory (where the GPU and CPU share the same DRAM), the dequantisation arithmetic may consume GPU shader time that outweighs the bandwidth saved.
+
+- **Interaction effect:** FA's tiling pattern changes the order in which KV cache elements are read. If q8_0's dequantisation is not fused into the FA kernel, the combination requires two passes over the KV data where one was expected — doubling the effective bandwidth cost and negating the optimization entirely.
+
+---
+
+### Hypothesis
+
+**H1 (FA is the culprit):** Condition B (FA=1, fp16) produces a prefill cliff at or below 25K tokens, matching Exp 007's behaviour. Condition C (FA=0, q8_0) shows no cliff in the 20K–40K range, matching Exp 008.
+
+**H2 (q8_0 is the culprit):** Condition C (FA=0, q8_0) produces a prefill cliff at or below 25K tokens. Condition B (FA=1, fp16) shows no cliff, matching Exp 008.
+
+**H3 (interaction effect):** Neither Condition B nor Condition C alone causes a cliff. Only the combination (FA=1 + q8_0, Exp 007) causes the cliff. Both B and C match Exp 008's flat prefill profile.
+
+**H0 (null — neither flag matters):** Both B and C match Exp 008 within ±15%. The Exp 007 cliff was caused by some other variable (thermal state, Ollama session state, model load order) not captured in the flag configuration.
+
+**Falsification criteria:**
+- H1 confirmed: Condition B cliff onset ≤ 25K; Condition C cliff onset > 40K.
+- H2 confirmed: Condition C cliff onset ≤ 25K; Condition B cliff onset > 40K.
+- H3 confirmed: Both B and C show no cliff through 40K, within 15% of Exp 008 gen t/s values.
+- H0 confirmed: Both B and C within ±15% of Exp 008 gen t/s at 15K, 25K, 35K.
+
+---
+
+### Experiment
+
+**Protocol:** Same Phase A (5 sizes: 4K, 8K, 15K, 25K, 35K, 3 repeats) and Phase B (cliff sweep 20K–40K, 2.5K spacing, 2 repeats) as Exp 007/008. Each condition run separately with a clean Ollama restart between conditions. LaunchDaemon stopped before each condition; `restore_daemon.sh` run after.
+
+**Condition B:** `OLLAMA_FLASH_ATTENTION=1`, `OLLAMA_KV_CACHE_TYPE` unset (fp16 default). Start with `start_condition_b.sh`.
+**Condition C:** `OLLAMA_FLASH_ATTENTION=0`, `OLLAMA_KV_CACHE_TYPE=q8_0`. Start with `start_condition_c.sh`.
+
+**Instrumentation (optional):** Run `sudo powermetrics --samplers gpu_power,cpu_power -i 2000` in a separate terminal during Phase B cells to capture GPU utilisation and memory bandwidth. Timestamp correlation with cell start/end allows per-size power attribution. This is exploratory — not a pre-registered metric.
+
+**Controls:** Same as Exp 007/008: AC power, Wi-Fi off, same model, same num_ctx=131072, 60s idle between cells.
+
+**Fixtures:** Shared from `exp_007_hardware_comparison/fixtures/padding/`.
+
+---
+
+### Pre-registered pass criteria
+
+- **H1 confirmed:** Condition B cliff ≤ 25K tokens AND Condition C gen t/s at 35K within 15% of Exp 008 (26.69 t/s).
+- **H2 confirmed:** Condition C cliff ≤ 25K tokens AND Condition B gen t/s at 35K within 15% of Exp 008.
+- **H3 confirmed:** Both B and C cliff-free through 40K, both within 15% of Exp 008 gen t/s at 35K.
+- **H0 confirmed:** Both B and C within ±15% of Exp 008 at 15K, 25K, 35K.
+
+---
+
+### Data / Results
+
+*[To be filled upon execution.]*
+
+**Phase A — Condition B (FA=1, fp16)**
+
+| Size | Actual tokens | Rep1 prefill ms/tok | Mean gen t/s | Exp 008 (FA=0) | Delta |
+|------|--------------|---------------------|--------------|----------------|-------|
+| 4k   | | | | 40.42 | |
+| 8k   | | | | 42.60 | |
+| 15k  | | | | 36.97 | |
+| 25k  | | | | 31.08 | |
+| 35k  | | | | 26.69 | |
+
+**Phase A — Condition C (FA=0, q8_0)**
+
+| Size | Actual tokens | Rep1 prefill ms/tok | Mean gen t/s | Exp 008 (FA=0) | Delta |
+|------|--------------|---------------------|--------------|----------------|-------|
+| 4k   | | | | 40.42 | |
+| 8k   | | | | 42.60 | |
+| 15k  | | | | 36.97 | |
+| 25k  | | | | 31.08 | |
+| 35k  | | | | 26.69 | |
+
+**Phase B — Cliff localisation**
+
+| Condition | Cliff onset | Notes |
+|-----------|-------------|-------|
+| A (FA=0, fp16) — Exp 008 | not reached at 40K | reference |
+| B (FA=1, fp16) | | |
+| C (FA=0, q8_0) | | |
+| D (FA=1, q8_0) — Exp 007 | 20K | reference |
+
+---
+
+### Conclusion
+
+*[To be written after execution.]*
+
+Evidence directory: `exp_010_fa_isolation/evidence/`
+Script: `bench.py --condition B|C --phase A|B`
+Fixtures: shared from `exp_007_hardware_comparison/fixtures/padding/`
+
+---
+
