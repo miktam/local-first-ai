@@ -49,10 +49,9 @@ SIZES = {
 
 INSTRUCTION = "\n\nWrite a one-sentence summary of the text above."
 
-FLAGS = {
-    "OLLAMA_FLASH_ATTENTION": "1",
-    "OLLAMA_KV_CACHE_TYPE": "q8_0",
-}
+FLAGS_ON  = {"OLLAMA_FLASH_ATTENTION": "1", "OLLAMA_KV_CACHE_TYPE": "q8_0"}
+FLAGS_OFF = {"OLLAMA_FLASH_ATTENTION": "0", "OLLAMA_KV_CACHE_TYPE": "fp16 (default)"}
+FLAGS = FLAGS_ON  # overridden in main() based on --no-flags
 
 
 def unload_model() -> None:
@@ -110,13 +109,15 @@ def derive_metrics(r: dict) -> dict:
     }
 
 
-def run(machine: str, baseline_ms: float, sizes: list[str]) -> None:
+def run(machine: str, baseline_ms: float, sizes: list[str], no_flags: bool) -> None:
     cliff_threshold = baseline_ms * 2.0
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    ev_dir = EVIDENCE / f"{timestamp}-phase_b-{machine}"
+    suffix = "nf" if no_flags else "fa"
+    ev_dir = EVIDENCE / f"{timestamp}-phase_b-{machine}-{suffix}"
     ev_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"\nExp 008 — Phase B: Prefill cliff localisation (FA + q8_0 KV cache)")
+    mode = "no-flags (FA=0, fp16 KV)" if no_flags else "flags-on (FA=1, q8_0 KV)"
+    print(f"\nExp 008 — Phase B: Prefill cliff localisation [{mode}]")
     print(f"Machine: {machine}  |  Model: {MODEL}  |  Sizes: {sizes}")
     print(f"Baseline (15K, this exp): {baseline_ms} ms/tok  |  "
           f"Cliff threshold: {cliff_threshold:.3f} ms/tok")
@@ -237,5 +238,11 @@ if __name__ == "__main__":
                    help="Rep1 prefill ms/tok at 15K from THIS experiment's Phase A")
     p.add_argument("--sizes", nargs="+", choices=list(SIZES), default=list(SIZES),
                    help="Which sizes to run (default: all 9)")
+    p.add_argument("--no-flags", action="store_true",
+                   help="Primary run: FA=0, fp16 KV cache (baseline). "
+                        "Default: FA=1, q8_0 (flags-on, production config).")
     args = p.parse_args()
-    run(machine=args.machine, baseline_ms=args.baseline, sizes=args.sizes)
+    if args.no_flags:
+        FLAGS = FLAGS_OFF
+    run(machine=args.machine, baseline_ms=args.baseline, sizes=args.sizes,
+        no_flags=args.no_flags)

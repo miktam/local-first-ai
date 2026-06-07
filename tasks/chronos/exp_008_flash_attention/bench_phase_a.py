@@ -46,10 +46,9 @@ SIZES = {
 
 INSTRUCTION = "\n\nWrite a one-sentence summary of the text above."
 
-FLAGS = {
-    "OLLAMA_FLASH_ATTENTION": "1",
-    "OLLAMA_KV_CACHE_TYPE": "q8_0",
-}
+FLAGS_ON  = {"OLLAMA_FLASH_ATTENTION": "1", "OLLAMA_KV_CACHE_TYPE": "q8_0"}
+FLAGS_OFF = {"OLLAMA_FLASH_ATTENTION": "0", "OLLAMA_KV_CACHE_TYPE": "fp16 (default)"}
+FLAGS = FLAGS_ON  # overridden in main() based on --no-flags
 
 
 def verify_flags() -> bool:
@@ -143,8 +142,9 @@ def derive_metrics(r: dict) -> dict:
     }
 
 
-def run(machine: str, sizes: list[str]) -> None:
-    print(f"\nExp 008 — Phase A: Generation sweep (FA + q8_0 KV cache)")
+def run(machine: str, sizes: list[str], no_flags: bool) -> None:
+    mode = "no-flags (FA=0, fp16 KV)" if no_flags else "flags-on (FA=1, q8_0 KV)"
+    print(f"\nExp 008 — Phase A: Generation sweep [{mode}]")
     print(f"Machine: {machine}  |  Model: {MODEL}  |  Sizes: {sizes}")
     print(f"\nVerifying Ollama is reachable...", end="", flush=True)
     if not verify_flags():
@@ -159,7 +159,8 @@ def run(machine: str, sizes: list[str]) -> None:
     print(f"  (If flags show as 'not detected', verify start_ollama_flags.sh was used)\n")
 
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    ev_dir = EVIDENCE / f"{timestamp}-phase_a-{machine}"
+    suffix = "nf" if no_flags else "fa"
+    ev_dir = EVIDENCE / f"{timestamp}-phase_a-{machine}-{suffix}"
     ev_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"Evidence: {ev_dir}\n")
@@ -249,7 +250,8 @@ def run(machine: str, sizes: list[str]) -> None:
         print(f"{row['size_key']:8}  {str(row.get('prompt_tokens','?')):8}  "
               f"{str(row.get('rep1_prefill_ms_per_tok','?')):21}  "
               f"{str(row.get('mean_gen_tps','?')):14}")
-    print(f"\nNext: python3 bench_phase_b.py --machine {machine} "
+    flag_arg = " --no-flags" if no_flags else ""
+    print(f"\nNext: python3 bench_phase_b.py --machine {machine}{flag_arg} "
           f"--baseline <rep1_prefill at 15k above>")
     print(f"Results in: {ev_dir}/\n")
 
@@ -261,5 +263,10 @@ if __name__ == "__main__":
                    help="Machine identifier")
     p.add_argument("--sizes", nargs="+", choices=list(SIZES), default=list(SIZES),
                    help="Which sizes to run (default: all 5)")
+    p.add_argument("--no-flags", action="store_true",
+                   help="Primary run: FA=0, fp16 KV cache (baseline). "
+                        "Default: FA=1, q8_0 (flags-on, production config).")
     args = p.parse_args()
-    run(machine=args.machine, sizes=args.sizes)
+    if args.no_flags:
+        FLAGS = FLAGS_OFF
+    run(machine=args.machine, sizes=args.sizes, no_flags=args.no_flags)
