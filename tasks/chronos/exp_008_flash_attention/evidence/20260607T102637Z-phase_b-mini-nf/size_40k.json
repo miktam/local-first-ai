@@ -1,0 +1,60 @@
+[
+  {
+    "experiment": "008",
+    "phase": "B",
+    "machine": "mini",
+    "size_key": "40k",
+    "repeat": 1,
+    "timestamp": "2026-06-07T10:46:39.711998+00:00",
+    "model": "gemma4:26b",
+    "ollama_flags": {
+      "OLLAMA_FLASH_ATTENTION": "0",
+      "OLLAMA_KV_CACHE_TYPE": "fp16 (default)"
+    },
+    "baseline_ms_per_tok": 1.774,
+    "cliff_threshold_ms_per_tok": 3.548,
+    "metrics": {
+      "prefill_ms_per_tok": 2.215,
+      "gen_tps": 26.01,
+      "prompt_tokens": 39991,
+      "gen_tokens": 64,
+      "wall_seconds": 93.961
+    },
+    "ollama_raw": {
+      "prompt_eval_count": 39991,
+      "prompt_eval_duration": 88591811208,
+      "eval_count": 64,
+      "eval_duration": 2460850994,
+      "done_reason": "length"
+    }
+  },
+  {
+    "experiment": "008",
+    "phase": "B",
+    "machine": "mini",
+    "size_key": "40k",
+    "repeat": 2,
+    "timestamp": "2026-06-07T10:46:42.832524+00:00",
+    "model": "gemma4:26b",
+    "ollama_flags": {
+      "OLLAMA_FLASH_ATTENTION": "0",
+      "OLLAMA_KV_CACHE_TYPE": "fp16 (default)"
+    },
+    "baseline_ms_per_tok": 1.774,
+    "cliff_threshold_ms_per_tok": 3.548,
+    "metrics": {
+      "prefill_ms_per_tok": 0.001,
+      "gen_tps": 26.37,
+      "prompt_tokens": 39991,
+      "gen_tokens": 64,
+      "wall_seconds": 3.12
+    },
+    "ollama_raw": {
+      "prompt_eval_count": 39991,
+      "prompt_eval_duration": 56657875,
+      "eval_count": 64,
+      "eval_duration": 2426913207,
+      "done_reason": "length"
+    }
+  }
+]

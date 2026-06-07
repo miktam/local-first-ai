@@ -1,0 +1,55 @@
+{
+  "experiment": "008",
+  "machine": "mini",
+  "model": "gemma4:26b",
+  "ollama_flags": {
+    "OLLAMA_FLASH_ATTENTION": "0",
+    "OLLAMA_KV_CACHE_TYPE": "fp16 (default)"
+  },
+  "num_predict": 128,
+  "idle_seconds": 60,
+  "started": "20260607T101221Z",
+  "sizes": [
+    {
+      "size_key": "4k",
+      "prompt_tokens": 4019,
+      "rep1_gen_tps": 42.72,
+      "mean_gen_tps": 40.42,
+      "rep1_prefill_ms_per_tok": 1.557,
+      "n": 3
+    },
+    {
+      "size_key": "8k",
+      "prompt_tokens": 8012,
+      "rep1_gen_tps": 42.61,
+      "mean_gen_tps": 42.6,
+      "rep1_prefill_ms_per_tok": 1.642,
+      "n": 3
+    },
+    {
+      "size_key": "15k",
+      "prompt_tokens": 15011,
+      "rep1_gen_tps": 36.94,
+      "mean_gen_tps": 36.97,
+      "rep1_prefill_ms_per_tok": 1.774,
+      "n": 3
+    },
+    {
+      "size_key": "25k",
+      "prompt_tokens": 24993,
+      "rep1_gen_tps": 31.1,
+      "mean_gen_tps": 31.08,
+      "rep1_prefill_ms_per_tok": 1.983,
+      "n": 3
+    },
+    {
+      "size_key": "35k",
+      "prompt_tokens": 34995,
+      "rep1_gen_tps": 26.5,
+      "mean_gen_tps": 26.69,
+      "rep1_prefill_ms_per_tok": 2.241,
+      "n": 3
+    }
+  ],
+  "exp007_baseline_ref": "../evidence/ — see exp_007 phase_a for default-flags comparison"
+}

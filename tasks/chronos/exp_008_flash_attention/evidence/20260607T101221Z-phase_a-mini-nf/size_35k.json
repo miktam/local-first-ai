@@ -1,0 +1,92 @@
+[
+  {
+    "experiment": "008",
+    "phase": "A",
+    "machine": "mini",
+    "size_key": "35k",
+    "repeat": 1,
+    "timestamp": "2026-06-07T10:21:49.736508+00:00",
+    "model": "gemma4:26b",
+    "ollama_flags": {
+      "OLLAMA_FLASH_ATTENTION": "0",
+      "OLLAMA_KV_CACHE_TYPE": "fp16 (default)"
+    },
+    "metrics": {
+      "gen_tps": 26.5,
+      "prefill_ms_per_tok": 2.241,
+      "prompt_tokens": 34995,
+      "gen_tokens": 128,
+      "wall_seconds": 87.189,
+      "load_duration_ms": 3328.3
+    },
+    "ollama_raw": {
+      "total_duration": 87020178042,
+      "load_duration": 3328308583,
+      "prompt_eval_count": 34995,
+      "prompt_eval_duration": 78416509334,
+      "eval_count": 128,
+      "eval_duration": 4829455834,
+      "done_reason": "length"
+    }
+  },
+  {
+    "experiment": "008",
+    "phase": "A",
+    "machine": "mini",
+    "size_key": "35k",
+    "repeat": 2,
+    "timestamp": "2026-06-07T10:21:55.223893+00:00",
+    "model": "gemma4:26b",
+    "ollama_flags": {
+      "OLLAMA_FLASH_ATTENTION": "0",
+      "OLLAMA_KV_CACHE_TYPE": "fp16 (default)"
+    },
+    "metrics": {
+      "gen_tps": 26.79,
+      "prefill_ms_per_tok": 0.001,
+      "prompt_tokens": 34995,
+      "gen_tokens": 128,
+      "wall_seconds": 5.487,
+      "load_duration_ms": 141.1
+    },
+    "ollama_raw": {
+      "total_duration": 5321564500,
+      "load_duration": 141099958,
+      "prompt_eval_count": 34995,
+      "prompt_eval_duration": 50349250,
+      "eval_count": 128,
+      "eval_duration": 4778318501,
+      "done_reason": "length"
+    }
+  },
+  {
+    "experiment": "008",
+    "phase": "A",
+    "machine": "mini",
+    "size_key": "35k",
+    "repeat": 3,
+    "timestamp": "2026-06-07T10:22:00.714298+00:00",
+    "model": "gemma4:26b",
+    "ollama_flags": {
+      "OLLAMA_FLASH_ATTENTION": "0",
+      "OLLAMA_KV_CACHE_TYPE": "fp16 (default)"
+    },
+    "metrics": {
+      "gen_tps": 26.77,
+      "prefill_ms_per_tok": 0.001,
+      "prompt_tokens": 34995,
+      "gen_tokens": 128,
+      "wall_seconds": 5.49,
+      "load_duration_ms": 137.3
+    },
+    "ollama_raw": {
+      "total_duration": 5327039542,
+      "load_duration": 137317250,
+      "prompt_eval_count": 34995,
+      "prompt_eval_duration": 47621625,
+      "eval_count": 128,
+      "eval_duration": 4781883877,
+      "done_reason": "length"
+    }
+  }
+]

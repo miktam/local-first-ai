@@ -715,7 +715,8 @@ The `~/Library/LaunchAgents/com.ollama.serve.plist` had both flags set, and the 
 
 *Date pre-registered: 2026-05-29*
 *Reformulated: 2026-06-07 — see Incident 007-Alpha*
-*Status: Pre-registered — awaiting execution*
+*Executed: 2026-06-07 (Mini, FA=0 primary run)*
+*Status: Complete — landmark finding (flags cause the cliff, not the hardware)*
 *Subdirectory: `tasks/chronos/exp_008_flash_attention/`*
 
 ---
@@ -783,46 +784,55 @@ If the 20K cliff (FA + q8_0) is primarily KV-bandwidth-bound, the FA=0 + fp16 ba
 
 ### Data / Results
 
-*[To be filled upon execution.]*
+*Run: 2026-06-07. Machine: Mac Mini M4 Pro. Config: FA=0, fp16 KV cache (primary / baseline run).*
+*Evidence: `exp_008_flash_attention/evidence/20260607T101221Z-phase_a-mini-nf/` and `20260607T102637Z-phase_b-mini-nf/`*
 
-**Phase A — Generation throughput (FA + q8_0)**
+**Phase A — Generation throughput (FA=0, fp16 KV)**
 
-| Size | Actual tokens | Rep1 prefill ms/tok | Mean gen t/s | Exp 007 gen t/s | Delta |
-|------|--------------|---------------------|--------------|-----------------|-------|
-| 4k   | | | | 34.76 | |
-| 8k   | | | | 31.38 | |
-| 15k  | | | | 25.08 | |
-| 25k  | | | | 14.40 | |
-| 35k  | | | | 10.75 | |
+| Size | Actual tokens | Rep1 prefill ms/tok | Mean gen t/s | Exp 007 gen t/s (FA+q8_0) | Delta gen t/s |
+|------|--------------|---------------------|--------------|---------------------------|---------------|
+| 4k   | 4019         | 1.557               | 40.42        | 34.76                     | +16%          |
+| 8k   | 8012         | 1.642               | 42.60        | 31.38                     | +36%          |
+| 15k  | 15011        | 1.774               | 36.97        | 25.08                     | +47%          |
+| 25k  | 24993        | 1.983               | 31.08        | 14.40                     | +116%         |
+| 35k  | 34995        | 2.241               | 26.69        | 10.75                     | +148%         |
 
-**Phase B — Cliff localisation (FA + q8_0)**
+**Phase B — Cliff localisation (FA=0, fp16 KV). Baseline 1.774 ms/tok → threshold 3.548 ms/tok.**
 
-| Size | Actual tokens | Rep1 prefill ms/tok | Cliff triggered | Exp 007 result |
-|------|--------------|---------------------|-----------------|----------------|
-| 20k  | | | | YES (19.352 ms/tok) |
-| 22500 | | | | YES |
-| 25k  | | | | YES |
-| 27500 | | | | YES |
-| 30k  | | | | YES |
-| 32500 | | | | |
-| 35k  | | | | |
-| 37500 | | | | |
-| 40k  | | | | |
+| Size   | Actual tokens | Rep1 prefill ms/tok | Cliff triggered | Exp 007 result (FA+q8_0)   |
+|--------|--------------|---------------------|-----------------|----------------------------|
+| 20k    | 20005        | 1.846               | **no**          | YES (19.352 ms/tok)        |
+| 22500  | 22502        | 1.923               | **no**          | YES (22.010 ms/tok)        |
+| 25k    | 24993        | 2.001               | **no**          | YES (24.235 ms/tok)        |
+| 27500  | 27500        | 2.069               | **no**          | YES (26.597 ms/tok)        |
+| 30k    | 29996        | 2.124               | **no**          | YES (28.945 ms/tok)        |
+| 32500  | 32493        | 2.069               | **no**          | —                          |
+| 35k    | 34995        | 2.119               | **no**          | —                          |
+| 37500  | 37482        | 2.167               | **no**          | —                          |
+| 40k    | 39991        | 2.215               | **no**          | —                          |
 
 ---
 
 ### Conclusion
 
-*[To be written after execution.]*
+**Status: Complete — landmark finding. All pre-registered hypotheses rejected; new causal finding.**
 
-**If H1 supported:** The q8_0 KV cache quantization is the primary mechanism — halving KV cache bandwidth materially raises the operational ceiling. The cascade's 22K bundle ceiling can be revised upward. Document the new ceiling and update ADR-002.
+**H1 (FA=0 cliff below 20K): REJECTED.** With FA=0/fp16, no cliff appears anywhere in the 20K–40K range. Prefill at 40K is 2.215 ms/tok — the slope from 15K to 40K is ~0.018 ms/tok per 1K tokens, essentially linear and stable.
 
-**If H0 holds:** The cliff is not purely KV cache bandwidth-bound; other factors (compute, memory controller latency, or Ollama overhead) dominate. Flags provide no operational benefit. Default settings remain correct.
+**H2 (FA=0 gen t/s lower than FA+q8_0): REJECTED.** Gen t/s is substantially *higher* without flags at every size. The effect grows with context: +16% at 4K, +148% at 35K. The flags degrade throughput under sustained load.
 
-**If H3 confirmed:** FA is disqualified for production use on this hardware/model combination. Run with `OLLAMA_FLASH_ATTENTION=0 OLLAMA_KV_CACHE_TYPE=q8_0` only and re-test.
+**H0 (no difference): REJECTED.** There is a very large difference — in the opposite direction to all prior expectations.
+
+**Causal finding (not pre-registered):** `OLLAMA_FLASH_ATTENTION=1` + `OLLAMA_KV_CACHE_TYPE=q8_0` is the cause of the 20K prefill cliff, not a remedy for it. Removing both flags eliminates the cliff entirely within the tested range (up to 40K tokens). The mechanism is not yet isolated — either flag or their combination may be responsible. A follow-on micro-experiment (Exp 010 candidate) could isolate the culprit by testing FA=1/fp16 and FA=0/q8_0 separately.
+
+**Retrospective consequence for Incident 003-Alpha:** The original incident (FA causing CPU fallback on gemma4-think:26b) was correctly diagnosed. The Incident 003-Alpha mitigation (FA=0) was the right call. The plist re-enabling FA=1 after that incident was a regression that went undetected until Exp 008.
+
+**Revised operational ceiling for Mac Mini M4 Pro (FA=0, fp16):** cliff not reached at 40K — operational ceiling is now **> 40K tokens on-wire** with a stable linear prefill slope. The previous < 18K ceiling was an artefact of FA+q8_0. All cascade ADR ceilings derived from Exp 007 must be revisited.
+
+**Production action taken:** LaunchDaemon plist updated to `OLLAMA_FLASH_ATTENTION=0`, `OLLAMA_KV_CACHE_TYPE` removed. Daemon restarted 2026-06-07.
 
 Evidence directory: `exp_008_flash_attention/evidence/`
-Scripts: `bench_phase_a.py`, `bench_phase_b.py`, `start_ollama_flags.sh`
+Scripts: `bench_phase_a.py --no-flags`, `bench_phase_b.py --no-flags`
 Fixtures: shared from `exp_007_hardware_comparison/fixtures/padding/`
 
 ---
