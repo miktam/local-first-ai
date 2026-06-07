@@ -105,6 +105,7 @@ Published at [localfirstai.eu](https://localfirstai.eu):
 
 **Technical — benchmarks, experiments, architecture**
 
+- [The Cliff That Wasn't](https://localfirstai.eu/posts/2026-06-07-the-cliff-that-wasnt/) — The 20K prefill cliff that shaped six months of cascade architecture was `OLLAMA_FLASH_ATTENTION=1`. Removing it tripled the Mac Mini's operational ceiling to >40K tokens. Full 2×2 factorial: FA=1 is the sole culprit, q8_0 alone is benign.
 - [The Adversarial Watcher: When a Local Model Audits Its Own Project](https://localfirstai.eu/posts/2026-06-06-adversarial-watcher/) — A staged 5-step pipeline that catches documentation drift before every merge. First production run: 5 confirmed gaps, 3 false positives, anatomy of each.
 - [We Tried to Replace Claude with a Local Critic. Here's Exactly Where It Failed.](https://localfirstai.eu/posts/2026-06-06-adversarial-critic/) — Exp 009: head-to-head adversarial review. gemma4:26b matches the compliance layer; only the frontier model caught the impl-vs-docs gap.
 - [The Silicon Wager: M4 Pro vs M5 Max](https://localfirstai.eu/posts/2026-05-29-silicon-wager/) — Exp 007: every Chronos envelope was measured on one machine. A second arrived. The difference is not incremental.
