@@ -685,9 +685,36 @@ CasaSol index: pre-requisite — must exist before Phase D Q3 runs. If absent, Q
 
 ---
 
+#### [Incident 007-Alpha] — Exp 007 Flag Mismatch: FA + q8_0 Were Active During Benchmarks
+
+*Date discovered: 2026-06-07*
+*Status: Closed*
+
+**Finding:** Exp 007's pre-registered design stated `OLLAMA_FLASH_ATTENTION=0` (per Incident 003-Alpha mitigation, applied uniformly). The actual runtime had `OLLAMA_FLASH_ATTENTION=1` and `OLLAMA_KV_CACHE_TYPE=q8_0` active throughout the entire bench run.
+
+**Evidence:** Ollama log entry from `2026-05-29T14:19:50+02:00` (the day of the Exp 007 Mini run):
+
+```
+server config: OLLAMA_FLASH_ATTENTION:true ... OLLAMA_KV_CACHE_TYPE:q8_0
+load request: FlashAttention:Enabled KvCacheType:q8_0
+```
+
+The `~/Library/LaunchAgents/com.ollama.serve.plist` had both flags set, and the log confirms the same configuration back to at least `2026-03-05`. The Incident 003-Alpha mitigation (`FA=0`) was documented in this log but never applied to the persistent LaunchAgent config. The mitigation existed only in text.
+
+**Consequence for Exp 007:** The 20K prefill cliff and all Phase A/B throughput numbers are correct measurements — but they were taken under FA=1 + q8_0 conditions. The "default settings" framing in the pre-registration is wrong. The numbers stand; the label does not. The operational ceilings (Mini < 18K, MBP < 40K) are valid as *optimized* ceilings, not default-settings ceilings.
+
+**Consequence for Exp 008:** The Exp 008 hypothesis assumed Exp 007 established an FA=0 baseline to compare against. That baseline does not exist. Running Exp 008 as designed would reproduce Exp 007 numbers. The experiment is reformulated — see Exp 008 status update below.
+
+**Root cause:** The Incident 003-Alpha mitigation was applied at the session level (manual `launchctl setenv` for that investigation) but never written back to the plist. Subsequent sessions, including Exp 007, used the unmodified config.
+
+**Fix going forward:** Ollama is now managed as a LaunchDaemon (`/Library/LaunchDaemons/com.ollama.serve.plist`), config is explicit and version-controlled. All future bench scripts must log Ollama env state as part of the evidence record (retrofitted into Exp 008 scripts and enforced in all future experiments).
+
+---
+
 ## [EXPERIMENT 008] — Flash Attention + q8_0 KV Cache: Does It Push the Cliff?
 
 *Date pre-registered: 2026-05-29*
+*Reformulated: 2026-06-07 — see Incident 007-Alpha*
 *Status: Pre-registered — awaiting execution*
 *Subdirectory: `tasks/chronos/exp_008_flash_attention/`*
 
@@ -695,39 +722,41 @@ CasaSol index: pre-requisite — must exist before Phase D Q3 runs. If absent, Q
 
 ### Observation
 
-Exp 007 Phase A/B established the prefill cliff on Mac Mini M4 Pro at **~20K tokens** under default Ollama settings (`OLLAMA_FLASH_ATTENTION=0`, fp16 KV cache). Incident 003-Alpha had previously measured the cliff between 25K–35K tokens using `gemma4-think:26b`; Exp 007 re-measured with `gemma4:26b` and found onset at 20K. Both experiments confirm the root cause: **memory bandwidth saturation**, not compute.
+**Original observation (pre-registration):** Exp 007 was believed to have established the prefill cliff at ~20K tokens under FA=0 + fp16 KV cache. Exp 008 was designed to test whether enabling FA + q8_0 would push that cliff to ≥30K.
+
+**Revised observation (2026-06-07, Incident 007-Alpha):** Exp 007 ran with `OLLAMA_FLASH_ATTENTION=1` and `OLLAMA_KV_CACHE_TYPE=q8_0` active — confirmed by Ollama log entry `2026-05-29T14:19:50+02:00`. The 20K cliff *is* the FA + q8_0 result. No FA=0 baseline exists.
+
+The experiment is therefore inverted: instead of measuring the gain from enabling the flags, we now need to establish the cost of running without them. This produces the same data the original Exp 008 would have compared against — just measured in the correct order.
 
 Two Ollama flags directly address memory bandwidth consumption:
 
-1. **`OLLAMA_FLASH_ATTENTION=1`** — enables flash attention, a memory-efficient attention kernel that reduces peak memory bandwidth for the attention operation by tiling the computation to avoid materialising the full attention matrix.
-2. **`OLLAMA_KV_CACHE_TYPE=q8_0`** — quantizes the KV cache from fp16 (2 bytes/element) to 8-bit (1 byte/element), halving the memory footprint of the KV cache and proportionally reducing the bandwidth required to read it during each forward pass.
+1. **`OLLAMA_FLASH_ATTENTION=1`** — memory-efficient attention kernel that avoids materialising the full attention matrix, reducing peak bandwidth for the attention operation.
+2. **`OLLAMA_KV_CACHE_TYPE=q8_0`** — quantizes the KV cache from fp16 to 8-bit, halving KV cache memory footprint and proportionally reducing bandwidth during autoregressive decoding.
 
-If the Exp 007 cliff is purely bandwidth-bound on the KV cache, `q8_0` should roughly double the cliff threshold. If flash attention provides additional relief, the combined effect could push the ceiling from ~20K to ~35K+ tokens — a substantial operational improvement for the Router/Reducer cascade.
-
-**Connection to Incident 003-Alpha:** H1 (FA-induced CPU fallback) was rejected in Incident 003 on `gemma4-think:26b` at small scale (≤5K chars). Exp 008 re-examines FA at production-scale prompts (up to 40K tokens) with `gemma4:26b`, now paired with `q8_0` as a co-variable. If FA causes instability at scale, Exp 008 will surface it.
+If the 20K cliff (FA + q8_0) is primarily KV-bandwidth-bound, the FA=0 + fp16 baseline should show a *lower* cliff — the flags are already providing measurable relief. If the cliff is identical without the flags, the bandwidth savings are not the binding constraint.
 
 ---
 
 ### Hypothesis
 
-**H1 (primary):** `OLLAMA_FLASH_ATTENTION=1` + `OLLAMA_KV_CACHE_TYPE=q8_0` raises the prefill cliff threshold from ~20K tokens (Exp 007 baseline) to ≥30K tokens on Mac Mini M4 Pro.
+**H1 (primary, reformulated):** `OLLAMA_FLASH_ATTENTION=0` + fp16 KV cache (flags disabled) produces a prefill cliff onset **below** the 20K observed in Exp 007 (FA + q8_0 active), confirming that the flags provide measurable operational headroom on Mac Mini M4 Pro.
 
-**H2 (throughput):** Gen t/s at medium context (15K–25K tokens) improves by ≥10% vs Exp 007 baseline due to reduced KV cache bandwidth pressure during autoregressive decoding.
+**H2 (throughput, reformulated):** Gen t/s at medium context (15K–25K tokens) is ≥10% **lower** without the flags vs Exp 007 values (34.76 / 31.38 / 25.08 / 14.40 / 10.75 t/s), consistent with increased KV cache bandwidth pressure during decoding.
 
-**H3 (instability):** FA causes silent generation failures, empty responses, or wedged runners under production-scale prompts (>15K tokens) — re-testing Incident 003-Alpha H1 at scale.
+**H3 (instability):** FA=1 causes silent generation failures, empty responses, or wedged runners under production-scale prompts (>15K tokens) — re-testing Incident 003-Alpha H1 at scale. (This sub-hypothesis is unchanged and tests the flags-on condition, using the current production config.)
 
-**H0 (null):** Prefill cliff threshold and gen t/s are statistically indistinguishable from Exp 007 baseline. Flags have no measurable effect on this hardware.
+**H0 (null):** Prefill cliff threshold and gen t/s are statistically indistinguishable between FA=0/fp16 and Exp 007 FA=1/q8_0 results. Flags have no measurable effect on this hardware.
 
 **Falsification criteria:**
-- H1 rejected if cliff threshold ≤20K with flags active (same as Exp 007 without flags).
-- H2 rejected if gen t/s at 15K and 25K sizes falls within ±10% of Exp 007 values.
-- H3 confirmed if ≥1 of 5 Phase A cells produces empty response, timeout, or wedged runner.
+- H1 rejected if FA=0 cliff onset is ≥20K (same as or higher than the FA + q8_0 result).
+- H2 rejected if gen t/s at 15K and 25K sizes falls within ±10% of Exp 007 values under FA=0.
+- H3 confirmed if ≥1 Phase A cell (flags on, production config) produces empty response, timeout, or wedged runner.
 
 ---
 
 ### Experiment
 
-**Protocol:** Same Phase A (5 sizes: 4K, 8K, 15K, 25K, 35K, 3 repeats) and Phase B (cliff sweep 20K–40K, 2.5K spacing, 2 repeats) as Exp 007. Ollama started via `start_ollama_flags.sh` with `OLLAMA_FLASH_ATTENTION=1 OLLAMA_KV_CACHE_TYPE=q8_0`. Brew services Ollama stopped before starting the flagged instance.
+**Protocol (reformulated 2026-06-07):** Same Phase A (5 sizes: 4K, 8K, 15K, 25K, 35K, 3 repeats) and Phase B (cliff sweep 20K–40K, 2.5K spacing, 2 repeats) as Exp 007. **Primary run: FA=0 + fp16 KV cache** (flags-off baseline, the missing comparison point). LaunchDaemon temporarily overridden: `OLLAMA_FLASH_ATTENTION=0`, `OLLAMA_KV_CACHE_TYPE=` (unset, defaults to fp16). Bench scripts must log confirmed env state from process scan before each run. `start_ollama_flags.sh` is not used for the primary run; a matching `start_ollama_no_flags.sh` will be created. Secondary run (flags on, production config) validates H3 and confirms Exp 007 numbers are reproducible.
 
 **Fixtures:** Shared from `exp_007_hardware_comparison/fixtures/padding/` — same files, no duplication.
 
