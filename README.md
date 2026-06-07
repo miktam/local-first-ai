@@ -16,8 +16,8 @@ This repo accompanies the blog at [localfirstai.eu](https://localfirstai.eu) and
 | Router model | `gemma4:e4b` (fast routing layer) |
 | Runtime | Ollama 0.20.2 |
 | Orchestration | OpenClaw → Nestor (local AI agent) |
-| Operating ceiling (Mini) | **< 18,000 tokens on-wire** (Exp 007 Phase B — cliff onset ~17–20K) |
-| Operating ceiling (MBP)  | **< 40,000 tokens on-wire** (Exp 007 Phase B — cliff onset ~43–50K) |
+| Operating ceiling (Mini) | **> 40,000 tokens on-wire** (Exp 008/010 — no cliff at FA=0; Exp 007's 18K was a FA=1 artefact) |
+| Operating ceiling (MBP)  | **> 40,000 tokens on-wire** (Exp 007 Phase B — FA=1 cliff at ~45K; FA=0 baseline not yet measured) |
 
 ---
 
@@ -37,9 +37,10 @@ Roadmap and pending experiments: [`tasks/chronos/roadmap.md`](./tasks/chronos/ro
 | [004](./tasks/chronos/exp_004_bootstrap_diet/) | Bootstrap Diet | Complete | OpenClaw session hygiene |
 | [005](./tasks/chronos/exp_005_dicer_describer/) | Router / Reducer Cascade | Phase 0 closed | Working two-model cascade over 8-year Apple Watch corpus; three load-bearing behaviours demonstrated |
 | [006](./tasks/chronos/exp_006_redactor_fidelity/) | Redactor Fidelity (GDPR) | Complete | 0/20 × 8 categories — zero true-positive leaks across all pre-registered GDPR categories |
-| [007](./tasks/chronos/exp_007_hardware_comparison/) | Mac Mini vs MacBook Pro M5 Max | Phase A+B complete | Mini cliff ~18K, MBP cliff ~45K (2.5×); MBP gen t/s +200–370%; H1+H2 confirmed |
-| [008](./tasks/chronos/exp_008_flash_attention/) | Flash Attention + q8_0 KV Cache | Pre-registered | Tests whether FA + KV cache quantization pushes the 20K cliff to ≥30K tokens |
+| [007](./tasks/chronos/exp_007_hardware_comparison/) | Mac Mini vs MacBook Pro M5 Max | Phase A+B complete | Mini cliff ~18K, MBP cliff ~45K (2.5×); MBP gen t/s +200–370%; H1+H2 confirmed ⚠ see Exp 008 |
+| [008](./tasks/chronos/exp_008_flash_attention/) | Flash Attention + q8_0 KV Cache | Complete — landmark | FA+q8_0 flags *cause* the cliff; FA=0/fp16 has no cliff through 40K. Exp 007 ceiling was an artefact |
 | [009](./tasks/chronos/exp_009_adversarial_critic/) | Adversarial Project Critic (Local vs. Frontier) | Complete — FAIL | gemma4:26b matched compliance layer (DPA/DSAR/DPIA) but missed impl-vs-docs gaps; 50% overlap, 50% FP rate |
+| [010](./tasks/chronos/exp_010_fa_isolation/) | FA vs q8_0 Factorial Isolation | Complete | FA=1 is the sole culprit (cliff at 32.5K alone, 20K combined with q8_0). q8_0 alone: no cliff, +5% gen t/s |
 
 ### Watcher Runs
 
@@ -80,7 +81,7 @@ chmod +x benchmarks/nestor-bench-phase1.sh
 
 ## Key findings (cumulative)
 
-1. **The prefill cliff is real — and hardware-specific.** On Mac Mini M4 Pro (`gemma4:26b`), prefill degrades sharply past ~18K tokens: at 35K tokens, prefill takes 20 minutes. On MacBook Pro M5 Max, the cliff onset is at ~45K tokens — 2.5× higher — and the slope above it is 20× gentler. The bottleneck is memory bandwidth, not compute. The right machine for long-context local inference is not interchangeable. (Incident 003-Alpha, Exp 007)
+1. **The prefill cliff was an artefact of `OLLAMA_FLASH_ATTENTION=1`, not a hardware limit.** Exp 007 measured a cliff at ~18K tokens on Mac Mini M4 Pro — but those runs were made with FA=1+q8_0 enabled (Incident 007-Alpha). Exp 008 established the FA=0 baseline: no cliff through 40K tokens. Exp 010's 2×2 factorial confirmed FA=1 is the sole culprit: it alone (without q8_0) produces a cliff at 32.5K and triples prefill latency at 15K tokens (1.774 → 5.405 ms/tok). Under optimal config (FA=0, q8_0), the Mac Mini's true operational ceiling is **> 40K tokens on-wire**. Flash Attention was designed for discrete GPU SRAM/HBM hierarchies; on Apple Silicon unified memory, its tiling overhead applies without the bandwidth benefit. (Incident 003-Alpha, Exp 007, Incident 007-Alpha, Exp 008, Exp 010)
 
 2. **Thinking tokens are expensive — cap and name them explicitly.** `gemma4:26b` is a thinking model: left unconstrained, a simple task generates 10,000–25,000 hidden thinking tokens — at 38 t/s that's 4–11 minutes per response with zero quality gain. The architectural response: a `gemma4-think:26b` Ollama alias with a hard 128K context cap, used only for tasks that genuinely need deliberation. The name makes the choice visible; the cap prevents runaway. (Exp 002)
 

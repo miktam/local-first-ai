@@ -1,0 +1,84 @@
+{
+  "experiment": "010",
+  "phase": "B",
+  "condition": "C",
+  "machine": "mini",
+  "model": "gemma4:26b",
+  "ollama_flags": {
+    "OLLAMA_FLASH_ATTENTION": "0",
+    "OLLAMA_KV_CACHE_TYPE": "q8_0"
+  },
+  "baseline_ms_per_tok": 1.694,
+  "cliff_threshold_ms_per_tok": 3.388,
+  "cliff_confirmed_at": null,
+  "started": "20260607T140224Z",
+  "sizes": [
+    {
+      "size_key": "20k",
+      "prompt_tokens": 20005,
+      "cold_prefill_ms_per_tok": 1.771,
+      "cliff_triggered": false,
+      "n": 2
+    },
+    {
+      "size_key": "22500",
+      "prompt_tokens": 22502,
+      "cold_prefill_ms_per_tok": 1.8,
+      "cliff_triggered": false,
+      "n": 2
+    },
+    {
+      "size_key": "25k",
+      "prompt_tokens": 24993,
+      "cold_prefill_ms_per_tok": 1.87,
+      "cliff_triggered": false,
+      "n": 2
+    },
+    {
+      "size_key": "27500",
+      "prompt_tokens": 27500,
+      "cold_prefill_ms_per_tok": 1.929,
+      "cliff_triggered": false,
+      "n": 2
+    },
+    {
+      "size_key": "30k",
+      "prompt_tokens": 29996,
+      "cold_prefill_ms_per_tok": 1.995,
+      "cliff_triggered": false,
+      "n": 2
+    },
+    {
+      "size_key": "32500",
+      "prompt_tokens": 32493,
+      "cold_prefill_ms_per_tok": 2.05,
+      "cliff_triggered": false,
+      "n": 2
+    },
+    {
+      "size_key": "35k",
+      "prompt_tokens": 34995,
+      "cold_prefill_ms_per_tok": 2.11,
+      "cliff_triggered": false,
+      "n": 2
+    },
+    {
+      "size_key": "37500",
+      "prompt_tokens": 37482,
+      "cold_prefill_ms_per_tok": 2.163,
+      "cliff_triggered": false,
+      "n": 2
+    },
+    {
+      "size_key": "40k",
+      "prompt_tokens": 39991,
+      "cold_prefill_ms_per_tok": 2.213,
+      "cliff_triggered": false,
+      "n": 2
+    }
+  ],
+  "reference_cliffs": {
+    "exp007_FA1_q8": "20k",
+    "exp008_FA0_fp16": "not reached at 40k"
+  }
+}

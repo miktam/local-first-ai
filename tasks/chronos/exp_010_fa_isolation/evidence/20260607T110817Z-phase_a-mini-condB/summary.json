@@ -1,0 +1,76 @@
+{
+  "experiment": "010",
+  "phase": "A",
+  "condition": "B",
+  "machine": "mini",
+  "model": "gemma4:26b",
+  "ollama_flags": {
+    "OLLAMA_FLASH_ATTENTION": "1",
+    "OLLAMA_KV_CACHE_TYPE": "fp16 (default)"
+  },
+  "idle_seconds": 60,
+  "started": "20260607T110817Z",
+  "sizes": [
+    {
+      "size_key": "4k",
+      "prompt_tokens": 4019,
+      "rep1_prefill_ms_per_tok": 2.417,
+      "mean_gen_tps": 33.44,
+      "exp007_gen_tps": 34.76,
+      "exp008_gen_tps": 40.42,
+      "n": 3
+    },
+    {
+      "size_key": "8k",
+      "prompt_tokens": 8012,
+      "rep1_prefill_ms_per_tok": 3.244,
+      "mean_gen_tps": 31.7,
+      "exp007_gen_tps": 31.38,
+      "exp008_gen_tps": 42.6,
+      "n": 3
+    },
+    {
+      "size_key": "15k",
+      "prompt_tokens": 15011,
+      "rep1_prefill_ms_per_tok": 5.405,
+      "mean_gen_tps": 25.36,
+      "exp007_gen_tps": 25.08,
+      "exp008_gen_tps": 36.97,
+      "n": 3
+    },
+    {
+      "size_key": "25k",
+      "prompt_tokens": 24993,
+      "rep1_prefill_ms_per_tok": 9.125,
+      "mean_gen_tps": 19.87,
+      "exp007_gen_tps": 14.4,
+      "exp008_gen_tps": 31.08,
+      "n": 3
+    },
+    {
+      "size_key": "35k",
+      "prompt_tokens": 34995,
+      "rep1_prefill_ms_per_tok": 12.286,
+      "mean_gen_tps": 16.26,
+      "exp007_gen_tps": 10.75,
+      "exp008_gen_tps": 26.69,
+      "n": 3
+    }
+  ],
+  "baselines": {
+    "exp007_FA1_q8": {
+      "4k": 34.76,
+      "8k": 31.38,
+      "15k": 25.08,
+      "25k": 14.4,
+      "35k": 10.75
+    },
+    "exp008_FA0_fp16": {
+      "4k": 40.42,
+      "8k": 42.6,
+      "15k": 36.97,
+      "25k": 31.08,
+      "35k": 26.69
+    }
+  }
+}
