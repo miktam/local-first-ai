@@ -423,7 +423,7 @@ def verify_candidate(client: OllamaClient, gap: dict, source: str,
         # Empty response — treat as unsupported so the candidate is dropped, not the run.
         verdict = {"supported": False, "evidence": "", "reasoning": "empty_response_from_model"}
     tracer.log("stage3", "verdict", {"gap_id": gap["id"], "supported": verdict["supported"],
-                                     "claim": gap["claim"], "evidence": verdict["evidence"][:200]})
+                                     "claim": gap["claim"], "evidence": (verdict.get("evidence") or "")[:200]})
     return verdict
 
 

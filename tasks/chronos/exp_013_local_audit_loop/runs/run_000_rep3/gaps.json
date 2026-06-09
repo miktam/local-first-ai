@@ -1,0 +1,47 @@
+{
+  "gaps": [
+    {
+      "id": "gap_auth_vulnerability_access_control",
+      "claim": "The MCP server lacks any authentication or authorization mechanisms, which poses a risk to data access control policies, although the policy specifically prohibits read access to Tier 1 data, the lack of auth means any user can execute tools that interact with the database/ChromaDB.",
+      "code_fact_ref": "mcp_server_auth_absence",
+      "policy_rule_ref": "ACCESS_CONTROL_002",
+      "severity": "high",
+      "evidence": "The MCP server code contains no authentication or authorization logic. The `mcp_server.py` file defines tools like `search_properties`, `get_property`, and `market_summary` which execute queries against `config.DB_PATH` and `config.CHROMA_DIR` without any check of the caller's identity or permissions. Furthermore, the policy document `01-ropa.md` explicitly states: 'Filesystem-level access control: the MCP server process has no read access to the private (Tier 1) layer', yet the code provides no mechanism to prevent an unauthorized user from attempting to use tools to access data or simply interacting with the server if they have network/local access.",
+      "rank": 1
+    }
+  ],
+  "coverage": {
+    "code_facts": 13,
+    "policy_rules": 18,
+    "candidates_generated": 2,
+    "candidates_verified": 1,
+    "verification_survival_rate": 0.5,
+    "attempted": [
+      {
+        "id": "gap_audit_log_missing_queries",
+        "claim": "The current logging implementation for the MCP server (mcp_server.py) logs tool calls and results, but does not explicitly confirm that all MCP queries (the input parameters/queries themselves) are being captured in a persistent audit log as required.",
+        "supported": false
+      },
+      {
+        "id": "gap_auth_vulnerability_access_control",
+        "claim": "The MCP server lacks any authentication or authorization mechanisms, which poses a risk to data access control policies, although the policy specifically prohibits read access to Tier 1 data, the lack of auth means any user can execute tools that interact with the database/ChromaDB.",
+        "supported": true
+      }
+    ]
+  },
+  "diagnosis": {
+    "label": "produced_output",
+    "confidence": "high",
+    "counts": {
+      "facts": 13,
+      "rules": 18,
+      "candidates": 2,
+      "verified": 1
+    },
+    "specificity_rate": 0.5,
+    "evidence": [
+      "candidates=2, verified=1: no structural zero."
+    ],
+    "suggested_fix": "No structural failure — the loop yields verified gaps. The remaining question is rubric mapping, which stays manual (specificity 0.50). If the score is still low, inspect whether verified gaps are concrete enough to match items."
+  }
+}
