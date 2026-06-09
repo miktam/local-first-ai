@@ -1548,6 +1548,47 @@ The recovery is real and reproducible: Items 3 (MCP auth) and 4 (inference log r
 
 ---
 
+## Exp 014 — Capability Variance Floor
+
+*Pre-registered: 2026-06-09. Subdirectory: `tasks/chronos/exp_014_capability_variance/`*
+
+### Motivation
+
+Exp 012 produced a clean result — gemma4:26b 0/8, all frontier tiers 5/8 — but on 3 reps per model. A 0/8 result with N=3 could be a true zero (every item independently missed with high probability) or a model that scores ~1–2/8 on average but happened to score 0 across all 3 runs. Those two cases have very different implications: the first supports a hard boundary; the second means the 0/8 was noise and the local/cloud step function weakens.
+
+Similarly, Haiku's 5/8 at N=3 could be consistently 5/8 or could be a 3–7/8 model that hit 5 three times.
+
+### Hypotheses
+
+**H1 (gemma zero replicates):** gemma4:26b scores 0/8 in ≥4 of 5 reps on the frozen Exp 012 rubric. Falsified if gemma scores ≥1/8 in ≥2 reps — indicating the 0/8 was sampling noise and the per-item probability is non-zero.
+
+**H2 (Haiku distribution is stable):** Haiku scores 4–6/8 net in every rep (±1 of the 5/8 mean). Falsified if Haiku scores ≤2/8 or ≥7/8 in any rep — indicating high variance that undermines the "local/cloud step" framing from either direction.
+
+**H3 (distributions do not overlap):** gemma and Haiku score distributions do not overlap across 5 reps. Falsified if gemma's max score meets or exceeds Haiku's min score.
+
+### Experiment design
+
+- Frozen rubric: `../exp_012_cost_capability/rubric.md` (not copied — referenced in place)
+- Frozen context bundles and prompts: identical to Exp 012 (`run.py` is a direct adaptation)
+- Models: gemma4:26b (Ollama, `think: false`, `temperature: 0.1`) and claude-haiku-4-5-20251001 (API)
+- 5 reps per model per task (Tasks A + B)
+- Scoring: all runs complete before any scoring begins (blind)
+- Scorer records item-level hits/misses per rep, not just net totals
+
+### Pass criteria
+
+| Criterion | Threshold |
+|---|---|
+| H1 confirmed | gemma 0/8 in ≥4/5 reps |
+| H1 falsified | gemma ≥1/8 in ≥2 reps |
+| H2 confirmed | Haiku within 4–6/8 every rep |
+| H3 confirmed | no score overlap across 5 reps |
+| H3 falsified | gemma max ≥ Haiku min |
+
+*Status: Pre-registered 2026-06-09. Running.*
+
+---
+
 ## Exp 015 — Active-Parameter Ablation: Dense vs MoE on the Audit Rubric
 
 *Pre-registered: 2026-06-09. Subdirectory: `tasks/chronos/exp_015_active_param_ablation/`*
