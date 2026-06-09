@@ -99,7 +99,7 @@ class Config:
     keep_alive: str = "10m"       # keep weights resident across the loop
     num_predict: int = 2048       # output budget reserved out of num_ctx
     temp_extract: float = 0.3     # breadth for recall-oriented passes
-    temp_check: float = 0.0       # deterministic for verification/assembly
+    temp_check: float = 0.1       # gemma4:26b returns empty content at temp=0.0 with schema injection
     request_timeout: int = 600
     trace_path: str = "trace.jsonl"
 
@@ -180,6 +180,10 @@ class OllamaClient:
         content = r.json()["message"]["content"]
         if schema is None:
             return content
+        if not content or not content.strip():
+            # Empty response — return a safe default rather than crashing the run.
+            # Callers check for the expected key and will treat missing/empty as failure.
+            return {}
         # Strip accidental markdown fences, then try to extract the outermost JSON object.
         text = re.sub(r"^```(?:json)?\s*", "", content.strip())
         text = re.sub(r"\s*```$", "", text)
