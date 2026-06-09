@@ -1484,25 +1484,56 @@ A score of 3/8 from the local model alone makes this architecture viable. That i
 | 4 | ✓ | ✓ | GAP-002: inference log absent from retention schedule — names file + schedule |
 | 5 | ✗ (needs config.py) | ✗ | n/a |
 
-Rep 1 score: **1/3 findable** (rubric items 1 and 3 missed; item 4 found). Rep 2 and 3 pending.
+Rep 1 score: **1/3 findable** (item 3 missed — bridge had no rule; item 4 found; item 1 missed — RULE-008 present but not connected).
+
+**Rubric scoring, run 000 rep 2 — 2026-06-09 (example-template harness):**
+
+3/3 candidates verified. Items found: 3 (MCP auth absent), 4 (inference log absent from retention schedule). Item 1 not found. Above-rubric: MCP log rotation gap (not scored).
+
+**Rubric scoring, run 000 rep 3 — 2026-06-09:**
+
+1/2 candidates verified. Item 3 found (MCP auth). Item 4 not found this rep.
+
+**Stability table (all 3 reps):**
+
+| Item | Rep 1 | Rep 2 | Rep 3 | Stable ≥2/3? | Score |
+|------|-------|-------|-------|:---:|:---:|
+| 1 (session retention violation) | ✗ | ✗ | ✗ | no | 0 |
+| 2 (DPIA for VLM) | n/a | n/a | n/a | — | 0 |
+| 3 (MCP auth absent) | ✗ | ✓ | ✓ | **yes** | +1 |
+| 4 (inference log not in retention schedule) | ✓ | ✓ | ✗ | **yes** | +1 |
+| 5 (model label mutable) | n/a | n/a | n/a | — | 0 |
+
+**Net score: 2/5 (2/3 findable in baseline bundle). No false positives across any rep.**
+
+Note: Exp 012 false positives (DPA template, DSAR procedure, VLM pipeline) did not reappear in any rep — the decomposed approach did not introduce new FP classes.
 
 **Score progression by intervention:**
 
-| Run | Intervention | Class | Diagnosis before | Score (net) | Notes |
-|---|---|---|---|---|---|
-| 000 rep1 | baseline — localization only | generic-scaffolding | 0/8 (exp_012 flat-context) | 1/3 findable | Item 4 found; Items 1, 3 missed |
-| 000 rep2 | — pending — | | | | |
-| 000 rep3 | — pending — | | | | |
+| Run | Intervention | Class | Score (net) | Notes |
+|---|---|---|---|---|
+| 000 (3 reps) | baseline localization — generic scaffolding only | generic-scaffolding | **2/3 findable (2/5)** | Items 3 and 4 stable; Item 1 consistently not bridged |
 
-**Key observation (run 000 rep 1):** The bridge failure for Item 1 is the primary gap. RULE-008 was correctly extracted from the policy ("Buyer query text must not be retained beyond the session unless a separate lawful basis and retention period are documented"). The code fact that `inference_log.py` persists input/output text to an append-only file was also extracted (17 facts). The bridge stage failed to connect the two. This is a scaffolding target — not a knowledge gap, but a bridging failure.
+**Key observation — bridge failure on Item 1:** RULE-008 ("Buyer query text must not be retained beyond the session") was extracted in all reps; the code fact that `inference_log.py` persistently appends input/output text was also extracted. The bridge consistently failed to connect them across all 3 reps. This is not stochastic noise — it is a systematic failure. The bridge stage appears to pattern-match on structural similarity between rule categories and code fact categories, and "session retention" does not fire on "inference logging" without additional framing.
 
-Item 3 (MCP auth) has a structural gap: no policy rule in the bundle explicitly states "the MCP endpoint must require authentication." The policy says remote access is restricted to authorised staff (RULE-007), but the bridge cannot make a compliance claim without a specific rule to cite. Adding an auth rule to the policy is not a context expansion fix — it's a genuine gap in the policy itself.
+**Key observation — Item 3 found despite earlier rep-1 miss:** Rep 1 (old harness, schema-object injection) failed to extract an auth-related rule. Reps 2 and 3 (example-template harness, 18 rules extracted vs 16) both found and verified the MCP auth gap. The harness fix (intervention 004) appears to have improved rule extraction recall.
 
 ### Conclusion
 
-*To be written after rep 2 and 3 and scoring is complete.*
+**H confirmed (partial):** Task decomposition (extract-facts → extract-rules → bridge → verify) does recover recall from the 0/8 flat-context baseline. 
 
-*Status: In progress. Run 000 rep 1 complete (2026-06-09). Reps 2–3 pending.*
+Baseline: gemma4:26b scored 0/8 on Exp 012's flat-context compliance task.  
+Decomposed: gemma4:26b scored 2/3 findable items (2/5 headline) on the same source material with no rubric leakage.
+
+The recovery is real and reproducible: Items 3 (MCP auth) and 4 (inference log retention) are both stable finds (≥2/3 reps). The target threshold of ≥3/8 (from the research question, set at the Exp 012 scoring level) is not directly comparable — Exp 013 uses a 5-item rubric, 3 of which are findable in the baseline bundle, and the model found 2/3. On the 5-item scale this is 2/5 = 40%.
+
+**What decomposition fixed:** Cross-document retention gaps — the model can now hold an implementation fact (log file appends data) and a schedule rule (item not in schedule) and generate a gap claim. Items 3 and 4 both require citing code and policy in the same claim; both found.
+
+**What decomposition did not fix:** Cross-semantic bridging — Item 1 requires the model to recognize that "inference input/output text" is the same category as "buyer query text" in the policy. The rule and the fact are in separate semantic frames; the bridge never fires. This is the next scaffolding target.
+
+**Operational implication:** 2/3 findable items at ~0 marginal cost (local inference, ~3–5 minutes per full run) enables on-premises pre-filter architecture: run the decomposed local audit, send only the bridge failures (items not found) to Haiku for cross-semantic coverage. Expected architecture: local (2/3 items) + Haiku top-up (remaining 1 item) = full coverage at ~$0.02/audit vs $0.09 full cloud run.
+
+*Status: Run 000 complete (2026-06-09). Score: 2/5. Context expansion runs (001-A2 with witness_ingest.py, 001-A5 with config.py) pending.*
 
 ---
 
