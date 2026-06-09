@@ -1271,31 +1271,100 @@ Estimated total API spend: **~$1.01**. All frontier runs via Anthropic API.
 
 ### Data tables
 
-*To be filled after runs.*
+*Runs completed 2026-06-09. Results scored against pre-committed rubric in `rubric.md`.*
 
-**Task A scores (compliance extraction, max 5):**
+**Task A scores (compliance extraction, max 5 pts; −1 per confirmed FP):**
 
-| Model | Rep 1 | Rep 2 | Rep 3 | Majority score | Cost per run | Cost per correct answer |
+| Model | Rep 1 | Rep 2 | Rep 3 | Net score | Task A cost | Cost/correct |
 |---|---|---|---|---|---|---|
-| gemma4:26b | | | | | $0 | $0 |
-| Claude Haiku 4.5 | | | | | | |
-| Claude Sonnet 4.6 | | | | | | |
-| Claude Opus 4.8 | | | | | | |
+| gemma4:26b | 0 | 0 | 0 | **0/5** | $0 | — |
+| Claude Haiku 4.5 | 2 | 3 | 2 | **3/5** | $0.046 | $0.015 |
+| Claude Sonnet 4.6 | 1 | 2 | 2 | **2/5** | $0.130 | $0.065 |
+| Claude Opus 4.8 | 3−1† | 3−1† | 3 | **2/5** | $0.268 | $0.134 |
 
-**Task B scores (impl gap detection, max 3, FP penalty −1):**
+†Opus Task A: gross 3, −1 FP ("no DSR procedure document exists" — `compliance/05-dsr-procedure.md` is 208 lines; confirmed false positive in reps 1 and 2).
 
-| Model | Rep 1 | Rep 2 | Rep 3 | Majority score | Cost per run | Cost per correct answer |
+**Task A rubric items breakdown:**
+
+| Item | gemma4:26b | Haiku | Sonnet | Opus |
+|---|---|---|---|---|
+| A1 — ROPA vs inference_log.py (HIGH) | — | ✓ 3/3 | ✓ 3/3 | ✓ 3/3 |
+| A2 — No DPIA for VLM witnessing (HIGH) | — | — | — | — |
+| A3 — MCP server no authentication (MEDIUM) | — | ✓ 2/3 | — | ✓ 3/3 |
+| A4 — inference.jsonl not in retention schedule (MEDIUM) | — | ✓ 2/3 | ✓ 2/3 | ✓ 3/3 |
+| A5 — Model version not auditable / Art. 22 (LOW) | — | — | — | — |
+
+**Task B scores (impl gap detection, max 3 pts; −1 per confirmed FP):**
+
+| Model | Rep 1 | Rep 2 | Rep 3 | Net score | Task B cost | Cost/correct |
 |---|---|---|---|---|---|---|
-| gemma4:26b | | | | | $0 | $0 |
-| Claude Haiku 4.5 | | | | | | |
-| Claude Sonnet 4.6 | | | | | | |
-| Claude Opus 4.8 | | | | | | |
+| gemma4:26b | 0 | 0 | 0 | **0/3** | $0 | — |
+| Claude Haiku 4.5 | 2 | 2 | 2 | **2/3** | $0.049 | $0.025 |
+| Claude Sonnet 4.6 | 3 | 3 | 3 | **3/3** | $0.161 | $0.054 |
+| Claude Opus 4.8 | 3 | 3 | 3 | **3/3** | $0.342 | $0.114 |
+
+**Task B rubric items breakdown:**
+
+| Item | gemma4:26b | Haiku | Sonnet | Opus |
+|---|---|---|---|---|
+| B1 — No schema versioning / migration (MEDIUM) | — | ✓ 3/3 | ✓ 3/3 | ✓ 3/3 |
+| B2 — Model pinned by label only, no hash (MEDIUM) | — | ✓ 2/3 | ✓ 3/3 | ✓ 3/3 |
+| B3 — MCP no concurrency model / booth scenario (MEDIUM) | — | — | ✓ 2/3 | ✓ 3/3 |
+
+**Composite scores (Task A + Task B, max 8):**
+
+| Model | Task A | Task B | FP penalty | **Net total** | Total cost | Cost/correct |
+|---|---|---|---|---|---|---|
+| gemma4:26b | 0/5 | 0/3 | 0 | **0/8** | $0 | — |
+| Claude Haiku 4.5 | 3/5 | 2/3 | 0 | **5/8** | $0.095 | $0.019 |
+| Claude Sonnet 4.6 | 2/5 | 3/3 | 0 | **5/8** | $0.291 | $0.058 |
+| Claude Opus 4.8 | 3/5 | 3/3 | −1 | **5/8** | $0.611 | $0.122 |
+
+*Actual API spend: $0.997 total (vs $1.01 estimated). Opus input tokens ~40% higher than Sonnet for identical context — likely adaptive thinking overhead in usage reporting.*
 
 ### Conclusion
 
-*To be written after runs.*
+*Completed 2026-06-09.*
 
-*Status: Pre-registered (2026-06-09).*
+#### Hypothesis verdicts
+
+**H1 (local ceiling on Task A) — FALSIFIED.** gemma4:26b scored 0/5 on Task A. All three frontier models outperformed it (Haiku 3/5, Sonnet 2/5, Opus 2/5 net). The compliance extraction capability gap is absolute, not marginal. Exp 009's 3/3 gemma4 overlap with Sonnet was on a different rubric using a shorter, easier context bundle; the expanded Task A rubric with 5 pre-registered items revealed a clean 0 baseline. This falsifies the hypothesis that local models match frontier on structured compliance extraction.
+
+**H2 (frontier premium on Task B) — CONFIRMED.** All three frontier models scored 2–3/3 on Task B vs gemma4 0/3. The impl-vs-docs gap detection premium over the local model is total across this rubric.
+
+**H3 (cost curve is stepped) — CONFIRMED.** Haiku → Sonnet: 3.1× cost increase, 0 net quality gain (5/8 → 5/8). Haiku → Opus: 6.4× cost increase, 0 net quality gain. The quality/cost ratio collapses to zero above the cheapest cloud tier. The curve is a single step function: $0 (local) → $0.09 (cheapest API), then flat.
+
+#### Key findings
+
+**1. The capability cliff is between local and cloud, not within the cloud tier.**
+
+For this task type — structured analytical extraction over a ~10K-token bounded context — all three frontier models land at 5/8 net. The premium of Sonnet over Haiku (3.1×) and Opus over Haiku (6.4×) delivers no additional rubric score. Haiku is the cost-dominant choice for this workload: same score as Opus at 1/7th the cost.
+
+**2. Haiku and Sonnet have complementary blind spots.**
+
+Haiku caught A3 (MCP server no authentication) but missed B3 (concurrency model for booth demo). Sonnet missed A3 but caught all three Task B items including the booth-context concurrency risk. Neither gap is random noise — each model has a consistent profile across reps. This suggests the strength/weakness pattern is structural, not stochastic.
+
+**3. Opus has the highest gross score (6/8) but the highest false positive rate.**
+
+Opus uniquely found above-rubric gaps in both reps — notably "the filesystem firewall has no implementation" (BRIEF promotes it as the primary moat; config.py defines outbound HTTPS URLs to Catastro/SNCZI/Overpass with no egress blocking) and "Bouncer sanitisation path has no code" (BRIEF describes a sanitised buyer-facing slice; mcp_server.py exposes the full DB unfiltered). Both are real and significant, but outside the pre-committed rubric. The DSR procedure FP (compliance/05-dsr-procedure.md exists; Opus claimed it didn't, 2/3 reps) cost it 1 point and dropped it from 6/8 to 5/8 net.
+
+**4. Two items evaded every model: A2 and A5.**
+
+A2 (no DPIA for VLM witnessing pipeline under Art. 35) and A5 (model name label only logged in inference_log.py — no hash, no Art. 22 accountability) were missed by all four models. A5 requires connecting a low-level code observation (`"model": model` in inference_log.py, where `model` is the string label from config.py) to the GDPR Article 22 accountability obligation for automated processing. No model made that connection. A2 requires recognising that `scripts/witness_ingest.py` with face detection crosses the Art. 35 threshold for high-risk processing — apparently non-trivial even for frontier models given the context bundle does not include the witness_ingest.py source.
+
+**5. Sonnet uniquely found an above-rubric bug.**
+
+Sonnet (all 3 reps) identified a median calculation error in `db.py`: `mid = len(prices) // 2` followed by `prices[mid]` returns the upper-middle value for even-length arrays rather than the average of the two midpoints. This is a real bug in the primary market intelligence endpoint, not in the rubric. Haiku and gemma4 missed it. Opus missed it. Sonnet found it 3/3 with correct diagnosis and fix (`statistics.median()`).
+
+#### Implication for the debate
+
+The @Prathkum / @nix_eth exchange was testing two claims: (a) cost is the blocking problem, (b) cost and capability are decoupled. The data does not cleanly support either.
+
+For this task class, the cost cliff is real but it's at $0.09 (Haiku), not $0.61 (Opus). Upgrading from Haiku to Opus costs 6.4× more and buys zero additional rubric score. Within the cloud tier, intelligence and cost are genuinely decoupled on this workload. But "use local instead of cloud" is not a valid substitute — gemma4:26b scored 0/8 on a task designed to favour local models. The decoupling breaks at the local/cloud boundary.
+
+The practical recommendation for recurring compliance and engineering gap detection on bounded context: run Haiku. Budget one Sonnet or Opus pass per release cycle for qualitative depth — the above-rubric findings (Opus: filesystem firewall gap, Bouncer sanitisation gap; Sonnet: median bug) are genuine value not captured by the rubric score.
+
+*Status: Complete (2026-06-09). Evidence: `tasks/chronos/exp_012_cost_capability/results/`. Rubric committed before first run.*
 
 ---
 

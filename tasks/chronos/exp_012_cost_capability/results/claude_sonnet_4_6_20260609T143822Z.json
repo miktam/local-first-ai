@@ -1,0 +1,341 @@
+{
+  "experiment": "012",
+  "ts": "20260609T143822Z",
+  "model": "claude-sonnet-4-6",
+  "runtime": "api",
+  "project": "/Users/miktam02/REPOS/casasol",
+  "reps_per_task": 3,
+  "task_a": [
+    {
+      "rep": 1,
+      "duration_s": 35.5,
+      "tokens": {
+        "input_tokens": 6860,
+        "output_tokens": 1599,
+        "total_tokens": 8459,
+        "tokens_per_s": null
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log records the full raw input and output text of every LLM call, which may contain personal data (buyer query text, incidental staff names), directly contradicting the RoPA claim that buyer query text is 'not retained beyond the session'.",
+          "severity": "HIGH",
+          "evidence": "inference_log.py lines 43-44: '\"input\": input_text, \"output\": output_text' — full text persisted to logs/inference.jsonl; RoPA §2.4: 'Buyer query text: not retained beyond the session (default)'",
+          "recommendation": "Strip or hash the 'input' and 'output' fields from inference log records, retaining only the metadata fields (input_chars, output_chars, duration_s, stage, model) so no personal data is persisted to the JSONL log."
+        },
+        {
+          "finding": "The LIA (Legitimate Interests Assessment) required to lawfully activate Processing Activity 1 under Article 6(1)(f) has not been signed off by a qualified practitioner, yet the pipeline is already processing data in production (70 listings ingested as of 2026-06-06).",
+          "severity": "HIGH",
+          "evidence": "RoPA §1.2: '⚠ Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off by a qualified practitioner before this basis is placed into force.' BRIEF.md: 'LIA requires practitioner sign-off before witnessing goes to production' — yet '12 witnessed KDTeam listings ingested via the VLM witnessing pipeline on 2026-06-06'.",
+          "recommendation": "Halt ingestion of new data under the witnessing pipeline and suspend live demonstrations until a qualified legal practitioner reviews and signs off the LIA, establishing the lawful basis required by Article 6(1)(f)."
+        },
+        {
+          "finding": "The MCP audit log records only tool name and filter parameters per _log_call(), providing no record of which natural person or client session initiated the query, making the audit trail insufficient to support GDPR accountability and data subject rights investigations.",
+          "severity": "HIGH",
+          "evidence": "mcp_server.py lines 36-38: '_log_call(tool, **kwargs)' logs only '[tool] key=value' pairs with no session ID, user identifier, or timestamp of the originating request; RoPA §1.8: 'Audit log maintained on all MCP queries' implies sufficient detail for accountability.",
+          "recommendation": "Extend _log_call() to record a pseudonymous session token and the UTC timestamp of each query so the audit trail can reconstruct who queried what and when, as required for accountability under Article 5(2)."
+        },
+        {
+          "finding": "No Data Processing Agreement (DPA) with a signed, identified counterparty is in place for the scraping of listings from Drumelia, Idealista, and KDTeam, yet personal data (agent names, contact details typically embedded in listings) from these third-party sources is ingested into the local corpus.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: '58 scraped — Drumelia 23, Idealista 31, KDTeam 5'; RoPA §1.3 asserts listing data is 'No — property data, not personal data' without acknowledging that scraped listings routinely contain agent names and contact numbers; compliance/01-ropa.md §1.5: 'No data is shared with third parties' addresses outbound sharing only, not inbound sourcing lawfulness.",
+          "recommendation": "Conduct a data mapping exercise on the scraped .md files to identify any personal data fields (agent names, phone numbers, emails) and either establish a lawful basis for their processing or strip them at ingestion time before they enter SQLite and ChromaDB."
+        },
+        {
+          "finding": "The retention schedule imposes no automated enforcement mechanism for ChromaDB vectors or SQLite records — deletion is marked as 'Agency IT' manual responsibility with no corresponding code or cron job, creating a high risk that vectors outlive their permitted retention period.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md: ChromaDB vectors row — 'Trigger for deletion: Manual deletion (see DSR procedure)' and 'Responsible: Agency IT'; no automated deletion script is referenced anywhere in the provided codebase for either SQLite or ChromaDB.",
+          "recommendation": "Implement a scheduled retention enforcement script (e.g. a nightly cron job) that queries listing status and deletion dates from SQLite and issues corresponding ChromaDB collection deletes and SQLite row deletions automatically, removing reliance on manual Agency IT action."
+        },
+        {
+          "finding": "The retention schedule states that voice audio WAV files are 'Deleted immediately after transcription' and the .m4a source file is the responsibility of the staff member's device, but no Article 30 processing activity documents the audio transcription pipeline, leaving this processing activity entirely outside the RoPA.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md: 'Voice note audio (if audio pipeline used) — Deleted immediately after transcription — Automatic — audio_demo.py deletes WAV after Whisper pass'; compliance/01-ropa.md documents only Processing Activity 1 (listing analysis) and Processing Activity 2 (buyer query matching) — no audio/transcription activity is listed.",
+          "recommendation": "Add a Processing Activity 3 to the RoPA covering the audio transcription pipeline, documenting the lawful basis, data categories (voice recordings of staff), retention (session-only), and the Whisper model used as a processing tool."
+        },
+        {
+          "finding": "The retention schedule states backup media is subject to the same retention periods but provides no automated or procedural mechanism to enforce this, and explicitly acknowledges that for full-disk encrypted backups the residual retention may exceed policy limits with only a documentation obligation.",
+          "severity": "LOW",
+          "evidence": "compliance/07-retention-schedule.md: 'Where this is impractical (e.g. encrypted full-disk backup), document the residual retention and ensure backup access is restricted' — this directly permits personal data retention beyond the Article 5(1)(e) storage limitation principle without a lawful justification for the extended period.",
+          "recommendation": "Define a maximum outer bound for backup residual retention (e.g. 30 days beyond primary deletion) and document it as a formal derogation with a specific risk acceptance, or switch to file-level incremental backups that support targeted deletion of expired records."
+        }
+      ]
+    },
+    {
+      "rep": 2,
+      "duration_s": 30.71,
+      "tokens": {
+        "input_tokens": 6860,
+        "output_tokens": 1414,
+        "total_tokens": 8274,
+        "tokens_per_s": null
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log records full input and output text of every Ollama call, meaning any personal data in buyer queries or model outputs is persisted to disk with no documented retention period or access control.",
+          "severity": "HIGH",
+          "evidence": "inference_log.py lines 42-43: '\"input\": input_text, \"output\": output_text' — full text logged to logs/inference.jsonl; retention-schedule.md contains no entry for inference.jsonl; RoPA §2.4 states buyer query text is 'not retained beyond the session (default)'",
+          "recommendation": "Either strip personal-data fields from the inference log (log only metadata: chars, duration, stage) or add inference.jsonl to the retention schedule with a defined maximum period and document the lawful basis for retention."
+        },
+        {
+          "finding": "The LIA (document 03-lia.md) is explicitly flagged as requiring practitioner sign-off before the witnessing pipeline goes to production, yet 12 witnessed KDTeam listings have already been ingested into the live corpus.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: 'LIA requires practitioner sign-off before witnessing goes to production'; BRIEF.md status section: '12 witnessed KDTeam listings ingested via the VLM witnessing pipeline on 2026-06-06'; RoPA §1.2: '⚠ Legal review required: the LIA in document 03-lia.md must be reviewed and signed off by a qualified practitioner before this basis is placed into force.'",
+          "recommendation": "Halt further witnessing ingestion and halt use of the 12 already-ingested witnessed listings until a qualified legal practitioner reviews and signs off the LIA, or document an alternative lawful basis that does not depend on the LIA."
+        },
+        {
+          "finding": "The MCP audit log (_log_call in mcp_server.py) logs only tool name and filter parameters, omitting the identity of the caller, meaning there is no audit trail attributing queries to specific users or sessions as required for accountability under Article 5(2).",
+          "severity": "HIGH",
+          "evidence": "mcp_server.py lines 35-37: '_log_call(tool: str, **kwargs)' logs only tool name and kwargs; no caller identity, session ID, or IP address is captured; RoPA §1.8: 'Audit log maintained on all MCP queries' implies sufficient logging for accountability."
+        },
+        {
+          "finding": "The retention schedule mandates deletion of ChromaDB vectors via 'manual deletion' with no automated enforcement mechanism, creating a structural gap where vector embeddings of expired listings persist indefinitely if the manual step is missed.",
+          "severity": "MEDIUM",
+          "evidence": "retention-schedule.md: ChromaDB vectors row — 'Trigger for deletion: Manual deletion (see DSR procedure)'; no corresponding automated script or cron job is referenced anywhere in the provided codebase; Article 5(1)(e) GDPR requires storage limitation to be enforced, not merely documented.",
+          "recommendation": "Implement an automated cleanup script (e.g. a nightly cron job) that cross-references ChromaDB collection IDs against active listing .md files and deletes orphaned vectors, then add it to the retention schedule as the responsible mechanism."
+        },
+        {
+          "finding": "The RoPA states 'No buyer personal data is processed' and that the buyer query is 'not retained beyond the session', but no technical control in the provided code enforces non-retention of buyer query text that passes through MCP tools.",
+          "severity": "MEDIUM",
+          "evidence": "RoPA §2.3: 'The query is not stored beyond the session unless the agency has a separate lawful basis'; mcp_server.py _log_call function logs kwargs which would include query strings passed to search_properties; inference_log.py logs full input_text of every pipeline call, which downstream of the MCP tool would include buyer query content.",
+          "recommendation": "Add explicit technical controls—either a query sanitisation layer before logging or a verified no-log path for buyer-originated queries—and document these controls in the RoPA as security measures."
+        },
+        {
+          "finding": "The retention schedule's 'Voice note audio' row delegates responsibility for the .m4a source file to 'the agency staff member's device', creating an undocumented data flow outside the controller's retention enforcement scope.",
+          "severity": "MEDIUM",
+          "evidence": "retention-schedule.md Notes section: 'The .m4a source file brought in from AirDrop is the responsibility of the agency staff member's device, not CasaSol'; no procedure exists to ensure deletion of this file, and no RoPA processing activity covers the .m4a pre-ingestion step.",
+          "recommendation": "Add a processing activity in the RoPA for voice note ingestion covering the .m4a file lifecycle, and provide a documented instruction to agency staff to delete the source file from their device immediately after AirDrop transfer."
+        },
+        {
+          "finding": "The retention schedule states backup media should overwrite deleted data 'at backup cycle following deletion from primary storage' but qualifies this as impractical for encrypted full-disk backups, with no compensating control or defined outer time limit for residual backup retention.",
+          "severity": "LOW",
+          "evidence": "retention-schedule.md Backup media note: 'Where this is impractical (e.g. encrypted full-disk backup), document the residual retention and ensure backup access is restricted' — no maximum residual period is specified, no documentation template is provided, and no reference to this gap appears in the RoPA.",
+          "recommendation": "Define an explicit maximum residual retention period for backup media (e.g. the next scheduled full backup rotation) and add a mandatory documentation step to the DSR and deletion procedures that records backup residual status."
+        }
+      ]
+    },
+    {
+      "rep": 3,
+      "duration_s": 33.57,
+      "tokens": {
+        "input_tokens": 6860,
+        "output_tokens": 1563,
+        "total_tokens": 8423,
+        "tokens_per_s": null
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log records full input and output text of every LLM call, which may contain personal data (buyer queries, staff names, listing context), but the retention schedule does not define a retention period for inference.jsonl, leaving it outside storage-limitation controls.",
+          "severity": "HIGH",
+          "evidence": "inference_log.py line 40-41: '\"input\": input_text, \"output\": output_text' — full text logged. compliance/07-retention-schedule.md: no row for 'inference.jsonl' or 'Ollama inference log' in the retention table.",
+          "recommendation": "Add an explicit retention period (e.g. 90 days, aligned with Tier 1 outputs) for logs/inference.jsonl in the retention schedule and implement automated log rotation enforcing that limit."
+        },
+        {
+          "finding": "The LIA (document 03-lia.md) has not received practitioner sign-off, yet buyer query matching (Processing Activity 2) and Coach analysis (Processing Activity 1) are described as operational since 2026-03-29, meaning personal data is being processed on an unvalidated legitimate-interests basis.",
+          "severity": "HIGH",
+          "evidence": "compliance/01-ropa.md §1.2: '⚠ Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off by a qualified practitioner before this basis is placed into force.' BRIEF.md: 'LIA requires practitioner sign-off before witnessing goes to production' — yet corpus includes 12 witnessed listings ingested 2026-06-06.",
+          "recommendation": "Halt processing activities that rely on Article 6(1)(f) until the LIA is signed off by a qualified legal practitioner and the signed copy is version-controlled in compliance/."
+        },
+        {
+          "finding": "The MCP audit log (_log_call in mcp_server.py) records only tool name and filter parameters, not the caller identity or session identifier, so the audit trail cannot attribute queries to specific buyers or sessions as required for accountability under Article 5(2).",
+          "severity": "HIGH",
+          "evidence": "mcp_server.py line 36-38: 'def _log_call(tool: str, **kwargs) -> None: parts = \", \".join(f\"{k}={v!r}\" for k, v in kwargs.items() ...) _log.info(f\"[{tool}] {parts or \\\"(no filters)\\\"}\")'  — no user/session field logged. compliance/01-ropa.md §1.8: 'Audit log maintained on all MCP queries' implies completeness that the code does not deliver.",
+          "recommendation": "Extend _log_call to capture a session or request identifier (e.g. a UUID generated per MCP connection) so individual query sequences can be reconstructed for DSR or AEPD investigation."
+        },
+        {
+          "finding": "The RoPA states buyer query text is 'not retained beyond the session (default)', but inference_log.py unconditionally writes the full input text to an append-only JSONL file with no session-scoped deletion, directly contradicting this retention commitment.",
+          "severity": "HIGH",
+          "evidence": "compliance/01-ropa.md §2.4: 'Buyer query text: not retained beyond the session (default).' inference_log.py line 38: '\"input\": input_text' written to append-only path at config.INFERENCE_LOG_PATH with no deletion mechanism and no session boundary.",
+          "recommendation": "Either exclude buyer-originated query text from the inference log or implement an automatic purge of inference log entries containing buyer queries at session close, and update the RoPA to accurately reflect actual retention."
+        },
+        {
+          "finding": "The retention schedule mandates ChromaDB vectors be deleted in sync with source .md files, but no automated deletion mechanism is implemented — the schedule assigns responsibility to 'Agency IT' with a manual procedure, creating a structural gap between policy and enforcement for an embedded vector store.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md row: 'ChromaDB vectors | data/chromadb/ | Same as source .md | Manual deletion (see DSR procedure) | Agency IT' — no corresponding automated cascade exists; SQLite row shows 'Cascade delete on .md removal' but ChromaDB row explicitly says 'Manual deletion'.",
+          "recommendation": "Implement a scheduled script (e.g. hooked into the nightly run) that reconciles ChromaDB collection entries against current .md files and deletes orphaned vectors automatically, removing reliance on manual IT action."
+        },
+        {
+          "finding": "No Data Protection Impact Assessment (DPIA) document is present in the compliance pack despite the system performing automated AI-based profiling of property and market data with outputs that could influence contractual decisions, which likely meets the Article 35 threshold.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md compliance pack listing: 'compliance/ — DPA v1.0-template signed off 2026-06-06, RoPA + LIA drafts present' — no DPIA mentioned. compliance/01-ropa.md §1.1 describes automated analysis producing 'intelligence signals' and 'buyer-matching accuracy' improvements. WP29/EDPB guidelines require a DPIA for systematic automated processing used to make or inform decisions.",
+          "recommendation": "Conduct and document a DPIA under Article 35, covering the Coach automated-analysis pipeline and buyer-matching activity, before any production deployment beyond the booth demo."
+        },
+        {
+          "finding": "The retention schedule's backup media note is non-enforceable ('should be overwritten', 'where impractical, document the residual retention'), meaning personal data in Time Machine backups may persist beyond defined retention periods with no technical or procedural control.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md Notes section: 'Where this is impractical (e.g. encrypted full-disk backup), document the residual retention and ensure backup access is restricted' — no maximum residual period is defined, no documentation template is referenced, and no technical control enforces this.",
+          "recommendation": "Define a maximum backup retention period equal to the longest primary retention period (12 months), require Time Machine exclusion of casasol data directories, or document backup residual retention with a hard outer bound in the schedule."
+        }
+      ]
+    }
+  ],
+  "task_b": [
+    {
+      "rep": 1,
+      "duration_s": 35.09,
+      "tokens": {
+        "input_tokens": 9894,
+        "output_tokens": 1591,
+        "total_tokens": 11485,
+        "tokens_per_s": null
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The `collection_method` column added via ALTER TABLE migration is not present in `ensure_schema()` in db.py, nor in `save_listing()`, meaning the witnessed-listing badge feature has no durable schema backing in the canonical schema management code.",
+          "severity": "HIGH",
+          "evidence": "BUILD_LOG.md: 'added `collection_method` column to SQLite (ALTER TABLE migration for existing DBs)' — but db.py `ensure_schema()` CREATE TABLE for listings has no `collection_method` column, and `save_listing()` INSERT does not include it.",
+          "recommendation": "Add `collection_method TEXT DEFAULT 'scrape'` to the CREATE TABLE statement in `ensure_schema()` and include it in the `save_listing()` INSERT so fresh installs and the booth Mac Mini get the column without requiring a manual ALTER TABLE."
+        },
+        {
+          "finding": "The MCP server tool list in the brief (`search_properties`, `get_property`, `market_summary`, `corpus_status`) advertises four tools, but `get_db()` in mcp_server.py opens a raw sqlite3 connection with no connection pooling or locking, creating a concurrency hazard when Claude Desktop issues parallel tool calls.",
+          "severity": "HIGH",
+          "evidence": "mcp_server.py: `def get_db(): conn = sqlite3.connect(config.DB_PATH)` — a new unguarded connection per call with no WAL mode set, while db.py uses a context-manager with rollback; mcp_server.py bypasses db.py entirely.",
+          "recommendation": "Replace the raw `sqlite3.connect` in mcp_server.py with the `_conn()` context manager from db.py (or enable WAL mode via `PRAGMA journal_mode=WAL`) to prevent SQLITE_BUSY errors under concurrent MCP tool calls."
+        },
+        {
+          "finding": "The LIA (Legitimate Interests Assessment) is documented as a hard gate before the witnessing pipeline goes to production, but there is no enforcement mechanism in code — the witness ingestion scripts have no runtime check for LIA sign-off status.",
+          "severity": "HIGH",
+          "evidence": "BUILD_LOG.md: 'one ⚠ remaining: LIA (doc 03) practitioner sign-off before witnessing goes to production' and 'LIA practitioner sign-off (gate before witnessing production) — none blocking merge'; no corresponding guard in any ingestion script shown.",
+          "recommendation": "Add a sentinel file check (e.g., `compliance/LIA_SIGNED_OFF`) at the top of the witness ingestion pipeline that raises a hard error with a compliance message if the file is absent, making the legal gate machine-enforced."
+        },
+        {
+          "finding": "The OLLAMA model identifiers in config.py use mutable floating tag names (`gemma4:e4b`, `gemma4:26b`) rather than pinned digest SHAs, so a silent `ollama pull` on any machine could swap the model weights without any record, invalidating reproducibility claims.",
+          "severity": "HIGH",
+          "evidence": "config.py: `OLLAMA_MODEL_ROUTER = 'gemma4:e4b'` and `OLLAMA_MODEL_ASSESSMENT = 'gemma4:26b'` — mutable tags; BRIEF.md and ADR-002 treat the model choice as an architectural decision but nothing pins the exact weights.",
+          "recommendation": "Pin model references to immutable Ollama digest SHAs (e.g., `gemma4:26b@sha256:...`) in config.py and record the digests in ADR-002 so every machine in the project runs identical weights."
+        },
+        {
+          "finding": "The brief describes a `corpus_status` tool as one of the four MCP tools proven since 2026-03-29, but mcp_server.py's visible tool registrations show only `search_properties` in the excerpt and there is no `corpus_status` function defined in the provided code.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md: '`mcp_server.py` running on miktam02 with three tools (`search_properties`, `get_property`, `market_summary`, `corpus_status`)' — four tools listed; mcp_server.py shows only `search_properties` decorated with `@mcp.tool()` in the 80 lines provided.",
+          "recommendation": "Verify all four MCP tools (`get_property`, `market_summary`, `corpus_status`) are implemented with `@mcp.tool()` decorators and add an integration test that enumerates registered tools to catch future regressions."
+        },
+        {
+          "finding": "The median calculation in `get_market_summary()` uses integer floor division for the midpoint index, returning the lower-middle value for even-length lists rather than a true median, silently producing incorrect market intelligence figures.",
+          "severity": "MEDIUM",
+          "evidence": "db.py: `mid = len(prices) // 2` then `prices[mid]` — for a list of length 4, `mid=2` picks the third element, not the average of indices 1 and 2; this is the core market intelligence metric surfaced to agents at the booth.",
+          "recommendation": "Replace the floor-division median with `statistics.median()` from the standard library to ensure correct median computation for both odd and even corpus sizes."
+        },
+        {
+          "finding": "The Adversarial Watcher's `run_manifest.json` records git HEAD and file hashes for reproducibility, but `reports/RUN_ID/` intermediates are gitignored, meaning Watcher run artefacts cited as evidence in the merge gate (Run 001, commit 889b6a2) are not auditable from the repository.",
+          "severity": "LOW",
+          "evidence": "BUILD_LOG.md: 'Each step saves JSON intermediate to `reports/RUN_ID/` (gitignored); pipeline resumable with `--from-step N`' and 'Watcher Run 001 … landed results in `tasks/chronos/watcher_run_001/`' — two different paths, and the gitignore status of the canonical path means audit trail is local-only.",
+          "recommendation": "Commit at minimum the final `report.md` and `run_manifest.json` for each merge-gate Watcher run into a tracked directory (e.g., `decisions/watcher-runs/`) so the audit trail survives machine loss and is inspectable on Codeberg."
+        }
+      ]
+    },
+    {
+      "rep": 2,
+      "duration_s": 33.31,
+      "tokens": {
+        "input_tokens": 9894,
+        "output_tokens": 1570,
+        "total_tokens": 11464,
+        "tokens_per_s": null
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The `collection_method` column added via ALTER TABLE migration is not present in `ensure_schema()` in db.py, meaning fresh installs get the column but existing DBs only get it if the ALTER TABLE migration script is run separately — and that migration script is not visible in any committed file.",
+          "severity": "HIGH",
+          "evidence": "BUILD_LOG.md: 'added `collection_method` column to SQLite (ALTER TABLE migration for existing DBs)' — but db.py `ensure_schema()` CREATE TABLE for `listings` has no `collection_method` column in its column list, and no ALTER TABLE migration is present in db.py or any visible script.",
+          "recommendation": "Add `collection_method TEXT DEFAULT 'scrape'` to the CREATE TABLE statement in `ensure_schema()` and include an idempotent ALTER TABLE fallback for existing databases within the same function."
+        },
+        {
+          "finding": "The MCP server creates a new SQLite connection and ChromaDB client on every tool call with no connection pooling or concurrency guard, risking SQLite 'database is locked' errors under concurrent MCP requests at the booth demo.",
+          "severity": "HIGH",
+          "evidence": "mcp_server.py lines: `def get_db(): conn = sqlite3.connect(config.DB_PATH)` and `def get_chroma(): client = chromadb.PersistentClient(...)` — both instantiated per-call with no pool, lock, or WAL-mode setting; SQLite default journal mode is DELETE which serialises writes and raises on concurrent access.",
+          "recommendation": "Enable WAL mode (`PRAGMA journal_mode=WAL`) on connection open and use a module-level singleton or thread-local connection for the MCP server to prevent lock contention during live demos."
+        },
+        {
+          "finding": "The LIA (Legitimate Interests Assessment) is documented as required before the witnessing pipeline goes to production, but there is no code gate, environment flag, or runtime check that prevents the witness pipeline from running without LIA sign-off.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md status block: 'LIA requires practitioner sign-off before witnessing goes to production'; BUILD_LOG.md merge gate table: 'LIA practitioner sign-off — none blocking merge' — yet the witnessing pipeline was merged to main and 12 witnessed listings are already in the production DB.",
+          "recommendation": "Add a runtime guard in the witness ingestion script that checks for a `compliance/LIA_SIGNED_OFF` sentinel file or environment variable and aborts with a clear compliance error if absent."
+        },
+        {
+          "finding": "BRIEF.md lists four MCP tools (`search_properties`, `get_property`, `market_summary`, `corpus_status`) but the tool count claim is internally inconsistent — four tools are named yet the brief says 'three tools' in the same sentence.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md: '`mcp_server.py` running on miktam02 with three tools (`search_properties`, `get_property`, `market_summary`, `corpus_status`)' — that parenthetical enumerates four distinct tool names, not three.",
+          "recommendation": "Audit mcp_server.py for all `@mcp.tool()` decorated functions and update the BRIEF status block to reflect the accurate tool count."
+        },
+        {
+          "finding": "The Ollama model identifiers in config.py use mutable floating tags (`gemma4:e4b`, `gemma4:26b`) rather than pinned digest SHAs, meaning a `ollama pull` could silently swap the model version and invalidate reproducibility claims tied to ADR-002 and the Chronos experiment record.",
+          "severity": "MEDIUM",
+          "evidence": "config.py: `OLLAMA_MODEL_ROUTER = 'gemma4:e4b'` and `OLLAMA_MODEL_ASSESSMENT = 'gemma4:26b'` — tag-based references; ADR-002 documents the model swap rationale but does not record a digest SHA; BRIEF.md cites 'Gemma 4 26B Describer + Gemma 4 E4B Dicer cascade' as the engineering substrate for reproducible Chronos experiments.",
+          "recommendation": "Record the Ollama model digest SHA in ADR-002 and add a startup assertion in config.py or mcp_server.py that verifies the running model digest matches the pinned value."
+        },
+        {
+          "finding": "The `get_market_summary` function in db.py uses a hardcoded median calculation (`prices[mid]`) that returns the lower of the two middle values for even-length arrays rather than a true median, silently producing biased market intelligence figures presented to prospects at the booth.",
+          "severity": "MEDIUM",
+          "evidence": "db.py: `mid = len(prices) // 2` then `'median_price': prices[mid]` — for an even-count sorted list this returns the upper-middle element (e.g., index 5 of 10), not the average of the two middle elements; no comment acknowledges the approximation.",
+          "recommendation": "Replace the manual median with `statistics.median()` from the Python standard library to ensure correct median calculation for both odd and even corpus sizes."
+        },
+        {
+          "finding": "The `save_listing()` function in db.py omits the `collection_method`, `listing_type`, `province`, `year_built`, `energy_rating`, `original_text`, `scraped_at`, and `file` columns from its INSERT, meaning those fields are never persisted for programmatically saved listings even when populated on the Listing model.",
+          "severity": "LOW",
+          "evidence": "db.py `save_listing()` INSERT lists 15 columns: `casasol_id, title, price, property_type, listing_status, bedrooms, bathrooms, size_m2, plot_m2, location, features, description, source, source_url, loaded_at` — `collection_method` and 7 other schema columns present in `ensure_schema()` CREATE TABLE are absent from the INSERT, so the `[witnessed in-person]` badge logic has no persistent backing for listings saved via this path.",
+          "recommendation": "Extend `save_listing()` to include all schema columns, adding `collection_method` defaulting to `'scrape'` and accepting optional values for the remaining fields from the Listing model."
+        }
+      ]
+    },
+    {
+      "rep": 3,
+      "duration_s": 35.84,
+      "tokens": {
+        "input_tokens": 9894,
+        "output_tokens": 1642,
+        "total_tokens": 11536,
+        "tokens_per_s": null
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The `collection_method` column added via ALTER TABLE migration is never present in `ensure_schema()` in db.py, meaning fresh installs get the column but existing DBs only get it if a separate migration path is run — yet no migration function exists in db.py.",
+          "severity": "HIGH",
+          "evidence": "BUILD_LOG.md: 'added `collection_method` column to SQLite (ALTER TABLE migration for existing DBs)' — but db.py `ensure_schema()` CREATE TABLE for `listings` has no `collection_method` column and no ALTER TABLE migration code anywhere in the file.",
+          "recommendation": "Add `collection_method TEXT DEFAULT 'scrape'` to the CREATE TABLE statement in `ensure_schema()` and add an idempotent ALTER TABLE migration block (catch OperationalError for 'duplicate column') to handle existing databases."
+        },
+        {
+          "finding": "The LIA (Legitimate Interests Assessment) is documented as a hard gate before witnessing goes to production, but witnessing is already running in production with 12 ingested listings and no code or config enforces the gate.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: 'LIA requires practitioner sign-off before witnessing goes to production' and BUILD_LOG.md merge gate table: 'LIA practitioner sign-off — none blocking merge' while simultaneously confirming '12 witnessed KDTeam listings ingested via the VLM witnessing pipeline on 2026-06-06' and 'Merge: APPROVED'.",
+          "recommendation": "Introduce a runtime config flag (e.g., `WITNESSING_PRODUCTION_ENABLED=false`) checked in the witness ingestion pipeline that raises an explicit error until the LIA sign-off artefact path is present and verified."
+        },
+        {
+          "finding": "The MCP server's `get_db()` and `get_chroma()` open a new connection/client on every tool call with no connection pooling, no context manager, and no explicit close, risking connection leaks under concurrent Claude Desktop usage.",
+          "severity": "HIGH",
+          "evidence": "mcp_server.py lines: `def get_db(): conn = sqlite3.connect(config.DB_PATH); conn.row_factory = sqlite3.Row; return conn` and `def get_chroma(): client = chromadb.PersistentClient(...)` — neither uses a context manager nor closes the connection, unlike db.py which uses `@contextmanager def _conn()`.",
+          "recommendation": "Refactor `get_db()` in mcp_server.py to use the same `_conn()` context manager from db.py, and cache the ChromaDB client at module level rather than instantiating a new `PersistentClient` on every call."
+        },
+        {
+          "finding": "BRIEF.md documents four MCP tools (`search_properties`, `get_property`, `market_summary`, `corpus_status`) but the mcp_server.py excerpt shows only `search_properties` defined, with no evidence the other three tools are implemented.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md: '`mcp_server.py` running on miktam02 with three tools (`search_properties`, `get_property`, `market_summary`, `corpus_status`)' — mcp_server.py first 80 lines show only `@mcp.tool() def search_properties(...)` defined; `get_property`, `market_summary`, and `corpus_status` are absent from the provided code.",
+          "recommendation": "Verify and include the remaining three tool implementations in mcp_server.py; if they exist beyond line 80, add an integration test that asserts all four tool names are registered on the FastMCP instance at startup."
+        },
+        {
+          "finding": "The Ollama model names in config.py use mutable float-version tags (`gemma4:e4b`, `gemma4:26b`) rather than pinned digest SHAs, meaning a background `ollama pull` can silently swap the model weights and invalidate reproducibility guarantees.",
+          "severity": "MEDIUM",
+          "evidence": "config.py: `OLLAMA_MODEL_ROUTER = 'gemma4:e4b'` and `OLLAMA_MODEL_ASSESSMENT = 'gemma4:26b'` — these are mutable tags; BRIEF.md and ADR-002 treat the model swap as a significant architectural decision ('swapped from qwen3.5:35b 2026-05-29') yet nothing pins the digest.",
+          "recommendation": "Pin both model references to immutable Ollama digest SHAs (e.g., `gemma4:26b@sha256:...`) and add a startup check that validates the running model digest matches the pinned value before accepting MCP requests."
+        },
+        {
+          "finding": "The `get_market_summary` function uses a naive middle-index median (`prices[mid]`) that is incorrect for even-length lists (should average the two middle values), producing subtly wrong market intelligence in the primary business-facing summary tool.",
+          "severity": "MEDIUM",
+          "evidence": "db.py: `mid = len(prices) // 2` followed by `'median_price': prices[mid]` — for an even-length sorted list this returns the upper-middle element rather than the average of the two middle elements, a known off-by-one in median calculation.",
+          "recommendation": "Replace the manual median with `statistics.median(prices)` and `statistics.median(prices_sqm)` from the Python standard library to get a correct median for both odd and even corpus sizes."
+        },
+        {
+          "finding": "The `save_listing()` function in db.py uses `INSERT OR REPLACE` which silently deletes and re-inserts a row on conflict, destroying any foreign-key-linked `price_events` rows for that `casasol_id` if SQLite foreign keys are ever enabled, and losing columns not included in the INSERT (e.g., `collection_method`, `province`, `year_built`).",
+          "severity": "MEDIUM",
+          "evidence": "db.py `save_listing()`: `INSERT OR REPLACE INTO listings (casasol_id, title, ...) VALUES (...)` — the column list omits `province`, `year_built`, `energy_rating`, `original_text`, `scraped_at`, `file`, `listing_type`, and the undocumented `collection_method`, so any re-ingest silently nulls those fields.",
+          "recommendation": "Replace `INSERT OR REPLACE` with an `INSERT ... ON CONFLICT(casasol_id) DO UPDATE SET ...` upsert that explicitly lists every column to be updated, preserving fields not present in the current ingest payload."
+        }
+      ]
+    }
+  ]
+}

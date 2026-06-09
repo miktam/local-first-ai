@@ -1,0 +1,342 @@
+{
+  "experiment": "012",
+  "ts": "20260609T145718Z",
+  "model": "claude-opus-4-8",
+  "runtime": "api",
+  "project": "/Users/miktam02/REPOS/casasol",
+  "reps_per_task": 3,
+  "task_a": [
+    {
+      "rep": 1,
+      "duration_s": 19.74,
+      "tokens": {
+        "input_tokens": 9654,
+        "output_tokens": 1574,
+        "total_tokens": 11228,
+        "tokens_per_s": null
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log captures full prompt and response text including buyer query content, contradicting the RoPA's claim that buyer query text is not retained beyond the session.",
+          "severity": "HIGH",
+          "evidence": "inference_log.py: record includes \"input\": input_text, \"output\": output_text written append-only to JSONL; vs RoPA 2.4 'Buyer query text: not retained beyond the session (default)' and retention schedule 'Buyer query text | Not retained | Session only'",
+          "recommendation": "Either redact/hash query text in the inference log or document the log as a retained processing activity with a lawful basis and retention period."
+        },
+        {
+          "finding": "The legitimate-interests basis for Activity 1 is in force without the mandatory LIA practitioner sign-off, and the witnessing pipeline already ingested 12 listings on 2026-06-06.",
+          "severity": "HIGH",
+          "evidence": "RoPA 1.2: '⚠ Legal review required: the Legitimate Interests Assessment (LIA) ... must be reviewed and signed off by a qualified practitioner before this basis is placed into force'; BRIEF: 'LIA requires practitioner sign-off before witnessing goes to production' yet '12 witnessed KDTeam listings ingested ... 2026-06-06'.",
+          "recommendation": "Halt production processing under Art 6(1)(f) until the LIA is reviewed and signed off by a qualified practitioner."
+        },
+        {
+          "finding": "The MCP server logs every query with no authentication or access control documented on the endpoints handling potentially personal buyer query data.",
+          "severity": "HIGH",
+          "evidence": "mcp_server.py exposes tools via FastMCP stdio with no auth layer shown; RoPA 2.3 notes buyer query text is 'Potentially yes — query may contain personal preferences or circumstances'.",
+          "recommendation": "Document and implement access control / authentication on the MCP transport and restrict who can invoke query tools."
+        },
+        {
+          "finding": "The inference log (logs/inference.jsonl) is not listed anywhere in the Retention Schedule, leaving prompt/response personal data with no defined retention period.",
+          "severity": "HIGH",
+          "evidence": "07-retention-schedule.md table lists only 'MCP audit logs | logs/mcp.log | 12 months' — there is no entry for logs/inference.jsonl which inference_log.py writes via config.INFERENCE_LOG_PATH.",
+          "recommendation": "Add the inference log to the retention schedule with a defined period and deletion trigger, or stop logging raw text."
+        },
+        {
+          "finding": "The retention schedule was authored by a CISSP and explicitly claims 'no legal review required', despite defining storage-limitation periods that are GDPR Article 5(1)(e) legal determinations.",
+          "severity": "MEDIUM",
+          "evidence": "07-retention-schedule.md: 'Status: Draft — CISSP-authored, no legal review required'.",
+          "recommendation": "Submit the retention schedule for DPO/legal review before relying on it for GDPR compliance."
+        },
+        {
+          "finding": "No Data Subject Request (DSR) procedure document exists in the pack, yet retention schedule and RoPA reference one as the mechanism for erasure of ChromaDB vectors and staff data.",
+          "severity": "MEDIUM",
+          "evidence": "07-retention-schedule.md references 'Manual deletion (see DSR procedure)' for ChromaDB vectors and 'DSR records | Agency DPO files | 3 years', but no DSR procedure file is present among compliance/ documents shown.",
+          "recommendation": "Author and ship a documented DSR/erasure procedure covering SQLite, ChromaDB, raw .md files, and the inference log."
+        },
+        {
+          "finding": "The MCP audit log records only tool name and filter parameters, omitting timestamp date, caller identity, and outcome — insufficient as an audit trail for automated processing of personal data.",
+          "severity": "MEDIUM",
+          "evidence": "mcp_server.py: datefmt='%H:%M:%S' (no date) and _log_call logs only tool and kwargs with no actor identity or result; RoPA 1.8 relies on 'Audit log maintained on all MCP queries' as a security measure.",
+          "recommendation": "Extend the MCP log to include full ISO date-time, requesting identity, and query outcome to make the audit trail GDPR-defensible."
+        }
+      ]
+    },
+    {
+      "rep": 2,
+      "duration_s": 24.91,
+      "tokens": {
+        "input_tokens": 9654,
+        "output_tokens": 1820,
+        "total_tokens": 11474,
+        "tokens_per_s": null
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log persists full raw input AND output text of every model call indefinitely, but no retention period, lawful basis, or RoPA entry covers this store — contradicting the RoPA's claim that buyer queries are 'not retained beyond the session'.",
+          "severity": "HIGH",
+          "evidence": "inference_log.py: record includes \"input\": input_text, \"output\": output_text; appended to JSONL with no rotation, while 01-ropa.md §2.4 states 'Buyer query text: not retained beyond the session (default)' and 07-retention-schedule.md lists buyer query as 'Session only'.",
+          "recommendation": "Either exclude input/output text from the inference log or add it to the retention schedule and RoPA with a defined period and lawful basis, plus log rotation."
+        },
+        {
+          "finding": "The primary lawful basis (Art 6(1)(f) Legitimate Interests) is in force without the required LIA sign-off, which the brief itself states is a precondition to production.",
+          "severity": "HIGH",
+          "evidence": "01-ropa.md §1.2: '⚠ Legal review required: the Legitimate Interests Assessment (LIA) ... must be reviewed and signed off by a qualified practitioner before this basis is placed into force'; BRIEF.md status: 'LIA requires practitioner sign-off before witnessing goes to production' — yet 12 witnessed listings already ingested 2026-06-06.",
+          "recommendation": "Obtain qualified-practitioner LIA sign-off before any production processing under Art 6(1)(f), or suspend processing until completed."
+        },
+        {
+          "finding": "The MCP server applies no authentication or access control on tools that handle personal data (buyer query text), relying solely on local stdio transport with no documented authorisation procedure in code.",
+          "severity": "HIGH",
+          "evidence": "mcp_server.py exposes FastMCP tools with no auth layer; _log_call records query filters but there is no caller identity or access check; RoPA §1.8 claims 'No remote access ... except by authorised agency staff via documented procedure' but no such control appears in the code.",
+          "recommendation": "Implement and document authentication/authorisation on the MCP server and verify no network-exposed transport is enabled."
+        },
+        {
+          "finding": "The MCP audit log records only tool name and non-empty filter values, omitting timestamp date, caller identity, and full query text — insufficient as an audit trail for automated processing of personal data.",
+          "severity": "MEDIUM",
+          "evidence": "mcp_server.py: datefmt=\"%H:%M:%S\" (time only, no date) and _log_call drops any kwarg where 'v in (0, \"\", None)', so falsy-but-valid filters and caller identity are never logged.",
+          "recommendation": "Log full ISO timestamps, caller/session identifier, and complete query parameters to make the audit trail reconstructable."
+        },
+        {
+          "finding": "The architectural prohibition on special-category and seller-circumstance data is asserted as 'enforced at the system-prompt and schema level' but no enforcement code (redactor/schema validation) is shown, leaving the Art 9 claim undocumented and unverified.",
+          "severity": "MEDIUM",
+          "evidence": "01-ropa.md §1.3: 'This is enforced at the system-prompt and schema level (see §3.2 of the CasaSol BRIEF)'; the LIA's 'prohibited-fields schema' is referenced but the Redactor stage in inference_log.py is only logged, never shown to filter, and no schema-validation file is present.",
+          "recommendation": "Provide and test the technical enforcement (schema validation/redaction) and cite the implementing file in the RoPA rather than a system prompt."
+        },
+        {
+          "finding": "The retention schedule and RoPA carry inconsistent status/version stamps and no legal review, with the CISSP author explicitly waiving legal review on a storage-limitation document that defines lawful retention periods.",
+          "severity": "MEDIUM",
+          "evidence": "07-retention-schedule.md: 'Status: Draft — CISSP-authored, no legal review required'; RoPA footer 'version 0.1-draft', while BRIEF.md claims 'DPA v1.0-template signed off 2026-06-06, RoPA + LIA drafts present'.",
+          "recommendation": "Have a qualified data-protection practitioner review and finalise the retention schedule and RoPA before production."
+        },
+        {
+          "finding": "Right-to-erasure for staff data is defined as redaction-in-place of `.md` files, but no DSR procedure exists to propagate erasure to derived stores (SQLite, ChromaDB vectors, inference log) where the same personal data may persist.",
+          "severity": "MEDIUM",
+          "evidence": "07-retention-schedule.md notes 'their name is redacted from the file while the listing record is otherwise retained'; ChromaDB row marked 'Manual deletion (see DSR procedure)' but no DSR document is present in the supplied compliance pack and the inference log retains raw outputs.",
+          "recommendation": "Author and test an end-to-end DSR/erasure procedure covering SQLite, ChromaDB, backups, and the inference log."
+        }
+      ]
+    },
+    {
+      "rep": 3,
+      "duration_s": 20.3,
+      "tokens": {
+        "input_tokens": 9654,
+        "output_tokens": 1548,
+        "total_tokens": 11202,
+        "tokens_per_s": null
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log captures full verbatim input AND output text of every model call, contradicting the RoPA claim that no buyer/seller personal data is processed and creating an undocumented retention store of potentially personal data.",
+          "severity": "HIGH",
+          "evidence": "inference_log.py: record includes \"input\": input_text, \"output\": output_text — full text logged; RoPA §2.4 says buyer query text is \"not retained beyond the session (default)\"",
+          "recommendation": "Add inference.jsonl to the retention schedule with a defined period and lawful basis, or hash/truncate input/output rather than storing verbatim text."
+        },
+        {
+          "finding": "Both legal bases (Art 6(1)(f) for Activity 1 and the LIA itself) remain unsigned by a qualified practitioner, meaning the primary processing has no validated lawful basis in force.",
+          "severity": "HIGH",
+          "evidence": "RoPA §1.2: \"⚠ Legal review required: the Legitimate Interests Assessment (LIA) ... must be reviewed and signed off by a qualified practitioner before this basis is placed into force\"; BRIEF: \"LIA requires practitioner sign-off before witnessing goes to production\"",
+          "recommendation": "Obtain qualified legal sign-off on the LIA before any production processing of the corpus under Art 6(1)(f)."
+        },
+        {
+          "finding": "The MCP audit log records only tool name and filter parameters, omitting timestamp date, requester identity, and the query content needed for an Article 30/automated-processing audit trail.",
+          "severity": "HIGH",
+          "evidence": "mcp_server.py: datefmt=\"%H:%M:%S\" (no date); _log_call logs only \"[{tool}] {parts}\" with no subject/actor identity",
+          "recommendation": "Add full date, requester identity, and result counts to mcp.log and document who can correlate it with the inference log."
+        },
+        {
+          "finding": "The MCP server endpoints (search_properties, get_property, market_summary) have no authentication or access control in code, contradicting the RoPA security claim of restricted access.",
+          "severity": "HIGH",
+          "evidence": "mcp_server.py exposes FastMCP tools with no auth layer; RoPA §1.8 claims \"No remote access ... except by authorised agency staff via documented procedure\" but code enforces nothing",
+          "recommendation": "Implement authentication/authorisation on the MCP transport and document the access-control mechanism, not just a procedural claim."
+        },
+        {
+          "finding": "Retention schedule and RoPA are both unsigned drafts (v0.1-draft) with the retention schedule explicitly stating no legal review was performed, leaving Article 5(1)(e) and Article 30 obligations undocumented for production.",
+          "severity": "MEDIUM",
+          "evidence": "07-retention-schedule.md: \"Status: Draft — CISSP-authored, no legal review required\"; RoPA: \"RoPA version 0.1-draft\"",
+          "recommendation": "Have a DPO/legal practitioner review and formally approve the RoPA and retention schedule before production deployment."
+        },
+        {
+          "finding": "The RoPA asserts buyer query text contains no personal data while its own Activity 2 table admits queries 'may contain personal preferences or circumstances', and these queries are then logged verbatim by inference_log.py with no erasure path.",
+          "severity": "MEDIUM",
+          "evidence": "RoPA §2.3: buyer query text \"Potentially yes — query may contain personal preferences or circumstances\"; retention schedule lists buyer query as \"Not retained\" but inference_log.py persists it",
+          "recommendation": "Reconcile the logging behaviour with the stated non-retention and define a DSR/erasure procedure covering logged query text."
+        },
+        {
+          "finding": "Backup/Time Machine retention is described as 'impractical' to enforce for full-disk encrypted backups, meaning deleted personal data (staff names, query logs) may persist beyond stated retention periods without a hard control.",
+          "severity": "LOW",
+          "evidence": "07-retention-schedule.md Notes: \"Where this is impractical (e.g. encrypted full-disk backup), document the residual retention\"",
+          "recommendation": "Define a concrete backup expiry/rotation policy that guarantees deleted personal data is purged within a bounded window."
+        }
+      ]
+    }
+  ],
+  "task_b": [
+    {
+      "rep": 1,
+      "duration_s": 24.27,
+      "tokens": {
+        "input_tokens": 13773,
+        "output_tokens": 1945,
+        "total_tokens": 15718,
+        "tokens_per_s": null
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The filesystem firewall — promoted in v3.6/v3.7 as the primary, hardware-enforced moat preventing data egress — has no corresponding implementation anywhere in the codebase.",
+          "severity": "HIGH",
+          "evidence": "BRIEF: 'the filesystem firewall (a hardware-enforced boundary that prevents data egress — structurally unreplicable)'; yet config.py only defines outbound URLs (CATASTRO_BASE_URL, OVERPASS_URL, OLLAMA_BASE_URL) with no egress-blocking code present.",
+          "recommendation": "Implement and document an actual network/filesystem egress control (e.g. enforced offline mode, outbound allowlist, or OS-level firewall config) or downgrade the 'hardware-enforced firewall' claim to aspirational."
+        },
+        {
+          "finding": "The Bouncer ↔ buyer-Claude individual-sovereignty path (sanitised slice exposed to external buyer AI) is central to the 'sovereignty pair' product but has no sanitisation/boundary code; the MCP server returns raw listing data unfiltered.",
+          "severity": "HIGH",
+          "evidence": "BRIEF §1: 'Individual sovereignty (Bouncer ↔ buyer-Claude)... queries a sanitised slice of the agency's portfolio'; mcp_server.py exposes search_properties directly against the full DB with no sanitisation layer.",
+          "recommendation": "Implement an explicit Bouncer sanitisation/redaction layer between MCP tools and any external-facing query path, or scope the buyer-facing pitch out for OLÉ."
+        },
+        {
+          "finding": "Model identifiers are pinned to mutable rolling tags (gemma4:26b, gemma4:e4b) rather than immutable digests, undermining the reproducibility/Chronos-artefact claim and the deterministic flag generation.",
+          "severity": "MEDIUM",
+          "evidence": "config.py: 'OLLAMA_MODEL_ROUTER = \"gemma4:e4b\"' / 'OLLAMA_MODEL_ASSESSMENT = \"gemma4:26b\"' — no digest pin, despite BUILD_LOG claiming 'run_manifest.json records git HEAD + file hashes — every run is a Chronos artefact'.",
+          "recommendation": "Pin Ollama models by immutable digest (model@sha256:...) and record the digest in run_manifest.json."
+        },
+        {
+          "finding": "The LIA (Legitimate Interest Assessment) requires practitioner sign-off before witnessing goes to production, yet 12 witnessed listings are already loaded into the live corpus and exposed via MCP.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF: 'LIA requires practitioner sign-off before witnessing goes to production'; same block: '12 witnessed KDTeam listings ingested via the VLM witnessing pipeline on 2026-06-06... verified in SQLite + ChromaDB'.",
+          "recommendation": "Gate witnessed-listing ingestion/serving behind the LIA sign-off flag, or remove witnessed listings from the live corpus until sign-off is obtained."
+        },
+        {
+          "finding": "SQLite access uses no concurrency safeguards (no WAL mode, no busy_timeout) while the MCP server opens its own raw sqlite3 connections in parallel with the db.py module, risking 'database is locked' errors during the booth demo.",
+          "severity": "MEDIUM",
+          "evidence": "db.py: 'connection = sqlite3.connect(config.DB_PATH)' with no pragmas; mcp_server.py: 'conn = sqlite3.connect(config.DB_PATH)' — the very raw access db.py's docstring forbids ('Never write raw sqlite3 outside this file').",
+          "recommendation": "Enable WAL + busy_timeout pragmas centrally and route the MCP server through db.py rather than opening its own connections."
+        },
+        {
+          "finding": "The save_listing path silently drops the collection_method column that the witnessing/badge feature depends on, so listings written via this API lose their witnessed/scraped provenance.",
+          "severity": "MEDIUM",
+          "evidence": "BUILD_LOG: 'added collection_method column to SQLite ... [witnessed in-person] badge'; but db.py save_listing INSERT lists only 15 columns and omits collection_method (and source_url provenance fields like province/scraped_at).",
+          "recommendation": "Add collection_method to the save_listing INSERT and ensure ensure_schema migrates the column rather than relying on an out-of-band ALTER TABLE."
+        },
+        {
+          "finding": "External enrichment APIs (Catastro, SNCZI, Overpass) are called from inside the 'local-first, data-never-leaves' appliance, contradicting the sovereignty/egress thesis, with no documented egress disclosure or offline fallback.",
+          "severity": "LOW",
+          "evidence": "config.py defines CATASTRO_BASE_URL, SNCZI_WMS_URL, OVERPASS_URL with API_TIMEOUT_SECONDS=10; git log: 'feat: merge assess-property — Catastro/SNCZI enrichment' — outbound calls absent from the 'data never leaves your hardware' narrative.",
+          "recommendation": "Document these outbound third-country/EU calls in the RoPA/DPA and provide an offline mode, since they are real network egress from the 'sovereign' appliance."
+        }
+      ]
+    },
+    {
+      "rep": 2,
+      "duration_s": 22.73,
+      "tokens": {
+        "input_tokens": 13773,
+        "output_tokens": 1742,
+        "total_tokens": 15515,
+        "tokens_per_s": null
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The filesystem firewall — billed as the primary moat and a 'hardware-enforced boundary that prevents data egress' — has no implementation; the codebase makes outbound HTTPS calls to Catastro, SNCZI, and Overpass with no egress enforcement.",
+          "severity": "HIGH",
+          "evidence": "BRIEF: 'the filesystem firewall (a hardware-enforced boundary that prevents data egress)'; config.py: 'CATASTRO_BASE_URL ... SNCZI_WMS_URL ... OVERPASS_URL = \"https://overpass-api.de/api/interpreter\"'",
+          "recommendation": "Implement and document the actual egress-blocking mechanism (e.g. network sandbox/firewall rules), or downgrade the moat claim to match what code enforces."
+        },
+        {
+          "finding": "MCP tools list in BRIEF claims four tools including corpus_status, but only search_properties is visible and the witnessing/collection_method features are not demonstrably wired to a hardened query path.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF: 'three tools (search_properties, get_property, market_summary, corpus_status)' — itself inconsistent (lists four, says three)",
+          "recommendation": "Reconcile the tool count and confirm each named MCP tool is registered and tested in mcp_server.py."
+        },
+        {
+          "finding": "DB_PATH and all data paths default to mutable working-tree locations keyed off CWD/PROJECT_ROOT, and config falls back silently if CASASOL_DATA_DIR is unset, risking writing the production corpus into the repo on the booth machine.",
+          "severity": "MEDIUM",
+          "evidence": "config.py: '_data_dir = Path(os.environ[\"CASASOL_DATA_DIR\"]) if \"CASASOL_DATA_DIR\" in os.environ else PROJECT_ROOT / \"data\"'",
+          "recommendation": "Require an explicit immutable data directory (fail fast if unset) so corpus location is deterministic across miktam02, booth Mac Mini, and contributor laptops."
+        },
+        {
+          "finding": "Models are pinned to mutable Ollama tags (gemma4:26b, gemma4:e4b) with no digest/version pinning, so a model re-pull can silently change inference behaviour the brief stakes its asymmetry claim on.",
+          "severity": "MEDIUM",
+          "evidence": "config.py: 'OLLAMA_MODEL_ROUTER = \"gemma4:e4b\" ... OLLAMA_MODEL_ASSESSMENT = \"gemma4:26b\"'",
+          "recommendation": "Pin models by immutable digest/manifest hash and record it in the run_manifest/ADR for reproducibility."
+        },
+        {
+          "finding": "The witnessing pipeline is claimed as a co-equal moat ('proprietary witnessed corpus') with GDPR processing obligations (face blurring, source provenance), yet collection_method is the only witness artefact in db.py and 6 of 12 witnessed listings have unverified source_url: unknown.",
+          "severity": "MEDIUM",
+          "evidence": "BUILD_LOG: '6 witness files with source_url: unknown — QR not detected'; db.py listings schema has no collection_method, faces, or witness-provenance columns",
+          "recommendation": "Persist witness provenance (location, date, blur-confirmation, decoded source) as first-class, validated columns and block ingest of records with unknown source_url."
+        },
+        {
+          "finding": "Concurrency safeguards are absent: each db.py operation opens a new sqlite3 connection with no WAL/timeout/locking strategy, while MCP server and ingest/load scripts may access the same DB simultaneously during the live booth.",
+          "severity": "MEDIUM",
+          "evidence": "db.py: 'connection = sqlite3.connect(config.DB_PATH)' with no timeout or journal_mode; mcp_server.py opens its own 'sqlite3.connect(config.DB_PATH)'",
+          "recommendation": "Enable WAL mode and a busy_timeout, and centralize all access (mcp_server.py currently bypasses the 'never write raw sqlite3 outside this file' rule)."
+        },
+        {
+          "finding": "The LIA still requires practitioner sign-off before witnessing goes to production, yet 12 witnessed (personal-data-bearing) listings are already loaded into the live corpus and exposed via MCP search.",
+          "severity": "LOW",
+          "evidence": "BUILD_LOG: 'LIA practitioner sign-off (gate before witnessing production)'; BRIEF: '12 witnessed KDTeam listings ingested ... verified in SQLite + ChromaDB'",
+          "recommendation": "Gate witnessed records out of the queryable corpus (or behind a flag) until the LIA is signed off, rather than gating only at a documentation level."
+        }
+      ]
+    },
+    {
+      "rep": 3,
+      "duration_s": 22.85,
+      "tokens": {
+        "input_tokens": 13773,
+        "output_tokens": 1738,
+        "total_tokens": 15511,
+        "tokens_per_s": null
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The 'filesystem firewall' is named as the primary, hardware-enforced moat but no code enforces any data-egress boundary; config makes outbound HTTP calls to Catastro, SNCZI, and Overpass with no perimeter control.",
+          "severity": "HIGH",
+          "evidence": "BRIEF: 'the filesystem firewall (a hardware-enforced boundary that prevents data egress)'; config.py defines CATASTRO_BASE_URL, SNCZI_WMS_URL, OVERPASS_URL outbound endpoints with no egress-blocking code anywhere",
+          "recommendation": "Implement and test an actual egress control (allowlist proxy / network namespace) or downgrade the claim to 'on-premise deployment' in all four artifacts."
+        },
+        {
+          "finding": "The brief gates witnessing to production on practitioner LIA sign-off, yet 12 witnessed listings are already loaded into the live corpus and exposed via MCP search before that gate is met.",
+          "severity": "HIGH",
+          "evidence": "BRIEF: 'LIA requires practitioner sign-off before witnessing goes to production'; BUILD_LOG: '70 active listings ... kdteam-witness 12' and 'Claude Desktop returns 12 witnessed listings with badge'",
+          "recommendation": "Either remove witnessed listings from the queryable corpus until LIA sign-off, or obtain sign-off before any demo/production exposure."
+        },
+        {
+          "finding": "Ollama model identifiers are pinned as mutable tags (gemma4:26b, gemma4:e4b) rather than immutable digests, so a re-pull can silently change the model despite ADR-002 documenting a deliberate swap.",
+          "severity": "MEDIUM",
+          "evidence": "config.py: OLLAMA_MODEL_ROUTER = 'gemma4:e4b'; OLLAMA_MODEL_ASSESSMENT = 'gemma4:26b'",
+          "recommendation": "Pin models by content digest (gemma4:26b@sha256:...) and record the digest in the ADR and run_manifest."
+        },
+        {
+          "finding": "The brief claims four MCP tools (search_properties, get_property, market_summary, corpus_status) are proven and connected, but the corpus_status tool is named inconsistently as four-and-a-half items ('three tools' then lists four) and only search_properties is visible in the provided server source.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF: 'three tools (search_properties, get_property, market_summary, corpus_status)' — count says three but lists four",
+          "recommendation": "Reconcile the tool inventory in the brief with the actual @mcp.tool() definitions and fix the count."
+        },
+        {
+          "finding": "SQLite access uses a connection-per-call with no concurrency or locking strategy, while the same DB is read by both the MCP server (direct sqlite3) and db.py, risking write contention and bypassing the 'never write raw sqlite3 outside this file' rule.",
+          "severity": "MEDIUM",
+          "evidence": "mcp_server.py: 'def get_db(): conn = sqlite3.connect(config.DB_PATH)' — direct raw sqlite3, contradicting db.py docstring 'Never write raw sqlite3 outside this file'",
+          "recommendation": "Route MCP reads through db.py and enable WAL mode / busy_timeout for concurrent access."
+        },
+        {
+          "finding": "save_listing silently omits columns present in the schema (property_type listing_type default ok, but scraped_at, source, original_text, year_built, energy_rating, province) so witnessed/scraped provenance fields like collection_method described in BUILD_LOG are not visible in db.py's INSERT statement.",
+          "severity": "MEDIUM",
+          "evidence": "BUILD_LOG: 'added collection_method column to SQLite'; db.py save_listing INSERT lists no collection_method, scraped_at, source_url is written but schema/insert column sets diverge",
+          "recommendation": "Add collection_method (and provenance fields) to the canonical save_listing INSERT and to the Listing model so writes match the migrated schema."
+        },
+        {
+          "finding": "The data directory is configurable via CASASOL_DATA_DIR but the brief mandates a fixed working tree (~/REPOS/casasol/) that scripts assume, creating a documented-vs-code mismatch where DB/Chroma paths can diverge from the assumed convention with no validation.",
+          "severity": "LOW",
+          "evidence": "BRIEF: 'Scripts and docs assume this path'; config.py: \"_data_dir = Path(os.environ['CASASOL_DATA_DIR']) if 'CASASOL_DATA_DIR' in os.environ else PROJECT_ROOT / 'data'\"",
+          "recommendation": "Add a startup check that warns when the resolved data dir or repo path diverges from the documented convention."
+        }
+      ]
+    }
+  ]
+}
