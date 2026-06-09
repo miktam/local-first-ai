@@ -1,0 +1,418 @@
+{
+  "experiment": "014",
+  "ts": "20260609T201133Z",
+  "model": "gemma4:26b",
+  "runtime": "ollama",
+  "project": "/Users/miktam02/REPOS/casasol",
+  "reps_per_task": 5,
+  "task_a": [
+    {
+      "rep": 1,
+      "duration_s": 24.86,
+      "tokens": {
+        "input_tokens": 6385,
+        "output_tokens": 567,
+        "total_tokens": 6952,
+        "tokens_per_s": 45.5
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log implementation captures full raw input and output text, creating a high-risk repository of all processed data.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py:28-35: \"record = { ... \"input\": input_text, \"output\": output_text, }\"",
+          "recommendation": "Implement redaction or logging of only metadata (lengths/tokens) to prevent the log from becoming a shadow database of sensitive information."
+        },
+        {
+          "finding": "The system lacks a documented procedure for handling Data Subject Requests (DSR) for the 'incidental staff data' processed.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md:1.4: \"The only incidental personal data is: Agency staff names...\"",
+          "recommendation": "Create a formal procedure for staff to exercise their right to erasure/rectification regarding authorship metadata."
+        },
+        {
+          "finding": "The 'Tier 1 private outputs' retention period relies on an unverified automated nightly overwrite process.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md:21: \"Overwritten on each nightly run; residual files deleted after 90 days\"",
+          "recommendation": "Implement and audit a verifiable automated script that confirms deletion of files exceeding the 90-day threshold."
+        },
+        {
+          "finding": "The Legitimate Interests Assessment (LIA) required for the primary processing activity is not yet finalized or legally validated.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md:1.2: \"Legal review required: the Legitimate Interests Assessment (LIA)... must be reviewed and signed off...\"",
+          "recommendation": "Complete and formally sign off on the LIA (document 03-lia.md) before moving from pilot to production."
+        },
+        {
+          "finding": "The MCP server lacks explicit access control or authentication for the tools it exposes to the Claude Desktop interface.",
+          "severity": "LOW",
+          "evidence": "scripts/mcp_server.py:55: \"mcp = FastMCP(\"CasaSol\")\"",
+          "recommendation": "Implement a layer of authentication or strict environment-based authorization to ensure only authorized users can trigger property searches."
+        }
+      ]
+    },
+    {
+      "rep": 2,
+      "duration_s": 13.33,
+      "tokens": {
+        "input_tokens": 6385,
+        "output_tokens": 587,
+        "total_tokens": 6972,
+        "tokens_per_s": 45.4
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log implementation captures full raw input and output text, creating a high-risk repository of potentially sensitive data.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py:35-36: \"\\\"input\\\": input_text, \\\"output\\\": output_text\"",
+          "recommendation": "Implement redaction or hashing of input/output text in the logging function to prevent the reconstruction of sensitive data in logs."
+        },
+        {
+          "finding": "The system lacks a documented procedure for handling Data Subject Requests (DSR) such as erasure or access, despite claiming to support them.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md:33: \"Manual deletion (see DSR procedure)\"",
+          "recommendation": "Create and document a formal Data Subject Request (DSR) procedure for handling erasure and access requests."
+        },
+        {
+          "finding": "The Legitimate Interests Assessment (LIA) required for the primary processing activity has not been finalized or signed off.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md:24: \"Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off\"",
+          "recommendation": "Complete, review, and formally sign off on the LIA before moving the processing activity into production."
+        },
+        {
+          "finding": "The system lacks a defined mechanism to prevent the MCP server from accessing the 'Tier 1' private data layer, despite claims of filesystem-level isolation.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md:85: \"the MCP server process has no read access to the private (Tier 1) layer\"",
+          "recommendation": "Implement and audit OS-level user permissions or containerization to technically enforce the separation between the MCP process and the private directory."
+        },
+        {
+          "finding": "The retention period for 'Voice note audio' is not explicitly defined in the RoPA, creating a discrepancy in data lifecycle documentation.",
+          "severity": "LOW",
+          "evidence": "compliance/01-ropa.md:1.3 vs compliance/07-retention-schedule.md:45",
+          "recommendation": "Update the RoPA to include the temporary processing of audio data and its immediate deletion policy."
+        }
+      ]
+    },
+    {
+      "rep": 3,
+      "duration_s": 13.2,
+      "tokens": {
+        "input_tokens": 6385,
+        "output_tokens": 581,
+        "total_tokens": 6966,
+        "tokens_per_s": 45.4
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log implementation violates the privacy-by-design principle by logging raw input and output text.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py:35-36: \"\\\"input\\\": input_text, \\\"output\\\": output_text\"",
+          "recommendation": "Remove raw text from logs and only record metadata like token counts or character lengths to prevent accidental leakage of personal data."
+        },
+        {
+          "finding": "The system lacks a documented procedure for handling Data Subject Requests (DSR) despite claiming to support erasure.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md:28: \"Manual deletion (see DSR procedure)\"",
+          "recommendation": "Create and document a formal procedure for receiving, verifying, and executing data erasure and access requests."
+        },
+        {
+          "finding": "The Legitimate Interests Assessment (LIA) required for the primary processing activity is not yet finalized or legally validated.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md:25: \"Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off...\"",
+          "recommendation": "Complete the LIA and obtain formal sign-off from a qualified legal practitioner before deploying the system."
+        },
+        {
+          "finding": "The system lacks a formal mechanism to prevent the processing of prohibited special-category data at the application layer.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md:36: \"This is enforced at the system-prompt and schema level (see §3.2 of the CasaSol BRIEF).\"",
+          "recommendation": "Implement a programmatic PII/Sensitive Data scanner (e.g., Presidio) to validate inputs/outputs against the prohibited-fields schema."
+        },
+        {
+          "finding": "The retention schedule for backup media is non-compliant as it lacks a concrete mechanism for overwriting data.",
+          "severity": "LOW",
+          "evidence": "compliance/07-retention-schedule.md:45: \"Where this is impractical (e.g. encrypted full-disk backup), document the residual retention...\"",
+          "recommendation": "Define a specific rotation or destruction policy for encrypted backups to ensure data is not retained indefinitely."
+        }
+      ]
+    },
+    {
+      "rep": 4,
+      "duration_s": 13.59,
+      "tokens": {
+        "input_tokens": 6385,
+        "output_tokens": 598,
+        "total_tokens": 6983,
+        "tokens_per_s": 45.4
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log implementation violates the privacy-by-design principle by logging raw input and output text containing potentially sensitive data.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py:35-36: \"\\\"input\\\": input_text, \\\"output\\\": output_text\"",
+          "recommendation": "Implement redaction or hashing of input/output text in the logging function to prevent the persistence of personal data in logs."
+        },
+        {
+          "finding": "The system lacks a documented procedure for handling Data Subject Requests (DSR), specifically for the 'right to erasure' mentioned in the retention schedule.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md:33: \"Manual deletion (see DSR procedure)\"",
+          "recommendation": "Create a formal DSR procedure document outlining the steps for identifying, verifying, and executing erasure requests."
+        },
+        {
+          "finding": "The Legitimate Interests Assessment (LIA) required for the primary processing activity is not yet finalized or legally validated.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md:24: \"Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off\"",
+          "recommendation": "Complete and formally sign off on the LIA before moving the processing activity from draft to production."
+        },
+        {
+          "finding": "The retention schedule for 'Tier 1 private outputs' relies on an unverified automated overwrite mechanism that may leave residual data.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md:23: \"Overwritten on each nightly run; residual files deleted after 90 days\"",
+          "recommendation": "Implement and audit a verifiable secure deletion (shredding) process for Tier 1 data to ensure no fragments remain after the 90-day window."
+        },
+        {
+          "finding": "The system lacks an audit trail for the 'Redactor' stage of the pipeline, making it impossible to verify if sensitive data was successfully removed.",
+          "severity": "LOW",
+          "evidence": "scripts/inference_log.py:11: \"Every Ollama call (Reducer, Router, Redactor) writes one record\"",
+          "recommendation": "Add specific validation logs that confirm the success/failure of the redaction logic without logging the sensitive content itself."
+        }
+      ]
+    },
+    {
+      "rep": 5,
+      "duration_s": 12.87,
+      "tokens": {
+        "input_tokens": 6385,
+        "output_tokens": 566,
+        "total_tokens": 6951,
+        "tokens_per_s": 45.3
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log implementation violates the privacy-by-design principle by logging raw input and output text.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py:35-36: \"\\\"input\\\": input_text, \\\"output\\\": output_text\"",
+          "recommendation": "Remove raw text from logs and only record metadata like character counts and duration to prevent accidental leakage of personal data."
+        },
+        {
+          "finding": "The system lacks a documented procedure for handling Data Subject Requests (DSR) despite claiming to support erasure.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md:25: \"Manual deletion (see DSR procedure)\"",
+          "recommendation": "Create and document a formal procedure for receiving, verifying, and executing data erasure and access requests."
+        },
+        {
+          "finding": "The Legitimate Interests Assessment (LIA) required for the primary processing activity is not yet finalized or legally validated.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md:25: \"Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off\"",
+          "recommendation": "Complete the LIA and obtain formal sign-off from a qualified legal practitioner before processing begins."
+        },
+        {
+          "finding": "The system lacks an automated mechanism to enforce the 90-day rolling deletion of Tier 1 private outputs.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md:18: \"Overwritten on each nightly run; residual files deleted after 90 days\"",
+          "recommendation": "Implement a verified automated cleanup script that explicitly checks file timestamps and purges data older than 90 days."
+        },
+        {
+          "finding": "The audit log for MCP queries does not capture the identity of the user/agent performing the query, hindering accountability.",
+          "severity": "LOW",
+          "evidence": "scripts/mcp_server.py:36: \"_log.info(f\"[{tool}] {parts or '(no filters)'}\")\"",
+          "recommendation": "Update the MCP server logging to include the authenticated user or system context initiating the tool call."
+        }
+      ]
+    }
+  ],
+  "task_b": [
+    {
+      "rep": 1,
+      "duration_s": 28.67,
+      "tokens": {
+        "input_tokens": 9263,
+        "output_tokens": 489,
+        "total_tokens": 9752,
+        "tokens_per_s": 35.9
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The LIA (Legitimate Interest Assessment) requires practitioner sign-off before production, but no implementation or workflow exists to enforce this gate.",
+          "severity": "HIGH",
+          "evidence": "BUILD_LOG.md: 'LIA practitioner sign-off (gate before witnessing production)'; BRIEF.md: 'LIA requires practitioner sign-off before witnessing goes to production.'",
+          "recommendation": "Implement a configuration flag or environment variable that prevents the witnessing pipeline from executing unless a signed LIA hash is verified."
+        },
+        {
+          "finding": "The system uses a mutable environment variable for the primary data directory without a fallback or validation mechanism.",
+          "severity": "MEDIUM",
+          "evidence": "config.py: '_data_dir = Path(os.environ[\"CASASOL_DATA_DIR\"]) if \"CASASOL_DATA_DIR\" in os.environ else PROJECT_ROOT / \"data\"'",
+          "recommendation": "Implement a startup check that validates the existence and write-permissions of the resolved DB_PATH and CHROMA_DIR."
+        },
+        {
+          "finding": "The MCP server implementation lacks error handling for database connection failures, which could crash the Claude Desktop bridge.",
+          "severity": "MEDIUM",
+          "evidence": "scripts/mcp_server.py: 'def get_db(): conn = sqlite3.connect(config.DB_PATH)...'",
+          "recommendation": "Wrap the database connection and tool execution logic in try-except blocks that return structured error messages to the MCP client instead of crashing the process."
+        },
+        {
+          "finding": "The 'witnessing' pipeline relies on unverified QR code decoding which currently has known failures in the production corpus.",
+          "severity": "LOW",
+          "evidence": "BUILD_LOG.md: '6 listings still have source_url: unknown — QR not detected'",
+          "recommendation": "Implement a manual override or 're-processing' queue for listings where the automated VLM/QR pipeline fails to resolve the source_url."
+        }
+      ]
+    },
+    {
+      "rep": 2,
+      "duration_s": 13.86,
+      "tokens": {
+        "input_tokens": 9263,
+        "output_tokens": 483,
+        "total_tokens": 9746,
+        "tokens_per_s": 35.9
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The LIA (Legitimate Interest Assessment) requires practitioner sign-off before production, but no implementation or workflow exists to enforce this gate.",
+          "severity": "HIGH",
+          "evidence": "BUILD_LOG.md: 'LIA practitioner sign-off (gate before witnessing production)'; BRIEF.md: 'LIA requires practitioner sign-off before witnessing goes to production.'",
+          "recommendation": "Implement a configuration flag or environment variable that prevents the witnessing pipeline from executing unless a signed LIA hash is verified."
+        },
+        {
+          "finding": "The system uses a mutable environment variable for the primary data directory without a fallback or validation mechanism.",
+          "severity": "MEDIUM",
+          "evidence": "config.py: '_data_dir = Path(os.environ[\"CASASOL_DATA_DIR\"]) if \"CASASOL_DATA_DIR\" in os.environ else PROJECT_ROOT / \"data\"'",
+          "recommendation": "Implement a startup check that validates the existence and write-permissions of the resolved DB_PATH and CHROMA_DIR."
+        },
+        {
+          "finding": "The MCP server implementation lacks error handling for database connection failures, which could crash the Claude Desktop bridge.",
+          "severity": "MEDIUM",
+          "evidence": "scripts/mcp_server.py: 'def get_db(): conn = sqlite3.connect(config.DB_PATH)...'",
+          "recommendation": "Wrap the connection logic in a try-except block that returns a meaningful error message via the MCP protocol instead of crashing the process."
+        },
+        {
+          "finding": "The 'witnessing' pipeline relies on QR code detection which is documented as failing for several files, creating a data integrity gap.",
+          "severity": "LOW",
+          "evidence": "BUILD_LOG.md: '6 listings still have source_url: unknown — QR not detected'",
+          "recommendation": "Implement a manual override tool in the MCP server to allow administrators to link discovered URLs to unlinked witness files."
+        }
+      ]
+    },
+    {
+      "rep": 3,
+      "duration_s": 14.5,
+      "tokens": {
+        "input_tokens": 9263,
+        "output_tokens": 506,
+        "total_tokens": 9769,
+        "tokens_per_s": 35.9
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The LIA (Legitimate Interest Assessment) requires practitioner sign-off before witnessing production, but no implementation or workflow exists to enforce this gate.",
+          "severity": "HIGH",
+          "evidence": "BUILD_LOG.md: 'LIA practitioner sign-off (gate before witnessing production)'; BRIEF.md: 'LIA requires practitioner sign-off before witnessing goes to production.'",
+          "recommendation": "Implement a configuration flag or a deployment check that prevents the witnessing pipeline from executing unless a signed LIA hash is verified."
+        },
+        {
+          "finding": "The system uses a mutable environment variable for the primary data directory without a fallback or validation, risking data loss if misconfigured.",
+          "severity": "MEDIUM",
+          "evidence": "config.py: '_data_dir = Path(os.environ[\"CASASOL_DATA_DIR\"]) if \"CASASOL_DATA_DIR\" in os.environ else PROJECT_ROOT / \"data\"'",
+          "recommendation": "Add a startup validation check to ensure the directory exists and is writable, and log a warning if falling back to the default path."
+        },
+        {
+          "finding": "The MCP server implementation lacks error handling for database connection failures, which could crash the Claude Desktop bridge.",
+          "severity": "MEDIUM",
+          "evidence": "scripts/mcp_server.py: 'def get_db(): conn = sqlite3.connect(config.DB_PATH)...'",
+          "recommendation": "Wrap the database connection and tool execution logic in try-except blocks to return meaningful error messages via the MCP protocol instead of crashing the process."
+        },
+        {
+          "finding": "The 'witnessing' pipeline relies on QR code detection which is documented as failing for several files, with no automated retry or fallback mechanism.",
+          "severity": "LOW",
+          "evidence": "BUILD_LOG.md: '6 listings still have source_url: unknown — QR not detected; re-photograph or look up manually'",
+          "recommendation": "Implement an automated secondary verification step using the VLM to extract URLs from text within the image when QR detection fails."
+        }
+      ]
+    },
+    {
+      "rep": 4,
+      "duration_s": 19.18,
+      "tokens": {
+        "input_tokens": 9263,
+        "output_tokens": 672,
+        "total_tokens": 9935,
+        "tokens_per_s": 35.9
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The LIA (Legitimate Interest Assessment) requires practitioner sign-off before witnessing production, but no implementation or workflow exists to enforce this gate.",
+          "severity": "HIGH",
+          "evidence": "BUILD_LOG.md: 'LIA practitioner sign-off (gate before witnessing production)'; BRIEF.md: 'LIA requires practitioner sign-off before witnessing goes to production.'",
+          "recommendation": "Implement a configuration flag or a deployment-time check that prevents the witnessing pipeline from executing unless a signed LIA hash is verified."
+        },
+        {
+          "finding": "The system uses a mutable environment variable for the primary data directory without a fallback or validation, risking data loss if misconfigured.",
+          "severity": "MEDIUM",
+          "evidence": "config.py: '_data_dir = Path(os.environ[\"CASASOL_DATA_DIR\"]) if \"CASASOL_DATA_DIR\" in os.environ else PROJECT_ROOT / \"data\"'",
+          "recommendation": "Add a startup validation step to ensure the directory exists and is writable, and log a warning if the environment variable is missing."
+        },
+        {
+          "finding": "The database schema lacks a 'collection_method' column in the 'listings' table despite the build log claiming it was added via migration.",
+          "severity": "MEDIUM",
+          "evidence": "db.py: 'CREATE TABLE IF NOT EXISTS listings (...)' (schema definition does not include collection_method); BUILD_LOG.md: 'added collection_method column to SQLite'",
+          "recommendation": "Update the `ensure_schema` function in `db.py` to include the `collection_method` column to ensure consistency across deployments."
+        },
+        {
+          "finding": "The 'search_properties' tool in the MCP server lacks implementation for several documented filters like 'max_price' and 'min_bedrooms'.",
+          "severity": "LOW",
+          "evidence": "mcp_server.py: '@mcp.tool() def search_properties(query: str = \"\", max_price: int = 0, min_bedrooms: int = 0...)' (function body is truncated/missing logic)",
+          "recommendation": "Complete the implementation of the `search_properties` tool to map all function arguments to the underlying SQLite/ChromaDB queries."
+        },
+        {
+          "finding": "The system relies on a hardcoded threshold for price/sqm outliers which may lead to silent data exclusion as market values shift.",
+          "severity": "LOW",
+          "evidence": "db.py: '_MIN_PRICE_SQM = 1500  # below this → plot size in size_m2, not built area'",
+          "recommendation": "Move the `_MIN_PRICE_SQM` threshold to `config.py` to allow for easier adjustment without code changes."
+        }
+      ]
+    },
+    {
+      "rep": 5,
+      "duration_s": 13.85,
+      "tokens": {
+        "input_tokens": 9263,
+        "output_tokens": 483,
+        "total_tokens": 9746,
+        "tokens_per_s": 35.9
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The LIA (Legitimate Interest Assessment) requires practitioner sign-off before production, but no implementation or workflow exists to enforce this gate.",
+          "severity": "HIGH",
+          "evidence": "BUILD_LOG.md: 'LIA practitioner sign-off (gate before witnessing production)'; BRIEF.md: 'LIA requires practitioner sign-off before witnessing goes to production.'",
+          "recommendation": "Implement a configuration flag or environment variable that prevents the witnessing pipeline from executing unless a signed LIA hash is verified."
+        },
+        {
+          "finding": "The system uses a mutable environment variable for the primary data directory without a fallback or validation mechanism.",
+          "severity": "MEDIUM",
+          "evidence": "config.py: '_data_dir = Path(os.environ[\"CASASOL_DATA_DIR\"]) if \"CASASOL_DATA_DIR\" in os.environ else PROJECT_ROOT / \"data\"'",
+          "recommendation": "Implement a startup check that validates the existence and write-permissions of the resolved DB_PATH and CHROMA_DIR."
+        },
+        {
+          "finding": "The MCP server implementation lacks error handling for database connection failures, which could crash the Claude Desktop bridge.",
+          "severity": "MEDIUM",
+          "evidence": "scripts/mcp_server.py: 'def get_db(): conn = sqlite3.connect(config.DB_PATH)...'",
+          "recommendation": "Wrap the database connection and tool execution logic in try-except blocks that return structured error messages to the MCP client instead of crashing the process."
+        },
+        {
+          "finding": "The 'witnessing' pipeline relies on unverified QR code decoding which currently has known failures in the production corpus.",
+          "severity": "LOW",
+          "evidence": "BUILD_LOG.md: '6 listings still have source_url: unknown — QR not detected'",
+          "recommendation": "Implement a manual override or 're-processing' queue for listings where the automated VLM/QR pipeline fails."
+        }
+      ]
+    }
+  ]
+}

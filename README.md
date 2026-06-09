@@ -44,6 +44,7 @@ Roadmap and pending experiments: [`tasks/chronos/roadmap.md`](./tasks/chronos/ro
 | [011](./tasks/chronos/exp_011_mlx_runtime/) | MLX Runtime vs Ollama — Context Cliff | Complete | No cliff through 40K on MLX. Prefill matches Ollama FA=0 within 3%. Cliff is an Ollama FA artefact, not a hardware limit. |
 | [012](./tasks/chronos/exp_012_cost_capability/) | Cost vs Capability: Where the Curve Breaks | Complete ⚠ see Exp 012-Alpha | gemma4:26b (MoE A4B, ~4B active) 0/8, Haiku/Sonnet/Opus all 5/8 net. Cliff confirmed at the 4B-active/frontier boundary; dense local 12–32B class untested (→ Exp 015). Haiku is cost-dominant; Haiku→Opus is 6.4× cost, 0 score gain. |
 | [013](./tasks/chronos/exp_013_local_audit_loop/) | Local Audit Loop: Can Scaffolding Move gemma4:26b Off Zero? | Complete | H confirmed (partial): decomposition recovered 2/3 findable items (Items 3+4 stable, Item 1 systematic bridge failure). Raw 2/5; context expansion deferred as out of scope for H3. Pre-filter architecture: local audit + Haiku top-up = ~$0.02/audit. |
+| [014](./tasks/chronos/exp_014_capability_variance/) | Capability Variance Floor | Complete | H1 CONFIRMED: gemma ≤0/8 all 5 reps (goes negative via systematic DSR FP). H3 CONFIRMED: no overlap (gemma max 0, Haiku min 1). H2 FALSIFIED: Haiku scores 1/1/4/1/2 — not stable at 4–6/8; the 5/8 Exp 012 result was a high-tail sample. Haiku mean ~2/8 across reps; variance driven by DSR/DPA FP penalties and B3 blind spot. |
 
 ### Watcher Runs
 

@@ -1,0 +1,519 @@
+{
+  "experiment": "014",
+  "ts": "20260609T202614Z",
+  "model": "claude-haiku-4-5-20251001",
+  "runtime": "api",
+  "project": "/Users/miktam02/REPOS/casasol",
+  "reps_per_task": 5,
+  "task_a": [
+    {
+      "rep": 1,
+      "duration_s": 19.54,
+      "tokens": {
+        "input_tokens": 6859,
+        "output_tokens": 1602,
+        "total_tokens": 8461,
+        "tokens_per_s": null
+      },
+      "task": "GDPR Compliance Audit — CasaSol.ai",
+      "gaps": [
+        {
+          "finding": "Retention schedule permits raw listing `.md` files to be retained indefinitely ('Duration of listing relationship + 12 months'), but no documented procedure exists for deletion trigger or verification of actual deletion.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md line 21: 'Active listing `.md` files | `seed/raw/` | Duration of listing relationship + 12 months | Listing withdrawn or sold; 12-month clock starts from status change | Agency IT' — but scripts/mcp_server.py and scripts/inference_log.py contain no deletion automation or audit trail for this trigger.",
+          "recommendation": "Implement automated deletion procedure in scripts/ with audit logging that records when and why each `.md` file was deleted, and include evidence of successful deletion in the audit log."
+        },
+        {
+          "finding": "Inference log (scripts/inference_log.py) stores full input and output text in append-only JSONL, including buyer query text which may contain personal data; retention policy for inference logs is not documented.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py lines 28–40: 'input': input_text, 'output': output_text — full text is logged. compliance/07-retention-schedule.md defines 'Buyer query text' as 'Session only' and 'Not retained (default)', but inference_log.py stores it permanently in logs/inference.jsonl with no expiry mechanism.",
+          "recommendation": "Either exclude buyer query and output from inference_log.py (log only metadata: stage, duration, token counts), or implement log rotation with explicit deletion after the documented retention period (12 months per the audit log retention in the RoPA)."
+        },
+        {
+          "finding": "RoPA (compliance/01-ropa.md §1.4) claims 'No buyer personal data is processed' but scripts/mcp_server.py and inference_log.py do process and store buyer query text, which may reveal personal circumstances, preferences, or financial constraints.",
+          "severity": "HIGH",
+          "evidence": "compliance/01-ropa.md line 65: 'No buyer personal data is processed.' vs. scripts/inference_log.py lines 38–40 storing buyer input text verbatim; compliance/01-ropa.md §2.3 contradicts this by listing 'Buyer query text | Natural-language property search query | Potentially yes — query may contain personal preferences or circumstances'.",
+          "recommendation": "Clarify in RoPA §1.4 that buyer query text *is* processed but retained only for the session duration; implement technical controls in mcp_server.py to exclude buyer queries from the persistent inference_log.py, or document a separate legal basis and retention period for query logging."
+        },
+        {
+          "finding": "Legitimate Interests Assessment (LIA, document 03-lia.md) is referenced as required ('must be reviewed and signed off by a qualified practitioner') in RoPA §1.2 but is not provided in the submission; compliance pack is incomplete.",
+          "severity": "HIGH",
+          "evidence": "compliance/01-ropa.md lines 32–33: '⚠ *Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off by a qualified practitioner before this basis is placed into force.*' — document 03-lia.md not supplied; BRIEF.md §0 states 'RoPA + LIA drafts present' but LIA is not in submission.",
+          "recommendation": "Provide the complete LIA (document 03-lia.md) documenting the balancing test for Article 6(1)(f) legitimate interests; include evidence of practitioner sign-off before deployment."
+        },
+        {
+          "finding": "MCP audit log (compliance/07-retention-schedule.md line 27: 'MCP audit logs | logs/mcp.log | 12 months') has no technical enforcement; scripts/mcp_server.py does not implement log rotation or deletion.",
+          "severity": "MEDIUM",
+          "evidence": "scripts/mcp_server.py lines 28–33: logging configured with no rotation policy. compliance/07-retention-schedule.md promises 12-month retention with deletion, but Python's basicConfig in mcp_server.py has no RotatingFileHandler or deletion mechanism.",
+          "recommendation": "Replace basicConfig with RotatingFileHandler (max 12 file backups, or 365-day expiry) and document the rotation in mcp_server.py; verify deletion of logs older than 12 months via cron or systemd timer."
+        },
+        {
+          "finding": "Data Subject Rights procedure is not documented; RoPA references 'DSR records | Agency DPO files | 3 years from closure' but no process exists for handling right to erasure (Article 17) for ChromaDB vectors and SQLite records.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md line 29 references DSR procedures but no document (e.g. compliance/04-dsr.md or compliance/05-dsr.md) is present. RoPA §1.6 mentions 'redacted from the file' for staff data but no deletion procedure for buyer or other data subjects.",
+          "recommendation": "Document a Data Subject Rights procedure (Articles 15–22 GDPR) including technical steps to delete records from ChromaDB (embeddings), SQLite (listing records), and inference logs; include DSR template and SLA (30-day response time)."
+        },
+        {
+          "finding": "MCP server (scripts/mcp_server.py) logs tool calls with user input but does not log authorization context (authenticated user identity, role, timestamp of access grant); audit trail is incomplete for non-repudiation.",
+          "severity": "MEDIUM",
+          "evidence": "scripts/mcp_server.py lines 36–38: '_log_call()' logs tool name and filter parameters but no identity, IP, or session token. compliance/01-ropa.md §1.8 claims 'Audit log maintained on all MCP queries' but the actual log (mcp.log written by mcp_server.py) does not include access-control context required for accountability under Article 32(1)(c).",
+          "recommendation": "Extend mcp_server.py logging to include authenticated user (or device) identifier, timestamp, and access result (allowed/denied); implement read-only audit log write and restrict MCP server process to read-only access to data as implemented in filesystem permissions."
+        }
+      ]
+    },
+    {
+      "rep": 2,
+      "duration_s": 17.39,
+      "tokens": {
+        "input_tokens": 6859,
+        "output_tokens": 1463,
+        "total_tokens": 8322,
+        "tokens_per_s": null
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "Retention schedule specifies 90-day rolling deletion for Tier 1 private outputs but inference_log.py stores full input/output text indefinitely in JSONL, creating uncontrolled retention of potentially personal data in query logs.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md: 'Tier 1 private outputs | ~/.casasol/private/ | 90 days rolling | Overwritten on each nightly run' vs scripts/inference_log.py:28–32 'record = { \"ts\": ..., \"input\": input_text, \"output\": output_text }' with no expiration or redaction mechanism",
+          "recommendation": "Implement automatic log rotation and truncation in inference_log.py to retain only metadata (ts, model, stage, duration_s, char counts) for 12 months, and redact full input/output after 24 hours."
+        },
+        {
+          "finding": "RoPA claims 'No buyer personal data is processed' and 'query is not stored beyond the session (default)' but inference_log.py stores all buyer query text ('input': input_text) in persistent JSONL file with no documented deletion or expiration.",
+          "severity": "HIGH",
+          "evidence": "compliance/01-ropa.md §2.4: 'Buyer query text: not retained beyond the session (default)' vs scripts/inference_log.py:28 stores 'input': input_text in append-only log with no session boundary or TTL",
+          "recommendation": "Either exclude buyer query input from inference logs entirely, or document explicit retention period and implement automatic redaction/deletion after that period in the log rotation logic."
+        },
+        {
+          "finding": "RoPA §1.4 states 'No buyer personal data is processed' but mcp_server.py logs all tool calls including buyer-initiated queries with no filtering or anonymization of potentially personal query content.",
+          "severity": "HIGH",
+          "evidence": "scripts/mcp_server.py:31–32 '_log_call(tool: str, **kwargs)' logs all kwargs from tool calls, and RoPA §2.3 acknowledges buyer queries are 'Potentially yes — personal data' but mcp_server.py has no data minimization in logging",
+          "recommendation": "Implement query sanitization in _log_call() to strip personal identifiers (names, phone numbers, financial details) from logged query parameters before writing to mcp.log."
+        },
+        {
+          "finding": "Retention Schedule document §1 claims 'Review cycle: Annual, or on material change to processing' but RoPA §1.2 references unsigned LIA document (03-lia.md) with warning '⚠ Legal review required' — no evidence of executed legal review or practitioner sign-off before processing commenced.",
+          "severity": "HIGH",
+          "evidence": "compliance/01-ropa.md §1.2: '⚠ *Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off by a qualified practitioner before this basis is placed into force.*' but BRIEF.md §Status says 'LIA requires practitioner sign-off before witnessing goes to production' with no evidence sign-off completed",
+          "recommendation": "Obtain and attach signed LIA from qualified legal practitioner before any production deployment. Do not place Legitimate Interests basis into force without documented DPO or lawyer approval."
+        },
+        {
+          "finding": "MCP audit log (mcp.log) retention is documented as 12 months but no log rotation mechanism, size limits, or automated deletion script exists in the codebase to enforce this retention limit.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md: 'MCP audit logs | logs/mcp.log | 12 months | Log rotation; files older than 12 months deleted' but scripts/mcp_server.py:24–28 uses Python logging.basicConfig() with no RotatingFileHandler, maxBytes, or backupCount parameters",
+          "recommendation": "Replace basicConfig() with RotatingFileHandler(maxBytes=10485760, backupCount=12) or implement cron-based log rotation that deletes logs older than 12 months, documented in an operations runbook."
+        },
+        {
+          "finding": "BRIEF.md §Status claims DPA 'signed off 2026-06-06' but compliance/ directory contains only RoPA and retention schedule — DPA template itself (document 02) is missing, preventing verification of processor/controller terms and liability allocation.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md: 'Compliance pack: `compliance/` — DPA v1.0-template signed off 2026-06-06' but compliance/ only contains 01-ropa.md and 07-retention-schedule.md; DPA document not provided for audit",
+          "recommendation": "Provide signed DPA document (02-dpa.md or equivalent) showing Anthropic processor terms, sub-processor notifications, and data subject rights procedures, or confirm DPA status is aspirational pending completion."
+        },
+        {
+          "finding": "MCP server logs buyer query parameters without distinguishing between property filters (non-personal) and query content that may contain personal context (Article 4(1) definition of personal data), creating risk of logging personal data without lawful basis or documented necessity.",
+          "severity": "MEDIUM",
+          "evidence": "scripts/mcp_server.py:31–32 logs all kwargs indiscriminately; compliance/01-ropa.md §2.3 acknowledges query is 'Potentially yes — personal data' but provides no schema or validation to separate property-search parameters from personal-context disclosures",
+          "recommendation": "Define a whitelist of permitted tool parameters for logging (e.g. beds, baths, price_min, price_max) and exclude free-text query fields; document the distinction in RoPA §2.3."
+        }
+      ]
+    },
+    {
+      "rep": 3,
+      "duration_s": 23.87,
+      "tokens": {
+        "input_tokens": 6859,
+        "output_tokens": 1895,
+        "total_tokens": 8754,
+        "tokens_per_s": null
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "RoPA §1.2 states lawful basis is Article 6(1)(f) Legitimate Interests but explicitly marks the required Legitimate Interests Assessment (LIA) in document 03-lia.md as 'must be reviewed and signed off by a qualified practitioner before this basis is placed into force' — no evidence that LIA has been completed or signed off, creating a gap between documented processing and legal authorization.",
+          "severity": "HIGH",
+          "evidence": "compliance/01-ropa.md §1.2: '⚠ *Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off by a qualified practitioner before this basis is placed into force.*' AND BRIEF.md status line: 'LIA requires practitioner sign-off before witnessing goes to production' — no sign-off date or completion status provided.",
+          "recommendation": "Complete and have a qualified legal practitioner formally sign off the LIA document before any processing under Article 6(1)(f) begins; document the sign-off date and practitioner name in RoPA §1.2."
+        },
+        {
+          "finding": "scripts/inference_log.py logs both 'input' and 'output' text in plaintext to an append-only JSONL file, but RoPA §1.6 and retention schedule §1 make no mention of inference logs as a retained data category, creating ambiguity about retention period, access control, and whether input queries (which may contain personal data) are being logged indefinitely.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py lines 32–47 write full 'input_text' and 'output_text' to JSONL; compliance/07-retention-schedule.md table has no row for inference logs or model intermediate outputs; config.INFERENCE_LOG_PATH is referenced but not defined in provided code.",
+          "recommendation": "Add inference log data category to retention schedule with explicit retention period and deletion trigger; implement redaction of query input before logging, or exclude full input/output logging and log only metadata (model, stage, duration, counts)."
+        },
+        {
+          "finding": "RoPA §2.3 claims buyer query text is 'potentially yes — personal data' but §2.4 retention states 'not retained beyond the session (default)' with no code-level enforcement shown; mcp_server.py does not implement query deletion, and inference_log.py appends all input indefinitely, contradicting the documented default.",
+          "severity": "HIGH",
+          "evidence": "compliance/01-ropa.md §2.4: 'Buyer query text: not retained beyond the session (default).' vs. scripts/inference_log.py lines 32–47: records are appended to logs/inference.jsonl with 'input': input_text (no session boundary, no deletion hook shown).",
+          "recommendation": "Implement explicit session-scoped storage for buyer queries with automatic deletion on session end; do not log full buyer query text to permanent logs, or if logging for audit, redact/hash the query content."
+        },
+        {
+          "finding": "RoPA §1.5 states 'No data is shared with third parties' and 'All processing occurs on hardware physically located on agency premises,' but compliance/01-ropa.md §1.5 also states 'Anthropic (via Claude Desktop) receives only the sanitised public-layer output' — this is a third-party data transfer to Anthropic that contradicts the 'no third parties' statement and lacks a separate lawful basis or processor agreement reference.",
+          "severity": "HIGH",
+          "evidence": "compliance/01-ropa.md §1.5: 'No data is shared with third parties.' immediately followed by 'Anthropic (via Claude Desktop) receives only the sanitised public-layer output — property descriptions and attributes with no personal data. This is a separate processing activity under Anthropic's own DPA with the buyer.' — missing reference to a processor DPA or controller-processor relationship.",
+          "recommendation": "Clarify RoPA §1.5 to explicitly document Anthropic as a processor or data recipient, specify the lawful basis for sharing (Article 6(1)(b) pre-contractual steps or 6(1)(f)), reference the processor agreement or clarify that Anthropic is the buyer's own processor under the buyer's own contract, not the agency's processor."
+        },
+        {
+          "finding": "scripts/mcp_server.py lines 1–50 define a file logger to 'logs/mcp.log' but there is no shown mechanism for access control, authentication, or authorization check before MCP tools are invoked; any client with network access to the MCP endpoint can query the property database without attestation of buyer or agency status.",
+          "severity": "MEDIUM",
+          "evidence": "scripts/mcp_server.py lines 30–35: 'logging.basicConfig(filename=str(_log_path), level=logging.INFO, ...)' sets up logging but mcp_server.py excerpt does not show any FastMCP tool definition with authentication; the 'Claude Desktop config' comment on line 7 implies local use only, but no code enforcement of that boundary is shown.",
+          "recommendation": "Add access control to all MCP tool handlers: verify caller identity, log all tool invocations with caller identifier, and reject calls from unauthenticated or unauthorized sources; document the authentication model in RoPA and update BRIEF to clarify whether MCP is intended for local Claude Desktop only or remote/multi-user scenarios."
+        },
+        {
+          "finding": "Retention schedule §1 row for 'MCP audit logs' specifies '12 months' retention and 'log rotation; files older than 12 months deleted,' but scripts/inference_log.py and scripts/mcp_server.py show append-only logging with no log rotation code or deletion hook; no automated cleanup job or cron configuration is provided.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md: 'MCP audit logs | logs/mcp.log | 12 months | Log rotation; files older than 12 months deleted | Agency IT' vs. scripts/mcp_server.py lines 30–35 using Python logging.basicConfig with no RotatingFileHandler or cleanup configuration shown.",
+          "recommendation": "Implement RotatingFileHandler (Python logging.handlers) with maxBytes and backupCount to enforce 12-month log retention, or document manual deletion procedure and assign explicit responsibility; test log deletion and verify compliance during annual review."
+        },
+        {
+          "finding": "BRIEF.md §1 and §3 reference a 'prohibited-fields schema' and 'system-prompt' that enforce prevention of inferences about 'divorce, financial pressure, health, legal proceedings' on sellers, but the actual system prompt, schema validation code, and enforcement mechanism are not provided in the code excerpt; RoPA §1.3 and §1.4 rely on this enforcement but cannot be audited against implemented controls.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md §1.5: 'No special-category data (Article 9) is processed. The architecture explicitly forbids input or output containing data about the personal circumstances, health, family status, financial distress, or legal situation of any natural person. This is enforced at the system-prompt and schema level (see §3.2 of the CasaSol BRIEF).' — §3.2 is not provided; no code file shows system_prompt.txt, schema validation, or output filtering.",
+          "recommendation": "Provide complete system prompt, schema validation code (e.g. pydantic models or JSON schema), and output filtering logic; document how prohibited inferences are detected and blocked; include test cases demonstrating the filter rejects seller-circumstance queries; reference this in RoPA §1.3 as 'enforced by code artifact [X]'."
+        }
+      ]
+    },
+    {
+      "rep": 4,
+      "duration_s": 23.98,
+      "tokens": {
+        "input_tokens": 6859,
+        "output_tokens": 2048,
+        "total_tokens": 8907,
+        "tokens_per_s": null
+      },
+      "raw": "```json\n{\n  \"task\": \"GDPR compliance audit — CasaSol.ai real estate platform\",\n  \"gaps\": [\n    {\n      \"finding\": \"Legitimate Interests Assessment (LIA) required by RoPA §1.2 is not signed off; document 03-lia.md exists as draft but RoPA §1.2 states it 'must be reviewed and signed off by a qualified practitioner before this basis is placed into force' — no evidence of sign-off provided.\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"compliance/01-ropa.md §1.2: '⚠ *Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off by a qualified practitioner before this basis is placed into force.*' — LIA file not provided for audit; RoPA claims document '03-lia.md' exists but is not present in submission.\",\n      \"recommendation\": \"Obtain and provide the signed LIA from qualified legal counsel before processing begins; document the sign-off date and practitioner credentials in RoPA §1.2.\"\n    },\n    {\n      \"finding\": \"Data Retention Schedule (document 07) defines 90-day rolling retention for Tier 1 private outputs but implementation in inference_log.py and mcp_server.py includes full input/output text in logs without corresponding 90-day deletion automation — logs are rotated at 12 months only.\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"compliance/07-retention-schedule.md row 'Tier 1 private outputs': 'Retention period: 90 days rolling; Overwritten on each nightly run' vs scripts/inference_log.py lines 31–40: log() appends full 'input_text' and 'output_text' to JSONL with no 90-day purge; scripts/mcp_server.py lines 31–34: MCP log path is 'logs/mcp.log' with no mention of 90-day rotation in retention schedule table (row specifies 12 months).\",\n      \"recommendation\": \"Implement automated deletion of inference_log.jsonl and mcp.log records older than 90 days; add explicit cron job or startup script that purges aged records; update retention schedule table to clarify whether logs follow 90-day or 12-month cycle.\"\n    },\n    {\n      \"finding\": \"Audit trail for Buyer query matching (Processing Activity 2) is incomplete — RoPA §2.2–2.4 states buyer queries are 'not retained beyond the session (default)' but mcp_server.py logs all MCP calls including tool parameters without distinguishing buyer query content from internal operations, and no encryption or access control specification exists for the mcp.log file.\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"compliance/01-ropa.md §2.4: 'Buyer query text: not retained beyond the session (default)' vs scripts/mcp_server.py lines 44–47: '_log_call(tool: str, **kwargs)' logs all tool invocations with kwargs (which include query parameters) to 'logs/mcp.log' with no purge logic; compliance/01-ropa.md §1.8 specifies 'Audit log maintained on all MCP queries' but does not specify access control or encryption of the log file.\",\n      \"recommendation\": \"Separate audit logs into two categories: (1) operational logs (tool calls, duration, error codes) retained 12 months, (2) query content logs purged at session end; encrypt mcp.log with same AES-256 as production data; document file-level access controls in §1.8 of RoPA.\"\n    },\n    {\n      \"finding\": \"MCP server (mcp_server.py) lacks any access control on the endpoint — no authentication or authorization documented; RoPA §1.5 claims 'No data is shared with third parties' but the MCP protocol allows any Claude Desktop instance with access to the stdio transport to query all listings without authentication.\",\n      \"severity\": \"HIGH\",\n      \"evidence\": \"scripts/mcp_server.py: no authentication check before tool execution; RoPA §1.8 lists 'Audit log maintained on all MCP queries' and 'documented procedure' for access but mcp_server.py contains no procedure or credential validation; BRIEF.md §4.5 mentions 'Bouncer' layer but no Bouncer access-control logic appears in submitted code.\",\n      \"recommendation\": \"Implement API key or certificate-based authentication in mcp_server.py before any tool executes; document the authentication procedure in RoPA §1.8 and in a separate access-control policy; define which Claude Desktop instances or users are authorized to query which property tiers.\"\n    },\n    {\n      \"finding\": \"Inference log stores full model input and output text (inference_log.py lines 31–40) which may contain Tier 1 (private) data as defined in BRIEF.md, but RoPA Processing Activity 1 does not list 'inference logs' as a data category with retention period; no Data Processing Impact Assessment (DPIA) or risk analysis documents whether full input/output logging violates storage-limitation principle.\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"scripts/inference_log.py lines 31–40: record includes 'input': input_text and 'output': output_text stored in JSONL; RoPA table (compliance/01-ropa.md §1.6) does not list 'inference logs' or 'model input/output logs' as a retained category; BRIEF.md §3.2 references 'system-prompt and schema level' enforcement but no artifact documents what input restrictions exist.\",\n      \"recommendation\": \"Add 'Inference logs' row to retention schedule table with justification for storing full text (or exclude sensitive text); conduct and document a DPIA to assess whether inference logs should be redacted to remove Tier 1 private data before storage; update RoPA §1.3 to list inference logs as a distinct data category.\"\n    },\n    {\n      \"finding\": \"Data Subject Request (DSR) procedure is referenced in retention schedule (document 07, row 'DSR records': '3 years from closure') but no DSR procedure document is provided; RoPA does not specify how buyer or staff DSRs are handled, timelines for response, or technical steps to delete/port data on request.\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"compliance/07-retention-schedule.md row 'DSR records': 'Retention period: 3 years from closure; Trigger for deletion: Annual review; Responsible: Agency DPO' — no procedure document provided; compliance/01-ropa.md does not mention Articles 15–22 (access, erasure, portability rights); BRIEF.md does not reference DSR handling.\",\n      \"recommendation\": \"Create a DSR Procedure document (e.g. compliance/04-dsr-procedure.md) specifying: request intake, 30-day response timeline, data deletion steps for each category (listing .md files, ChromaDB vectors, logs, backup media), staff erasure workflow, and audit trail of DSRs; reference it in RoPA §1 overview.\"\n    },\n    {\n      \"finding\": \"RoPA §1.4 claims 'No buyer personal data is processed' because 'Buyers interact through their own AI provider (Claude Desktop / Anthropic) under their own contract with Anthropic' — but if mcp_server.py executes as a tool within Claude Desktop, the agency may be a joint controller with Anthropic; no Data Processing Agreement (DPA) between agency and Anthropic is provided, and joint-controller obligations (Article 26) are not documented.\",\n      \"severity\": \"MEDIUM\",\n      \"evidence\": \"compliance/01-ropa.md §1.4: 'Buyers interact through their own AI provider (Claude Desktop / Anthropic) under their own contract with Anthropic; the agency receives only the query, which it processes for listing-matching purposes only.' vs BRIEF.md 'Foundational MCP ↔ Claude Desktop bridge is proven' — if Claude Desktop invokes mcp_server.py as an MCP tool, the agency is processing buyer data (queries) on Anthropic's behalf or in joint control; no DPA or joint-controller agreement provided; BRIEF.md mentions 'DPA v1.0-template signed off 2026-06-06' but the actual DPA document is not in the submission.\",\n      \"recommendation\": \"Provide the signed DPA with Anthropic (or confirm Anthropic's separate controller status with evidence); if joint control, execute Article 26 joint-controller agreement specifying",
+      "parse_error": "Unterminated string starting at: line 44 column 25 (char 7585)"
+    },
+    {
+      "rep": 5,
+      "duration_s": 17.93,
+      "tokens": {
+        "input_tokens": 6859,
+        "output_tokens": 1461,
+        "total_tokens": 8320,
+        "tokens_per_s": null
+      },
+      "task": "GDPR Compliance Audit — CasaSol.ai",
+      "gaps": [
+        {
+          "finding": "Inference log stores full input and output text in plaintext JSONL, including potentially sensitive buyer queries and property details, with no encryption or access control specified.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py lines 28–36: `\"input\": input_text, \"output\": output_text` appended to logs/inference.jsonl with no mention of encryption; compliance/07-retention-schedule.md does not list inference.jsonl in retention table.",
+          "recommendation": "Either exclude full input/output from the log (store only metadata: timestamps, model, duration, token counts) or implement encrypted storage with restricted filesystem access (mode 0600, owned by inference process only)."
+        },
+        {
+          "finding": "MCP server audit log (mcp.log) is created without documented access controls or encryption, contradicting the security claim in RoPA §1.8 that restricts access to 'authorised agency staff via documented procedure.'",
+          "severity": "HIGH",
+          "evidence": "scripts/mcp_server.py lines 23–29 create logs/mcp.log with standard file permissions; compliance/01-ropa.md §1.8 claims 'filesystem-level access control' and 'documented procedure' but no enforcement code or file-mode specification is present.",
+          "recommendation": "Set log file mode to 0600 immediately after creation; document and enforce filesystem ACLs restricting read access to designated staff only; add code verification in mcp_server.py."
+        },
+        {
+          "finding": "Data Subject Rights (DSR) procedure is referenced but not implemented; no code path exists to handle right to erasure on ChromaDB vectors or processed outputs, and manual deletion is error-prone.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md §Sold listings and §DSR records reference 'DSR procedure' and manual deletion, but no DSR handling code is present in mcp_server.py or other scripts; compliance/01-ropa.md does not specify DSR response procedures.",
+          "recommendation": "Implement a documented DSR handler (API endpoint or CLI tool) that atomically deletes/redacts data across all tiers (Tier 1, Tier 2, SQLite, ChromaDB, logs) with audit trail of deletion actions."
+        },
+        {
+          "finding": "Legitimate Interests Assessment (LIA) is flagged as a precondition ('⚠ Legal review required') in RoPA but is not present in the compliance pack, and no evidence of sign-off exists; processing under Article 6(1)(f) cannot legally proceed without it.",
+          "severity": "HIGH",
+          "evidence": "compliance/01-ropa.md §1.2 states: '> ⚠ *Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off by a qualified practitioner before this basis is placed into force.*' Document 03-lia.md is not provided; no sign-off evidence is attached.",
+          "recommendation": "Complete and obtain legal sign-off on the LIA document before any processing under Article 6(1)(f) begins; attach evidence of sign-off to the compliance pack."
+        },
+        {
+          "finding": "Buyer query matching (Processing Activity 2, RoPA §2) states 'query is not stored beyond the session (default)' but mcp_server.py logs all calls to mcp.log with query context, creating undisclosed retention in contradiction to the documented lawful basis.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md §2.4: 'Buyer query text: not retained beyond the session (default)'; scripts/mcp_server.py lines 38–40 call `_log_call(tool, **kwargs)` which logs query parameters to mcp.log; mcp.log is retained for 12 months per retention schedule §Audit logs.",
+          "recommendation": "Either exclude buyer query parameters from mcp.log (log only tool name, timestamp, result count, duration) or revise the lawful basis and RoPA to document 12-month query retention with corresponding privacy notice to buyers."
+        },
+        {
+          "finding": "Retention Schedule does not cover inference.jsonl or mcp.log retention in the detailed table, creating ambiguity about when these audit logs are actually deleted; the schedule only lists 'MCP audit logs' as 'logs/mcp.log' with 12-month retention but does not specify rotation or deletion enforcement.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md retention table: 'MCP audit logs | logs/mcp.log | 12 months | Log rotation; files older than 12 months deleted | Agency IT'; no implementation code enforces this rotation; inference_log.py creates logs/inference.jsonl with no retention period defined.",
+          "recommendation": "Implement automated log rotation in mcp_server.py and inference_log.py (e.g., using Python's `logging.handlers.RotatingFileHandler` or external tool like logrotate with verified deletion); document the rotation schedule in the implementation."
+        },
+        {
+          "finding": "Privacy notice to data subjects (buyers) is not documented; RoPA §2 describes buyer query matching but no corresponding Article 14 privacy information (or Article 13 if buyers are informed at point of query) is provided or mentioned.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md defines Processing Activity 2 (buyer query matching) with lawful basis Article 6(1)(b) but no privacy notice document or booth signage text is referenced; BRIEF.md and compliance pack contain no buyer-facing privacy disclosure.",
+          "recommendation": "Create a concise privacy notice for buyers explaining that their query text is processed against public listings, how long it is retained (or not), and their rights; display it at booth and in Claude Desktop MCP context."
+        }
+      ]
+    }
+  ],
+  "task_b": [
+    {
+      "rep": 1,
+      "duration_s": 18.73,
+      "tokens": {
+        "input_tokens": 9893,
+        "output_tokens": 1461,
+        "total_tokens": 11354,
+        "tokens_per_s": null
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "BRIEF documents CADA regulatory tailwind as a competitive moat component (§1, v3.7), but no code implements CADA compliance verification or compliance-level flagging for listings.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md §1: 'CADA adds a third component to the moat... CADA structural alignment' and 'Your data never leaves your hardware. There is nothing to certify.' — but db.py, mcp_server.py, and config.py contain no CADA-level metadata, no compliance-tier tagging, and no audit trail for regulatory alignment.",
+          "recommendation": "Add a `compliance_tier` column to the listings table and document CADA Level 4 alignment in property metadata returned by MCP tools."
+        },
+        {
+          "finding": "BRIEF §1.5 states that data richness is a commercial precondition and recommends a '30-minute CRM audit' for prospects, but no code implements a CRM audit tool or data-quality assessment.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md §1.5: 'Precondition P3 in §5 operationalises it: a 30-minute audit of any prospective alpha agency's CRM shape' — P3 is referenced but no corresponding code, tool, or endpoint in mcp_server.py or elsewhere provides this audit capability.",
+          "recommendation": "Create a `@mcp.tool()` called `audit_crm_readiness` that scores CRM data richness (listing history depth, comparable-sale density, neighbour-guide coverage) and returns a readiness report."
+        },
+        {
+          "finding": "BRIEF documents LIA (Legal Impact Assessment) as a gate before witnessing goes to production, but no code enforces this gate or checks LIA sign-off status before ingesting witness listings.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md status block: '⚠ remaining: LIA (doc 03) practitioner sign-off before witnessing goes to production' and BUILD_LOG.md: 'LIA practitioner sign-off (gate before witnessing production)' — but witness ingestion pipeline has no conditional logic checking for LIA approval.",
+          "recommendation": "Add a `lia_status` field to config or a witness-gate function that blocks ingestion of witness entries unless `lia_status == 'signed_off'`."
+        },
+        {
+          "finding": "BRIEF cites filesystem firewall as a core architectural moat (§1: 'filesystem firewall + proprietary witnessed corpus'), but db.py and mcp_server.py contain no access-control enforcement, audit logging, or data-egress prevention code.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md §1: 'The filesystem firewall (a hardware-enforced boundary that prevents data egress)' is described as structurally unreplicable, yet mcp_server.py's tool implementations have no rate-limiting, query-scope restrictions, or egress guards; db.py exports any SQL query result without filtering.",
+          "recommendation": "Implement query scope guards in mcp_server.py tools; add per-tool export quotas and audit logging for all data-access events to a tamper-evident log."
+        },
+        {
+          "finding": "BRIEF documents 70 active listings as of 2026-06-06, including 12 witnessed KDTeam listings, but db.py has no `collection_method` column definition in the schema comment or migration, despite BUILD_LOG citing it was added.",
+          "severity": "MEDIUM",
+          "evidence": "BUILD_LOG.md: 'did: added `collection_method` column to SQLite (ALTER TABLE migration for existing DBs)' and 'default for all existing corpus is `collection_method: scrape`' — but db.py's CREATE TABLE listings statement does not include a `collection_method` column definition.",
+          "recommendation": "Add `collection_method TEXT DEFAULT 'scrape'` to the CREATE TABLE listings statement in ensure_schema() to match the ALTER TABLE migration cited in BUILD_LOG."
+        },
+        {
+          "finding": "BRIEF §3 repudiates v2 Coach layer ('seller divorce timelines,' 'currency desperation' tags) as unrevivable, but no code removes or prevents these tags from being generated or stored in existing listings.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md §3: 'The v2 framing of the Coach layer... is repudiated and not revivable' — but db.py's Listing model and features array have no validation that blocks or warns on deprecated v2 tags; no migration removes them from the 70-listing corpus.",
+          "recommendation": "Add a deprecation check in the Listing model to reject or strip v2 tags; run a one-time migration to clean existing corpus entries."
+        },
+        {
+          "finding": "BRIEF documents DPA v1.0-template signed off 2026-06-06 with Annex A processing table and full governance (§11: Spain GDPR + LOPD-GDD + AEPD), but mcp_server.py does not log processing activities (query context, timestamps, user identity) required to populate RoPA.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md status block: 'DPA v1.0-template signed off 2026-06-06... Annex A processing table' and BUILD_LOG.md: 'full §11 (Spain governing law: GDPR + LOPD-GDD Ley Orgánica 3/2018, AEPD supervisory authority)' — but mcp_server.py only logs tool calls by name; there is no Records of Processing Activities data (data category, legal basis, retention, recipients).",
+          "recommendation": "Implement structured RoPA-compliant logging in mcp_server.py: record data category, processing context, legal basis reference, and timestamp for all tool calls; make logs available for AEPD audits."
+        }
+      ]
+    },
+    {
+      "rep": 2,
+      "duration_s": 14.55,
+      "tokens": {
+        "input_tokens": 9893,
+        "output_tokens": 1228,
+        "total_tokens": 11121,
+        "tokens_per_s": null
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "BRIEF claims 'filesystem firewall' as core moat component but no code implements hardware-level data egress prevention or validation.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md §1 (dual moat): 'filesystem firewall (a hardware-enforced boundary that prevents data egress — structurally unreplicable by cloud competitors)' vs. codebase: db.py, config.py, mcp_server.py have no filesystem ACLs, SecureEnclave binding, or egress interception logic",
+          "recommendation": "Either implement filesystem firewall enforcement (macOS SecureEnclave, SELinux rules) or reframe the moat claim to 'architectural design' rather than 'hardware-enforced boundary'."
+        },
+        {
+          "finding": "collection_method filter documented in BUILD_LOG as implemented but not present in mcp_server.py search_properties() signature.",
+          "severity": "HIGH",
+          "evidence": "BUILD_LOG.md (collection_method filter in MCP): 'added `collection_method` parameter to `search_properties`' vs. mcp_server.py line 79 search_properties() signature has no `collection_method` parameter, only query, max_price, min_bedrooms, property_type, location, source, limit",
+          "recommendation": "Add `collection_method: str = ''` parameter to search_properties() and implement ChromaDB $and filtering as described in BUILD_LOG."
+        },
+        {
+          "finding": "BRIEF claims CADA (Cloud and AI Development Act) 'regulatory tailwind' but cites June 3, 2026 proposed date with no evidence of passage or implementation status.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md §1.7: 'CADA — the Cloud and AI Development Act, proposed June 3, 2026' positions it as a market advantage, but no code reflects conditional logic for CADA compliance, and proposal date is future-relative to build log (June 6, 2026)",
+          "recommendation": "Either document CADA as aspirational/conditional or add compliance feature flags and conditional processing if CADA becomes law."
+        },
+        {
+          "finding": "LIA (Legal Impact Assessment) practitioner sign-off is documented as blocking production witnessing but no code implements conditional deployment gates.",
+          "severity": "MEDIUM",
+          "evidence": "BUILD_LOG.md: 'LIA requires practitioner sign-off before witnessing goes to production' and 'remaining open items...LIA practitioner sign-off — none blocking merge' vs. witness pipeline (mcp_server.py, db.py) has no conditional checks for LIA approval status or deployment environment gating",
+          "recommendation": "Add witness pipeline feature flag or environment variable to gate witnessing until LIA sign-off is recorded in compliance/ directory."
+        },
+        {
+          "finding": "BRIEF claims 'proprietary witnessed corpus' as moat but corpus collection uses QR codes with 6 unresolved unknown URLs and no fallback validation mechanism.",
+          "severity": "MEDIUM",
+          "evidence": "BUILD_LOG.md: 'faces detected: 1–7 per photo; all blurred before VLM submission' and '6 listings still have source_url: unknown — QR not detected; re-photograph or look up manually' vs. db.py has no URL validation, retry, or manual override mechanism for source_url",
+          "recommendation": "Implement source_url validation function and add manual override field to SQLite schema before claiming corpus integrity to customers."
+        },
+        {
+          "finding": "config.py uses environment variable fallback (CASASOL_DATA_DIR) with mutable default path, inconsistent with BRIEF claim of immutable data perimeter.",
+          "severity": "MEDIUM",
+          "evidence": "config.py line 8: `_data_dir = Path(os.environ[\"CASASOL_DATA_DIR\"]) if \"CASASOL_DATA_DIR\" in os.environ else PROJECT_ROOT / \"data\"` allows runtime path mutation vs. BRIEF §1: 'local-first hardware...inside its own data perimeter' requires fixed, validated paths",
+          "recommendation": "Pin data directory at install time or use secure config file (signed, validated) instead of environment variable fallback."
+        },
+        {
+          "finding": "DPA v1.0-template marked complete but no code implements automated Records of Processing Activities (RoPA) audit or versioning.",
+          "severity": "LOW",
+          "evidence": "BUILD_LOG.md: 'DPA v1.0-template...substantially complete; one ⚠ remaining: LIA...practitioner sign-off' and BRIEF cites 'RoPA + LIA drafts' but db.py, mcp_server.py have no logging of processing activities (who queried, when, what filters, retention)",
+          "recommendation": "Add JSONL audit log for all MCP tool calls (search_properties, get_property, market_summary) with user/timestamp/filters to support RoPA evidence collection."
+        }
+      ]
+    },
+    {
+      "rep": 3,
+      "duration_s": 15.88,
+      "tokens": {
+        "input_tokens": 9893,
+        "output_tokens": 1461,
+        "total_tokens": 11354,
+        "tokens_per_s": null
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "collection_method filter in MCP search_properties is documented in BUILD_LOG but parameter definition is incomplete in mcp_server.py (line 95+ cut off mid-signature)",
+          "severity": "HIGH",
+          "evidence": "BUILD_LOG.md: 'added `collection_method` parameter to `search_properties`; Claude Desktop returns 12 witnessed listings with badge' vs mcp_server.py line 95: function signature truncated, collection_method parameter declared but no handler code visible",
+          "recommendation": "Complete mcp_server.py search_properties implementation to show collection_method filtering logic and ChromaDB $and clause rewrite mentioned in BUILD_LOG"
+        },
+        {
+          "finding": "BRIEF claims 70 active listings (58 scraped + 12 witnessed) verified in SQLite + ChromaDB as of 2026-06-06, but db.py schema has no collection_method column despite BUILD_LOG documenting ALTER TABLE migration",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: '70 active listings (58 scraped — Drumelia 23, Idealista 31, KDTeam 5 — plus 12 witnessed KDTeam listings)' and BUILD_LOG: 'added `collection_method` column to SQLite (ALTER TABLE migration for existing DBs)' vs db.py: CREATE TABLE listings has no collection_method column, no ALTER TABLE in ensure_schema()",
+          "recommendation": "Add collection_method TEXT column to listings table schema and implement ALTER TABLE migration in ensure_schema() to backfill existing rows with 'scrape' default"
+        },
+        {
+          "finding": "LIA (Legal Impact Assessment) practitioner sign-off is documented as a gate before witnessing goes to production, but no LIA document exists in the codebase and no sign-off mechanism is implemented",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: 'LIA requires practitioner sign-off before witnessing goes to production' and BUILD_LOG: 'one ⚠ remaining: LIA (doc 03) practitioner sign-off before witnessing goes to production'; git log and compliance/ folder show DPA v1.0 exists but no compliance/03-lia.md",
+          "recommendation": "Create compliance/03-lia.md with Legal Impact Assessment template, define sign-off workflow (e.g., compliance state file with timestamp + practitioner signature), and gate witnessing pipeline on this checkpoint"
+        },
+        {
+          "finding": "CASASOL_DATA_DIR environment variable is optional (config.py uses fallback to PROJECT_ROOT/data), but BRIEF claims filesystem firewall is a core moat and no validation enforces immutable data directory paths or prevents path traversal",
+          "severity": "MEDIUM",
+          "evidence": "config.py line 6: `_data_dir = Path(os.environ[\"CASASOL_DATA_DIR\"]) if \"CASASOL_DATA_DIR\" in os.environ else PROJECT_ROOT / \"data\"` allows fallback; no Path validation; BRIEF: 'filesystem firewall + proprietary witnessed corpus' as dual moat",
+          "recommendation": "Require CASASOL_DATA_DIR as a mandatory environment variable with validation that path is absolute, read-only (after init), and does not contain symlinks; document this in README as security-critical"
+        },
+        {
+          "finding": "ChromaDB is used for semantic search but no versioning constraint is specified in code or dependencies; mcp_server.py imports chromadb without version pin and config.py has no schema version validation",
+          "severity": "MEDIUM",
+          "evidence": "mcp_server.py line 38: `import chromadb` with no version constraint; config.py defines CHROMA_DIR path but no version check; BUILD_LOG mentions '$and' clause rewrite but no migration path if ChromaDB API changes",
+          "recommendation": "Pin chromadb version in requirements.txt, add chromadb schema version check in ensure_schema() / get_chroma(), and document migration path for future ChromaDB upgrades"
+        },
+        {
+          "finding": "Model names in config.py use mutable identifiers (e.g., 'gemma4:e4b', 'gemma4:26b') without versioning; BRIEF documents model swap ADR-002 (qwen→gemma) but code has no mechanism to track or validate which model is deployed",
+          "severity": "MEDIUM",
+          "evidence": "config.py lines 23-24: `OLLAMA_MODEL_ROUTER = \"gemma4:e4b\"` and `OLLAMA_MODEL_ASSESSMENT = \"gemma4:26b\"` are unversioned tags; BRIEF: 'ADR-002 (Reducer swap qwen3.5:35b → gemma4:26b, 2026-05-29)' but no model version audit trail in code",
+          "recommendation": "Replace model names with immutable SHA256 digests or explicit version tags (e.g., 'gemma4:26b@sha256:abc...'), store model manifest in config with deployment date, and log model versions at startup"
+        },
+        {
+          "finding": "Witnessing pipeline processes photos with VLM and stores collection_method='witness' in metadata, but mcp_server.py search_properties does not sanitize or validate collection_method values before passing to ChromaDB $and clause, risking injection",
+          "severity": "MEDIUM",
+          "evidence": "BUILD_LOG: 'ChromaDB multi-condition `where` clause rewritten with `$and` — previous flat dict merge was a latent bug' vs mcp_server.py line 95+: collection_method parameter passed to query without visible validation; no allowlist of {'scrape', 'witness'} enforced",
+          "recommendation": "Validate collection_method parameter against explicit allowlist {'scrape', 'witness'} before constructing ChromaDB query; document this validation in code and in MCP tool docstring"
+        }
+      ]
+    },
+    {
+      "rep": 4,
+      "duration_s": 14.1,
+      "tokens": {
+        "input_tokens": 9893,
+        "output_tokens": 1220,
+        "total_tokens": 11113,
+        "tokens_per_s": null
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "collection_method parameter added to MCP search_properties signature but implementation incomplete—function definition cuts off at line 80 without showing filter logic.",
+          "severity": "HIGH",
+          "evidence": "scripts/mcp_server.py line 80: `collection_method: str = \"\"` is declared but function body is not shown; BUILD_LOG.md states 'search_properties(collection_method=\"witness\") works on both semantic and structured paths' but code proof is absent.",
+          "recommendation": "Complete mcp_server.py to show full search_properties() implementation with ChromaDB $and filtering logic for collection_method and verify it matches BUILD_LOG claims."
+        },
+        {
+          "finding": "Database schema in db.py lacks collection_method column despite BUILD_LOG claiming ALTER TABLE migration and current active use in MCP queries.",
+          "severity": "HIGH",
+          "evidence": "db.py lines 30–65: CREATE TABLE listings statement has no collection_method column; BUILD_LOG.md states 'added `collection_method` column to SQLite (ALTER TABLE migration for existing DBs)' but migration SQL is not in codebase.",
+          "recommendation": "Add collection_method column to listings table schema in db.py (either in CREATE TABLE or as explicit ALTER in ensure_schema) with default 'scrape' for backward compatibility."
+        },
+        {
+          "finding": "LIA (Listing Impact Assessment) practitioner sign-off is documented as a gate before witnessing production but no code path exists to enforce or track sign-off state.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md §1: 'LIA requires practitioner sign-off before witnessing goes to production'; BUILD_LOG.md states 'LIA practitioner sign-off (gate before witnessing production)' as open item; witness pipeline in code has no check for LIA approval state.",
+          "recommendation": "Implement a compliance gate: add lia_signed_off boolean column to a compliance or configuration table; modify witness ingestion pipeline to check this gate before processing witness photos."
+        },
+        {
+          "finding": "OLLAMA_MODEL_ASSESSMENT in config.py hardcodes gemma4:26b but no version pinning, which contradicts BRIEF claim of reproducible 'operating envelope' and Chronos reproducibility requirements.",
+          "severity": "MEDIUM",
+          "evidence": "config.py line 47: `OLLAMA_MODEL_ASSESSMENT = \"gemma4:26b\"` has no version or digest; BRIEF.md states 'operating envelope from Incident 003-Alpha' implying precise specification; ADR-002 in git log references model swap but no immutable model hash stored.",
+          "recommendation": "Pin model to immutable digest (e.g. 'gemma4:26b@sha256:abc123...') or store model hash in config with validation in mcp_server.py startup."
+        },
+        {
+          "finding": "No error handling or retry logic for external APIs (Catastro, SNCZI, Overpass) documented in code despite config defining timeouts and critical enrichment dependency.",
+          "severity": "MEDIUM",
+          "evidence": "config.py lines 50–53 define API endpoints and API_TIMEOUT_SECONDS=10 but no Python code shown implementing timeout-aware HTTP clients or retry backoff; assess_property merge referenced in git log but implementation not provided.",
+          "recommendation": "Implement resilient HTTP client in dedicated module with timeout enforcement, exponential backoff, and circuit breaker pattern for enrichment calls; document behavior in assess_property."
+        },
+        {
+          "finding": "CASASOL_DATA_DIR environment variable fallback in config.py allows mutable path to data directory; this undermines 'filesystem firewall' claim if path can be redirected at runtime.",
+          "severity": "MEDIUM",
+          "evidence": "config.py lines 7–8: `_data_dir = Path(os.environ[\"CASASOL_DATA_DIR\"]) if \"CASASOL_DATA_DIR\" in os.environ else PROJECT_ROOT / \"data\"` allows runtime path override with no validation or immutability constraint.",
+          "recommendation": "Remove environment variable override for production; hard-code data directory path relative to PROJECT_ROOT or validate CASASOL_DATA_DIR against a whitelist of approved paths to enforce data locality."
+        },
+        {
+          "finding": "Deduplication and price-event tracking tables exist but no documented workflow or code shown for triggering dedup_matches detection or price_events ingestion during scrape/ingest.",
+          "severity": "LOW",
+          "evidence": "db.py defines save_dedup_match() and save_price_event() functions but no caller visible in provided code; BUILD_LOG.md and git log mention 'merged assess-property' and price tracking but ingest workflow is not shown.",
+          "recommendation": "Document and show code for the ingest pipeline that populates price_events and dedup_groups; add logging to track when dedup detection is triggered during load_db.py runs."
+        }
+      ]
+    },
+    {
+      "rep": 5,
+      "duration_s": 16.03,
+      "tokens": {
+        "input_tokens": 9893,
+        "output_tokens": 1284,
+        "total_tokens": 11177,
+        "tokens_per_s": null
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "collection_method filter implemented in MCP but schema migration for existing databases is undocumented and may fail silently on production instances",
+          "severity": "HIGH",
+          "evidence": "BUILD_LOG.md: 'ALTER TABLE migration for existing DBs' noted but db.py ensure_schema() has no ALTER TABLE statement; only CREATE TABLE IF NOT EXISTS. Production DBs lacking collection_method column will crash or ignore the filter.",
+          "recommendation": "Add explicit ALTER TABLE migration in ensure_schema() with EXISTS check to add collection_method column to existing listings tables."
+        },
+        {
+          "finding": "BRIEF claims 70 active listings (58 scraped + 12 witnessed) but load_db.py output referenced as proof is not present in codebase — corpus count unverifiable from code",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: 'verified in SQLite + ChromaDB as of 2026-06-06 (load_db.py output: 70 loaded, 0 errors)' but load_db.py file is not provided; BUILD_LOG references purging 12 stale entries but final state is only documented in narrative, not in committed code artifact.",
+          "recommendation": "Commit load_db.py with output log or database snapshot showing 70 listings; add corpus_status MCP tool implementation that returns exact count and collection_method breakdown."
+        },
+        {
+          "finding": "ChromaDB query filter rewrite from flat dict to $and syntax documented as bug fix but no test coverage or regression prevention exists",
+          "severity": "HIGH",
+          "evidence": "BUILD_LOG.md: 'ChromaDB multi-condition where clause rewritten with $and — previous flat dict merge was a latent bug that would crash any query combining two or more filters' but mcp_server.py search_properties() tool has no test cases validating multi-filter queries work without crashing.",
+          "recommendation": "Add unit tests in tests/ for search_properties() with at least three multi-filter combinations (e.g., collection_method + property_type + location) to prevent regression."
+        },
+        {
+          "finding": "BRIEF claims filesystem firewall as architectural moat but no code implements data egress prevention or validates that data never leaves hardware",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md §1 (Dual Moat): 'filesystem firewall (a hardware-enforced boundary that prevents data egress)' and §1.7: 'CasaSol is the architecture agencies adopt — no cloud service' but config.py has OLLAMA_BASE_URL, CATASTRO_BASE_URL, SNCZI_WMS_URL, OVERPASS_URL all pointing to external services; no proof that listing data is never sent to these endpoints.",
+          "recommendation": "Add mandatory request sanitization layer that strips PII/structured property data from all outbound HTTP calls; document and test that only anonymized queries leave the system."
+        },
+        {
+          "finding": "LIA (Legal Impact Assessment) practitioner sign-off documented as blocking gate for witnessing production but no code path enforces this gate",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md: 'one ⚠ remaining: LIA (doc 03) practitioner sign-off before witnessing goes to production'; BUILD_LOG.md: 'LIA practitioner sign-off (gate before witnessing production)' but witness pipeline (not provided) has no feature flag, approval workflow, or runtime check that halts ingestion if LIA sign-off is missing.",
+          "recommendation": "Add environment variable CASASOL_LIA_SIGNED_BY with practitioner name; refuse to run witness_ingest.py if variable is unset or expired."
+        },
+        {
+          "finding": "BRIEF cites CADA regulatory tailwind as competitive moat but project code has zero detection or documentation of CADA compliance status",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md §1.7: 'CADA adds a third component to the moat... CasaSol is structurally outside the entire framework' but no config flag, compliance audit, or operational check exists to verify or assert CADA exemption status; agencies cannot demonstrate compliance.",
+          "recommendation": "Add compliance/cada_status.md documenting the three architectural claims (no cloud service, on-premise only, no US control) with corresponding code pointers; add CASASOL_CADA_EXEMPT environment assertion."
+        },
+        {
+          "finding": "OLLAMA_MODEL_ASSESSMENT hardcoded as 'gemma4:26b' in config.py but no versioning, pinning, or fallback mechanism exists if model is unavailable or upgraded",
+          "severity": "MEDIUM",
+          "evidence": "config.py: 'OLLAMA_MODEL_ASSESSMENT = \"gemma4:26b\"' with no semantic versioning, no hash pinning, no retry logic in mcp_server.py or inference code; if Ollama updates the model, silent incompatibility or degradation is possible.",
+          "recommendation": "Pin model to digest hash (e.g., 'gemma4:26b@sha256:abc123') and add health-check at startup that confirms model exists and reports version; implement graceful degradation if model is unavailable."
+        }
+      ]
+    }
+  ]
+}

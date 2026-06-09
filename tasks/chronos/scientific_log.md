@@ -1585,7 +1585,63 @@ Similarly, Haiku's 5/8 at N=3 could be consistently 5/8 or could be a 3–7/8 mo
 | H3 confirmed | no score overlap across 5 reps |
 | H3 falsified | gemma max ≥ Haiku min |
 
-*Status: Pre-registered 2026-06-09. Running.*
+### Results
+
+*Runs completed 2026-06-09. All reps complete before scoring began (blind).*
+
+Raw result files:
+- `exp_014_capability_variance/results/gemma4_26b_20260609T201133Z.json`
+- `exp_014_capability_variance/results/claude_haiku_4_5_20251001_20260609T202614Z.json`
+
+#### Gemma4:26b — all 5 reps
+
+| Rep | A1 | A3 | A4 | B2 | FP | Net |
+|-----|----|----|----|----|-----|-----|
+| 1 | 0 | +1 | 0 | 0 | −1 (DSR FP) | **0/8** |
+| 2 | 0 | 0 | 0 | 0 | −1 (DSR FP) | **−1/8** |
+| 3 | 0 | 0 | 0 | 0 | −1 (DSR FP) | **−1/8** |
+| 4 | 0 | 0 | 0 | 0 | −1 (DSR FP) | **−1/8** |
+| 5 | 0 | 0 | 0 | 0 | −1 (DSR FP) | **−1/8** |
+
+DSR false positive pattern: gemma claimed `compliance/05-dsr-procedure.md` does not exist in 4/5 reps (the file is 208 lines). Same systematic FP confirmed in Exp 009. One rep (1) found A3 (MCP auth gap) but still net 0/8 due to the DSR penalty.
+
+#### Claude Haiku 4.5 — all 5 reps
+
+| Rep | A1 | A3 | A4 | B2 | B1* | FP | Net |
+|-----|----|----|----|----|----|-----|-----|
+| 1 | +1 | 0 | +1 | 0 | 0 | −1 (DSR) | **1/8** |
+| 2 | +1 | 0 | +1 | 0 | 0 | −1 (DPA) | **1/8** |
+| 3 | +1 | +1 | +1 | +1 | 0 | 0 | **4/8** |
+| 4 | 0† | 0 | 0 | +1 | 0 | 0 | **1/8** |
+| 5 | +1 | 0 | +1 | +1 | 0 | −1 (DSR) | **2/8** |
+
+† Rep 4 Task A: JSON parse error — output truncated at 2048 token limit mid-object. Task A scored 0/5 for this rep; Task B completed normally.
+
+*B1 note: Reps 1, 3, 4 raised schema/migration findings ("collection_method column absent despite BUILD_LOG ALTER TABLE claim"). Under broad interpretation matching what the original Exp 012 scorer likely applied, these would score B1 (+1 each), yielding nets of 2/1/5/2/2. Under strict rubric interpretation (schema versioning explicitly for the 15-field Reducer output fields), B1 = 0 across all reps. Neither interpretation changes the hypothesis verdicts. Strict interpretation used above; broad interpretation is the alternate scoreline.*
+
+### Hypothesis verdicts
+
+| Hypothesis | Verdict | Evidence |
+|---|---|---|
+| H1: gemma 0/8 in ≥4/5 reps | **CONFIRMED (strong)** | gemma ≤0 in all 5 reps; goes negative in 4/5 reps due to systematic DSR FP. Never scores ≥1/8 net. |
+| H2: Haiku 4–6/8 every rep | **FALSIFIED** | Haiku scores 1/1/4/1/2. Four of five reps fall at or below the ≤2/8 falsification threshold. The 5/8 single-rep result from Exp 012 was at the high tail of an unstable distribution. |
+| H3: distributions do not overlap | **CONFIRMED** | gemma max = 0/8, Haiku min = 1/8. No overlap across 5 reps under any B1 interpretation. |
+
+### Conclusion
+
+H1 and H3 hold. The gemma zero result replicates at N=5 with zero contamination from sampling variance — it actually goes negative via systematic false positive. The gap between the two model classes is real and durable.
+
+H2 is falsified: Haiku is not stable at 4–6/8. Its distribution across 5 reps is 1–4/8 with high variance. The 5/8 result from Exp 012 (3 reps) was a lucky high sample. Three factors compress the Haiku mean below the Exp 012 reference:
+
+1. **False positive penalties** — DSR/DPA FP fired in 3/5 reps (−1 each), costing one guaranteed point per affected rep.
+2. **B3 blind spot** — concurrency risk (MCP server, no concurrency model for booth demo) found in 0/5 reps. In Exp 012 this was found by Sonnet/Opus but not consistently by Haiku (Haiku was already 2/3 on B3 in Exp 012 and 0/5 here — consistent with the Haiku/Sonnet complementary-blind-spots pattern from Exp 012).
+3. **Rep 4 token-limit truncation** — Task A parse error dropped that rep's A-task score to 0.
+
+A note on codebase anchor: the rubric anchor commit (`623c4c8`) is not in the current casasol repo (repo was rebased since Exp 012). All rubric items were verified present in the current codebase prior to scoring — the gaps are still open. The H2 falsification is not a codebase-drift artefact.
+
+**Pre-filter architecture validation (Exp 013 follow-on):** The Exp 013 conclusion proposed local audit + Haiku top-up at ~$0.02/audit. Exp 014 shows Haiku's expected contribution at that step is 1–4/8 (not 5/8), putting the realistic pre-filter catch rate lower than Exp 012 suggested. The architecture remains viable but the expected catch rate at the Haiku stage should be modelled as ~2/8 mean rather than 5/8.
+
+*Status: Complete (2026-06-09). H1 CONFIRMED, H2 FALSIFIED, H3 CONFIRMED. The zero/gap replicates; Haiku variance is higher than Exp 012 indicated.*
 
 ---
 
