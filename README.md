@@ -12,7 +12,7 @@ This repo accompanies the blog at [localfirstai.eu](https://localfirstai.eu) and
 |---|---|
 | Primary machine | Mac Mini M4 Pro (`miktam02`), 64 GB unified memory |
 | Secondary machine | MacBook Pro M5 Max — under benchmark (Exp 007) |
-| Primary model | `gemma4:26b` (MoE, 25.8B active params, Q4_K_M) |
+| Primary model | `gemma4:26b` (MoE A4B, 25.8B total params / ~4B active per forward pass, Q4_K_M) |
 | Router model | `gemma4:e4b` (fast routing layer) |
 | Runtime | Ollama 0.20.2 |
 | Orchestration | OpenClaw → Nestor (local AI agent) |

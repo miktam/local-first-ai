@@ -485,7 +485,7 @@ A secondary question follows from Exp 005: the Router/Reducer cascade was built 
 
 ### Experiment
 
-**Model:** `gemma4:26b` (Q4\_K\_M, MoE, ~25.8B active params) — identical to all prior Chronos benchmarks.
+**Model:** `gemma4:26b` (Q4\_K\_M, MoE A4B, 25.8B total params / ~4B active per forward pass) — identical to all prior Chronos benchmarks.
 
 **Runtime:** Ollama 0.20.2 on both machines. `OLLAMA_FLASH_ATTENTION=0` (per Incident 003-Alpha mitigation, applied uniformly). `think: false` throughout unless Phase D explicitly exercises thinking-mode Reducer (scoped below).
 
