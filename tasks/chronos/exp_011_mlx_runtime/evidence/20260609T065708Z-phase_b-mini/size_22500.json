@@ -1,0 +1,45 @@
+{
+  "experiment": "011",
+  "phase": "B",
+  "machine": "mini",
+  "runtime": "mlx",
+  "model_id": "mlx-community/gemma-4-26B-A4B-it-OptiQ-4bit",
+  "size_key": "22500",
+  "target_tokens": 22500,
+  "rep1_prefill_ms_per_tok": 1.961,
+  "rep1_prompt_tokens": 20001,
+  "mean_gen_tps": 32.7,
+  "cliff_triggered": false,
+  "reps": [
+    {
+      "rep": 1,
+      "prompt_tokens": 20001,
+      "prefill_ms_per_tok": 1.961,
+      "gen_tps": 43.02
+    },
+    {
+      "rep": 2,
+      "prompt_tokens": 20001,
+      "prefill_ms_per_tok": 2.661,
+      "gen_tps": 22.39
+    }
+  ],
+  "baselines": {
+    "exp008_FA0_fp16": {
+      "4k": 1.557,
+      "8k": 1.642,
+      "15k": 1.774,
+      "25k": 1.983,
+      "35k": 2.241,
+      "gen_35k": 26.69
+    },
+    "exp010_FA0_q8": {
+      "4k": 1.497,
+      "8k": 1.57,
+      "15k": 1.694,
+      "25k": 1.859,
+      "35k": 2.087,
+      "gen_35k": 27.9
+    }
+  }
+}

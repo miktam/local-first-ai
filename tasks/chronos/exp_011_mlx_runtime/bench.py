@@ -48,31 +48,18 @@ def load_fixture(target_tokens: int) -> str:
 
 def measure_one(model, tokenizer, prompt_text: str, max_tokens: int = NUM_PREDICT):
     """Return (prompt_tokens, prefill_ms_per_tok, gen_tps)."""
-    import mlx.core as mx
-    from mlx_lm.utils import generate_step
+    from mlx_lm import stream_generate
 
-    tokens = tokenizer.encode(prompt_text)
-    n_prompt = len(tokens)
-    prompt_mx = mx.array(tokens)
+    last = None
+    for response in stream_generate(model, tokenizer, prompt=prompt_text,
+                                    max_tokens=max_tokens):
+        last = response
 
-    first_token_t = None
-    out_tokens = []
-    t_start = time.perf_counter()
+    n_prompt      = last.prompt_tokens
+    prefill_ms    = 1000.0 / last.prompt_tps      # tps → ms/tok
+    gen_tps       = last.generation_tps
 
-    for token, _ in zip(generate_step(prompt_mx, model, temp=0.0), range(max_tokens)):
-        if first_token_t is None:
-            mx.eval(token)          # force sync for accurate prefill timing
-            first_token_t = time.perf_counter()
-        out_tokens.append(token)
-
-    t_end = time.perf_counter()
-
-    prefill_s = first_token_t - t_start
-    gen_s = t_end - first_token_t
-    prefill_ms_per_tok = (prefill_s * 1000) / n_prompt
-    gen_tps = len(out_tokens) / gen_s if gen_s > 0 else 0.0
-
-    return n_prompt, prefill_ms_per_tok, gen_tps
+    return n_prompt, prefill_ms, gen_tps
 
 
 def run(phase: str, machine: str, baseline_ms: float | None):

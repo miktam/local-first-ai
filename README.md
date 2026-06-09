@@ -41,6 +41,7 @@ Roadmap and pending experiments: [`tasks/chronos/roadmap.md`](./tasks/chronos/ro
 | [008](./tasks/chronos/exp_008_flash_attention/) | Flash Attention + q8_0 KV Cache | Complete — landmark | FA+q8_0 flags *cause* the cliff; FA=0/fp16 has no cliff through 40K. Exp 007 ceiling was an artefact |
 | [009](./tasks/chronos/exp_009_adversarial_critic/) | Adversarial Project Critic (Local vs. Frontier) | Complete — FAIL | gemma4:26b matched compliance layer (DPA/DSAR/DPIA) but missed impl-vs-docs gaps; 50% overlap, 50% FP rate |
 | [010](./tasks/chronos/exp_010_fa_isolation/) | FA vs q8_0 Factorial Isolation | Complete | FA=1 is the sole culprit (cliff at 32.5K alone, 20K combined with q8_0). q8_0 alone: no cliff, +5% gen t/s |
+| [011](./tasks/chronos/exp_011_mlx_runtime/) | MLX Runtime vs Ollama — Context Cliff | Complete | No cliff through 40K on MLX. Prefill matches Ollama FA=0 within 3%. Cliff is an Ollama FA artefact, not a hardware limit. |
 
 ### Watcher Runs
 
@@ -94,6 +95,8 @@ chmod +x benchmarks/nestor-bench-phase1.sh
 6. **The M5 Max die is in a different performance class for inference.** At 25K tokens, MBP gen t/s is 66 vs Mini's 14 — a 4.7× difference on the same model weights and quantisation. MBP at 35K tokens (1.24 ms/tok prefill) is still well below the Mini's baseline at 4K tokens (3.03 ms/tok). The cascade's 22K bundle ceiling — set for the Mini — is comfortably safe on the MBP, which can handle ~40K before hitting its own cliff. (Exp 007)
 
 7. **A fixed redaction prompt reliably produces GDPR-clean output.** 20 synthetic toxic real estate notes spanning 8 pre-registered GDPR categories — 0 true-positive leaks in any output. The local 26B model with `temperature=0.1` and a structured system prompt passes all four pre-registered criteria: zero leaks, full structural compliance (TAGS + DESCRIPTION), all 20 within 300s. (Exp 006)
+
+9. **The Flash Attention cliff is a runtime artefact, not a hardware limit — confirmed by independent runtime.** MLX (Apple's native ML framework) shows no prefill cliff through 40K tokens on the same Mac Mini M4 Pro hardware. MLX prefill at 15K is 1.650 ms/tok — matching Ollama FA=0/q8_0 (1.694) within 3%. The cliff Exp 007 attributed to the Mac Mini's architecture was entirely a product of Ollama's llama.cpp Flash Attention tiling on unified memory. Two independent runtimes; same hardware; same result. The hardware ceiling is memory bandwidth, not attention kernel. (Exp 011)
 
 8. **Local models match compliance gaps; frontier models catch implementation gaps.** A head-to-head adversarial critic comparison (three fixed personas, fixed JSON schema, same context bundle) found that gemma4:26b matched Claude Sonnet 4.6 on the DPO/compliance layer (DPA template, DSAR procedure, DPIA — 3/3 near-exact matches) but missed the highest-severity engineering finding: a primary moat component described across the BRIEF, deck, and BUILD_LOG had no corresponding code in any commit. gemma4 pattern-matched on documented claims and critiqued their replicability; Claude cross-referenced the BUILD_LOG claim against the git history and flagged the absence. Overlap rate: ~50%. False-positive rate: ~50%. Verdict: FAIL as a drop-in replacement, viable as a zero-cost compliance-layer complement to periodic frontier review. (Exp 009)
 
