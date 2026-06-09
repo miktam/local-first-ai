@@ -43,6 +43,7 @@ Roadmap and pending experiments: [`tasks/chronos/roadmap.md`](./tasks/chronos/ro
 | [010](./tasks/chronos/exp_010_fa_isolation/) | FA vs q8_0 Factorial Isolation | Complete | FA=1 is the sole culprit (cliff at 32.5K alone, 20K combined with q8_0). q8_0 alone: no cliff, +5% gen t/s |
 | [011](./tasks/chronos/exp_011_mlx_runtime/) | MLX Runtime vs Ollama — Context Cliff | Complete | No cliff through 40K on MLX. Prefill matches Ollama FA=0 within 3%. Cliff is an Ollama FA artefact, not a hardware limit. |
 | [012](./tasks/chronos/exp_012_cost_capability/) | Cost vs Capability: Where the Curve Breaks | Complete | gemma4:26b 0/8, Haiku/Sonnet/Opus all 5/8 net. The quality cliff is at the local/cloud boundary, not within cloud tiers. Haiku is cost-dominant; Haiku→Opus is 6.4× cost, 0 score gain. |
+| [013](./tasks/chronos/exp_013_local_audit_loop/) | Local Audit Loop: Can Scaffolding Move gemma4:26b Off Zero? | Pre-registered | Does task decomposition (extract-facts → extract-rules → bridge → verify) recover recall on the cross-document auditing task where gemma scored 0/8? Target: generic scaffolding moves score to ≥3/8 without rubric leakage. |
 
 ### Watcher Runs
 

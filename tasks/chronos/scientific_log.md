@@ -1368,3 +1368,126 @@ The practical recommendation for recurring compliance and engineering gap detect
 
 ---
 
+## Exp 013 — Local Audit Loop: Can Scaffolding Move gemma4:26b Off Zero?
+
+*Pre-registered: 2026-06-09. Subdirectory: `tasks/chronos/exp_013_local_audit_loop/`*
+
+### Motivation
+
+Exp 012 produced a clean result: gemma4:26b 0/8, every Claude tier 5/8. The obvious interpretation is "local models can't do cross-document compliance auditing." The less obvious but more useful question is: *why* 0/8 and *what kind* of zero is it?
+
+Two very different failures produce a zero score:
+
+- **Structural zero**: the model's weights don't contain the capability. No scaffold changes this. The gap is permanent.
+- **Architectural zero**: the model has the underlying capability but the single-shot prompt is asking it to do in one step what it can do in three. The gap is scaffolding-addressable.
+
+These have entirely different implications for the local-first thesis. A structural zero means local models are permanently excluded from this task class. An architectural zero means the right pipeline makes them useful — possibly not at frontier quality, but useful enough to handle the common cases locally and send edge cases to a cloud model as a top-up.
+
+The practical target is not parity with Haiku. It is: *does generic scaffolding move gemma4:26b from 0/8 to ≥3/8 without naming a single rubric item in the prompts?* A 3/8 local model handling the structured extraction layer, combined with a targeted cloud pass on unresolved items, changes the economics significantly — the per-audit cost drops from $0.09 (full Haiku run) toward $0.02 (Haiku top-up on the 40% the local model missed).
+
+### Research question
+
+Is gemma4:26b's 0/8 score a structural capability gap, or an architectural gap addressable through task decomposition? If architectural: how much of the gap closes with generic (non-rubric-specific) scaffolding?
+
+### The diagnosed failure mode from Exp 012
+
+Exp 012 established that the failure is **recall-shaped**: zero true positives generated across all three reps. This rules out:
+- Formatting problems (JSON schema was followed)
+- Speed or context problems (the bundle fit well within 32K)
+- Precision/false-positive problems (nothing to penalise if nothing is generated)
+
+The failure is specifically at generating candidate gaps that reference both a code observation and a policy rule simultaneously. The cross-document leap — "read RoPA §2.4 AND `inference_log.py` lines 42-43 AND notice the contradiction" — appears to fail as a single-shot task for a 26B local model. Each half of that leap may be within capability; the bridging in one context may not be.
+
+### Hypotheses
+
+**H1 (decomposition recovers recall):** Breaking the audit into three sequential single-purpose passes — extract code facts, extract policy rules, bridge them — will produce a non-zero candidate set from gemma4:26b. Falsified if Stage 2 (bridge) produces zero candidates even when Stage 1 produced non-empty facts and rules.
+
+**H2 (specificity is the verifier bottleneck):** If candidates are generated but score zero after verification, the failure will be specificity — candidates too generic to map to a rubric item (e.g. "the system lacks GDPR compliance" rather than "inference_log.py line 42 stores `input_text` while ropa.md §2.4 states no retention"). Falsified if the verifier rejects specific, evidence-grounded candidates.
+
+**H3 (scaffolding moves the score without rubric leakage):** Generic scaffolding alone — decomposition, absent/present checklists over property types, schema-constrained output, fresh-context verification — moves gemma4:26b from 0/8 to ≥3/8 on the same rubric used in Exp 012. Falsified if score after scaffolding remains ≤2/8. This is the operationally meaningful hypothesis.
+
+**Falsification criteria:**
+- H1 rejected if Stage 2 produces zero candidates on every run where Stage 1 was non-empty
+- H2 rejected if the verifier rejects candidates that contain file/line/article anchors
+- H3 rejected if net score after all generic interventions is ≤2/8
+
+### The instrument
+
+`exp_013_local_audit_loop.py` — stdlib + `requests`, no frameworks. The pipeline:
+
+**Stage 0 — budget + canary guard.** Estimates token use vs `num_ctx`, then embeds a UUID canary at the top of the context and asks the model to echo it. Ollama silently truncates the *oldest* tokens when context overflows — which is exactly the system prefix. If the canary fails, the run is aborted. This guard is non-negotiable: an experiment that audited a half-loaded context would produce meaningless results.
+
+**Stage 1 — decomposed extraction (fresh contexts).** Two independent passes, each in a clean context:
+- 1a: Extract atomic code facts — what the code *actually does*: what is logged, stored, authenticated, hashed, versioned, exposed, or absent
+- 1b: Extract atomic policy rules — what the policy *requires*: retention periods, DPIA thresholds, accountability obligations, access-control expectations, with article/section references
+
+The decomposition is the primary scaffolding intervention. Instead of one context holding both code and policy and asking the model to reason across them, each extraction sees only its own source material and has a single job.
+
+**Stage 2 — bridge.** Given the extracted facts and rules lists, find gaps: where does a code fact contradict or fail to satisfy a policy rule? Recall-biased — propose every plausible pair now; the verifier will prune. The model is not asked to recall which rule applies; the rule text is supplied.
+
+**Stage 3 — fresh-context verifier.** Each candidate gap is re-checked in an isolated context containing only the source bundle and that one claim. The model must quote the exact line that supports the claim or mark it `INVALID`. Not self-critique in a growing context — an external check.
+
+**Stage 4 — deterministic assembly.** Python sorts survivors by severity. No final LLM pass.
+
+**Auto-diagnosis.** After every run (or standalone via `--diagnose-trace`), the trace is read by a deterministic rule-based function — no model call — and labelled:
+
+| label | meaning | implied fix |
+|---|---|---|
+| `extraction_empty` | Stage 1 produced no facts or rules | switch to present/absent checklist; check canary (num_ctx truncation) |
+| `no_bridge` | facts+rules existed, Stage 2 connected nothing | make bridging a matching task over supplied rule text, not a recall task |
+| `vague_candidates` | candidates generated, all too generic, verifier killed them | require a concrete anchor per gap (file, line, article, identifier) |
+| `over_pruned` | specific candidates all rejected | verifier too strict; run calibration check before touching upstream |
+| `produced_output` | no structural zero | remaining gap is rubric mapping (manual) |
+
+The diagnosis is deterministic and reproducible from the trace alone. This is the point: after the first localization run, we know exactly which stage to target for the first intervention. We do not guess.
+
+### Intervention discipline
+
+Every change goes in `intervention_ledger.md` before the run it's tested in, classified on this spectrum:
+
+1. **generic-scaffolding** — structural help: decomposition, present/absent checklists over property types, article-matching over supplied rule text, output schemas, sampling/context settings. Fair. Publishable. The headline result is: *generic scaffolding moved gemma 0 → N without naming a single rubric item.*
+2. **fair-evidence** — adds a source file legitimately part of the system but missing from the context bundle (e.g. `scripts/witness_ingest.py` for item A2). Result must be reported as "with expanded context."
+3. **rubric-leakage** — any prompt, checklist item, or example that names or paraphrases a specific rubric answer (e.g. "check whether a model hash exists"). **Forbidden.** Voids the score; the number stops being interpretable.
+
+Rule of thumb: if removing the rubric from the room would make the change impossible to write, it's leakage.
+
+### What "useful" means
+
+The target is not matching Haiku. It is producing a result where a local model handles the mechanical extraction layer and a cloud model does targeted top-up work on the unresolved fraction. That architecture:
+
+- Keeps the full context bundle off the wire (privacy/sovereignty maintained for 80% of runs)
+- Reduces cloud cost from $0.09/audit to ~$0.02 (Haiku top-up on unresolved items only)
+- Is deployable in an agency's on-premises appliance without a permanent API dependency
+
+A score of 3/8 from the local model alone makes this architecture viable. That is the bar.
+
+### Data tables
+
+*To be filled after runs.*
+
+**Localization run (baseline, no interventions):**
+
+| Stage | Output | Diagnosis label | Evidence |
+|---|---|---|---|
+| Stage 1a (code facts) | | | |
+| Stage 1b (policy rules) | | | |
+| Stage 2 (candidates) | | | |
+| Stage 3 (verified) | | | |
+| Auto-diagnosis | | | |
+
+**Score progression by intervention:**
+
+| Run | Intervention | Class | Diagnosis before | Score (net) | Notes |
+|---|---|---|---|---|---|
+| 000 | baseline — localization only | generic-scaffolding | — | 0/8 (exp_012) | establishes drop-off point |
+| 001 | | | | | |
+| 002 | | | | | |
+
+### Conclusion
+
+*To be written after runs.*
+
+*Status: Pre-registered (2026-06-09). Instrument ready. rubric.md to be committed before first run.*
+
+---
+
