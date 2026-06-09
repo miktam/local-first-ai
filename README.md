@@ -42,6 +42,7 @@ Roadmap and pending experiments: [`tasks/chronos/roadmap.md`](./tasks/chronos/ro
 | [009](./tasks/chronos/exp_009_adversarial_critic/) | Adversarial Project Critic (Local vs. Frontier) | Complete — FAIL | gemma4:26b matched compliance layer (DPA/DSAR/DPIA) but missed impl-vs-docs gaps; 50% overlap, 50% FP rate |
 | [010](./tasks/chronos/exp_010_fa_isolation/) | FA vs q8_0 Factorial Isolation | Complete | FA=1 is the sole culprit (cliff at 32.5K alone, 20K combined with q8_0). q8_0 alone: no cliff, +5% gen t/s |
 | [011](./tasks/chronos/exp_011_mlx_runtime/) | MLX Runtime vs Ollama — Context Cliff | Complete | No cliff through 40K on MLX. Prefill matches Ollama FA=0 within 3%. Cliff is an Ollama FA artefact, not a hardware limit. |
+| [012](./tasks/chronos/exp_012_cost_capability/) | Cost vs Capability: Where the Curve Breaks | Pre-registered | Does quality scale with model cost? gemma4:26b vs Haiku/Sonnet/Opus on compliance extraction + impl gap detection. Fixed rubric, pre-scored ground truth. |
 
 ### Watcher Runs
 

@@ -1200,3 +1200,102 @@ Peak Phase B prefill: 2.518 ms/tok (37.5K). Threshold: 3.300 ms/tok. Margin: 24%
 
 ---
 
+## Exp 012 — Cost vs Capability: Where the Curve Breaks
+
+*Pre-registered: 2026-06-09. Subdirectory: `tasks/chronos/exp_012_cost_capability/`*
+
+### Motivation
+
+@Prathkum (79.7K views, Jun 8 2026): "We don't need a more powerful model right now. What we need to solve is the cost problem." @nix_eth replied: "I don't think intelligence, capabilities, and cost are all tied together."
+
+Both claims are unfalsifiable without a fixed task and a scoring rubric. Exp 009 produced one data point: gemma4:26b matched Claude Sonnet 4.6 on compliance gap detection (3/3 near-exact matches) but missed the highest-severity implementation gap (0/1). That is a specific capability threshold at a specific cost differential. This experiment extends that single comparison into a full cost-capability curve across four model tiers, using the same task setup from Exp 009 plus a second task designed to favour local models.
+
+### Research question
+
+At what capability threshold — and at what cost premium — does a frontier model outperform a local model on structured analytical tasks? Is the relationship linear, stepped, or does local match frontier within a specific capability envelope?
+
+### Confounds (pre-registered)
+
+1. **Task selection bias.** Tasks chosen here are structured and schema-constrained — a known strength of local models with a fixed prompt. Open-ended creative or multi-hop reasoning tasks might produce a different curve. Results apply only to the task types measured.
+2. **Prompt sensitivity.** Frontier models may be more sensitive to prompt phrasing differences. All models receive identical prompts to control for this, accepting that a prompt optimised for one model may disadvantage another.
+3. **Local model cost accounting.** gemma4:26b has zero marginal API cost but non-zero hardware and electricity cost. Hardware is treated as sunk cost (already purchased for CasaSol production use). Electricity is not measured. "Zero cost" means zero marginal API cost, not zero total cost of ownership.
+4. **Non-determinism.** Frontier models run at default temperature. gemma4:26b runs at temperature=0.1 (production config). 3 reps per model per task; majority verdict for pass/fail scoring.
+
+### Hypotheses
+
+**H1 (local ceiling):** gemma4:26b matches or exceeds frontier models on Task A (structured compliance extraction) — the task type where Exp 009 showed 3/3 overlap with Sonnet. Falsified if Haiku or Sonnet scores higher than gemma4 on Task A.
+
+**H2 (frontier premium):** At least one frontier model scores higher than gemma4:26b on Task B (cross-document implementation gap detection) — the task type where Exp 009 showed gemma4 missed the highest-severity finding. Falsified if gemma4 matches all frontier models on Task B.
+
+**H3 (cost curve is stepped, not linear):** The quality improvement from Haiku → Sonnet → Opus on Task B does not scale proportionally with cost. There exists at least one tier pair where the cost multiplier exceeds the quality gain multiplier. Falsified if quality scores increase at the same rate as cost across all tier pairs.
+
+**Falsification criteria:**
+- H1 rejected if gemma4:26b Task A score < max(Haiku, Sonnet, Opus) Task A score
+- H2 rejected if gemma4:26b Task B score = max(Haiku, Sonnet, Opus) Task B score
+- H3 rejected if (quality_gain / cost_multiplier) is within ±10% across all adjacent tier pairs
+
+### Tasks
+
+**Task A — Compliance extraction (structured, schema-constrained)**
+
+Reuse the Adversarial Critic context bundle from Exp 009: CasaSol BRIEF.md + BUILD_LOG.md + git log summary. Fixed system prompt: DPA Compliance Auditor persona, JSON output schema (gaps array with severity, category, finding, recommendation). Same prompt as Exp 009.
+
+Ground truth: pre-scored set of 5 compliance items with known correct classifications (established from Exp 009 results + manual verification before running).
+
+Scoring: 1 point per correct gap identification, 0 for missed or fabricated (false positive). Max score: 5. Scored before running any model.
+
+**Task B — Implementation gap detection (cross-document reasoning)**
+
+Reuse the Implementation Auditor persona from Exp 009: same context bundle, same JSON schema. Ground truth: the single high-severity gap confirmed in Exp 009 (primary moat component described in BRIEF/deck/BUILD_LOG with no corresponding code in any commit) + 2 additional pre-verified gaps identified via manual audit of the repo.
+
+Scoring: 1 point per confirmed gap found, −1 for confirmed false positive. Max score: 3. Scored before running any model.
+
+### Models and cost estimate
+
+| Model | API cost (input/output per M tok) | Est. tokens per run | Est. cost per run | Runs (3 reps × 2 tasks) | Est. total |
+|---|---|---|---|---|---|
+| gemma4:26b (local) | $0 marginal | ~5K / ~800 | $0 | 6 | $0 |
+| Claude Haiku 4.5 | $0.80 / $4 | ~5K / ~800 | ~$0.007 | 6 | ~$0.04 |
+| Claude Sonnet 4.6 | $3 / $15 | ~5K / ~800 | ~$0.027 | 6 | ~$0.16 |
+| Claude Opus 4.8 | $15 / $75 | ~5K / ~800 | ~$0.135 | 6 | ~$0.81 |
+
+Estimated total API spend: **~$1.01**. All frontier runs via Anthropic API.
+
+### Protocol
+
+1. Score ground truth for Task A and Task B before running any model. Commit scored rubric to `exp_012_cost_capability/rubric.md`.
+2. Run gemma4:26b via Ollama (FA=0, q8_0 — production config). 3 reps per task, 60s idle between reps.
+3. Run Haiku, Sonnet, Opus via Anthropic API. 3 reps per task per model. Default temperature.
+4. Score all outputs against the pre-committed rubric. Do not adjust rubric after seeing outputs.
+5. Compute: score per model per task, cost per correct answer, quality/cost ratio across tiers.
+
+### Data tables
+
+*To be filled after runs.*
+
+**Task A scores (compliance extraction, max 5):**
+
+| Model | Rep 1 | Rep 2 | Rep 3 | Majority score | Cost per run | Cost per correct answer |
+|---|---|---|---|---|---|---|
+| gemma4:26b | | | | | $0 | $0 |
+| Claude Haiku 4.5 | | | | | | |
+| Claude Sonnet 4.6 | | | | | | |
+| Claude Opus 4.8 | | | | | | |
+
+**Task B scores (impl gap detection, max 3, FP penalty −1):**
+
+| Model | Rep 1 | Rep 2 | Rep 3 | Majority score | Cost per run | Cost per correct answer |
+|---|---|---|---|---|---|---|
+| gemma4:26b | | | | | $0 | $0 |
+| Claude Haiku 4.5 | | | | | | |
+| Claude Sonnet 4.6 | | | | | | |
+| Claude Opus 4.8 | | | | | | |
+
+### Conclusion
+
+*To be written after runs.*
+
+*Status: Pre-registered (2026-06-09).*
+
+---
+
