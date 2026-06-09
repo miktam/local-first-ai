@@ -156,19 +156,21 @@ class OllamaClient:
             "options": options,
         }
         if schema is not None:
-            # Use basic JSON mode ("json" string) — universally supported by Ollama.
-            # Full schema objects in `format` are silently ignored by some model/version
-            # combinations; gemma4:26b via /api/chat ignores them and returns free text.
-            # Inject the schema into the last message instead so the model knows the
-            # exact structure expected. This keeps the constraint visible in the prompt
-            # without changing what the model is being asked to reason about.
-            body["format"] = "json"
+            # Do NOT use format:"json" — gemma4:26b on /api/chat returns empty content
+            # with that constraint active (confirmed in exp_013 run attempt 2026-06-09).
+            # Exp 012 never used the format constraint; it relied purely on system prompt
+            # instructions and the model followed them. Same approach here: inject the
+            # schema into the system message so the model knows the exact structure.
             messages = list(messages)  # shallow copy — don't mutate caller's list
-            messages[-1] = dict(messages[-1])
-            messages[-1]["content"] += (
-                "\n\nOutput ONLY valid JSON — no markdown, no explanation, no preamble."
-                f"\nExact schema required:\n{json.dumps(schema, indent=2)}"
+            schema_instruction = (
+                "Output ONLY valid JSON — no markdown fences, no explanation, no preamble.\n"
+                f"Required schema:\n{json.dumps(schema, indent=2)}"
             )
+            if messages and messages[0]["role"] == "system":
+                messages[0] = dict(messages[0])
+                messages[0]["content"] += f"\n\n{schema_instruction}"
+            else:
+                messages = [{"role": "system", "content": schema_instruction}] + messages
             body["messages"] = messages
 
         r = requests.post(
@@ -178,9 +180,13 @@ class OllamaClient:
         content = r.json()["message"]["content"]
         if schema is None:
             return content
-        # Strip accidental markdown fences before parsing.
+        # Strip accidental markdown fences, then try to extract the outermost JSON object.
         text = re.sub(r"^```(?:json)?\s*", "", content.strip())
         text = re.sub(r"\s*```$", "", text)
+        # If the model wrapped JSON in prose, pull out the first {...} block.
+        m = re.search(r"\{.*\}", text, re.DOTALL)
+        if m:
+            text = m.group(0)
         try:
             return json.loads(text)
         except json.JSONDecodeError as e:
