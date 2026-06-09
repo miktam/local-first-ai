@@ -1075,3 +1075,103 @@ Fixtures: shared from `exp_007_hardware_comparison/fixtures/padding/`
 
 ---
 
+## Experiment 011 — MLX Runtime vs Ollama: Does the Runtime Cause the Cliff?
+
+**Status: Pre-registered — 2026-06-09**
+
+*Subdirectory: `tasks/chronos/exp_011_mlx_runtime/`*
+
+### Motivation
+
+Exp 008 and Exp 010 proved that `OLLAMA_FLASH_ATTENTION=1` causes the prefill cliff on Apple Silicon. The open question: is the cliff a property of Ollama's implementation (llama.cpp + its FA flag), or would any runtime exhibit degradation at large context on this hardware? MLX is Apple's own ML framework, designed from the ground up for unified memory — no SRAM/HBM hierarchy assumption, different attention kernels. If MLX has no cliff, the cause is Ollama's FA implementation. If MLX also cliffs, the hardware architecture itself is the constraint.
+
+The GigaHiveDigital exchange (2026-06-09) confirmed that other local AI practitioners run gemma4:26b-mlx in production. This is a live comparison worth measuring.
+
+### Confounds (pre-registered)
+
+1. **Quantisation format:** Ollama runs GGUF Q4_K_M. MLX runs OptiQ 4-bit (`mlx-community/gemma-4-26B-A4B-it-OptiQ-4bit`). Different compression schemes; not a pure runtime isolation.
+2. **Active parameter count:** Ollama reports 25.8B parameters for gemma4:26b. The MLX model name includes "A4B" suggesting potentially 4B active parameters per forward pass (sparse MoE). If true, compute cost per token is lower in MLX — this would affect gen t/s comparisons. Prefill scaling behaviour (how ms/tok grows with context) remains informative regardless.
+3. **Tokeniser differences:** MLX uses the HuggingFace tokeniser; Ollama uses the GGUF-embedded tokeniser. Actual token counts for the same prompt text may differ slightly. Bench script reports actual token count from the MLX tokeniser.
+
+### Hypotheses
+
+**H1 (runtime advantage):** MLX prefill ms/tok at 15K tokens is ≤ Ollama FA=0/fp16 baseline (1.774 ms/tok). MLX's unified-memory-native kernels outperform llama.cpp on Apple Silicon.
+
+**H2 (no cliff):** MLX shows no prefill cliff through 40K tokens (prefill ms/tok stays below 2× the 15K baseline at all Phase B sizes).
+
+**H3 (gen t/s):** MLX gen t/s at 25K tokens is within ±25% of Ollama FA=0/fp16 (31.08 t/s). Wide tolerance given the active-parameter confound.
+
+**Falsification criteria:**
+- H1 rejected if MLX 15K prefill > 1.774 ms/tok
+- H2 rejected if any Phase B size exceeds 2× the MLX 15K baseline
+- H3 rejected if MLX 25K gen t/s is outside [23.3, 38.9] t/s
+
+### Experiment design
+
+**Model (Ollama):** `gemma4:26b` — FA=0, q8_0 (Exp 010 Condition C optimal config). Reference only; no new Ollama runs needed.
+
+**Model (MLX):** `mlx-community/gemma-4-26B-A4B-it-OptiQ-4bit` — default MLX settings.
+
+**Machine:** Mac Mini M4 Pro (miktam02), 64GB unified memory.
+
+**Phase A:** 5 context sizes — 4K, 8K, 15K, 25K, 35K. 3 reps per size. Fresh model load and 60s idle between sizes. Rep 1 prefill is authoritative (cold KV). Reps 2–3 measure gen t/s with warm KV.
+
+**Phase B:** 9 context sizes — 20K, 22.5K, 25K, 27.5K, 30K, 32.5K, 35K, 37.5K, 40K. 2 reps per size. Cliff detection: prefill > 2× the 15K baseline.
+
+**Metrics:** prefill ms/tok (rep 1), mean gen t/s (all reps), cliff triggered (bool).
+
+**Baselines for comparison:**
+
+| Condition | Source | 15K prefill ms/tok | 35K gen t/s |
+|---|---|---|---|
+| Ollama FA=0, fp16 | Exp 008 | 1.774 | 26.69 |
+| Ollama FA=0, q8_0 | Exp 010 Cond C | 1.694 | 27.90 |
+| MLX default | **Exp 011** | TBD | TBD |
+
+### Setup
+
+```bash
+# Download model (~14–16 GB)
+python3 -c "from mlx_lm import load; load('mlx-community/gemma-4-26B-A4B-it-OptiQ-4bit')"
+
+# Run Phase A
+python3 bench.py --phase A --machine mini
+
+# Run Phase B
+python3 bench.py --phase B --machine mini --baseline <15K_prefill_from_phase_a>
+```
+
+### Data
+
+*To be filled after runs.*
+
+**Phase A:**
+
+| Size | Tokens | Rep1 prefill ms/tok | Mean gen t/s | Ollama Cond C ref |
+|---|---|---|---|---|
+| 4K | | | | 42.05 |
+| 8K | | | | 44.07 |
+| 15K | | | | 38.41 |
+| 25K | | | | 32.35 |
+| 35K | | | | 27.90 |
+
+**Phase B:**
+
+| Size | Tokens | Rep1 prefill ms/tok | Cliff |
+|---|---|---|---|
+| 20K | | | |
+| 22.5K | | | |
+| 25K | | | |
+| 27.5K | | | |
+| 30K | | | |
+| 32.5K | | | |
+| 35K | | | |
+| 37.5K | | | |
+| 40K | | | |
+
+### Conclusion
+
+*To be written after runs.*
+
+---
+
