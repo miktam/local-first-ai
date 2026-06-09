@@ -1366,6 +1366,15 @@ The practical recommendation for recurring compliance and engineering gap detect
 
 *Status: Complete (2026-06-09). Evidence: `tasks/chronos/exp_012_cost_capability/results/`. Rubric committed before first run.*
 
+#### [Intelligence Feedback Loop: Exp 012-Alpha — Active-Parameter Framing Error]
+*Date: 2026-06-09*
+
+* **Error:** Exp 012 was pre-registered with gemma4:26b described as "25.8B active params." The model is MoE A4B: ~4B active parameters per forward pass, not 25.8B. The conclusion — "the decoupling breaks at the local/cloud boundary" — was derived under this wrong premise. Exp 012 measured one MoE model with ~4B active per forward pass; it did not test the dense 12–32B local class at all. The correct scope of the finding is: *the decoupling breaks at the 4B-active/frontier boundary.* The "local/cloud" framing is an artefact of model selection, not a confirmed property of local hardware as a category.
+
+* **Correction:** Model header corrected to "25.8B total params / ~4B active per forward pass" (committed 2026-06-09). Conclusion narrowed in README key finding #10 and the blog post. The sharper implication: if the bottleneck is active compute rather than total parameters, a dense 12–27B local model should outperform gemma4:26b on the audit rubric — an active-compute advantage, not a total-parameter advantage. This hypothesis is pre-registered as Exp 015 (active-parameter ablation). If confirmed, the model-selection principle becomes: MoE for transduction and recall stages (knowledge breadth); dense for adjudication stages (per-token reasoning depth).
+
+* **Status:** Exp 012 conclusions valid within narrowed scope (4B-active/frontier boundary, cross-document auditing task class). Exp 015 pre-registered as resolution experiment. README and blog post updated 2026-06-09.
+
 ---
 
 ## Exp 013 — Local Audit Loop: Can Scaffolding Move gemma4:26b Off Zero?
@@ -1534,6 +1543,47 @@ The recovery is real and reproducible: Items 3 (MCP auth) and 4 (inference log r
 **Operational implication:** 2/3 findable items at ~0 marginal cost (local inference, ~3–5 minutes per full run) enables on-premises pre-filter architecture: run the decomposed local audit, send only the bridge failures (items not found) to Haiku for cross-semantic coverage. Expected architecture: local (2/3 items) + Haiku top-up (remaining 1 item) = full coverage at ~$0.02/audit vs $0.09 full cloud run.
 
 *Status: Run 000 complete (2026-06-09). Score: 2/5. Context expansion runs (001-A2 with witness_ingest.py, 001-A5 with config.py) pending.*
+
+---
+
+## Exp 015 — Active-Parameter Ablation: Dense vs MoE on the Audit Rubric
+
+*Pre-registered: 2026-06-09. Subdirectory: `tasks/chronos/exp_015_active_param_ablation/`*
+
+### Motivation
+
+Exp 012 found gemma4:26b (MoE A4B, ~4B active per forward pass) scored 0/8 on cross-document auditing tasks. The result was initially interpreted as a "local/cloud boundary," but Exp 012-Alpha (framing correction) narrows the scope: Exp 012 tested one point in the local model space — a large-total-parameter MoE with small active compute per token.
+
+The open question: is the bottleneck *total parameters* (knowledge breadth — which MoE provides cheaply) or *active compute per token* (per-token reasoning depth — which dense models provide)? These are separable properties. Exp 009 and 012 are both consistent with the second reading: gemma4:26b matched the compliance knowledge layer (recall-shaped task, benefits from breadth) and failed the cross-document reasoning layer (computation-shaped task, benefits from depth).
+
+### Hypotheses
+
+**H1 (bottleneck is active compute):** A dense local model with ≥12B active parameters per forward pass scores ≥2/8 on the frozen Exp 012 audit rubric without scaffolding. Falsified if no tested dense model scores above 1/8.
+
+**H2 (model selection principle):** If H1 is confirmed, per-token active compute predicts audit rubric performance better than total parameter count. MoE models are suited for transduction and recall stages; dense models for adjudication stages. Falsified if MoE and dense models at matched active-parameter counts perform equivalently.
+
+### Experiment design
+
+1. Select candidate dense models runnable on 64GB unified memory at Q4: target range 12–32B active params (e.g. `qwen2.5:32b`, `mistral-small3.2`, or similar dense models available via Ollama). Confirm active-parameter count from model card and verify against observed decode throughput (bandwidth estimate cross-check per Exp 012-Alpha method).
+2. Run 3 reps per model on the frozen Exp 012 rubric (Task A + Task B, identical context bundles, identical scoring). Rubric committed before first run; do not re-score after seeing outputs.
+3. Score blind. Compare net scores against gemma4:26b baseline (0/8) and frontier baseline (Haiku 5/8).
+
+### Pass criteria
+
+| Criterion | Threshold |
+|---|---|
+| H1 confirmed | ≥1 dense model scores ≥2/8 net |
+| H1 strong | ≥1 dense model scores ≥4/8 net (within frontier range) |
+| H1 falsified | No tested dense model scores >1/8 |
+| H2 confirmed | MoE/dense scores separate cleanly across ≥2 dense models |
+
+### Implications
+
+If H1 is confirmed: the local/cloud curve is a continuous active-parameter curve, not a binary step function. Watcher pipeline and Nestor orchestration should route adjudication tasks to the densest available local model. The design principle becomes: MoE for transduction/recall stages, dense for adjudication stages.
+
+If H1 is falsified: the local/cloud step function is real at every tested local model class. The primary engineering lever shifts to cloud escalation with a provably tight redaction boundary (Exp 018).
+
+*Status: Pre-registered 2026-06-09. Awaiting Exp 013 context expansion runs and Exp 014 (variance floor) before scheduling. Dense model candidates to be confirmed.*
 
 ---
 
