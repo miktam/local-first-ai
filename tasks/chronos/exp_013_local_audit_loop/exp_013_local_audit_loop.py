@@ -97,7 +97,7 @@ class Config:
     model: str = "gemma4:26b"
     num_ctx: int = 32768          # set explicitly; see truncation guard below
     keep_alive: str = "10m"       # keep weights resident across the loop
-    num_predict: int = 2048       # output budget reserved out of num_ctx
+    num_predict: int = 4096       # output budget; 2048 truncated 16-rule policy extraction
     temp_extract: float = 0.3     # breadth for recall-oriented passes
     temp_check: float = 0.1       # gemma4:26b returns empty content at temp=0.0 with schema injection
     request_timeout: int = 600
@@ -120,6 +120,30 @@ class Tracer:
         rec = {"ts": round(time.time(), 3), "stage": stage, "event": event, "data": data}
         with self.path.open("a") as f:
             f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+
+def _schema_example(schema: dict) -> Any:
+    """Generate a concrete example value from a JSON Schema dict.
+
+    Used to give the model an instance template instead of the schema document
+    itself — gemma4:26b mirrors the schema structure rather than instantiating it
+    when we inject the raw schema, producing double-nested responses.
+    """
+    t = schema.get("type", "object")
+    if t == "object":
+        props = schema.get("properties", {})
+        return {k: _schema_example(v) for k, v in props.items()}
+    if t == "array":
+        return [_schema_example(schema["items"])]
+    if t == "boolean":
+        return True
+    if t == "string":
+        return "..."
+    if t == "integer":
+        return 0
+    if t == "number":
+        return 0.0
+    return "..."
 
 
 # --------------------------------------------------------------------------- #
@@ -157,15 +181,15 @@ class OllamaClient:
         }
         if schema is not None:
             # Do NOT use format:"json" — gemma4:26b on /api/chat returns empty content
-            # with that constraint active (confirmed in exp_013 run attempt 2026-06-09).
-            # Exp 012 never used the format constraint; it relied purely on system prompt
-            # instructions and the model followed them. Same approach here: inject the
-            # schema into the system message so the model knows the exact structure.
-            messages = list(messages)  # shallow copy — don't mutate caller's list
+            # with that constraint active. Use a concrete example template instead of
+            # injecting the raw JSON Schema object — the schema structure confuses the
+            # model into mirroring the schema document rather than an instance of it.
+            example = _schema_example(schema)
             schema_instruction = (
                 "Output ONLY valid JSON — no markdown fences, no explanation, no preamble.\n"
-                f"Required schema:\n{json.dumps(schema, indent=2)}"
+                f"Required output structure (fill in the values):\n{json.dumps(example, indent=2)}"
             )
+            messages = list(messages)  # shallow copy — don't mutate caller's list
             if messages and messages[0]["role"] == "system":
                 messages[0] = dict(messages[0])
                 messages[0]["content"] += f"\n\n{schema_instruction}"
@@ -173,28 +197,39 @@ class OllamaClient:
                 messages = [{"role": "system", "content": schema_instruction}] + messages
             body["messages"] = messages
 
-        r = requests.post(
-            f"{self.cfg.host}/api/chat", json=body, timeout=self.cfg.request_timeout
-        )
-        r.raise_for_status()
-        content = r.json()["message"]["content"]
+        def _do_request() -> str:
+            r = requests.post(
+                f"{self.cfg.host}/api/chat", json=body, timeout=self.cfg.request_timeout
+            )
+            r.raise_for_status()
+            return r.json()["message"]["content"]
+
+        content = _do_request()
         if schema is None:
             return content
         if not content or not content.strip():
             # Empty response — return a safe default rather than crashing the run.
-            # Callers check for the expected key and will treat missing/empty as failure.
             return {}
-        # Strip accidental markdown fences, then try to extract the outermost JSON object.
-        text = re.sub(r"^```(?:json)?\s*", "", content.strip())
-        text = re.sub(r"\s*```$", "", text)
-        # If the model wrapped JSON in prose, pull out the first {...} block.
-        m = re.search(r"\{.*\}", text, re.DOTALL)
-        if m:
-            text = m.group(0)
-        try:
+
+        def _parse(raw: str) -> Any:
+            text = re.sub(r"^```(?:json)?\s*", "", raw.strip())
+            text = re.sub(r"\s*```$", "", text)
+            m = re.search(r"\{.*\}", text, re.DOTALL)
+            if m:
+                text = m.group(0)
             return json.loads(text)
-        except json.JSONDecodeError as e:
-            raise RuntimeError(f"Schema response was not valid JSON: {content[:300]}") from e
+
+        try:
+            return _parse(content)
+        except json.JSONDecodeError:
+            # One retry — stochastic output can occasionally produce malformed JSON.
+            content = _do_request()
+            if not content or not content.strip():
+                return {}
+            try:
+                return _parse(content)
+            except json.JSONDecodeError as e:
+                raise RuntimeError(f"Schema response was not valid JSON after retry: {content[:300]}") from e
 
 
 # --------------------------------------------------------------------------- #

@@ -1,0 +1,70 @@
+{
+  "gaps": [
+    {
+      "id": "gap_mcp_auth_access_control",
+      "claim": "The MCP server lacks authentication, which may allow unauthorized access to data, potentially violating access control principles.",
+      "code_fact_ref": "mcp_server_auth_status",
+      "policy_rule_ref": "ACCESS_CONTROL_003",
+      "severity": "high",
+      "evidence": "Filesystem-level access control: the MCP server process has no read access to the private (Tier 1) layer",
+      "rank": 1
+    },
+    {
+      "id": "gap_mcp_audit_log_retention",
+      "claim": "The MCP server logs tool calls to logs/mcp.log, but there is no implementation fact confirming that these logs are retained for the required 12 months.",
+      "code_fact_ref": "mcp_server_logging",
+      "policy_rule_ref": "RETENTION_004",
+      "severity": "medium",
+      "evidence": "The source code for `mcp_server.py` shows the log path and basic logging configuration, but contains no logic for log rotation or deletion after 12 months.\n\n_log_path = Path(__file__).resolve().parent.parent / \"logs\" / \"mcp.log\"\nlogging.basicConfig(\n    filename=str(_log_path),\n    level=logging.INFO,\n    format=\"%(asctime)s  %(message)s\",\n    datefmt=\"%H:%M:%S\",\n)",
+      "rank": 2
+    },
+    {
+      "id": "gap_inference_log_retention",
+      "claim": "The inference log appends records to a file, but there is no implementation fact confirming that these logs are retained for the required 12 months.",
+      "code_fact_ref": "inference_log_storage",
+      "policy_rule_ref": "RETENTION_004",
+      "severity": "medium",
+      "evidence": "with path.open(\"a\", encoding=\"utf-8\") as f:\n        f.write(json.dumps(record, ensure_ascii=False) + \"\\n\")",
+      "rank": 3
+    }
+  ],
+  "coverage": {
+    "code_facts": 14,
+    "policy_rules": 18,
+    "candidates_generated": 3,
+    "candidates_verified": 3,
+    "verification_survival_rate": 1.0,
+    "attempted": [
+      {
+        "id": "gap_mcp_auth_access_control",
+        "claim": "The MCP server lacks authentication, which may allow unauthorized access to data, potentially violating access control principles.",
+        "supported": true
+      },
+      {
+        "id": "gap_mcp_audit_log_retention",
+        "claim": "The MCP server logs tool calls to logs/mcp.log, but there is no implementation fact confirming that these logs are retained for the required 12 months.",
+        "supported": true
+      },
+      {
+        "id": "gap_inference_log_retention",
+        "claim": "The inference log appends records to a file, but there is no implementation fact confirming that these logs are retained for the required 12 months.",
+        "supported": true
+      }
+    ]
+  },
+  "diagnosis": {
+    "label": "produced_output",
+    "confidence": "high",
+    "counts": {
+      "facts": 14,
+      "rules": 18,
+      "candidates": 3,
+      "verified": 3
+    },
+    "specificity_rate": 0.0,
+    "evidence": [
+      "candidates=3, verified=3: no structural zero."
+    ],
+    "suggested_fix": "No structural failure — the loop yields verified gaps. The remaining question is rubric mapping, which stays manual (specificity 0.00). If the score is still low, inspect whether verified gaps are concrete enough to match items."
+  }
+}
