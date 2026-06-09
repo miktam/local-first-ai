@@ -156,7 +156,20 @@ class OllamaClient:
             "options": options,
         }
         if schema is not None:
-            body["format"] = schema
+            # Use basic JSON mode ("json" string) — universally supported by Ollama.
+            # Full schema objects in `format` are silently ignored by some model/version
+            # combinations; gemma4:26b via /api/chat ignores them and returns free text.
+            # Inject the schema into the last message instead so the model knows the
+            # exact structure expected. This keeps the constraint visible in the prompt
+            # without changing what the model is being asked to reason about.
+            body["format"] = "json"
+            messages = list(messages)  # shallow copy — don't mutate caller's list
+            messages[-1] = dict(messages[-1])
+            messages[-1]["content"] += (
+                "\n\nOutput ONLY valid JSON — no markdown, no explanation, no preamble."
+                f"\nExact schema required:\n{json.dumps(schema, indent=2)}"
+            )
+            body["messages"] = messages
 
         r = requests.post(
             f"{self.cfg.host}/api/chat", json=body, timeout=self.cfg.request_timeout
@@ -165,8 +178,11 @@ class OllamaClient:
         content = r.json()["message"]["content"]
         if schema is None:
             return content
+        # Strip accidental markdown fences before parsing.
+        text = re.sub(r"^```(?:json)?\s*", "", content.strip())
+        text = re.sub(r"\s*```$", "", text)
         try:
-            return json.loads(content)
+            return json.loads(text)
         except json.JSONDecodeError as e:
             raise RuntimeError(f"Schema response was not valid JSON: {content[:300]}") from e
 

@@ -24,7 +24,8 @@ write, it's leakage.
 
 | id | date | stage targeted | change | class | diagnosis before | score before | score after | publishable | notes |
 |----|------|----------------|--------|-------|-------------------|--------------|-------------|-------------|-------|
-| 000 | YYYY-MM-DD | baseline | none — first localization run | generic-scaffolding | — | 0/8 (exp_012) | TBD | y | establishes the drop-off point before any intervention |
+| 000 | 2026-06-09 | baseline | none — first localization run | generic-scaffolding | — | 0/8 (exp_012) | TBD | y | establishes the drop-off point before any intervention |
+| 001 | 2026-06-09 | output format | `format: schema_object` → `format: "json"` + schema injected into last user message. gemma4:26b via /api/chat ignores the schema object in `format` and returns free text. Basic JSON mode + prompt-embedded schema is universally supported. | generic-scaffolding | n/a (pre-run fix) | n/a | n/a | y | no rubric content added; only output format constraint changed |
 | 001 | | stage1 | _example:_ open extraction → present/absent checklist over property types | generic-scaffolding | extraction_empty | | | | only if diagnosis says extraction_empty/vague |
 | 002 | | stage2 | _example:_ bridge becomes matching task over supplied article text | generic-scaffolding | no_bridge | | | | feed rule text, do not name which rule |
 | 003 | | stage3 | _example:_ loosen verifier after calibration check | generic-scaffolding | over_pruned | | | | run calibration first; record accept-rate on known-true items |
