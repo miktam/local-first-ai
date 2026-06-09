@@ -1463,31 +1463,46 @@ A score of 3/8 from the local model alone makes this architecture viable. That i
 
 ### Data tables
 
-*To be filled after runs.*
+**Localization run 000, rep 1 — 2026-06-09, baseline bundle:**
 
-**Localization run (baseline, no interventions):**
+| Stage | Output | Detail |
+|---|---|---|
+| Stage 0 (canary) | PASS | num_ctx=32768 active; canary UUID echoed |
+| Stage 1a (code facts) | 17 facts extracted | inference_log.py append behaviour, model label, MCP routes, query handling, etc. |
+| Stage 1b (policy rules) | 16 rules extracted | RULE-001 through RULE-016; RULE-008 (session retention), RULE-012 (log rotation) present |
+| Stage 2 (bridge candidates) | 2 candidates | Both retention-related; Item 1 session-logging violation NOT bridged despite RULE-008 being present |
+| Stage 3 (verified) | 1/2 survived | GAP-001 (MCP log rotation) rejected; GAP-002 (inference log absent from schedule) accepted |
+| Auto-diagnosis | **produced_output [high]** | Pipeline completed end-to-end; no structural zero |
 
-| Stage | Output | Diagnosis label | Evidence |
+**Rubric scoring, run 000 rep 1:**
+
+| Item | findable? | found? | notes |
 |---|---|---|---|
-| Stage 1a (code facts) | | | |
-| Stage 1b (policy rules) | | | |
-| Stage 2 (candidates) | | | |
-| Stage 3 (verified) | | | |
-| Auto-diagnosis | | | |
+| 1 | ✓ | ✗ | RULE-008 was extracted; bridge missed the inference_log.py → session-retention violation |
+| 2 | ✗ (needs witness_ingest.py) | ✗ | n/a |
+| 3 | ✓ | ✗ | No auth-related rule in policy docs; bridge had nothing to match against |
+| 4 | ✓ | ✓ | GAP-002: inference log absent from retention schedule — names file + schedule |
+| 5 | ✗ (needs config.py) | ✗ | n/a |
+
+Rep 1 score: **1/3 findable** (rubric items 1 and 3 missed; item 4 found). Rep 2 and 3 pending.
 
 **Score progression by intervention:**
 
 | Run | Intervention | Class | Diagnosis before | Score (net) | Notes |
 |---|---|---|---|---|---|
-| 000 | baseline — localization only | generic-scaffolding | — | 0/8 (exp_012) | establishes drop-off point |
-| 001 | | | | | |
-| 002 | | | | | |
+| 000 rep1 | baseline — localization only | generic-scaffolding | 0/8 (exp_012 flat-context) | 1/3 findable | Item 4 found; Items 1, 3 missed |
+| 000 rep2 | — pending — | | | | |
+| 000 rep3 | — pending — | | | | |
+
+**Key observation (run 000 rep 1):** The bridge failure for Item 1 is the primary gap. RULE-008 was correctly extracted from the policy ("Buyer query text must not be retained beyond the session unless a separate lawful basis and retention period are documented"). The code fact that `inference_log.py` persists input/output text to an append-only file was also extracted (17 facts). The bridge stage failed to connect the two. This is a scaffolding target — not a knowledge gap, but a bridging failure.
+
+Item 3 (MCP auth) has a structural gap: no policy rule in the bundle explicitly states "the MCP endpoint must require authentication." The policy says remote access is restricted to authorised staff (RULE-007), but the bridge cannot make a compliance claim without a specific rule to cite. Adding an auth rule to the policy is not a context expansion fix — it's a genuine gap in the policy itself.
 
 ### Conclusion
 
-*To be written after runs.*
+*To be written after rep 2 and 3 and scoring is complete.*
 
-*Status: Pre-registered (2026-06-09). Instrument ready. rubric.md to be committed before first run.*
+*Status: In progress. Run 000 rep 1 complete (2026-06-09). Reps 2–3 pending.*
 
 ---
 
