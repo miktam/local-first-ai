@@ -1,0 +1,47 @@
+{
+  "gaps": [
+    {
+      "id": "GAP-002",
+      "claim": "The inference log appends JSONL records to a file, but there is no evidence that these logs (which contain input/output strings) are subject to a retention or rotation policy.",
+      "code_fact_ref": "log_append_behavior",
+      "policy_rule_ref": "RULE-012",
+      "severity": "low",
+      "evidence": "The `inference_log.py` script writes records containing `input` and `output` text to `config.INFERENCE_LOG_PATH`. The `07-retention-schedule.md` defines retention periods for several data categories (e.g., 'MCP audit logs' at `logs/mcp.log'), but does not include the inference log or its path.",
+      "rank": 1
+    }
+  ],
+  "coverage": {
+    "code_facts": 17,
+    "policy_rules": 1,
+    "candidates_generated": 2,
+    "candidates_verified": 1,
+    "verification_survival_rate": 0.5,
+    "attempted": [
+      {
+        "id": "GAP-001",
+        "claim": "The MCP server logs tool calls and results, but there is no evidence that these logs are subject to a 12-month retention period or log rotation.",
+        "supported": false
+      },
+      {
+        "id": "GAP-002",
+        "claim": "The inference log appends JSONL records to a file, but there is no evidence that these logs (which contain input/output strings) are subject to a retention or rotation policy.",
+        "supported": true
+      }
+    ]
+  },
+  "diagnosis": {
+    "label": "produced_output",
+    "confidence": "high",
+    "counts": {
+      "facts": 17,
+      "rules": 1,
+      "candidates": 2,
+      "verified": 1
+    },
+    "specificity_rate": 0.5,
+    "evidence": [
+      "candidates=2, verified=1: no structural zero."
+    ],
+    "suggested_fix": "No structural failure — the loop yields verified gaps. The remaining question is rubric mapping, which stays manual (specificity 0.50). If the score is still low, inspect whether verified gaps are concrete enough to match items."
+  }
+}

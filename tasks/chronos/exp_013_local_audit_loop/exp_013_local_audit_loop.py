@@ -383,7 +383,10 @@ def verify_candidate(client: OllamaClient, gap: dict, source: str,
             f"SOURCE:\n```\n{source}\n```\n\nCLAIMED GAP:\n{json.dumps(gap, indent=2)}\n\n"
             "Is this gap directly supported by the source above?"},
     ]
-    verdict = client.chat(messages, schema=VERDICT_SCHEMA, temperature=0.0)
+    verdict = client.chat(messages, schema=VERDICT_SCHEMA)  # uses cfg.temp_check (0.1)
+    if not verdict or "supported" not in verdict:
+        # Empty response — treat as unsupported so the candidate is dropped, not the run.
+        verdict = {"supported": False, "evidence": "", "reasoning": "empty_response_from_model"}
     tracer.log("stage3", "verdict", {"gap_id": gap["id"], "supported": verdict["supported"],
                                      "claim": gap["claim"], "evidence": verdict["evidence"][:200]})
     return verdict
