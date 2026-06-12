@@ -1,6 +1,7 @@
 # Exp 016 — MBP Setup: MLX Inference Server
 
 Hardware target: MacBook Pro 14" M5 Max, 128 GB unified memory.  
+Username: `service-user` (home: `/Users/service-user/`)  
 This is a new machine — nothing pre-installed.
 
 ---
@@ -148,7 +149,7 @@ After Phase A selects the winning model, install a LaunchAgent so the MLX server
 starts automatically on login and restarts on crash. Replace `MODEL_ID` with the
 winner's mlx-community path.
 
-Create `~/Library/LaunchAgents/com.mlx.serve.plist`:
+Create `/Users/service-user/Library/LaunchAgents/com.mlx.serve.plist`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
