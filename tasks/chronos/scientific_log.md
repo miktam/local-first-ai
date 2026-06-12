@@ -1686,3 +1686,55 @@ If H1 is falsified: the local/cloud step function is real at every tested local 
 
 ---
 
+## Exp 016 — Two-Mac Orchestration: Model Selection and Tiered Pipeline
+
+*Pre-registered: 2026-06-12. Subdirectory: `tasks/chronos/exp_016_two_mac_orchestration/`*
+
+### Motivation
+
+Exp 007 measured `gemma4:26b` throughput on both machines (mini M4 Pro 64 GB; MBP M5 Max 128 GB).
+That experiment used one model on both machines. Exp 016 asks whether the MBP's 128 GB enables a
+qualitatively different model class — and whether that supports a two-tier local agent setup where
+the MBP runs a smart planning/review tier and the mini runs a cheap mechanical tier.
+
+Three phases: (A) model selection on MBP, (B) LAN routing overhead, (C) tiered pipeline end-to-end.
+
+### Hypotheses
+
+**H1:** At least one model runnable on 128 GB at Q4 sustains >20 tok/s generation and scores ≥3/5
+on the benchmark coding task. Falsified if no tested model meets both thresholds.
+
+**H2:** The winning MBP model scores subjectively higher than `gemma4:26b` on the mini on the same
+task. Falsified if delta ≤1/5.
+
+**H3 (tier viability gate):** H2 delta >1/5 AND LAN overhead <500 ms. If not, tiered design is
+not worthwhile at this scale.
+
+**H4 (LAN overhead):** Mini→MBP request adds <500 ms median TTFT overhead over home WiFi.
+
+**H5 (tier reduction):** Two-tier pipeline requires fewer human interventions than single-model
+baseline on the mini for the same task. Falsified if intervention count is equal or higher.
+
+### Benchmark task (frozen)
+
+> Add a `price_per_sqm` computed field to the CasaSol MCP server's `get_property` response.
+> `price_EUR / living_area_sqm`, rounded to nearest integer; `null` if either field is absent or zero.
+> Implement in `scripts/mcp_server.py` and add a regression test.
+
+### Design constraint (Phase C)
+
+Phase C pipeline must satisfy deterministic-glue invariants: smart model outputs a typed
+`plan.json` artifact (`{ steps: [{ id, role, instruction, context_budget_tokens }] }`); cheap
+receives one step object at a time; role routing is deterministic code. See
+`wiki/patterns/deterministic-glue-pipeline.md`.
+
+### Evidence paths
+
+- `exp_016_two_mac_orchestration/measurements/phase_a_summary.json` — model selection results
+- `exp_016_two_mac_orchestration/measurements/phase_b_lan_latency.json` — LAN overhead
+- `exp_016_two_mac_orchestration/measurements/phase_c_tiered_pipeline.json` — tiered pipeline
+
+*Status: Pre-registered 2026-06-12. Phase A pending — MBP Ollama install required first.*
+
+---
+
