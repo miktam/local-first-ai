@@ -11,7 +11,7 @@ Usage:
 
 Copy results to mini when done (printed again at end):
     scp ~/exp_016_measurements/*.json \\
-        miktam02@mini.local:/Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_016_two_mac_orchestration/measurements/
+        miktam02@miktam-mini.local:/Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_016_two_mac_orchestration/measurements/
 """
 
 import argparse
@@ -266,7 +266,7 @@ def main():
 
     scp_cmd = (
         f"scp {output_dir}/*.json "
-        f"miktam02@mini.local:{MINI_MEASUREMENTS_PATH}"
+        f"miktam02@miktam-mini.local:{MINI_MEASUREMENTS_PATH}"
     )
     print(f"\n{'═'*60}")
     print("  Phase A done. Copy results to mini:")
