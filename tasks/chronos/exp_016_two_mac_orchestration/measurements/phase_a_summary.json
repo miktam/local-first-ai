@@ -1,0 +1,48 @@
+{
+  "experiment": "016",
+  "phase": "A",
+  "machine": "mbp",
+  "models": [
+    {
+      "model_id": "mlx-community/gemma-4-26b-a4b-it-4bit",
+      "reps": [
+        {
+          "rep": 1,
+          "gen_tps": 118.011,
+          "prompt_tps": 394.796,
+          "gen_tokens": 2000,
+          "prompt_tokens": 82,
+          "peak_memory_gb": 14.745,
+          "wall_clock_s": 19.33,
+          "quality_score": 2,
+          "quality_notes": "correct reasoning and logic, implementation incomplete due to token budget consumed by thinking",
+          "timestamp": "20260612T173410Z"
+        },
+        {
+          "rep": 2,
+          "gen_tps": 118.383,
+          "prompt_tps": 403.785,
+          "gen_tokens": 2000,
+          "prompt_tokens": 82,
+          "peak_memory_gb": 14.744,
+          "wall_clock_s": 19.21,
+          "quality_score": 2,
+          "quality_notes": "",
+          "timestamp": "20260612T173628Z"
+        },
+        {
+          "rep": 3,
+          "gen_tps": 118.113,
+          "prompt_tps": 396.933,
+          "gen_tokens": 2000,
+          "prompt_tokens": 82,
+          "peak_memory_gb": 14.744,
+          "wall_clock_s": 19.22,
+          "quality_score": 2,
+          "quality_notes": "",
+          "timestamp": "20260612T173841Z"
+        }
+      ]
+    }
+  ]
+}
