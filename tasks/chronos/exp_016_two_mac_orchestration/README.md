@@ -1,7 +1,8 @@
 # Exp 016 — Two-Mac Orchestration: Model Selection and Tiered Pipeline
 
 *Pre-registered: 2026-06-12*  
-*Status: Pre-registered — Phase A pending*
+*Phase A: COMPLETE 2026-06-12 — Winner: Qwen3-Coder-Next-4bit (4.0/5, 100.6 tok/s)*  
+*Phase B: Blocked — mlx_lm.server hang unresolved*
 
 ---
 

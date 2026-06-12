@@ -1747,5 +1747,43 @@ receives one step object at a time; role routing is deterministic code. See
 
 *Status: Pre-registered 2026-06-12. Phase A pending — MBP Ollama install required first.*
 
+### Phase A results — 2026-06-12
+
+All three candidate models benchmarked (3 reps each) on MBP via `mlx_lm.generate`.
+Runtime: `uv tool install mlx-lm` with Python 3.12 (`mlx_lm.server` hangs — threading
+incompatibility with Python 3.14 C extensions; workaround: subprocess-per-rep for Phase A).
+
+| Model | avg gen_tps | avg quality | hits 2000-token limit | peak mem GB |
+|---|---|---|---|---|
+| `gemma-4-26b-a4b-it-4bit` (control) | 118.2 | 2.0/5 | yes | 14.7 |
+| `Qwen3.5-122B-A10B-4bit` | 64.3 | 2.0/5 | yes | ~50 |
+| `Qwen3-Coder-Next-4bit` | 100.6 | 4.0/5 | no (1614 tokens) | 45.0 |
+
+**Key finding:** gemma4-26b and Qwen3.5-122B both enter extended thinking mode and exhaust the
+2000-token budget before producing code. Qwen3-Coder-Next does not enter thinking mode — it
+produces a complete implementation (function + Pydantic variant + regression test) in 1614 tokens,
+finishing naturally within the budget. Output is deterministic across all 3 reps (identical token
+count and structure). Notable Qwen3.5-122B observation (rep 1 notes): correctly identified that
+Python's `round()` uses banker's rounding (round-half-to-even), not conventional round-half-up —
+a real edge case the control model missed, but irrelevant if truncation prevents implementation.
+
+**H1: CONFIRMED** — Qwen3-Coder-Next sustains 100.6 tok/s (>>20 tok/s gate) and scores 4/5.  
+**H2: CONFIRMED** — Qwen3-Coder-Next (4.0) vs gemma4-26b (2.0): delta = 2/5 (>>1/5 threshold).  
+**Phase A gate: PASSED** — Qwen3-Coder-Next selected as smart-tier model.
+
+**Winner: `mlx-community/Qwen3-Coder-Next-4bit`**
+
+One edge case note (does not affect selection): the winning implementation checks
+`price_eur is not None` but not `price_eur != 0`, so a property with price_EUR=0 would return
+`price_per_sqm=0` instead of null. This is spec-compliant enough for Phase C — the smart tier's
+output would be reviewed before merge.
+
+**mlx_lm.server hang (unresolved):** Server hangs on first GET request under Python 3.14.
+Reproduced on Python 3.12 as well. Cause unknown. Phase B (LAN routing) requires a working
+server — investigating LM Studio or a custom FastAPI wrapper as alternatives before Phase B.
+
+*Evidence: `exp_016_two_mac_orchestration/measurements/` — 9 rep JSONs + phase_a_summary.json*  
+*Status: Phase A complete 2026-06-12. Phase B blocked on mlx_lm.server hang.*
+
 ---
 

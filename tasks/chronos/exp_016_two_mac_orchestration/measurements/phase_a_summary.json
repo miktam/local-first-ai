@@ -43,6 +43,88 @@
           "timestamp": "20260612T173841Z"
         }
       ]
+    },
+    {
+      "model_id": "mlx-community/Qwen3.5-122B-A10B-4bit",
+      "reps": [
+        {
+          "rep": 1,
+          "gen_tps": 63.765,
+          "prompt_tps": 13.713,
+          "gen_tokens": 2000,
+          "prompt_tokens": 68,
+          "peak_memory_gb": 68.999,
+          "wall_clock_s": 45.46,
+          "quality_score": 2,
+          "quality_notes": "Qwen3.5 caught Python's banker's rounding issue \u2014 round() in Python 3 does round-half-to-even, not conventional round-half-up. It was about to recommend a fix before truncation. gemma4 didn't notice this. Slightly more thorough reasoning \u2014 worth a quality note even if same score.",
+          "timestamp": "20260612T174406Z"
+        },
+        {
+          "rep": 2,
+          "gen_tps": 64.684,
+          "prompt_tps": 20.289,
+          "gen_tokens": 2000,
+          "prompt_tokens": 68,
+          "peak_memory_gb": 69.0,
+          "wall_clock_s": 42.85,
+          "quality_score": 2,
+          "quality_notes": "",
+          "timestamp": "20260612T174618Z"
+        },
+        {
+          "rep": 3,
+          "gen_tps": 64.558,
+          "prompt_tps": 21.554,
+          "gen_tokens": 2000,
+          "prompt_tokens": 68,
+          "peak_memory_gb": 69.0,
+          "wall_clock_s": 42.33,
+          "quality_score": 2,
+          "quality_notes": "",
+          "timestamp": "20260612T174755Z"
+        }
+      ]
+    },
+    {
+      "model_id": "mlx-community/Qwen3-Coder-Next-4bit",
+      "reps": [
+        {
+          "rep": 1,
+          "gen_tps": 100.256,
+          "prompt_tps": 145.91,
+          "gen_tokens": 1614,
+          "prompt_tokens": 66,
+          "peak_memory_gb": 45.037,
+          "wall_clock_s": 2734.61,
+          "quality_score": 4,
+          "quality_notes": "One subtle bug to note: the implementation checks price_eur is not None but not price_eur != 0. The spec says return null if price_EUR is zero \u2014 that case slips through and returns round(0/area) = 0 instead of null. Gemma4's if price_eur and living_area ironically handles this correctly (0 is falsy).",
+          "timestamp": "20260612T175331Z"
+        },
+        {
+          "rep": 2,
+          "gen_tps": 101.042,
+          "prompt_tps": 192.278,
+          "gen_tokens": 1614,
+          "prompt_tokens": 66,
+          "peak_memory_gb": 45.037,
+          "wall_clock_s": 19.27,
+          "quality_score": 4,
+          "quality_notes": "consistent with rep 1; wall_clock_s=19.27 is actual inference (no download); same price_EUR=0 edge case missed",
+          "timestamp": "20260612T201300Z"
+        },
+        {
+          "rep": 3,
+          "gen_tps": 100.429,
+          "prompt_tps": 171.564,
+          "gen_tokens": 1614,
+          "prompt_tokens": 66,
+          "peak_memory_gb": 45.037,
+          "wall_clock_s": 19.15,
+          "quality_score": 4,
+          "quality_notes": "all 3 reps identical output; avg 100.6 tok/s; 19.2s real wall clock; reproducible",
+          "timestamp": "20260612T202429Z"
+        }
+      ]
     }
   ]
 }
