@@ -78,13 +78,21 @@ Rationale: Exp 011 ran MLX on the mini — no cliff through 40K tokens, 52 tok/s
 
 ### Candidate models
 
-Confirm at execution time against current mlx-community rankings. Target classes:
-- **70B dense** (e.g. `mlx-community/Qwen2.5-72B-Instruct-*` or equivalent — fits in 128 GB)
-- **Large MoE** (≥100B total params, e.g. a DeepSeek or Mixtral-class MoE in MLX format)
-- **Control:** `mlx-community/gemma-4-26B-A4B-it-OptiQ-4bit` on MBP — same model as Exp 011
-  mini run, confirms per-machine scaling without model variable
+| Priority | Model | Type | Est. memory | Notes |
+|---|---|---|---|---|
+| Control | `mlx-community/gemma-4-26b-a4b-it-4bit` | MoE (26B / 4B active) | ~13–15 GB | Same model as Exp 011 mini run; confirms per-machine scaling |
+| Primary | `mlx-community/Qwen3.5-122B-A10B-4bit` | MoE (122B / ~10B active) | ~50 GB | Best balanced smart tier candidate |
+| Coding specialist | `mlx-community/Qwen3-Coder-Next-4bit` | MoE (80B / 3B active) | ~40 GB | Purpose-built for coding; likely strongest on benchmark task |
+| Optional | `mlx-community/Llama-4-Scout-17B-16E-Instruct-4bit` | MoE (~109B / 17B active) | ~55–65 GB | Strong generalist; run if time allows |
+
+**Testing order:** control → Qwen3.5-122B → Qwen3-Coder-Next → Llama-4-Scout (optional).
 
 Pull models one at a time; do not load multiple into memory simultaneously.
+
+**Expected outcome:** H1 and H2 both likely to confirm — all candidates are MoE architectures
+with 10–17B active parameters per forward pass, substantially more than the control's 4B active.
+Qwen3-Coder-Next may score highest on the coding benchmark despite lower active params due to
+domain specialisation.
 
 ### Measurements (per model, per run — 3 reps)
 

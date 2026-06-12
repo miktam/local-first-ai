@@ -1715,6 +1715,17 @@ not worthwhile at this scale.
 **H5 (tier reduction):** Two-tier pipeline requires fewer human interventions than single-model
 baseline on the mini for the same task. Falsified if intervention count is equal or higher.
 
+### Candidate models (Phase A)
+
+| Priority | Model | Type | Est. memory |
+|---|---|---|---|
+| Control | `mlx-community/gemma-4-26b-a4b-it-4bit` | MoE 26B / 4B active | ~13–15 GB |
+| Primary | `mlx-community/Qwen3.5-122B-A10B-4bit` | MoE 122B / ~10B active | ~50 GB |
+| Coding specialist | `mlx-community/Qwen3-Coder-Next-4bit` | MoE 80B / 3B active | ~40 GB |
+| Optional | `mlx-community/Llama-4-Scout-17B-16E-Instruct-4bit` | MoE ~109B / 17B active | ~55–65 GB |
+
+Testing order: control → Qwen3.5-122B → Qwen3-Coder-Next → Llama-4-Scout (optional).
+
 ### Benchmark task (frozen)
 
 > Add a `price_per_sqm` computed field to the CasaSol MCP server's `get_property` response.
