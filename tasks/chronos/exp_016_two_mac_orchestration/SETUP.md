@@ -106,7 +106,7 @@ mlx_lm.server \
 # In another terminal — quick verification from MBP itself
 curl -s http://localhost:8080/v1/chat/completions \
   -H "Content-Type: application/json" \
-  -d '{"model":"ignored","messages":[{"role":"user","content":"Reply: OK"}],"max_tokens":5}' \
+  -d '{"model":"mlx-community/gemma-4-26b-a4b-it-4bit","messages":[{"role":"user","content":"Reply: OK"}],"max_tokens":5}' \
   | python3 -m json.tool
 ```
 
@@ -115,7 +115,7 @@ curl -s http://localhost:8080/v1/chat/completions \
 ```bash
 curl -s http://mbp.local:8080/v1/chat/completions \
   -H "Content-Type: application/json" \
-  -d '{"model":"ignored","messages":[{"role":"user","content":"Reply: OK"}],"max_tokens":5}' \
+  -d '{"model":"mlx-community/gemma-4-26b-a4b-it-4bit","messages":[{"role":"user","content":"Reply: OK"}],"max_tokens":5}' \
   | python3 -m json.tool
 ```
 
