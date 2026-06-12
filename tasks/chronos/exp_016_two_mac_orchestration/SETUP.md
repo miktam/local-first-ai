@@ -69,8 +69,8 @@ Or use the HuggingFace CLI (faster with progress bars):
 
 ```bash
 uv tool install "huggingface_hub[cli]"
-huggingface-cli download mlx-community/gemma-4-26b-a4b-it-4bit
-huggingface-cli download mlx-community/Qwen3.5-122B-A10B-4bit
+hf download mlx-community/gemma-4-26b-a4b-it-4bit
+hf download mlx-community/Qwen3.5-122B-A10B-4bit
 # etc.
 ```
 
