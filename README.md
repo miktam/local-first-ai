@@ -11,7 +11,7 @@ This repo accompanies the blog at [localfirstai.eu](https://localfirstai.eu) and
 | Component | Value |
 |---|---|
 | Primary machine | Mac Mini M4 Pro (`miktam02`), 64 GB unified memory |
-| Secondary machine | MacBook Pro M5 Max — under benchmark (Exp 007) |
+| Secondary machine | MacBook Pro M5 Max (`miktam-mbp`) — smart inference tier (Exp 016) |
 | Primary model | `gemma4:26b` (MoE A4B, 25.8B total params / ~4B active per forward pass, Q4_K_M) |
 | Router model | `gemma4:e4b` (fast routing layer) |
 | Runtime | Ollama 0.20.2 |
@@ -45,6 +45,9 @@ Roadmap and pending experiments: [`tasks/chronos/roadmap.md`](./tasks/chronos/ro
 | [012](./tasks/chronos/exp_012_cost_capability/) | Cost vs Capability: Where the Curve Breaks | Complete ⚠ see Exp 012-Alpha | gemma4:26b (MoE A4B, ~4B active) 0/8, Haiku/Sonnet/Opus all 5/8 net. Cliff confirmed at the 4B-active/frontier boundary; dense local 12–32B class untested (→ Exp 015). Haiku is cost-dominant; Haiku→Opus is 6.4× cost, 0 score gain. |
 | [013](./tasks/chronos/exp_013_local_audit_loop/) | Local Audit Loop: Can Scaffolding Move gemma4:26b Off Zero? | Complete | H confirmed (partial): decomposition recovered 2/3 findable items (Items 3+4 stable, Item 1 systematic bridge failure). Raw 2/5; context expansion deferred as out of scope for H3. Pre-filter architecture: local audit + Haiku top-up = ~$0.02/audit. |
 | [014](./tasks/chronos/exp_014_capability_variance/) | Capability Variance Floor | Complete | H1 CONFIRMED: gemma ≤0/8 all 5 reps (goes negative via systematic DSR FP). H3 CONFIRMED: no overlap (gemma max 0, Haiku min 1). H2 FALSIFIED: Haiku scores 1/1/4/1/2 — not stable at 4–6/8; the 5/8 Exp 012 result was a high-tail sample. Haiku mean ~2/8 across reps; variance driven by DSR/DPA FP penalties and B3 blind spot. |
+| [016](./tasks/chronos/exp_016_two_mac_orchestration/) | Two-Mac Orchestration | Phase B in progress | Phase A: Qwen3-Coder-Next-4bit selected (4.0/5, 100.6 tok/s). Phase B: LAN path mini→MBP confirmed (miktam-mbp.local:8080). TTFT benchmark pending. |
+| [017](./tasks/chronos/exp_017_argos_phase0/) | Argos Phase 0 — Feed Reconnaissance | Pre-registered | DGT NAP (DATEX II) + OpenChargeMap recon, Málaga–Gibraltar EV corridor. 24h cadence measurement required before Phase 1. |
+| [018](./tasks/chronos/exp_018_sovereignty_resilience/) | Sovereignty Resilience | Pre-registered | Three failure modes: Ollama down, weights removed, network cut. Teased in "We Didn't Notice" (2026-06-13). Execution post-OLÉ. |
 
 ### Watcher Runs
 
@@ -64,7 +67,7 @@ Production runs of the Adversarial Watcher — a staged local LLM pipeline that 
 
 ## Benchmarks
 
-Early benchmarks that preceded the Chronos framework. Results in `benchmarks/results/`.
+Early benchmarks that preceded the Chronos framework. Scripts and results in [`tasks/chronos/experiments/`](./tasks/chronos/experiments/).
 
 | Script | What it measures |
 |---|---|
@@ -76,9 +79,9 @@ Early benchmarks that preceded the Chronos framework. Results in `benchmarks/res
 
 ```bash
 ollama pull gemma4:26b
-chmod +x benchmarks/nestor-bench-phase1.sh
-./benchmarks/nestor-bench-phase1.sh
-# Results written to benchmarks/results/
+chmod +x tasks/chronos/experiments/nestor-bench-phase1.sh
+./tasks/chronos/experiments/nestor-bench-phase1.sh
+# Results written to tasks/chronos/experiments/results/
 ```
 
 ---
@@ -99,9 +102,9 @@ chmod +x benchmarks/nestor-bench-phase1.sh
 
 7. **A fixed redaction prompt reliably produces GDPR-clean output.** 20 synthetic toxic real estate notes spanning 8 pre-registered GDPR categories — 0 true-positive leaks in any output. The local 26B model with `temperature=0.1` and a structured system prompt passes all four pre-registered criteria: zero leaks, full structural compliance (TAGS + DESCRIPTION), all 20 within 300s. (Exp 006)
 
-9. **The Flash Attention cliff is a runtime artefact, not a hardware limit — confirmed by independent runtime.** MLX (Apple's native ML framework) shows no prefill cliff through 40K tokens on the same Mac Mini M4 Pro hardware. MLX prefill at 15K is 1.650 ms/tok — matching Ollama FA=0/q8_0 (1.694) within 3%. The cliff Exp 007 attributed to the Mac Mini's architecture was entirely a product of Ollama's llama.cpp Flash Attention tiling on unified memory. Two independent runtimes; same hardware; same result. The hardware ceiling is memory bandwidth, not attention kernel. (Exp 011)
+8. **The Flash Attention cliff is a runtime artefact, not a hardware limit — confirmed by independent runtime.** MLX (Apple's native ML framework) shows no prefill cliff through 40K tokens on the same Mac Mini M4 Pro hardware. MLX prefill at 15K is 1.650 ms/tok — matching Ollama FA=0/q8_0 (1.694) within 3%. The cliff Exp 007 attributed to the Mac Mini's architecture was entirely a product of Ollama's llama.cpp Flash Attention tiling on unified memory. Two independent runtimes; same hardware; same result. The hardware ceiling is memory bandwidth, not attention kernel. (Exp 011)
 
-8. **Local models match compliance gaps; frontier models catch implementation gaps.** A head-to-head adversarial critic comparison (three fixed personas, fixed JSON schema, same context bundle) found that gemma4:26b matched Claude Sonnet 4.6 on the DPO/compliance layer (DPA template, DSAR procedure, DPIA — 3/3 near-exact matches) but missed the highest-severity engineering finding: a primary moat component described across the BRIEF, deck, and BUILD_LOG had no corresponding code in any commit. gemma4 pattern-matched on documented claims and critiqued their replicability; Claude cross-referenced the BUILD_LOG claim against the git history and flagged the absence. Overlap rate: ~50%. False-positive rate: ~50%. Verdict: FAIL as a drop-in replacement, viable as a zero-cost compliance-layer complement to periodic frontier review. (Exp 009)
+9. **Local models match compliance gaps; frontier models catch implementation gaps.** A head-to-head adversarial critic comparison (three fixed personas, fixed JSON schema, same context bundle) found that gemma4:26b matched Claude Sonnet 4.6 on the DPO/compliance layer (DPA template, DSAR procedure, DPIA — 3/3 near-exact matches) but missed the highest-severity engineering finding: a primary moat component described across the BRIEF, deck, and BUILD_LOG had no corresponding code in any commit. gemma4 pattern-matched on documented claims and critiqued their replicability; Claude cross-referenced the BUILD_LOG claim against the git history and flagged the absence. Overlap rate: ~50%. False-positive rate: ~50%. Verdict: FAIL as a drop-in replacement, viable as a zero-cost compliance-layer complement to periodic frontier review. (Exp 009)
 
 10. **The cost-capability curve has one step — confirmed at the 4B-active/frontier boundary; dense local models untested.** ⚠ *Scope correction (Exp 012-Alpha, 2026-06-09): gemma4:26b is MoE A4B (~4B active parameters per forward pass, not 25.8B). Exp 012 tested one local model class; whether the step holds for dense 12–32B local models is open and pre-registered as Exp 015.* A four-model sweep (gemma4:26b, Haiku, Sonnet, Opus) on a pre-scored 8-point rubric across two task types (DPO compliance extraction + engineering gap detection) produced: gemma4:26b 0/8, all three frontier models 5/8 net. Haiku→Sonnet (3.1× cost) and Haiku→Opus (6.4× cost) each yield zero additional rubric points. For structured analytical extraction on bounded context (~10K tokens), Haiku is cost-dominant. Qualitative differences exist within the same net score: Haiku and Sonnet have complementary blind spots (Haiku misses concurrency risk; Sonnet misses auth gap). Opus has the highest gross score (6/8) but the highest false positive rate. Two items — a missing DPIA for VLM processing and the Art. 22 model-version accountability gap — evaded all four models. (Exp 012; scope corrected 2026-06-09 — see Exp 012-Alpha in scientific_log.md)
 
@@ -113,13 +116,15 @@ Published at [localfirstai.eu](https://localfirstai.eu):
 
 **Technical — benchmarks, experiments, architecture**
 
+- [We Didn't Notice](https://localfirstai.eu/posts/2026-06-13-we-didnt-notice/) — The US government suspended the world's best AI model overnight for all foreign nationals. CasaSol was unaffected. Exp 018 pre-registered.
+- [The Cost-Capability Curve Has One Step](https://localfirstai.eu/posts/2026-06-09-cost-capability-curve/) — A four-model sweep at the 4B-active/frontier boundary. One step, not a ramp. Haiku is cost-dominant; Haiku→Opus is 6.4× cost, 0 score gain.
 - [Same Hardware. Different Runtime. Same Result.](https://localfirstai.eu/posts/2026-06-09-mlx-vs-ollama-runtime/) — Exp 011: MLX and Ollama FA=0 on the same Mac Mini M4 Pro. Neither cliffs through 40K tokens. Prefill within 3%. The FA cliff was an Ollama/llama.cpp artefact, confirmed by an independent runtime.
 - [The Cliff That Wasn't](https://localfirstai.eu/posts/2026-06-07-the-cliff-that-wasnt/) — The 20K prefill cliff that shaped six months of cascade architecture was `OLLAMA_FLASH_ATTENTION=1`. Removing it tripled the Mac Mini's operational ceiling to >40K tokens. Full 2×2 factorial: FA=1 is the sole culprit, q8_0 alone is benign.
 - [The Adversarial Watcher: When a Local Model Audits Its Own Project](https://localfirstai.eu/posts/2026-06-06-adversarial-watcher/) — A staged 5-step pipeline that catches documentation drift before every merge. First production run: 5 confirmed gaps, 3 false positives, anatomy of each.
 - [We Tried to Replace Claude with a Local Critic. Here's Exactly Where It Failed.](https://localfirstai.eu/posts/2026-06-06-adversarial-critic/) — Exp 009: head-to-head adversarial review. gemma4:26b matches the compliance layer; only the frontier model caught the impl-vs-docs gap.
 - [The Silicon Wager: M4 Pro vs M5 Max](https://localfirstai.eu/posts/2026-05-29-silicon-wager/) — Exp 007: every Chronos envelope was measured on one machine. A second arrived. The difference is not incremental.
 - [The GDPR Canary for Real Estate: 8 Data Categories, 0 Leaks](https://localfirstai.eu/posts/2026-05-09-redactor-fidelity/) — Exp 006: pre-registered fidelity sweep over 20 synthetic toxic notes. Zero true leaks. The claim becomes evidence.
-- [The Memory Bandwidth Cliff](https://localfirstai.eu/posts/incident_003_alpha_post/) — Incident 003-Alpha: why local AI is bound by the bus, not the GPU.
+- [The Memory Bandwidth Cliff](https://localfirstai.eu/posts/2026-04-28-incident_003_alpha_post/) — Incident 003-Alpha: why local AI is bound by the bus, not the GPU.
 - [The Architecture of Anonymity](https://localfirstai.eu/posts/2026-04-26-the-architecture-of-anonymity/) — Exp 003: data sovereignty enforced by the import graph, not by policy.
 - [The Control Plane and the Data Plane](https://localfirstai.eu/posts/2026-04-22-control-plane-vs-data-plane/) — Exp 002: managing the AI thinking tax.
 - [The Genesis of Chronos](https://localfirstai.eu/posts/2026-04-21-genesis-of-chronos/) — Why Nestor commits to verified, evidence-backed claims.
