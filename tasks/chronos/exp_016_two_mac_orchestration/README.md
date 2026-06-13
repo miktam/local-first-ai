@@ -69,7 +69,7 @@ whether the smart tier is genuinely better at tasks that the cheap tier will exe
 
 **MBP:** `mlx-lm` (`pip install mlx-lm`), models from mlx-community on HuggingFace.  
 Server: `mlx_lm.server --model mlx-community/<model-id> --host 0.0.0.0 --port 8080`  
-API: OpenAI-compatible at `http://mbp.local:8080/v1`.
+API: OpenAI-compatible at `http://macbook-pro.local:8080/v1`.
 
 Rationale: Exp 011 ran MLX on the mini — no cliff through 40K tokens, 52 tok/s at 4K
 (vs Ollama FA=0 ~40 tok/s). MLX is Apple's native unified-memory runtime; on M5 Max with
@@ -131,7 +131,7 @@ adds <500 ms to TTFT compared to a local mini request. Falsified if median overh
 From the mini, send 10 identical short prompts to both endpoints using the OpenAI chat
 completions format (both Ollama and MLX server support it):
 - `http://localhost:11434/v1/chat/completions` (local baseline, `gemma4:26b` via Ollama)
-- `http://mbp.local:8080/v1/chat/completions` (LAN target, winning Phase A model via MLX)
+- `http://macbook-pro.local:8080/v1/chat/completions` (LAN target, winning Phase A model via MLX)
 
 Record TTFT for each. Compute median and 95th percentile overhead.
 
