@@ -22,48 +22,49 @@ To build and maintain a public-facing blog written from the perspective of Nesto
 - [x] **Execute Experiment 003:** Validated Anonymized Adversarial Memory (Data Sovereignty)
 - [x] **Incident 003-Alpha Resolution:** Identified the 25k–35k token "Memory Cliff" for Gemma 4 26B on M4 Pro.
 - [x] **Drafted/Published:** "Every Company Can Be a Palantir Now" (Data Sovereignty thesis).
-- [x] **Exp 005 (Phase 0):** Build and validate "Router / Reducer" Cascade (Health Corpus).
-- [x] **Incident 005-Alpha:** Root-cause schema-meaning gaps and "zombie" prefill runners.
-- [x] **Exp 005 (Phase 0):** Build and validate "Router / Reducer" Cascade (Health Corpus).
-- [x] **Incident 005-Alpha:** Root-cause schema-meaning gaps and "zombie" prefill runners.
-- [x] **Exp 005 Phase 0 closed (2026-05-02):** Architectural pattern documented in [`cascade_pattern.md`](./tasks/chronos/exp_005_dicer_describer/cascade_pattern.md). Three working behaviours demonstrated end-to-end (single-slice trend grounding, workouts with cliff-aware coarsening, clarifying-question protocol); first demand-signal evidence surfaced (fencing as personal-signature activity). [Router / Reducer cascade — formerly Dicer / Describer]
-- [x] **Orchestrator Hardening:** `aggregation_level` honoured for workouts (yearly coarsening fallback); per-slice operational caps in `extract.py`; bundle-level token guard at 22K in `cascade.py` (ADR-002).
-- [x] **Streaming Reducer:** `cascade.py` now streams with three-timeout separation (first-byte/idle/total), `--show-thinking` flag for live deliberation visibility.
+- [x] **Exp 005 Phase 0 closed (2026-05-02):** Router / Reducer cascade validated on 8-year Apple Watch corpus.
 - [x] **Exp 006 — Redactor Fidelity Test:** Complete 2026-05-09. 0/20 × 8 categories — zero true-positive leaks.
+- [x] **Exp 007 Phase A+B — The Silicon Wager:** Complete 2026-05-29. MBP gen t/s +200–370% vs Mini; cliff at ~45K vs ~18K.
+- [x] **Exp 008/010 — Flash Attention cliff resolved:** FA=1 is the sole culprit. FA=0 has no cliff through 40K tokens.
+- [x] **Exp 009 — Adversarial Critic:** gemma4:26b matches compliance layer; misses impl-vs-docs gap. FAIL as drop-in.
+- [x] **Exp 011 — MLX runtime:** No cliff through 40K on MLX. Confirms cliff is Ollama/llama.cpp artefact, not hardware.
+- [x] **Exp 012–014 — Cost/capability curve:** Step function confirmed at 4B-active/frontier boundary. Haiku cost-dominant.
 
 ## Current Focus
 
-Exp 007 Phase A+B complete on both machines (2026-05-29). H1 and H2 confirmed: MBP cliff onset at ~45K tokens vs Mini ~18K (2.5× difference); MBP gen t/s +200–370% vs Mini. New operational ceilings: Mini <18K tokens, MBP <40K tokens. The cascade ADR-002 ceiling (22K) is safe on MBP; Mini ceiling tightened. Phase C (thermal endurance, MBP) and Phase D (cascade, both machines) pending. Exp 008 (flash attention + q8_0 KV cache) pre-registered — tests whether flags push Mini cliff from 18K to 35K+.
+*Updated: 2026-06-13*
+
+**Flash Attention cliff resolved (Exp 008/010, June 2026).** `OLLAMA_FLASH_ATTENTION=1` was the sole cause of the prefill cliff. FA=0/fp16 has no cliff through 40K tokens — confirmed by Exp 010's 2×2 factorial and independently by MLX on the same hardware (Exp 011). The Mini's true operational ceiling is >40K tokens on-wire.
+
+**Two-mac orchestration (Exp 016) in progress.** Phase A complete: Qwen3-Coder-Next-4bit selected as smart tier model (4.0/5 quality, 100.6 tok/s on MBP M5 Max). Phase B: LAN path mini→miktam-mbp.local confirmed; TTFT benchmark pending before Phase C.
+
+**Pre-registered and awaiting execution:** Exp 015 (active-parameter ablation, dense vs MoE), Exp 017 (Argos Phase 0 feed reconnaissance), Exp 018 (sovereignty resilience — triggered by Fable/Mythos export control suspension June 11).
+
+**OLÉ Marbella (June 17–18).** CasaSol booth demo. Exp 015/017/018 execution scheduled post-event.
 
 ## Technical Deployment Plan
 
 - **Engine:** Hugo (Static Site Generator).
 - **Workflow:** Nestor generates content via OpenClaw; symlinked to `~/REPOS/local-first-ai` for version control.
 - **Cascade:** Router (`gemma4:e4b`) plans → Extractor (`json`) → Reducer (`gemma4:26b`) synthesizes.
-- **Hardware Invariant:** Prefill context must remain **< 22,000 tokens** to avoid memory-bandwidth saturation.
+- **Hardware Invariant:** Prefill context must remain **< 40,000 tokens** (revised upward from 22K after Exp 008/010).
 - **Strict Validation:** ADR-001 contract with code-fence normalization for unreliable structured output.
 
 ## Pending Tasks
 
-### 🛠️ Infrastructure & Experimentation
+### Infrastructure & Experimentation
 
-- [x] **Exp 006 — Redactor Fidelity Test (CasaSol GDPR Validation).** Pre-registered 2026-05-09. 20 synthetic toxic real estate notes × 8 GDPR data categories → 0 true-positive leaks. Evidence at [`exp_006_redactor_fidelity/`](./exp_006_redactor_fidelity/). Post: *"The GDPR Canary for Real Estate: 8 Data Categories, 0 Leaks."*
-- [ ] **Exp 005-Beta — Cliff measurement on thinking models.** Replicate [Incident 003](https://localfirstai.eu/posts/incident_003_alpha_post/)'s three-size prefill sweep, but with a thinking-model Reducer where generation expands effective KV utilisation past the prefill estimate. Produces the empirical ceiling Phase 1 must respect.
-- [ ] **Exp 005 Phase 1 — Cascade vs Claude Opus 4.7.** Pre-register against frontier on a query class drawn from the health corpus. Synthetic shadow corpus for parity-without-disclosure. Depends on Exp 005-Beta for ceiling, and on N-of-M rubric design.
-- [ ] **N-of-M scoring rubric design.** Phase 0's three-RHR-run variance and the VO2/RHR cliff hit together imply single-shot scoring conflates quality variance with reliability. Methodology work; could be standalone or rolled into Phase 1 pre-registration.
-- [ ] **Process Management:** Track upstream Ollama cancellation API or contribute a fix. As of 0.20.2, abandoned streaming requests wedge runners at ~900% CPU; recovery requires `ollama serve` restart. Phase 0 reliability ceiling: one cliff hit per restart.
-- [ ] **Environment Fix:** Resolve `sudo -n killall powermetrics` inheritance for automated power-profile logging. (Carried forward.)
-- [x] **Exp 007 Phase A+B — The Silicon Wager (Mac Mini M4 Pro vs MacBook Pro M5 Max).** Complete 2026-05-29. Mini cliff: ~18K tokens. MBP cliff: ~45K tokens (2.5× higher). MBP gen t/s +200–370% vs Mini at matched context sizes. H1 and H2 confirmed. Evidence at [`exp_007_hardware_comparison/evidence/`](./exp_007_hardware_comparison/evidence/).
-- [ ] **Exp 016 — Two-Mac Orchestration.** Pre-registered 2026-06-12. Three phases: (A) large model selection on MBP M5 Max 128 GB — does 128 GB enable a qualitatively better smart tier? Gate: >20 tok/s + quality score ≥3/5 on frozen CasaSol coding task. (B) LAN routing overhead mini→MBP over home WiFi. Gate: <500 ms median overhead. (C) Tiered pipeline end-to-end — plan on smart, execute on cheap, all state in git-backed beads; deterministic-glue invariants enforced. Evidence at [`exp_016_two_mac_orchestration/`](./exp_016_two_mac_orchestration/).
-- [ ] **Exp 007 Phase C — Thermal endurance (MBP, 90 min sustained).** Fan audible during Phase B at 110K tokens. Phase C quantifies thermal decay under sustained load.
-- [ ] **Exp 007 Phase D — Router/Reducer cascade (Watch + CasaSol, both machines).** Tests H4: cascade portability. CasaSol Q3 (Nota Simple vs Catastro) deferred pending CasaSol index.
-- [ ] **Exp 008 — Flash Attention + q8_0 KV Cache.** Pre-registered 2026-05-29. Tests whether `OLLAMA_FLASH_ATTENTION=1` + `OLLAMA_KV_CACHE_TYPE=q8_0` pushes the prefill cliff from Exp 007's ~20K token onset to ≥30K. If H1 confirmed, ADR-002 bundle ceiling can be revised upward. Evidence at [`exp_008_flash_attention/`](./exp_008_flash_attention/).
-- [ ] **Router alternative:** Evaluate **Qwen 2.5/3.5b** or similar as a more deterministic structured-output model for the Router role. Phase 0 confirmed `gemma4:e4b` ignores prose instructions in favour of fixture patterns; a stricter structured-output model may not require fixture-only constraint encoding.
+- [ ] **Exp 016 Phase B — TTFT benchmark.** 10 reps mini→local vs mini→miktam-mbp.local. Gate: median overhead <500 ms. Produce `phase_b_lan_latency.json`. [`exp_016_two_mac_orchestration/`](./exp_016_two_mac_orchestration/)
+- [ ] **Exp 016 Phase C — Tiered pipeline end-to-end.** Plan on smart (Qwen3-Coder-Next), execute on cheap (gemma4:26b). Deterministic-glue invariants enforced. Gate: fewer human interventions than single-model baseline.
+- [ ] **Exp 015 — Active-parameter ablation (dense vs MoE).** Does a dense 12–32B local model score ≥2/8 on the frozen Exp 012 audit rubric? Tests whether the capability boundary is total-parameter or active-compute. [`exp_015_active_param_ablation/`](./exp_015_active_param_ablation/)
+- [ ] **Exp 017 — Argos Phase 0 feed reconnaissance.** DGT NAP (DATEX II) + OpenChargeMap, Málaga–Gibraltar EV corridor. 24h cadence measurement required. [`exp_017_argos_phase0/`](./exp_017_argos_phase0/)
+- [ ] **Exp 018 — Sovereignty resilience.** Three failure modes: Ollama down, weights removed, network cut. Triggered by Fable/Mythos export control event (June 11). [`exp_018_sovereignty_resilience/`](./exp_018_sovereignty_resilience/)
+- [ ] **Exp 007 Phase C — Thermal endurance (MBP, 90 min sustained).** Fan audible during Phase B at 110K tokens. Deferred; lower priority now that Exp 016 characterises the two-machine pipeline.
+- [ ] **Router alternative evaluation.** `gemma4:e4b` follows fixture patterns over prose instructions. Evaluate Qwen 2.5/3.5b as a more deterministic structured-output router.
 
-### ✍️ Content Execution
+### Content Execution
 
-- [ ] **The Cascade Pattern (transferable post):** Public writeup drawing from [`cascade_pattern.md`](./tasks/chronos/exp_005_dicer_describer/cascade_pattern.md) sections 6–9. The pattern as a response to the memory-bandwidth cliff, framed for readers who don't have the watch corpus. Closes the Shape B writeup deferred from Phase 0.
-- [ ] **The Dicer's Dilemma:** Phase 0 narrative — how Nestor learned to "slice" 8 years of heartbeats without triggering a system timeout. The story version of cascade_pattern.md, focused on the cliff hit and the architectural response.
-- [ ] **The Silicon Sentinel:** Update with "Memory Bandwidth Cliff" findings — visualizing why local-first AI is bound by the bus, not just the GPU.
-- [ ] **Intelligence Feedback Loop:** Case study on **Incident 005-Alpha** (Router following few-shot patterns over prose instructions).
-- [ ] **Technical Tutorial:** The "Anonymization & Routing" pattern for local-first retrieval.
+- [ ] **"What was in the tank?"** Hindenburg analogy essay (US helium ban → hydrogen → 1937 fire as rhetorical frame for Fable/Mythos sovereignty event). Post-OLÉ.
+- [ ] **Exp 015 writeup.** "The Active Compute Boundary" — does the local/cloud step function hold at every model class, or is it an artefact of testing only MoE-A4B? Post-execution.
+- [ ] **Chronos README narrative.** Add "Chronos tests the 29%, not the 981%" framing (NBER WP 35275: Claude Code +981% lines written, +29% shipped releases).
+- [ ] **The Cascade Pattern.** Transferable architecture writeup from [`exp_005_dicer_describer/cascade_pattern.md`](./exp_005_dicer_describer/cascade_pattern.md). Deferred since May; still worth writing post-OLÉ.
