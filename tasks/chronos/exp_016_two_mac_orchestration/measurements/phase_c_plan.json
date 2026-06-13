@@ -1,0 +1,17 @@
+{
+  "task": "Add price_per_sqm computed field to get_property response and add regression test",
+  "steps": [
+    {
+      "id": "step-01",
+      "role": "cheap",
+      "instruction": "Modify format_listing_full() in scripts/mcp_server.py to add a new 'Price per sqm:' line immediately after the 'Price:' line. Compute price_per_sqm = round(price / size_m2) only when both price (INTEGER) and size_m2 (REAL) exist and are non-zero. Format the output as '\u20ac{price_per_sqm:,}/m\u00b2'. Do not add the line if either value is missing or zero.",
+      "context_budget_tokens": 1500
+    },
+    {
+      "id": "step-02",
+      "role": "cheap",
+      "instruction": "Add a new regression test function test_get_property_price_per_sqm in tests/test_mcp_server.py that verifies: (a) when price=1000000 and size_m2=300, the string '3,333' appears in the result; (b) when size_m2 is 0 or absent, the 'Price per sqm' line does not appear. Use the existing test fixtures and patterns.",
+      "context_budget_tokens": 1500
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 *Pre-registered: 2026-06-12*  
 *Phase A: COMPLETE 2026-06-12 — Winner: Qwen3-Coder-Next-4bit (4.0/5, 100.6 tok/s)*  
 *Phase B: COMPLETE 2026-06-13 — H4_INCONCLUSIVE: median overhead 1140.9 ms (model delta, not network)*  
-*Phase C: READY — planning tasks unblocked; interactive use contra-indicated*
+*Phase C: COMPLETE 2026-06-13 — H5_FALSIFIED: baseline (0 interventions) < tiered (1 intervention)*
 
 ---
 
@@ -208,6 +208,53 @@ Baseline comparison: single-model run of the same task on mini (document before 
 |---|---|
 | H5 confirmed | Tiered interventions < single-model interventions |
 | Phase C gate | H5 confirmed; if not, Gas Town (Phase 4) is unlikely to fix it |
+
+### Results (2026-06-13T151615Z)
+
+**Task:** Add `price_per_sqm` computed field to `get_property` response (`casasol/scripts/mcp_server.py`).
+
+| Run | Model(s) | Interventions | Tests | Verdict |
+|---|---|---|---|---|
+| Baseline | gemma4:26b (mini, no plan) | 0 | 6/6 passed | PASSED |
+| Tiered | Qwen3-Coder-Next plan → gemma4:26b execute | 1 | 6/6 passed (false pass — see notes) | PASSED nominally |
+
+**H5_FALSIFIED.** Baseline outperformed tiered (0 < 1 interventions).
+
+**Root causes of the single tiered intervention:**
+
+1. **Step-01 code extraction failure.** gemma4:26b responded with bullet-point reasoning prose
+   followed by code fragments, rather than a clean Python code fence. The regex extractor
+   `extract_fence(content, "python")` found a fence but it contained inline backtick blocks
+   from the reasoning text, not the complete function. `def format_listing_full` was not present
+   in the extracted content → apply skipped.
+
+2. **Step-02 indentation failure (false pass).** gemma4:26b's appended test code was indented
+   4 spaces, placing it inside the previous test function's scope. pytest collected 6 items
+   (not 7); the new test was syntactically valid but unreachable. Tests passed vacuously.
+   The true test count was still 6 — unchanged from baseline.
+
+**Why the baseline worked in one shot:** The single-model call included both the task description
+and the full `format_listing_full` source in one context window. gemma4:26b produced a correct
+replacement function + test in the same response, with no planning overhead and no per-step
+context fragmentation.
+
+**Interpretation:** H5 is falsified because the task was a single-file, single-function change —
+exactly the shape of work where a cheap tier needs no decomposition to succeed. The tiered
+architecture adds overhead (planning latency ~32s, per-step routing, code extraction) that
+is only justified when the task genuinely exceeds one model's single-context reasoning capacity.
+The 1140 ms TTFT overhead for the smart tier (Phase B) also means planning adds wall-clock cost
+with no quality benefit on simple tasks.
+
+**Scope boundary for tiered architecture:** Tasks where tiered would be expected to win:
+- Multi-file refactors where the plan prevents cheap-tier hallucination of non-existent APIs
+- Tasks requiring knowledge the cheap tier doesn't have (smart tier provides it in the plan)
+- Long sequences where context accumulation would hit Incident 003-Alpha territory
+
+The feature itself was implemented by the human operator after Phase C concluded:
+`casasol` commit `6e8b8c9` (7/7 tests passing).
+
+Raw results: [`measurements/phase_c_tiered_pipeline.json`](./measurements/phase_c_tiered_pipeline.json)  
+Plan artifact: [`measurements/phase_c_plan.json`](./measurements/phase_c_plan.json)
 
 ---
 

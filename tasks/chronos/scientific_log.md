@@ -1808,6 +1808,31 @@ Phase C unblocked: planning-only smart-tier calls fit within H4_INCONCLUSIVE tol
 *Evidence: `exp_016_two_mac_orchestration/measurements/` — 9 rep JSONs + phase_a_summary.json + phase_b_lan_latency.json*  
 *Status: Phase A complete 2026-06-12. Phase B complete 2026-06-13. Phase C: READY.*
 
+**Phase C — Tiered pipeline end-to-end (2026-06-13T151615Z):**
+
+Task: Add `price_per_sqm` computed field to `casasol/scripts/mcp_server.py:format_listing_full`.
+Baseline (single gemma4:26b call): 0 interventions, tests passed. Tiered: 1 intervention.
+
+**H5_FALSIFIED.** Baseline outperformed tiered. Two failure modes in the tiered run:
+- Step-01: gemma4:26b produced reasoning prose instead of a clean code fence; regex extractor
+  failed to isolate `def format_listing_full` → patch not applied.
+- Step-02: appended test was indented 4 spaces (inside the previous function's scope);
+  pytest could not collect it — 6 tests passed as before, not 7. False PASSED verdict.
+
+**Scope interpretation:** H5 is task-sensitive, not architecture-fatal. The task was a
+single-file, single-function change requiring no decomposition. Tiered overhead (32 s smart
+planning + per-step routing) is only justified when the task genuinely exceeds a single-context
+window or requires upfront ambiguity resolution. The feature was implemented by the human
+operator post-experiment: `casasol` commit `6e8b8c9`, 7/7 tests.
+
+**Engineering lessons:**
+1. Cheap tier (gemma4:26b) needs structured output prompting to avoid reasoning-prose before code.
+2. Code appending requires indentation-aware insertion, not naive string concatenation.
+3. Tiered architecture test criterion should verify test count delta (Δ=+1), not raw pass count.
+
+*Evidence: `exp_016_two_mac_orchestration/measurements/phase_c_tiered_pipeline.json` + `phase_c_plan.json`*  
+*Status: ALL PHASES COMPLETE 2026-06-13.*
+
 ---
 
 ## Exp 018 — Sovereignty Resilience: Three Failure Modes
