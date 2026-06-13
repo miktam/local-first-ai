@@ -31,8 +31,8 @@ Roadmap and pending experiments: [`tasks/chronos/roadmap.md`](./tasks/chronos/ro
 
 | # | Name | Status | Key finding |
 |---|---|---|---|
-| [001](./tasks/chronos/scientific_log.md) | Verification of Veracity | Complete | Chronos framework activated |
-| [002](./tasks/chronos/experiments/) | Control Plane vs Data Plane | Complete | Thinking mode is flat at ~38 t/s until it isn't — unconstrained prompts trigger runaway |
+| [001](./tasks/chronos/exp_001_verification_of_veracity/) | Verification of Veracity | Complete | Chronos framework activated |
+| [002](./tasks/chronos/exp_002_control_plane_vs_data_plane/) | Control Plane vs Data Plane | Complete | Thinking mode is flat at ~38 t/s until it isn't — unconstrained prompts trigger runaway |
 | [003](./tasks/chronos/exp_003_local_memory/) | Anonymized Adversarial Memory | Complete | 0/20 source recognition, 0/3 identity leaks on Fight Club corpus — data-sovereignty moat is architectural |
 | [004](./tasks/chronos/exp_004_bootstrap_diet/) | Bootstrap Diet | Complete | OpenClaw session hygiene |
 | [005](./tasks/chronos/exp_005_dicer_describer/) | Router / Reducer Cascade | Phase 0 closed | Working two-model cascade over 8-year Apple Watch corpus; three load-bearing behaviours demonstrated |
