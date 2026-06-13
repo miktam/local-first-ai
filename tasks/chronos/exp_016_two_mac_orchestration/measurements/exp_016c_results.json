@@ -1,0 +1,26 @@
+{
+  "experiment": "exp_016c",
+  "hypothesis": "H6",
+  "timestamp": "2026-06-13T16:47:20.810256+00:00",
+  "query": {
+    "feature": "sea view",
+    "property_type": "villa",
+    "min_bedrooms": 4,
+    "max_price": 2500000
+  },
+  "flat": {
+    "total_returned": 7,
+    "tp": 2,
+    "fp": 5
+  },
+  "orchestrated": {
+    "total_candidates": 7,
+    "verified_count": 2,
+    "tp": 2,
+    "fp": 0,
+    "leaf_calls": 9,
+    "wall_ms": 62956
+  },
+  "verdict": "H6_CONFIRMED",
+  "note": "Full results (casasol_ids, evidence quotes) retained in private CasaSol repo only."
+}
