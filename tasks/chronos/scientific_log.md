@@ -1794,3 +1794,21 @@ fresh terminal with the model already cached starts cleanly. No workaround neede
 
 ---
 
+## Exp 018 — Sovereignty Resilience: Three Failure Modes
+
+**Pre-registered: 2026-06-13**  
+**Status: PRE-REGISTERED**  
+**Trigger:** Fable/Mythos export control suspension, 11 June 2026 — external provider failure as real-world prompt.
+
+**Hypotheses (pre-registered before first run):**
+- H1: Stopping Ollama daemon → deterministic MCP error, zero data loss, recovery ≤2 commands
+- H2: Removing gemma4:26b weights → Reducer stage error, SQLite corpus intact, recovery = `ollama pull`
+- H3: Full outbound network block → inference unaffected, only HF download fails
+
+**Teased in:** [We Didn't Notice](https://localfirstai.eu/posts/2026-06-13-we-didnt-notice/) — post references this experiment by number before execution, per Chronos pre-registration contract.
+
+*Evidence: `exp_018_sovereignty_resilience/evidence/` — not yet collected*  
+*Status: Pre-registered 2026-06-13. Execution post-OLÉ (after June 17).*
+
+---
+
