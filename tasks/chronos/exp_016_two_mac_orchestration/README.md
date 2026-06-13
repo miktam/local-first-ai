@@ -2,7 +2,8 @@
 
 *Pre-registered: 2026-06-12*  
 *Phase A: COMPLETE 2026-06-12 — Winner: Qwen3-Coder-Next-4bit (4.0/5, 100.6 tok/s)*  
-*Phase B: IN PROGRESS 2026-06-13 — LAN path confirmed; TTFT benchmark pending*
+*Phase B: COMPLETE 2026-06-13 — H4_INCONCLUSIVE: median overhead 1140.9 ms (model delta, not network)*  
+*Phase C: READY — planning tasks unblocked; interactive use contra-indicated*
 
 ---
 
@@ -144,6 +145,22 @@ Write raw timings to `measurements/phase_b_lan_latency.json`.
 | H4 confirmed | Median overhead <500 ms |
 | H4 inconclusive | Overhead 500–1500 ms — acceptable for long-running tasks, not for interactive |
 | H4 falsified | Median overhead ≥1500 ms — investigate network path before Phase C |
+
+### Results (2026-06-13T150641Z, 10 reps)
+
+| Endpoint | Model | TTFT median | TTFT p95 |
+|---|---|---|---|
+| local (mini) | gemma4:26b via Ollama | 189.0 ms | 208.4 ms |
+| remote (MBP) | Qwen3-Coder-Next-4bit via MLX | 1329.9 ms | 1563.0 ms |
+| **Overhead** | | **1140.9 ms** | |
+
+**Verdict: H4_INCONCLUSIVE.** The 1140 ms delta is not network latency (WiFi RTT was 6–22 ms per
+`ping`; network contribution is <25 ms). The overhead is model-architecture difference: gemma4:26b
+runs with a warm KV cache in Ollama (`KEEP_ALIVE=-1`), while Qwen3-Coder-Next cold-starts each
+request under MLX. For Phase C planning tasks (one smart-tier call per feature, not per keystroke),
+1.3 s TTFT is acceptable. Interactive use of the smart tier is contra-indicated.
+
+Raw results: [`measurements/phase_b_lan_latency.json`](./measurements/phase_b_lan_latency.json)
 
 ---
 

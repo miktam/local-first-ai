@@ -1,0 +1,238 @@
+{
+  "experiment": "exp_016_phase_b",
+  "run_ts": "20260613T150641Z",
+  "n_reps": 10,
+  "prompt": "Return exactly one line: The quick brown fox jumps over the lazy dog.",
+  "local": {
+    "url": "http://localhost:11434/v1/chat/completions",
+    "model": "gemma4:26b",
+    "summary": {
+      "endpoint": "local",
+      "n_ok": 10,
+      "n_fail": 0,
+      "ttft_ms_median": 189.0,
+      "ttft_ms_p95": 208.4,
+      "ttft_ms_min": 176.0,
+      "ttft_ms_max": 5759.0
+    },
+    "reps": [
+      {
+        "ttft_ms": 5759.0,
+        "wall_ms": 6257.7,
+        "chunks": 26,
+        "rep": 1,
+        "ts": "20260613T150641Z",
+        "endpoint": "local",
+        "model": "gemma4:26b",
+        "ok": true
+      },
+      {
+        "ttft_ms": 180.9,
+        "wall_ms": 678.9,
+        "chunks": 28,
+        "rep": 2,
+        "ts": "20260613T150647Z",
+        "endpoint": "local",
+        "model": "gemma4:26b",
+        "ok": true
+      },
+      {
+        "ttft_ms": 190.6,
+        "wall_ms": 690.6,
+        "chunks": 26,
+        "rep": 3,
+        "ts": "20260613T150648Z",
+        "endpoint": "local",
+        "model": "gemma4:26b",
+        "ok": true
+      },
+      {
+        "ttft_ms": 208.4,
+        "wall_ms": 706.2,
+        "chunks": 26,
+        "rep": 4,
+        "ts": "20260613T150648Z",
+        "endpoint": "local",
+        "model": "gemma4:26b",
+        "ok": true
+      },
+      {
+        "ttft_ms": 202.0,
+        "wall_ms": 702.0,
+        "chunks": 25,
+        "rep": 5,
+        "ts": "20260613T150649Z",
+        "endpoint": "local",
+        "model": "gemma4:26b",
+        "ok": true
+      },
+      {
+        "ttft_ms": 200.7,
+        "wall_ms": 697.7,
+        "chunks": 26,
+        "rep": 6,
+        "ts": "20260613T150650Z",
+        "endpoint": "local",
+        "model": "gemma4:26b",
+        "ok": true
+      },
+      {
+        "ttft_ms": 187.4,
+        "wall_ms": 687.2,
+        "chunks": 26,
+        "rep": 7,
+        "ts": "20260613T150650Z",
+        "endpoint": "local",
+        "model": "gemma4:26b",
+        "ok": true
+      },
+      {
+        "ttft_ms": 176.6,
+        "wall_ms": 675.2,
+        "chunks": 29,
+        "rep": 8,
+        "ts": "20260613T150651Z",
+        "endpoint": "local",
+        "model": "gemma4:26b",
+        "ok": true
+      },
+      {
+        "ttft_ms": 176.0,
+        "wall_ms": 676.4,
+        "chunks": 26,
+        "rep": 9,
+        "ts": "20260613T150652Z",
+        "endpoint": "local",
+        "model": "gemma4:26b",
+        "ok": true
+      },
+      {
+        "ttft_ms": 177.0,
+        "wall_ms": 675.4,
+        "chunks": 26,
+        "rep": 10,
+        "ts": "20260613T150652Z",
+        "endpoint": "local",
+        "model": "gemma4:26b",
+        "ok": true
+      }
+    ]
+  },
+  "remote": {
+    "url": "http://miktam-mbp.local:8080/v1/chat/completions",
+    "model": "mlx-community/Qwen3-Coder-Next-4bit",
+    "summary": {
+      "endpoint": "remote",
+      "n_ok": 10,
+      "n_fail": 0,
+      "ttft_ms_median": 1329.9,
+      "ttft_ms_p95": 1563.0,
+      "ttft_ms_min": 1155.4,
+      "ttft_ms_max": 1563.5
+    },
+    "reps": [
+      {
+        "ttft_ms": 1551.2,
+        "wall_ms": 1666.2,
+        "chunks": 11,
+        "rep": 1,
+        "ts": "20260613T150653Z",
+        "endpoint": "remote",
+        "model": "mlx-community/Qwen3-Coder-Next-4bit",
+        "ok": true
+      },
+      {
+        "ttft_ms": 1160.7,
+        "wall_ms": 1272.3,
+        "chunks": 11,
+        "rep": 2,
+        "ts": "20260613T150655Z",
+        "endpoint": "remote",
+        "model": "mlx-community/Qwen3-Coder-Next-4bit",
+        "ok": true
+      },
+      {
+        "ttft_ms": 1155.4,
+        "wall_ms": 1267.9,
+        "chunks": 11,
+        "rep": 3,
+        "ts": "20260613T150656Z",
+        "endpoint": "remote",
+        "model": "mlx-community/Qwen3-Coder-Next-4bit",
+        "ok": true
+      },
+      {
+        "ttft_ms": 1219.0,
+        "wall_ms": 1328.5,
+        "chunks": 11,
+        "rep": 4,
+        "ts": "20260613T150657Z",
+        "endpoint": "remote",
+        "model": "mlx-community/Qwen3-Coder-Next-4bit",
+        "ok": true
+      },
+      {
+        "ttft_ms": 1563.5,
+        "wall_ms": 1687.7,
+        "chunks": 11,
+        "rep": 5,
+        "ts": "20260613T150659Z",
+        "endpoint": "remote",
+        "model": "mlx-community/Qwen3-Coder-Next-4bit",
+        "ok": true
+      },
+      {
+        "ttft_ms": 1563.0,
+        "wall_ms": 1687.4,
+        "chunks": 11,
+        "rep": 6,
+        "ts": "20260613T150700Z",
+        "endpoint": "remote",
+        "model": "mlx-community/Qwen3-Coder-Next-4bit",
+        "ok": true
+      },
+      {
+        "ttft_ms": 1457.4,
+        "wall_ms": 1577.2,
+        "chunks": 11,
+        "rep": 7,
+        "ts": "20260613T150702Z",
+        "endpoint": "remote",
+        "model": "mlx-community/Qwen3-Coder-Next-4bit",
+        "ok": true
+      },
+      {
+        "ttft_ms": 1353.7,
+        "wall_ms": 1451.8,
+        "chunks": 11,
+        "rep": 8,
+        "ts": "20260613T150704Z",
+        "endpoint": "remote",
+        "model": "mlx-community/Qwen3-Coder-Next-4bit",
+        "ok": true
+      },
+      {
+        "ttft_ms": 1167.4,
+        "wall_ms": 1306.3,
+        "chunks": 11,
+        "rep": 9,
+        "ts": "20260613T150705Z",
+        "endpoint": "remote",
+        "model": "mlx-community/Qwen3-Coder-Next-4bit",
+        "ok": true
+      },
+      {
+        "ttft_ms": 1306.1,
+        "wall_ms": 1419.7,
+        "chunks": 11,
+        "rep": 10,
+        "ts": "20260613T150706Z",
+        "endpoint": "remote",
+        "model": "mlx-community/Qwen3-Coder-Next-4bit",
+        "ok": true
+      }
+    ]
+  },
+  "overhead_ms_median": 1140.9,
+  "verdict": "H4_INCONCLUSIVE"
+}

@@ -1789,8 +1789,24 @@ fresh terminal with the model already cached starts cleanly. No workaround neede
   integration must disable thinking or read from `reasoning`
 - TTFT benchmark (10 reps, `phase_b_lan_latency.json`) pending — next step before Phase C
 
-*Evidence: `exp_016_two_mac_orchestration/measurements/` — 9 rep JSONs + phase_a_summary.json*  
-*Status: Phase A complete 2026-06-12. Phase B LAN path live 2026-06-13; TTFT benchmark pending.*
+**Phase B — LAN routing overhead (2026-06-13T150641Z, 10 reps):**
+
+| Endpoint | Model | TTFT median | TTFT p95 |
+|---|---|---|---|
+| local (mini) | gemma4:26b via Ollama | 189.0 ms | 208.4 ms |
+| remote (MBP) | Qwen3-Coder-Next-4bit via MLX | 1329.9 ms | 1563.0 ms |
+| Overhead | | 1140.9 ms | |
+
+Verdict: H4_INCONCLUSIVE. Overhead 1140.9 ms is between the 500 ms confirmed and 1500 ms falsified
+thresholds. Network contribution is negligible (WiFi RTT 6–22 ms per `ping`). The gap is model
+architecture: gemma4:26b runs with a warm KV cache in Ollama, while Qwen3-Coder-Next cold-starts
+each request under MLX. For Phase C planning tasks (one smart-tier call per feature), 1.3 s TTFT
+is acceptable. Interactive use contra-indicated.
+
+Phase C unblocked: planning-only smart-tier calls fit within H4_INCONCLUSIVE tolerance.
+
+*Evidence: `exp_016_two_mac_orchestration/measurements/` — 9 rep JSONs + phase_a_summary.json + phase_b_lan_latency.json*  
+*Status: Phase A complete 2026-06-12. Phase B complete 2026-06-13. Phase C: READY.*
 
 ---
 
