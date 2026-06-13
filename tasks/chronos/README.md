@@ -17,9 +17,10 @@ This README is the index. The canonical record is
 chronos/
 ├── scientific_log.md          # canonical log; one entry per experiment or incident
 ├── roadmap.md                 # forward-looking; what's planned, not yet logged
-├── exp_NNN_<slug>/            # one directory per experiment
+├── exp_NNN_<slug>/            # one directory per experiment (001–018)
 ├── incident_NNN_<slug>/       # one directory per investigated incident
-└── experiments/               # ad-hoc benchmarks not promoted to a full experiment
+├── watcher_run_NNN/           # production adversarial watcher runs
+└── experiments/               # unnumbered pre-Chronos bench scripts
 ```
 
 The numbering is shared between experiments and incidents because
@@ -65,12 +66,29 @@ months can be tested against the same on-disk evidence.
 
 | Entry | Type | Status | Path |
 | --- | --- | --- | --- |
-| Experiment 003 | local memory anonymisation | landed | [`exp_003_local_memory/`](./exp_003_local_memory/) |
-| Incident 003-Alpha | prefill scaling cliff | closed | [`incident_003_alpha/`](./incident_003_alpha/) |
-| Latency benchmark v2 | ad-hoc | reference data | [`experiments/`](./experiments/) |
+| Exp 001 | Chronos activation | Complete | [`exp_001_verification_of_veracity/`](./exp_001_verification_of_veracity/) |
+| Exp 002 | Control plane vs data plane (thinking tax) | Complete | [`exp_002_control_plane_vs_data_plane/`](./exp_002_control_plane_vs_data_plane/) |
+| Exp 003 | Local memory anonymisation | Complete | [`exp_003_local_memory/`](./exp_003_local_memory/) |
+| Incident 003-Alpha | Prefill scaling cliff | Closed | [`incident_003_alpha/`](./incident_003_alpha/) |
+| Exp 004 | Bootstrap diet | Complete | [`exp_004_bootstrap_diet/`](./exp_004_bootstrap_diet/) |
+| Exp 005 | Router / Reducer cascade | Complete | [`exp_005_dicer_describer/`](./exp_005_dicer_describer/) |
+| Exp 006 | Redactor fidelity (GDPR, 0/20 leaks) | Complete | [`exp_006_redactor_fidelity/`](./exp_006_redactor_fidelity/) |
+| Exp 007 | Mac Mini vs MacBook Pro M5 Max | Complete | [`exp_007_hardware_comparison/`](./exp_007_hardware_comparison/) |
+| Exp 008 | Flash Attention + q8_0 KV cache | Complete | [`exp_008_flash_attention/`](./exp_008_flash_attention/) |
+| Exp 009 | Adversarial critic (local vs frontier) | Complete | [`exp_009_adversarial_critic/`](./exp_009_adversarial_critic/) |
+| Exp 010 | FA vs q8_0 factorial isolation | Complete | [`exp_010_fa_isolation/`](./exp_010_fa_isolation/) |
+| Exp 011 | MLX runtime vs Ollama context cliff | Complete | [`exp_011_mlx_runtime/`](./exp_011_mlx_runtime/) |
+| Exp 012 | Cost vs capability curve | Complete | [`exp_012_cost_capability/`](./exp_012_cost_capability/) |
+| Exp 013 | Local audit loop scaffolding | Complete | [`exp_013_local_audit_loop/`](./exp_013_local_audit_loop/) |
+| Exp 014 | Capability variance floor | Complete | [`exp_014_capability_variance/`](./exp_014_capability_variance/) |
+| Exp 015 | Active-parameter ablation (dense vs MoE) | Pre-registered | [`exp_015_active_param_ablation/`](./exp_015_active_param_ablation/) |
+| Exp 016 | Two-mac orchestration | Phase B in progress | [`exp_016_two_mac_orchestration/`](./exp_016_two_mac_orchestration/) |
+| Exp 017 | Argos Phase 0 — feed reconnaissance | Pre-registered | [`exp_017_argos_phase0/`](./exp_017_argos_phase0/) |
+| Exp 018 | Sovereignty resilience (3 failure modes) | Pre-registered | [`exp_018_sovereignty_resilience/`](./exp_018_sovereignty_resilience/) |
+| Watcher Run 001 | Adversarial watcher — CasaSol gap analysis | Complete | [`watcher_run_001/`](./watcher_run_001/) |
+| Pre-Chronos benchmarks | Ad-hoc bench scripts (unnumbered) | Reference | [`experiments/`](./experiments/) |
 
-For details on any of these, the `scientific_log.md` entry is
-authoritative.
+For details on any entry, the `scientific_log.md` entry is authoritative.
 
 ## What this directory is not
 
@@ -85,9 +103,12 @@ localfirstai.eu are the public surface; this directory is the
 substrate they reference. A post should be readable on its own and
 the link to Chronos provides the receipts on demand.
 
-## Hardware target
+## Hardware targets
 
-All measurements unless otherwise stated are taken on `miktam02`:
-Apple M4 Pro Mac Mini, 14-core CPU (10P + 4E), 20-core GPU, 64 GB
-unified memory. Specific model versions, runtime versions, and
-configuration are recorded in the relevant log entry.
+| Machine | Chip | Memory | Role | Hostname |
+| --- | --- | --- | --- | --- |
+| Mac Mini (`miktam02`) | M4 Pro, 14-core CPU, 20-core GPU | 64 GB | Primary — always-on, cheap inference tier | `miktam-mini.local` |
+| MacBook Pro 14" | M5 Max, 18-core CPU, 40-core GPU | 128 GB | Smart inference tier (home network only) | `miktam-mbp.local` |
+
+All measurements unless otherwise stated are taken on the Mac Mini. Experiments specifying
+MBP hardware are noted in the relevant log entry. Two-machine experiments: Exp 007, Exp 016.
