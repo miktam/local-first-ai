@@ -1,0 +1,56 @@
+{
+  "task": "Add price_tier classification to CasaSol",
+  "leaves": [
+    {
+      "id": "leaf-A",
+      "deps": [],
+      "file": "scripts/mcp_server.py",
+      "target_symbol": "_price_tier",
+      "instruction": "Write a new Python function `_price_tier(price: int | None) -> str | None` that returns 'budget' for price<300000, 'mid' for 300000<=price<800000, 'premium' for 800000<=price<2000000, 'luxury' for price>=2000000, and None if price is None or 0. Output the complete function only."
+    },
+    {
+      "id": "leaf-B",
+      "deps": [
+        "leaf-A"
+      ],
+      "file": "scripts/mcp_server.py",
+      "target_symbol": "format_listing_full",
+      "instruction": "Modify format_listing_full() to call _price_tier(row.get('price')) and add a '**Price tier:** {tier}' line immediately after the '**Price per sqm:**' line. Omit the line if tier is None. Output the complete replacement function only."
+    },
+    {
+      "id": "leaf-C",
+      "deps": [],
+      "file": "scripts/mcp_server.py",
+      "target_symbol": "search_properties",
+      "instruction": "Add a `price_tier: str = ''` parameter to search_properties(). When price_tier is set, add a SQLite WHERE condition using only standard Python comparisons (no external imports, no undefined names). Use inline if/elif: if price_tier == 'budget': conditions.append('price < ?'); params.append(300000). elif price_tier == 'mid': conditions.append('price >= ? AND price < ?'); params.extend([300000,800000]). elif price_tier == 'premium': conditions.append('price >= ? AND price < ?'); params.extend([800000,2000000]). elif price_tier == 'luxury': conditions.append('price >= ?'); params.append(2000000). Add this block in the SQLite path after the existing max_price block. Also add price_tier to the ChromaDB where-clause metadata filter when set, using the same if/elif pattern appending to clauses. Output the complete replacement function only."
+    },
+    {
+      "id": "leaf-D1",
+      "deps": [
+        "leaf-A"
+      ],
+      "file": "tests/test_mcp_server.py",
+      "target_symbol": "test_price_tier_utility",
+      "instruction": "Write one pytest function `test_price_tier_utility` that imports _price_tier from scripts.mcp_server and asserts: _price_tier(250000)=='budget', _price_tier(1000000)=='premium', _price_tier(5000000)=='luxury', _price_tier(None) is None, _price_tier(0) is None. Output only that one function in a code fence."
+    },
+    {
+      "id": "leaf-D2",
+      "deps": [
+        "leaf-A",
+        "leaf-B"
+      ],
+      "file": "tests/test_mcp_server.py",
+      "target_symbol": "test_get_property_price_tier",
+      "instruction": "Write one pytest function `test_get_property_price_tier(setup_test_sqlite)` that patches 'scripts.mcp_server.get_db' with setup_test_sqlite, calls mcp_server.get_property(casasol_id='test-001') (price=1000000), and asserts 'Price tier' in result and 'premium' in result. Use the same patch pattern as the other tests in the file. Output only that one function in a code fence."
+    },
+    {
+      "id": "leaf-D3",
+      "deps": [
+        "leaf-C"
+      ],
+      "file": "tests/test_mcp_server.py",
+      "target_symbol": "test_search_properties_price_tier",
+      "instruction": "Write one pytest function `test_search_properties_price_tier(setup_test_sqlite)` that patches 'scripts.mcp_server.get_db' with setup_test_sqlite, calls mcp_server.search_properties(price_tier='budget'), and asserts 'No properties found' in result (all fixture prices are >=500000, none qualify as budget <300000). Use the same patch pattern as the other tests in the file. Output only that one function in a code fence."
+    }
+  ]
+}

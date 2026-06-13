@@ -1,0 +1,228 @@
+{
+  "experiment": "exp_016b",
+  "run_ts": "20260613T154638Z",
+  "task": "Add `price_tier` classification to CasaSol (casasol/scripts/mcp_server.py).\n\nPrice tier rules (EUR):\n  budget   \u2192 price < 300,000\n  mid      \u2192 300,000 \u2264 price < 800,000\n  premium  \u2192 800,000 \u2264 price < 2,000,000\n  luxury   \u2192 price \u2265 2,000,000\n  None     \u2192 price is None, 0, or absent\n\nChanges required:\n  1. New utility function _price_tier(price: int | None) -> str | None\n     Insert before the format_listing() function.\n  2. In format_listing_full(), add \"**Price tier:** {tier}\" line after \"**Price per sqm:**\".\n     Only add the line if price_tier is not None.\n  3. In search_properties(), add a price_tier: str = \"\" parameter.\n     Add SQLite filter: if price_tier is set, add a WHERE condition using a Python\n     helper that maps the tier name back to the price range.\n  4. Regression tests in tests/test_mcp_server.py:\n     (a) test that _price_tier(250000) == \"budget\", _price_tier(1000000) == \"premium\",\n         _price_tier(None) is None\n     (b) test that get_property for a listing with price=1000000 includes \"Price tier\"\n     (c) test that search_properties(price_tier=\"budget\") filters correctly\n",
+  "pre_test": {
+    "returncode": 0,
+    "passed": 7,
+    "failed": 0,
+    "errors": 0,
+    "output": "============================= test session starts ==============================\nplatform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0 -- /Users/miktam02/REPOS/casasol/.venv/bin/python3.14\ncachedir: .pytest_cache\nrootdir: /Users/miktam02/REPOS/casasol\nplugins: anyio-4.13.0\ncollecting ... collected 7 items\n\ntests/test_mcp_server.py::test_get_property_found PASSED                 [ 14%]\ntests/test_mcp_server.py::test_get_property_not_found PASSED             [ 28%]\ntests/test_mcp_server.py::test_search_properties_sqlite_filter PASSED    [ 42%]\ntests/test_mcp_server.py::test_search_properties_sqlite_no_results PASSED [ 57%]\ntests/test_mcp_server.py::test_search_properties_chroma_query PASSED     [ 71%]\ntests/test_mcp_server.py::test_search_properties_chroma_with_filters PASSED [ 85%]\ntests/test_mcp_server.py::test_get_property_price_per_sqm PASSED         [100%]\n\n=============================== warnings summary ===============================\n.venv/lib/python3.14/site-packages/chromadb/telemetry/opentelemetry/__init__.py:128\n  /Users/miktam02/REPOS/casasol/.venv/lib/python3.14/site-packages/chromadb/telemetry/opentelemetry/__init__.py:128: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead\n    if asyncio.iscoroutinefunction(f):\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n========================= 7 passed, 1 warning in 0.39s =========================\n"
+  },
+  "tree_source": "fallback",
+  "tree": {
+    "task": "Add price_tier classification to CasaSol",
+    "leaves": [
+      {
+        "id": "leaf-A",
+        "deps": [],
+        "file": "scripts/mcp_server.py",
+        "target_symbol": "_price_tier",
+        "instruction": "Write a new Python function `_price_tier(price: int | None) -> str | None` that returns 'budget' for price<300000, 'mid' for 300000<=price<800000, 'premium' for 800000<=price<2000000, 'luxury' for price>=2000000, and None if price is None or 0. Output the complete function only."
+      },
+      {
+        "id": "leaf-B",
+        "deps": [
+          "leaf-A"
+        ],
+        "file": "scripts/mcp_server.py",
+        "target_symbol": "format_listing_full",
+        "instruction": "Modify format_listing_full() to call _price_tier(row.get('price')) and add a '**Price tier:** {tier}' line immediately after the '**Price per sqm:**' line. Omit the line if tier is None. Output the complete replacement function only."
+      },
+      {
+        "id": "leaf-C",
+        "deps": [],
+        "file": "scripts/mcp_server.py",
+        "target_symbol": "search_properties",
+        "instruction": "Add a `price_tier: str = ''` parameter to search_properties(). When price_tier is set, add a SQLite WHERE condition using only standard Python comparisons (no external imports, no undefined names). Use inline if/elif: if price_tier == 'budget': conditions.append('price < ?'); params.append(300000). elif price_tier == 'mid': conditions.append('price >= ? AND price < ?'); params.extend([300000,800000]). elif price_tier == 'premium': conditions.append('price >= ? AND price < ?'); params.extend([800000,2000000]). elif price_tier == 'luxury': conditions.append('price >= ?'); params.append(2000000). Add this block in the SQLite path after the existing max_price block. Also add price_tier to the ChromaDB where-clause metadata filter when set, using the same if/elif pattern appending to clauses. Output the complete replacement function only."
+      },
+      {
+        "id": "leaf-D1",
+        "deps": [
+          "leaf-A"
+        ],
+        "file": "tests/test_mcp_server.py",
+        "target_symbol": "test_price_tier_utility",
+        "instruction": "Write one pytest function `test_price_tier_utility` that imports _price_tier from scripts.mcp_server and asserts: _price_tier(250000)=='budget', _price_tier(1000000)=='premium', _price_tier(5000000)=='luxury', _price_tier(None) is None, _price_tier(0) is None. Output only that one function in a code fence."
+      },
+      {
+        "id": "leaf-D2",
+        "deps": [
+          "leaf-A",
+          "leaf-B"
+        ],
+        "file": "tests/test_mcp_server.py",
+        "target_symbol": "test_get_property_price_tier",
+        "instruction": "Write one pytest function `test_get_property_price_tier(setup_test_sqlite)` that patches 'scripts.mcp_server.get_db' with setup_test_sqlite, calls mcp_server.get_property(casasol_id='test-001') (price=1000000), and asserts 'Price tier' in result and 'premium' in result. Use the same patch pattern as the other tests in the file. Output only that one function in a code fence."
+      },
+      {
+        "id": "leaf-D3",
+        "deps": [
+          "leaf-C"
+        ],
+        "file": "tests/test_mcp_server.py",
+        "target_symbol": "test_search_properties_price_tier",
+        "instruction": "Write one pytest function `test_search_properties_price_tier(setup_test_sqlite)` that patches 'scripts.mcp_server.get_db' with setup_test_sqlite, calls mcp_server.search_properties(price_tier='budget'), and asserts 'No properties found' in result (all fixture prices are >=500000, none qualify as budget <300000). Use the same patch pattern as the other tests in the file. Output only that one function in a code fence."
+      }
+    ]
+  },
+  "leaf_logs": [
+    {
+      "leaf": {
+        "id": "leaf-A",
+        "deps": [],
+        "file": "scripts/mcp_server.py",
+        "target_symbol": "_price_tier",
+        "instruction": "Write a new Python function `_price_tier(price: int | None) -> str | None` that returns 'budget' for price<300000, 'mid' for 300000<=price<800000, 'premium' for 800000<=price<2000000, 'luxury' for price>=2000000, and None if price is None or 0. Output the complete function only."
+      },
+      "calls": [
+        {
+          "attempt": 0,
+          "ok": true,
+          "valid": true,
+          "reason": "ok",
+          "elapsed_s": 20.86,
+          "raw": "```python\ndef _price_tier(price: int | None) -> str | None:\n    if price is None or price == 0:\n        return None\n    if price < 300000:\n        return 'budget'\n    elif price < 800000:\n        return 'mid'\n    elif price < 2000000:\n        return 'premium'\n    else:\n        return 'luxury'\n```"
+        }
+      ],
+      "interventions": 0,
+      "applied": true,
+      "artifact_len": 284
+    },
+    {
+      "leaf": {
+        "id": "leaf-B",
+        "deps": [
+          "leaf-A"
+        ],
+        "file": "scripts/mcp_server.py",
+        "target_symbol": "format_listing_full",
+        "instruction": "Modify format_listing_full() to call _price_tier(row.get('price')) and add a '**Price tier:** {tier}' line immediately after the '**Price per sqm:**' line. Omit the line if tier is None. Output the complete replacement function only."
+      },
+      "calls": [
+        {
+          "attempt": 0,
+          "ok": true,
+          "valid": true,
+          "reason": "ok",
+          "elapsed_s": 13.9,
+          "raw": "```python\ndef format_listing_full(row: dict) -> str:\n    \"\"\"Format a listing with all details.\"\"\"\n    price = f\"\u20ac{row['price']:,}\" if row.get(\"price\") else \"Price on request\"\n    ppm2 = \"\"\n    price_per_sqm = None\n    if row.get(\"price\") and row.get(\"size_m2\") and row[\"size_m2\"] > 0:\n        price_per_sqm = round(row[\"price\"] / row[\"size_m2\"])\n        ppm2 = f\" (\u20ac{price_per_sqm:,}/m\u00b2)\"\n\n    tier = _price_tier(row.get('price'))\n    tier_line = f\"**Price tier:** {tier}\" if tier else \"\"\n\n    lines "
+        }
+      ],
+      "interventions": 0,
+      "applied": true,
+      "artifact_len": 1705
+    },
+    {
+      "leaf": {
+        "id": "leaf-C",
+        "deps": [],
+        "file": "scripts/mcp_server.py",
+        "target_symbol": "search_properties",
+        "instruction": "Add a `price_tier: str = ''` parameter to search_properties(). When price_tier is set, add a SQLite WHERE condition using only standard Python comparisons (no external imports, no undefined names). Use inline if/elif: if price_tier == 'budget': conditions.append('price < ?'); params.append(300000). elif price_tier == 'mid': conditions.append('price >= ? AND price < ?'); params.extend([300000,800000]). elif price_tier == 'premium': conditions.append('price >= ? AND price < ?'); params.extend([800000,2000000]). elif price_tier == 'luxury': conditions.append('price >= ?'); params.append(2000000). Add this block in the SQLite path after the existing max_price block. Also add price_tier to the ChromaDB where-clause metadata filter when set, using the same if/elif pattern appending to clauses. Output the complete replacement function only."
+      },
+      "calls": [
+        {
+          "attempt": 0,
+          "ok": true,
+          "valid": true,
+          "reason": "ok",
+          "elapsed_s": 33.32,
+          "raw": "```python\ndef search_properties(\n    query: str = \"\",\n    max_price: int = 0,\n    min_bedrooms: int = 0,\n    property_type: str = \"\",\n    location: str = \"\",\n    source: str = \"\",\n    collection_method: str = \"\",\n    price_tier: str = \"\",\n    limit: int = 5,\n) -> str:\n    \"\"\"\n    Search Costa del Sol property listings.\n\n    Combines semantic search (natural and natural language query) with structured filters.\n    Use query for natural language like \"apartment near the beach with sea views\".\n    "
+        }
+      ],
+      "interventions": 0,
+      "applied": true,
+      "artifact_len": 5435
+    },
+    {
+      "leaf": {
+        "id": "leaf-D1",
+        "deps": [
+          "leaf-A"
+        ],
+        "file": "tests/test_mcp_server.py",
+        "target_symbol": "test_price_tier_utility",
+        "instruction": "Write one pytest function `test_price_tier_utility` that imports _price_tier from scripts.mcp_server and asserts: _price_tier(250000)=='budget', _price_tier(1000000)=='premium', _price_tier(5000000)=='luxury', _price_tier(None) is None, _price_tier(0) is None. Output only that one function in a code fence."
+      },
+      "calls": [
+        {
+          "attempt": 0,
+          "ok": true,
+          "valid": true,
+          "reason": "ok",
+          "elapsed_s": 13.32,
+          "raw": "```python\nfrom scripts.mcp_server import _price_tier\n\ndef test_price_tier_utility():\n    assert _price_tier(250000) == 'budget'\n    assert _price_tier(1000000) == 'premium'\n    assert _price_tier(5000000) == 'luxury'\n    assert _price_tier(None) is None\n    assert _price_tier(0) is None\n```"
+        }
+      ],
+      "interventions": 0,
+      "applied": true,
+      "artifact_len": 278
+    },
+    {
+      "leaf": {
+        "id": "leaf-D2",
+        "deps": [
+          "leaf-A",
+          "leaf-B"
+        ],
+        "file": "tests/test_mcp_server.py",
+        "target_symbol": "test_get_property_price_tier",
+        "instruction": "Write one pytest function `test_get_property_price_tier(setup_test_sqlite)` that patches 'scripts.mcp_server.get_db' with setup_test_sqlite, calls mcp_server.get_property(casasol_id='test-001') (price=1000000), and asserts 'Price tier' in result and 'premium' in result. Use the same patch pattern as the other tests in the file. Output only that one function in a code fence."
+      },
+      "calls": [
+        {
+          "attempt": 0,
+          "ok": true,
+          "valid": true,
+          "reason": "ok",
+          "elapsed_s": 44.46,
+          "raw": "*   Goal: Write one `pytest` function `test_get_property_price_tier(setup_test_sqlite)`.\n    *   Requirements:\n        *   Patch `scripts.mcp_server.get_db` with the `setup_test_sqlite` fixture.\n        *   Call `mcp_server.get_property(casasol_id='test-001')`.\n        *   `test-001` has `price=1000000` (Note: the fixture data provided is `\u20ac1,000,000` as a string, but the logic for `_price_tier` uses `int`. However, the prompt says `price=1000000`. I should look at how the data is loaded. The `s"
+        }
+      ],
+      "interventions": 0,
+      "applied": true,
+      "artifact_len": 278
+    },
+    {
+      "leaf": {
+        "id": "leaf-D3",
+        "deps": [
+          "leaf-C"
+        ],
+        "file": "tests/test_mcp_server.py",
+        "target_symbol": "test_search_properties_price_tier",
+        "instruction": "Write one pytest function `test_search_properties_price_tier(setup_test_sqlite)` that patches 'scripts.mcp_server.get_db' with setup_test_sqlite, calls mcp_server.search_properties(price_tier='budget'), and asserts 'No properties found' in result (all fixture prices are >=500000, none qualify as budget <300000). Use the same patch pattern as the other tests in the file. Output only that one function in a code fence."
+      },
+      "calls": [
+        {
+          "attempt": 0,
+          "ok": true,
+          "valid": true,
+          "reason": "ok",
+          "elapsed_s": 5.38,
+          "raw": "```python\ndef test_search_properties_price_tier(setup_test_sqlite):\n    with patch('scripts.mcp_server.get_db', side_effect=setup_test_sqlite):\n        result = mcp_server.search_properties(price_tier='budget')\n        assert 'No properties found' in result\n```"
+        }
+      ],
+      "interventions": 0,
+      "applied": true,
+      "artifact_len": 248
+    }
+  ],
+  "post_test": {
+    "returncode": 0,
+    "passed": 10,
+    "failed": 0,
+    "errors": 0,
+    "output": "============================= test session starts ==============================\nplatform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0 -- /Users/miktam02/REPOS/casasol/.venv/bin/python3.14\ncachedir: .pytest_cache\nrootdir: /Users/miktam02/REPOS/casasol\nplugins: anyio-4.13.0\ncollecting ... collected 10 items\n\ntests/test_mcp_server.py::test_get_property_found PASSED                 [ 10%]\ntests/test_mcp_server.py::test_get_property_not_found PASSED             [ 20%]\ntests/test_mcp_server.py::test_search_properties_sqlite_filter PASSED    [ 30%]\ntests/test_mcp_server.py::test_search_properties_sqlite_no_results PASSED [ 40%]\ntests/test_mcp_server.py::test_search_properties_chroma_query PASSED     [ 50%]\ntests/test_mcp_server.py::test_search_properties_chroma_with_filters PASSED [ 60%]\ntests/test_mcp_server.py::test_get_property_price_per_sqm PASSED         [ 70%]\ntests/test_mcp_server.py::test_price_tier_utility PASSED                 [ 80%]\ntests/test_mcp_server.py::test_get_property_price_tier PASSED            [ 90%]\ntests/test_mcp_server.py::test_search_properties_price_tier PASSED       [100%]\n\n=============================== warnings summary ===============================\n.venv/lib/python3.14/site-packages/chromadb/telemetry/opentelemetry/__init__.py:128\n  /Users/miktam02/REPOS/casasol/.venv/lib/python3.14/site-packages/chromadb/telemetry/opentelemetry/__init__.py:128: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead\n    if asyncio.iscoroutinefunction(f):\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n======================== 10 passed, 1 warning in 0.40s =========================\n"
+  },
+  "summary": {
+    "tree_source": "fallback",
+    "leaves": 6,
+    "total_interventions": 0,
+    "tests_before": 7,
+    "tests_after": 10,
+    "new_tests": 3,
+    "suite_pass": true
+  }
+}
