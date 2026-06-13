@@ -1782,7 +1782,7 @@ output would be reviewed before merge.
 fresh terminal with the model already cached starts cleanly. No workaround needed.
 
 **Phase B — LAN path confirmed 2026-06-13:**
-- MBP mDNS: `MacBook-Pro.local` → `192.168.18.161`; mini: `192.168.18.155`
+- MBP mDNS: `miktam-mbp.local` → `192.168.18.161`; mini: `192.168.18.155`
 - `ping` from mini: resolves, RTT 15–343 ms (home WiFi variance)
 - Single inference request mini→MBP: HTTP 200, `gemma-4-26b-a4b-it-4bit` responds, 19+5 tokens
 - Note: MLX Gemma 4 returns `reasoning` field instead of `content` when thinking is active;

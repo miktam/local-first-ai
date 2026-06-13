@@ -113,7 +113,7 @@ curl -s http://localhost:8080/v1/chat/completions \
 **From the mini** (verifies LAN reachability):
 
 ```bash
-curl -s http://macbook-pro.local:8080/v1/chat/completions \
+curl -s http://miktam-mbp.local:8080/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{"model":"mlx-community/gemma-4-26b-a4b-it-4bit","messages":[{"role":"user","content":"Reply: OK"}],"max_tokens":5}' \
   | python3 -m json.tool
@@ -216,15 +216,15 @@ Once the server is running on the MBP, confirm the LAN path works end-to-end:
 
 ```bash
 # Run from miktam02 (mini)
-ping -c 3 macbook-pro.local
+ping -c 3 miktam-mbp.local
 
-curl -s http://macbook-pro.local:8080/v1/chat/completions \
+curl -s http://miktam-mbp.local:8080/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{"model":"x","messages":[{"role":"user","content":"Reply: OK"}],"max_tokens":5}' \
   | python3 -m json.tool
 ```
 
-If `macbook-pro.local` doesn't resolve, fall back to the MBP's LAN IP:
+If `miktam-mbp.local` doesn't resolve, fall back to the MBP's LAN IP:
 
 ```bash
 # On MBP
