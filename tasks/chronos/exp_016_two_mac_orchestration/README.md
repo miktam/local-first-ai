@@ -2,7 +2,7 @@
 
 *Pre-registered: 2026-06-12*  
 *Phase A: COMPLETE 2026-06-12 — Winner: Qwen3-Coder-Next-4bit (4.0/5, 100.6 tok/s)*  
-*Phase B: Blocked — mlx_lm.server hang unresolved*
+*Phase B: IN PROGRESS 2026-06-13 — LAN path confirmed; TTFT benchmark pending*
 
 ---
 

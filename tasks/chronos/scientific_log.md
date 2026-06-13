@@ -1778,12 +1778,19 @@ One edge case note (does not affect selection): the winning implementation check
 `price_per_sqm=0` instead of null. This is spec-compliant enough for Phase C — the smart tier's
 output would be reviewed before merge.
 
-**mlx_lm.server hang (unresolved):** Server hangs on first GET request under Python 3.14.
-Reproduced on Python 3.12 as well. Cause unknown. Phase B (LAN routing) requires a working
-server — investigating LM Studio or a custom FastAPI wrapper as alternatives before Phase B.
+**mlx_lm.server hang (resolved 2026-06-13):** Interactive-session artifact. Launching from a
+fresh terminal with the model already cached starts cleanly. No workaround needed.
+
+**Phase B — LAN path confirmed 2026-06-13:**
+- MBP mDNS: `MacBook-Pro.local` → `192.168.18.161`; mini: `192.168.18.155`
+- `ping` from mini: resolves, RTT 15–343 ms (home WiFi variance)
+- Single inference request mini→MBP: HTTP 200, `gemma-4-26b-a4b-it-4bit` responds, 19+5 tokens
+- Note: MLX Gemma 4 returns `reasoning` field instead of `content` when thinking is active;
+  integration must disable thinking or read from `reasoning`
+- TTFT benchmark (10 reps, `phase_b_lan_latency.json`) pending — next step before Phase C
 
 *Evidence: `exp_016_two_mac_orchestration/measurements/` — 9 rep JSONs + phase_a_summary.json*  
-*Status: Phase A complete 2026-06-12. Phase B blocked on mlx_lm.server hang.*
+*Status: Phase A complete 2026-06-12. Phase B LAN path live 2026-06-13; TTFT benchmark pending.*
 
 ---
 
