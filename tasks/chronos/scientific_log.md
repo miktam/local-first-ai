@@ -1853,3 +1853,37 @@ operator post-experiment: `casasol` commit `6e8b8c9`, 7/7 tests.
 
 ---
 
+## Exp 019 — Adversarial Legal Review Pipeline
+
+**Pre-registered: 2026-06-23**  
+**Status: COMPLETE — 2026-06-24**  
+**Type:** Methodology experiment + applied output
+
+**Hypothesis (pre-registered before first run):**  
+An adversarial 3-panelist pipeline (Regulator / Opposing Counsel / Devil's Advocate) produces a more accurate legal brief than single-pass drafting. Metric: claims surviving the panel unchanged vs. total claims drafted.
+
+**Result: 0/7 claims survived unchanged.** Core argument (local inference is superior for data sovereignty) is directionally correct and survived; every individual claim required revision. Two critical issues caught that would have caused a Gibraltar lawyer to distrust the document on first read.
+
+**What was produced:**
+- **v1** — neutral ILAC drafter (claude-sonnet-4-6); all 7 claims SOLID in body text, score 4.2/5
+- **3 panel verdicts** — Panelist 1 (Regulator), Panelist 2 (Opposing Counsel), Panelist 3 (Devil's Advocate)
+- **Dissent register** — 0 claims SOLID unchanged; 6 CONTESTED; 1 WEAK → required rewrite
+- **v_final** — all revisions incorporated; 10 open questions for legal counsel (up from 5 in v1)
+
+**Two critical issues the panel caught:**
+
+*Issue A — UK-US BDAA (Oct 2022) missing from v1.* The Bilateral Data Access Agreement constrains US law enforcement access to UK/Gibraltar persons' data from US companies. v1 ignored it entirely — visible omission to any UK-trained lawyer. Added in v_final with scope limitations (law enforcement only; not civil/intelligence).
+
+*Issue B — Ingestion transfer gap.* v1 claimed "no international transfer occurs during inference." True only if compute and data are co-located. The brief's technical premise placed the cluster in Singapore and the documents in Gibraltar. The Gibraltar→Singapore transit is itself a restricted international transfer — the very restriction the document claimed to avoid. Caught by Panelist 3 (Devil's Advocate), who attacks the fundamental conclusion rather than individual claims. Added in v_final as the co-location precondition.
+
+**Why the adversarial structure caught what a single model missed:**  
+Panelists 1 and 2 hunt for local errors (overclaims, citation gaps). Panelist 3 attacks the thesis. A single model reviewing its own output finds typos; conflicting mandates find structural failures. The BDAA gap was a knowledge-base omission — the drafter and a single reviewer share the same blind spots. The ingestion gap was an internal inconsistency between the legal claim and the technical brief the drafter itself produced — caught only when an adversarial model was told to assume the conclusion was wrong.
+
+**Scope:** Data sovereignty assessment — cloud AI versus local inference under UK/Gibraltar (primary), Singapore (secondary), EU (tertiary) law. Subject: document processing by a non-US operator on Apple Silicon running Ollama/gemma4:26b.
+
+*Evidence: `exp_019_adversarial_legal_review/` — README, `data_sovereignty_brief_sanitised.md`, `iterations/v2_citation_check.md`, `iterations/v3_overclaim_review.md`. Internal iteration chain (v1 → panel → dissent → v_final) held privately.*  
+*Blog post: `2026-06-24-adversarial-legal-panel.md` (methodology — adversarial pipeline technique)*  
+*Status: Complete 2026-06-24.*
+
+---
+

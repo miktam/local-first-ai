@@ -29,14 +29,15 @@ To build and maintain a public-facing blog written from the perspective of Nesto
 - [x] **Exp 009 — Adversarial Critic:** gemma4:26b matches compliance layer; misses impl-vs-docs gap. FAIL as drop-in.
 - [x] **Exp 011 — MLX runtime:** No cliff through 40K on MLX. Confirms cliff is Ollama/llama.cpp artefact, not hardware.
 - [x] **Exp 012–014 — Cost/capability curve:** Step function confirmed at 4B-active/frontier boundary. Haiku cost-dominant.
+- [x] **Exp 019 — Adversarial Legal Review Pipeline:** Complete 2026-06-24. 0/7 claims survived unchanged. Adversarial 3-panelist pipeline caught 2 critical issues single-pass drafting missed (UK-US BDAA omission; ingestion transfer gap). First application of the Legal Agent pattern.
 
 ## Current Focus
 
-*Updated: 2026-06-13*
+*Updated: 2026-06-24*
+
+**Adversarial Legal Review Pipeline (Exp 019) complete.** First application of the Legal Agent pattern. 0/7 claims survived the adversarial panel unchanged. Two critical issues caught that single-pass drafting missed: UK-US BDAA omission and the ingestion transfer gap (data and compute in different jurisdictions). Methodology post drafted for blog 2026-06-24 (pending deploy). Full iteration chain in Chronos (internal); sanitised brief held privately.
 
 **Flash Attention cliff resolved (Exp 008/010, June 2026).** `OLLAMA_FLASH_ATTENTION=1` was the sole cause of the prefill cliff. FA=0/fp16 has no cliff through 40K tokens — confirmed by Exp 010's 2×2 factorial and independently by MLX on the same hardware (Exp 011). The Mini's true operational ceiling is >40K tokens on-wire.
-
-**Two-mac orchestration (Exp 016) in progress.** Phase A complete: Qwen3-Coder-Next-4bit selected as smart tier model (4.0/5 quality, 100.6 tok/s on MBP M5 Max). Phase B: LAN path mini→miktam-mbp.local confirmed; TTFT benchmark pending before Phase C.
 
 **Pre-registered and awaiting execution:** Exp 015 (active-parameter ablation, dense vs MoE), Exp 017 (Argos Phase 0 feed reconnaissance), Exp 018 (sovereignty resilience — triggered by Fable/Mythos export control suspension June 11).
 
@@ -64,6 +65,7 @@ To build and maintain a public-facing blog written from the perspective of Nesto
 
 ### Content Execution
 
+- [ ] **Exp 019 — Publish methodology post.** `2026-06-24-adversarial-legal-panel.md` — drafted, in `local-first-ai-blog/content/posts/`, pending `hugo deploy`. Brief post removed — the analysis is a product, not marketing content.
 - [ ] **"What was in the tank?"** Hindenburg analogy essay (US helium ban → hydrogen → 1937 fire as rhetorical frame for Fable/Mythos sovereignty event). Post-OLÉ.
 - [ ] **Exp 015 writeup.** "The Active Compute Boundary" — does the local/cloud step function hold at every model class, or is it an artefact of testing only MoE-A4B? Post-execution.
 - [ ] **Chronos README narrative.** Add "Chronos tests the 29%, not the 981%" framing (NBER WP 35275: Claude Code +981% lines written, +29% shipped releases).
