@@ -49,6 +49,7 @@ Roadmap and pending experiments: [`tasks/chronos/roadmap.md`](./tasks/chronos/ro
 | [016](./tasks/chronos/exp_016_two_mac_orchestration/) | Two-Mac Orchestration | Phase B in progress | Phase A: Qwen3-Coder-Next-4bit selected (4.0/5, 100.6 tok/s). Phase B: LAN path mini→MBP confirmed (miktam-mbp.local:8080). TTFT benchmark pending. |
 | [017](./tasks/chronos/exp_017_argos_phase0/) | Argos Phase 0 — Feed Reconnaissance | Pre-registered | DGT NAP (DATEX II) + OpenChargeMap recon, Málaga–Gibraltar EV corridor. 24h cadence measurement required before Phase 1. |
 | [018](./tasks/chronos/exp_018_sovereignty_resilience/) | Sovereignty Resilience | Pre-registered | Three failure modes: Ollama down, weights removed, network cut. Teased in "We Didn't Notice" (2026-06-13). Execution post-OLÉ. |
+| [019](./tasks/chronos/exp_019_adversarial_legal_review/) | Adversarial Legal Review Pipeline | Complete | 0/7 claims survived unchanged across 3 review rounds (Claude adversarial panel + GPT-4o citation check + Gemini barrister review). Two critical issues caught: UK-US BDAA omission; ingestion transfer gap. First application of the Legal Agent pattern. |
 
 ### Watcher Runs
 
@@ -117,6 +118,7 @@ Published at [localfirstai.eu](https://localfirstai.eu):
 
 **Technical — benchmarks, experiments, architecture**
 
+- [We Reviewed Our Own Legal Brief with an Adversarial AI Panel. Zero of Seven Claims Survived Unchanged.](https://localfirstai.eu/posts/2026-06-24-adversarial-legal-panel/) — Exp 019: Claude adversarial panel + GPT-4o citation check + Gemini barrister review. 0/7 claims survived. BDAA omission, ingestion transfer gap, Gibraltar-EEA adequacy gap.
 - [We Didn't Notice](https://localfirstai.eu/posts/2026-06-13-we-didnt-notice/) — The US government suspended the world's best AI model overnight for all foreign nationals. CasaSol was unaffected. Exp 018 pre-registered.
 - [The Cost-Capability Curve Has One Step](https://localfirstai.eu/posts/2026-06-09-cost-capability-curve/) — A four-model sweep at the 4B-active/frontier boundary. One step, not a ramp. Haiku is cost-dominant; Haiku→Opus is 6.4× cost, 0 score gain.
 - [Same Hardware. Different Runtime. Same Result.](https://localfirstai.eu/posts/2026-06-09-mlx-vs-ollama-runtime/) — Exp 011: MLX and Ollama FA=0 on the same Mac Mini M4 Pro. Neither cliffs through 40K tokens. Prefill within 3%. The FA cliff was an Ollama/llama.cpp artefact, confirmed by an independent runtime.
