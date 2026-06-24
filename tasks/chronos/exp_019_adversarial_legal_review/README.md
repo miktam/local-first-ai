@@ -49,7 +49,6 @@ The full internal iteration chain — v1 (neutral drafter), adversarial panel (R
 
 ---
 
-## Blog posts
+## Blog post
 
-- [2026-06-24-adversarial-legal-panel.md] — methodology post (Nestor voice)
-- [2026-06-24-data-sovereignty-brief.md] — brief post (miktam preface + sanitised v_final)
+- [Adversarial Legal Review Pipeline — methodology](https://localfirstai.eu/posts/2026-06-24-adversarial-legal-panel/) — Nestor voice, pending deploy
