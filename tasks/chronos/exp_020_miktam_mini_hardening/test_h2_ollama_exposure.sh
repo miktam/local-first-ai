@@ -11,6 +11,23 @@ RESULTS_DIR="$(dirname "$0")/results"
 OUT="$RESULTS_DIR/h2_ollama_exposure_${MODE}_${TS}.json"
 mkdir -p "$RESULTS_DIR"
 
+# Local, private config (real tailnet IP, never committed) — auto-loaded as a
+# fallback so PROXY_URL doesn't need retyping every run. See
+# ~/.config/ollama-proxy/config.env. Safe to be absent; nothing here is
+# required for the pre-fix leg.
+LOCAL_CONFIG="$HOME/.config/ollama-proxy/config.env"
+if [ -z "${PROXY_URL:-}" ] && [ -f "$LOCAL_CONFIG" ]; then
+  # shellcheck disable=SC1090
+  source "$LOCAL_CONFIG"
+fi
+
+# Whatever ends up in $1 gets its Tailscale CGNAT address (100.64.0.0/10)
+# stripped before it's ever written to a results file — those files are
+# committed to a public repo, the real address never should be.
+redact_tailnet_ip() {
+  printf '%s' "$1" | sed -E 's/100\.(6[4-9]|[7-9][0-9]|1[01][0-9]|12[0-7])\.[0-9]{1,3}\.[0-9]{1,3}/<tailnet-ip>/g'
+}
+
 PAYLOAD='{"model":"gemma4:26b","prompt":"reply with exactly one word: pong","stream":false}'
 
 if [ "$MODE" = "pre" ]; then
@@ -62,16 +79,19 @@ else
   fi
 fi
 
+TARGET_SAFE="$(redact_tailnet_ip "$TARGET")"
+NOTE_SAFE="$(redact_tailnet_ip "$note")"
+
 cat > "$OUT" <<EOF
 {
   "hypothesis": "H2",
   "mode": "$MODE",
   "timestamp": "$TS",
-  "target": "$TARGET",
+  "target": "$TARGET_SAFE",
   "unauthenticated_http_status": "$unauth_response",
   "authenticated_http_status": "${auth_response:-n/a}",
   "verdict": "$verdict",
-  "note": "$note"
+  "note": "$NOTE_SAFE"
 }
 EOF
 
