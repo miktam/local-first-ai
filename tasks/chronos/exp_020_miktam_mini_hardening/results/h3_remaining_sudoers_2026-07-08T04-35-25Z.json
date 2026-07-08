@@ -1,0 +1,14 @@
+{
+  "hypothesis": "H3",
+  "timestamp": "2026-07-08T04-35-25Z",
+  "note_on_scope": "pharos-deploy script reviewed by source only in Phase 0 (fixed hardcoded paths, no attacker-influenced input, bounded to one repo + one plist) — not invoked here, since a real invocation would copy files and bounce a live daemon.",
+  "checks": [
+    {"command":"shutdown (invalid flag, never actually shuts down)","passwordless":true,"exit_code":1,"note":""},
+    {"command":"lsof -p 1","passwordless":true,"exit_code":0,"note":""},
+    {"command":"asitop --help","passwordless":true,"exit_code":0,"note":""},
+    {"command":"powermetrics -n1 -i1 (single sample)","passwordless":true,"exit_code":0,"note":""},
+    {"command":"killall powermetrics (no-op, none running)","passwordless":true,"exit_code":1,"note":""},
+    {"command":"pmset -g","passwordless":false,"exit_code":1,"note":""},
+    {"command":"cp (control — expected password-gated per Phase 0 correction)","passwordless":false,"exit_code":1,"note":""}
+  ]
+}

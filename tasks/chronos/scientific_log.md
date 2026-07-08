@@ -1887,3 +1887,27 @@ Panelists 1 and 2 hunt for local errors (overclaims, citation gaps). Panelist 3 
 
 ---
 
+## Exp 020 — Hardening and Red-Teaming the Inference Node
+
+**Pre-registered: 2026-07-08**
+**Status: COMPLETE — 2026-07-08 (H1, H2 pre+post, H3 all confirmed by direct testing; fix applied and verified same day)**
+**Type:** Security audit + methodology note
+
+**Hypothesis (pre-registered before formal scripted testing):**
+H1: an unrestricted `tail` NOPASSWD sudoers grant permits root-level file read beyond the user's own permissions. H2: the local inference API is reachable and fully functional with zero authentication from the private network, and this stops being true once an auth layer is added. H3: the remaining NOPASSWD grants are each either genuinely scoped/low-severity, or not actually passwordless despite appearing so in a static `sudo -l` read.
+
+**Result:**
+- **H1 — confirmed.** Direct `cat /etc/sudoers` denied (permission error); `sudo -n tail -n 5 /etc/sudoers` succeeded with no password, returning real content. Unrestricted `tail` is a genuine confidentiality-breaking read primitive.
+- **H2 — confirmed both legs.** Pre-fix: an unauthenticated POST to the local model's generate endpoint returned a real response with zero credentials presented (HTTP 200). Fix applied same day (token-authenticated reverse proxy, model rebound to loopback-only). Post-fix: the identical unauthenticated request against the proxy now returns HTTP 401; the same request with the correct bearer token returns HTTP 200. Model server itself confirmed no longer reachable at all from the Tailscale-facing address (connection timeout on the old port from that interface) — only reachable from `127.0.0.1`, which is by design since the proxy forwards to it locally.
+- **H3 — mixed, and this is the interesting part.** `shutdown`, `lsof`, `asitop`, and `powermetrics` are genuinely passwordless (low severity — availability/telemetry, not data exposure). `cp` and `pmset` **are not** — both appeared unrestricted in the static `sudo -l -n` listing but failed with "a password is required" under direct invocation. Most likely a line-wrap artifact in how the listing rendered two adjacent sudoers rules as one. This was the single biggest correction in the whole exercise: the thing that looked like the worst finding (arbitrary root file write via `cp`) wasn't real, and a full test script even reproduced a second, smaller version of the same category of error — a path-resolution bug (`/usr/sbin/pmset` doesn't exist; the real binary is `/usr/bin/pmset`) made one script run misreport `pmset` as passwordless, caught only by manually re-running the exact failing invocation.
+
+**Why this matters methodologically:** twice in one session, trusting a static read (a config dump, then a test script's own string-matching logic) produced a false positive that direct, repeated empirical invocation caught. The lesson generalizes past this one machine: for security claims specifically, "the config says X" is not evidence — only "I ran it and this is what happened" is.
+
+**Scope:** miktam-mini (M4 Pro, 64GB) — the machine running local inference for a client-facing document-processing deployment. Findings and fixes documented for an audit record; sudoers narrowing and FileVault enablement explicitly deferred (accepted-risk decisions, not oversights).
+
+*Evidence: `exp_020_miktam_mini_hardening/` — `HYPOTHESIS.md`, `AUDIT_FINDINGS.md`, `test_h1_tail.sh`, `test_h2_ollama_exposure.sh`, `test_h3_remaining_sudoers.sh`, `results/` (timestamped JSON per run, including two superseded buggy runs — the H3 `pmset` path bug and the first H2 post-fix run that tested the wrong endpoint — kept for the record per append-only convention; each is itself an instance of the post's central finding).*
+*Blog post: `2026-07-08-hardening-the-inference-node.md` (drafted, built cleanly via local Hugo, fully anonymized per the exp_019 precedent; not yet published).*
+*Status: Complete 2026-07-08. SSH confirmed key-only (`PasswordAuthentication no`) — no action needed. Screen-lock delay tightening still open, pending confirmation of intent.*
+
+---
+

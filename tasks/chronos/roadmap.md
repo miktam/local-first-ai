@@ -62,10 +62,14 @@ To build and maintain a public-facing blog written from the perspective of Nesto
 - [ ] **Exp 018 — Sovereignty resilience.** Three failure modes: Ollama down, weights removed, network cut. Triggered by Fable/Mythos export control event (June 11). [`exp_018_sovereignty_resilience/`](./exp_018_sovereignty_resilience/)
 - [ ] **Exp 007 Phase C — Thermal endurance (MBP, 90 min sustained).** Fan audible during Phase B at 110K tokens. Deferred; lower priority now that Exp 016 characterises the two-machine pipeline.
 - [ ] **Router alternative evaluation.** `gemma4:e4b` follows fixture patterns over prose instructions. Evaluate Qwen 2.5/3.5b as a more deterministic structured-output router.
+- [x] **Exp 020 — Run the one-time Ollama proxy setup.** Applied and verified 2026-07-08 — H2 post-fix confirmed (401 unauth, 200 auth). [`exp_020_miktam_mini_hardening/`](./exp_020_miktam_mini_hardening/)
+- [x] **Exp 020 — Confirm SSH password-auth setting.** `PasswordAuthentication no` confirmed 2026-07-08 — key-only, no action needed.
+- [ ] **Exp 020 — Tighten screen-lock delay.** Currently 3,600s (1 hour); recommend ~5s. No known downside (doesn't affect background daemons), just wasn't in the originally negotiated hardening scope — pending confirmation of intent.
 
 ### Content Execution
 
 - [ ] **Exp 019 — Publish methodology post.** `2026-06-24-adversarial-legal-panel.md` — drafted, in `local-first-ai-blog/content/posts/`, pending `hugo deploy`. Brief post removed — the analysis is a product, not marketing content.
+- [ ] **Exp 020 — Publish hardening post.** `2026-07-08-hardening-the-inference-node.md` — drafted, fully anonymized per the exp_019 precedent (no client/product names). Pending local Hugo preview check and `hugo deploy`.
 - [ ] **"What was in the tank?"** Hindenburg analogy essay (US helium ban → hydrogen → 1937 fire as rhetorical frame for Fable/Mythos sovereignty event). Post-OLÉ.
 - [ ] **Exp 015 writeup.** "The Active Compute Boundary" — does the local/cloud step function hold at every model class, or is it an artefact of testing only MoE-A4B? Post-execution.
 - [ ] **Chronos README narrative.** Add "Chronos tests the 29%, not the 981%" framing (NBER WP 35275: Claude Code +981% lines written, +29% shipped releases).

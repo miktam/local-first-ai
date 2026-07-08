@@ -1,0 +1,10 @@
+{
+  "hypothesis": "H2",
+  "mode": "post",
+  "timestamp": "2026-07-08T04-53-15Z",
+  "target": "http://<tailnet-ip>:11435/api/generate",
+  "unauthenticated_http_status": "401",
+  "authenticated_http_status": "200",
+  "verdict": "confirmed",
+  "note": "Unauthenticated request to the proxy now rejected (HTTP 401); authenticated request via the proxy succeeded (HTTP 200)."
+}

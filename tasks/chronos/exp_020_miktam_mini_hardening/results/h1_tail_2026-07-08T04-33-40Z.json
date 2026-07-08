@@ -1,0 +1,11 @@
+{
+  "hypothesis": "H1",
+  "timestamp": "2026-07-08T04-33-40Z",
+  "target_file": "/etc/sudoers",
+  "direct_read_exit_code": 1,
+  "direct_read_stderr": "cat: /etc/sudoers: Permission denied",
+  "sudo_tail_exit_code": 0,
+  "sudo_tail_output_line_count": 4,
+  "verdict": "confirmed",
+  "note": "Direct read denied (exit 1); sudo -n tail succeeded (exit 0) with no password prompt — H1 confirmed."
+}
