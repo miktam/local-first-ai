@@ -1911,3 +1911,39 @@ H1: an unrestricted `tail` NOPASSWD sudoers grant permits root-level file read b
 
 ---
 
+## Exp 021 — Independent Red-Team Pass on the Inference Node
+
+**Pre-registered: 2026-07-08**
+**Status: H3 CONFIRMED, sensitive — do not publish/push until remediated. H1/H2 blocked on cooperative access.**
+**Type:** Security audit, methodology follow-up to Exp 020
+
+**Hypothesis (pre-registered before execution):** exp_020's red-team phase was self-tested — same session, same account, same machine building and testing the fix. This experiment re-tests from independent vantage points: H1 network access from a genuinely separate device, H2 privilege boundary from a genuinely separate account, H3 what's reachable through ordinary file permissions with zero escalation at all.
+
+**Result — H3 confirmed, and it's the most consequential finding across both experiments:** without any sudo or exploit, an unencrypted SSH private key and three live, exported secrets (an LLM API key, a bot token, and a keyring password) are all readable by anything running as the automation account — a `cat` of a shell startup file or a plain `env` dump, no privilege escalation needed at all. This is a lower bar than anything exp_020 found, and the realistic path to it (a compromised dependency, or eventually a crafted document manipulating the pipeline's own tooling) doesn't require an OS misconfiguration the way the exp_020 `tail` finding did.
+
+**Handling note:** unlike exp_020's findings, this one names live, unrotated credentials by category (not value) and is being held out of any public writeup or push until the credentials are rotated and moved out of shell startup files. Evidence in `results/h3_secret_exposure_*.json` records variable *names* and file permissions only — no secret values were ever written to disk or displayed beyond this session.
+
+**H1/H2 status:** H1 blocked until `miktam-mbp` (the field laptop) is back on the network, ~2026-07-10. H2 (throwaway non-admin test account on miktam-mini) is ready to run any time, unblocked by the laptop's absence — see `HYPOTHESIS.md`.
+
+*Evidence: `exp_021_independent_red_team/` — `HYPOTHESIS.md`, `H3_FINDINGS.md`, `test_h3_secret_exposure.sh`, `results/`.*
+*Status: Partially complete 2026-07-08. Do not push to the public remote until H3's remediation (credential rotation) is done.*
+
+---
+
+## Exp 022 — Adversarial Red-Team of the CasaSol Guide Bot
+
+**Pre-registered: 2026-07-21**
+**Status: PRE-REGISTERED — execution pending**
+**Type:** Security audit, application-layer adversarial testing
+
+**Hypothesis (pre-registered before execution):** Exp_020/021 tested the infrastructure layer (OS permissions, network exposure). This experiment tests the application layer — the CasaSol Guide Telegram bot exposed to untrusted users. Four hypotheses: H1 prompt injection (bot resists SYSTEM_PROMPT override/extraction), H2 session extraction (cross-user session leakage is impossible via conversational input), H3 corpus poisoning (a crafted /witness submission, once approved, measurably biases bot answers — *expected to confirm*), H4 guardrail bypass (bot cannot be made to give binding legal advice or reveal seller contacts).
+
+H3 is the anchor finding: the /witness community-contribution pipeline has no content moderation beyond admin approval, creating a social-layer attack surface that doesn't exist in read-only systems. H3 confirming is the expected result and the publication hook regardless of H1/H2/H4 outcome.
+
+**Scope:** `casasol/scripts/telegram_bot.py` + `community_store.py` + gemma4:26b via Ollama. Tests call `handle_message()` directly (no live Telegram). H3 uses `community_store.submit()` + `index_witness_report()` with a synthetic poisoned report, deleted immediately after testing.
+
+*Evidence: `exp_022_bot_red_team/` — `HYPOTHESIS.md`, `results/` (to be populated on execution).*
+*Status: Pre-registered 2026-07-21. Execution pending.*
+
+---
+
