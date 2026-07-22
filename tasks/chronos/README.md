@@ -85,6 +85,9 @@ months can be tested against the same on-disk evidence.
 | Exp 016 | Two-mac orchestration | Phase B in progress | [`exp_016_two_mac_orchestration/`](./exp_016_two_mac_orchestration/) |
 | Exp 017 | Argos Phase 0 — feed reconnaissance | Pre-registered | [`exp_017_argos_phase0/`](./exp_017_argos_phase0/) |
 | Exp 018 | Sovereignty resilience (3 failure modes) | Pre-registered | [`exp_018_sovereignty_resilience/`](./exp_018_sovereignty_resilience/) |
+| Exp 019 | Adversarial legal review pipeline | Complete | [`exp_019_adversarial_legal_review/`](./exp_019_adversarial_legal_review/) |
+| Exp 020 | Hardening and red-teaming the inference node | Complete | [`exp_020_miktam_mini_hardening/`](./exp_020_miktam_mini_hardening/) |
+| Exp 022 | Adversarial red-team of the CasaSol Guide bot | Complete | [`exp_022_bot_red_team/`](./exp_022_bot_red_team/) |
 | Watcher Run 001 | Adversarial watcher — CasaSol gap analysis | Complete | [`watcher_run_001/`](./watcher_run_001/) |
 | Pre-Chronos benchmarks | Ad-hoc bench scripts (unnumbered) | Reference | [`experiments/`](./experiments/) |
 

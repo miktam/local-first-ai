@@ -50,6 +50,8 @@ Roadmap and pending experiments: [`tasks/chronos/roadmap.md`](./tasks/chronos/ro
 | [017](./tasks/chronos/exp_017_argos_phase0/) | Argos Phase 0 — Feed Reconnaissance | Pre-registered | DGT NAP (DATEX II) + OpenChargeMap recon, Málaga–Gibraltar EV corridor. 24h cadence measurement required before Phase 1. |
 | [018](./tasks/chronos/exp_018_sovereignty_resilience/) | Sovereignty Resilience | Pre-registered | Three failure modes: Ollama down, weights removed, network cut. Teased in "We Didn't Notice" (2026-06-13). Execution post-OLÉ. |
 | [019](./tasks/chronos/exp_019_adversarial_legal_review/) | Adversarial Legal Review Pipeline | Complete | 0/7 claims survived unchanged across 3 review rounds (Claude adversarial panel + GPT-4o citation check + Gemini barrister review). Two critical issues caught: UK-US BDAA omission; ingestion transfer gap. First application of the Legal Agent pattern. |
+| [020](./tasks/chronos/exp_020_miktam_mini_hardening/) | Hardening and Red-Teaming the Inference Node | Complete | Unauthenticated Ollama on the Tailscale network fixed (loopback-only + token-authenticated proxy); an unrestricted `tail` NOPASSWD grant confirmed as a genuine root-read primitive; the static listing's worst-looking finding (`cp`) turned out to be a misread, refuted by direct invocation. |
+| [022](./tasks/chronos/exp_022_bot_red_team/) | Adversarial Red-Team of the CasaSol Guide Bot | Complete | H1/H2/H4 (prompt injection, session extraction, guardrail bypass) refuted — the bot resisted every attack, mostly rejected at the intent-router layer. H3 (corpus poisoning via `/witness`) confirmed: one admin approval is enough to get a fabricated claim indexed and reproduced as fact across every follow-up query. |
 
 ### Watcher Runs
 
@@ -118,6 +120,8 @@ Published at [localfirstai.eu](https://localfirstai.eu):
 
 **Technical — benchmarks, experiments, architecture**
 
+- [We Red-Teamed Our Own Bot](https://localfirstai.eu/posts/2026-07-22-we-red-teamed-our-own-bot/) — Exp 022: prompt injection, session extraction, and guardrail bypass all refuted. Corpus poisoning via the `/witness` community channel confirmed — one admin approval turns a fabricated claim into fact for every subsequent user.
+- [Hardening the Inference Node](https://localfirstai.eu/posts/2026-07-08-hardening-the-inference-node/) — Exp 020: auditing the machine behind the local-first pitch. A static permission listing's worst-looking finding wasn't real; the one that was real (`tail`, NOPASSWD) wasn't the one that looked scary on paper.
 - [We Reviewed Our Own Legal Brief with an Adversarial AI Panel. Zero of Seven Claims Survived Unchanged.](https://localfirstai.eu/posts/2026-06-24-adversarial-legal-panel/) — Exp 019: Claude adversarial panel + GPT-4o citation check + Gemini barrister review. 0/7 claims survived. BDAA omission, ingestion transfer gap, Gibraltar-EEA adequacy gap.
 - [We Didn't Notice](https://localfirstai.eu/posts/2026-06-13-we-didnt-notice/) — The US government suspended the world's best AI model overnight for all foreign nationals. CasaSol was unaffected. Exp 018 pre-registered.
 - [The Cost-Capability Curve Has One Step](https://localfirstai.eu/posts/2026-06-09-cost-capability-curve/) — A four-model sweep at the 4B-active/frontier boundary. One step, not a ramp. Haiku is cost-dominant; Haiku→Opus is 6.4× cost, 0 score gain.
