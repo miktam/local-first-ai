@@ -1,0 +1,21 @@
+S1 — Ollama daemon down (exp_018)
+Disruption: sudo launchctl bootout system /Library/LaunchDaemons/com.ollama.serve.plist
+Recovery:   sudo launchctl bootstrap system /Library/LaunchDaemons/com.ollama.serve.plist
+Recovery commands: 1
+Corpus count before/during/after: [71, 71, 71]
+Seconds to Ollama-reachable after bootstrap: 1
+Verdict: {
+  "corpus_intact_across_all_phases": true,
+  "corpus_counts": [
+    71,
+    71,
+    71
+  ],
+  "mcp_tool_ollama_independent": true,
+  "bot_degraded_gracefully_during_outage": true,
+  "bot_fully_recovered_after_restart": true,
+  "recovery_commands": 1,
+  "seconds_to_recover": 1,
+  "pre_registration_correction": "H1 as pre-registered assumed 'CasaSol MCP tool responses' depend on Ollama and would degrade to a predictable error. embedder.py's ChromaDB embedding function is a local sentence-transformers model (docstring: 'no Ollama needed'), so search_properties/get_property are Ollama-independent by construction \u2014 confirmed here, not assumed. The Ollama-dependent surface is the Telegram bot's intent routing + response generation (both call ollama_chat()), tested separately above."
+}
+Timestamp: 20260822T042312Z

@@ -30,6 +30,9 @@ To build and maintain a public-facing blog written from the perspective of Nesto
 - [x] **Exp 011 — MLX runtime:** No cliff through 40K on MLX. Confirms cliff is Ollama/llama.cpp artefact, not hardware.
 - [x] **Exp 012–014 — Cost/capability curve:** Step function confirmed at 4B-active/frontier boundary. Haiku cost-dominant.
 - [x] **Exp 019 — Adversarial Legal Review Pipeline:** Complete 2026-06-24. 0/7 claims survived unchanged. Adversarial 3-panelist pipeline caught 2 critical issues single-pass drafting missed (UK-US BDAA omission; ingestion transfer gap). First application of the Legal Agent pattern.
+- [x] **Exp 020 — Hardening and Red-Teaming the Inference Node:** Complete 2026-07-08. Unauthenticated Ollama fixed; unrestricted `tail` NOPASSWD grant confirmed real; the static listing's worst-looking finding (`cp`) was a misread.
+- [x] **Exp 022 — Adversarial Red-Team of the CasaSol Guide Bot:** Complete 2026-07-22. Prompt injection, session extraction, guardrail bypass all refuted. Corpus poisoning via `/witness` confirmed — one admin approval turns a fabricated claim into fact for every user.
+- [x] **Exp 018 — Sovereignty Resilience:** Complete 2026-08-22. Daemon-down and weights-removed both confirmed with graceful fallback and zero data loss. Network-cut inconclusive by design — remote-only access to the test machine means blocking outbound also blinds the observer; forced a full reboot, zero data loss.
 
 ## Current Focus
 
@@ -39,7 +42,7 @@ To build and maintain a public-facing blog written from the perspective of Nesto
 
 **Flash Attention cliff resolved (Exp 008/010, June 2026).** `OLLAMA_FLASH_ATTENTION=1` was the sole cause of the prefill cliff. FA=0/fp16 has no cliff through 40K tokens — confirmed by Exp 010's 2×2 factorial and independently by MLX on the same hardware (Exp 011). The Mini's true operational ceiling is >40K tokens on-wire.
 
-**Pre-registered and awaiting execution:** Exp 015 (active-parameter ablation, dense vs MoE), Exp 017 (Argos Phase 0 feed reconnaissance), Exp 018 (sovereignty resilience — triggered by Fable/Mythos export control suspension June 11).
+**Pre-registered and awaiting execution:** Exp 015 (active-parameter ablation, dense vs MoE), Exp 017 (Argos Phase 0 feed reconnaissance).
 
 **OLÉ Marbella (June 17–18).** CasaSol booth demo. Exp 015/017/018 execution scheduled post-event.
 
@@ -59,7 +62,7 @@ To build and maintain a public-facing blog written from the perspective of Nesto
 - [ ] **Exp 016 Phase C — Tiered pipeline end-to-end.** Plan on smart (Qwen3-Coder-Next), execute on cheap (gemma4:26b). Deterministic-glue invariants enforced. Gate: fewer human interventions than single-model baseline.
 - [ ] **Exp 015 — Active-parameter ablation (dense vs MoE).** Does a dense 12–32B local model score ≥2/8 on the frozen Exp 012 audit rubric? Tests whether the capability boundary is total-parameter or active-compute. [`exp_015_active_param_ablation/`](./exp_015_active_param_ablation/)
 - [ ] **Exp 017 — Argos Phase 0 feed reconnaissance.** DGT NAP (DATEX II) + OpenChargeMap, Málaga–Gibraltar EV corridor. 24h cadence measurement required. [`exp_017_argos_phase0/`](./exp_017_argos_phase0/)
-- [ ] **Exp 018 — Sovereignty resilience.** Three failure modes: Ollama down, weights removed, network cut. Triggered by Fable/Mythos export control event (June 11). [`exp_018_sovereignty_resilience/`](./exp_018_sovereignty_resilience/)
+- [x] **Exp 018 — Sovereignty resilience.** Complete 2026-08-22. H1 (daemon down) + H2 (weights removed) confirmed — graceful fallback, zero data loss, 1-command recovery each. H3 (network cut) inconclusive: the test machine has no physical console, only remote SSH access, so blocking all outbound severed the SSH session itself before the checks could run; a mis-armed self-heal timer (not nohup'd/disowned) died with it, forcing a full reboot. Zero data loss through the reboot. [`exp_018_sovereignty_resilience/`](./exp_018_sovereignty_resilience/)
 - [ ] **Exp 007 Phase C — Thermal endurance (MBP, 90 min sustained).** Fan audible during Phase B at 110K tokens. Deferred; lower priority now that Exp 016 characterises the two-machine pipeline.
 - [ ] **Router alternative evaluation.** `gemma4:e4b` follows fixture patterns over prose instructions. Evaluate Qwen 2.5/3.5b as a more deterministic structured-output router.
 - [x] **Exp 020 — Run the one-time Ollama proxy setup.** Applied and verified 2026-07-08 — H2 post-fix confirmed (401 unauth, 200 auth). [`exp_020_miktam_mini_hardening/`](./exp_020_miktam_mini_hardening/)

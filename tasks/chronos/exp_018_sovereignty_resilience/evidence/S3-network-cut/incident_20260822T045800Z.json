@@ -1,0 +1,29 @@
+{
+  "ts": "2026-08-22T04:58:00Z",
+  "scenario": "S3 — network isolation",
+  "access_model": "All access to miktam-mini is remote — SSH from miktam-mbp via VS Code Remote. There is no physical console workflow for this machine.",
+  "timeline": [
+    {"step": "baseline", "action": "search_properties(query='villa', limit=2) from miktam", "result": "success, real listing returned"},
+    {"step": "arm_safety_net", "command": "(sleep 90 && sudo pfctl -d && echo AUTO-RESTORED) &", "note": "backgrounded but NOT nohup'd or disowned"},
+    {"step": "disrupt", "command": "sudo pfctl -e && echo 'block out all' | sudo pfctl -f -", "result": "applied"},
+    {"step": "immediate_effect", "observed": "SSH session from miktam-mbp to miktam-mini severed immediately — 'totally disconnected'"},
+    {"step": "wait", "duration_s": 300, "observed": "no reconnect; 90s safety-net timer did not fire (no AUTO-RESTORED message ever seen)"},
+    {"step": "recovery_attempt", "action": "full reboot of miktam-mini", "note": "only recovery path available — no console access to run 'sudo pfctl -d' locally"},
+    {"step": "post_reboot", "ts": "2026-08-22T05:02:07Z", "uptime": "5 mins", "ollama_reachable": true, "gemma4_26b_present": true, "corpus_count": 71}
+  ],
+  "root_cause_of_failed_self_heal": "The armed background job (sleep 90 && sudo pfctl -d) was not nohup'd or disowned. When the parent SSH session died (as a direct effect of the block it had just applied), the job almost certainly received SIGHUP and was killed before its 90s elapsed — so it never ran pfctl -d.",
+  "methodological_gap": "The pre-registered S3 protocol assumes an operator can still probe the machine locally during the outage ('confirm SQLite corpus still readable', 're-run search_properties') to verify inference keeps working while only outbound-dependent operations fail. Because ALL access to this machine is remote (SSH from mbp, no physical console), a full outbound block also severs the only channel available to run those checks. The test cannot distinguish 'inference still works locally' from 'we have no way to find out' — those checks were never executed during the actual outage window, only before and after (post-reboot).",
+  "data_integrity": {
+    "corpus_count_before": 71,
+    "corpus_count_after_reboot": 71,
+    "data_loss": false
+  },
+  "recovery": {
+    "method": "full reboot (not a targeted fix)",
+    "commands_needed": "not applicable — no remote command could reach the machine to apply a targeted fix",
+    "ollama_auto_recovered_on_boot": true,
+    "note": "confirms exp_020's LaunchDaemon setup survives a full reboot cleanly, independent of this test's actual purpose"
+  },
+  "verdict": "INCONCLUSIVE as pre-registered — not because the architecture failed, but because the pre-registration didn't account for the access model. What IS confirmed: corpus/model state survived the outage + reboot with zero data loss, and Ollama's LaunchDaemon self-recovers on boot with no manual re-enrichment. What is NOT confirmed: whether local inference kept working during the outage itself, since there was no way to observe it without network access.",
+  "real_world_cost": "One unplanned reboot of the production inference machine; ~5 minutes of unavailability from disconnect to confirmed recovery."
+}

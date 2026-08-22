@@ -1838,7 +1838,7 @@ operator post-experiment: `casasol` commit `6e8b8c9`, 7/7 tests.
 ## Exp 018 — Sovereignty Resilience: Three Failure Modes
 
 **Pre-registered: 2026-06-13**  
-**Status: PRE-REGISTERED**  
+**Status: COMPLETE — 2026-08-22. H1+H2 CONFIRMED. H3 INCONCLUSIVE as pre-registered — access-model gap, not an architecture failure — plus a real incident (forced reboot).**  
 **Trigger:** Fable/Mythos export control suspension, 11 June 2026 — external provider failure as real-world prompt.
 
 **Hypotheses (pre-registered before first run):**
@@ -1848,8 +1848,16 @@ operator post-experiment: `casasol` commit `6e8b8c9`, 7/7 tests.
 
 **Teased in:** [We Didn't Notice](https://localfirstai.eu/posts/2026-06-13-we-didnt-notice/) — post references this experiment by number before execution, per Chronos pre-registration contract.
 
-*Evidence: `exp_018_sovereignty_resilience/evidence/` — not yet collected*  
-*Status: Pre-registered 2026-06-13. Execution post-OLÉ (after June 17).*
+**Result:**
+- **H1 — CONFIRMED, with a pre-registration correction.** H1 as written assumed "CasaSol MCP tool responses" depend on Ollama. Checking `embedder.py` first: the ChromaDB embedding function is a local sentence-transformers model, explicitly "no Ollama needed" per its own docstring — confirmed directly, not assumed: `search_properties` succeeded in all three phases (before/during/after `launchctl bootout`), zero degradation, because it was never coupled to Ollama in the first place. The actual Ollama-dependent surface — the Telegram bot's intent routing + response generation — degraded exactly as hoped: router failed fast (`ConnectionResetError`), generation retried twice over ~3s, then returned the built-in friendly fallback message, no crash or stack trace reaching a user. Recovery: one command (`launchctl bootstrap`), Ollama reachable again within ~1 second, next bot query fully recovered (42.6s, in line with the 47.2s baseline). Corpus count (71 listings) identical across all three phases, confirmed by direct SQLite query bypassing Ollama and ChromaDB entirely.
+- **H2 — CONFIRMED, cleanly matches pre-registration.** `ollama rm gemma4:26b` left the router (`gemma4:e4b`) untouched, so intent classification still succeeded (`area_knowledge`); only the responder call failed, with `404 Client Error: Not Found` for `gemma4:26b` specifically — exactly "names the missing model." Same graceful fallback, no crash. Corpus: 71/71/71, zero data loss. Recovery: one command (`ollama pull gemma4:26b`), 265.8s for the 17GB re-download, then immediate full recovery.
+- **H3 — INCONCLUSIVE, and the reason why is the actual finding.** The pre-registered protocol assumes an operator can still probe the machine locally during the outage (confirm SQLite readable, re-run `search_properties`) to isolate "inference still works" from "only outbound-dependent ops fail." But **all access to miktam-mini is remote — SSH from miktam-mbp via VS Code Remote, no physical console workflow exists for this machine.** `sudo pfctl -e` + a `block out all` rule severed the SSH session immediately. A 90-second self-revert timer had been armed beforehand (`(sleep 90 && sudo pfctl -d) &`) but was not `nohup`'d or `disown`'d — it almost certainly died to SIGHUP along with the parent shell when the SSH session dropped, and never fired. No reconnect after 5 minutes; recovery required a **full reboot** of the production inference machine, not a targeted fix, because no remote command could reach it. Post-reboot: Ollama's LaunchDaemon self-recovered with zero manual steps, `gemma4:26b` present, corpus count still 71 — zero data loss even through an unplanned reboot. But the core H3 question — does inference keep answering queries while the network is down — was never actually observable, because the same block that (correctly, per its design) isolates the machine from HuggingFace also isolates the only channel available to check on it. **Sovereignty of inference and sovereignty of operations/observability are two different properties**, and this experiment only tested the first two scenarios' worth of the latter.
+
+**Real-world cost:** one unplanned reboot of the production inference machine, ~5 minutes from disconnect to confirmed recovery, zero data loss.
+
+*Evidence: `exp_018_sovereignty_resilience/evidence/` — `S1-daemon-down/{before,during,after}_*.json` + `recovery_steps_*.txt`, `S2-weights-gone/{before,during,after}_*.json` + `recovery_steps_*.txt`, `S3-network-cut/incident_20260822T045800Z.json` + `recovery_steps.txt`.*
+*Harness: `casasol/scripts/run_exp_018_s1.py`, `run_exp_018_s2.py` (S3 was run manually per the incident above, no automated harness — by design, since it severs the channel any harness would run over).*
+*Status: Complete 2026-08-22.*
 
 ---
 

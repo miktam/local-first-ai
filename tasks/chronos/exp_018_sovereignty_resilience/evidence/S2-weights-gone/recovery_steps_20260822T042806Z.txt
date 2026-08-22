@@ -1,0 +1,21 @@
+S2 — gemma4:26b weights removed (exp_018)
+Disruption: ollama rm gemma4:26b
+Recovery:   ollama pull gemma4:26b
+Recovery commands: 1
+Recovery time: 265.8s
+Corpus count before/during/after: [71, 71, 71]
+Verdict: {
+  "corpus_intact_across_all_phases": true,
+  "corpus_counts": [
+    71,
+    71,
+    71
+  ],
+  "mcp_tool_unaffected_by_missing_responder_model": true,
+  "bot_degraded_gracefully_during_outage": true,
+  "bot_fully_recovered_after_pull": true,
+  "recovery_commands": 1,
+  "recovery_seconds": 265.8,
+  "notes": "Router (gemma4:e4b) is untouched by removing gemma4:26b, so intent classification still runs; only generate_response()'s call to the missing RESPONDER_MODEL fails, caught by the existing 2-attempt retry, falling back to LLM_ERROR_MSG."
+}
+Timestamp: 20260822T042806Z

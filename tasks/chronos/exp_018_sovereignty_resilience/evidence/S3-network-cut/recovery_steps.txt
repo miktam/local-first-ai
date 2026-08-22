@@ -1,0 +1,27 @@
+S3 — network isolation (exp_018)
+
+Disruption: sudo pfctl -e && echo "block out all" | sudo pfctl -f -
+Intended recovery: sudo pfctl -d (pre-armed as a backgrounded 90s timer before the block)
+Actual recovery: full reboot of miktam-mini — the timer did not fire (see incident JSON for root cause)
+
+Timeline:
+  T+0s    Safety-net timer armed: (sleep 90 && sudo pfctl -d && echo AUTO-RESTORED) &
+  T+~5s   Block applied: pfctl -e + "block out all" loaded
+  T+~5s   SSH session (miktam-mbp -> miktam-mini) severed immediately
+  T+300s  No reconnect after 5 minutes; no AUTO-RESTORED message ever seen
+  T+300s+ Full reboot of miktam-mini performed (only available recovery path — no console access)
+  ~5 min later: machine back up, confirmed via `uptime` (5 mins), Ollama reachable,
+                gemma4:26b present, corpus_count=71 (matches pre-incident count)
+
+Root cause of failed self-heal: backgrounded timer job was not nohup'd/disowned;
+almost certainly killed by SIGHUP when the parent SSH session died as a direct
+effect of the block it had just applied.
+
+Data loss: none. SQLite corpus count identical before and after (71).
+
+Verdict: INCONCLUSIVE against the pre-registered wording (couldn't verify local
+inference kept working during the outage, since the only access to this machine
+is remote SSH from miktam-mbp — the block removed the observation channel along
+with everything else). Confirmed instead: zero data loss through an unplanned
+reboot, and Ollama's LaunchDaemon self-recovers on boot without manual
+re-enrichment. Real-world cost: one unplanned production reboot, ~5 min outage.
