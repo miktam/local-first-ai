@@ -1,0 +1,48 @@
+{
+  "ts": "2026-08-29T05:14:41+00:00",
+  "hardware": "miktam-mini M4 Pro 64GB",
+  "prompts": [
+    "Explain how a hash table resolves collisions, comparing chaining and open addressing.",
+    "Write a function that finds the longest palindromic substring in a string, and explain its time complexity.",
+    "Explain the difference between TCP and UDP, and give one real-world scenario where each is the better choice.",
+    "A user reports that their API returns 200 OK but the response body is empty about 1% of the time under load. Walk through how you'd debug this.",
+    "Explain what a Bloom filter is, how it works, and one real-world use case."
+  ],
+  "runs": [
+    {
+      "model": "gemma4:31b",
+      "prompt_idx": 0,
+      "prompt": "Explain how a hash table resolves collisions, comparing chaining and open addressing.",
+      "error": "HTTPConnectionPool(host='100.100.251.84', port=11434): Read timed out. (read timeout=600)"
+    },
+    {
+      "model": "gemma4:31b",
+      "prompt_idx": 1,
+      "prompt": "Write a function that finds the longest palindromic substring in a string, and explain its time complexity.",
+      "error": "HTTPConnectionPool(host='100.100.251.84', port=11434): Read timed out. (read timeout=600)"
+    },
+    {
+      "model": "gemma4:31b",
+      "prompt_idx": 2,
+      "prompt": "Explain the difference between TCP and UDP, and give one real-world scenario where each is the better choice.",
+      "error": "HTTPConnectionPool(host='100.100.251.84', port=11434): Read timed out. (read timeout=600)"
+    },
+    {
+      "model": "gemma4:31b",
+      "prompt_idx": 3,
+      "prompt": "A user reports that their API returns 200 OK but the response body is empty about 1% of the time under load. Walk through how you'd debug this.",
+      "error": "HTTPConnectionPool(host='100.100.251.84', port=11434): Read timed out. (read timeout=600)"
+    },
+    {
+      "model": "gemma4:31b",
+      "prompt_idx": 4,
+      "prompt": "Explain what a Bloom filter is, how it works, and one real-world use case.",
+      "error": "HTTPConnectionPool(host='100.100.251.84', port=11434): Read timed out. (read timeout=600)"
+    }
+  ],
+  "summary": {},
+  "verdicts": {
+    "H3": "REFUTED",
+    "H3_detail": "by_size_order=[]; by_wallclock_order=[]"
+  }
+}

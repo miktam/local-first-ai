@@ -1,0 +1,88 @@
+{
+  "ts": "2026-08-28T20:19:22+00:00",
+  "photos": [
+    "20260606_190939_img-6126_blurred.jpg",
+    "20260606_191041_img-6127_blurred.jpg",
+    "20260606_191144_img-6128_blurred.jpg",
+    "20260606_191251_img-6129_blurred.jpg",
+    "20260606_191356_img-6130_blurred.jpg"
+  ],
+  "photo_source_note": "Substituted from casasol/witness/photos/ (GDPR-blurred property photos) — Pharos has no maintenance-issue sample photos in its own repo. See HYPOTHESIS.md.",
+  "prompt": "You are a facilities inspection assistant. Examine the photo and identify the maintenance issue.\n\nRespond with JSON only:\n{\n  \"visual_description\": \"<one or two sentences: what the issue is and where it appears>\",\n  \"apparent_severity\": \"low|medium|high|critical\",\n  \"location_hint\": \"<room or area visible in the photo, or 'unknown'>\"\n}",
+  "runs": [
+    {
+      "model": "gemma4:26b",
+      "photo": "20260606_190939_img-6126_blurred.jpg",
+      "error": "timed out"
+    },
+    {
+      "model": "gemma4:26b",
+      "photo": "20260606_191041_img-6127_blurred.jpg",
+      "error": "timed out"
+    },
+    {
+      "model": "gemma4:26b",
+      "photo": "20260606_191144_img-6128_blurred.jpg",
+      "parsed_ok": false,
+      "parse_error": "no JSON object found",
+      "raw_response": "{\"visual_description\": \"The image shows a digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital display",
+      "visual_description": null,
+      "apparent_severity": null,
+      "location_hint": null,
+      "total_ms": 12131,
+      "wall_clock_s": 12.14,
+      "prompt_tokens": 368,
+      "output_tokens": 200,
+      "tok_per_s": 54.4
+    },
+    {
+      "model": "gemma4:26b",
+      "photo": "20260606_191251_img-6129_blurred.jpg",
+      "error": "timed out"
+    },
+    {
+      "model": "gemma4:26b",
+      "photo": "20260606_191356_img-6130_blurred.jpg",
+      "error": "timed out"
+    },
+    {
+      "model": "qwen3.8:27b",
+      "photo": "20260606_190939_img-6126_blurred.jpg",
+      "error": "timed out"
+    },
+    {
+      "model": "qwen3.8:27b",
+      "photo": "20260606_191041_img-6127_blurred.jpg",
+      "error": "timed out"
+    },
+    {
+      "model": "qwen3.8:27b",
+      "photo": "20260606_191144_img-6128_blurred.jpg",
+      "error": "timed out"
+    },
+    {
+      "model": "qwen3.8:27b",
+      "photo": "20260606_191251_img-6129_blurred.jpg",
+      "error": "HTTP Error 400: Bad Request"
+    },
+    {
+      "model": "qwen3.8:27b",
+      "photo": "20260606_191356_img-6130_blurred.jpg",
+      "error": "timed out"
+    }
+  ],
+  "verdicts": {
+    "gemma4:26b": {
+      "n_parsed_ok": 0,
+      "n_total": 1,
+      "mean_total_ms": 12131.0,
+      "mean_tok_per_s": 54.4
+    },
+    "qwen3.8:27b": {
+      "n_parsed_ok": 0,
+      "n_total": 0,
+      "mean_total_ms": null,
+      "mean_tok_per_s": null
+    }
+  }
+}

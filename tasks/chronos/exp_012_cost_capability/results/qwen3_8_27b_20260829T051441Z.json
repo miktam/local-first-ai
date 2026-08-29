@@ -1,0 +1,240 @@
+{
+  "experiment": "012",
+  "ts": "20260829T051441Z",
+  "model": "qwen3.8:27b",
+  "runtime": "ollama",
+  "project": "/Users/miktam02/REPOS/casasol",
+  "reps_per_task": 3,
+  "task_a": [
+    {
+      "rep": 1,
+      "duration_s": 521.28,
+      "tokens": {
+        "input_tokens": 6338,
+        "output_tokens": 1138,
+        "total_tokens": 7476,
+        "tokens_per_s": 7.3
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log records full input and output text, which may contain personal data (e.g., buyer queries or staff names), contradicting the RoPA claim that buyer queries are not retained and that no personal data is processed in automated logs.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py:42-43: `\"input\": input_text, \"output\": output_text,` vs compliance/01-ropa.md: 'Buyer query text: not retained beyond the session (default).'",
+          "recommendation": "Redact or hash personal data fields in the inference log before writing, or exclude buyer query inputs from the log entirely."
+        },
+        {
+          "finding": "The Retention Schedule specifies a 12-month retention period for MCP audit logs, but the provided code snippets do not demonstrate any automated log rotation or deletion mechanism to enforce this limit.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md: 'MCP audit logs | logs/mcp.log | 12 months | Log rotation; files older than 12 months deleted' vs scripts/mcp_server.py: `logging.basicConfig(filename=str(_log_path), ...)` with no rotation handler visible.",
+          "recommendation": "Implement a `RotatingFileHandler` or a cron job that deletes log files older than 12 months to comply with the storage limitation principle."
+        },
+        {
+          "finding": "The RoPA states that the MCP server process has no read access to the private (Tier 1) layer, but the code imports `config` and uses `chromadb`/`sqlite3` without visible filesystem-level permission enforcement or sandboxing in the provided snippets.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md: 'Filesystem-level access control: the MCP server process has no read access to the private (Tier 1) layer' vs scripts/mcp_server.py: `import chromadb`, `import sqlite3` with no visible `os.chmod` or permission checks.",
+          "recommendation": "Verify and document the specific filesystem permissions (e.g., `chmod 700` on private dirs) or implement runtime checks to ensure the MCP process cannot access Tier 1 data."
+        },
+        {
+          "finding": "The Retention Schedule requires manual deletion of ChromaDB vectors upon listing removal, which is a high-risk manual process prone to error and inconsistent with the 'automated' deletion claimed for other data types.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md: 'ChromaDB vectors | data/chromadb/ | Same as source .md | Manual deletion (see DSR procedure)'",
+          "recommendation": "Implement an automated cascade deletion script that removes ChromaDB vectors when the corresponding SQLite record or `.md` file is deleted."
+        },
+        {
+          "finding": "The RoPA claims that no seller personal data is processed and that the Coach layer is prohibited from processing inferences about sellers, but the inference log captures full model outputs which could contain such inferences if the model generates them.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md: 'No seller personal data is processed... The Coach layer is explicitly prohibited from processing inferences about named sellers' vs scripts/inference_log.py: `\"output\": output_text` which logs the full model response.",
+          "recommendation": "Add a post-processing filter to the inference log that detects and redacts potential personal data or prohibited inferences before writing to the log."
+        },
+        {
+          "finding": "The compliance pack is marked as 'draft' and requires practitioner sign-off for the LIA, but the system is described as 'live' and 'battle-tested', creating a risk of processing data without a valid lawful basis.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md: 'RoPA version 0.1-draft' and 'LIA... must be reviewed and signed off by a qualified practitioner' vs BRIEF.md: 'Status: Registration secured... Public website: casasol.ai... shipped 2026-05-06'.",
+          "recommendation": "Suspend processing of personal data or ensure the LIA is signed off before any production use involving personal data."
+        },
+        {
+          "finding": "The Retention Schedule mentions that backup media is subject to the same retention periods, but there is no evidence of a procedure to ensure backups are deleted or overwritten in a timely manner, which could lead to indefinite retention.",
+          "severity": "LOW",
+          "evidence": "compliance/07-retention-schedule.md: 'Backup media: Data on Time Machine or other backup media is subject to the same retention periods... Where this is impractical... document the residual retention'",
+          "recommendation": "Implement a backup rotation policy that explicitly deletes or overwrites backup data after the retention period expires."
+        }
+      ]
+    },
+    {
+      "rep": 2,
+      "duration_s": 151.5,
+      "tokens": {
+        "input_tokens": 6338,
+        "output_tokens": 1120,
+        "total_tokens": 7458,
+        "tokens_per_s": 7.4
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log records full input and output text, which may contain personal data (e.g., buyer queries or staff names), contradicting the RoPA claim that buyer queries are not retained and staff data is minimal/incidental.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py:42-43: '\"input\": input_text, \"output\": output_text,' vs compliance/01-ropa.md: 'Buyer query text: not retained beyond the session (default).'",
+          "recommendation": "Redact or hash personal data fields in the inference log before writing to disk, or exclude buyer query inputs from the log entirely."
+        },
+        {
+          "finding": "The Retention Schedule mandates 12-month retention for MCP audit logs, but the provided code snippets show no implementation of log rotation or automatic deletion of logs older than 12 months.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md: 'MCP audit logs | logs/mcp.log | 12 months | Log rotation; files older than 12 months deleted' vs scripts/mcp_server.py:30-36: 'logging.basicConfig(filename=str(_log_path), ...)' with no rotation handler.",
+          "recommendation": "Implement a logging handler with TimedRotatingFileHandler or a cron job to delete logs older than 12 months."
+        },
+        {
+          "finding": "The RoPA states that Tier 1 private outputs are overwritten on each nightly run and deleted after 90 days, but no code or script is provided that enforces this 90-day deletion or nightly overwrite logic.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md: 'Tier 1 (private) outputs: retained for 90 days rolling; overwritten on next nightly run' vs absence of any retention enforcement script in the provided codebase.",
+          "recommendation": "Create a scheduled task (e.g., cron job) that scans ~/.casasol/private/ and deletes files older than 90 days."
+        },
+        {
+          "finding": "The RoPA claims that the MCP server process has no read access to the private (Tier 1) layer via filesystem-level access control, but the code does not demonstrate any mechanism to enforce this separation (e.g., separate user accounts, chroot, or explicit path validation).",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md: 'Filesystem-level access control: the MCP server process has no read access to the private (Tier 1) layer' vs scripts/mcp_server.py: no evidence of path restriction or permission checks.",
+          "recommendation": "Implement explicit path validation in the MCP server to prevent access to ~/.casasol/private/ or run the server under a restricted user account with no read permissions on that directory."
+        },
+        {
+          "finding": "The Retention Schedule states that ChromaDB vectors are deleted via 'Manual deletion (see DSR procedure)', but no DSR (Data Subject Request) procedure or tooling is provided to facilitate this deletion.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md: 'ChromaDB vectors | data/chromadb/ | Same as source .md | Manual deletion (see DSR procedure)' vs absence of any DSR handling script or documentation in the provided files.",
+          "recommendation": "Develop a DSR script that can identify and delete specific ChromaDB vectors associated with a data subject or listing."
+        },
+        {
+          "finding": "The RoPA states that the LIA (Legitimate Interests Assessment) must be reviewed and signed off by a qualified practitioner before the lawful basis is placed into force, but the document is marked as a draft and no sign-off is evidenced.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md: '⚠ Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off by a qualified practitioner before this basis is placed into force.' vs BRIEF.md: 'LIA requires practitioner sign-off before witnessing goes to production.'",
+          "recommendation": "Obtain and document the practitioner sign-off for the LIA before processing personal data under Article 6(1)(f)."
+        },
+        {
+          "finding": "The inference log does not include a unique request ID or correlation ID, making it difficult to audit specific automated processing decisions or link logs to specific user sessions for DSR or accountability purposes.",
+          "severity": "LOW",
+          "evidence": "scripts/inference_log.py:38-44: record structure lacks a 'request_id' or 'session_id' field.",
+          "recommendation": "Add a unique request ID to each inference log entry to enable precise auditing and correlation with user sessions."
+        }
+      ]
+    },
+    {
+      "rep": 3,
+      "duration_s": 145.48,
+      "tokens": {
+        "input_tokens": 6338,
+        "output_tokens": 1084,
+        "total_tokens": 7422,
+        "tokens_per_s": 7.5
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log records full input and output text, which may contain personal data (e.g., buyer queries or staff names), contradicting the RoPA claim that buyer queries are not retained and staff data is minimal/incidental.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py:42-43: '\"input\": input_text, \"output\": output_text,' vs compliance/01-ropa.md: 'Buyer query text: not retained beyond the session (default).'",
+          "recommendation": "Redact or hash personal data fields in the inference log before writing to disk, or exclude buyer query inputs from the log entirely."
+        },
+        {
+          "finding": "The Retention Schedule specifies a 12-month retention period for MCP audit logs, but the provided code snippets do not show any implementation of log rotation or automatic deletion of logs older than 12 months.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md: 'MCP audit logs | logs/mcp.log | 12 months | Log rotation; files older than 12 months deleted' vs scripts/mcp_server.py: 'logging.basicConfig(filename=str(_log_path), ...)' with no rotation handler visible.",
+          "recommendation": "Implement a logging handler with a TimedRotatingFileHandler or a cron job to delete logs older than 12 months."
+        },
+        {
+          "finding": "The RoPA states that the MCP server process has no read access to the private (Tier 1) layer, but the code does not demonstrate any filesystem-level access control or permission enforcement to prevent the MCP server from reading private data.",
+          "severity": "HIGH",
+          "evidence": "compliance/01-ropa.md: 'Filesystem-level access control: the MCP server process has no read access to the private (Tier 1) layer' vs scripts/mcp_server.py: no visible permission checks or path restrictions in the provided code.",
+          "recommendation": "Implement explicit path validation and permission checks in the MCP server to ensure it cannot access files in the private directory."
+        },
+        {
+          "finding": "The RoPA claims that no seller personal data is processed and the Coach layer is prohibited from processing inferences about named sellers, but the inference log captures full input/output which could include such data if present in the context.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md: 'No seller personal data is processed. The Coach layer is explicitly prohibited from processing inferences about named sellers' vs scripts/inference_log.py: 'input': input_text, 'output': output_text,' which logs all content.",
+          "recommendation": "Add a pre-logging filter to detect and redact any seller personal data or prohibited inferences before writing to the inference log."
+        },
+        {
+          "finding": "The Retention Schedule states that ChromaDB vectors are deleted manually upon DSR requests, but there is no documented procedure or code implementation for this manual deletion process.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md: 'ChromaDB vectors | data/chromadb/ | Same as source .md | Manual deletion (see DSR procedure)' but no DSR procedure document or code snippet is provided.",
+          "recommendation": "Document the DSR procedure for ChromaDB vector deletion and implement a script or API endpoint to perform this deletion."
+        },
+        {
+          "finding": "The RoPA states that the LIA must be reviewed and signed off by a qualified practitioner before the legitimate interests basis is placed into force, but the status of this sign-off is not confirmed in the provided documents.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md: 'Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off by a qualified practitioner before this basis is placed into force.' vs BRIEF.md: 'LIA requires practitioner sign-off before witnessing goes to production.'",
+          "recommendation": "Confirm and document the practitioner sign-off for the LIA before processing personal data under legitimate interests."
+        },
+        {
+          "finding": "The inference log does not include a unique identifier for the data subject or the specific processing activity, making it difficult to link logs to specific data subjects for DSR purposes.",
+          "severity": "LOW",
+          "evidence": "scripts/inference_log.py: 'record = { \"ts\": ..., \"model\": ..., \"stage\": ..., ... }' with no data subject ID or processing activity ID.",
+          "recommendation": "Add a unique identifier for the data subject or processing activity to the inference log to facilitate DSR handling."
+        }
+      ]
+    }
+  ],
+  "task_b": [
+    {
+      "rep": 1,
+      "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=600)"
+    },
+    {
+      "rep": 2,
+      "duration_s": 246.8,
+      "tokens": {
+        "input_tokens": 9896,
+        "output_tokens": 1349,
+        "total_tokens": 11245,
+        "tokens_per_s": 5.5
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The 'witnessing pipeline' and 'proprietary witnessed corpus' are central to the moat and status, but the codebase lacks the VLM ingestion logic and provenance storage (GPS/timestamp) required to validate the 'provenance triple' claim.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: '12 witnessed KDTeam listings ingested via the VLM witnessing pipeline... The capture unit is photo + GPS + timestamp; it is the provenance triple, and it cannot be faked after the fact.' vs db.py: `listings` table has no `gps`, `timestamp`, or `witness_metadata` columns; `config.py` defines `WITNESS_PHOTOS_DIR` but no ingestion script is visible in the provided code or git log.",
+          "recommendation": "Implement the VLM ingestion pipeline that extracts and stores GPS/timestamp metadata in the database to substantiate the 'witnessed' claim."
+        },
+        {
+          "finding": "The 'filesystem firewall' is claimed as a hardware-enforced boundary preventing data egress, but the codebase contains no implementation of egress blocking, network isolation, or hardware-level enforcement.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: 'The filesystem firewall (a hardware-enforced boundary that prevents data egress — structurally unreplicable by cloud competitors...)' vs config.py: `OLLAMA_BASE_URL` points to a remote IP `100.100.251.84`, and `CATASTRO_BASE_URL` points to an external API, with no visible firewall rules or local-only enforcement in the provided code.",
+          "recommendation": "Implement or document the specific network isolation and egress blocking mechanisms that constitute the 'filesystem firewall' to ensure data does not leave the local perimeter."
+        },
+        {
+          "finding": "The brief claims 'GDPR-by-design' and 'sovereignty' as core features, but the codebase lacks implementation of data minimization, consent tracking, or right-to-erasure mechanisms required for GDPR compliance.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: 'GDPR-by-design as a co-equal pillar... The compliant agency and the differentiated agency are the same agency.' vs db.py: `listings` table stores `original_text`, `description`, and `source_url` without any `consent`, `legal_basis`, or `deletion_request` fields; no code for data subject access requests (DSAR) is present.",
+          "recommendation": "Add GDPR-compliant data handling features including consent tracking, data minimization, and mechanisms for data subject access and erasure requests."
+        },
+        {
+          "finding": "The 'CADA structural alignment' is claimed as a regulatory tailwind, but the codebase does not implement or verify the 'zero third-country control' requirement, nor does it provide certification or audit trails for CADA compliance.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md: 'CADA... requires zero third-country control... CasaSol... is structurally outside the entire framework... no cloud service to certify.' vs config.py: `OLLAMA_BASE_URL` and `CATASTRO_BASE_URL` point to external services, and no code verifies or enforces the 'zero third-country control' requirement.",
+          "recommendation": "Implement verification and audit trails to ensure all data processing remains within the EU and meets CADA Level 4 requirements, or clarify the scope of 'structural alignment' in the code."
+        },
+        {
+          "finding": "The 'MCP ↔ Claude Desktop bridge' is claimed as proven and operational, but the codebase lacks error handling, retry logic, or health checks for the MCP server, making it fragile in production.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md: 'Foundational MCP ↔ Claude Desktop bridge is proven — mcp_server.py running on miktam02... connected to Claude Desktop since 2026-03-29.' vs scripts/mcp_server.py: No visible error handling, retry logic, or health check endpoints; `get_db()` and `get_chroma()` do not handle connection failures or timeouts.",
+          "recommendation": "Add robust error handling, retry logic, and health check endpoints to the MCP server to ensure reliability in production."
+        },
+        {
+          "finding": "The '70 active listings' corpus is claimed as verified in SQLite + ChromaDB, but the codebase lacks a reconciliation mechanism to ensure consistency between the two databases, risking data drift.",
+          "severity": "MEDIUM",
+          "evidence": "BRIEF.md: 'The queryable corpus is now 70 active listings... verified in SQLite + ChromaDB as of 2026-06-06 (load_db.py output: 70 loaded, 0 errors).' vs db.py: No code for reconciling or synchronizing data between SQLite and ChromaDB; `save_listing()` only writes to SQLite, and `get_chroma()` in mcp_server.py reads from ChromaDB without any consistency check.",
+          "recommendation": "Implement a reconciliation mechanism to ensure data consistency between SQLite and ChromaDB, or document the process for manual verification."
+        },
+        {
+          "finding": "The 'adversarial watcher' is claimed as a staged gap analysis pipeline, but the codebase lacks the implementation of the watcher logic, gap analysis, or reporting mechanisms.",
+          "severity": "LOW",
+          "evidence": "BRIEF.md: 'Adversarial Watcher: strategy/adversarial_watcher/watcher.py — staged gap analysis pipeline, Run 001 completed 2026-06-06.' vs git log: No commits related to `watcher.py` or gap analysis; no code for the watcher is visible in the provided files.",
+          "recommendation": "Implement the adversarial watcher pipeline or document its location and functionality to substantiate the claim."
+        }
+      ]
+    },
+    {
+      "rep": 3,
+      "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=600)"
+    }
+  ]
+}

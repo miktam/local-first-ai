@@ -1,0 +1,283 @@
+{
+  "ts": "2026-08-28T21:18:17+00:00",
+  "hardware": "miktam-mini M4 Pro 64GB",
+  "prompts": [
+    "Explain how a hash table resolves collisions, comparing chaining and open addressing.",
+    "Write a function that finds the longest palindromic substring in a string, and explain its time complexity.",
+    "Explain the difference between TCP and UDP, and give one real-world scenario where each is the better choice.",
+    "A user reports that their API returns 200 OK but the response body is empty about 1% of the time under load. Walk through how you'd debug this.",
+    "Explain what a Bloom filter is, how it works, and one real-world use case."
+  ],
+  "runs": [
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 0,
+      "prompt": "Explain how a hash table resolves collisions, comparing chaining and open addressing.",
+      "reply_excerpt": "A hash table is a data structure that implements an associative array abstract data type, mapping keys to values. It uses a **hash function** to compute an index (or \"slot\") in an underlying array (of",
+      "gen_tok_s": 55.75,
+      "prompt_tok_s": 230.9,
+      "wall_clock_s": 26.32,
+      "load_duration_s": 0.0,
+      "tokens_per_answer": 1460
+    },
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 1,
+      "prompt": "Write a function that finds the longest palindromic substring in a string, and explain its time complexity.",
+      "reply_excerpt": "This problem can be solved efficiently using the **Expand Around Center** approach. This method leverages the fact that a palindrome is symmetrical around its center.\n\nWhile a Dynamic Programming solu",
+      "gen_tok_s": 54.66,
+      "prompt_tok_s": 235.02,
+      "wall_clock_s": 38.71,
+      "load_duration_s": 0.0,
+      "tokens_per_answer": 2107
+    },
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 2,
+      "prompt": "Explain the difference between TCP and UDP, and give one real-world scenario where each is the better choice.",
+      "reply_excerpt": "The difference between TCP and UDP lies primarily in their **reliability**, **connection management**, and **speed**. They are both protocols used at the transport layer of the internet protocol suite",
+      "gen_tok_s": 54.74,
+      "prompt_tok_s": 233.22,
+      "wall_clock_s": 25.4,
+      "load_duration_s": 0.0,
+      "tokens_per_answer": 1381
+    },
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 3,
+      "prompt": "A user reports that their API returns 200 OK but the response body is empty about 1% of the time under load. Walk through how you'd debug this.",
+      "reply_excerpt": "This is a classic, difficult-to-debug production issue. The fact that the status code is `200 OK` while the body is empty means the API layer believes the request was successful, but the business logi",
+      "gen_tok_s": 54.87,
+      "prompt_tok_s": 326.99,
+      "wall_clock_s": 43.86,
+      "load_duration_s": 0.0,
+      "tokens_per_answer": 2397
+    },
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 4,
+      "prompt": "Explain what a Bloom filter is, how it works, and one real-world use case.",
+      "reply_excerpt": "A Bloom filter is a highly specialized and clever data structure used in computer science that is designed to test whether an element is a member of a set, using a minimal amount of memory.\n\nBecause i",
+      "gen_tok_s": 55.31,
+      "prompt_tok_s": 272.4,
+      "wall_clock_s": 35.76,
+      "load_duration_s": 0.0,
+      "tokens_per_answer": 1970
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 0,
+      "prompt": "Explain how a hash table resolves collisions, comparing chaining and open addressing.",
+      "reply_excerpt": "To understand how hash tables resolve collisions, we must first understand why they happen.\n\nA **hash table** uses a **hash function** to transform a key (like a name) into an index (an integer) in an",
+      "gen_tok_s": 55.36,
+      "prompt_tok_s": 148.32,
+      "wall_clock_s": 30.96,
+      "load_duration_s": 0.0,
+      "tokens_per_answer": 1702
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 1,
+      "prompt": "Write a function that finds the longest palindromic substring in a string, and explain its time complexity.",
+      "reply_excerpt": "The most efficient and intuitive way to solve this problem (without moving into the highly complex Manacher's Algorithm) is the **\"Expand Around Center\"** approach.\n\nHere is the implementation in Pyth",
+      "gen_tok_s": 55.17,
+      "prompt_tok_s": 173.02,
+      "wall_clock_s": 32.82,
+      "load_duration_s": 0.0,
+      "tokens_per_answer": 1797
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 2,
+      "prompt": "Explain the difference between TCP and UDP, and give one real-world scenario where each is the better choice.",
+      "reply_excerpt": "To understand the difference between **TCP** (Transmission Control Protocol) and **UDP** (User Datagram Protocol), it is helpful to think of them as two different ways of delivering a message: one is ",
+      "gen_tok_s": 56.14,
+      "prompt_tok_s": 168.33,
+      "wall_clock_s": 23.66,
+      "load_duration_s": 0.0,
+      "tokens_per_answer": 1314
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 3,
+      "prompt": "A user reports that their API returns 200 OK but the response body is empty about 1% of the time under load. Walk through how you'd debug this.",
+      "reply_excerpt": "This is a classic \"silent failure\" scenario. Because the status code is `200 OK`, the networking layer believes the transaction was successful. The fact that it happens **under load** and **intermitte",
+      "gen_tok_s": 54.16,
+      "prompt_tok_s": 214.63,
+      "wall_clock_s": 37.21,
+      "load_duration_s": 0.0,
+      "tokens_per_answer": 2000
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 4,
+      "prompt": "Explain what a Bloom filter is, how it works, and one real-world use case.",
+      "reply_excerpt": "### What is a Bloom Filter?\n\nA **Bloom filter** is a space-efficient, probabilistic data structure used to test whether an element is a member of a set. \n\nIt is \"probabilistic\" because it provides a d",
+      "gen_tok_s": 52.92,
+      "prompt_tok_s": 153.85,
+      "wall_clock_s": 31.44,
+      "load_duration_s": 0.0,
+      "tokens_per_answer": 1650
+    },
+    {
+      "model": "qwen3.5:35b",
+      "prompt_idx": 0,
+      "prompt": "Explain how a hash table resolves collisions, comparing chaining and open addressing.",
+      "error": "HTTPConnectionPool(host='100.100.251.84', port=11434): Read timed out. (read timeout=300)"
+    },
+    {
+      "model": "qwen3.5:35b",
+      "prompt_idx": 1,
+      "prompt": "Write a function that finds the longest palindromic substring in a string, and explain its time complexity.",
+      "reply_excerpt": "Here's a Python function that finds the longest palindromic substring in a given string using the \"expand around center\" approach:\n\n```python\ndef longest_palindromic_substring(s):\n    \"\"\"\n    Finds th",
+      "gen_tok_s": 5.63,
+      "prompt_tok_s": 8.24,
+      "wall_clock_s": 128.26,
+      "load_duration_s": 0.01,
+      "tokens_per_answer": 697
+    },
+    {
+      "model": "qwen3.5:35b",
+      "prompt_idx": 2,
+      "prompt": "Explain the difference between TCP and UDP, and give one real-world scenario where each is the better choice.",
+      "reply_excerpt": "TCP (Transmission Control Protocol) and UDP (User Datagram Protocol) are both transport layer protocols used to send data across a network (like the internet). The fundamental difference lies in their",
+      "gen_tok_s": 6.48,
+      "prompt_tok_s": 8.3,
+      "wall_clock_s": 291.0,
+      "load_duration_s": 0.01,
+      "tokens_per_answer": 1857
+    },
+    {
+      "model": "qwen3.5:35b",
+      "prompt_idx": 3,
+      "prompt": "A user reports that their API returns 200 OK but the response body is empty about 1% of the time under load. Walk through how you'd debug this.",
+      "reply_excerpt": "When an API returns 200 OK with an empty response body about 1% of the time under load, it indicates a subtle but critical issue likely tied to concurrency, resource exhaustion, or infrastructure beha",
+      "gen_tok_s": 7.35,
+      "prompt_tok_s": 10.17,
+      "wall_clock_s": 147.26,
+      "load_duration_s": 0.01,
+      "tokens_per_answer": 1044
+    },
+    {
+      "model": "qwen3.5:35b",
+      "prompt_idx": 4,
+      "prompt": "Explain what a Bloom filter is, how it works, and one real-world use case.",
+      "reply_excerpt": "### What is a Bloom Filter?\n\nA **Bloom filter** is a space-efficient, probabilistic data structure used to test whether an element is a member of a set.\n\nUnlike standard data structures (like hash set",
+      "gen_tok_s": 6.93,
+      "prompt_tok_s": 8.98,
+      "wall_clock_s": 291.49,
+      "load_duration_s": 0.01,
+      "tokens_per_answer": 1995
+    },
+    {
+      "model": "qwen3.6:35b",
+      "prompt_idx": 0,
+      "prompt": "Explain how a hash table resolves collisions, comparing chaining and open addressing.",
+      "error": "HTTPConnectionPool(host='100.100.251.84', port=11434): Read timed out. (read timeout=300)"
+    },
+    {
+      "model": "qwen3.6:35b",
+      "prompt_idx": 1,
+      "prompt": "Write a function that finds the longest palindromic substring in a string, and explain its time complexity.",
+      "error": "HTTPConnectionPool(host='100.100.251.84', port=11434): Read timed out. (read timeout=300)"
+    },
+    {
+      "model": "qwen3.6:35b",
+      "prompt_idx": 2,
+      "prompt": "Explain the difference between TCP and UDP, and give one real-world scenario where each is the better choice.",
+      "reply_excerpt": "### Core Differences Between TCP and UDP\n\n| Feature | TCP (Transmission Control Protocol) | UDP (User Datagram Protocol) |\n|--------|-------------------------------------|-----------------------------",
+      "gen_tok_s": 7.9,
+      "prompt_tok_s": 7.96,
+      "wall_clock_s": 204.23,
+      "load_duration_s": 0.02,
+      "tokens_per_answer": 1576
+    },
+    {
+      "model": "qwen3.6:35b",
+      "prompt_idx": 3,
+      "prompt": "A user reports that their API returns 200 OK but the response body is empty about 1% of the time under load. Walk through how you'd debug this.",
+      "error": "HTTPConnectionPool(host='100.100.251.84', port=11434): Read timed out. (read timeout=300)"
+    },
+    {
+      "model": "qwen3.6:35b",
+      "prompt_idx": 4,
+      "prompt": "Explain what a Bloom filter is, how it works, and one real-world use case.",
+      "reply_excerpt": "### What is a Bloom Filter?\nA **Bloom filter** is a space-efficient, probabilistic data structure used to test whether an element belongs to a set. It never returns false negatives, but can occasional",
+      "gen_tok_s": 7.71,
+      "prompt_tok_s": 8.91,
+      "wall_clock_s": 269.0,
+      "load_duration_s": 0.01,
+      "tokens_per_answer": 2044
+    }
+  ],
+  "summary": {
+    "gemma4:e4b": {
+      "n_runs": 5,
+      "mean_gen_tok_s": 55.07,
+      "mean_prompt_tok_s": 259.71,
+      "mean_wall_clock_s": 34.01,
+      "mean_tokens_per_answer": 1863,
+      "range_gen_tok_s": [
+        54.66,
+        55.75
+      ],
+      "range_wall_clock_s": [
+        25.4,
+        43.86
+      ]
+    },
+    "gemma4:26b": {
+      "n_runs": 5,
+      "mean_gen_tok_s": 54.75,
+      "mean_prompt_tok_s": 171.63,
+      "mean_wall_clock_s": 31.22,
+      "mean_tokens_per_answer": 1692.6,
+      "range_gen_tok_s": [
+        52.92,
+        56.14
+      ],
+      "range_wall_clock_s": [
+        23.66,
+        37.21
+      ]
+    },
+    "qwen3.5:35b": {
+      "n_runs": 4,
+      "mean_gen_tok_s": 6.6,
+      "mean_prompt_tok_s": 8.92,
+      "mean_wall_clock_s": 214.5,
+      "mean_tokens_per_answer": 1398.2,
+      "range_gen_tok_s": [
+        5.63,
+        7.35
+      ],
+      "range_wall_clock_s": [
+        128.26,
+        291.49
+      ]
+    },
+    "qwen3.6:35b": {
+      "n_runs": 2,
+      "mean_gen_tok_s": 7.8,
+      "mean_prompt_tok_s": 8.44,
+      "mean_wall_clock_s": 236.62,
+      "mean_tokens_per_answer": 1810,
+      "range_gen_tok_s": [
+        7.71,
+        7.9
+      ],
+      "range_wall_clock_s": [
+        204.23,
+        269.0
+      ]
+    }
+  },
+  "verdicts": {
+    "H1": "CONFIRMED",
+    "H1_detail": "gemma4:e4b=55.07 tok/s; models matching/beating it: none",
+    "H2": "REFUTED",
+    "H2_detail": "qwen3.5:35b gen=6.6 tok/s wall=214.5s tokens=1398.2; qwen3.6:35b gen=7.8 tok/s wall=236.62s tokens=1810",
+    "H3": "CONFIRMED",
+    "H3_detail": "by_size_order=['gemma4:e4b', 'gemma4:26b', 'qwen3.5:35b', 'qwen3.6:35b']; by_wallclock_order=['gemma4:26b', 'gemma4:e4b', 'qwen3.5:35b', 'qwen3.6:35b']"
+  }
+}

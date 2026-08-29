@@ -26,7 +26,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 OLLAMA_URL     = "http://localhost:11434/api/generate"
-OLLAMA_TIMEOUT = 300
+OLLAMA_TIMEOUT = 600
 REPS           = 3
 IDLE_BETWEEN_REPS = 10  # seconds
 

@@ -42,7 +42,9 @@ To build and maintain a public-facing blog written from the perspective of Nesto
 
 **Flash Attention cliff resolved (Exp 008/010, June 2026).** `OLLAMA_FLASH_ATTENTION=1` was the sole cause of the prefill cliff. FA=0/fp16 has no cliff through 40K tokens — confirmed by Exp 010's 2×2 factorial and independently by MLX on the same hardware (Exp 011). The Mini's true operational ceiling is >40K tokens on-wire.
 
-**Pre-registered and awaiting execution:** Exp 015 (active-parameter ablation, dense vs MoE), Exp 017 (Argos Phase 0 feed reconnaissance).
+**Pre-registered and awaiting execution:** Exp 017 (Argos Phase 0 feed reconnaissance).
+
+**Exp 015 attempted 2026-08-29** — frozen commit `623c4c8` no longer exists, so the clean ablation couldn't run as pre-registered; pivoted to a fresh contemporaneous comparison instead (see scientific_log.md). Re-opening it properly needs a dense model with confirmed architecture and a re-frozen rubric.
 
 **OLÉ Marbella (June 17–18).** CasaSol booth demo. Exp 015/017/018 execution scheduled post-event.
 
@@ -60,7 +62,9 @@ To build and maintain a public-facing blog written from the perspective of Nesto
 
 - [ ] **Exp 016 Phase B — TTFT benchmark.** 10 reps mini→local vs mini→miktam-mbp.local. Gate: median overhead <500 ms. Produce `phase_b_lan_latency.json`. [`exp_016_two_mac_orchestration/`](./exp_016_two_mac_orchestration/)
 - [ ] **Exp 016 Phase C — Tiered pipeline end-to-end.** Plan on smart (Qwen3-Coder-Next), execute on cheap (gemma4:26b). Deterministic-glue invariants enforced. Gate: fewer human interventions than single-model baseline.
-- [ ] **Exp 015 — Active-parameter ablation (dense vs MoE).** Does a dense 12–32B local model score ≥2/8 on the frozen Exp 012 audit rubric? Tests whether the capability boundary is total-parameter or active-compute. [`exp_015_active_param_ablation/`](./exp_015_active_param_ablation/)
+- [x] **Exp 015 — Active-parameter ablation (dense vs MoE).** Attempted 2026-08-29 — frozen commit gone, not resolvable as pre-registered. Pivoted to a fresh gemma4:26b-vs-qwen3.8:27b comparison on current codebase; see scientific_log.md for the full write-up and the B2-drift irony (gemma4:26b's own weights had silently drifted since June). [`exp_015_active_param_ablation/`](./exp_015_active_param_ablation/)
+- [x] **Exp 023 — Generation efficiency across the local model family.** Complete 2026-08-29. terminalbytes-style methodology applied to 5 local models. gemma4:31b confirmed broken/unusable on this hardware. [`exp_023_local_model_efficiency/`](./exp_023_local_model_efficiency/)
+- [ ] **Exp 024 — Vision capability: gemma4:26b vs qwen3.8:27b.** Inconclusive 2026-08-29 — gemma4:26b hit a repetition-loop failure mode on 4/5 photos (worth flagging to Pharos directly); qwen3.8:27b's data is void since the model vanished from disk mid-experiment, unexplained. Needs a clean re-run once qwen3.8:27b's re-pull is decided. [`exp_024_vision_model_comparison/`](./exp_024_vision_model_comparison/)
 - [ ] **Exp 017 — Argos Phase 0 feed reconnaissance.** DGT NAP (DATEX II) + OpenChargeMap, Málaga–Gibraltar EV corridor. 24h cadence measurement required. [`exp_017_argos_phase0/`](./exp_017_argos_phase0/)
 - [x] **Exp 018 — Sovereignty resilience.** Complete 2026-08-22. H1 (daemon down) + H2 (weights removed) confirmed — graceful fallback, zero data loss, 1-command recovery each. H3 (network cut) inconclusive: the test machine has no physical console, only remote SSH access, so blocking all outbound severed the SSH session itself before the checks could run; a mis-armed self-heal timer (not nohup'd/disowned) died with it, forcing a full reboot. Zero data loss through the reboot. [`exp_018_sovereignty_resilience/`](./exp_018_sovereignty_resilience/)
 - [ ] **Exp 007 Phase C — Thermal endurance (MBP, 90 min sustained).** Fan audible during Phase B at 110K tokens. Deferred; lower priority now that Exp 016 characterises the two-machine pipeline.

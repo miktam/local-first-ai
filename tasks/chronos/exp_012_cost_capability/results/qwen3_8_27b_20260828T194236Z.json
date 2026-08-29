@@ -1,0 +1,36 @@
+{
+  "experiment": "012",
+  "ts": "20260828T194236Z",
+  "model": "qwen3.8:27b",
+  "runtime": "ollama",
+  "project": "/Users/miktam02/REPOS/casasol",
+  "reps_per_task": 3,
+  "task_a": [
+    {
+      "rep": 1,
+      "error": "500 Server Error: Internal Server Error for url: http://localhost:11434/api/generate"
+    },
+    {
+      "rep": 2,
+      "error": "500 Server Error: Internal Server Error for url: http://localhost:11434/api/generate"
+    },
+    {
+      "rep": 3,
+      "error": "500 Server Error: Internal Server Error for url: http://localhost:11434/api/generate"
+    }
+  ],
+  "task_b": [
+    {
+      "rep": 1,
+      "error": "500 Server Error: Internal Server Error for url: http://localhost:11434/api/generate"
+    },
+    {
+      "rep": 2,
+      "error": "500 Server Error: Internal Server Error for url: http://localhost:11434/api/generate"
+    },
+    {
+      "rep": 3,
+      "error": "500 Server Error: Internal Server Error for url: http://localhost:11434/api/generate"
+    }
+  ]
+}

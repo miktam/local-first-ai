@@ -1,0 +1,161 @@
+{
+  "ts": "2026-08-28T19:19:06+00:00",
+  "hardware": "miktam-mini M4 Pro 64GB",
+  "prompts": [
+    "Explain how a hash table resolves collisions, comparing chaining and open addressing.",
+    "Write a function that finds the longest palindromic substring in a string, and explain its time complexity.",
+    "Explain the difference between TCP and UDP, and give one real-world scenario where each is the better choice.",
+    "A user reports that their API returns 200 OK but the response body is empty about 1% of the time under load. Walk through how you'd debug this.",
+    "Explain what a Bloom filter is, how it works, and one real-world use case."
+  ],
+  "runs": [
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 0,
+      "prompt": "Explain how a hash table resolves collisions, comparing chaining and open addressing.",
+      "reply_excerpt": "A hash table is a data structure that implements an associative array abstract data type, mapping keys to values. It uses a **hash function** to compute an index (or \"slot\") in an underlying array (of",
+      "gen_tok_s": 55.44,
+      "prompt_tok_s": 323.53,
+      "wall_clock_s": 27.17,
+      "load_duration_s": 0.12,
+      "tokens_per_answer": 1477
+    },
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 1,
+      "prompt": "Write a function that finds the longest palindromic substring in a string, and explain its time complexity.",
+      "reply_excerpt": "This problem is a classic computer science challenge. While there exists a linear time $O(N)$ solution (Manacher's Algorithm), the most straightforward and commonly implemented solution that is effici",
+      "gen_tok_s": 54.53,
+      "prompt_tok_s": 507.88,
+      "wall_clock_s": 47.49,
+      "load_duration_s": 0.1,
+      "tokens_per_answer": 2550
+    },
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 2,
+      "prompt": "Explain the difference between TCP and UDP, and give one real-world scenario where each is the better choice.",
+      "reply_excerpt": "The difference between TCP and UDP lies primarily in their **reliability, connection management, and overhead**. They are both protocols used at the transport layer of the internet protocol suite (alo",
+      "gen_tok_s": 55.54,
+      "prompt_tok_s": 516.24,
+      "wall_clock_s": 22.24,
+      "load_duration_s": 0.1,
+      "tokens_per_answer": 1210
+    },
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 3,
+      "prompt": "A user reports that their API returns 200 OK but the response body is empty about 1% of the time under load. Walk through how you'd debug this.",
+      "reply_excerpt": "This is a classic, difficult-to-debug production issue. The fact that it only happens under load and is intermittent means standard logging and local testing will likely fail to reproduce it.\n\nThe cor",
+      "gen_tok_s": 54.62,
+      "prompt_tok_s": 421.93,
+      "wall_clock_s": 42.61,
+      "load_duration_s": 0.1,
+      "tokens_per_answer": 2286
+    },
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 4,
+      "prompt": "Explain what a Bloom filter is, how it works, and one real-world use case.",
+      "reply_excerpt": "A Bloom filter is a fascinating and highly efficient data structure used in computer science. It's designed to test whether an element is a member of a set, with a crucial trade-off: it can tell you w",
+      "gen_tok_s": 55.25,
+      "prompt_tok_s": 396.18,
+      "wall_clock_s": 25.02,
+      "load_duration_s": 0.11,
+      "tokens_per_answer": 1354
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 0,
+      "prompt": "Explain how a hash table resolves collisions, comparing chaining and open addressing.",
+      "reply_excerpt": "To understand collision resolution, we must first understand the problem: A **hash function** takes a key and maps it to an index in an array. Because the number of possible keys is usually much large",
+      "gen_tok_s": 52.65,
+      "prompt_tok_s": 213.62,
+      "wall_clock_s": 36.26,
+      "load_duration_s": 0.1,
+      "tokens_per_answer": 1873
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 1,
+      "prompt": "Write a function that finds the longest palindromic substring in a string, and explain its time complexity.",
+      "reply_excerpt": "The most efficient and intuitive way to solve this problem (without moving into the highly complex Manacher's Algorithm) is the **\"Expand Around Center\"** approach.\n\nHere is the implementation in Pyth",
+      "gen_tok_s": 52.55,
+      "prompt_tok_s": 217.74,
+      "wall_clock_s": 36.7,
+      "load_duration_s": 0.11,
+      "tokens_per_answer": 1892
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 2,
+      "prompt": "Explain the difference between TCP and UDP, and give one real-world scenario where each is the better choice.",
+      "reply_excerpt": "To understand the difference between **TCP (Transmission Control Protocol)** and **UDP (User Datagram Protocol)**, it is helpful to think of them as two different types of delivery services: one is a ",
+      "gen_tok_s": 53.2,
+      "prompt_tok_s": 213.3,
+      "wall_clock_s": 27.83,
+      "load_duration_s": 0.11,
+      "tokens_per_answer": 1448
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 3,
+      "prompt": "A user reports that their API returns 200 OK but the response body is empty about 1% of the time under load. Walk through how you'd debug this.",
+      "reply_excerpt": "This is a classic \"heisenbug\"—a bug that disappears or changes behavior when you try to study it, often caused by concurrency or resource exhaustion. Since the status code is `200 OK`, we know the req",
+      "gen_tok_s": 52.32,
+      "prompt_tok_s": 284.2,
+      "wall_clock_s": 40.64,
+      "load_duration_s": 0.1,
+      "tokens_per_answer": 2086
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 4,
+      "prompt": "Explain what a Bloom filter is, how it works, and one real-world use case.",
+      "reply_excerpt": "### What is a Bloom Filter?\n\nA **Bloom filter** is a space-efficient, probabilistic data structure used to test whether an element is a member of a set. \n\nUnlike a standard Hash Set, which stores the ",
+      "gen_tok_s": 52.94,
+      "prompt_tok_s": 214.14,
+      "wall_clock_s": 31.34,
+      "load_duration_s": 0.1,
+      "tokens_per_answer": 1625
+    }
+  ],
+  "summary": {
+    "gemma4:e4b": {
+      "n_runs": 5,
+      "mean_gen_tok_s": 55.08,
+      "mean_prompt_tok_s": 433.15,
+      "mean_wall_clock_s": 32.91,
+      "mean_tokens_per_answer": 1775.4,
+      "range_gen_tok_s": [
+        54.53,
+        55.54
+      ],
+      "range_wall_clock_s": [
+        22.24,
+        47.49
+      ]
+    },
+    "gemma4:26b": {
+      "n_runs": 5,
+      "mean_gen_tok_s": 52.73,
+      "mean_prompt_tok_s": 228.6,
+      "mean_wall_clock_s": 34.55,
+      "mean_tokens_per_answer": 1784.8,
+      "range_gen_tok_s": [
+        52.32,
+        53.2
+      ],
+      "range_wall_clock_s": [
+        27.83,
+        40.64
+      ]
+    }
+  },
+  "verdicts": {
+    "H1": "CONFIRMED",
+    "H1_detail": "gemma4:e4b=55.08 tok/s; models matching/beating it: none",
+    "H3": "REFUTED",
+    "H3_detail": "by_size_order=['gemma4:e4b', 'gemma4:26b']; by_wallclock_order=['gemma4:e4b', 'gemma4:26b']"
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "ts": "2026-08-29T05:53:42+00:00",
+  "photos": [
+    "20260606_190939_img-6126_blurred.jpg",
+    "20260606_191041_img-6127_blurred.jpg",
+    "20260606_191144_img-6128_blurred.jpg",
+    "20260606_191251_img-6129_blurred.jpg",
+    "20260606_191356_img-6130_blurred.jpg"
+  ],
+  "photo_source_note": "Substituted from casasol/witness/photos/ (GDPR-blurred property photos) — Pharos has no maintenance-issue sample photos in its own repo. See HYPOTHESIS.md.",
+  "prompt": "You are a facilities inspection assistant. Examine the photo and identify the maintenance issue.\n\nRespond with JSON only:\n{\n  \"visual_description\": \"<one or two sentences: what the issue is and where it appears>\",\n  \"apparent_severity\": \"low|medium|high|critical\",\n  \"location_hint\": \"<room or area visible in the photo, or 'unknown'>\"\n}",
+  "runs": [
+    {
+      "model": "gemma4:26b",
+      "photo": "20260606_190939_img-6126_blurred.jpg",
+      "parsed_ok": false,
+      "parse_error": "no JSON object found",
+      "raw_response": "{\"visual_description\": \"The image shows a digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital displayly, digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital",
+      "visual_description": null,
+      "apparent_severity": null,
+      "location_hint": null,
+      "total_ms": 18585,
+      "wall_clock_s": 18.6,
+      "prompt_tokens": 368,
+      "output_tokens": 200,
+      "tok_per_s": 57.0
+    },
+    {
+      "model": "gemma4:26b",
+      "photo": "20260606_191041_img-6127_blurred.jpg",
+      "parsed_ok": false,
+      "parse_error": "Unterminated string starting at: line 1 column 35 (char 34)",
+      "raw_response": "{\"visual_<channel|>```json way: \":\"}```json { \"  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  ",
+      "visual_description": null,
+      "apparent_severity": null,
+      "location_hint": null,
+      "total_ms": 0,
+      "wall_clock_s": 3.0,
+      "prompt_tokens": 0,
+      "output_tokens": 0,
+      "tok_per_s": 0.0
+    },
+    {
+      "model": "gemma4:26b",
+      "photo": "20260606_191144_img-6128_blurred.jpg",
+      "parsed_ok": false,
+      "parse_error": "no JSON object found",
+      "raw_response": "{\"visual_description\": \"The image shows a digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital display screen, digital display",
+      "visual_description": null,
+      "apparent_severity": null,
+      "location_hint": null,
+      "total_ms": 5610,
+      "wall_clock_s": 5.61,
+      "prompt_tokens": 368,
+      "output_tokens": 200,
+      "tok_per_s": 54.4
+    },
+    {
+      "model": "gemma4:26b",
+      "photo": "20260606_191251_img-6129_blurred.jpg",
+      "parsed_ok": true,
+      "parse_error": null,
+      "raw_response": "{\"visual_description\": \"A crease or fold in the transparent plastic sleeve/holder, appearing as a diagonal line across the middle of the photo.\", \"apparent_severity\": \"low\", \"location_hint\": \"unknown\"}",
+      "visual_description": "A crease or fold in the transparent plastic sleeve/holder, appearing as a diagonal line across the middle of the photo.",
+      "apparent_severity": "low",
+      "location_hint": "unknown",
+      "total_ms": 2800,
+      "wall_clock_s": 2.8,
+      "prompt_tokens": 368,
+      "output_tokens": 47,
+      "tok_per_s": 57.6
+    },
+    {
+      "model": "gemma4:26b",
+      "photo": "20260606_191356_img-6130_blurred.jpg",
+      "parsed_ok": false,
+      "parse_error": "no JSON object found",
+      "raw_response": "{\"visual_description\": \"The image shows a real estate advertisement for a house, not a a maintenance issue. There is no maintenance issue to be identify. There is a \\u0026t;s a reflection-baseder in thethe in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the the in the t",
+      "visual_description": null,
+      "apparent_severity": null,
+      "location_hint": null,
+      "total_ms": 5564,
+      "wall_clock_s": 5.57,
+      "prompt_tokens": 368,
+      "output_tokens": 200,
+      "tok_per_s": 56.3
+    },
+    {
+      "model": "qwen3.8:27b",
+      "photo": "20260606_190939_img-6126_blurred.jpg",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "model": "qwen3.8:27b",
+      "photo": "20260606_191041_img-6127_blurred.jpg",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "model": "qwen3.8:27b",
+      "photo": "20260606_191144_img-6128_blurred.jpg",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "model": "qwen3.8:27b",
+      "photo": "20260606_191251_img-6129_blurred.jpg",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "model": "qwen3.8:27b",
+      "photo": "20260606_191356_img-6130_blurred.jpg",
+      "error": "HTTP Error 404: Not Found"
+    }
+  ],
+  "verdicts": {
+    "gemma4:26b": {
+      "n_parsed_ok": 1,
+      "n_total": 5,
+      "mean_total_ms": 6511.8,
+      "mean_tok_per_s": 45.1
+    },
+    "qwen3.8:27b": {
+      "n_parsed_ok": 0,
+      "n_total": 0,
+      "mean_total_ms": null,
+      "mean_tok_per_s": null
+    }
+  }
+}

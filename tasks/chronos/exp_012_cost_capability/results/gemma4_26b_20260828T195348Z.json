@@ -1,0 +1,270 @@
+{
+  "experiment": "012",
+  "ts": "20260828T195348Z",
+  "model": "gemma4:26b",
+  "runtime": "ollama",
+  "project": "/Users/miktam02/REPOS/casasol",
+  "reps_per_task": 3,
+  "task_a": [
+    {
+      "rep": 1,
+      "duration_s": 28.0,
+      "tokens": {
+        "input_tokens": 6468,
+        "output_tokens": 592,
+        "total_tokens": 7060,
+        "tokens_per_s": 34.4
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log implementation violates the privacy-by-design principle by logging raw input and output text containing potentially sensitive data.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py:35-36: \"\\\"input\\\": input_text, \\\"output\\\": output_text\"",
+          "recommendation": "Implement redaction or hashing of input/output text in the logging function to prevent the persistence of personal data in logs."
+        },
+        {
+          "finding": "The system lacks a documented procedure for handling Data Subject Requests (DSR), specifically for the 'right to erasure' mentioned in the retention schedule.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md:35: \"If a staff member requests erasure... their name is redacted...\"",
+          "recommendation": "Create a formal DSR procedure document outlining the steps for verifying identity and executing redaction/deletion."
+        },
+        {
+          "finding": "The Legitimate Interests Assessment (LIA) required to validate the lawful basis for processing is currently unapproved and legally non-functional.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md:25: \"Legal review required: the Legitimate Interests Assessment (LIA)... must be reviewed and signed off...\"",
+          "recommendation": "Complete and formally sign off on the LIA (document 03-lia.md) to establish a valid legal basis for processing."
+        },
+        {
+          "finding": "The MCP server lacks explicit authentication or authorization checks for incoming tool calls, relying solely on filesystem-level access.",
+          "severity": "MEDIUM",
+          "evidence": "scripts/mcp_server.py:55: (No authentication logic present in the initialization or tool definition block)",
+          "recommendation": "Implement an authorization layer within the MCP server to validate the identity of the caller before executing tools."
+        },
+        {
+          "finding": "There is a discrepancy between the RoPA's claim of no third-party sharing and the actual data flow to Anthropic via Claude Desktop.",
+          "severity": "LOW",
+          "evidence": "compliance/01-ropa.md:63: \"No data is shared with third parties. ... Anthropic (via Claude Desktop) receives only the sanitised public-layer output\"",
+          "recommendation": "Update the RoPA to explicitly list Anthropic as a sub-processor for the 'Buyer query matching' activity."
+        }
+      ]
+    },
+    {
+      "rep": 2,
+      "duration_s": 17.37,
+      "tokens": {
+        "input_tokens": 6468,
+        "output_tokens": 589,
+        "total_tokens": 7057,
+        "tokens_per_s": 34.2
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log implementation violates the privacy-by-design principle by logging raw input and output text containing potentially sensitive data.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py:35-36: \"\\\"input\\\": input_text, \\\"output\\\": output_text\"",
+          "recommendation": "Implement redaction or hashing of input/output text in the logging function to prevent the persistence of personal data in logs."
+        },
+        {
+          "finding": "The system lacks a documented procedure for handling Data Subject Requests (DSR), specifically for the 'right to erasure' mentioned in the retention schedule.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md:33: \"Manual deletion (see DSR procedure)\"",
+          "recommendation": "Create a formal DSR procedure document outlining the steps for identifying, verifying, and executing erasure requests."
+        },
+        {
+          "finding": "The Legitimate Interests Assessment (LIA) required for the primary processing activity is not yet finalized or legally validated.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md:24: \"Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off...\"",
+          "recommendation": "Complete and formally sign off on the LIA before deploying the processing activity in a production environment."
+        },
+        {
+          "finding": "There is a discrepancy between the RoPA's claim of no third-party sharing and the actual technical flow involving Anthropic/Claude Desktop.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md:65-67: \"Anthropic (via Claude Desktop) receives only the sanitised public-layer output... This is a separate processing activity\"",
+          "recommendation": "Explicitly document the data flow to Anthropic as a sub-processor or secondary controller relationship to ensure transparency."
+        },
+        {
+          "finding": "The retention schedule lacks a defined trigger or mechanism for the 'manual deletion' of ChromaDB vectors, creating a risk of residual data.",
+          "severity": "LOW",
+          "evidence": "compliance/07-retention-schedule.md:21: \"Manual deletion (see DSR procedure)\"",
+          "recommendation": "Automate the deletion of vector embeddings in synchronization with the deletion of the source .md files."
+        }
+      ]
+    },
+    {
+      "rep": 3,
+      "duration_s": 16.73,
+      "tokens": {
+        "input_tokens": 6468,
+        "output_tokens": 569,
+        "total_tokens": 7037,
+        "tokens_per_s": 34.3
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log implementation violates the privacy-by-design principle by logging raw input and output text containing potentially sensitive data.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py:35-36: \"\\\"input\\\": input_text, \\\"output\\\": output_text\"",
+          "recommendation": "Implement redaction or hashing of input/output text in the logging function to prevent the persistence of personal data in logs."
+        },
+        {
+          "finding": "The system lacks a documented procedure for handling Data Subject Requests (DSR), specifically for the 'right to erasure' mentioned in the retention schedule.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md:33: \"Manual deletion (see DSR procedure)\"",
+          "recommendation": "Create a formal DSR procedure document outlining the steps for identifying, verifying, and executing erasure requests."
+        },
+        {
+          "finding": "The Legitimate Interests Assessment (LIA) required to validate the lawful basis for processing is not yet finalized or signed.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md:24: \"Legal review required: the Legitimate Interests Assessment (LIA) in document 03-lia.md must be reviewed and signed off...\"",
+          "recommendation": "Complete and formally sign off on the LIA to provide legal justification for the processing activity."
+        },
+        {
+          "finding": "The MCP server lacks explicit authentication or authorization checks for incoming tool calls, relying solely on filesystem-level access.",
+          "severity": "MEDIUM",
+          "evidence": "scripts/mcp_server.py:55: \"mcp = FastMCP(\\\"CasaSol\\\")\"",
+          "recommendation": "Implement an authorization layer within the MCP server to validate the identity of the caller before executing tools."
+        },
+        {
+          "finding": "There is a discrepancy between the RoPA's claim of no buyer personal data processing and the potential for personal data to enter via query text.",
+          "severity": "LOW",
+          "evidence": "compliance/01-ropa.md:85: \"Buyer query text... Potentially yes — query may contain personal preferences or circumstances\"",
+          "recommendation": "Update the RoPA to explicitly define the mitigation measures used to sanitize buyer queries before processing."
+        }
+      ]
+    }
+  ],
+  "task_b": [
+    {
+      "rep": 1,
+      "duration_s": 36.11,
+      "tokens": {
+        "input_tokens": 10486,
+        "output_tokens": 558,
+        "total_tokens": 11044,
+        "tokens_per_s": 31.9
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The 'witnessing pipeline' for proprietary off-market data described in the brief has no implementation in the codebase.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: 'The capture unit is photo + GPS + timestamp...'; codebase contains only SQLite/ChromaDB retrieval logic.",
+          "recommendation": "Implement the VLM-based ingestion pipeline for processing 'witness' photos and extracting metadata."
+        },
+        {
+          "finding": "The system lacks a mechanism to handle the 'Bouncer' (buyer-facing) sovereignty boundary described in the strategy.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: 'Two-sided sovereignty pair... Bouncer ↔ buyer-Claude'; mcp_server.py only implements internal search tools.",
+          "recommendation": "Implement a secondary MCP server or API layer with sanitization logic to expose only the 'sanitised slice' to external users."
+        },
+        {
+          "finding": "The database schema lacks support for the 'provenance triple' (GPS/Timestamp/Photo) required for the proprietary moat.",
+          "severity": "MEDIUM",
+          "evidence": "db.py: listings table contains 'source' and 'source_url' but no fields for GPS coordinates or photo references.",
+          "recommendation": "Update the listings table schema to include latitude, longitude, and a reference to the witness photo file."
+        },
+        {
+          "finding": "The 'Temporal Delta Engine' mentioned as a key internal leverage feature is not implemented in the data layer.",
+          "severity": "MEDIUM",
+          "evidence": "BUILD_LOG.md: 'Distinct from FEATURE-001 (Temporal Delta Engine...)'; db.py only tracks price_events, not delta scoring.",
+          "recommendation": "Implement a service to calculate and store scoring metrics based on price volatility and listing age."
+        },
+        {
+          "finding": "The system uses a mutable environment variable for the primary data directory without a fallback or validation check.",
+          "severity": "LOW",
+          "evidence": "config.py: _data_dir = Path(os.environ['CASASOL_DATA_DIR']) if 'CASASOL_DATA_DIR' in os.environ else ...",
+          "recommendation": "Add a startup check to verify that the resolved DB_PATH is writable and the directory exists."
+        }
+      ]
+    },
+    {
+      "rep": 2,
+      "duration_s": 17.87,
+      "tokens": {
+        "input_tokens": 10486,
+        "output_tokens": 566,
+        "total_tokens": 11052,
+        "tokens_per_s": 32.0
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The 'witnessing pipeline' for proprietary off-market data described in the brief has no implementation in the codebase.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: 'The capture unit is photo + GPS + timestamp...'; codebase contains only scraping/loading logic in db.py and mcp_server.py.",
+          "recommendation": "Implement the VLM-based ingestion pipeline for processing 'witness' photos and extracting metadata."
+        },
+        {
+          "finding": "The system lacks a mechanism to handle the 'Bouncer' (buyer-facing) sovereignty boundary described in the strategy.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: 'The buyer... queries a sanitised slice of the agency's portfolio through MCP'; mcp_server.py only implements internal search tools.",
+          "recommendation": "Implement a secondary MCP server or API layer with strict schema-based sanitization and permission scopes for external clients."
+        },
+        {
+          "finding": "The database schema lacks support for the 'provenance triple' (photo, GPS, timestamp) required for the witnessed corpus moat.",
+          "severity": "MEDIUM",
+          "evidence": "db.py: listings table contains 'source' and 'source_url' but lacks fields for GPS coordinates or photo metadata.",
+          "recommendation": "Update the listings table schema to include latitude, longitude, and photo_id fields."
+        },
+        {
+          "finding": "The 'Temporal Delta Engine' mentioned as a key internal leverage feature is not implemented in the data layer.",
+          "severity": "MEDIUM",
+          "evidence": "BUILD_LOG.md: 'Distinct from FEATURE-001 (Temporal Delta Engine...)'; db.py: only tracks price_events, not delta scoring logic.",
+          "recommendation": "Implement a service to calculate and store scoring metrics based on price_events and listing duration."
+        },
+        {
+          "finding": "The system uses a mutable environment variable for the primary data directory without a fallback or validation check.",
+          "severity": "LOW",
+          "evidence": "config.py: _data_dir = Path(os.environ['CASASOL_DATA_DIR']) if 'CASASOL_DATA_DIR' in os.environ else ...",
+          "recommendation": "Implement a startup check to verify the existence and write-permissions of the resolved DB_PATH."
+        }
+      ]
+    },
+    {
+      "rep": 3,
+      "duration_s": 15.47,
+      "tokens": {
+        "input_tokens": 10486,
+        "output_tokens": 489,
+        "total_tokens": 10975,
+        "tokens_per_s": 32.0
+      },
+      "task": "B",
+      "gaps": [
+        {
+          "finding": "The 'witnessing pipeline' described as a core moat for proprietary data has no implementation in the provided codebase.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: 'The proprietary witnessed corpus... capture unit is photo + GPS + timestamp'",
+          "recommendation": "Implement the VLM-based ingestion pipeline for processing photos in WITNESS_DIR."
+        },
+        {
+          "finding": "The system lacks a mechanism to handle the 'Bouncer' (buyer-facing) sovereignty requirement via a negotiated boundary.",
+          "severity": "HIGH",
+          "evidence": "BRIEF.md: 'Two sovereign parties... meeting via a negotiated boundary (MCP)'",
+          "recommendation": "Implement a secondary MCP server or API layer with permission-scoped access for external clients."
+        },
+        {
+          "finding": "The database schema lacks support for the 'provenance triple' (photo, GPS, timestamp) required for the witnessed corpus.",
+          "severity": "MEDIUM",
+          "evidence": "db.py: CREATE TABLE IF NOT EXISTS listings (...)",
+          "recommendation": "Add columns for GPS coordinates and photo metadata to the listings table."
+        },
+        {
+          "finding": "The 'Temporal Delta Engine' mentioned as a key internal feature is not present in the database or logic.",
+          "severity": "MEDIUM",
+          "evidence": "BUILD_LOG.md: 'Distinct from FEATURE-001 (Temporal Delta Engine...)'",
+          "recommendation": "Implement logic to calculate and store price/status deltas over time."
+        },
+        {
+          "finding": "The system uses a mutable environment variable for the primary data directory without a fallback or validation.",
+          "severity": "LOW",
+          "evidence": "config.py: _data_dir = Path(os.environ['CASASOL_DATA_DIR']) if 'CASASOL_DATA_DIR' in os.environ else PROJECT_ROOT / 'data'",
+          "recommendation": "Implement a check to ensure the directory exists and is writable on startup."
+        }
+      ]
+    }
+  ]
+}

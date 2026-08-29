@@ -1,0 +1,138 @@
+{
+  "experiment": "012",
+  "ts": "20260828T195640Z",
+  "model": "qwen3.8:27b",
+  "runtime": "ollama",
+  "project": "/Users/miktam02/REPOS/casasol",
+  "reps_per_task": 3,
+  "task_a": [
+    {
+      "rep": 1,
+      "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)"
+    },
+    {
+      "rep": 2,
+      "duration_s": 193.7,
+      "tokens": {
+        "input_tokens": 6338,
+        "output_tokens": 1229,
+        "total_tokens": 7567,
+        "tokens_per_s": 7.4
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log records full input and output text, which may contain personal data (e.g., buyer queries or staff names), contradicting the RoPA claim that buyer queries are not retained and staff data is minimal/incidental.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py:42-43: `\"input\": input_text, \"output\": output_text` vs compliance/01-ropa.md:2.4: \"Buyer query text: not retained beyond the session (default).\"",
+          "recommendation": "Redact or hash personal data fields in the inference log before writing, or exclude buyer query inputs from the log entirely."
+        },
+        {
+          "finding": "The Retention Schedule specifies a 12-month retention period for MCP audit logs, but the provided code snippet for `mcp_server.py` shows no log rotation or deletion mechanism, risking indefinite retention.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md:18: \"MCP audit logs | logs/mcp.log | 12 months | Log rotation; files older than 12 months deleted\" vs scripts/mcp_server.py:28-33: `logging.basicConfig(filename=str(_log_path), ...)` with no rotation handler.",
+          "recommendation": "Implement `logging.handlers.TimedRotatingFileHandler` or a cron job to delete logs older than 12 months."
+        },
+        {
+          "finding": "The RoPA states that Tier 1 private outputs are overwritten on each nightly run and deleted after 90 days, but no code or script is provided to enforce this automated deletion, relying on manual agency IT action.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md:16: \"Tier 1 private outputs | ~/.casasol/private/ | 90 days rolling | Overwritten on each nightly run; residual files deleted after 90 days | Automated / Agency IT\" vs absence of any `cleanup.py` or cron script in the provided codebase.",
+          "recommendation": "Implement an automated cleanup script that deletes files in `~/.casasol/private/` older than 90 days and schedule it via cron or systemd timer."
+        },
+        {
+          "finding": "The RoPA claims that the MCP server process has no read access to the private (Tier 1) layer via filesystem-level access control, but the code does not demonstrate any such restriction, and the inference log writes to a shared project directory.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md:1.8: \"Filesystem-level access control: the MCP server process has no read access to the private (Tier 1) layer\" vs scripts/inference_log.py:24: `PROJECT_ROOT = Path(__file__).resolve().parent.parent` implying shared filesystem access.",
+          "recommendation": "Enforce filesystem permissions (e.g., `chmod 700` on private directories) or use separate user accounts for the MCP server and private data storage."
+        },
+        {
+          "finding": "The Retention Schedule states that ChromaDB vectors are deleted manually via DSR procedure, but no code or procedure is provided to link ChromaDB vector deletion to the deletion of source `.md` files or SQLite records.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md:15: \"ChromaDB vectors | data/chromadb/ | Same as source .md | Manual deletion (see DSR procedure)\" vs absence of any `delete_vector.py` or DSR script in the provided codebase.",
+          "recommendation": "Implement a script that deletes ChromaDB vectors corresponding to deleted SQLite records or `.md` files, and document the DSR procedure."
+        },
+        {
+          "finding": "The RoPA states that no data is shared with third parties and all processing occurs on agency premises, but the use of Anthropic's Claude Desktop as the buyer's AI provider implies data transfer to Anthropic, which is not explicitly addressed as a third-party processor in the RoPA.",
+          "severity": "LOW",
+          "evidence": "compliance/01-ropa.md:1.5: \"No data is shared with third parties... Anthropic (via Claude Desktop) receives only the sanitised public-layer output\" vs compliance/01-ropa.md:2.1: \"Matching buyer natural-language queries (received via Claude Desktop MCP protocol)\".",
+          "recommendation": "Explicitly list Anthropic as a third-party processor in the RoPA and include a Data Processing Agreement (DPA) with Anthropic in the compliance pack."
+        },
+        {
+          "finding": "The Retention Schedule states that voice note audio is deleted immediately after transcription, but the code snippet for `audio_demo.py` is not provided to verify this behavior.",
+          "severity": "LOW",
+          "evidence": "compliance/07-retention-schedule.md:20: \"Voice note audio (if audio pipeline used) | Temporary /tmp/ | Deleted immediately after transcription | Automatic — audio_demo.py deletes WAV after Whisper pass\" vs absence of `audio_demo.py` in the provided codebase.",
+          "recommendation": "Provide the `audio_demo.py` script to verify that the WAV file is deleted after transcription, or implement this deletion logic if it is missing."
+        }
+      ]
+    },
+    {
+      "rep": 3,
+      "duration_s": 166.7,
+      "tokens": {
+        "input_tokens": 6338,
+        "output_tokens": 1205,
+        "total_tokens": 7543,
+        "tokens_per_s": 7.2
+      },
+      "task": "A",
+      "gaps": [
+        {
+          "finding": "The inference log records full input and output text, which may contain personal data (e.g., buyer queries or staff names), contradicting the RoPA claim that buyer queries are not retained and staff data is minimal/incidental.",
+          "severity": "HIGH",
+          "evidence": "scripts/inference_log.py:42-43: `\"input\": input_text, \"output\": output_text` vs compliance/01-ropa.md:2.4: 'Buyer query text: not retained beyond the session (default)'",
+          "recommendation": "Redact or hash personal data fields in the inference log before writing to disk, or exclude buyer query stages from full-text logging."
+        },
+        {
+          "finding": "The Retention Schedule mandates 12-month retention for MCP audit logs, but the provided code snippet for mcp_server.py does not implement log rotation or deletion logic, risking indefinite retention.",
+          "severity": "HIGH",
+          "evidence": "compliance/07-retention-schedule.md: 'MCP audit logs | logs/mcp.log | 12 months | Log rotation; files older than 12 months deleted' vs scripts/mcp_server.py:26-32: `logging.basicConfig(filename=str(_log_path), ...)` with no rotation handler visible.",
+          "recommendation": "Implement `logging.handlers.TimedRotatingFileHandler` or a cron job to delete `mcp.log` entries older than 12 months."
+        },
+        {
+          "finding": "The RoPA states that Tier 1 private outputs are overwritten on nightly runs and deleted after 90 days, but no code or script is provided to enforce this automated deletion, relying on manual 'Agency IT' action which is prone to error.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md: 'Tier 1 private outputs | ~/.casasol/private/ | 90 days rolling | Overwritten on each nightly run; residual files deleted after 90 days | Automated / Agency IT'",
+          "recommendation": "Implement a scheduled script (e.g., `cleanup_private.py`) that enforces the 90-day deletion policy for `~/.casasol/private/`."
+        },
+        {
+          "finding": "The RoPA claims 'Filesystem-level access control: the MCP server process has no read access to the private (Tier 1) layer', but the code imports `config` and uses standard file paths without demonstrating OS-level permission enforcement (e.g., chroot, namespaces, or strict file permissions) in the provided snippet.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/01-ropa.md:1.8: 'Filesystem-level access control: the MCP server process has no read access to the private (Tier 1) layer' vs scripts/mcp_server.py:15-18: `import config` and standard `Path` usage without visible permission checks.",
+          "recommendation": "Document and implement OS-level file permissions (e.g., `chmod 700` on private dirs, running MCP as a non-privileged user) to enforce the claimed access control."
+        },
+        {
+          "finding": "The Retention Schedule states that ChromaDB vectors are deleted via 'Manual deletion (see DSR procedure)', but no DSR (Data Subject Request) procedure document is provided in the compliance pack, creating a gap in the erasure workflow.",
+          "severity": "MEDIUM",
+          "evidence": "compliance/07-retention-schedule.md: 'ChromaDB vectors | data/chromadb/ | Same as source .md | Manual deletion (see DSR procedure)' vs absence of a `compliance/05-dsr-procedure.md` or similar file in the provided context.",
+          "recommendation": "Create and document a formal DSR procedure that includes specific steps for deleting vectors from ChromaDB."
+        },
+        {
+          "finding": "The RoPA lists 'Incidental staff data' as personal data, but the inference log and MCP logs may capture staff names in query contexts or system prompts without explicit redaction, violating the 'minimal' processing claim.",
+          "severity": "LOW",
+          "evidence": "compliance/01-ropa.md:1.3: 'Incidental staff data | Staff names as authors... | Yes — minimal' vs scripts/inference_log.py:42: `\"input\": input_text` which may include staff names if present in prompts.",
+          "recommendation": "Implement a PII redaction filter in the logging pipeline to strip staff names from logged inputs/outputs."
+        },
+        {
+          "finding": "The Brief mentions 'LIA requires practitioner sign-off before witnessing goes to production', but the RoPA is marked as 'draft' and the LIA is not provided for review, meaning the lawful basis (Art 6(1)(f)) is not yet validated.",
+          "severity": "LOW",
+          "evidence": "BRIEF.md: 'LIA requires practitioner sign-off before witnessing goes to production' vs compliance/01-ropa.md: 'RoPA version 0.1-draft' and absence of `compliance/03-lia.md` in the provided context.",
+          "recommendation": "Complete the LIA and obtain practitioner sign-off before deploying the system to production."
+        }
+      ]
+    }
+  ],
+  "task_b": [
+    {
+      "rep": 1,
+      "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)"
+    },
+    {
+      "rep": 2,
+      "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)"
+    },
+    {
+      "rep": 3,
+      "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)"
+    }
+  ]
+}
