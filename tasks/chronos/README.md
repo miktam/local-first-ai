@@ -90,6 +90,7 @@ months can be tested against the same on-disk evidence.
 | Exp 022 | Adversarial red-team of the CasaSol Guide bot | Complete | [`exp_022_bot_red_team/`](./exp_022_bot_red_team/) |
 | Exp 023 | Generation efficiency across the local model family | Complete | [`exp_023_local_model_efficiency/`](./exp_023_local_model_efficiency/) |
 | Exp 024 | Vision capability: gemma4:26b vs qwen3.8:27b | Inconclusive | [`exp_024_vision_model_comparison/`](./exp_024_vision_model_comparison/) |
+| Exp 025 | Context-allocation isolation (gemma4:31b's slowdown) | H1+H2 confirmed, H3 superseded — fixed directly | [`exp_025_context_config_isolation/`](./exp_025_context_config_isolation/) |
 | Watcher Run 001 | Adversarial watcher — CasaSol gap analysis | Complete | [`watcher_run_001/`](./watcher_run_001/) |
 | Pre-Chronos benchmarks | Ad-hoc bench scripts (unnumbered) | Reference | [`experiments/`](./experiments/) |
 
