@@ -22,7 +22,7 @@ import requests
 
 OLLAMA_BASE_URL = "http://100.100.251.84:11434"
 
-MODELS = ["gemma4:e4b", "gemma4:26b", "gemma4:31b", "qwen3.5:35b", "qwen3.6:35b"]
+MODELS = ["gemma4:e4b", "gemma4:26b", "gemma4:31b", "qwen3.8:27b"]
 
 PROMPTS = [
     "Explain how a hash table resolves collisions, comparing chaining and open addressing.",
@@ -141,7 +141,7 @@ def main():
             f"qwen3.6:35b gen={s6['mean_gen_tok_s']} tok/s wall={s6['mean_wall_clock_s']}s tokens={s6['mean_tokens_per_answer']}"
         )
 
-    sizes_gb = {"gemma4:e4b": 9.6, "gemma4:26b": 17, "gemma4:31b": 19, "qwen3.5:35b": 23, "qwen3.6:35b": 23}
+    sizes_gb = {"gemma4:e4b": 9.6, "gemma4:26b": 17, "gemma4:31b": 19, "qwen3.5:35b": 23, "qwen3.6:35b": 23, "qwen3.8:27b": 17}
     present = [m for m in MODELS if m in summary]
     by_size = sorted(present, key=lambda m: sizes_gb[m])
     by_wallclock = sorted(present, key=lambda m: summary[m]["mean_wall_clock_s"])

@@ -1,0 +1,219 @@
+{
+  "ts": "2026-08-30T04:57:12+00:00",
+  "hardware": "miktam-mini M4 Pro 64GB",
+  "config": "OLLAMA_FLASH_ATTENTION=0, no KV cache quantization, OLLAMA_CONTEXT_LENGTH=8192",
+  "prompts": [
+    "Explain how a hash table resolves collisions, comparing chaining and open addressing.",
+    "Write a function that finds the longest palindromic substring in a string, and explain its time complexity.",
+    "Explain the difference between TCP and UDP, and give one real-world scenario where each is the better choice.",
+    "A user reports that their API returns 200 OK but the response body is empty about 1% of the time under load. Walk through how you'd debug this.",
+    "Explain what a Bloom filter is, how it works, and one real-world use case."
+  ],
+  "runs": [
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 0,
+      "gen_tok_s": 54.92,
+      "tokens_per_answer": 1638,
+      "wall_clock_s": 29.95
+    },
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 1,
+      "gen_tok_s": 54.13,
+      "tokens_per_answer": 2140,
+      "wall_clock_s": 39.7
+    },
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 2,
+      "gen_tok_s": 55.7,
+      "tokens_per_answer": 1099,
+      "wall_clock_s": 19.9
+    },
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 3,
+      "gen_tok_s": 54.03,
+      "tokens_per_answer": 2199,
+      "wall_clock_s": 40.88
+    },
+    {
+      "model": "gemma4:e4b",
+      "prompt_idx": 4,
+      "gen_tok_s": 54.5,
+      "tokens_per_answer": 1858,
+      "wall_clock_s": 34.24
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 0,
+      "gen_tok_s": 55.09,
+      "tokens_per_answer": 1776,
+      "wall_clock_s": 32.45
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 1,
+      "gen_tok_s": 55.35,
+      "tokens_per_answer": 1631,
+      "wall_clock_s": 29.71
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 2,
+      "gen_tok_s": 55.82,
+      "tokens_per_answer": 1435,
+      "wall_clock_s": 25.97
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 3,
+      "gen_tok_s": 54.17,
+      "tokens_per_answer": 2097,
+      "wall_clock_s": 38.99
+    },
+    {
+      "model": "gemma4:26b",
+      "prompt_idx": 4,
+      "gen_tok_s": 55.29,
+      "tokens_per_answer": 1684,
+      "wall_clock_s": 30.72
+    },
+    {
+      "model": "gemma4:31b",
+      "prompt_idx": 0,
+      "gen_tok_s": 11.2,
+      "tokens_per_answer": 1716,
+      "wall_clock_s": 153.84
+    },
+    {
+      "model": "gemma4:31b",
+      "prompt_idx": 1,
+      "gen_tok_s": 11.3,
+      "tokens_per_answer": 1644,
+      "wall_clock_s": 146.64
+    },
+    {
+      "model": "gemma4:31b",
+      "prompt_idx": 2,
+      "gen_tok_s": 11.41,
+      "tokens_per_answer": 1306,
+      "wall_clock_s": 115.54
+    },
+    {
+      "model": "gemma4:31b",
+      "prompt_idx": 3,
+      "gen_tok_s": 11.17,
+      "tokens_per_answer": 1989,
+      "wall_clock_s": 179.11
+    },
+    {
+      "model": "gemma4:31b",
+      "prompt_idx": 4,
+      "gen_tok_s": 11.38,
+      "tokens_per_answer": 1450,
+      "wall_clock_s": 128.15
+    },
+    {
+      "model": "qwen3.8:27b",
+      "prompt_idx": 0,
+      "gen_tok_s": 7.08,
+      "tokens_per_answer": 1215,
+      "wall_clock_s": 172.14
+    },
+    {
+      "model": "qwen3.8:27b",
+      "prompt_idx": 1,
+      "gen_tok_s": 8.68,
+      "tokens_per_answer": 1311,
+      "wall_clock_s": 151.64
+    },
+    {
+      "model": "qwen3.8:27b",
+      "prompt_idx": 2,
+      "gen_tok_s": 6.85,
+      "tokens_per_answer": 750,
+      "wall_clock_s": 110.19
+    },
+    {
+      "model": "qwen3.8:27b",
+      "prompt_idx": 3,
+      "gen_tok_s": 6.23,
+      "tokens_per_answer": 3003,
+      "wall_clock_s": 483.27
+    },
+    {
+      "model": "qwen3.8:27b",
+      "prompt_idx": 4,
+      "gen_tok_s": 7.38,
+      "tokens_per_answer": 1027,
+      "wall_clock_s": 139.72
+    }
+  ],
+  "summary": {
+    "gemma4:e4b": {
+      "n_runs": 5,
+      "mean_gen_tok_s": 54.66,
+      "mean_wall_clock_s": 32.93,
+      "mean_tokens_per_answer": 1786.8,
+      "range_gen_tok_s": [
+        54.03,
+        55.7
+      ],
+      "range_wall_clock_s": [
+        19.9,
+        40.88
+      ]
+    },
+    "gemma4:26b": {
+      "n_runs": 5,
+      "mean_gen_tok_s": 55.14,
+      "mean_wall_clock_s": 31.57,
+      "mean_tokens_per_answer": 1724.6,
+      "range_gen_tok_s": [
+        54.17,
+        55.82
+      ],
+      "range_wall_clock_s": [
+        25.97,
+        38.99
+      ]
+    },
+    "gemma4:31b": {
+      "n_runs": 5,
+      "mean_gen_tok_s": 11.29,
+      "mean_wall_clock_s": 144.66,
+      "mean_tokens_per_answer": 1621,
+      "range_gen_tok_s": [
+        11.17,
+        11.41
+      ],
+      "range_wall_clock_s": [
+        115.54,
+        179.11
+      ]
+    },
+    "qwen3.8:27b": {
+      "n_runs": 5,
+      "mean_gen_tok_s": 7.24,
+      "mean_wall_clock_s": 211.39,
+      "mean_tokens_per_answer": 1461.2,
+      "range_gen_tok_s": [
+        6.23,
+        8.68
+      ],
+      "range_wall_clock_s": [
+        110.19,
+        483.27
+      ]
+    }
+  },
+  "verdicts": {
+    "H1": "REFUTED",
+    "H1_detail": "gemma4:e4b=54.66 tok/s; models matching/beating it: ['gemma4:26b']",
+    "H3": "CONFIRMED",
+    "H3_detail": "by_size_order=['gemma4:e4b', 'gemma4:26b', 'qwen3.8:27b', 'gemma4:31b']; by_wallclock_order=['gemma4:26b', 'gemma4:e4b', 'gemma4:31b', 'qwen3.8:27b']",
+    "note": "Corrected re-run under fixed OLLAMA_CONTEXT_LENGTH=8192 (post exp_025 fix). Model roster changed from the original run: qwen3.5:35b/qwen3.6:35b dropped (superseded, old-generation, ~7x slower than gemma4 independent of the context bug — no longer the relevant comparison once qwen3.8:27b exists), qwen3.8:27b added, gemma4:31b re-included now that it's fixed. Reconstructed from the run's printed log output after a KeyError crashed the script at the verdict-computation stage (sizes_gb dict missing a qwen3.8:27b entry, fixed in run_exp_023.py) — after all 4 models' actual data had already been generated successfully. No re-run was needed or performed."
+  }
+}
