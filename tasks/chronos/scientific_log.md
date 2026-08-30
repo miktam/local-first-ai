@@ -1738,7 +1738,24 @@ If H1 is falsified: the local/cloud step function is real at every tested local 
 **Result: inconclusive, and not from lack of trying.** `gemma4:26b` parsed valid JSON on only 1 of 5 photos; the other 4 either failed outright or degenerated into a repetition loop at `temperature=0` (one raw response was `"...digital display screen, digital display screen, digital display screen..."` repeated until it hit the 200-token budget without ever closing the JSON object) — a genuine model failure mode on this exact production call shape, not a harness bug. `qwen3.8:27b`'s entire run returned `404 model not found` for every photo — because, as discovered afterward, the model had vanished from disk entirely by the time this ran (see the Exp 015 write-up above for the same anomaly). This experiment needs a clean re-run once `qwen3.8:27b` is confirmed present again, and `gemma4:26b`'s repetition-loop failure mode is worth a follow-up in its own right — Pharos's real production `leaf_vision` calls have presumably been hitting the same failure rate on real maintenance photos, un-noticed, unless something downstream tolerates the parse failure gracefully.
 
 *Evidence: `exp_024_vision_model_comparison/results/run_20260829T055307Z.json`.*
-*Status: Inconclusive 2026-08-29. Blocked on the qwen3.8:27b re-pull decision; gemma4:26b's repetition-loop finding stands regardless and is worth flagging to Pharos directly.*
+*Status: Inconclusive 2026-08-29. `qwen3.8:27b` was deleted by Andrei directly (resolved, not a bug) and re-pulled 2026-08-30 — the blocker is gone, but the clean re-run itself hasn't happened yet. `gemma4:26b`'s repetition-loop finding stands regardless and is worth flagging to Pharos directly.*
+
+---
+
+## Exp 026 — Contextual Retrieval on the COAPI Corpus, Fully Local
+
+**Pre-registered and executed: 2026-08-30.** Full design in `exp_026_contextual_retrieval/HYPOTHESIS.md`. Tests Anthropic's "Contextual Retrieval" technique (an LLM-generated blurb prepended to each chunk before embedding, situating it within its source document) fully locally, on CasaSol's real `coapi_knowledge_en` pipeline — naive 500-word sliding-window chunks of PDF-extracted training material, zero structural awareness, exactly the failure mode the technique targets. Reused production chunking (`index_coapi.py`) and embedding (`embedder.py`) code directly; never touched the real collection (throwaway in-memory ChromaDB only). Sample: one full module ("Module 6 — The Contract", 11 chunks).
+
+**Result:**
+- **H1 (prefixing improves retrieval accuracy) — directionally CONFIRMED.** The "neighbor-tolerant" metric (correct chunk or its sliding-window neighbor in top-3) was a ceiling effect — 0.909 across all three variants, uninformative. The stricter **exact-hit rate** shows a clean monotonic trend: unprefixed 0.455 → `gemma4:e4b`-prefixed 0.545 → `gemma4:26b`-prefixed 0.636. Small sample (n=11, one module) — directional evidence, not statistically airtight, but it points the same way Anthropic's own published results do, on a completely different (much smaller) embedding model than they used.
+- **H2 (cheap model's prefixes are as good as the expensive model's) — leans REFUTED.** `gemma4:26b`'s prefixes measurably beat `gemma4:e4b`'s (0.636 vs 0.545 exact-hit rate).
+- **A genuinely useful cost finding that changes the H2 answer's practical weight:** `gemma4:e4b` and `gemma4:26b` took almost identical wall-clock time per chunk (~12.5s vs ~13.2s) — because this specific task is prompt-eval-bound (re-reading the ~7,500-token module on every call) rather than generation-bound, and the two models have comparable prompt-eval throughput on this hardware (matching exp_023's finding that they're close on raw tok/s too). The usual "pick the cheap model to save time" logic doesn't apply here: `gemma4:26b` produces better prefixes for essentially no extra cost, so there's no real reason to default to `gemma4:e4b` for this sub-task specifically.
+- **H3 (practical to run at scale) — CONFIRMED.** Extrapolating `gemma4:e4b`'s measured per-chunk time to the full, currently-indexed `coapi_knowledge_en` corpus (1,307 chunks, checked fresh at run time) gives ≈4.8 hours one-time cost — comfortably an overnight background job, not a blocker.
+
+**Practical recommendation this points to:** if CasaSol adopts contextual retrieval for COAPI content, use `gemma4:26b` for the contextualization pass, not `gemma4:e4b` — the quality gain is real and the speed cost isn't, for this task shape.
+
+*Evidence: `exp_026_contextual_retrieval/results/run_20260830T050558Z.json`.*
+*Status: Complete 2026-08-30 (pilot scale — one module, 11 chunks). A full-corpus run would need the ~4.8h background job from H3 plus a larger, more rigorous query set before this becomes more than directional evidence.*
 
 ---
 

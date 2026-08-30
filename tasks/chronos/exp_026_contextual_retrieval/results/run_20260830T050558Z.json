@@ -1,0 +1,513 @@
+{
+  "ts": "2026-08-30T05:11:33+00:00",
+  "module": "10.modulo_6_el_contrato.txt",
+  "n_chunks_tested": 11,
+  "queries": [
+    "What is the legal difference between a unilateral and a bilateral contract, and which type is most common in real estate transactions?",
+    "What is the difference between nominate, innominate, and mixed contracts, and how do they differ from preparatory, principal, and ancillary contracts in terms of their legal structure and relationship to one another?",
+    "What are the three essential requirements for a contract to exist under Article 1261 of the Civil Code, and what are the necessary characteristics for consent to be considered valid?",
+    "If a client is being pressured through a well-founded fear of serious harm to sign a property sale, and the contract contains a price that is merely symbolic, what are the legal implications regarding the validity of the consent and the object of the contract?",
+    "Under the Spanish Civil Code, what are the requirements for the \"cause\" of a contract to be valid, and which specific types of real estate-related acts must be recorded in a public document according to Article 1280?",
+    "If a real estate agent (API) breaks off advanced negotiations after creating well-founded expectations in a client, can they be held liable even if no formal contract was ever signed?",
+    "If a person makes an offer to buy a property and the recipient responds with a change to the agreed price, does the original offer still stand, and what is the legal status of that response?",
+    "What are the primary differences between nullity, voidability, and rescission in terms of their legal effects, the parties who can invoke them, and the specific circumstances under which they apply?",
+    "If a buyer pays a deposit during a contract negotiation but the contract does not explicitly state whether the deposit is \"confirmatory\" or \"penitential,\" how will the law treat that deposit if one party decides to withdraw from the deal?",
+    "If a client provides a payment for a property purchase but the contract fails to specify whether this money is \"earnest money\" (arras) or an \"amount on account\" (importe a cuenta), how will the courts interpret the nature of that payment and what are the legal consequences?",
+    "If a contract does not explicitly state whether the earnest money deposit is penitential, how does the Supreme Court interpret its nature?"
+  ],
+  "hit_results": {
+    "unprefixed": [
+      {
+        "query_idx": 0,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_1",
+          "chunk_2",
+          "chunk_5"
+        ]
+      },
+      {
+        "query_idx": 1,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_2",
+          "chunk_5",
+          "chunk_6"
+        ]
+      },
+      {
+        "query_idx": 2,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_5",
+          "chunk_8",
+          "chunk_2"
+        ]
+      },
+      {
+        "query_idx": 3,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_4",
+          "chunk_1",
+          "chunk_8"
+        ]
+      },
+      {
+        "query_idx": 4,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_1",
+          "chunk_4",
+          "chunk_2"
+        ]
+      },
+      {
+        "query_idx": 5,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_1",
+          "chunk_6",
+          "chunk_2"
+        ]
+      },
+      {
+        "query_idx": 6,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_6",
+          "chunk_8",
+          "chunk_1"
+        ]
+      },
+      {
+        "query_idx": 7,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_7",
+          "chunk_4",
+          "chunk_1"
+        ]
+      },
+      {
+        "query_idx": 8,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_9",
+          "chunk_6",
+          "chunk_8"
+        ]
+      },
+      {
+        "query_idx": 9,
+        "hit_with_neighbor_tolerance": false,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_1",
+          "chunk_4",
+          "chunk_6"
+        ]
+      },
+      {
+        "query_idx": 10,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_9",
+          "chunk_2",
+          "chunk_7"
+        ]
+      }
+    ],
+    "prefixed_gemma4:e4b": [
+      {
+        "query_idx": 0,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_2",
+          "chunk_1",
+          "chunk_0"
+        ]
+      },
+      {
+        "query_idx": 1,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_2",
+          "chunk_6",
+          "chunk_1"
+        ]
+      },
+      {
+        "query_idx": 2,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_3",
+          "chunk_5",
+          "chunk_4"
+        ]
+      },
+      {
+        "query_idx": 3,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_1",
+          "chunk_7",
+          "chunk_2"
+        ]
+      },
+      {
+        "query_idx": 4,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_5",
+          "chunk_4",
+          "chunk_8"
+        ]
+      },
+      {
+        "query_idx": 5,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_1",
+          "chunk_7",
+          "chunk_6"
+        ]
+      },
+      {
+        "query_idx": 6,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_1",
+          "chunk_6",
+          "chunk_2"
+        ]
+      },
+      {
+        "query_idx": 7,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_7",
+          "chunk_1",
+          "chunk_4"
+        ]
+      },
+      {
+        "query_idx": 8,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_7",
+          "chunk_6",
+          "chunk_1"
+        ]
+      },
+      {
+        "query_idx": 9,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_1",
+          "chunk_7",
+          "chunk_9"
+        ]
+      },
+      {
+        "query_idx": 10,
+        "hit_with_neighbor_tolerance": false,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_7",
+          "chunk_2",
+          "chunk_1"
+        ]
+      }
+    ],
+    "prefixed_gemma4:26b": [
+      {
+        "query_idx": 0,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_1",
+          "chunk_8",
+          "chunk_3"
+        ]
+      },
+      {
+        "query_idx": 1,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_1",
+          "chunk_5",
+          "chunk_2"
+        ]
+      },
+      {
+        "query_idx": 2,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_3",
+          "chunk_5",
+          "chunk_2"
+        ]
+      },
+      {
+        "query_idx": 3,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_3",
+          "chunk_4",
+          "chunk_8"
+        ]
+      },
+      {
+        "query_idx": 4,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_1",
+          "chunk_4",
+          "chunk_0"
+        ]
+      },
+      {
+        "query_idx": 5,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_6",
+          "chunk_8",
+          "chunk_3"
+        ]
+      },
+      {
+        "query_idx": 6,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_6",
+          "chunk_8",
+          "chunk_3"
+        ]
+      },
+      {
+        "query_idx": 7,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_7",
+          "chunk_4",
+          "chunk_1"
+        ]
+      },
+      {
+        "query_idx": 8,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": true,
+        "retrieved": [
+          "chunk_8",
+          "chunk_6",
+          "chunk_7"
+        ]
+      },
+      {
+        "query_idx": 9,
+        "hit_with_neighbor_tolerance": true,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_8",
+          "chunk_4",
+          "chunk_7"
+        ]
+      },
+      {
+        "query_idx": 10,
+        "hit_with_neighbor_tolerance": false,
+        "exact_hit": false,
+        "retrieved": [
+          "chunk_7",
+          "chunk_8",
+          "chunk_6"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "unprefixed": {
+      "top3_hit_rate_with_neighbor_tolerance": 0.909,
+      "top3_exact_hit_rate": 0.455
+    },
+    "prefixed_gemma4:e4b": {
+      "top3_hit_rate_with_neighbor_tolerance": 0.909,
+      "top3_exact_hit_rate": 0.545
+    },
+    "prefixed_gemma4:26b": {
+      "top3_hit_rate_with_neighbor_tolerance": 0.909,
+      "top3_exact_hit_rate": 0.636
+    }
+  },
+  "context_generation_meta": {
+    "gemma4:e4b": [
+      {
+        "wall_clock_s": 20.17,
+        "prompt_tokens": 7569,
+        "output_tokens": 51,
+        "gen_tok_s": 49.66
+      },
+      {
+        "wall_clock_s": 12.18,
+        "prompt_tokens": 7553,
+        "output_tokens": 56,
+        "gen_tok_s": 50.04
+      },
+      {
+        "wall_clock_s": 12.14,
+        "prompt_tokens": 7530,
+        "output_tokens": 49,
+        "gen_tok_s": 50.02
+      },
+      {
+        "wall_clock_s": 12.94,
+        "prompt_tokens": 7586,
+        "output_tokens": 65,
+        "gen_tok_s": 50.19
+      },
+      {
+        "wall_clock_s": 12.79,
+        "prompt_tokens": 7516,
+        "output_tokens": 61,
+        "gen_tok_s": 50.4
+      },
+      {
+        "wall_clock_s": 12.62,
+        "prompt_tokens": 7492,
+        "output_tokens": 52,
+        "gen_tok_s": 50.41
+      },
+      {
+        "wall_clock_s": 12.72,
+        "prompt_tokens": 7533,
+        "output_tokens": 56,
+        "gen_tok_s": 50.4
+      },
+      {
+        "wall_clock_s": 12.56,
+        "prompt_tokens": 7525,
+        "output_tokens": 50,
+        "gen_tok_s": 50.31
+      },
+      {
+        "wall_clock_s": 12.51,
+        "prompt_tokens": 7502,
+        "output_tokens": 47,
+        "gen_tok_s": 50.08
+      },
+      {
+        "wall_clock_s": 12.78,
+        "prompt_tokens": 7537,
+        "output_tokens": 58,
+        "gen_tok_s": 50.11
+      },
+      {
+        "wall_clock_s": 11.94,
+        "prompt_tokens": 7140,
+        "output_tokens": 51,
+        "gen_tok_s": 50.21
+      }
+    ],
+    "gemma4:26b": [
+      {
+        "wall_clock_s": 15.23,
+        "prompt_tokens": 7573,
+        "output_tokens": 37,
+        "gen_tok_s": 46.52
+      },
+      {
+        "wall_clock_s": 13.63,
+        "prompt_tokens": 7557,
+        "output_tokens": 58,
+        "gen_tok_s": 46.02
+      },
+      {
+        "wall_clock_s": 13.47,
+        "prompt_tokens": 7534,
+        "output_tokens": 53,
+        "gen_tok_s": 46.49
+      },
+      {
+        "wall_clock_s": 13.18,
+        "prompt_tokens": 7590,
+        "output_tokens": 38,
+        "gen_tok_s": 46.12
+      },
+      {
+        "wall_clock_s": 13.0,
+        "prompt_tokens": 7520,
+        "output_tokens": 38,
+        "gen_tok_s": 46.0
+      },
+      {
+        "wall_clock_s": 12.81,
+        "prompt_tokens": 7496,
+        "output_tokens": 30,
+        "gen_tok_s": 47.41
+      },
+      {
+        "wall_clock_s": 13.0,
+        "prompt_tokens": 7537,
+        "output_tokens": 36,
+        "gen_tok_s": 46.56
+      },
+      {
+        "wall_clock_s": 13.37,
+        "prompt_tokens": 7529,
+        "output_tokens": 55,
+        "gen_tok_s": 46.47
+      },
+      {
+        "wall_clock_s": 13.33,
+        "prompt_tokens": 7506,
+        "output_tokens": 55,
+        "gen_tok_s": 46.67
+      },
+      {
+        "wall_clock_s": 13.08,
+        "prompt_tokens": 7541,
+        "output_tokens": 42,
+        "gen_tok_s": 47.01
+      },
+      {
+        "wall_clock_s": 12.13,
+        "prompt_tokens": 7144,
+        "output_tokens": 29,
+        "gen_tok_s": 46.39
+      }
+    ]
+  },
+  "h3_extrapolation": {
+    "full_corpus_size_coapi_en": 1307,
+    "mean_seconds_per_chunk_gemma4_e4b": 13.21,
+    "extrapolated_full_corpus_hours": 4.8
+  }
+}
