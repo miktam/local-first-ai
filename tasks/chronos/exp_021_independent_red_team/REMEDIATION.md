@@ -12,6 +12,10 @@
 
 **Residual risk (accepted, stated plainly):** every credential listed here remains technically readable by any process running as `miktam02`. The SSH-key-without-passphrase finding (Tier 3) is likewise open. This is the accepted position, not a mitigated one.
 
+**Portability caveat, stated plainly:** an exfiltrated API key or bot token is usable from any machine, indefinitely, without further access to this box. The acceptance therefore rests on the *low likelihood* of code-execution as `miktam02` here (single user, private mesh network, no churn of untrusted dependencies, no evidence of compromise), not on the impact of a theft being small. A one-off rotation does not close the exposure the finding describes (a new value would land in the same globally-inherited environment); the fix that would is Tier 2 — per-process injection / Keychain / OAuth — which remains open.
+
+**Revisit triggers — this acceptance is void and rotation becomes mandatory if any of the following occurs:** a second user or account gains access to the machine; the machine moves to a different network or its physical custody changes; any dependency or package run as `miktam02` is found to be compromised; or any credential is confirmed to have left the machine (public repo, shipped log, breach).
+
 **Why publishing this is safe:** the exp_021 directory records variable *names* and file *permissions* only — no secret values — verified by a value-shape scan on 2026-09-20 (no `sk-ant-` keys, no bot-token shapes, no key blobs). Publishing documents the *reachability* finding; it does not disclose the credentials themselves.
 
 **Out of exp_021's original scope, flagged not folded in:** the CasaSol bot's `CASASOL_TELEGRAM_TOKEN` (a *different* token from the Nestor `TELEGRAM_BOT_TOKEN` covered here) is supplied from the environment at launch and was never part of exp_021's three-credential scan — its exposure status is unconfirmed and belongs in a separate pass, not retrofitted into this record.
