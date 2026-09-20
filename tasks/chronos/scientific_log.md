@@ -1995,19 +1995,19 @@ H1: an unrestricted `tail` NOPASSWD sudoers grant permits root-level file read b
 ## Exp 021 — Independent Red-Team Pass on the Inference Node
 
 **Pre-registered: 2026-07-08**
-**Status: H3 CONFIRMED, sensitive — do not publish/push until remediated. H1/H2 blocked on cooperative access.**
+**Status: H3 CONFIRMED. Published 2026-09-20 — rotation declined as a documented accepted risk by the risk owner (credentials remain live; the directory is value-free, so publication documents reachability, not the secrets). H1/H2 remain blocked on cooperative access.**
 **Type:** Security audit, methodology follow-up to Exp 020
 
 **Hypothesis (pre-registered before execution):** exp_020's red-team phase was self-tested — same session, same account, same machine building and testing the fix. This experiment re-tests from independent vantage points: H1 network access from a genuinely separate device, H2 privilege boundary from a genuinely separate account, H3 what's reachable through ordinary file permissions with zero escalation at all.
 
 **Result — H3 confirmed, and it's the most consequential finding across both experiments:** without any sudo or exploit, an unencrypted SSH private key and three live, exported secrets (an LLM API key, a bot token, and a keyring password) are all readable by anything running as the automation account — a `cat` of a shell startup file or a plain `env` dump, no privilege escalation needed at all. This is a lower bar than anything exp_020 found, and the realistic path to it (a compromised dependency, or eventually a crafted document manipulating the pipeline's own tooling) doesn't require an OS misconfiguration the way the exp_020 `tail` finding did.
 
-**Handling note:** unlike exp_020's findings, this one names live, unrotated credentials by category (not value) and is being held out of any public writeup or push until the credentials are rotated and moved out of shell startup files. Evidence in `results/h3_secret_exposure_*.json` records variable *names* and file permissions only — no secret values were ever written to disk or displayed beyond this session.
+**Handling note:** this one names live credentials by category (not value). It was held out of any public writeup for over two months while the disposition was decided. On 2026-09-20 the risk owner **declined rotation as a documented accepted risk** — single-user physically-controlled machine, no evidence of compromise, and the realistic exploit path (code-execution as the automation account) reaches these credentials whether or not they are rotated, so rotation does not close the path the finding describes. Storage was hardened where cheap (Telegram token reduced from three plaintext locations to one, 2026-07-12) and two agentic guardrails were added (`block_secret_reveal.py`, `dcg` — see `RISK_MODEL.md` Part 3). The directory is value-free — variable *names* and file permissions only, real account email masked — verified by scan before publish, so publishing documents *reachability*, not the secrets. Full rationale and residual risk: `REMEDIATION.md` § "Publication status & risk acceptance." Documented acceptance is a legitimate risk treatment; silent non-remediation would not be.
 
-**H1/H2 status:** H1 blocked until `miktam-mbp` (the field laptop) is back on the network, ~2026-07-10. H2 (throwaway non-admin test account on miktam-mini) is ready to run any time, unblocked by the laptop's absence — see `HYPOTHESIS.md`.
+**H1/H2 status:** still blocked on cooperative access — H1 needs a second tailnet device, H2 a throwaway non-admin account. Not run. See `HYPOTHESIS.md`.
 
-*Evidence: `exp_021_independent_red_team/` — `HYPOTHESIS.md`, `H3_FINDINGS.md`, `test_h3_secret_exposure.sh`, `results/`.*
-*Status: Partially complete 2026-07-08. Do not push to the public remote until H3's remediation (credential rotation) is done.*
+*Evidence: `exp_021_independent_red_team/` — `HYPOTHESIS.md`, `H3_FINDINGS.md`, `RISK_MODEL.md`, `REMEDIATION.md`, `test_h3_secret_exposure.sh`, `test_h4_agentic_guardrails.sh`, `results/`.*
+*Status: H3 complete; published 2026-09-20 (commit `c8d9443`) as an accepted-risk finding. H1/H2 open.*
 
 ---
 

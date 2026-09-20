@@ -87,6 +87,7 @@ months can be tested against the same on-disk evidence.
 | Exp 018 | Sovereignty resilience (3 failure modes) | Complete | [`exp_018_sovereignty_resilience/`](./exp_018_sovereignty_resilience/) |
 | Exp 019 | Adversarial legal review pipeline | Complete | [`exp_019_adversarial_legal_review/`](./exp_019_adversarial_legal_review/) |
 | Exp 020 | Hardening and red-teaming the inference node | Complete | [`exp_020_miktam_mini_hardening/`](./exp_020_miktam_mini_hardening/) |
+| Exp 021 | Independent red-team pass (zero-escalation credential reachability) | H3 confirmed; published as accepted risk | [`exp_021_independent_red_team/`](./exp_021_independent_red_team/) |
 | Exp 022 | Adversarial red-team of the CasaSol Guide bot | Complete | [`exp_022_bot_red_team/`](./exp_022_bot_red_team/) |
 | Exp 023 | Generation efficiency across the local model family | Complete | [`exp_023_local_model_efficiency/`](./exp_023_local_model_efficiency/) |
 | Exp 024 | Vision capability: gemma4:26b vs qwen3.8:27b | Inconclusive | [`exp_024_vision_model_comparison/`](./exp_024_vision_model_comparison/) |
