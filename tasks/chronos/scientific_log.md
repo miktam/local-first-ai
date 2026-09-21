@@ -2038,3 +2038,7 @@ H1: an unrestricted `tail` NOPASSWD sudoers grant permits root-level file read b
 
 ---
 
+
+## Experiment 035 — COAPI Voice: form in the weights, facts in retrieval, on a phone
+
+**Pre-registered: 2026-09-21.** Full design, fixed hashes and hypotheses in `exp_035_coapi_voice/HYPOTHESIS.md` (workspace `tasks/chronos/`). Steps 0–4 executed the same day and recorded there: iPhone 14 Pro clears every device budget; Qwen2.5-1.5B fails the Polish floor (0/3), Qwen3-1.7B clears it; on the sealed 60-row eval (sha256 `efc16ab2…`) retrieval over the study guide lifts numeric preservation 24 → 90 % and citation-in-context 0 → 51 % with no training (H1 confirmed), while the untrained model with retrieval fails every form floor — no-legal-advice 50 %, Spanish-term 75 %, language 90 %, out-of-scope 0/3 (H2: gate met). H3–H5 (form moves into the weights; no facts leak; device fidelity) are pre-registered; no training run has started. Teaching material is written and adversarially reviewed by Fable before the local model sees it — 6 review agents found 9 ok / 51 edit / 0 reject on the machine draft, 16 internal guide conflicts and 43 guide gaps, now in `casasol/coapi_voice/data/ADJUDICATION.md`.
