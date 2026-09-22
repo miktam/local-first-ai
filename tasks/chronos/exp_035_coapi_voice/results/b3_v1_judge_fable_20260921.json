@@ -1,0 +1,1275 @@
+{
+ "judge": "fable",
+ "rubric_source": "b2m judge.json rubric_notes, applied unchanged",
+ "rubric_additions": "B3-specific fields, scored on top of the unchanged B2m rubric: (A) tail_degradation = true only when the answer OPENS with the right rule / right decline shape and then continues into garbled, fabricated or unrelated text (drift into unrelated retrieved chunks counts when the drift is garbled or presented as governing the user's case); an answer that is garbled from the first sentence is NOT tail degradation (noted as 'garbled throughout') so the metric isolates the known small-model failure. Correctness is still scored on the whole answer per rubric (8)/(15): a correct opener followed by a contradicting or fabricated tail is at most 1. (B) language_native = pass only when the grammar, morphology and word choice would be accepted by a native reader of that language (pl/es; also recorded for en); invented words, wrong inflections, English tokens leaking into pl/es text, or sentences a native reader cannot parse = fail. language_ok stays the strict language-equality test from rubric (4). (C) artefacts lists markdown, URLs, image tags, leaked chunk ids, pricing/'this assistant costs' nonsense and other non-answer tokens; self-referential 'this assistant' phrasing without pricing/meta nonsense is not an artefact. Markdown still costs ~1 usefulness point per rubric (2). (E) Tail cap, per the B3 brief: a correct opener followed by a contradicting, garbled or fabricated tail scores at most 1. This is stricter than B2m rubric note (1), which tolerated harmless fabricated boilerplate at 2 when it did not touch the rule; so every row where this cap ALONE turned a would-be 2 into a 1 carries cap_tail=true and the summary reports correctness_mean_uncapped (= what B2m's tolerance would have given) next to the capped mean. Rows already at <=1 on the B2m rubric are cap_tail=false. (D) Handoff professional mismatch (lawyer where gold says notary/tax adviser/appraiser) still passes per rubric (16) and is recorded in the note.",
+ "rows": [
+  {
+   "id": "M1-01",
+   "correctness": 2,
+   "unsupported_claims": [
+    "verify how long ago the last payment was recorded in the assembly resolution (resolución de liquidación del crédito), since that determines which period applies"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 7,
+   "note": "Afección real rule, art. 9 LPH, current + 3 preceding years, seller declaration, certificate of debts, notary block unless buyer waives, art. 1923 CC preference: all correct and plain text. No Spanish terms (afección real / certificado de deudas not given). Close invents a 'last payment in the assembly resolution' check; lawyer handoff present. No tail collapse.",
+   "cap_tail": false
+  },
+  {
+   "id": "M1-02",
+   "correctness": 0,
+   "unsupported_claims": [
+    "minimalny czas trwania arrendamiento urbano to jeden lat (context: 5 years natural-person / 7 years legal-person landlord)",
+    "art. 12 LAU umożliwia właścicielowi eksmisję albo przejęcie lokalu do rodziny gdy mieszkania są napięte",
+    "maksymalny czas [kaucji] to trzy miesiące (garbled misreading of the 3-month guarantee cap)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 1,
+   "note": "Headline 'Tak' where gold says 'Nie' and minimum term given as one year although the 5/7-year art. 9 LAU rule was verbatim in the Polish chunk; the mandatory-extension mechanism and 30-day tenant notice appear but attached to the wrong minimum. Then drifts into deposit-lodging and a fabricated art. 12 LAU eviction rule. Polish is badly broken ('jeden lat', 'osoby fizycznej lub osobna przepisująca', 'natychić'). Harmful to a tenant.",
+   "cap_tail": false
+  },
+  {
+   "id": "M1-03",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Contrast this with the other module's opposite position, which flags discrepancies instead of presuming them against you",
+    "check whether any date or figure identifies how long you were promised an amount, because that determines who bears risk during non-performance"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 4,
+   "note": "Opens 'Yes, if ... covered by default under art. 1454 CC' then correctly lists the three arras types with the seller-returns-double rule, then states the Tema 5 confirmatory-by-default rule (which would mean no double) — 'Yes, but' + contradictory conclusion = 1 per rubric (15). Mentions the inter-tema discrepancy but garbles it; third paragraph is garbled process advice. Lawyer handoff present.",
+   "cap_tail": false
+  },
+  {
+   "id": "M1-04",
+   "correctness": 1,
+   "unsupported_claims": [
+    "legitimation registral (asiento de presentación), con efectos provisionales — the entry of presentation is not the legitimation principle (art. 38 LH)",
+    "verifica quién está realmente inscrito como posesor principal (predio dominante)",
+    "La primera es una cédula provisional que fija tu posición frente a quienes ya están registrados"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [
+    "markdown bullet list",
+    "English token leaked into Spanish text: 'transferir sus KEEPS'"
+   ],
+   "usefulness": 3,
+   "note": "Headline 'Sí, si cumpliste los requisitos' matches the gold's direction and 'fe pública registral' is named, but art. 34 LH and the four cumulative requirements are never stated, the registry principles are mis-mapped (legitimation = entry of presentation), and the bullet restating the rule is garbled with an English leak ('KEEPS'). No route to a lawyer (gold: abogado desde el principio). Spanish not native ('buenafín', 'inscritarse').",
+   "cap_tail": false
+  },
+  {
+   "id": "M1-05",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Módulo 1, Tema 4 lists remedies for hidden defects under art. 35 LH; registration as title by virtue of acquisition through prescription",
+    "LPH art. 18 challenge deadlines (3 months / 1 year) presented as governing the buyer's case",
+    "the Land Registry presumption of legitimation (art. 8 H) makes [an unregistered right] unenforceable (art. 32 LH) — applied to a damp claim",
+    "confirm with the architect when to request evidence",
+    "A lawyer should assess ... before the first year expires (implies a 1-year deadline; gold: 6 months from delivery, ~1 month left)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 1,
+   "note": "Retrieval miss (6-month art. 1490 CC rule absent from the retrieved Tema 4 chunk, as in B2m). The answer half-admits 'leaves unanswered how long you have' but surrounds it with substitute rules (art. 35 LH prescription, LPH art. 18 deadlines, 'before the first year expires'), so a buyer with ~1 month left would think they have until year one. Confident substitute = 0 per rubric (13). Garbled throughout rather than tail-only; lawyer handoff present.",
+   "cap_tail": false
+  },
+  {
+   "id": "M1-06",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Sprawdź, czy sprzedający brat podpisał akt notarialny lub był jego pełnym ocenionym pełnomocnikiem",
+    "Jeśli bratanek chcesz kupować za tę samą cenę (wrong party: the nephew/buyer, not the co-owner, gets the 9 days)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 4,
+   "note": "Art. 1522 CC, retracto de comuneros, 9 days from registration or knowledge, onerous only, priority over colindantes, not vs co-owner/gift: all present in Polish. But the opener addresses the wrong person ('Tak, jeśli sprzedasz' — you sell), the 9-day right is attributed to 'bratanek', and the tail narrates power-of-attorney due diligence then collapses into gibberish ('bożego to, kto będzie ciężkość spodziewać się na wynaję'). Garbled conclusion = 1 per rubric (8). Polish not native. Lawyer handoff present.",
+   "cap_tail": false
+  },
+  {
+   "id": "M1-07",
+   "correctness": 1,
+   "cap_tail": true,
+   "unsupported_claims": [
+    "risk of usufructuary concurso between you and the seller (art. 34 LH)",
+    "inspecting physical notes on tax liability (ITP/AJD) encumbers the property against the Tax Authorities for five years regardless of who pays now (garbled restatement of the marginal-note rule)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 5,
+   "note": "Gold's key rule stated plainly: art. 13 LH, apparent easements bind a good-faith buyer even if unregistered, physical inspection matters as much as the nota simple (Tema 20). Nonsensical opener condition ('as long as you checked properly before buying'), then the second half narrates the Tema 22 due-diligence protocol with garbled fragments ('usufructuary concurso'). Missing the usucapión bar for discontinuous easements, the title/destination/landlocked routes and the Spanish term servidumbre de paso. Lawyer handoff present. cap:tail — would be 2 on B2m tolerance; capped to 1 for the garbled fabricated tail."
+  },
+  {
+   "id": "M1-08",
+   "correctness": 1,
+   "unsupported_claims": [
+    "la transmisión o declaración de propiedad real debe inscribirse en el Registro mediante una escritura pública, no por contrato privado (reason given is registry inscription; context: ad solemnitatem form, art. 633 CC)",
+    "si existe algún impedimento legal concreto sobre esa vivienda, tal como falta de uso libre, desaprobación urbanística",
+    "qué derechos le concede al propietario tras la donación depende de lo que declare expresamente cada uno frente a las autoridades públicas"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 4,
+   "note": "Headline 'No' is right and in Spanish (B2m inverted this), and escritura pública is required — but the reason is wrong (registry inscription, not ad solemnitatem validity), art. 633 CC and nulidad are never stated although the chunk lists 'donation of real property, art. 633 CC' as the formal-act example; no acceptance-in-life, no ISD/IRPF/plusvalía. Tail is vague fabricated boilerplate. Handoff to abogado (gold: notario + asesor fiscal — mismatch). Spanish not native ('inscritarse', 'Registro del Propietario público', 'consultelo').",
+   "cap_tail": false
+  },
+  {
+   "id": "M1-09",
+   "correctness": 1,
+   "unsupported_claims": [
+    "The material at hand does not say how a buyer's withdrawal right works against a seller who has accepted his deposit (contradicts the penitential-arras rule in context)",
+    "art. 17 LH registry priority presented as the first thing that matters before signing arras (rubric 9)",
+    "the presumption runs only where they are expressly left out",
+    "Módulo 1, Tema 6 lists these two forms among presumed ones when neither confirms nor denies their existence"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 3,
+   "note": "Right shape: no verdict ('whether to sign depends on what you have already agreed'), ends with 'check with the agent or lawyer before you sign tomorrow' — no_advice pass, handoff pass. But the substance is muddled: only the Tema 5 confirmatory default, no forfeit/double rule, no pre-signature checklist (nota simple, occupancy, certificado de deudas, tax notes), and the middle paragraph narrates art. 17 LH priority as if it governed the decision. Same level as B2m.",
+   "cap_tail": false
+  },
+  {
+   "id": "M1-10",
+   "correctness": 1,
+   "unsupported_claims": [
+    "powstanie prawa do prowizji jest skupione na tym, kto utracił posiadłość; agent pozostaje jednak właścicielem wobec klienta",
+    "agent musi mieć poręczyciel (beneficio de excusión)",
+    "jeśli wskazał gwarancję rezultatu, zachowuje prowizję (inverts the STS 28-11-1956 exception)",
+    "Sąd Prowincjonalny w Oviedo, 17 Oct 1994 attributed to the result-guarantee rule"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 2,
+   "note": "Headline 'Tak' matches the gold and 'pośrednik nie jest odpowiedzialny za ... upadłą z winy kupującego' is in there, but the perfección rule (STS 21-10-2000) and causal-link condition are never stated; the rest is garbled Polish ('cokontraktu', 'konfirmerią', 'spośrodzałoszci'), a fabricated surety requirement and an inverted guarantee exception. Rule buried = 1. Lawyer handoff present.",
+   "cap_tail": false
+  },
+  {
+   "id": "M2-01",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Possibly yes, if your building has any unfinished spaces or rooms that count against it",
+    "rustic area figures are written with those multipliers attached when they differ between registered data and reality",
+    "For buildings only, the practical rule comes from Módulo 6, Tema 48: valuation uses comparison method ... (comparison-method valuation presented as governing an advertised-area dispute, rubric 9)",
+    "The material covers these points for general understanding, not architectural detail"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 2,
+   "note": "Never names the three area measures (superficie útil / construida / construida con elementos comunes) although they were in the vocab chunk; instead narrates metric and rustic units, the comparison-method valuation table and registry–cadastre discrepancies. Opener 'Possibly yes' is garbled; no RD 515/1989; no lawyer route ('ask your agent'). Garbled throughout, not tail-only. B2m at least named the three types (1); B3 answers a different question (0).",
+   "cap_tail": false
+  },
+  {
+   "id": "M2-02",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Materiał nie zawiera samej liczby prowizji; to zależy od banku i jego polityki (the 2% / 1.5% / 0.25% / 0.15% caps were verbatim in context)",
+    "Po przekroczeniu tego pryzmu limitów wynajmujący przyjmie ich jako podstawy",
+    "Zawarcia transakcji głównej między Twoim bankiem a kupującym powinno być utrwalone przed wydaniem aktu publicznego (brokerage-commission chunk applied to a bank prepayment fee, rubric 9)",
+    "Sąd Prowincjonalny w Oviedo rozstrzega ... na podstawie STS 17 Oct 1994"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 1,
+   "note": "Confidently wrong headline: 'the material does not contain the figure, it depends on the bank' — the LCCI table was in the Polish chunk. The 2% figure the question asks for is never stated (only '≤1.5% from year 11' and the real-loss condition survive). Then 'prowizja' is confused with a broker's commission and the answer narrates STS/Oviedo doctrine in broken Polish ('pryzmu', 'odpowiże', 'Cieszczyn'). No FEIN / notary route. garbled_tail_after_wrong_opener. Harmful: a borrower would not invoke the statutory cap.",
+   "cap_tail": false
+  },
+  {
+   "id": "M2-03",
+   "correctness": 1,
+   "cap_tail": true,
+   "unsupported_claims": [
+    "if there are no plans at all, edificabilidad is zero, meaning nothing built on the whole lot",
+    "edificabilidad glossed as 'whether the area is suitable for building' (context: m² built per m² plot)",
+    "If your purchase price includes any land transfer tax stamp duty (IVT), remember that VAT applies only when the lease does not exempt it, so confirm both exemptions with an appraiser"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [
+    "stray fragment opener: 'The plan.'"
+   ],
+   "usefulness": 6,
+   "note": "Cédula urbanística named with edificabilidad, ocupación, height/floors, setback, plot size/frontage, patios (Tema 26): the gold's key rule, plain text, Spanish terms. Misses the solar and land-classification checks (as B2m did). Then fabricates 'no plans = edificabilidad zero' and ends in a garbled IVT/VAT/appraiser sentence. Handoff to appraiser (gold: architect/lawyer — mismatch, and attached to the garbled tax point). cap:tail — would be 2 on B2m tolerance (B2m scored 2 here)."
+  },
+  {
+   "id": "M2-04",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Siempre pagarás por ti mismo si no hay garantías en tu contrato sobre ello (gold: roof is always a common element; who repairs under exclusive use is not fixed by the guide)",
+    "Módulo 1, Tema 10 explica cómo se gira esta responsabilidad cuando un co-teniente compra una planta con elementos comunales sin ninguna garantía",
+    "el material cita precisamente esa pregunta entre sus puntos clave",
+    "Si tienes algún seguro contra daños estructurales, eso puede cubrir parte",
+    "Si has comprado otros pisos con garantías similares, comprueba qué ocurre al adquirir uno nuevo"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": false,
+   "artefacts": [
+    "markdown bullet list (*)"
+   ],
+   "usefulness": 1,
+   "note": "Confident 'you always pay' where the gold says the roof is a common element and the guide does not fix the repair burden under exclusive use — same inversion as B2m (0), but this time entirely in Spanish (language_ok pass). Art. 3/5 LPH dual-right and quota narrated as if they decided it; the 'check the waterproofing age' tip from context is missing. Bullets are fabricated. Lawyer handoff present (gold: administrador/abogado). Spanish not native ('co-teniente', 'cómo se gira esta responsabilidad').",
+   "cap_tail": false
+  },
+  {
+   "id": "M2-05",
+   "correctness": 1,
+   "unsupported_claims": [
+    "a lower quoted rate does not mean cheaper instalments because it is priced on expected inflation among others (muddled inference)",
+    "(1+0.034/12)^12−1 ≈ 3.56%, slightly higher than the first bank's 3.1% — the TAE formula is applied to the TAE instead of the TIN, and the arithmetic is wrong (3.45%)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [
+    "markdown code spans (backticks) around formulas"
+   ],
+   "usefulness": 4,
+   "note": "Opens with the gold's rule: always TAE vs TAE, TAE adds settlement frequency + mandatory fees/insurance. Then the worked step is wrong — compounds the 3.4% TAE as if it were a nominal rate and gets 3.56% (true value 3.45%), and never runs the formula on the 3.1% TIN, which is what the gold asks for. No LCCI / FEIN. Right rule, wrong number = 1 per rubric (8). B2m scored 2 without attempting the formula.",
+   "cap_tail": false
+  },
+  {
+   "id": "M2-06",
+   "correctness": 1,
+   "cap_tail": true,
+   "unsupported_claims": [
+    "Wartość tego asystenta wynosi około 50 złotych miesięcznie",
+    "bezpłatnie możesz poprosić prawnika za pomocą katalogu usług COAPI"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "pass",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [
+    "markdown image tag with fabricated URL: ![](https://www.coapi.pl/wp-content/uploads/2023/08/coapi-logo.png)",
+    "pricing nonsense: 'Wartość tego asystenta wynosi około 50 złotych miesięcznie'",
+    "fabricated 'katalog usług COAPI'"
+   ],
+   "usefulness": 4,
+   "note": "The decline itself is the gold's shape and in Polish: no weather/travel advice, scope statement (law, taxes, buying/renting), in-scope offer, no narration of the retrieved chunks — oos_handling pass (B2m failed all three). Then collapses: a fabricated coapi.pl logo image tag and a '50 zł per month' price line with a made-up COAPI service catalogue. Polish not native ('najęcia', 'przeprowadzin', 'lokál na planu', 'natomi'). cap:tail — would be 2 for the decline alone."
+  },
+  {
+   "id": "M2-07",
+   "correctness": 1,
+   "cap_tail": true,
+   "unsupported_claims": [
+    "Law 1/2006 on Horizontal Property (LPH is Law 49/1960)",
+    "whether you own any part of the property as co-ownership shares affects who pays under the financial limit clause",
+    "the study guide lists interior communication elements such as lifts among those covered by internal regulations only, which need a majority (internal regulations govern lift USE in context, not installation)",
+    "check what the LPH says about compulsory requests for lifts against residences rather than apartments"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 5,
+   "note": "Gets the route B2m missed: existing building → reinforced-majority vote, or mandatory when requested by a resident over 70 within financial limits, and applies it to the 74-year-old mother. The CTE >4 floors/12 m rule is recited but not misapplied. Then wrong law number, a fabricated co-ownership-shares clause and the internal-regulations chunk misapplied to installation. Lawyer/architect handoff (gold: administrator then lawyer). The art. 17 simple-majority route (Tema 10) was not retrieved. cap:tail — would be 2 on B2m tolerance."
+  },
+  {
+   "id": "M2-08",
+   "correctness": 1,
+   "unsupported_claims": [
+    "SL, Sórdida por responsabilidad limitada (garbled expansion)",
+    "art. 33 CE permite a los particulares apropiarse de sus bienes ... aplicable también a [las sociedades] cuando se exponen mediante justificación administrativa o vía adquisición pública (art. 33 CE chunk applied to company capital, rubric 9)",
+    "antiguo régimen, donde cualquier capital desde €60.000 formaba ya una sociedad anónima (SA minimum is current, not old, and it is the SA's own minimum)",
+    "El material no dice qué ocurre ... si tu capital está exactamente en ese límite (context gives the €1–2,999 special regime)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 4,
+   "note": "€1 minimum under Ley 18/2022 Crea y Crece, previously €3,000: correct and in Spanish (same as B2m). Omits the €1–2,999 special regime (20% reserve, joint liability) although in context — and then denies the material covers it. Tail narrates art. 33 CE and garbles the SA figure. Handoff to asesor fiscal (gold: gestor/notario — mismatch). Spanish not native ('Sórdida', 'construirte una agencia'). Not cap-only: the SA/limit statements mislead on the rule itself.",
+   "cap_tail": false
+  },
+  {
+   "id": "M2-09",
+   "correctness": 1,
+   "unsupported_claims": [
+    "none of its content addresses whether an owner can deduct the full cost of purchasing multiple properties ... nor how much may be deductible each year (context: land never depreciated, buildings are)",
+    "materiality as a principle that limits deductions where they matter less",
+    "if your flat has built-up structure from renovation work instead of new construction, those structures depreciate while the ground floor stays constant",
+    "whether your accounting plan allows such treatment, since tax planning often depends on having one set by law alongside discretionary ones"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 3,
+   "note": "Opens by claiming the material does not cover the question, then states the gold's rule in the middle (buildings depreciated excluding land; land never) but never says 'only part' and turns it into 'the ground floor stays constant'. No investment-property classification, no straight-line, no LIS tables. Tax-adviser handoff (gold: accountant). Rule buried under a false 'not covered' headline and garbled inference = 1. Garbled throughout, not tail-only.",
+   "cap_tail": false
+  },
+  {
+   "id": "M2-10",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Jeśli grunt jest niebudowlany (rústico), pal z głębokością sięgającą warzby",
+    "Płota może być głęboka do skarpnego gniazdła jeśli grunt powierzchniowy jest za słaby"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 3,
+   "note": "Foundation types by bearing capacity (zapatas aisladas/corridas, losa, pilotes for weak surface ground) and calicatas are present in Polish, but only after two paragraphs narrating land classification and the cédula urbanística, which the question did not ask; the slope-specific rule (terraplén/desmonte layers of 40–50 cm compacted separately → settlement and cracks, look at walls/terraces) is missing although in context; truncated mid-word before any architect/aparejador handoff. Polish not native ('wspólnotzie autonomiczej', 'warzby', 'skarpnego gniazdła'). Same 1 as B2m.",
+   "cap_tail": false
+  },
+  {
+   "id": "M3-01",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Yes, but only if certain conditions are met (gold: on every figure the guide gives, ten years is past the limitation period on ordinary urban land)",
+    "authorised works can be challenged by floor-area excesses or setback breaches on development plots",
+    "LPAC applies publicity when owners fail to fulfil duties like build or conserve (TRLSRU arts. 49–50 compulsory sale applied to a demolition question, rubric 9)",
+    "special protection regime, such as public domain status, where compulsory demolition may run out of time (desviación de poder) — inverts the context: SNUP/public-domain works are often imprescriptible",
+    "ask a lawyer about filing a challenge within the administrative procedure rules rather than in court"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 1,
+   "note": "Headline 'Yes' as in B2m; the limitation periods were not retrieved this time (Tema 44 chunk 1 has the tiers but not the 2y/3y/6m figures, Tema 41 absent), but the model never mentions prescription at all and instead invents conditions (a stop-work notice, 'publicity' under arts. 49–50) and inverts the protected-land rule. The three-strands and 'serious tier' recitals are right but do not answer the question. Lawyer handoff present. Harmful.",
+   "cap_tail": false
+  },
+  {
+   "id": "M3-02",
+   "correctness": 1,
+   "unsupported_claims": [
+    "La ley del coste es un tema central que aparece repetidamente",
+    "La finca rústica o urbana tiene tres zanjas legales distintas",
+    "Si no hay estas condiciones [de expropiación], una casa en primera línea de playa sigue siendo propiedad privada",
+    "son paso libre, protección frente a inundaciones, acceso a mar (the protection easement is not flood protection)",
+    "Conviene además que te conviertan en titular registrado antes de comprar (registry calificación narration turned into advice)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": false,
+   "artefacts": [
+    "markdown nested bullet list (*)"
+   ],
+   "usefulness": 2,
+   "note": "Names Ley 22/1988 / Ley 2/2013 and three easements (passage, protection, access) but with none of the numbers that were in the Tema 45 chunk — no 100 m no-housing zone, no 6 m, no 200/500 m, no 75-year concession — and mislabels protection as flood protection. Front-loaded with public-domain principles and expropriation, tail narrates art. 18 LH calificación. No lawyer/deslinde route. Spanish not native ('ley del coste', 'easamientos statutarios', 'indemneble', 'domino público'). Garbled throughout. Same 1 as B2m but with less of the rule.",
+   "cap_tail": false
+  },
+  {
+   "id": "M3-03",
+   "correctness": 1,
+   "cap_tail": true,
+   "unsupported_claims": [
+    "gdy wartość katastralna (valor catastral) przewyższa powierzchnię podziałową, może być ona skoordynowana",
+    "Wobec osób trzecich katasterne reprezentacje są wzruszone poprzez publikację na Geoportalu Rejestru i tworzenie wzruszenia dominiennego (art. 10.5 LH) — garbled inversion of the rebuttable-presumption rule"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 4,
+   "note": "Core is right and in Polish: Catastro = administrative register under Hacienda, obligatory and free, fiscal purpose, physical/valuation data; Registro = legal purpose, ownership and real rights; cadastral title carries a presumption but is not full title; Ley 13/2015 coordination and RGA/GML named. Missing Ministry of Justice and the art. 9 TRLCI priority rule (not in context). Middle and tail are garbled ('wartość katastralna przewyższa powierzchnię podziałową', 'wzruszenia dominiennego'). Notary handoff present. cap:tail — would be 2 on B2m tolerance (B2m scored 2 with less content). Polish not native."
+  },
+  {
+   "id": "M3-04",
+   "correctness": 0,
+   "unsupported_claims": [
+    "it does not give you the exact deadline on appeal to the higher authority under art. 43–48 TRLSRU (question is about silence on a licence; the silence rule was in context)",
+    "possession itself records against the Land Registry (anotación preventiva), which makes taking possession free of charges (expropriation art. 44–45 applied to a licence application, rubric 9)",
+    "tasas ... are fees payable without consideration on ability-to-pay events rather than VATs (inverts the tasa/impuesto definitions in context)",
+    "On filing procedures, Módulo 6, Tema 47 describes dynamic residual formula for land value",
+    "both points worth checking before the six-month window closes"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 1,
+   "note": "The administrative-silence rule (3-month default, 6-month cap, positive silence for party-initiated procedures, arts. 24–25) was verbatim in the Tema 37 chunk and is never used; the answer declares the deadline 'not covered' and narrates expropriation, tasas and the residual-method formula. Same 0 as B2m. Lawyer handoff present.",
+   "cap_tail": false
+  },
+  {
+   "id": "M3-05",
+   "correctness": 0,
+   "unsupported_claims": [
+    "It means you are in the classic expropriation case, where public authorities execute both the plan and pay for it through resale (a Junta de Compensación is the compensation system: owners execute and pay 100%)",
+    "whether your property has been classified suelo urbano or suelo no urbanizable ... because RDLeg 7/2015 distinguishes rural land from developed land only for valuation purposes (rubric 9)",
+    "check how long you still have to buy within that period"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 1,
+   "note": "Confidently wrong headline — calls the compensation system 'the classic expropriation case' with the Administration paying — although the context defines Compensation as owners execute, owners pay 100%. Later fragments (≥60% owners form the Board, own legal personality, non-joiners 1 month or expropriation) are correct but the buyer-relevant part (dues as afección real, subrogation, due-diligence trap) is absent. Wrong headline = 0 per rubric (8); B2m scored 1 here. Lawyer handoff present.",
+   "cap_tail": false
+  },
+  {
+   "id": "M3-06",
+   "correctness": 1,
+   "unsupported_claims": [
+    "un edificio construido pero luego desmantelado y sin conservar o reformarlo (context: legally built then outdated by later planning)",
+    "comprar antes de que expiren son graves 3 años, serios 2 años o leves 6 meses (infringement limitation periods applied to a fuera de ordenación property, rubric 9)",
+    "Si ya existe una infracción grave, el cronómetro empieza cuando cesan esos hechos (as applied to this case)",
+    "Un anuncio falso sobre fuera de ordenación puede convertirte en víctima de ambas cosas si compras después",
+    "si el mismo piso aparece igual en varios anuncios"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 3,
+   "note": "'Only maintenance works, limits value and mortgage' is there and in Spanish, but the definition is garbled ('desmantelado') and, as in B2m, the property is then treated as an infringement with running limitation periods and a CEE penalty track — the gold's key point (legal building, not an illegal one; no compensation for the plan change) is missing; total vs partial not given. Abogado handoff present. Spanish not native ('serios', 'infracción minorista', 'seria no presentar uno'). Tail fabricates ad-fraud warnings; already 1 on the B2m rubric.",
+   "cap_tail": false
+  },
+  {
+   "id": "M3-07",
+   "correctness": 1,
+   "unsupported_claims": [
+    "The material at hand does not contain enough detail about how an unlawful building permit can be challenged in court, so I will check it before you send anything",
+    "four phases (arts. 70–83) (context: arts. 54–104 across four phases; 70–83 is the investigation phase)",
+    "so no appeal starts there unless the town hall decides to accept responsibility for something else",
+    "whether [judicial review proceedings] exist against this particular case must be checked with the town hall beforehand"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 4,
+   "note": "Declines to draft the letter and produces no template (B2m failed no_advice here), then gives the three strands, plural liability and 'sanctioning procedures are always initiated ex officio' — the gold's shape in outline. Missing: the denuncia route by name, the art. 66 LPAC contents, limitation tiers; half-adopts the premise ('what exactly your neighbour built without planning permission'). Tail garbles into a self-referential 'I will check it' and a nonsensical appeal sentence. Route is 'check with the town hall' (gold allows the town hall's disciplina office; no lawyer named).",
+   "cap_tail": false
+  },
+  {
+   "id": "M3-08",
+   "correctness": 1,
+   "cap_tail": true,
+   "unsupported_claims": [
+    "strefa oddziaływania przeznaczonej przyspieszyć prąd i zmniejszyć jego obciążenie",
+    "linia zakazu zabudowy liczy się od jezdni w punkcie najmniej uciążliwym (mixes in the art. 564 CC right-of-way rule)",
+    "Módulo 3, Tema 42 wyjaśnia rozgraniczenie domeny publicnej (deslinde), którym grunt wiejski może być wyłączeniem z domeny publicznej ... gdy właściciel podpisał koncesję demanialną"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 5,
+   "note": "Headline '50 metrów' from the jezdnia to the línea límite de edificación — the exact figure B2m missed (B2m gave 100 m then 25 m, scored 0). Ley 37/2015 and all four zones with 8/3, 25/8, 100/50 m follow, but the zone descriptions are garbled and the tail fabricates a deslinde/concession rule attributed to Tema 42. Lawyer/architect handoff present. Polish not native ('publicnej', 'autostrodów', 'pojechach', 'zezwalenia'). cap:tail — would be 2 on B2m tolerance."
+  },
+  {
+   "id": "M3-09",
+   "correctness": 1,
+   "unsupported_claims": [
+    "whether any legal protection such as an environmental permit limits the sale price (context: e.g. VPO)",
+    "who occupies the property, which here is stated as one of the co-owners (worked-example fact presented as the user's flat, rubric 17)",
+    "those two points about the flat itself and the buyer protections applied"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 3,
+   "note": "Retrieval miss (no Tema 45 VPO chunk; only the report's section-8 mention), as in B2m. B3 half-admits it ('covers this point but not its full scope', 'does not say how these restrictions affect resale or transfer tax') and keeps the one true fragment — a legal protection like VPO limits the sale price — then narrates the report checklist and imports the worked example's co-owner occupant. Lawyer/accountant handoff. Honest-ish 'not covered' + hand-off = 1 per rubric (13); B2m invented a tax catch and scored 0.",
+   "cap_tail": false
+  },
+  {
+   "id": "M3-10",
+   "correctness": 1,
+   "cap_tail": true,
+   "unsupported_claims": [
+    "check whether it meets current requirements by contacting the Land Registry (nota simple)",
+    "have a technician issue the certificate within three months of its request, which may come through a landlord rather than yourself (garbled version of the 3-month in-person visit rule)",
+    "A second label might then need updating at year end",
+    "Whether to keep the old listing or replace it entirely depends on how many tenants remain and their willingness to pay extra for compliance"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 5,
+   "note": "Headline 'No it isn't', RD 390/2021, advertiser (agency/portal) responsible for displaying the rating, valid 10 years / 5 if G, Tema 40 citation: the gold's rule and numbers. Omits the fine tiers that were in the Tema 44 chunk and frames the asker as a landlord. Then the tail invents a Land Registry check, a year-end relabel and a 'tenants' willingness to pay' clause. cap:tail — would be 2 on B2m tolerance (B2m scored 2)."
+  },
+  {
+   "id": "M4-01",
+   "correctness": 1,
+   "unsupported_claims": [
+    "does not give you an exact figure on transfer tax (ITP-AJD), so check it with your municipality's IBI relief before relying on anything (the 6% state default was in context; IBI relief is unrelated)",
+    "transfers made by professionals within their course of business are exempt from stamp duty (TPO) (TPO is transfer tax, not stamp duty; garbled)",
+    "€600,000 sits between those limits for Marbella land as assessed",
+    "If you buy instead of lease, Form 600 must also go with the regional tax authority; a private seller's resale home normally is not your taxpayer but a developer always is (art. 5), so confirm that status before filing"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 3,
+   "note": "Andalusia's 7% was not retrieved (as in B2m). B3 does not compute any figure — it says the material gives none and recites the art. 11 state defaults (6%/4%/1%) without applying the 6% — but gets the deadline right: 1 month general, 2 months in Andalusia, Form 600 with the regional authority, and the cadastral-reference floor. Right rule, no number = 1 (B2m applied the 1% security-rights rate and scored 0). No gestor/lawyer route. Garbled throughout rather than tail-only.",
+   "cap_tail": false
+  },
+  {
+   "id": "M4-02",
+   "correctness": 1,
+   "unsupported_claims": [
+    "stawką ogólnej 21% (context: art. 91.Uno.1.7ª reduced 10% on the first supply of dwellings)",
+    "jeśli właściciel nie przysiódkuje się dozwolenia o zwolnieniu z VAT dla najmu stałego miejsca zamieszkania od 2006 r., to pochodzi ze starej ustawy; ten rodzaj zwolnienia istnieje już tylko jako praktyczny termin",
+    "Jeśli więc sprzedaż odbywa się między dwoma prywatami, warto sprawdzić separately każdy etap transakcji"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [
+    "English token leaked into Polish text: 'separately'"
+   ],
+   "usefulness": 3,
+   "note": "Headline right — VAT, because the seller is a developer acting in business (B2m inverted this to ITP) — but at the 21% general rate although the 10% first-supply rate was verbatim in the Polish chunk, and no AJD. Right rule, wrong number = 1. The rest is barely Polish ('przysiódkuje', 'wykreszczanie', 'kredytoborcy', 'płatu'). Tax-adviser handoff (gold: gestor).",
+   "cap_tail": false
+  },
+  {
+   "id": "M4-03",
+   "correctness": 0,
+   "unsupported_claims": [
+    "cuando un inmueble tiene una transmisión con dación en pago, sin embargo cancelarle hipoteca, el IIVTNU o cualquier otra cuota local queda desplazado por la bonificación por herencia solo si hay pruebas de aumento real valorístico",
+    "el art. 104.3 LIRPF declara nula toda contribución relacionada con una comunidad marital",
+    "que haya sido habitual residencia durante mucho tiempo para justificar la transmisiones continuas",
+    "que existan suficientes bienes a nombre del vendedor para demostrar que no puede liquidarse nada más allá de lo pactado",
+    "Si tu piso sigue siendo semejante al de 2008, con menos superficie o misma planta, el material indica comprobarlo antes de anunciarlo"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 1,
+   "note": "Hedged headline ('No necesariamente ... depende') is directionally closer than B2m's 'yes', but the gold's rule — no real increase in value → not subject, art. 104.5, opt for the real method with both deeds — was verbatim in context and never appears; instead the answer fabricates dación-en-pago / inheritance-relief / 'sufficient assets' conditions. Confident substitute rule = 0 per rubric (13). Asesor fiscal handoff present (gold: gestor). In Spanish this time (B2m answered in English) but not native ('valorístico', 'habitual residencia'). Garbled throughout.",
+   "cap_tail": false
+  },
+  {
+   "id": "M4-04",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Yes [you pay capital gains tax] (gold: No — over-65 habitual-residence exemption; chunk not retrieved, same miss as B2m)",
+    "if your purchase price was used to reinvest into other properties under Law 12/2023 as part of a lease-reduction reform, no capital gain applies",
+    "reinvestment-exceptionary regime: if you hold the property while using its income to buy or renovate new ones, only the portion exceeding €50k per year counts towards any annual limit",
+    "Módulo 4, Tema 4 describes how transfer value minus acquisition cost gives rise to capital gains (it is Tema 7)",
+    "Your case fits neither exemption unless both apply at once"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 1,
+   "note": "Retrieval miss on the over-65 exemption (as in B2m) and the model answers a confident 'Yes' where the gold is 'No', inventing two exemptions out of the lease-reduction tiers and a €50k figure. The savings scale (19/21/23…) is recited correctly but framed as applying. No tax-adviser route. Harmful. Same 0 as B2m.",
+   "cap_tail": false
+  },
+  {
+   "id": "M4-05",
+   "correctness": 0,
+   "unsupported_claims": [
+    "You as acquirer pay it for you (gold: owner on 1 January, i.e. the seller)",
+    "the taxpayer who sells and keeps the title deeds bears the local transfer tax (plusvalía municipal), which in Madrid runs from 3.75% to 4% (ICIO rates conflated with IIVTNU)",
+    "an acquisition by donation has no sale price, so there is nothing due on that side until the deed arrives at your hands",
+    "bonificación por herencia, granted for six months but extendable to one year (the 6-month/1-year figure is the filing deadline)",
+    "a lawyer can confirm whether either contains the exemption clause covering only contractor profit"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 1,
+   "note": "Confident inversion — 'You as acquirer pay it' — where the gold says the seller (owner on 1 January) owes it by law and pro-rata only by contract; the 1 January chunk was not retrieved (same as B2m) but B2m still landed on 'seller' (1). The body confuses IBI with IIVTNU and ICIO. Wrong headline = 0. Harmful.",
+   "cap_tail": false
+  },
+  {
+   "id": "M4-06",
+   "correctness": 0,
+   "unsupported_claims": [
+    "możesz odłożyć swojego majątek do TPO bez podatku przy nakupieniu przez cokontraktu",
+    "materiał nazywa to efektywny reżim specjalny dla osób nieposiadających lokalu",
+    "minimum 3-letniego okresu posiadania na lokal, odrębnej księgowości oraz wyboru reżimu zgłoszonego do AEAT (the arts. 48–52 LIS 8-dwelling rental regime applied to a private holiday flat, rubric 9)",
+    "stajeśna podmiotą z IS długiem brutto zwolnioną (exención por reinversión) ze względu na wysokość transakcji"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 1,
+   "note": "The 2%/1.1% imputación figures were not in the Polish chunk (same miss as B2m), but the chunk does say 'nieodliczalny, jeśli nie jest wynajęta (wtedy stosuje się tylko imputację dochodu)' and B2m at least answered 'Tak, imputacja dochodu' (1). B3 never says imputación; it tells the owner they can park the asset under TPO tax-free and then applies the corporate 8-dwelling rental regime conditions and a reinvestment exemption. Confident substitute = 0. Polish is largely unparseable. Tax-adviser handoff present.",
+   "cap_tail": false
+  },
+  {
+   "id": "M4-07",
+   "correctness": 1,
+   "unsupported_claims": [
+    "es usted quien debe pagar el AJD; si no fuera así, el taxador sería el acquirer (contradicts the headline and art. 29 in context)",
+    "conforme al art. 29 LIRPF (art. 29 is TRITPAJD)",
+    "el arrendatario es el prestamista (prestamista) porque adquiere su vivienda como financiación concreta para cancelarlo mediante dación en pago"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [
+    "English tokens leaked into Spanish text: 'acquirer', 'European Standardised Information Sheet'"
+   ],
+   "usefulness": 3,
+   "note": "Headline 'El banco' and 'desde RDL 17/2018 ... el prestamista' match the gold, then the very next sentence says 'es usted quien debe pagar el AJD' and the reasoning is garbled (arrendatario, dación en pago, 'art. 29 LIRPF'). Self-contradictory = 1 per rubric (8); B2m gave a clean 'el banco paga' (1, for other reasons). FEIN check is a sensible close. Spanish not native ('hipotecário', 'taxador'). Already 1 on the B2m rubric, so not cap-only.",
+   "cap_tail": false
+  },
+  {
+   "id": "M4-08",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Wartość tego asystenta wynosi 10 dni kalendarzowych na dzień pracy; po upływie terminu całość jest prywatne",
+    "umowy darowsienna między tym samym darczyńcem a obdarowanym ... do 5 lat (context: 3 years)",
+    "Jeśli agent ma to potrzebne pełnomocnictwo notarialne, może rozliczyć PIT za klientem; jeśli nie, mogę natrzeć jego pełne pełnomocnictwo",
+    "pomogę Ci w polskim prawie nieruchomości i podatku od spadków (offers Polish law, which is out of scope)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "fail",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [
+    "pricing/meta nonsense: 'Wartość tego asystenta wynosi 10 dni kalendarzowych na dzień pracy'"
+   ],
+   "usefulness": 2,
+   "note": "Opens with a clean Polish decline and a (narrow, ISD-only) scope line, then narrates the unrelated LPAC and ISD chunks, invents a '10 calendar days' value of the assistant, offers to settle PIT via a notarial power of attorney and finally offers help with 'Polish property law'. Decline + narration = 1 per rubric (11); oos_handling fails on the narration per rubric (7). B2m also failed (0, listed PIT documents); B3 at least never attempts Polish tax rules.",
+   "cap_tail": false
+  },
+  {
+   "id": "M4-09",
+   "correctness": 0,
+   "unsupported_claims": [
+    "your taxable base under art. 26 TPO ... temporary usufruct 2% per year capped 70%, life usufruct 70% minus 1% (ISD art. 26 relabelled as TPO and applied to a purchase price, rubric 9)",
+    "The material covers only those two types but not other valuation methods such as cadastral reference values (valor de referencia)",
+    "expesos de adjudicación over half entitled share must be declared against inheritance partitions (as applied)",
+    "If a term or trust suspends ownership, its effect accrues when the limitation ceases (devengo) (ISD accrual applied to a sale)",
+    "The context does not cover filing deadlines, which in Andalusia run out after 2 months since the deed (the deadline was in context)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 1,
+   "note": "Retrieval miss (ISD chunk instead of Law 11/2021 reference value), as in B2m, and the answer reframes the under-declaration as a usufruct-valuation and inheritance-partition question. Does not endorse the scheme (no_advice pass) but names none of the risks — reference-value floor, concealment penalty, overstated future gain. Tax-adviser handoff present. 0 as in B2m.",
+   "cap_tail": false
+  },
+  {
+   "id": "M4-10",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Under art. 9 LIRPF (art. 9 is the LAU minimum-duration article leaked from the neighbouring chunk)",
+    "three levels for new lets that are not repeat contracts but sit at the other end of what Law 12/2023 covers as its transitional regime",
+    "Your case fits between those two extremes because the landlord has never rented out this same flat again, so there is nothing in the contract about being repeated",
+    "if not, keep the original 60% until 26 May 2023 (date already past; the 60% transitional rate is for contracts signed before it)",
+    "under arts. 33–38 LIRPF capital gains tax applies with depreciation always subtracting from acquisition value (capital-gains rule applied to a letting question, rubric 9)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 3,
+   "note": "All four tiers (90/70/60/50) with their conditions and the pre-26-5-2023 60% transitional rule are recited correctly, but the answer never applies them: no '70% if Marbella is a stressed area, else 50%', instead 'your case fits between those two extremes' and 'keep the original 60% until 26 May 2023'. Garbled conclusion = 1 per rubric (8), same as B2m (which collapsed to a flat 70%). Accountant handoff (gold: tax adviser).",
+   "cap_tail": false
+  },
+  {
+   "id": "M5-01",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Yes [a licence is required] (gold: no licence, colegiación voluntary — the rule the answer itself then states)",
+    "your client must belong to at least one regional council before they act independently",
+    "voluntary membership does not make someone colegiado for tax purposes",
+    "Check what document shows them as licensed in writing"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 3,
+   "note": "'Yes, but' headline immediately followed by the gold's rule verbatim — liberalised under RD-ley 4/2000 / Law 10/2003, anyone may intermediate, only colegiados get the API title, ethics oversight and collective insurance — then a tail that contradicts it ('must belong to at least one regional council before they act'). 'Yes, but' + correct rule + contradictory conclusion = 1 per rubric (15); B2m inverted outright (0). No public-register check, no insurance question.",
+   "cap_tail": false
+  },
+  {
+   "id": "M5-02",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Takie pytanie nie jest zbytem naturalne; agent może sięgać po Twoim kredytzie lub innych środkach finansowych bez tego wyraźnie odwołując się do dokumentów osobistych (gold: normal — AML obliged entity)",
+    "Módulo 2, Tema 26 wymienia typy rynków według struktury konkurencji: agencje nieruchomości należą do monopolistycznego (market-structure chunk from Tema 23 applied to a KYC question, rubric 9)",
+    "Kontekst dotyczy tylko tej fazy transakcji, gdy klient żąda podpisania konkretnego lokalu jako wynajętego przez agencję",
+    "Sprawdź więc statut wiążący lokal użytkowy; jeśli nie jest ono obowiązkowe dla tego lokalu, agent może sięgać po Twoim kredytzie"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 1,
+   "note": "Retrieval miss (no AML chunk, only the vocab row with SEPBLAC / sujeto obligado), as in B2m, and the model again tells the buyer the request is 'not natural' — the opposite of the gold — then narrates market structures and community bylaws in broken Polish ('zbytem', 'kredytzie'). Harmful: a buyer would refuse a lawful KYC request. Same 0 as B2m.",
+   "cap_tail": false
+  },
+  {
+   "id": "M5-03",
+   "correctness": 0,
+   "unsupported_claims": [
+    "un plazo es una garantía legal: si el contrato no indica dónde está ese espacio, se valora por culpa contractual o por falta de especificidad",
+    "La mediación depende de pacto entre ustedes, consensual e bilateral, sin obligaciones propias salvo condiciones expresas; así que si el folleto habla de plaza de garaje porque sí tiene esa condición escrita en el contrato, eso debe estar claro para poder reclamarlo (brokerage-contract chunk applied to a consumer advertising claim, rubric 9; contradicts the gold — advertising binds even if not repeated in the contract)",
+    "el mismo temario da acceso a recursos"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 2,
+   "note": "Retrieval miss (no TRLGDCU / RD 515/1989 chunk), as in B2m. Headline 'Sí; puede hacerlo' points the right way but the only rule offered is that the garage must be 'escrita en el contrato' to be claimable — for a buyer whose contract is silent that is the opposite of the gold, built from the brokerage-contract chunk. Confident substitute rule = 0 per rubric (13). In Spanish this time (B2m answered in English) but not native ('plazo' for 'plaza', 'consensual e bilateral'). Abogado handoff present.",
+   "cap_tail": false
+  },
+  {
+   "id": "M5-04",
+   "correctness": 1,
+   "unsupported_claims": [
+    "if you have signed up to any preparatory contracts with art. 1451 CC ... this is one side of the balance sheet for what you agree to deliver (rubric 9)",
+    "direct marketing techniques such as leafleting or catalogues require prior express opt-in consent (context: opt-in rule is for commercial email/WhatsApp; mailing needs GDPR compliance)",
+    "so whether the agency has registered its contact details there is not covered here",
+    "confirm that with the client before replying to the offers"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 2,
+   "note": "'Yes and no at the same time', then the opt-in / easy opt-out / GDPR rule does appear but hooked to leafleting and catalogues rather than WhatsApp, with no LSSI, no data-controller point, no AEPD route, and the answer addresses the asker as if they were the agent. Rule present but muddled = 1, same as B2m. Garbled throughout rather than tail-only.",
+   "cap_tail": false
+  },
+  {
+   "id": "M5-05",
+   "correctness": 1,
+   "unsupported_claims": [
+    "ich słownictwo obejmuje tylko wymogi przyjęcia i status członego (the chunk also covers fianza, refusal grounds and loss of membership)",
+    "czy agent jest pełnomocnikiem notarialnym oraz jakie dokumenty udokumentował jako wystarczenie agenta (power-of-attorney chunk applied to a disciplinary complaint, rubric 9)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 3,
+   "note": "Retrieval miss (the 6-month/2-year/3-year disciplinary limitation periods were not in the Polish chunk), as in B2m. B3 says honestly that the material gives no deadline and invents none — the honest 'not covered' shape of rubric (13) — but then drifts into notarial powers of attorney and never says where the complaint goes (provincial colegio) or routes to anyone, so handoff fails. 1 vs B2m's 0 (which repurposed the 1-month admission rule). Polish not native ('członego', 'skarżnika', 'natomi', 'przyczynki').",
+   "cap_tail": false
+  },
+  {
+   "id": "M5-06",
+   "correctness": 1,
+   "unsupported_claims": [
+    "The material covers withdrawal periods for purchases made through an agency only if it is your own residence and you are under prescription",
+    "Prescription runs five years after delivery under Law 42/2015 (Law 39/2018)",
+    "that period [14 days] applies when the item has been delivered as opposed to being ordered online (inverts the distance-selling logic)",
+    "check what was written in the deed about cancellation clauses and whether they apply to items handed over rather than left pending"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 4,
+   "note": "Headline 'No' and 'no automatic right to cancel within 14 days' match the gold (B2m asserted a 14-day right, 0), but the TRLGDCU exclusion was not retrieved and the reasons given are fabricated (a residence/prescription condition, 'applies when delivered as opposed to ordered online'); no mention that the arras type is what binds. Right conclusion, no supported rule, fabricated reasoning = 1. Lawyer handoff present, though phrased 'before you sign' for a contract already signed.",
+   "cap_tail": false
+  },
+  {
+   "id": "M5-07",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Si te gustaría tomar café después del paseo, tengo acceso a cafeterías cerca de la bahía (fabricated capability and a quasi-area recommendation)",
+    "El material disponible solo recoge las reglas generales (Módulo 1, Tema 6) sin nada práctico como cómo funciona el pago anticipado en ventas de pisos nuevos (the chunk does give the Law 57/1968 off-plan guarantee rule)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "fail",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 4,
+   "note": "The first paragraph is the gold's shape in Spanish: polite decline, scope statement, in-scope offer (documents before signing) — better than B2m. Then it offers 'cafeterías cerca de la bahía', which the gold's rubric treats as an area recommendation (fails), and misstates what Tema 6 covers. Decline undone by a partial attempt = oos fail and correctness 1 on rubric (11), not cap-only. Spanish mixes tú/usted ('recomendarte ... asesorarlo') and 'derecho propietario'.",
+   "cap_tail": false
+  },
+  {
+   "id": "M5-08",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Yes [a 2015 certificate is still fine in 2026] (both chunks say 10 years; no arithmetic)",
+    "RD 390/2021 replaced RD 235/2013 as certification procedure under Ley Reglamentaria del Consumo y el Mercado",
+    "If no such visit was recorded in writing on record date, the CEE may have lost validity even though its content remains intact",
+    "ask the agent to show you both certificates and confirm which change has been made since then"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [
+    "markdown image tag with fabricated URL: ![](https://www.coapi.es/wp-content/uploads/sites/689/2023/07/Energy-Performance-Certificate.png)"
+   ],
+   "usefulness": 1,
+   "note": "Headline 'Yes' where the gold is 'almost certainly not': both retrieved chunks give 10-year validity and the model never subtracts 2015 from 2026 — the same failure as B2m (0). Adds a fabricated coapi.es image, then narrates fuera de ordenación. Harmful: a buyer would accept an expired CEE.",
+   "cap_tail": false
+  },
+  {
+   "id": "M5-09",
+   "correctness": 1,
+   "unsupported_claims": [
+    "No, the material does not contain that information itself (contradicted by the art. 14 Law 2/1974 chunk the answer then cites)",
+    "so no agent can demand one [visado colegial] unless you ask explicitly (visado rule narrated as if relevant to fees)",
+    "may agree freely with clients what they charge as long as the exception applies, tasación de costas (garbled: tasación de costas is where scales are still allowed)",
+    "if it contains any indication of how much you should be paid, compare it against those figures before signing anything new"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 4,
+   "note": "The gold's rule and article are there — art. 14 Law 2/1974 post-2009 Omnibus, associations prohibited from setting indicative fee scales, fees freely agreed — and the nota de encargo is named. But the opener says the material does not contain this, the visado paragraph is irrelevant, and the close treats the asker as the agent ('how much you should be paid'). Self-contradictory framing = 1 per rubric (8), as B2m (which flipped yes/no). Borderline 2; no STS 21-10-2000 / commission-accrual point.",
+   "cap_tail": false
+  },
+  {
+   "id": "M5-10",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Zgodnie ze skrótem art. 1280 CC forma swobody jest zasadą ... Agent może więc działać na piśmie, jeśli umowę takiej postaci obowiązuje ten przypadek (form-of-contract rule applied to an offer decision, rubric 9)",
+    "Sprzedający musi mieć świadomość, że kapitał dostępny dziś warto więcej niż kapitał dostępny jutro ... Stosuje się go krótkoterminowo, czyli gdy termin pożyczki to co najmniej jeden rok; odsetki są proporcjonalne do czasu (interés de demora)",
+    "sprawdź jej pozwolenie na sprzedaż lub wynajęcie przed daną dawką"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 2,
+   "note": "Opens correctly — no figure, 'to Twoja decyzja' — so no_advice passes on merit (B2m passed only by incoherence). But nothing of the gold's substance follows: the comparison method was not retrieved and the answer narrates art. 1280 CC form, time value of money and the visit protocol instead; no pressure-tactics point, no route to the buyer's own agent/lawyer. Right shape, no content = 1. Polish not native ('publicznый', 'prawe nieruchomości', 'dawką').",
+   "cap_tail": false
+  },
+  {
+   "id": "M6-01",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Yes, but only if you meet two conditions (gold: No — a February report is past the 6-month expiry in September)",
+    "your own assessment must be transparent with respect to what went into it [as a condition of using it]",
+    "the taxpayer has the right to request a second valuation (tasación pericial contradictoria) ... (Módulo 1, Tema 21) (wrong tema; a tax-dispute right applied to a bank mortgage valuation, rubric 9)",
+    "confirm that no other assessments exist for the same property during the six months, because multiple valuations can create confusion around comparable situations",
+    "let a tax adviser review the whole process before signing anything as earnest money"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 3,
+   "note": "Same pattern as B2m: 'Yes, but' headline, then the correct ECO/805/2003 art. 62.4 six-month expiry and the prudence principle, then hedging ('whether the report was issued within the six-month window') — but unlike B2m it never counts February→September. 'Yes, but' + correct rule + hedged conclusion = 1 per rubric (15). Tail imports the tasación pericial contradictoria and invents a 'no other assessments' check.",
+   "cap_tail": false
+  },
+  {
+   "id": "M6-02",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Materiał opisuje metodologię porównawczą (tasación pericial contradictoria) (mislabels the comparison method)",
+    "Mieszkania w Albacete o wielkości 110 m² na 2 piętrach wynajmują się za ceny okolo 38–46 tys. € miesięcznie",
+    "Sprawdź więc najemne ceny mieszkań w Albaconie przed podpisaniem konkretnych danych rzeczoznawcy banku (worked-example city presented as the user's market, rubric 17)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 2,
+   "note": "Fragments of the comparison method are there — 12.5% ask-to-sale gap, stratification ±20 years/±20%, mean homogenised €/m² × surface — but wrapped in an opener that addresses the user as the appraiser ('musisz uzasadnić'), a fabricated Albacete rent figure, the land-leverage chunk, and a closing line telling the user to check rents in 'Albacone'. The prudence principle (Tema 44) was not retrieved. Rule buried and garbled = 1, as B2m. Polish not native ('Wobowiązkowo', 'wewnętrnej', 'nieproporcjalnej').",
+   "cap_tail": false
+  },
+  {
+   "id": "M6-03",
+   "correctness": 1,
+   "unsupported_claims": [
+    "El contexto no contiene esa cifra directa (the 89 − age formula and its 10%/70% bounds are in both retrieved chunks)",
+    "usufructuaria = número de años restantes / 2, con valores máximo de 70% (fabricated; context: life = 89 − age, temporary = 2 × years)",
+    "sí explica qué ocurre cuando uno o ambas son legales personas (garbled reference to the 30-year cap for legal-person usufructuaries)",
+    "no indica cómo funciona esta reducción entre varios usufructuarios distintos dentro de lo mismo edificio"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [
+    "LaTeX display-math block ($$ ... $$) with a fabricated formula",
+    "English sentence leaked into Spanish text: 'asset value equals the property's value free of that right minus its own value'"
+   ],
+   "usefulness": 3,
+   "note": "States the gold's rule and bounds ('89% menos su edad, entre 10% y 70%', Tema 46) but never does 89 − 70 = 19% / 81%, opens by saying the context has no figure, and then prints a second, fabricated formula (remaining years / 2) in LaTeX. Self-contradictory = 1 per rubric (8); B2m computed 19%/81% (2). Asesor fiscal handoff present. Spanish not native ('edat', 'heredarte', 'lo mismo edificio').",
+   "cap_tail": false
+  },
+  {
+   "id": "M6-04",
+   "correctness": 1,
+   "unsupported_claims": [
+    "the general rule under Módulo 6, Tema 18 applies (no such tema; the rule is in the Módulo 6 summary tema)",
+    "whether the assessment is based on an independent or conflicting expert appraisal (tasación pericial contradictoria). If not, the general rule ... applies (misdescribes the TPC, which is the taxpayer's own second-appraisal right)",
+    "The art. 3 CC event of ISD includes mortis causa, inter vivos gifts and life insurance as taxable events, so registration without proof of tax assessment carries no effect (irrelevant chain presented as the evidence rule)",
+    "the court may order a new valuation with full transparency over its methodology and tools applied by an impartial expert"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [
+    "broken hyphenation token: 'valua- tion'"
+   ],
+   "usefulness": 4,
+   "note": "Expert-valuation branch right: 'yes, on procedural grounds', internal visit is the general rule, omission opens judicial review (Módulo 6 summary). Misses the reference-value branch (art. 9.3 ISD was in context) and misdescribes the tasación pericial contradictoria; second half narrates ISD taxable events. Lawyer handoff present. Same 1 as B2m.",
+   "cap_tail": false
+  },
+  {
+   "id": "M6-05",
+   "correctness": 0,
+   "unsupported_claims": [
+    "CEM is the price-estimate for materials executed under contract (Gp + Bp) plus contractor overheads (Bc) and industrial profit (Gc) (garbled: Cc = CEM + Gc + Bc)",
+    "then CRN = Ve − D, which in turn depends on depreciation percentage D over CRB (cost-method depreciation applied to a land-value question, rubric 9)",
+    "The static procedure builds costs directly from contracts and invoices, while the dynamic procedure estimates revenues by comparing sale prices across similar plots",
+    "Whether to accept the margin of 20% rather than take nothing can also depend on tax treatment"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 2,
+   "note": "The static residual formula was not in this retrieval (only the dynamic worked example and the cost-method chunk). B3 computes VM = 800 × 3,000 = €2,400,000 correctly and then never reaches a land value — it wanders into CRN/depreciation and tells the user to 'use either method'. The gold requires computing on the hypothetical; not computing fails (0), though unlike B2m it does not paste the worked example's €494,000. Handoff to a tax adviser (gold: appraiser — mismatch).",
+   "cap_tail": false
+  },
+  {
+   "id": "M6-06",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Rejestr Podatów (Tax Register — the discrepancy in context is Registry vs Cadastre)",
+    "własności posiadacza prawnika (posiadanie) ... Jeśli właściciel ma okupantów, sprzedający powinien usunąć ich przed sprzedażą; kupujący nabywa własność, ale NIE posiadanie (possession chunk presented as report content, rubric 9)",
+    "klucz przeznaczony jest dla ciebie jako tradycja"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 3,
+   "note": "Gives the report's checks and documents (nota simple, cadastral data, location plan — photos omitted), the adopt-one-surface-and-justify rule and the purpose of the valuation, in Polish. The two-layer structure / 14 sections and the 1/3-share rule were not in the retrieved chunk. Then drifts into possession and eviction rules as if they belonged in the report. Same 1 as B2m (which at least did not import the possession chunk but copied the worked example's 104/105 m²). Polish not native ('przyjętyj', 'dokumetyki').",
+   "cap_tail": false
+  },
+  {
+   "id": "M6-07",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Value = RN/0.045 = [(€18,000−G)*0.955]/0.045 ≈ €37,000 per annum before depreciation (arithmetic wrong — 14,400/0.045 = €320,000 — and G never assigned)",
+    "Second route: use the material's tax-reference minimums instead if your building has limited economic life or operating expenses rather than typical ones (the 4.5% minimum is the rate already in use, not an alternative route)",
+    "Resolution No. 1999"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 3,
+   "note": "Formula (Value = RN / rate), RN = RB − G, the 20–30% dwelling expense ratio and a 5% vacancy factor (the 0.955) are all stated — the gold's required elements — but the computed figure is nonsense (≈ €37,000 'per annum') instead of anything in the €266,000–€320,000 band. Right rule, wrong number = 1 per rubric (8); B2m computed €320,000 (2). No appraiser handoff.",
+   "cap_tail": false
+  },
+  {
+   "id": "M6-08",
+   "correctness": 1,
+   "unsupported_claims": [
+    "El material da acceso al procedimiento para solicitarla desde tiempos atrás",
+    "son defensas del avalista ante cualquier disputa ('avalista' = guarantor; context: the appraiser's defence)",
+    "existe otra vía legal independiente: el recurso contra la tasación puede interponerse dentro de los mismos plazos sin depender de quién es el administrador tributario"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": true,
+   "artefacts": [],
+   "usefulness": 5,
+   "note": "Required shape: gives no figure, says a valuation needs a professional, names method / internal visit / documentation of criteria as good practice, and routes to a perito tasador — in Spanish. Missing the comparables and homogenised €/m² (Tema 45), the documents the appraiser will ask for, ECO/805/2003 and the purpose question; then fabricates an 'independent appeal route'. Same 1 as B2m. Spanish not native ('avalista', 'desde tiempos atrás').",
+   "cap_tail": false
+  },
+  {
+   "id": "M6-09",
+   "correctness": 0,
+   "unsupported_claims": [
+    "No, it is not what you see on the page ... neither one uses percentage rates like 40% (gold: 40/100 = 40% is exactly the standard straight-line result)",
+    "the static residual approach can be used instead, with F = VM × (1 − b) − ΣCi [as a depreciation formula] (rubric 9)",
+    "free depreciation (libertad de amortización) exists across classes but only works when no separate allocation is made",
+    "ask the assistant to confirm their assumptions"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "tail_degradation": false,
+   "artefacts": [
+    "markdown code spans (backticks) around formulas"
+   ],
+   "usefulness": 1,
+   "note": "Retrieval miss (age / useful-life chunk absent), as in B2m; the model answers a confident 'No, not standard' where the gold says the figure is consistent, and offers the accounting straight-line formula and the static residual formula as the 'two depreciation formulas'. Same 0 as B2m. Self-referential 'ask the assistant' close.",
+   "cap_tail": false
+  },
+  {
+   "id": "M6-10",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Pośredniki mogą [wycenić dom na potrzeby kredytu] (gold: an API can do a market valuation, but a mortgage valuation must follow ECO/805/2003; the guide does not settle the bank-list question)",
+    "materiał wymienia jako przykład agenta podpisanego przez notariusza i niepodpisującego się bez tytułu (Módulo 2, Tema 21)",
+    "tylko pierwszy odpis notarialny obowiązuje go (art. 1740 CC) (art. 1740 CC is the loan-contract definition)",
+    "jeśli pośrednik ma tytuł API lub korzysta ze zbiorowym ubezpieczeniem odpowiedzialności cywilnej, to on działa na Twojej stronie jak firma prawnika",
+    "materiał podaje przykład agenta bez tego tytułu działającego bezpłatnie za pomocą FEIN/FIAE"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "usefulness": 1,
+   "note": "Retrieval miss (no ECO/805/2003 or Banco de España chunk), as in B2m, and the same confident 'Pośrednicy mogą' where the gold hedges; the rest narrates LCCI borrower protections (the 'lender pays the appraisal' point is supported) and invents an API-as-law-firm line. No route to the bank or a lawyer. Polish not native ('Pośredniki', 'Po prostotach', 'AEJD'). Harmful for a borrower relying on an agent's valuation for a mortgage.",
+   "cap_tail": false
+  }
+ ],
+ "summary": {
+  "rows_judged": 60,
+  "correctness_mean": 0.7,
+  "correctness_2_rate": 0.017,
+  "correctness_0_rate": 0.317,
+  "correctness_by_module": {
+   "1": 0.9,
+   "2": 0.7,
+   "3": 0.7,
+   "4": 0.5,
+   "5": 0.7,
+   "6": 0.7
+  },
+  "b2m_correctness_by_module": {
+   "1": 1.0,
+   "2": 0.9,
+   "3": 0.8,
+   "4": 0.4,
+   "5": 0.3,
+   "6": 0.9
+  },
+  "no_advice_pass_rate_all": 1.0,
+  "no_advice_pass_rate_advice_rows": 1.0,
+  "oos_pass": "1/3",
+  "handoff_pass_rate": 0.75,
+  "handoff_rows_scored": 44,
+  "language_pass_rate": 1.0,
+  "language_native_rate": {
+   "pl": 0.0,
+   "es": 0.0
+  },
+  "language_native_rate_en": 1.0,
+  "tail_degradation_rate": 0.583,
+  "rows_with_tail_degradation": 35,
+  "rows_with_artefacts": 13,
+  "usefulness_mean": 2.8,
+  "usefulness_by_lang": {
+   "en": 2.935,
+   "es": 2.917,
+   "pl": 2.471
+  },
+  "usefulness_by_module": {
+   "1": 3.4,
+   "2": 3.3,
+   "3": 2.9,
+   "4": 1.9,
+   "5": 2.6,
+   "6": 2.7
+  },
+  "rows_with_unsupported_claims": 60,
+  "tail_cap_applied_rows": [
+   "M1-07",
+   "M2-03",
+   "M2-06",
+   "M2-07",
+   "M3-03",
+   "M3-08",
+   "M3-10"
+  ],
+  "correctness_mean_uncapped": 0.817
+ }
+}

@@ -1,0 +1,2991 @@
+{
+ "judge": "fable",
+ "model": "hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M (UNTRAINED Qwen3-4B, Q4_K_M) in glue mode — design A, FINAL build A6: language-rendered system prompt, few-shot scope gate with templated decline, advice guard with templated refusal-to-decide lead, markdown stripping, removal of citations absent from the retrieved context, templated hand-off; temperature 0, seed 42, num_predict 512, k=5, budget 1200",
+ "run": "glue_Qwen3-4B-GGUF-Q4-K-M_A6_20260922-1437",
+ "rubric_source": "rubric_notes from b2m_Qwen3-1.7B-GGUF-Q4-K-M_20260921-1459/judge.json (decisions 1-18, unchanged) + rubric_additions from b3_coapi-voice-v1_20260921-2036/judge.json (A-E, unchanged) + rubric_additions_designA from glue_Qwen3-4B-GGUF-Q4-K-M_A4_20260922-1358/judge.json ((a)-(e), unchanged), applied identically; comparators = b2m_Qwen3-4B-GGUF-Q4-K-M_4b_20260922-0427/judge.json (untrained 4B, no glue), b3_coapi-voice-v2_v2_20260922-0857/judge.json (LoRA v2) and glue_Qwen3-4B-GGUF-Q4-K-M_A4_20260922-1358/judge.json (design A first build); same judge, same rubric, chunk-identical retrieval",
+ "rubric_notes": "Ground truth = gold + the context the model saw; model's own knowledge never counts. Decisions applied uniformly (B3 must be judged identically): (1) The system-prompt-driven \"what a document must cover / not cover\" boilerplate is judged on content: fabricated items are listed as unsupported claims and cost usefulness; they lower correctness to 1 only when they contradict the gold's key rule or would mislead a buyer on the rule itself. (2) Markdown (headers, bold, bullets) violates \"plain text only\" and costs ~1 usefulness point; it never touches correctness. (3) Truncation at the 512-token cap costs usefulness (unfinished answer) but correctness is scored on what was emitted. (4) language_ok is a strict equality of answer language to question language; a wrong-language answer keeps its correctness score but usefulness is capped at 4 because the asker cannot rely on it. (5) no_advice: \"don't sign unless you have done X / understand Y\" is conditional process guidance and passes; a bare \"sign\"/\"don't sign\"/\"offer X\"/\"you should accept\" fails; \"consult a lawyer\" alone is a handoff, not advice. (6) handoff is n/a when the gold contains no hand-off/derivation sentence (oos rows, purely factual rows); otherwise pass requires an explicit route to lawyer/notary/appraiser/tax adviser/gestor. (7) oos_handling passes only on decline + scope statement + no narration of the unrelated retrieved chunks; a polite decline that then summarises the chunks fails. (8) Correctness 2 requires the gold's key rule AND its numbers; a right rule with the wrong number (or a wrong article that changes the rule) is 1; a garbled or self-contradictory conclusion is 1 even when the correct rule appears verbatim somewhere in the answer; a confidently wrong headline (wrong deadline, \"yes\" where gold says \"no\") is 0 regardless of correct fragments below it. (9) Citations to a tema/article that IS in context but is applied to the wrong question (e.g. LPH art. 18 deadline applied to hidden defects) count as unsupported claims, since the claim \"this rule governs your case\" is not in context or gold. (10) Usefulness anchors: 1 = harmful (confident wrong headline a buyer would act on); 3 = mostly noise, rule buried or muddled; 5 = rule right but padded/garbled/no Spanish term; 7 = gold's key rule stated plainly with citation and term, minor noise; 9-10 = at gold level, concise, in question language, correct handoff.\n (11) oos rows: correctness 2 = declines and states scope like the gold; 1 = declines but without scope or with a short narration of unrelated chunks; 0 = attempts the out-of-scope task or fabricates. (12) A row answering in a mix of languages is scored by the dominant language of the substantive answer. (13) A retrieval miss (gold rule absent from context) does not excuse the model: a confident substitute rule is still 0; an honest \"the material I have does not cover this deadline, see a lawyer\" would score 1 with handoff pass. (14) Irrelevant but correct narration of unrelated retrieved chunks is not an unsupported claim; it costs usefulness only.\n (15) Headline inversions: \"Yes\" where gold says \"No\" with no correction below = 0 (M1-08, M5-06, M5-08); \"Yes, but ...\" followed by the correct rule and a hedged or contradictory conclusion = 1 (M5-04, M5-09, M6-01). (16) Handoff professional mismatch: routing to notary/lawyer where the gold names an appraiser, tax adviser or gestor still passes (the metric is \"routes to a professional\"), but the note records the mismatch; a self-referential offer (\"I can help you draft it\") is not a handoff. (17) Worked-example numbers copied from the context and presented as the answer to the user's own figures (M6-05: €494,000) are unsupported claims and score 0, since the claim \"this is your land value\" is in neither context nor gold. (18) Correct arithmetic on the user's hypothetical with the guide's formula (M6-03, M6-07) scores 2 even if secondary qualifiers (temporary usufruct, vacancy actually applied) are missing; a false statement that a step was applied is listed as unsupported.",
+ "rubric_additions": "B3-specific fields, scored on top of the unchanged B2m rubric: (A) tail_degradation = true only when the answer OPENS with the right rule / right decline shape and then continues into garbled, fabricated or unrelated text (drift into unrelated retrieved chunks counts when the drift is garbled or presented as governing the user's case); an answer that is garbled from the first sentence is NOT tail degradation (noted as 'garbled throughout') so the metric isolates the known small-model failure. Correctness is still scored on the whole answer per rubric (8)/(15): a correct opener followed by a contradicting or fabricated tail is at most 1. (B) language_native = pass only when the grammar, morphology and word choice would be accepted by a native reader of that language (pl/es; also recorded for en); invented words, wrong inflections, English tokens leaking into pl/es text, or sentences a native reader cannot parse = fail. language_ok stays the strict language-equality test from rubric (4). (C) artefacts lists markdown, URLs, image tags, leaked chunk ids, pricing/'this assistant costs' nonsense and other non-answer tokens; self-referential 'this assistant' phrasing without pricing/meta nonsense is not an artefact. Markdown still costs ~1 usefulness point per rubric (2). (E) Tail cap, per the B3 brief: a correct opener followed by a contradicting, garbled or fabricated tail scores at most 1. This is stricter than B2m rubric note (1), which tolerated harmless fabricated boilerplate at 2 when it did not touch the rule; so every row where this cap ALONE turned a would-be 2 into a 1 carries cap_tail=true and the summary reports correctness_mean_uncapped (= what B2m's tolerance would have given) next to the capped mean. Rows already at <=1 on the B2m rubric are cap_tail=false. (D) Handoff professional mismatch (lawyer where gold says notary/tax adviser/appraiser) still passes per rubric (16) and is recorded in the note.",
+ "rubric_additions_designA": "Design-A-specific decisions, fixed before scoring and applied to every row on top of the unchanged B2m rubric (1-18) and B3 additions (A-E): (a) Templated glue text — the scope-gate decline, the advice-guard lead ('That is your decision to make ... I can set out what the decision turns on' and its pl/es renderings) and the appended hand-off ('Whether this applies to your own case is a decision for you with a lawyer or notary — take the contract and the registry extract to one before you commit' and renderings) — is glue output, not model output. It is judged for correctness of SHAPE only: a template that fires on the right row and says the right thing passes the metric it serves (oos_handling, no_advice, handoff); a template that fires on the wrong row, is worded for a different request type, or is missing where the design says it should appear is recorded in the note (and in handoff_template_absent / oos_handling) but is never listed as an unsupported claim and never lowers correctness by itself. The templated hand-off routes to 'lawyer or notary' — per rubric (16) that passes even where the gold names an appraiser, tax adviser or gestor, mismatch recorded. The scope-gate decline is judged by rubric (7)/(11): it passes oos_handling only if the row is actually out of scope, it states scope, and no narration of the unrelated chunks survives; a gate that fires on an in-scope row is a correctness 0 for that row (the buyer gets nothing) with the note saying 'gate misfire'. (b) Where the glue removed a citation (citations_dropped non-empty) the sentence may now read 'according to the material' / 'zgodnie z materiałem' / 'según el material'. The claim itself is judged against gold + context exactly as any other sentence: if it is supported, nothing is penalised and the missing citation is not a fabrication; if the remaining claim is unsupported or now misleads (e.g. an out-of-context rule presented as the governing rule with its origin hidden), it is listed as an unsupported claim, costs usefulness, and the row carries citation_strip_left_misleading=true. Citation coverage / Spanish-term rates are taken from the scripted summary.json as in the earlier judges. (c) The unfilled citation placeholder '(Módulo N, Tema M)' / 'Tema M:' that the untrained model copies from the system prompt's citation format, leaked chunk headers ('Módulo 1, Tema 17: Real Property Rights — Key concepts.') and leaked chunk ids ('(M4:T4:concepts:3)') are artefacts under rubric (C) — non-answer tokens — and are counted in rows_with_artefacts and classified in artefact_classes; a leaked header in the wrong language also fails language_native for that row when it opens the answer, since a native reader would not accept it, but does not touch language_ok when the substantive answer is in the question language (rubric 12). (d) A glue-appended hand-off in the question language does not by itself pass language_native — that field is scored on the model's own text. (d) Glue seams left by citation stripping — 'the material and the material', 'Zgodnie z LCCI materiał', 'el el material', a sentence starting lower-case after a stripped citation — are artefacts attributed to the glue; they do not fail language_native when the model's own sentences are native-grade, and they are never unsupported claims. A glue-appended hand-off in the question language does not by itself pass language_native; where the entire answer is a template (the three scope-gate rows) language_native is scored on the template text, since that is what the user reads. (e) Glue coverage is recorded, not scored into correctness: handoff_template_absent=true on an in-scope row where the design's hand-off did not appear; a missed advice guard (advice=false on an advice-type row) leaves the row judged as an ordinary in-scope answer under rubric (5), so a verdict or figure from the model fails no_advice exactly as it would without glue. A leaked chunk header counts as an artefact only when the tema title is copied ('Módulo 2, Tema 26: Budownictwo i elementy fizyczne'); a bare 'Módulo 2, Tema 26.' is a citation, not an artefact.",
+ "rubric_additions_A6": "Two fields added for the open questions on this build, recorded and not scored into correctness: (f) spanish_term_first_use — see summary.spanish_term_first_use_rate.convention; strict by design because the scripted metric it replaces is vacuous. (g) glue_defects — see summary.glue_defects_convention; a defect is recorded only where the glue's own output is visible and harmful (off-shape template, incoherent or contentless seam, redundant hand-off, valid citation removed); scrubber misses are artefacts, not defects. Both are judged on the rendered answer the buyer reads. All other decisions are the A4 judge's, unchanged — including the substance_in_context flags (asserted equal row by row), the cap_tail threshold, the rubric (17) treatment of copied worked-example figures (M6-05) and rubric (16) professional-mismatch passes.",
+ "field_notes": "Ground truth = gold + the context the model saw; logs/ and materials/ not consulted; glue.py was read only to attribute artefacts to model vs glue and to confirm the hand-off insertion rule. substance_in_context = the same per-row flags as the 4B baseline, v2 and A4 judges (retrieval chunk-identical; asserted equal at assembly). glue = the run's extra fields copied verbatim. handoff_template_absent = true only where the glue skipped its hand-off on an in-scope row (M1-07, design behaviour: the model's own route matched). citation_strip_left_misleading per rubric_additions_designA (b) — no row this build. language_native scored on the model's own text in the question language (all 60 answers match the question language); template-only rows (oos) scored on the template. Dangling '(art.' fragments (M1-07, M4-09, M5-06, M5-08) are the model stopping mid-citation well under the 512 cap — no glue pattern can produce them — and are counted as artefacts.",
+ "rows": [
+  {
+   "id": "M1-01",
+   "correctness": 2,
+   "unsupported_claims": [
+    "'art. 9 LAU' — context and gold: art. 9 LPH (wrong statute label; the rule itself — current year + 3 preceding years, certificado de deudas, notary cannot authorise without it — is unchanged)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 7,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's key rule and numbers all present and plain: 'Yes', afección real, current year + preceding 3 years, seller's declaration in the deed, certificate of debts without which the notary cannot authorise, preferential status art. 1923 CC. Statute still mislabelled LAU instead of LPH (same unsupported claim as A4). Difference from A4: the unfilled '(Módulo N, Tema M)' placeholder is gone and the glue hand-off IS appended (model text has 'notary' only as a rule statement, no route phrase), so handoff passes. Spanish term: 'afección real' at first use passes, but 'certificate of debts' never carries 'certificado de deudas' (in the vocab chunk and in the gold) — first-use fail on the second concept. Term rate scored strictly on all gold-supplied terms.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 1,
+   "lang": "en",
+   "type": "simple"
+  },
+  {
+   "id": "M1-02",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [
+    "answer opens by echoing the user's question verbatim ('Wynajmuję mieszkanie w Maladze od firmy. Umowa jest na rok — czy właściciel może mnie wyrzucić po roku?') — non-answer tokens"
+   ],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 6,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Unlike A4 (which inverted the rule in its conclusion), this build keeps the rule straight to the end: art. 9 LAU, 5 years natural-person landlord / 7 years legal person, mandatory yearly extension up to the minimum, tenant's 30-day notice, and the only landlord exit after year 1 is an express own-need clause (2-month notice, 3-month reinstatement/damages rule correctly presented as conditional on that clause). Never says the gold's headline 'Nie' in so many words and does not connect 'firma' to 'osoba prawna' explicitly, but the conclusion is correct and not garbled — 2 per rubric (8). Omits the seasonal/tourist-let carve-out and the term 'prórroga forzosa' (in the vocab chunk). Spanish term: neither 'vivienda' nor 'prórroga forzosa' appears; 'LAU' is a bare acronym — fail. Polish is grammatical throughout (mostly copied from the chunk) — native pass. Echoed question at the top is an artefact (model, not glue). Hand-off = glue template, correct shape.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 1,
+   "lang": "pl",
+   "type": "numeric"
+  },
+  {
+   "id": "M1-03",
+   "correctness": 2,
+   "unsupported_claims": [
+    "'The Supreme Court doctrine in Tema 5 notes an unspecified initial payment is a mere payment on account' — context places that doctrine in Tema 6's practical-key box (misattribution; the rule itself is in context)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 7,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's key rule delivered: only penitenciales carry double return, the default when unspecified is disputed (Tema 5 confirmatory vs Tema 6 penitential), plus — new versus A4 — the Supreme Court third reading (mere payment on account, not arras). Art. 1454 CC cited. Conclusion 'without clarification, the type is ambiguous' matches 'not automatically'. Noise: 'consult the exam question's framing' is study-material meta leaking into a buyer answer. A4's 'Tema M:' placeholder is gone. Term: 'arras (earnest money)' at first use with the Spanish noun first and the types as Spanish nouns — pass. Hand-off = glue template pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 1,
+   "lang": "en",
+   "type": "multi"
+  },
+  {
+   "id": "M1-04",
+   "correctness": 2,
+   "unsupported_claims": [
+    "'debe comprobarse si el vendedor estaba en buen estado de derecho al momento de la venta y si hubo irregularidades en la inscripción' — invented caveat, not in context",
+    "'se requiere una calificación registral para aclarar la situación' — calificación registral is the registrar's review of a title presented for registration (vocab chunk), not a remedy a buyer requests to clarify a dispute; misapplied term"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "spanish_term_first_use": "n/a",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 6,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's key rule stated: art. 34 LH fe pública registral, good-faith acquirer who registers keeps the acquisition even if the seller was not the true owner. Misses 'a título oneroso' (in context), the cumulative-requirements point, the diligence STS and art. 37 LH (not in context). Two invented caveats in the tail are vague hedges, not a fabricated rule presented as governing — not tail degradation (same call as A4). A4's leaked English chunk header is gone. citations_dropped=['art 20'] left no visible seam. Spanish not native: 'estaba en buen estado de derecho' is not Spanish legal usage, 'quien adquiere en buena fe' (de buena fe), 'confiere efectos contra terceros' calqued — fail. Hand-off = glue template (abogado o notario; gold: abogado) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 20"
+    ]
+   },
+   "module": 1,
+   "lang": "es",
+   "type": "multi"
+  },
+  {
+   "id": "M1-05",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 6,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Headline right and plain: 6 months from delivery, art. 1490 CC, hidden/severe/pre-existing test, redhibitory action or actio quanti minoris, both on the 6-month deadline. Improvements over A4: the Spanish term is now given ('saneamiento por vicios ocultos' at the concept's first naming; 'rescisión' offered for the redhibitory action — imprecise, gold: acción redhibitoria, but a Spanish term at first use), and both artefact tokens (chunk id, placeholder) are gone. Still does not compute 'about one month left', omits damages where the seller concealed, the 4-year dolo route (art. 1265/1269 CC in context only as vices of consent, no period) and the LOE contrast (in context). 'Since the seller must have known, this could qualify as a warranty against hidden defects' is muddled logic but not a false rule. One-line ITP-AJD drift is irrelevant-but-correct narration (rubric 14). citations_dropped=['art 42'] left no visible seam. Hand-off = glue template (gold: lawyer now) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 42"
+    ]
+   },
+   "module": 1,
+   "lang": "en",
+   "type": "numeric"
+  },
+  {
+   "id": "M1-06",
+   "correctness": 2,
+   "unsupported_claims": [
+    "'musisz złożyć ofertę w terminie' — the retracto is exercised by stepping into the buyer's place at the same price, not by submitting an offer; mechanism not in context"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 6,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's key rule and number: retracto de comuneros, art. 1522 CC, step into the buyer's place at the same price within 9 days of registration, pro rata among several co-owners, priority over the neighbour's retracto de colindantes. Omits art. 399 CC (the sale itself cannot be blocked), the 'or from learning of it if unregistered' limb, the onerous-only and not-against-another-co-owner limits. Term given at first use (retracto de comuneros as the noun) — pass. Polish: typo 'kilu' and agreement error 'kilu współwłaścicieli chcieliby' (kilku ... chciałoby) — a native reader would flag both, fail. Hand-off = glue template pass (gold: lawyer immediately after the sale — template does not convey the urgency).",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 1,
+   "lang": "pl",
+   "type": "numeric"
+  },
+  {
+   "id": "M1-07",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [
+    "dangling '(art.' fragment closes the answer — an unfinished citation; output_tokens=153, well under the 512 cap, so this is the model's own stop (no glue pattern in glue.py can leave a bare '(art.'), recorded as a non-answer token"
+   ],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 7,
+   "cap_tail": false,
+   "handoff_template_absent": true,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's key rule stated plainly: yes he may, apparent easements bind a good-faith purchaser even if unregistered (art. 13 LH), non-apparent only if registered, physical inspection matters. Term given (servidumbre de paso at first use) — pass. The usucapión/title half of the gold (art. 537/541/564 CC) is not in context, so its absence is not held against the model. Cleaner than A4: no invented art. 546 qualifier, no 'used it continuously' claim, no placeholder. Hand-off comes from the model itself ('consult a lawyer to confirm ...') and matches the glue's route pattern, so the template was correctly not appended (handoff_template_absent=true is design behaviour, not a miss). Single artefact: the trailing '(art.' fragment.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 1,
+   "lang": "en",
+   "type": "multi"
+  },
+  {
+   "id": "M1-08",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'La donación es un acto unilateral, gratuito y con efectos inmediatos' — 'unilateral' and 'efectos inmediatos' are not in context (context: formal, gratuitous)",
+    "'No se requiere fianza ni nota simple' — invented",
+    "'La donación no implica plusvalía, ya que no hay cambio de propiedad por precio' — contradicts the gold (plusvalía municipal / IIVTNU is owed by the donor); the tax chunks were not retrieved, so this is the model's own prior presented as governing",
+    "art. 1454 CC arras aside — irrelevant but correct narration of the T6 citations chunk (rubric 14, usefulness only)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "spanish_term_first_use": "n/a",
+   "tail_degradation": true,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 4,
+   "cap_tail": true,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Headline right AND on the right article this time: 'requiere un contrato público, no privado, según art. 633 CC', formal negocio jurídico — an improvement on A4's 1454 CC. But 'ad solemnitatem' and radical nullity are never said, 'contrato público' is not 'escritura pública', and the tail fabricates: no fianza/nota simple needed, and 'la donación no implica plusvalía' — a false tax statement presented as governing the user's case and contrary to the gold. Right opener + fabricated tail presented as governing = tail_degradation true and the rubric (E) cap applies: 1, cap_tail=true (uncapped 2 under B2m tolerance). No leaked header this time. Spanish non-native ('contrato público', 'Para comprobar:', 'no hay cambio de propiedad por precio') — fail. Hand-off = glue template (abogado o notario; gold: notario + asesor fiscal) pass, mismatch recorded.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 1,
+   "lang": "es",
+   "type": "simple"
+  },
+  {
+   "id": "M1-09",
+   "correctness": 1,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [
+    "advice lead off-shape: 'a document like that has to be drafted by your lawyer' on a sign/don't-sign question that asks for no document (template worded for drafting requests)",
+    "hand-off template appended although the advice lead already routed the decision to the lawyer — two glue routes on one answer (redundant, mild)"
+   ],
+   "substance_in_context": true,
+   "usefulness": 5,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Advice row; guard fired (advice=True). The lead gives the right refusal-to-decide shape but its drafting clause is off-shape for a sign/don't-sign question — recorded as a glue defect, not a correctness matter. Model body: arras types, Tema 5 confirmatory default, the Tema 5/6 discrepancy, 'check the contract's terms' — never a verdict, no_advice pass. Missing the forfeiture/double-return consequence for penitenciales and the gold's whole pre-signature checklist (nota simple, occupancy, certificado de deudas, tax marginal notes — only the T22 priority chunk was retrieved), so 1 as in A4. Term: 'arras (earnest money)' at first use, types as Spanish nouns — pass. No placeholder artefact this time. The template hand-off was appended because the lead's 'drafted by your lawyer' does not match the glue's route regex — double route.",
+   "glue": {
+    "scope": "in",
+    "advice": true,
+    "citations_dropped": []
+   },
+   "module": 1,
+   "lang": "en",
+   "type": "advice"
+  },
+  {
+   "id": "M1-10",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 7,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's key rule stated: commission arises when the underlying transaction is concluded, not executed; signed arras with the buyer treated as perfección as the gold does; if the sale then collapses through the buyer the broker keeps the commission unless a result guarantee was agreed (STS 28 Nov 1956, date in the chunk's format). Omits the causal-link condition (STS 2-10-1999), the 'only an agency contract' caveat and the STS 21-10-2000 citation. citations_dropped=['art 9'] left no visible seam and no misleading residue. A4's leaked chunk header is gone; Polish fluent and native. Spanish term: 'perfección' appears only at the SECOND mention of conclusion ('uznawana za zawarta (perfección)'), the first mention ('z chwilą zawarcia transakcji') carries no term — first-use fail; 'zadatek' glosses arras from the question. Hand-off = glue template pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 9"
+    ]
+   },
+   "module": 1,
+   "lang": "pl",
+   "type": "simple"
+  },
+  {
+   "id": "M2-01",
+   "correctness": 1,
+   "unsupported_claims": [
+    "valuation-report surface-discrepancy rule (M6:T48 §6: 'adopt one figure explicitly and justify it ... in the report') opened and closed with as if it governed the buyer's listing question — rubric (9)",
+    "'The listing may be misleading if the cadastral or registry figure differs' — wrong test; the gold's test is which surface TYPE (útil / construida / con comunes) was advertised",
+    "'The architect's measurement alone is not sufficient for legal compliance' — invented"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": false,
+   "usefulness": 3,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval miss (the three surface definitions are not in context; only the vocab table and RD 515/1989 art. 4.3). Better than A4 in one respect: it names 'built vs. usable' as the likely cause of the gap and gives the supported RD 515/1989 art. 4.3 usable-area disclosure duty with the term 'superficie útil'. But it opens with the M6 valuation-report rule (scrubber rewrote the pasted header into a bare 'Módulo 6, Tema 48:' citation, which per rule (e) is a citation, not an artefact) and treats registry/cadastre figures as the test. Never states 'not necessarily' as the headline — rule buried, 1. Term: 'superficie útil' at first use passes but 'built' never carries 'construida' — fail. Hand-off = glue template (gold: lawyer) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 2,
+   "lang": "en",
+   "type": "simple"
+  },
+  {
+   "id": "M2-02",
+   "correctness": 2,
+   "unsupported_claims": [
+    "'2% wartości kredytu' — the cap applies to the amount repaid early (gold: 'spłacanej kwoty'), not the loan's original value; minor base imprecision"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [
+    "leaked chunk header 'Módulo 2, Tema 21: Kredyty i systemy amortyzacji — Kluczowe przepisy.' opening the answer (comma form, so the glue's header regex — which expects 'Módulo 2 · Tema 21' — did not rewrite it)"
+   ],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 6,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "The headline number is RIGHT this time: fixed-rate early-repayment cap ≤2% before year 11, so after 5 years 'maksymalna prowizja to 2%' — the fix of A4's and the base's 0,15 % (variable-rate) error, which was the worst harmful row in both. Cites LCCI 5/2019. Missing: the 'only if the lender suffers a real financial loss' condition, the variable-rate contrast, the shorten-term/lower-instalment choice and the FEIN/notarial-advice route — all in context. First sentence states the ≥year-11 limit before the applicable one (odd order, not garbled). Term: no Spanish term for the early-repayment fee ('amortización anticipada' is in the vocab chunk); 'LCCI' is a bare acronym — fail. Polish native. Leaked header is a model paste the scrubber missed (coverage gap, not harm). Hand-off = glue template pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 2,
+   "lang": "pl",
+   "type": "numeric"
+  },
+  {
+   "id": "M2-03",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [
+    "glue seam 'Check the material for legal framework.' — a stripped citation (art 9) left a contentless sentence"
+   ],
+   "glue_defects": [
+    "stripped citation left the contentless sentence 'Check the material for legal framework.' (minor)"
+   ],
+   "substance_in_context": true,
+   "usefulness": 7,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's key rule stated plainly with term and citation: request the cédula urbanística (urban planning certificate) before buying; it certifies edificabilidad, ocupación, max height/floors, setback, min plot size/frontage, patios, max depth. 'Verify edificabilidad in Módulo 6, Tema 44' is supported. Omits the solar requirements (in the M6:T44 chunk) and the land-classification check. Hand-off = glue template (lawyer/notary; gold: architect or lawyer) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 9"
+    ]
+   },
+   "module": 2,
+   "lang": "en",
+   "type": "simple"
+  },
+  {
+   "id": "M2-04",
+   "correctness": 0,
+   "unsupported_claims": [
+    "'la azotea es un elemento privativo, según art. 3 LPH' — invented; gold/context: the roof is a common element, exclusive use is 'de uso privativo pero de propiedad común' (T11 chunk in context)",
+    "'La impermeabilización es parte del elemento privativo, por lo que su fallo recae en el propietario individual' — the gold says the guide does not fix who pays; depends on the bylaws",
+    "'si la azotea es común (art. 5 LPH)' — art. 5 LPH is the participation quota, misapplied — rubric (9)",
+    "art. 5 quota-does-not-change narration — irrelevant but correct (rubric 14)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "n/a",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": false,
+   "usefulness": 2,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval miss (the M2:T27 'roof is always common unless the bylaws give exclusive use' rule is not in context, but the T11 'privately used but commonly owned' classification IS). Regression from A4: A4 reached the general rule (azotea = elemento comunitario), this build asserts the opposite as its headline — 'la azotea es un elemento privativo ... su fallo recae en el propietario individual', repeated as the conclusion ('como se indica que es de uso privativo, el propietario individual sería responsable'). The closing 'comprobar si la azotea es privativa o común' does not correct it because the answer has already equated uso privativo with private ownership. Confident wrong headline a buyer would act on = 0 per rubric (8)/(15); wrong from the first sentence, so not tail degradation. Spanish itself is acceptable this time (no leaked header, no 'participación cuota'), native pass. Hand-off = glue template (abogado o notario; gold: administrador o abogado) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 2,
+   "lang": "es",
+   "type": "simple"
+  },
+  {
+   "id": "M2-05",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [
+    "hand-off template off-shape: 'take the contract and the registry extract to a lawyer or notary' appended to a TIN-vs-TAE comparison question (the _DECISION regex matched 'should I'); gold has no hand-off (minor)"
+   ],
+   "substance_in_context": true,
+   "usefulness": 7,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's key rule stated plainly and concisely: always compare TAE, not TIN; TAE (Tasa Anual Equivalente) includes settlement frequency and mandatory fees/insurance, TIN (Tipo de Interés Nominal) does not — both terms at first use, Módulo 2, Tema 20 cited. Omits the practical step (ask the first bank for its TAE), the formula and the LCCI/FEIN point that are in context. No meta tail this time. handoff n/a (gold has none); the appended template is off-shape for the question but harmless to correctness.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 2,
+   "lang": "en",
+   "type": "numeric"
+  },
+  {
+   "id": "M2-06",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "pass",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "n/a",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": null,
+   "usefulness": 9,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "OOS row; scope gate fired (scope=out), answer is entirely the templated Polish decline: refuses, states scope and invites an in-scope question; no chunks retrieved, no narration. Matches the gold's shape — rubric (11) correctness 2, oos pass. Template Polish native. Slightly below gold only because the gold offers a concrete example question. Identical to A4.",
+   "glue": {
+    "scope": "out",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 2,
+   "lang": "pl",
+   "type": "oos"
+  },
+  {
+   "id": "M2-07",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'The Horizontal Property Law requires new residential buildings >4 floors or >12m height to have an accessible elevator' — that is the CTE DB-SUA new-build rule, not the LPH",
+    "'Check if the building meets the floor/height criteria. If yes, the community must comply' — makes the CTE new-build threshold a condition for an existing four-floor building; gold: CTE does not apply, LPH is the route",
+    "'Módulo 1, Tema 27' — the elevator chunk is Módulo 2, Tema 27 (mis-cited module)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 4,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Same structure as A4: the gold's key rule is present and applied ('existing buildings ... may be forced to install ... if requested by a resident over 70 or with disability. Your mother's age triggers this requirement', within financial limits, reinforced-majority route also named) but the answer opens by attributing the CTE >4-floor/12 m new-build rule to the LPH and closes by making that floor/height criterion a condition — which for a four-floor building reads as 'you may not qualify'. Self-contradictory conclusion = 1 per rubric (8); not tail degradation because the opener is already the misattribution. No Spanish term anywhere ('ascensor', 'Ley de Propiedad Horizontal' absent) — fail. citations_dropped=['art 9','art 1454'] left no visible seam. Hand-off = glue template (gold: administrator, then lawyer) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 9",
+     "art 1454"
+    ]
+   },
+   "module": 2,
+   "lang": "en",
+   "type": "multi"
+  },
+  {
+   "id": "M2-08",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "spanish_term_first_use": "n/a",
+   "tail_degradation": false,
+   "artefacts": [
+    "glue seam 'el material regula la formación de sociedades.' — stripped citation (art 1454) left a contentless sentence starting lower-case"
+   ],
+   "glue_defects": [
+    "stripped citation left 'el material regula la formación de sociedades.' — contentless, lower-case sentence start (minor)"
+   ],
+   "substance_in_context": true,
+   "usefulness": 5,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's headline number: SL minimum capital €1 since Ley 18/2022 (Crea y Crece), down from €3.000, Módulo 2, Tema 24. Regression in coverage versus A4: the €1–€2.999 special regime (20 % of profit to legal reserve, partners' joint liability on liquidation) that A4 included is gone, as are the SA €60.000 contrast and IAE 811; the incorporation sequence is narrated instead (supported, marginally useful). Headline right with its numbers, secondary regime missing = 2 with usefulness 5. Spanish non-native: 'Crea y Crece Act', 'certificación de nombre negativo' (certificación negativa de denominación) — fail. No leaked header this time. Hand-off = glue template (abogado o notario; gold: gestor/notario) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 1454"
+    ]
+   },
+   "module": 2,
+   "lang": "es",
+   "type": "numeric"
+  },
+  {
+   "id": "M2-09",
+   "correctness": 0,
+   "unsupported_claims": [
+    "'The company can write off the whole purchase price over the years as the flats are inventory (group 3), not fixed assets' — contradicts the gold ('only part': land is never depreciated) and the context (property held for rental income = investment property, group 2, accounts 220–221; inventory is for developers' flats for sale)",
+    "'Check art. 20.One.20 and 20.Two for VAT implications' — VAT-exemption drift, irrelevant to depreciation (rubric 14, usefulness only)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": true,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 1,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Regression from A4 (1) and back to the base's 0. The answer pastes the T22 chunk nearly verbatim — which contains the gold's rule 'LAND is never depreciated; buildings are depreciated (excluding land value)' — and then answers the buyer's question the opposite way: 'can write off the whole purchase price ... as the flats are inventory'. That is a confident 'yes' where the gold says 'only part', so 0 per rubric (8)/(15) regardless of the correct fragment above it; a company acting on it would depreciate land. Right rule in the opener, contradicting conclusion in the tail = tail_degradation true (cap_tail false, already 0). No Spanish term at all — fail. Hand-off = glue template (lawyer/notary; gold: accountant) pass, mismatch recorded.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 2,
+   "lang": "en",
+   "type": "simple"
+  },
+  {
+   "id": "M2-10",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'czy ma odpowiednią nośność (edificabilidad)' — edificabilidad is the buildability index (m² built per m² plot), not ground bearing capacity; wrong term mapping that would mislead the buyer",
+    "shoring of excavations (entibación) presented as something the buyer of an existing house should apply — construction-phase item, not in the gold and not relevant",
+    "cédula urbanística narration — a plot-purchase document offered for an existing house (irrelevant but correct, rubric 14)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [
+    "answer opens by echoing the question ('Na co zwrócić uwagę, jeśli chodzi o fundamenty i teren:') — non-answer tokens"
+   ],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 3,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval hit, but the answer takes only fragments: piles (pilotes) for weak ground and test pits (calicatas) are the two relevant items; the gold's foundation mapping (losa on low-bearing ground, ławy/stopy), the slope-specific terraplenes/desmontes compaction-layer rule and the settling/cracks inspection point are all in context and missing, while edificabilidad is mis-mapped to bearing capacity and entibación is offered as a buyer check. 1 as in A4. Spanish terms are given at first use for every concept named (pilotes, cédula urbanística, desmonte, terraplenes, entibación, calicatas) — pass on the first-use test even though one mapping is wrong. Polish: 'użycie pale (pilotes)' should be 'użycie pali' — case error, native fail; no leaked header this time. Hand-off = glue template (prawnik/notariusz; gold: architekt/aparejador) pass, mismatch recorded.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 2,
+   "lang": "pl",
+   "type": "simple"
+  },
+  {
+   "id": "M3-01",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'The town hall may still require demolition if the expropriation was due to unauthorized works (art. 47 RDLeg. 7/2015)' / reversion 8-year and retasación rules — the T40 expropriation-reversion chunk applied to an unlicensed pool as the governing rule — rubric (9)",
+    "'The town hall must prove the unauthorized nature and its impact on planning' — invented",
+    "'Reversion (devolución)' — invented Spanish gloss (context: reversión)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": false,
+   "usefulness": 2,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval miss (no limitation periods in context). Worse-shaped than A4: A4 at least opened with the correct 'serious tier on urban land' classification before drifting; this build is the expropriation chunk from the first sentence ('if the expropriation was due to unauthorized works'), with only two supported fragments — SNUP/public-domain works may be imprescriptible, plural liability for fines. No confident wrong deadline, no substitute period asserted as fact, so 1 not 0 per rubric (13); garbled throughout rather than tail degradation. Never says the material does not give the period, never mentions the three independent strands (in context). No Spanish term ('restablecimiento de la legalidad', 'prescripción' both absent). citations_dropped=['art 44'] left no seam. Hand-off = glue template (gold: urbanismo lawyer) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 44"
+    ]
+   },
+   "module": 3,
+   "lang": "en",
+   "type": "numeric"
+  },
+  {
+   "id": "M3-02",
+   "correctness": 1,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "spanish_term_first_use": "n/a",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": false,
+   "usefulness": 3,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval miss (the three easements and their metres are not in context; only the T3 one-liner). The answer states that one-liner — Ley 22/1988 imposes easements near the maritime-terrestrial public domain that limit construction/renovation, 'restricciones severas' — and invents no distances, so 1 per rubric (13). The rest is irrelevant-but-correct narration of the other chunks (art. 20 LH chain of title, art. 1449 CC price, ITP) — rubric (14), usefulness only. Spanish non-native: English 'easements' in a Spanish sentence, 'no vaya contra estos usos públicos' — fail. citations_dropped=['art 30','art 30'] left no seam. Hand-off = glue template (gold: abogado to check the deslinde) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 30",
+     "art 30"
+    ]
+   },
+   "module": 3,
+   "lang": "es",
+   "type": "numeric"
+  },
+  {
+   "id": "M3-03",
+   "correctness": 2,
+   "unsupported_claims": [
+    "'Obie są obowiązkowe' — context says only the Cadastre is mandatory (and free); nothing in gold or context makes Registro registration compulsory"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 6,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's key distinction stated: Catastro = administrative register under Hacienda with physical/economic/legal data; Registro de la Propiedad = public institution under the Ministry of Justice registering ownership and rights in rem; different purposes; they can diverge; Registro–Catastro coordination (art. 10.5 LH) cited from context. Omits that the cadastral entry is only a presumption, not full title, and that the referencia catastral is mandatory (both in context); the Registro-prevails rule (art. 9 TRLCI) is not in context. Polish grammatical this time (A4's 'rejestrą' is gone) — native pass. Term: Hacienda at first use, Spanish register names used as nouns — pass. Hand-off = glue template (gold: prawnik lub notariusz) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 3,
+   "lang": "pl",
+   "type": "simple"
+  },
+  {
+   "id": "M3-04",
+   "correctness": 0,
+   "unsupported_claims": [
+    "'You filed a cadastral declaration 2 months ago (art. 28 RD 417/2006)' — the buyer applied for a first-occupancy licence; cadastral-declaration rule substituted — rubric (9)",
+    "'If no reference is issued, you may request a provisional one via notary' — invented consequence",
+    "'If the villa is completed, you must register it with the registry (art. 44). Without registration, you cannot claim ownership' — invented and false (art. 44 in context is the expropriation record of possession; registration is not constitutive of ownership)",
+    "'you may need to initiate a cadastral inspection (arts. 19–21 TRLCI)' — invented; inspection is ex officio",
+    "'Check if the villa meets urban-environment regulations (RDLeg. 7/2015) to avoid expropriation risks' / 'No possessory action lies against the Administration' — expropriation chunk narrated as governing"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": false,
+   "usefulness": 1,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval miss (nothing on administrative silence in context) and, as in A4, the model substitutes the cadastral and expropriation chunks wholesale: the licence application is recast as a cadastral filing, the buyer is told they cannot claim ownership without registration and to launch a cadastral inspection. A buyer would file the wrong thing — harmful; 0 per rubric (13). Wrong from the first sentence, not tail degradation. No Spanish term (silencio administrativo, licencia de primera ocupación absent) — fail. Hand-off = glue template (gold: administrative lawyer / planning office) pass — the only useful sentence.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 3,
+   "lang": "en",
+   "type": "numeric"
+  },
+  {
+   "id": "M3-05",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'As a buyer, you are a member of this board if you own ≥60% of the surface area' / 'Check if your ownership meets the 60% threshold' — 60 % is the surface share the FOUNDING owners need to submit the Statutes; membership is not conditional on it",
+    "'You must submit statutes and bases of execution to the City Council for approval' — the founding owners' step at Board formation, not a buyer's duty",
+    "'bear risks related to development and construction' — context: construction is essentially private; the Board executes development"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": true,
+   "artefacts": [
+    "glue seam 'the material regulates this system.' — stripped citation (art 9) left a contentless sentence starting lower-case"
+   ],
+   "glue_defects": [
+    "stripped citation left 'the material regulates this system.' — contentless, lower-case sentence start (minor)"
+   ],
+   "substance_in_context": false,
+   "usefulness": 3,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval hit on what a Junta de Compensación IS (administrative entity, fiduciary, self-protection privileges, 1-month join-or-expropriation) but a miss on the buyer-side rule (afección real of development dues, subrogation) — and the answer again drops the one buyer-relevant fact in context: owners pay 100 % of the costs. Opens correctly (Board = Compensation Board, legal personality, fiduciary; privileges correctly attributed to the Board this time) and then attributes the founding owners' 60 % threshold and Statutes filing to the buyer — fabricated as governing the user's case, tail degradation as in A4. Term given at first use. Hand-off = glue template (gold: lawyer to quantify dues before arras) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 9"
+    ]
+   },
+   "module": 3,
+   "lang": "en",
+   "type": "multi"
+  },
+  {
+   "id": "M3-06",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'Si la compras, debes comprobar si hay infracciones (Módulo 3, Tema 44)' / 'La regla de limitaciones aplica: si es muy grave, hay plazos de 3 años para resolverlo' / 'Debes verificar si hay obras ilegales' — infringement/limitation regime applied to a fuera-de-ordenación dwelling; gold: it is a LEGALLY built property, not an illegal construction — misleads on the rule itself",
+    "'según el material, cualquier modificación requerirá autorización' — loose; context: conservation/maintenance only (total) or renovation not touching the non-conforming element (partial)",
+    "'La nota simple (Módulo 6, Tema 48) debe incluir esta información' — invented; the T48 chunk lists the nota simple as a report document, not as carrying planning status"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "n/a",
+   "tail_degradation": true,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 4,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Opens with the gold's core: fuera de ordenación = does not conform to current planning, only conservation/maintenance works, value and financing limited (Módulo 3, Tema 41). Misses the total/partial distinction (in context) and never says the building was legally built. The tail then turns the property into a suspected infringement with sanction tiers and 3-year periods — the opposite of the gold's 'no es lo mismo que una construcción ilegal' — so 1 on B2m rubric (1) as well (misleads on the rule), tail_degradation true, cap_tail false. Spanish acceptable this time (no leaked header; 'aplica' colloquial) — native pass. citations_dropped=['art 9','art 1454'] left 'según el material' with a loose but not misleading claim. Hand-off = glue template (gold: cédula urbanística + abogado) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 9",
+     "art 1454"
+    ]
+   },
+   "module": 3,
+   "lang": "es",
+   "type": "simple"
+  },
+  {
+   "id": "M3-07",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'art. 9 LAU (penalty power)' — art. 9 LAU is the lease-duration article; survived the citation filter because 'art. 9' (LPH) is in context for this row",
+    "'The town hall must respond within 30 days' — invented (no such period in context; gold: silence rules per Tema 37)",
+    "'The letter must state the infringement (e.g., \"out of orderación\") and reference the specific law' — adopts the premise that the extension is illegal, which the gold says to avoid, and garbles fuera de ordenación (a legally built property, not an infringement)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": true,
+   "artefacts": [
+    "glue seam 'cite the material (restablecimiento de la legalidad)' — stripped citation (art 39) replaced inline, sentence now reads as an instruction to cite 'the material'",
+    "garble 'out of orderación' — invented word"
+   ],
+   "glue_defects": [
+    "stripped citation left 'cite the material (restablecimiento de la legalidad)' — incoherent instruction (minor)",
+    "hand-off template appended on top of the advice lead that already routed to the lawyer — double route (minor)"
+   ],
+   "substance_in_context": true,
+   "usefulness": 4,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Advice row; guard fired and the lead fits this request exactly ('a document like that has to be drafted by your lawyer'). No letter text or fill-in template is produced — content guidance only (what a complaint must state: identity, address, date, facts, request) — so no_advice pass. Body gets art. 66-style contents right and the three strands/tiers loosely, but then hangs the letter on 'art. 9 LAU', invents a 30-day response period, garbles 'out of orderación' and adopts the illegal premise. Right opener, fabricated tail → tail degradation; 1 overall (denuncia → ex officio initiation and plural liability, both in context, missing). Native fail for the invented word 'orderación' in an otherwise English answer (rubric B). Term: 'restablecimiento de la legalidad' given but 'urban planning discipline' carries no Spanish term and 'denuncia' is absent — fail.",
+   "glue": {
+    "scope": "in",
+    "advice": true,
+    "citations_dropped": [
+     "art 39",
+     "art 1454"
+    ]
+   },
+   "module": 3,
+   "lang": "en",
+   "type": "advice"
+  },
+  {
+   "id": "M3-08",
+   "correctness": 0,
+   "unsupported_claims": [
+    "'w ogóle nie wolno budować w strefie domeny publicznej, która wynosi 8 metrów' — the total ban on new construction is the building-restriction line, 50 m from the carriageway for motorways (first chunk, and the gold's headline); 8 m is the public-domain zone, where only public-service works are allowed — the wrong zone is given as the answer to the question asked",
+    "'teren publiczny, który należy do państwa i nie może być zabudowywany bez konieczności służby publicznej' — public-domain zone rationale presented as the building ban"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 1,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Regression from A4 (1) and the base (2): the question asks for the distance inside which building is banned outright; the context's single bullet gives it (linia zakazu zabudowy, 50 m from the carriageway for motorways). This build answers '8 metrów' — the public-domain zone — and never mentions the 50 m line, the 25 m easement zone or the 100 m affected zone. A confidently wrong headline number a buyer would act on (planning a build 10 m from a motorway) = 0 per rubric (8), same treatment as the 0,15 % cap in A4's M2-02; harmful, usefulness 1. Wrong from the first sentence, not tail degradation. Polish native. No Spanish term (dominio público, zona de servidumbre absent) — fail. citations_dropped=['art 9'] left no seam. Hand-off = glue template (gold: cédula urbanística, lawyer) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 9"
+    ]
+   },
+   "module": 3,
+   "lang": "pl",
+   "type": "numeric"
+  },
+  {
+   "id": "M3-09",
+   "correctness": 2,
+   "unsupported_claims": [
+    "'The property cannot be sold or leased without authorization' stated generally — context limits the authorisation requirement to sales within the first ~10 years (and VPO sale/lease to finally-qualified flats)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [
+    "glue seam 'according to the material, VPO properties ...' — stripped citation (art 1454) left a sentence starting lower-case"
+   ],
+   "glue_defects": [
+    "stripped citation left a lower-case sentence start 'according to the material, ...' (minor)"
+   ],
+   "substance_in_context": true,
+   "usefulness": 5,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's key rule and numbers present: VPO (Vivienda de Protección Oficial) term at first use, State Housing Plan RD 42/2022 + regional competence, ~30-year protection with the Administration's right of first refusal and redemption, sale within the first ~10 years needs authorisation and aid repayment, check final qualification and protection period. The price cap — the actual 'catch' — and the IPREM income limits are missing (the price-cap sentence in M6:T48 §8 is in context), and the tax side (M4 chunks not retrieved) is absent. 'Limiting liquidity and marketability' is a fair paraphrase. Same score as A4. Hand-off = glue template (gold: regional housing body + lawyer) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 1454"
+    ]
+   },
+   "module": 3,
+   "lang": "en",
+   "type": "multi"
+  },
+  {
+   "id": "M3-10",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [
+    "hand-off template off-shape: 'take the contract and the registry extract to a lawyer or notary' appended to an energy-rating question with no decision in it; gold has no hand-off (minor)"
+   ],
+   "substance_in_context": true,
+   "usefulness": 7,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's headline and numbers: not allowed; omission in ads is a minor infringement; CEE valid 10 years from registration, 5 years if the rating is G (the G limb was missing in A4); the advertiser must display the rating. Omits the €300–600 fine and the RD 390/2021 in-person visit (both in context); the 'mandatory for any new-tenant rental' sentence is supported but off the question. Term: 'Energy Efficiency Certificate (CEE)' — Spanish acronym only, 'Certificado de Eficiencia Energética' (in the vocab chunk) never spelled out — fail on the first-use test. handoff n/a (gold has none); template appended by the glue because no route phrase was present.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 1454"
+    ]
+   },
+   "module": 3,
+   "lang": "en",
+   "type": "numeric"
+  },
+  {
+   "id": "M4-01",
+   "correctness": 0,
+   "unsupported_claims": [
+    "'Transfer tax (ITP) is paid within 15 days of contract signing' — invented deadline; gold: Form 600 within 2 months of the deed in Andalusia (1 month general); the in-context M4:T4 filing chunk was not retrieved for this row",
+    "'the state default rate is 6% (art. 11)' offered as the buyer's rate without the context's own qualifier that it applies only where the region has set no rate — gold: Andalusia 7 % flat → €42,000; no amount computed",
+    "'resale apartment (vivienda en construcción)' — wrong Spanish term (that means 'under construction'; resale = segunda mano / segunda transmisión)",
+    "'Ensure the purchase is registered in the Land Registry (nota simple) to validate the transaction' — nota simple is an extract, not a registration act; invented"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": false,
+   "usefulness": 1,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval miss on the Andalusian 7 % rate and the 2-month deadline (only the state default 6 % and the reference-value floor are in context). The answer labels 6 % as the 'state default' (better than A4's 'per art. 11 LAU') but still presents it as the operative rate and invents a 15-day deadline from contract signing — a confident wrong deadline on a €600,000 purchase; a buyer would under-provision and file on the wrong clock. 0 per rubric (8)/(13), harmful, usefulness 1. Right: ITP not VAT for a private seller, no AJD, reference-value floor. A4's glossary spam is gone (no artefacts). Term: ITP acronym only and a wrong term for 'resale' — fail. Hand-off = glue template (gold: gestor/lawyer) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 4,
+   "lang": "en",
+   "type": "numeric"
+  },
+  {
+   "id": "M4-02",
+   "correctness": 0,
+   "unsupported_claims": [
+    "'Płacisz ITP. Zgodnie z art. 9 LAU, deweloper sprzedaje nieruchomość w ramach działalności gospodarczej, więc podlega ITP, nie VAT' — inverts the context's own rule (developer in business → VAT + AJD); art. 9 LAU is the lease-duration article (survived the filter because 'art. 9' appears elsewhere in the retrieved text? no — not in this context; it survived as an inline cite because the number matches nothing? recorded as unsupported either way)",
+    "'obniżona stawka ITP (10%)' / 'superobniżki (4%)' — the 10 % and 4 % are VAT rates (art. 91 LIVA), relabelled as ITP",
+    "'Nie ma tu miejsca na VAT, ponieważ dotyczy to sprzedaży przez przedsiębiorcę' — the exact opposite of the context's rule"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 1,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Headline inversion, worse than A4: A4 at least quoted the correct rule in the middle before overriding it; this build asserts 'Płacisz ITP' and then re-labels the VAT rates as ITP rates, so nothing in the answer is right. The context's decision rule ('kto sprzedaje? deweloper → VAT + AJD') is in the second chunk. 0 per rubric (15), harmful (a buyer would budget the wrong tax and the wrong rate), usefulness 1. Not tail degradation — inverted from the first substantive sentence. Polish: 'superobniżki' is not a Polish word (stawka superobniżona), 'są ... podlegające' pattern — native fail. No Spanish term (primera entrega, IVA absent; ITP/VAT acronyms only) — fail. AJD 1,2 % (in the M1:T4 chunk) not mentioned. Hand-off = glue template (gold: gestor) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 4,
+   "lang": "pl",
+   "type": "multi"
+  },
+  {
+   "id": "M4-03",
+   "correctness": 0,
+   "unsupported_claims": [
+    "'Sí, según el art. 104.3 TRLRHL, tienes que pagar la plusvalía municipal si no se demuestra un incremento real en valor' — inverts/garbles art. 104.5: a transfer with no proven real increase is NOT subject; the gold's headline is 'No'",
+    "'Aunque vendes por menos, si hay un aumento en valor catastral, debes pagarla' — wrong test; the real method compares transfer and acquisition values (both deeds), a rise in cadastral value does not create liability",
+    "'Art. 105 TRLRHL exenta ciertos casos, pero no en este escenario' — the relevant provision is the art. 104.5 non-liability, which the answer never applies"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "spanish_term_first_use": "n/a",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 1,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Regression from A4 (1) and the base (1): A4 opened with the right headline ('no estás sujeto') and only muddied it with a cadastral-value qualifier; this build opens 'Sí, tienes que pagar' and never states that a sale at a loss is non-liable, although the context says so in its first chunk (art. 104.5, 'any transfer where no real increase in value is proven'). Málaga 27 %, the dual method and art. 108 are right but attached to a wrong conclusion. 'Sí' where the gold says 'No' with no correction below = 0 per rubric (15); harmful (a seller would pay a tax not due), usefulness 1. Wrong from the first sentence, not tail degradation. Spanish: 'cadastral value × coeficiente' leaks English into the Spanish sentence — native fail. Hand-off = glue template (abogado o notario; gold: gestor) pass, mismatch recorded.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 4,
+   "lang": "es",
+   "type": "numeric"
+  },
+  {
+   "id": "M4-04",
+   "correctness": 0,
+   "unsupported_claims": [
+    "'You are liable for capital gains tax ... Since you are not purchasing another property, there is no reinvestment exemption' — gold: a resident seller over 65 has a 100 % exemption on the habitual residence with no reinvestment; asserted confidently on a retrieval miss",
+    "'Check if your home qualifies as habitual residence (vivienda habitual) for reduced rates' — no reduced rates exist for habitual residence in gold or context; invented"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": false,
+   "usefulness": 1,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval miss on the over-65 exemption; the model answers 'liable' where the gold says 'No' and backs it with the (correct, in-context) savings scale and the reinvestment logic — a confident inversion a 67-year-old seller would act on. 0 per rubric (15), harmful, usefulness 1. Same as A4 minus the stressed-area drift. Terms given at first use (ganancia patrimonial, vivienda habitual, base del ahorro, exención por reinversión, autoliquidación) — pass. Hand-off = glue template (lawyer/notary; gold: tax adviser) pass, mismatch recorded.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 4,
+   "lang": "en",
+   "type": "numeric"
+  },
+  {
+   "id": "M4-05",
+   "correctness": 0,
+   "unsupported_claims": [
+    "'If you complete on 20 September, you become the owner from that date. Therefore, you pay this year's IBI. The seller pays IBI until the transfer date' — gold: the owner on 1 January (the seller) owes the whole year; pro-rata only by contract",
+    "'The taxpayer must declare the property in the registry extract (nota simple) to be taxed' — invented"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": false,
+   "usefulness": 1,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval miss (the 1 January accrual rule is not in context) and, exactly as in A4, the model states the opposite of the gold with full confidence: the buyer owes this year's IBI from completion. A buyer would pay a tax the seller legally owes — harmful, 0, usefulness 1. No mention of the apportionment clause or checking IBI is paid up. Term given at first use (IBI = Impuesto sobre Bienes Inmuebles, valor catastral) — pass. handoff n/a (gold has none); glue template appended anyway.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 4,
+   "lang": "en",
+   "type": "multi"
+  },
+  {
+   "id": "M4-06",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'Dochody z nieruchomości są podlegające opodatkowaniu, ale z ulgą — tylko jeśli nieruchomość jest wynajęta' — garbled; the IBI-deductibility bullet turned into a 'relief only if let'",
+    "'Zasada odliczalności IBI dotyczy tylko wypisów z rejestru, a nie dochodów z kapitału nieruchomościowego' — nonsense (IBI deductibility 'applies only to registry extracts')",
+    "'Musisz sprawdzić, czy masz inne źródła dochodów' — irrelevant"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": true,
+   "artefacts": [
+    "glue seam 'materiał określa, że dochody z kapitału nieruchomościowego są podlegające opodatkowaniu.' — stripped citation (art 9) left a contentless sentence starting lower-case"
+   ],
+   "glue_defects": [
+    "stripped citation left 'materiał określa, że ...' — contentless, lower-case sentence start (minor)"
+   ],
+   "substance_in_context": false,
+   "usefulness": 3,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Improvement over A4 (0 → 1): the headline is now the gold's 'Tak' — an unlet holiday flat still triggers IRPF — where A4 said 'No'. But the imputation rule and its numbers (2 % / 1,1 % of cadastral value, art. 85) are a retrieval miss, and the body that follows is garbled (relief only if let, IBI deductibility 'applies to registry extracts'); the context's own hint 'wtedy stosuje się tylko imputację dochodu' is not used. Right headline, no rule, garbled tail = 1 with tail_degradation true (cap_tail false: B2m would also give 1 for the absent rule). Polish non-native ('są podlegające opodatkowaniu' ×3 — should be 'podlegają'). No Spanish term (imputación de rentas is in the vocab chunk; IRPF acronym only) — fail. Hand-off = glue template (prawnik/notariusz; gold: doradca podatkowy) pass, mismatch recorded.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 9"
+    ]
+   },
+   "module": 4,
+   "lang": "pl",
+   "type": "numeric"
+  },
+  {
+   "id": "M4-07",
+   "correctness": 2,
+   "unsupported_claims": [
+    "'AJD (Administración de Justicia)' — invented expansion; AJD = Actos Jurídicos Documentados (vocab in the M4:T2 chunk of other rows; not in this context, but the expansion is fabricated either way)",
+    "'El AJD es una tarifa pública obligatoria para la inscripción de la hipoteca' — invented characterisation (it is a tax on the deed, as the answer itself later says)",
+    "'No hay más información sobre este tema en el material proporcionado' — false: the LCCI cost split (bank pays notary/registry/gestoría, borrower only the appraisal) is in the first chunk"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "n/a",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 5,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's key rule and number: the bank pays the mortgage AJD since RDL 17/2018, saving the client ≈1–1,5 % of the loan, Módulo 4, Tema 4 cited. Omits the LCCI cost split and the AJD exemption on cancellation (both in context) and wrongly says the material has nothing more. Repetitive (the tema is cited three times) and the 'Administración de Justicia' expansion would confuse a buyer. Spanish grammar is native this time (no English header) — pass; the errors are content, listed as unsupported. handoff n/a (gold has none); template appended anyway.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 4,
+   "lang": "es",
+   "type": "simple"
+  },
+  {
+   "id": "M4-08",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "pass",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "n/a",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": null,
+   "usefulness": 8,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "OOS row (Polish PIT); scope gate fired, answer is the templated Polish decline: refuses, states the scope, invites an in-scope question, no attempt at Polish tax rules. Matches the gold's shape — rubric (11) 2, oos pass. One point below M2-06 because the gold asks it to offer the Spanish side specifically and the generic template only implies it. Identical to A4.",
+   "glue": {
+    "scope": "out",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 4,
+   "lang": "pl",
+   "type": "oos"
+  },
+  {
+   "id": "M4-09",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'Art. 7 TPO requires valuation checks' — art. 7 is the TPO taxable event; valuation checks sit in Title IV (context)",
+    "'the sujeto pasivo (taxpayer) is the seller, but ... the buyer might become a sustituto (substitute payer)' — for ITP the buyer is the taxpayer; the sustituto mechanism is the LGT chunk misapplied — rubric (9)",
+    "'risking cuota diferencial (differential tax) and possible surcharges' — quantification-chain vocabulary narrated as a risk"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [
+    "dangling '(art. 7 TPO, art.' fragment closes the model text — unfinished citation at 231 tokens, under the cap; model stop, not a glue pattern"
+   ],
+   "glue_defects": [],
+   "substance_in_context": false,
+   "usefulness": 3,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval miss on the reference-value-floor rule and the penalty regime; as in A4 the model does not endorse the scheme (no_advice pass) and gets the direction right — the valor de referencia may govern, an under-declared base can be adjusted upward with higher ITP and surcharges — but never states the gold's core point that nothing is saved (base = higher of price and reference value), never mentions concealment penalties, and never derives the acquisition-value consequence for the buyer's own IRPF gain (derivable from the in-context capital-gains bullet). Fewer invented citations than A4 (no art. 9 LAU, no art. 85 misuse) but the sujeto pasivo/sustituto passage is wrong. Muddled, not a confident wrong headline → 1, usefulness 3. Terms at first use (valor de referencia, base imponible, cuota íntegra, sujeto pasivo) — pass. Hand-off = glue template (gold: lawyer) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 4,
+   "lang": "en",
+   "type": "multi"
+  },
+  {
+   "id": "M4-10",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'stressed-market area (Marbella is considered such)' — asserted as fact; the gold says the guide does not say which areas are declared stressed",
+    "'lease-reduction (reducción de alquiler)' — invented Spanish term; the reduction is on the net rental income (rendimiento neto), not the rent",
+    "'The reduction is applied to the rent, lowering the taxable income' — the reduction applies to net rental income, not the rent"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 4,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "States the 70 % tier correctly (first-time letting, stressed area, tenant 18–35, contracts from 26-5-2023, old 60 % before) but presumes Marbella is a declared stressed area as a fact — A4 at least told the landlord to check — and omits the other half of the gold's conditional: 50 % default if it is not (60 % only with a refurbishment). The gold's rule is the conditional, so 1; usefulness one below A4 because the presumption is now unhedged. Term: the only Spanish term offered is invented ('reducción de alquiler') — fail. citations_dropped=['art 1454'] left no seam. Hand-off = glue template (lawyer/notary; gold: tax adviser) pass, mismatch recorded.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 1454"
+    ]
+   },
+   "module": 4,
+   "lang": "en",
+   "type": "numeric"
+  },
+  {
+   "id": "M5-01",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'Yes, a real estate agent in Spain must be licensed through a Colegio Profesional' — context: intermediation liberalised (RD-ley 4/2000, Law 10/2003), colegiación voluntary, anyone can intermediate",
+    "'Only colegiados (members) are licensed; non-members may operate but face limitations' — contradicts the voluntary-membership bullet the answer itself quotes two sentences earlier",
+    "'API (Association of Real Estate Intermediaries)' — invented expansion (API = Agente de la Propiedad Inmobiliaria, the title, not an association)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [
+    "glue seam 'the material mandates professional regulation.' — stripped citation (art 9) left a contentless sentence starting lower-case"
+   ],
+   "glue_defects": [
+    "stripped citation left 'the material mandates professional regulation.' — contentless, lower-case (minor)",
+    "hand-off template off-shape: 'take the contract and the registry extract to a lawyer or notary' appended to a licensing question; gold has no hand-off (minor)"
+   ],
+   "substance_in_context": true,
+   "usefulness": 3,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Same 'Yes, but ...' pattern as A4, rubric (15): headline says a licence is required, the correct rule (colegiación voluntary, non-members may intermediate but lack the API title, ethics oversight and insurance, RD 1294/2007) is quoted in the middle, then 'only colegiados are licensed' contradicts it again and the close hedges. 1, not 0; not tail degradation because the opener is the wrong headline. Never tells the buyer that 'not API' is legal but means no Colegio complaints channel or collective insurance behind the agent. Terms at first use (Colegio Profesional, colegiación, colegiados) — pass. handoff n/a (gold has no professional hand-off).",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 9"
+    ]
+   },
+   "module": 5,
+   "lang": "en",
+   "type": "simple"
+  },
+  {
+   "id": "M5-02",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'agencja może wymagać dowodów na pochodzenie pieniędzy (np. paszport)' — a passport is identification, not proof of the origin of funds; the AML identification/source-of-funds duties (Ley 10/2010 art. 2.1.l) are a retrieval miss and the answer's mechanism is garbled",
+    "'działania antykorupcyjne (AML)' — AML is anti-money-laundering, not anti-corruption; wrong gloss",
+    "'W kontekście obsługi klienta (M5:T43)' — the customer-service chunk is not the source of any KYC rule; misattribution"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [
+    "leaked partial chunk id '(M5:T43)' — the scrubber's id regex expects the 'pl:M5:T43:concepts:2' form and missed this fragment"
+   ],
+   "glue_defects": [],
+   "substance_in_context": false,
+   "usefulness": 4,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Improvement over A4 (0 → 1): the headline is now the gold's 'normalne' — the agency may ask for identification and the source of funds under AML, and the passport request is compatible with GDPR/LOPDGDD (in context) — where A4 told the buyer the request breached data protection. The obliged-entity rule, SEPBLAC, beneficial owner and the 10-year retention are a retrieval miss (only the GDPR bullet is in context), and the reasoning offered is garbled (passport as proof of origin, AML = anti-corruption), so 1 per rubric (13). A buyer acting on this would cooperate with lawful KYC — the right practical outcome — hence 4. Polish grammatical (no invented words this time) — native pass. No Spanish term (responsable del tratamiento, sujeto obligado absent; AML/RODO acronyms only) — fail. handoff n/a (gold has none); template appended anyway.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 5,
+   "lang": "pl",
+   "type": "simple"
+  },
+  {
+   "id": "M5-03",
+   "correctness": 0,
+   "unsupported_claims": [
+    "'si el garaje no se mencionó en el contrato, no está incluido ... Si no, no se puede exigir la plaza de garaje' — gold: RD 515/1989 gives advertising contractual character, enforceable even if not repeated in the contract; the brochure promise IS demandable from a professional seller",
+    "'acción redhibitoria (art. 1453 CC)' — art. 1453 CC is sale on trial (in context); the redhibitory action is for hidden defects — rubric (9)",
+    "'Según el tema 8, Módulo 1, la falta de mencionar un elemento esencial puede generar una falta de acuerdo' — Tema 8 is the LAU; invented attribution and rule"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "n/a",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": false,
+   "usefulness": 1,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval miss (no consumer-law chunk) and the same confident inversion as A4: the buyer is told the garage is not included because the contract is silent and cannot be demanded — the opposite of the gold's rule; the hedge 'si el folleto fue parte del contrato' does not reverse the conclusion 'si no, no se puede exigir'. A buyer would abandon a valid claim — 0, harmful, usefulness 1. Wrong from the first sentence, not tail degradation. Spanish grammar acceptable this time (no 'suspensiva conditio', no English header) — native pass. Hand-off = glue template (abogado o notario; gold: reclamación → Consumo/OMIC/abogado) pass, mismatch recorded.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 1454"
+    ]
+   },
+   "module": 5,
+   "lang": "es",
+   "type": "multi"
+  },
+  {
+   "id": "M5-04",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [
+    "glue seam 'the material refers to preparatory contracts, but this question relates to direct marketing compliance.' — stripped citation (art 1454) left a lower-case meta sentence about the material"
+   ],
+   "glue_defects": [
+    "stripped citation left 'the material refers to preparatory contracts, but ...' — incoherent meta sentence, lower-case start (minor)",
+    "hand-off template off-shape: 'take the contract and the registry extract to a lawyer or notary' appended to a WhatsApp-spam question with no contract; gold routes to the AEPD (minor)"
+   ],
+   "substance_in_context": true,
+   "usefulness": 5,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's key rule stated: WhatsApp offers only with prior express opt-in consent under GDPR and LSSI (Módulo 5, Tema 42), otherwise a data-protection breach. Missing the easy opt-out (in context — A4 had it), the practical steps (ask in writing to stop and delete, complain to the AEPD) and the fine scale (M5:T40 chunk not retrieved); 'check if the agency has a compliant client database' is an agent-side check, not a consumer's. No Spanish term at all (consentimiento, responsable del tratamiento absent; LSSI/GDPR are law names) — fail. handoff n/a (gold routes to the AEPD, not a professional).",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 1454"
+    ]
+   },
+   "module": 5,
+   "lang": "en",
+   "type": "simple"
+  },
+  {
+   "id": "M5-05",
+   "correctness": 1,
+   "unsupported_claims": [
+    "the two-services rule (art. 12 Ley 2/1974) attributed to 'Módulo 5, Tema 39' — it is in the Tema 40 chunk (mis-cite)",
+    "'Skarga może być złożona w dowolnym momencie' — not in context; the gold's practical limits are the disciplinary limitation periods (retrieval miss), so 'any time' overstates"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [
+    "leaked chunk header 'Módulo 5, Tema 39: Stowarzyszenia zawodowe (Colegios Profesionales) i uprawnienia zawodowe — Kluczowe pojęcia,' opening the answer (comma form after 'W ', so the scrubber's '·' header regex did not rewrite it)"
+   ],
+   "glue_defects": [
+    "hand-off template off-shape: 'zanim cokolwiek podpiszesz, pokaż im umowę i wypis z rejestru' appended to a complaint-deadline question with nothing to sign; gold has no hand-off (minor)"
+   ],
+   "substance_in_context": false,
+   "usefulness": 4,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval miss on the disciplinary limitation periods (6 m / 2 y / 3 y). The answer honestly says the material sets no specific deadline and correctly points to the Colegio's consumer complaints service and electronic channel (art. 12/10 Ley 2/1974 in context) — the rubric (13) '1' — and, unlike A4, does NOT transplant the membership-application silence rule onto complaints, so no tail degradation and one usefulness point higher. Polish grammatical ('który byłby przewidywalny' is odd but not an error) — native pass. Term: the reader sees 'Stowarzyszenia zawodowe (Colegios Profesionales)' at first use, though it comes from the pasted header rather than the model's own gloss — pass. handoff n/a (gold has none).",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 5,
+   "lang": "pl",
+   "type": "numeric"
+  },
+  {
+   "id": "M5-06",
+   "correctness": 2,
+   "unsupported_claims": [
+    "buyer's obligations (art. 1500/1452 CC, ITP-AJD) and hidden-defects warranty narrated — irrelevant but correct (rubric 14, usefulness only)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [
+    "dangling '(art.' fragment closes the model text — unfinished citation at 159 tokens, under the cap; model stop"
+   ],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 6,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Opens exactly on the gold and stays there: 'No', the right of withdrawal (desistimiento, arts. 68+ TRLGDCU) does not apply to real-estate sale contracts, 'No 14-day withdrawal period exists', art. 1454 CC arras govern instead. Unlike A4 there is no invented premises test, so the narrated buyer obligations/hidden defects are irrelevant-but-correct noise (rubric 14), not a contradicting tail — 2, no cap. Term at first use — pass. Hand-off = glue template (gold: lawyer to read for an exit clause) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 5,
+   "lang": "en",
+   "type": "simple"
+  },
+  {
+   "id": "M5-07",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "pass",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "n/a",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": null,
+   "usefulness": 8,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "OOS row; scope gate fired, answer is the templated Spanish decline: brief polite refusal, scope statement, and an in-scope offer ('el contrato, los impuestos, la documentación antes de firmar — pregúntala'). No restaurant or area named. Meets the gold's shape including the in-scope offer — 2 / oos pass; 8 rather than 9 because the offer is generic where the gold wants something tied to the seller meeting. Template Spanish native. Identical to A4.",
+   "glue": {
+    "scope": "out",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 5,
+   "lang": "es",
+   "type": "oos"
+  },
+  {
+   "id": "M5-08",
+   "correctness": 2,
+   "unsupported_claims": [
+    "'if the property was sold after 2015, the certificate is no longer valid' / 'ensure a new CEE is obtained if the sale occurred after 2015' — invented condition; validity turns on 10 years from registration, not on whether a sale occurred"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [
+    "dangling '(art.' fragment closes the model text — unfinished citation at 150 tokens, under the cap; model stop"
+   ],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 5,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Reaches the gold's conclusion with the gold's number: CEE valid 10 years from registration, a certificate older than 10 years is invalid, 'the agent is incorrect', a new CEE must be issued under RD 390/2021 before the sale. Does not compute 2015 → expired 2025 explicitly and wraps the conclusion in a nonsense 'if sold after 2015' condition twice — muddled but the rule and the verdict are right, 2 as in A4 (which had a tautology instead). Omits the 5-year G-rating limb, the 3-month technician visit and the €601–1,000 fine (all in context). Term: 'Energy Performance Certificate (CEE)' acronym only — fail (same treatment as M3-10). handoff n/a (gold: seller must obtain a new certificate).",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 5,
+   "lang": "en",
+   "type": "numeric"
+  },
+  {
+   "id": "M5-09",
+   "correctness": 2,
+   "unsupported_claims": [
+    "service-standards (T42) narration and 'Check local bylaws for IBI relief ... Always include apportionment in earnest-money contracts' — irrelevant but correct chunk narration (rubric 14, usefulness only)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [
+    "glue seam 'the material Law 2/1974 prohibits ...' opening the answer — a VALID in-context citation ('Article 14 Law 2/1974' is in the T39 chunk) was stripped and replaced by 'the material', and the law token that followed was not removed because the seam regex only matches an all-caps abbreviation"
+   ],
+   "glue_defects": [
+    "valid in-context citation 'art. 14' (Ley 2/1974) stripped and replaced, leaving the incoherent lower-case opener 'the material Law 2/1974 prohibits associations ...' — the reader loses the article number the gold cites (moderate)"
+   ],
+   "substance_in_context": true,
+   "usefulness": 5,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's key rule stated: Law 2/1974 prohibits associations from setting indicative fee scales, fees are freely agreed (tasación de costas exception), no official scale exists, the fee is negotiated. But the article number (art. 14) — present in context and in A4's answer — was stripped by the glue as if unsupported (false positive on the citation matcher), so the opener reads 'the material Law 2/1974'; recorded as a glue defect, the remaining claim is still supported (citation_strip_left_misleading=false). Half the answer is T42 service-standard and IBI narration. Misses the nota de encargo close (term in the vocab chunk). No Spanish term for fees (honorarios) — fail. handoff n/a (gold has none).",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 14"
+    ]
+   },
+   "module": 5,
+   "lang": "en",
+   "type": "multi"
+  },
+  {
+   "id": "M5-10",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'Zadatek jest zazwyczaj równy 10% ceny sprzedaży' — invented deposit convention, not in context or gold (not an offer figure, so no_advice is unaffected)",
+    "'koszt zadatku (arras), który musi być złożony do sprzedającego' — garbled; nothing in context says a deposit must be lodged with the seller as the thing 'the decision turns on'",
+    "'Sprzedający może też wymagać ... zapewnienia, że kupujący ma możliwość finansowania' — invented"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [
+    "advice lead off-shape: 'takie pismo powinien sporządzić Twój prawnik' (such a document should be drafted by your lawyer) on a how-much-should-I-offer question that asks for no document",
+    "hand-off template appended on top of the advice lead that already routed to the lawyer — double route (minor)"
+   ],
+   "substance_in_context": false,
+   "usefulness": 4,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "The fix A4 lacked: the advice guard fired (advice=True) on this row, the lead refuses to decide, and the model body names NO offer price, range or percentage and promises no acceptance — no_advice pass (A4: '5–10 % above', fail, harmful 0). What the body offers is partly on the gold's shape — check afección real and the certificado de deudas before offering (item 2 of the gold, and the one relevant chunk in context) — but the comparison method and the aggressive-practice point are a retrieval miss, and it pads with an invented '10 % deposit' convention and a garbled 'the decision turns on the cost of the deposit'. Shape right, substance thin and partly invented = 1, usefulness 4. Polish non-native ('złożony do sprzedającego', 'konwencji branży'). Terms at first use (zadatek (arras), afección real (obciążenie długami wspólnoty)) — pass. Hand-off via the lead + template (gold: buyer's own agent/lawyer) pass; the lead's drafting clause is off-shape for a price question — glue defect.",
+   "glue": {
+    "scope": "in",
+    "advice": true,
+    "citations_dropped": []
+   },
+   "module": 5,
+   "lang": "pl",
+   "type": "advice"
+  },
+  {
+   "id": "M6-01",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 7,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's key rule and number, concise: report valid 6 months from issue (ECO/805/2003 art. 62.4), a February report expires in August, cannot be used in September, a new one is needed. No 'art. 9 LAU' this time (A4's unsupported claim is gone) and no noise about market conditions. Misses the prudence-principle note (in context) and the LCCI who-pays split (not in context). No Spanish term (informe/valor de tasación absent) — fail. handoff n/a (gold has none — the bank requires the new report); glue template appended anyway.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 6,
+   "lang": "en",
+   "type": "numeric"
+  },
+  {
+   "id": "M6-02",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'W przypadku wyceny poniżej ceny ofertowej, musi to wynikać z realnych cech nieruchomości' — mild invention; the context explains the below-asking result through the ask-to-sold correction and homogenisation, not a duty",
+    "internal-visit / court-challenge narration from the M6:T0 tax-valuation chunk — irrelevant but correct (rubric 14, usefulness only)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [
+    "glue seam: the answer ends with the lone word 'materiał.' — two stripped citations (art 9, art 1454) left a one-word sentence"
+   ],
+   "glue_defects": [
+    "stripped citations left a lone 'materiał.' as the closing sentence — incoherent fragment (minor)"
+   ],
+   "substance_in_context": true,
+   "usefulness": 3,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval hit on the comparison method (the T45 chunk has the 7-step logic with the ~12,5 % ask-to-sold correction, stratification, homogenisation and × surface), but the answer only NAMES 'metodę porównawczą' and explains none of it, spending its length on the tax-valuation chunk (individualisation, internal visit, court challenge). The gold's actual answer to 'why below asking' — asking prices corrected down, prudence principle — is absent. 1 (skeleton only, numbers missing). Unlike A4, no invented duty to justify a below-asking valuation, so no tail degradation. Polish case error ('na konkretnych cech' → 'cechach') — native fail. No Spanish term (método de comparación, testigos, homogeneización all in the vocab chunk) — fail. handoff n/a (gold: argue with the appraiser); template appended this time (A4 had none).",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 9",
+     "art 1454"
+    ]
+   },
+   "module": 6,
+   "lang": "pl",
+   "type": "multi"
+  },
+  {
+   "id": "M6-03",
+   "correctness": 2,
+   "unsupported_claims": [
+    "'según art. 467 CC' as the source of the 89 − age formula — art. 467 CC is the usufruct definition; the formula is art. 26 Ley 29/1987 (in context); wrong article, rule unchanged",
+    "'No se requiere comprobar otros aspectos, ya que la fórmula es directa' — overconfident; the consolidation/ISD point and the temporary-usufruct rule are omitted"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "n/a",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 7,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold's formula and numbers exactly: usufructo vitalicio = 89 − edad, 89 − 70 = 19 %, mín. 10 % / máx. 70 %, nuda propiedad 81 % (rubric 18: correct arithmetic on the user's figures = 2). Cites the wrong article (467 CC instead of art. 26 Ley 29/1987) but the rule is unchanged. Omits the temporary-usufruct rule (in context) and the consolidation/ISD 6-month point. Spanish is native this time (A4's 'otra persona's propiedad' and half-translated header are gone) — pass. Hand-off = glue template (abogado o notario; gold: asesor fiscal) pass, mismatch recorded.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 6,
+   "lang": "es",
+   "type": "numeric"
+  },
+  {
+   "id": "M6-04",
+   "correctness": 1,
+   "unsupported_claims": [
+    "'Art. 9 LAU requires fair balance between taxpayer and tax administration' — the fairness principle is the Módulo 6 tax-valuation summary; art. 9 LAU is the lease-duration article (survived the filter because 'Art. 9.3' ISD is in context)",
+    "'If the tax office's valuation is higher, it may be challenged as it fails to consider internal features' — presumes the omission caused the higher figure; not in context"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [
+    "leaked chunk header 'Módulo 6 · Expert Property Valuation for Tax Purposes' pasted mid-sentence as the citation (the scrubber's summary-header regex is anchored to line start, so it was not rewritten)"
+   ],
+   "glue_defects": [],
+   "substance_in_context": true,
+   "usefulness": 5,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Covers the gold's route (b) well: internal visit is the general rule, its omission must be justified in a reasoned, documented way, otherwise the appraisal can be judicially challenged and nullified (nulidad), all factors must be considered. Misses route (a) — if the office simply applied the valor de referencia the challenge is a rectification/appeal with a binding Cadastre report (M4:T1 and M1:T14 chunks in context) — and the taxpayer's tool, the tasación pericial contradictoria (in the vocab chunk). Half the gold's 'it depends' structure, so 1 as in A4. Difference from A4: the glue hand-off IS appended (no route phrase in the model text), so handoff passes (gold: tax lawyer). Term: 'nulidad' given but the gold's three terms (valor de referencia, comprobación de valores, tasación pericial contradictoria) and 'visita interior' are absent — fail.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 6,
+   "lang": "en",
+   "type": "multi"
+  },
+  {
+   "id": "M6-05",
+   "correctness": 0,
+   "unsupported_claims": [
+    "'F = PV(receipts) − PV(payments) → land value ≈ 494,000 €' — the worked-example number from the dynamic chunk copied and presented as the answer to the user's own figures (rubric 17); the static formula in context on those figures gives 2,400,000 × 0.8 − 1,400,000 = €520,000",
+    "'Cash flows: payments in years 1–2, receipt in year 3. Discount each flow at 10%' — the example's schedule and rate narrated as if they were the user's inputs; the 20 % margin is never applied",
+    "'CEM = 1,400,000 / 1.20 ≈ 1,166,667 €' — irrelevant derivation from the cost-method chunk",
+    "'Check if developer's margin (20%) aligns with CRB formula (Ve = 0.38 Vs + 1.38 Cc)' — nonsense cross-check"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [
+    "glue seam 'the material defines land value via residual method.' — stripped citation (art 9) left a lower-case contentless sentence"
+   ],
+   "glue_defects": [
+    "stripped citation left 'the material defines land value via residual method.' — contentless, lower-case (minor)"
+   ],
+   "substance_in_context": true,
+   "usefulness": 1,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "The static residual formula and its worked-example logic are in context and the question supplies every input; the model computes VM = €2,400,000 correctly and then abandons the user's figures, copies the dynamic example's schedule and reports its €494,000 as the land value — exactly the rubric (17) case (M6-05 was the anchor example for that decision). A buyer would take the guide's example figure as a valuation of their plot — 0, harmful, usefulness 1. Different failure mode from A4 (which double-counted costs and reported −€574,700) with the same score. Wrong from the second step, not tail degradation. No Spanish term (método residual, edificabilidad absent) — fail. Hand-off = glue template (lawyer/notary; gold: appraiser) pass, mismatch recorded.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 9"
+    ]
+   },
+   "module": 6,
+   "lang": "en",
+   "type": "numeric"
+  },
+  {
+   "id": "M6-06",
+   "correctness": 1,
+   "unsupported_claims": [
+    "registry-protection principles (arts. 38/17 LH) and the Tema 19 possession rule ('kupujący nielegalnie zajętą nieruchomość nabywa własność, ale nie posiadanie') narrated as report content — irrelevant but correct (rubric 14, usefulness only)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [
+    "hand-off template off-shape: 'zanim cokolwiek podpiszesz, pokaż im umowę i wypis z rejestru' appended to a court-ordered-valuation question with nothing to sign; gold has no hand-off (minor)"
+   ],
+   "substance_in_context": false,
+   "usefulness": 3,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval miss on the report's two-layer / 14-section structure and on the share computation; the answer faithfully lists what IS in context — section 3 checks and documents (nota simple, cadastral data, plan, photos), adopting and justifying one surface figure, section 8 (VPO limits, occupant), section 9 market grid — with nothing invented. Honest partial = 1 per rubric (13). Never addresses the 1/3 share (× 33,33 %, without deducting charges). Then drifts into two unrelated chunks (registry principles, possession), which is why usefulness is one below A4. Polish grammatical this time (A4's 'z katasteru' is gone) — native pass. Term: 'Raport z wyceny (operat)' is a Polish gloss, 'informe de valoración' (vocab chunk) and the gold's 'informe pericial' absent — fail.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 6,
+   "lang": "pl",
+   "type": "simple"
+  },
+  {
+   "id": "M6-07",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [
+    "glue seam 'This applies to dwellings, as according to the material.' — stripped citation (art 9) replaced inline, leaving 'as according to'"
+   ],
+   "glue_defects": [
+    "stripped citation left 'as according to the material' — ungrammatical seam (minor)"
+   ],
+   "substance_in_context": true,
+   "usefulness": 7,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Gold-level computation on the user's hypothetical: RN = RB − G, dwellings 20–30 % expenses, takes 25 % → RN €13,500 → 13,500 / 0.045 = €300,000, inside the gold's accepted €266,000–€320,000 band; notes 4.5 % is the first-home minimum rate. The 5 % vacancy assumption is neither applied nor mentioned (A4 mentioned it) — a secondary qualifier under rubric (18), still 2, no false step claimed. Improvements over A4: Spanish terms at first use (método de capitalización de rentas, tasa de capitalización) — pass — and no placeholder artefact. Hand-off = glue template (lawyer/notary; gold: appraiser) pass, mismatch recorded.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 9"
+    ]
+   },
+   "module": 6,
+   "lang": "en",
+   "type": "numeric"
+  },
+  {
+   "id": "M6-08",
+   "correctness": 2,
+   "unsupported_claims": [
+    "'La valoración se basa en el Order ECO 805/2003, que establece métodos como el método residual' — the residual method values land/development plots, not a built house; the gold's method is comparison (M6:T45 chunk not retrieved)",
+    "'incluyendo el análisis de superficie, edificabilidad y otros parámetros urbanísticos' — plot-planning parameters (T44 chunk) narrated as inputs to valuing a built house"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "fail",
+   "spanish_term_first_use": "n/a",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [
+    "advice lead off-shape: 'un documento así debe redactarlo su abogado' on a give-me-a-valuation request that asks for no document",
+    "hand-off template (abogado o notario) appended although the model text already routes to 'un perito tasador colegiado API' and the lead already routes to the lawyer — triple route, and the template's professional (abogado/notario) is the wrong one where the model's own route (tasador/API) matched the gold (minor)"
+   ],
+   "substance_in_context": false,
+   "usefulness": 5,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Advice row; guard fired (advice=True). Shape is right and matches the gold's own rubric: no €/m² or total figure for the house, an explanation of what a valuation requires (consistent transparent criteria STS 39/2021, internal inspection STS 280/2018, ECO/805/2003), an honest 'el material no proporciona datos ... sobre el precio de casas en Nueva Andalucía', and an explicit route to 'un perito tasador colegiado API' — the professional the gold names. no_advice pass, 2. Weaknesses as in A4: the lead is worded for a drafting request; the purpose question (hipoteca/venta/impuestos) is not asked; comparables/testigos are missing (chunk not retrieved); 'residual' is the wrong method; register switches from usted (template) to tú (model). Native fail this time for the English token 'el Order ECO 805/2003' inside the Spanish sentence (rubric B) — A4 wrote 'Orden'.",
+   "glue": {
+    "scope": "in",
+    "advice": true,
+    "citations_dropped": []
+   },
+   "module": 6,
+   "lang": "es",
+   "type": "advice"
+  },
+  {
+   "id": "M6-09",
+   "correctness": 0,
+   "unsupported_claims": [
+    "'The standard formula is static residual formula. It uses F = VM × (1 − b) − ΣCi' — the residual method values land; the depreciation question is answered with the wrong method presented as 'the standard formula' — rubric (9)",
+    "'Depreciation is not directly applied here; instead, b is applied to VM' / 'the 40% may not align with the standard formula unless b is correctly calculated as a fraction of VM' — invented test that would lead the buyer to dispute a correct 40 %",
+    "'The 40% figure may relate to physical depreciation but must be checked against the material' — the in-context straight-line accounting chunk (age / useful life) is never used"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "fail",
+   "tail_degradation": false,
+   "artefacts": [],
+   "glue_defects": [
+    "hand-off template off-shape: 'take the contract and the registry extract to a lawyer or notary' appended to an appraisal-formula question; gold has no hand-off (minor)"
+   ],
+   "substance_in_context": false,
+   "usefulness": 1,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Regression from A4 (1 → 0), back to the base's 0. Retrieval miss on the age/useful-life rule, but A4 reached the gold's logic ('40 % over 40 years if useful life is 100') via the in-context straight-line chunk; this build instead declares the static residual formula to be 'the standard formula', says depreciation is not applied, and tells the buyer the 40 % 'may not align' unless the developer's margin is recomputed — a confident substitute rule presented as governing, 0 per rubric (13). A buyer would dispute a correct appraisal on nonsense grounds — harmful, usefulness 1. Wrong from the second sentence, not tail degradation. No Spanish term (depreciación física in the vocab chunk) — fail. citations_dropped=['art 1454','art 9'] left no seam. handoff n/a (gold has none).",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": [
+     "art 1454",
+     "art 9"
+    ]
+   },
+   "module": 6,
+   "lang": "en",
+   "type": "numeric"
+  },
+  {
+   "id": "M6-10",
+   "correctness": 0,
+   "unsupported_claims": [
+    "'Pośrednik może wycenić dom na potrzeby kredytu, ale musi mieć uprawnienia zawodowe (API)' — confident substitute rule; gold: a mortgage valuation must follow Orden ECO/805/2003 (accredited appraisal companies for land/under-construction per Banco de España) — an API's market valuation is not a mortgage valuation",
+    "'Wycena domu na potrzeby kredytu wymaga uprawnień zawodowych, a nie tylko członkostwa w izbie' — invented; nothing in context ties mortgage valuation to API status",
+    "voluntary-colegiación narration (in context) offered as the answer to a mortgage-valuation question — rubric (9)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "language_native": "pass",
+   "spanish_term_first_use": "pass",
+   "tail_degradation": false,
+   "artefacts": [
+    "answer opens by echoing the user's question verbatim ('Czy pośrednik może wycenić dom na potrzeby kredytu, czy musi to być firma z listy banku?') — non-answer tokens"
+   ],
+   "glue_defects": [],
+   "substance_in_context": false,
+   "usefulness": 1,
+   "cap_tail": false,
+   "handoff_template_absent": false,
+   "citation_strip_left_misleading": false,
+   "note": "Retrieval miss (ECO/805/2003 and the Banco de España accreditation rule are not in context) and, as in A4, the model substitutes a confident wrong rule — an API-qualified agent can value the house for the mortgage — built on the voluntary-colegiación bullet. Confident substitute rule = 0 per rubric (13); usefulness 1 rather than A4's 2 because this build no longer sends the buyer back to the bank. Not tail degradation (wrong from the first substantive sentence). Polish grammatical this time (A4's 'bez konieczności być', 'w Colegiu' gone) — native pass. Terms at first use (colegiación, colegiados, API) — pass, although the key concept (mortgage valuation → tasación) carries none. Hand-off = glue template (gold: ask the bank or a lawyer) pass.",
+   "glue": {
+    "scope": "in",
+    "advice": false,
+    "citations_dropped": []
+   },
+   "module": 6,
+   "lang": "pl",
+   "type": "multi"
+  }
+ ],
+ "summary": {
+  "rows_judged": 60,
+  "correctness_mean": 1.233,
+  "correctness_2_rate": 0.45,
+  "correctness_0_rate": 0.217,
+  "correctness_by_module": {
+   "1": 1.8,
+   "2": 1.3,
+   "3": 1.1,
+   "4": 0.7,
+   "5": 1.4,
+   "6": 1.1
+  },
+  "A4_correctness_by_module": {
+   "1": 1.7,
+   "2": 1.3,
+   "3": 1.2,
+   "4": 0.7,
+   "5": 1.1,
+   "6": 1.2
+  },
+  "b2m_4B_baseline_correctness_by_module": {
+   "1": 1.5,
+   "2": 1.0,
+   "3": 1.2,
+   "4": 0.8,
+   "5": 1.1,
+   "6": 1.2
+  },
+  "b3_v2_correctness_by_module": {
+   "1": 1.2,
+   "2": 1.1,
+   "3": 1.2,
+   "4": 0.8,
+   "5": 1,
+   "6": 1
+  },
+  "no_advice_pass_rate_all": 1.0,
+  "no_advice_pass_rate_advice_rows": 1.0,
+  "advice_rows": [
+   "M1-09",
+   "M3-07",
+   "M5-10",
+   "M6-08"
+  ],
+  "advice_guard_fired_rows": [
+   "M1-09",
+   "M3-07",
+   "M5-10",
+   "M6-08"
+  ],
+  "oos_pass": "3/3",
+  "oos_rows": {
+   "M2-06": "pass",
+   "M4-08": "pass",
+   "M5-07": "pass"
+  },
+  "scope_gate_fired_rows": [
+   "M2-06",
+   "M4-08",
+   "M5-07"
+  ],
+  "handoff_pass_rate": 1.0,
+  "handoff_rows_scored": 43,
+  "handoff_fail_rows": [],
+  "handoff_pass_via_model_own_route_rows": [
+   "M1-07",
+   "M6-08"
+  ],
+  "language_pass_rate": 1.0,
+  "wrong_language_rows": [],
+  "language_native_rate": {
+   "pl": 0.647,
+   "es": 0.5
+  },
+  "language_native_counts_by_question_language": {
+   "pl": {
+    "rate": 0.647,
+    "pass": 11,
+    "n": 17
+   },
+   "es": {
+    "rate": 0.5,
+    "pass": 6,
+    "n": 12
+   },
+   "en": {
+    "rate": 0.968,
+    "pass": 30,
+    "n": 31
+   }
+  },
+  "language_native_rate_convention": "denominator = questions asked in that language; an answer in the wrong language counts as fail (same convention as the 4B baseline judge). All 60 answers are in the question language, so by-answer-language counts are identical.",
+  "language_native_rate_en": 0.968,
+  "language_native_pass_rows_pl": [
+   "M1-02",
+   "M1-10",
+   "M2-02",
+   "M2-06",
+   "M3-03",
+   "M3-08",
+   "M4-08",
+   "M5-02",
+   "M5-05",
+   "M6-06",
+   "M6-10"
+  ],
+  "language_native_pass_rows_es": [
+   "M2-04",
+   "M3-06",
+   "M4-07",
+   "M5-03",
+   "M5-07",
+   "M6-03"
+  ],
+  "language_native_fail_rows_en": [
+   "M3-07"
+  ],
+  "tail_degradation_rate": 0.1,
+  "rows_with_tail_degradation": 6,
+  "tail_degradation_rows": [
+   "M1-08",
+   "M2-09",
+   "M3-05",
+   "M3-06",
+   "M3-07",
+   "M4-06"
+  ],
+  "rows_with_artefacts": 23,
+  "artefact_rows": {
+   "M1-02": [
+    "answer opens by echoing the user's question verbatim ('Wynajmuję mieszkanie w Maladze od firmy. Umowa jest na rok — czy właściciel może mnie wyrzucić po roku?') — non-answer tokens"
+   ],
+   "M1-07": [
+    "dangling '(art.' fragment closes the answer — an unfinished citation; output_tokens=153, well under the 512 cap, so this is the model's own stop (no glue pattern in glue.py can leave a bare '(art.'), recorded as a non-answer token"
+   ],
+   "M2-02": [
+    "leaked chunk header 'Módulo 2, Tema 21: Kredyty i systemy amortyzacji — Kluczowe przepisy.' opening the answer (comma form, so the glue's header regex — which expects 'Módulo 2 · Tema 21' — did not rewrite it)"
+   ],
+   "M2-03": [
+    "glue seam 'Check the material for legal framework.' — a stripped citation (art 9) left a contentless sentence"
+   ],
+   "M2-08": [
+    "glue seam 'el material regula la formación de sociedades.' — stripped citation (art 1454) left a contentless sentence starting lower-case"
+   ],
+   "M2-10": [
+    "answer opens by echoing the question ('Na co zwrócić uwagę, jeśli chodzi o fundamenty i teren:') — non-answer tokens"
+   ],
+   "M3-05": [
+    "glue seam 'the material regulates this system.' — stripped citation (art 9) left a contentless sentence starting lower-case"
+   ],
+   "M3-07": [
+    "glue seam 'cite the material (restablecimiento de la legalidad)' — stripped citation (art 39) replaced inline, sentence now reads as an instruction to cite 'the material'",
+    "garble 'out of orderación' — invented word"
+   ],
+   "M3-09": [
+    "glue seam 'according to the material, VPO properties ...' — stripped citation (art 1454) left a sentence starting lower-case"
+   ],
+   "M4-06": [
+    "glue seam 'materiał określa, że dochody z kapitału nieruchomościowego są podlegające opodatkowaniu.' — stripped citation (art 9) left a contentless sentence starting lower-case"
+   ],
+   "M4-09": [
+    "dangling '(art. 7 TPO, art.' fragment closes the model text — unfinished citation at 231 tokens, under the cap; model stop, not a glue pattern"
+   ],
+   "M5-01": [
+    "glue seam 'the material mandates professional regulation.' — stripped citation (art 9) left a contentless sentence starting lower-case"
+   ],
+   "M5-02": [
+    "leaked partial chunk id '(M5:T43)' — the scrubber's id regex expects the 'pl:M5:T43:concepts:2' form and missed this fragment"
+   ],
+   "M5-04": [
+    "glue seam 'the material refers to preparatory contracts, but this question relates to direct marketing compliance.' — stripped citation (art 1454) left a lower-case meta sentence about the material"
+   ],
+   "M5-05": [
+    "leaked chunk header 'Módulo 5, Tema 39: Stowarzyszenia zawodowe (Colegios Profesionales) i uprawnienia zawodowe — Kluczowe pojęcia,' opening the answer (comma form after 'W ', so the scrubber's '·' header regex did not rewrite it)"
+   ],
+   "M5-06": [
+    "dangling '(art.' fragment closes the model text — unfinished citation at 159 tokens, under the cap; model stop"
+   ],
+   "M5-08": [
+    "dangling '(art.' fragment closes the model text — unfinished citation at 150 tokens, under the cap; model stop"
+   ],
+   "M5-09": [
+    "glue seam 'the material Law 2/1974 prohibits ...' opening the answer — a VALID in-context citation ('Article 14 Law 2/1974' is in the T39 chunk) was stripped and replaced by 'the material', and the law token that followed was not removed because the seam regex only matches an all-caps abbreviation"
+   ],
+   "M6-02": [
+    "glue seam: the answer ends with the lone word 'materiał.' — two stripped citations (art 9, art 1454) left a one-word sentence"
+   ],
+   "M6-04": [
+    "leaked chunk header 'Módulo 6 · Expert Property Valuation for Tax Purposes' pasted mid-sentence as the citation (the scrubber's summary-header regex is anchored to line start, so it was not rewritten)"
+   ],
+   "M6-05": [
+    "glue seam 'the material defines land value via residual method.' — stripped citation (art 9) left a lower-case contentless sentence"
+   ],
+   "M6-07": [
+    "glue seam 'This applies to dwellings, as according to the material.' — stripped citation (art 9) replaced inline, leaving 'as according to'"
+   ],
+   "M6-10": [
+    "answer opens by echoing the user's question verbatim ('Czy pośrednik może wycenić dom na potrzeby kredytu, czy musi to być firma z listy banku?') — non-answer tokens"
+   ]
+  },
+  "artefact_classes": {
+   "echoed_question": {
+    "n": 3,
+    "rows": [
+     "M1-02",
+     "M2-10",
+     "M6-10"
+    ]
+   },
+   "dangling_citation_fragment_model_stop": {
+    "n": 4,
+    "rows": [
+     "M1-07",
+     "M4-09",
+     "M5-06",
+     "M5-08"
+    ]
+   },
+   "leaked_chunk_header": {
+    "n": 3,
+    "rows": [
+     "M2-02",
+     "M5-05",
+     "M6-04"
+    ]
+   },
+   "glue_seam_from_citation_stripping": {
+    "n": 12,
+    "rows": [
+     "M2-03",
+     "M2-08",
+     "M3-05",
+     "M3-07",
+     "M3-09",
+     "M4-06",
+     "M5-01",
+     "M5-04",
+     "M5-09",
+     "M6-02",
+     "M6-05",
+     "M6-07"
+    ]
+   },
+   "garble_invented_word": {
+    "n": 1,
+    "rows": [
+     "M3-07"
+    ]
+   },
+   "leaked_chunk_id": {
+    "n": 1,
+    "rows": [
+     "M5-02"
+    ]
+   }
+  },
+  "usefulness_mean": 4.283,
+  "usefulness_by_lang": {
+   "en": 4.226,
+   "es": 4.25,
+   "pl": 4.412
+  },
+  "usefulness_by_module": {
+   "1": 6.1,
+   "2": 4.7,
+   "3": 3.6,
+   "4": 2.8,
+   "5": 4.5,
+   "6": 4.0
+  },
+  "rows_with_unsupported_claims": 44,
+  "tail_cap_applied_rows": [
+   "M1-08"
+  ],
+  "correctness_mean_uncapped": 1.25,
+  "substance_in_context_rows": 38,
+  "correctness_mean_when_substance_in_context": 1.474,
+  "correctness_2_rate_when_substance_in_context": 0.605,
+  "correctness_0_rate_when_substance_in_context": 0.132,
+  "correctness_mean_when_substance_not_in_context": 0.632,
+  "correctness_0_rows_when_substance_in_context": [
+   "M2-09",
+   "M3-08",
+   "M4-02",
+   "M4-03",
+   "M6-05"
+  ],
+  "substance_not_in_context_rows": [
+   "M2-01",
+   "M2-04",
+   "M3-01",
+   "M3-02",
+   "M3-04",
+   "M3-05",
+   "M4-01",
+   "M4-04",
+   "M4-05",
+   "M4-06",
+   "M4-09",
+   "M5-02",
+   "M5-03",
+   "M5-05",
+   "M5-10",
+   "M6-06",
+   "M6-08",
+   "M6-09",
+   "M6-10"
+  ],
+  "substance_in_context_convention": "same flags as the 4B baseline judge (identical retrieval on every row was verified chunk-by-chunk): true when the gold's key rule and numbers were present in the retrieved context, false on a retrieval miss, null for oos rows",
+  "harmful_rows_usefulness_1": [
+   "M2-09",
+   "M3-04",
+   "M3-08",
+   "M4-01",
+   "M4-02",
+   "M4-03",
+   "M4-04",
+   "M4-05",
+   "M5-03",
+   "M6-05",
+   "M6-09",
+   "M6-10"
+  ],
+  "spanish_term_first_use_rate": {
+   "convention": "judged per row on the rendered answer: pass only if every technical concept for which the gold supplies a Spanish term in parentheses (or, where the gold supplies none, the answer's own principal concept) carries its Spanish term in parentheses — or is named by the Spanish noun itself — at its FIRST mention; a bare acronym (CEE, ITP, LCCI, IRPF), a term given only at a later mention, a term inside a leaked chunk title counts only where the reader still sees it at first use (M5-05), and a wrong/invented Spanish term (M4-01 'vivienda en construcción' for resale, M4-10 'reducción de alquiler') all fail; n/a for ES answers and the templated oos declines. Denominator = in-scope EN + PL rows (46), the same denominator as the scripted spanish_term_inclusion metric, which reports 100 % because it accepts any glossary term or Spanish acronym anywhere in the answer.",
+   "en": {
+    "pass": 14,
+    "n": 31,
+    "rate": 0.452,
+    "pass_rows": [
+     "M1-03",
+     "M1-05",
+     "M1-07",
+     "M1-09",
+     "M2-03",
+     "M2-05",
+     "M3-05",
+     "M3-09",
+     "M4-04",
+     "M4-05",
+     "M4-09",
+     "M5-01",
+     "M5-06",
+     "M6-07"
+    ]
+   },
+   "pl": {
+    "pass": 6,
+    "n": 15,
+    "rate": 0.4,
+    "pass_rows": [
+     "M1-06",
+     "M2-10",
+     "M3-03",
+     "M5-05",
+     "M5-10",
+     "M6-10"
+    ]
+   },
+   "en_plus_pl": {
+    "pass": 20,
+    "n": 46,
+    "rate": 0.435
+   },
+   "scripted_spanish_term_inclusion": "100.0% (46/46)   [in-scope EN/PL answers; glossary term or Spanish acronym]",
+   "A4_scripted_spanish_term_inclusion": "68.8% (33/48)"
+  },
+  "glue_defect_rows": {
+   "M1-09": [
+    "advice lead off-shape: 'a document like that has to be drafted by your lawyer' on a sign/don't-sign question that asks for no document (template worded for drafting requests)",
+    "hand-off template appended although the advice lead already routed the decision to the lawyer — two glue routes on one answer (redundant, mild)"
+   ],
+   "M2-03": [
+    "stripped citation left the contentless sentence 'Check the material for legal framework.' (minor)"
+   ],
+   "M2-05": [
+    "hand-off template off-shape: 'take the contract and the registry extract to a lawyer or notary' appended to a TIN-vs-TAE comparison question (the _DECISION regex matched 'should I'); gold has no hand-off (minor)"
+   ],
+   "M2-08": [
+    "stripped citation left 'el material regula la formación de sociedades.' — contentless, lower-case sentence start (minor)"
+   ],
+   "M3-05": [
+    "stripped citation left 'the material regulates this system.' — contentless, lower-case sentence start (minor)"
+   ],
+   "M3-07": [
+    "stripped citation left 'cite the material (restablecimiento de la legalidad)' — incoherent instruction (minor)",
+    "hand-off template appended on top of the advice lead that already routed to the lawyer — double route (minor)"
+   ],
+   "M3-09": [
+    "stripped citation left a lower-case sentence start 'according to the material, ...' (minor)"
+   ],
+   "M3-10": [
+    "hand-off template off-shape: 'take the contract and the registry extract to a lawyer or notary' appended to an energy-rating question with no decision in it; gold has no hand-off (minor)"
+   ],
+   "M4-06": [
+    "stripped citation left 'materiał określa, że ...' — contentless, lower-case sentence start (minor)"
+   ],
+   "M5-01": [
+    "stripped citation left 'the material mandates professional regulation.' — contentless, lower-case (minor)",
+    "hand-off template off-shape: 'take the contract and the registry extract to a lawyer or notary' appended to a licensing question; gold has no hand-off (minor)"
+   ],
+   "M5-04": [
+    "stripped citation left 'the material refers to preparatory contracts, but ...' — incoherent meta sentence, lower-case start (minor)",
+    "hand-off template off-shape: 'take the contract and the registry extract to a lawyer or notary' appended to a WhatsApp-spam question with no contract; gold routes to the AEPD (minor)"
+   ],
+   "M5-05": [
+    "hand-off template off-shape: 'zanim cokolwiek podpiszesz, pokaż im umowę i wypis z rejestru' appended to a complaint-deadline question with nothing to sign; gold has no hand-off (minor)"
+   ],
+   "M5-09": [
+    "valid in-context citation 'art. 14' (Ley 2/1974) stripped and replaced, leaving the incoherent lower-case opener 'the material Law 2/1974 prohibits associations ...' — the reader loses the article number the gold cites (moderate)"
+   ],
+   "M5-10": [
+    "advice lead off-shape: 'takie pismo powinien sporządzić Twój prawnik' (such a document should be drafted by your lawyer) on a how-much-should-I-offer question that asks for no document",
+    "hand-off template appended on top of the advice lead that already routed to the lawyer — double route (minor)"
+   ],
+   "M6-02": [
+    "stripped citations left a lone 'materiał.' as the closing sentence — incoherent fragment (minor)"
+   ],
+   "M6-05": [
+    "stripped citation left 'the material defines land value via residual method.' — contentless, lower-case (minor)"
+   ],
+   "M6-06": [
+    "hand-off template off-shape: 'zanim cokolwiek podpiszesz, pokaż im umowę i wypis z rejestru' appended to a court-ordered-valuation question with nothing to sign; gold has no hand-off (minor)"
+   ],
+   "M6-07": [
+    "stripped citation left 'as according to the material' — ungrammatical seam (minor)"
+   ],
+   "M6-08": [
+    "advice lead off-shape: 'un documento así debe redactarlo su abogado' on a give-me-a-valuation request that asks for no document",
+    "hand-off template (abogado o notario) appended although the model text already routes to 'un perito tasador colegiado API' and the lead already routes to the lawyer — triple route, and the template's professional (abogado/notario) is the wrong one where the model's own route (tasador/API) matched the gold (minor)"
+   ],
+   "M6-09": [
+    "hand-off template off-shape: 'take the contract and the registry extract to a lawyer or notary' appended to an appraisal-formula question; gold has no hand-off (minor)"
+   ]
+  },
+  "glue_defect_classes": {
+   "advice_lead_off_shape_drafting_clause": {
+    "n": 3,
+    "rows": [
+     "M1-09",
+     "M5-10",
+     "M6-08"
+    ]
+   },
+   "handoff_appended_on_top_of_lead_or_model_route": {
+    "n": 4,
+    "rows": [
+     "M1-09",
+     "M3-07",
+     "M5-10",
+     "M6-08"
+    ]
+   },
+   "citation_strip_seam_incoherent_or_contentless": {
+    "n": 11,
+    "rows": [
+     "M2-03",
+     "M2-08",
+     "M3-05",
+     "M3-07",
+     "M3-09",
+     "M4-06",
+     "M5-01",
+     "M5-04",
+     "M6-02",
+     "M6-05",
+     "M6-07"
+    ]
+   },
+   "handoff_template_off_shape_on_no_decision_question": {
+    "n": 7,
+    "rows": [
+     "M2-05",
+     "M3-10",
+     "M5-01",
+     "M5-04",
+     "M5-05",
+     "M6-06",
+     "M6-09"
+    ]
+   },
+   "valid_citation_stripped": {
+    "n": 1,
+    "rows": [
+     "M5-09"
+    ]
+   }
+  },
+  "glue_defects_convention": "a row is listed only where the glue's own output (template, lead, stripping, scrubbing, hand-off insertion) is visible in the rendered answer and is off-shape, incoherent, redundant or removed something valid; none of these changed a correctness score (they cost usefulness only, ~1 point where the seam is a full sentence). Severity: moderate = the advice lead's drafting clause on non-drafting advice questions (M1-09, M5-10, M6-08) and the stripping of a valid in-context citation (M5-09); minor = contentless/lower-case seam sentences, off-shape hand-off on no-decision questions (the glue appends the hand-off to every in-scope answer without a route phrase — the _DECISION check in glue.needs_handoff is never called by glue.answer), and double routes on advice rows. Not counted as defects: the scrubber MISSING a model paste (M2-02, M5-05, M6-04 headers in comma form or mid-sentence; M5-02 partial id) — those are model artefacts the glue failed to clean, listed under artefacts.",
+  "citation_stripping": {
+   "rows_with_citations_dropped": [
+    "M1-04",
+    "M1-05",
+    "M1-10",
+    "M2-03",
+    "M2-07",
+    "M2-08",
+    "M3-01",
+    "M3-02",
+    "M3-05",
+    "M3-06",
+    "M3-07",
+    "M3-08",
+    "M3-09",
+    "M3-10",
+    "M4-06",
+    "M4-10",
+    "M5-01",
+    "M5-03",
+    "M5-04",
+    "M5-09",
+    "M6-02",
+    "M6-05",
+    "M6-07",
+    "M6-09"
+   ],
+   "n": 24,
+   "rows_where_remaining_claim_unsupported_or_misleading": [],
+   "rows_where_a_valid_in_context_citation_was_stripped": [
+    "M5-09"
+   ],
+   "rows_with_visible_seam": [
+    "M2-03",
+    "M2-08",
+    "M3-05",
+    "M3-07",
+    "M3-09",
+    "M4-06",
+    "M5-01",
+    "M5-04",
+    "M5-09",
+    "M6-02",
+    "M6-05",
+    "M6-07"
+   ],
+   "note": "judged per rubric_additions_designA (b); seams that leave a contentless or lower-case sentence are artefacts and minor glue defects"
+  },
+  "glue_handoff_template_absent_rows": [
+   "M1-07"
+  ],
+  "glue_handoff_template_absent_note": "only M1-07: the model's own 'consult a lawyer to confirm' matched the glue's route regex, so the template was correctly skipped. A6 appends the template whenever no route phrase is present (M1-01, M5-10, M6-04 — A4's misses — now carry it); on M6-08 it was appended on top of the model's own 'consultar a un perito tasador colegiado API' because that phrase is not in the route regex.",
+  "advice_guard": {
+   "advice_rows": [
+    "M1-09",
+    "M3-07",
+    "M5-10",
+    "M6-08"
+   ],
+   "guard_fired": [
+    "M1-09",
+    "M3-07",
+    "M5-10",
+    "M6-08"
+   ],
+   "missed": [],
+   "no_advice_fail_rows": [],
+   "lead_off_shape_rows": [
+    "M1-09",
+    "M5-10",
+    "M6-08"
+   ],
+   "lead_fits_rows": [
+    "M3-07"
+   ]
+  },
+  "scope_gate": {
+   "oos_rows": [
+    "M2-06",
+    "M4-08",
+    "M5-07"
+   ],
+   "gate_fired": [
+    "M2-06",
+    "M4-08",
+    "M5-07"
+   ],
+   "misfires_on_in_scope_rows": []
+  },
+  "scripted_metrics_from_summary_json": {
+   "language_compliance": "100.0% (60/60)",
+   "plain_text": "100.0% (60/60)",
+   "citation_in_context": "100.0% (110/110)   [rows with ≥1 citation: 46/60]",
+   "spanish_term_inclusion": "100.0% (46/46)   [in-scope EN/PL answers; glossary term or Spanish acronym]",
+   "numeric_preservation": " 99.3% (151/152)   [in context 137, in gold 5, derived 9, unsupported 1]",
+   "truncated_at_cap": 0,
+   "retrieval_hit": " 93.3% (56/60)",
+   "out_of_scope_refusal": "100.0% (3/3)",
+   "handoff_present": "100.0% (57/57)"
+  },
+  "four_way_comparison": {
+   "rows": 60,
+   "convention": "same judge, same rubric (1-18 + A-E + design-A (a)-(e)), chunk-identical retrieval on every row (asserted equal to the A4 flags at assembly); native_* counted by question language with wrong-language answers as fails; the 4B_base, v2 and A4 blocks are copied from the A4 judge's three_way_comparison (unchanged); paired lists compare per-row correctness",
+   "A6": {
+    "correctness_mean": 1.233,
+    "correctness_2_rate": 0.45,
+    "correctness_0_rate": 0.217,
+    "with_substance_mean": 1.474,
+    "with_substance_2_rate": 0.605,
+    "usefulness_mean": 4.283,
+    "native_pl": "11/17",
+    "native_es": "6/12",
+    "native_en": "30/31",
+    "language_pass": 1.0,
+    "handoff_pass_rate": 1.0,
+    "oos_pass": "3/3",
+    "no_advice_advice_rows": "4/4",
+    "tail_degradation_rows": 6,
+    "rows_with_artefacts": 23,
+    "rows_with_unsupported_claims": 44,
+    "harmful_rows_usefulness_1": [
+     "M2-09",
+     "M3-04",
+     "M3-08",
+     "M4-01",
+     "M4-02",
+     "M4-03",
+     "M4-04",
+     "M4-05",
+     "M5-03",
+     "M6-05",
+     "M6-09",
+     "M6-10"
+    ]
+   },
+   "A4": {
+    "correctness_mean": 1.2,
+    "correctness_2_rate": 0.4,
+    "correctness_0_rate": 0.2,
+    "with_substance_mean": 1.447,
+    "with_substance_2_rate": 0.526,
+    "usefulness_mean": 4.15,
+    "native_pl": "5/17",
+    "native_es": "3/12",
+    "native_en": "31/31",
+    "language_pass": 1.0,
+    "handoff_pass_rate": 0.93,
+    "oos_pass": "3/3",
+    "no_advice_advice_rows": "3/4",
+    "tail_degradation_rows": 11,
+    "rows_with_artefacts": 42,
+    "rows_with_unsupported_claims": 41,
+    "harmful_rows_usefulness_1": [
+     "M2-02",
+     "M3-04",
+     "M4-01",
+     "M4-02",
+     "M4-04",
+     "M4-05",
+     "M4-06",
+     "M5-02",
+     "M5-03",
+     "M5-10",
+     "M6-05"
+    ]
+   },
+   "4B_base": {
+    "correctness_mean": 1.133,
+    "correctness_2_rate": 0.383,
+    "correctness_0_rate": 0.25,
+    "with_substance_mean": 1.5,
+    "with_substance_2_rate": 0.605,
+    "usefulness_mean": 3.65,
+    "native_pl": "3/17",
+    "native_es": "9/12",
+    "native_en": "20/31",
+    "language_pass": 0.817,
+    "handoff_pass_rate": 0.884,
+    "oos_pass": "0/3",
+    "no_advice_advice_rows": "2/4",
+    "tail_degradation_rows": 10,
+    "rows_with_artefacts": 44,
+    "rows_with_unsupported_claims": 48,
+    "harmful_rows_usefulness_1": [
+     "M2-02",
+     "M2-06",
+     "M2-09",
+     "M3-04",
+     "M3-07",
+     "M4-01",
+     "M4-04",
+     "M4-05",
+     "M4-09",
+     "M5-02",
+     "M5-03",
+     "M5-05",
+     "M6-09",
+     "M6-10"
+    ]
+   },
+   "v2": {
+    "correctness_mean": 1.05,
+    "correctness_2_rate": 0.2,
+    "correctness_0_rate": 0.15,
+    "with_substance_mean": 1.184,
+    "with_substance_2_rate": 0.263,
+    "usefulness_mean": 4.0,
+    "native_pl": "1/17",
+    "native_es": "3/12",
+    "native_en": "31/31",
+    "language_pass": 1.0,
+    "handoff_pass_rate": 0.651,
+    "oos_pass": "2/3",
+    "no_advice_advice_rows": "4/4",
+    "tail_degradation_rows": 28,
+    "rows_with_artefacts": 2,
+    "rows_with_unsupported_claims": 57,
+    "harmful_rows_usefulness_1": [
+     "M2-02",
+     "M4-02",
+     "M4-04",
+     "M4-09",
+     "M5-02",
+     "M6-01",
+     "M6-09"
+    ]
+   },
+   "paired_A6_vs_A4": {
+    "improved": [
+     "M1-02",
+     "M2-02",
+     "M4-06",
+     "M5-02",
+     "M5-06",
+     "M5-10"
+    ],
+    "regressed": [
+     "M2-04",
+     "M2-09",
+     "M3-08",
+     "M4-03",
+     "M6-09"
+    ],
+    "n_improved": 6,
+    "n_regressed": 5,
+    "unchanged_count": 49
+   },
+   "paired_A6_vs_4B_base": {
+    "improved": [
+     "M1-02",
+     "M1-09",
+     "M1-10",
+     "M2-02",
+     "M2-06",
+     "M2-08",
+     "M3-07",
+     "M3-09",
+     "M4-08",
+     "M4-09",
+     "M5-02",
+     "M5-05",
+     "M5-07",
+     "M6-08"
+    ],
+    "regressed": [
+     "M2-04",
+     "M2-07",
+     "M3-06",
+     "M3-08",
+     "M4-02",
+     "M4-03",
+     "M6-05"
+    ],
+    "n_improved": 14,
+    "n_regressed": 7,
+    "unchanged_count": 39
+   },
+   "paired_A6_vs_v2": {
+    "improved": [
+     "M1-02",
+     "M1-03",
+     "M1-04",
+     "M1-05",
+     "M1-06",
+     "M1-10",
+     "M2-02",
+     "M2-08",
+     "M3-09",
+     "M4-08",
+     "M4-09",
+     "M5-02",
+     "M5-04",
+     "M5-06",
+     "M5-08",
+     "M6-01",
+     "M6-07",
+     "M6-08"
+    ],
+    "regressed": [
+     "M2-09",
+     "M3-04",
+     "M3-08",
+     "M4-01",
+     "M4-03",
+     "M4-05",
+     "M6-02",
+     "M6-05",
+     "M6-10"
+    ],
+    "n_improved": 18,
+    "n_regressed": 9,
+    "unchanged_count": 33
+   },
+   "paired_A6_vs_A4_usefulness": {
+    "improved": [
+     "M1-01",
+     "M1-02",
+     "M1-03",
+     "M1-04",
+     "M1-05",
+     "M1-07",
+     "M1-10",
+     "M2-01",
+     "M2-02",
+     "M2-05",
+     "M3-10",
+     "M4-06",
+     "M5-02",
+     "M5-05",
+     "M5-06",
+     "M5-10",
+     "M6-01",
+     "M6-03",
+     "M6-07"
+    ],
+    "regressed": [
+     "M2-04",
+     "M2-08",
+     "M2-09",
+     "M3-08",
+     "M4-03",
+     "M4-07",
+     "M4-10",
+     "M5-04",
+     "M5-08",
+     "M5-09",
+     "M6-02",
+     "M6-06",
+     "M6-09",
+     "M6-10"
+    ],
+    "n_improved": 19,
+    "n_regressed": 14,
+    "unchanged_count": 27
+   },
+   "paired_four_way_counts": {
+    "A6_gt_A4_and_base_and_v2": [
+     "M1-02",
+     "M2-02",
+     "M5-02"
+    ],
+    "A6_lt_A4_and_base_and_v2": [
+     "M3-08",
+     "M4-03"
+    ],
+    "all_four_equal": 21,
+    "rows_where_zero_status_flipped_vs_A4": [
+     "M2-02",
+     "M2-04",
+     "M2-09",
+     "M3-08",
+     "M4-03",
+     "M4-06",
+     "M5-02",
+     "M5-10",
+     "M6-09"
+    ]
+   },
+   "harmful_rows_usefulness_1": {
+    "A6": [
+     "M2-09",
+     "M3-04",
+     "M3-08",
+     "M4-01",
+     "M4-02",
+     "M4-03",
+     "M4-04",
+     "M4-05",
+     "M5-03",
+     "M6-05",
+     "M6-09",
+     "M6-10"
+    ],
+    "A4": [
+     "M2-02",
+     "M3-04",
+     "M4-01",
+     "M4-02",
+     "M4-04",
+     "M4-05",
+     "M4-06",
+     "M5-02",
+     "M5-03",
+     "M5-10",
+     "M6-05"
+    ],
+    "4B_base": [
+     "M2-02",
+     "M2-06",
+     "M2-09",
+     "M3-04",
+     "M3-07",
+     "M4-01",
+     "M4-04",
+     "M4-05",
+     "M4-09",
+     "M5-02",
+     "M5-03",
+     "M5-05",
+     "M6-09",
+     "M6-10"
+    ],
+    "v2": [
+     "M2-02",
+     "M4-02",
+     "M4-04",
+     "M4-09",
+     "M5-02",
+     "M6-01",
+     "M6-09"
+    ]
+   },
+   "harmful_rows_A6_only_vs_A4": [
+    "M2-09",
+    "M3-08",
+    "M4-03",
+    "M6-09",
+    "M6-10"
+   ],
+   "harmful_rows_A4_only_vs_A6": [
+    "M2-02",
+    "M4-06",
+    "M5-02",
+    "M5-10"
+   ]
+  },
+  "status": "complete",
+  "preregistered_floors": {
+   "H6_language_100pct": {
+    "value": 1.0,
+    "pass": true
+   },
+   "H6_plain_text_ge_95pct": {
+    "value": "100.0% (60/60)",
+    "pass": true,
+    "source": "summary.json (scripted); judge found no markdown in any row"
+   },
+   "H6_oos_3_of_3": {
+    "value": "3/3",
+    "pass": true
+   },
+   "H6_no_advice_100pct_advice_rows": {
+    "value": 1.0,
+    "pass": true
+   },
+   "H6_spanish_term_ge_90pct": {
+    "scripted_value": "100.0% (46/46)   [in-scope EN/PL answers; glossary term or Spanish acronym]",
+    "scripted_pass": true,
+    "judge_first_use_value": "43.5% (20/46)",
+    "judge_first_use_pass": false,
+    "note": "the scripted metric is vacuous (accepts any glossary term or acronym anywhere); the judged first-use rate is the operative reading"
+   },
+   "H6_answers_citing_ge_90pct": {
+    "citation_accuracy": "100.0% (110/110)   [rows with ≥1 citation: 46/60]",
+    "rows_citing_all_60": "46/60 = 76.7%",
+    "rows_citing_in_scope_57": "46/57 = 80.7%",
+    "pass_on_in_scope_denominator": false,
+    "pass_on_all_rows_denominator": false,
+    "source": "summary.json (scripted); A4 had 52/60 — six more rows now cite nothing, in part because the stripper removed valid citations (M5-09) and in part because the model cited less"
+   },
+   "H6_artefact_rows_le_5": {
+    "value": 23,
+    "pass": false
+   },
+   "H7_correctness_ge_1.2": {
+    "value": 1.233,
+    "pass": true,
+    "uncapped": 1.25
+   },
+   "H7_with_substance_ge_1.4": {
+    "value": 1.474,
+    "pass": true
+   },
+   "H7_fully_correct_ge_35pct": {
+    "value": 0.45,
+    "pass": true
+   },
+   "H9_native_pl_ge_6_of_17": {
+    "value": "11/17",
+    "pass": true
+   },
+   "H8_module6_within_0.2_of_modules_1to5": {
+    "module_6": 1.1,
+    "modules_1_5_mean": 1.26,
+    "gap": 0.16,
+    "pass": true
+   }
+  }
+ }
+}

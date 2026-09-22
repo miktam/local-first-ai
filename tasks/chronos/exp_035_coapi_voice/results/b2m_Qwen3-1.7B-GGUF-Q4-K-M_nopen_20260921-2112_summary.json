@@ -1,0 +1,24 @@
+{
+  "run": "b2m_Qwen3-1.7B-GGUF-Q4-K-M_nopen_20260921-2112",
+  "rows": 60,
+  "language_compliance": " 93.3% (56/60)",
+  "in_scope_answer_rate": "100.0% (57/57)",
+  "out_of_scope_refusal": "  0.0% (0/3)",
+  "handoff_present": " 78.9% (45/57)",
+  "plain_text": "  1.7% (1/60)",
+  "citation_in_context": " 89.6% (69/77)   [rows with ≥1 citation: 35/60]",
+  "numeric_preservation": " 98.1% (151/154)   [in context 130, in gold 5, derived 16, unsupported 3]",
+  "spanish_term_inclusion": " 79.2% (38/48)",
+  "retrieval_hit": " 91.7% (55/60)",
+  "truncated_at_cap": 8,
+  "answer_lang_counts": {
+    "en": 35,
+    "pl": 17,
+    "es": 8
+  },
+  "per_lang_language_compliance": {
+    "en": "100.0% (31/31)",
+    "pl": "100.0% (17/17)",
+    "es": " 66.7% (8/12)"
+  }
+}

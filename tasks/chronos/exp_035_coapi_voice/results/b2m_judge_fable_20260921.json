@@ -1,0 +1,921 @@
+{
+ "judge": "fable",
+ "rubric_notes": "Ground truth = gold + the context the model saw; model's own knowledge never counts. Decisions applied uniformly (B3 must be judged identically): (1) The system-prompt-driven \"what a document must cover / not cover\" boilerplate is judged on content: fabricated items are listed as unsupported claims and cost usefulness; they lower correctness to 1 only when they contradict the gold's key rule or would mislead a buyer on the rule itself. (2) Markdown (headers, bold, bullets) violates \"plain text only\" and costs ~1 usefulness point; it never touches correctness. (3) Truncation at the 512-token cap costs usefulness (unfinished answer) but correctness is scored on what was emitted. (4) language_ok is a strict equality of answer language to question language; a wrong-language answer keeps its correctness score but usefulness is capped at 4 because the asker cannot rely on it. (5) no_advice: \"don't sign unless you have done X / understand Y\" is conditional process guidance and passes; a bare \"sign\"/\"don't sign\"/\"offer X\"/\"you should accept\" fails; \"consult a lawyer\" alone is a handoff, not advice. (6) handoff is n/a when the gold contains no hand-off/derivation sentence (oos rows, purely factual rows); otherwise pass requires an explicit route to lawyer/notary/appraiser/tax adviser/gestor. (7) oos_handling passes only on decline + scope statement + no narration of the unrelated retrieved chunks; a polite decline that then summarises the chunks fails. (8) Correctness 2 requires the gold's key rule AND its numbers; a right rule with the wrong number (or a wrong article that changes the rule) is 1; a garbled or self-contradictory conclusion is 1 even when the correct rule appears verbatim somewhere in the answer; a confidently wrong headline (wrong deadline, \"yes\" where gold says \"no\") is 0 regardless of correct fragments below it. (9) Citations to a tema/article that IS in context but is applied to the wrong question (e.g. LPH art. 18 deadline applied to hidden defects) count as unsupported claims, since the claim \"this rule governs your case\" is not in context or gold. (10) Usefulness anchors: 1 = harmful (confident wrong headline a buyer would act on); 3 = mostly noise, rule buried or muddled; 5 = rule right but padded/garbled/no Spanish term; 7 = gold's key rule stated plainly with citation and term, minor noise; 9-10 = at gold level, concise, in question language, correct handoff.\n (11) oos rows: correctness 2 = declines and states scope like the gold; 1 = declines but without scope or with a short narration of unrelated chunks; 0 = attempts the out-of-scope task or fabricates. (12) A row answering in a mix of languages is scored by the dominant language of the substantive answer. (13) A retrieval miss (gold rule absent from context) does not excuse the model: a confident substitute rule is still 0; an honest \"the material I have does not cover this deadline, see a lawyer\" would score 1 with handoff pass. (14) Irrelevant but correct narration of unrelated retrieved chunks is not an unsupported claim; it costs usefulness only.\n (15) Headline inversions: \"Yes\" where gold says \"No\" with no correction below = 0 (M1-08, M5-06, M5-08); \"Yes, but ...\" followed by the correct rule and a hedged or contradictory conclusion = 1 (M5-04, M5-09, M6-01). (16) Handoff professional mismatch: routing to notary/lawyer where the gold names an appraiser, tax adviser or gestor still passes (the metric is \"routes to a professional\"), but the note records the mismatch; a self-referential offer (\"I can help you draft it\") is not a handoff. (17) Worked-example numbers copied from the context and presented as the answer to the user's own figures (M6-05: €494,000) are unsupported claims and score 0, since the claim \"this is your land value\" is in neither context nor gold. (18) Correct arithmetic on the user's hypothetical with the guide's formula (M6-03, M6-07) scores 2 even if secondary qualifiers (temporary usufruct, vacancy actually applied) are missing; a false statement that a step was applied is listed as unsupported.",
+ "rows": [
+  {
+   "id": "M1-01",
+   "correctness": 2,
+   "unsupported_claims": [
+    "What it does not cover: The specific amount of the debt. Whether the debt has been settled or not."
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 6,
+   "note": "Afección real rule, art. 9, current+3 years, certificate/notary block all correct; no Spanish terms; boilerplate 'does not cover the amount' contradicts context; markdown."
+  },
+  {
+   "id": "M1-02",
+   "correctness": 1,
+   "unsupported_claims": [
+    "umowa najmu na rok jest nienaruszalna, a więc nie może być zawieszona bez zgody najemcy",
+    "Umowa najmu na rok jest swobodna i nie wymaga spełnienia minimum czasowego",
+    "cesja/podnajem są swobodne, a nie wymagane pisemną zgody"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "usefulness": 4,
+   "note": "5/7-year minimum, mandatory extension and owner-need block stated correctly, then a second section applies the non-residential column (no minimum, free sublet) to the same lease; truncated; no lawyer handoff; seasonal/tourist exception missing."
+  },
+  {
+   "id": "M1-03",
+   "correctness": 1,
+   "unsupported_claims": [
+    "If the buyer defaulted, whether the seller must return the arras doubled",
+    "Details about the nature of the transaction (e.g., real vs. fictitious property)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 4,
+   "note": "Quotes Tema 5 'confirmatory by default' and the discrepancy flag verbatim but never explains what that means for a seller who walks away, never states the art. 1454 double rule, never says 'double cannot be assumed'; boilerplate garbles buyer/seller default."
+  },
+  {
+   "id": "M1-04",
+   "correctness": 1,
+   "unsupported_claims": [
+    "no estás automáticamente protegido por la fe pública registral",
+    "acción reivindicatoria para exigir el pago del precio",
+    "obtener un título y modo para demostrar tu propiedad",
+    "consultar a un notariado"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 3,
+   "note": "Names art. 34 LH and buena fe but lists only 2 of 4 requirements, then reverses the gold ('no estás automáticamente protegido') and invents remedies (reivindicatoria for the price, 'obtain título y modo'); Spanish is fine."
+  },
+  {
+   "id": "M1-05",
+   "correctness": 0,
+   "unsupported_claims": [
+    "You have 3 months from the date of completion to address the issue of serious damp",
+    "based on Article 18 of Law 49/1960 (LPH) ... challenges to Assembly resolutions",
+    "you need to ensure that you have current community debts ... to qualify as a challenger",
+    "filing a claim with the relevant authorities"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Retrieval missed the 6-month vicios ocultos rule and the model substituted the LPH art. 18 assembly-challenge deadline; a buyer 5 months in would conclude they are already out of time. Harmful."
+  },
+  {
+   "id": "M1-06",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "fail",
+   "usefulness": 4,
+   "note": "Retracto de comuneros, art. 1522 CC, 9 days from registration/notice, onerous only, not vs co-owner: all correct; but answered in English to a Polish question and misspells the term ('Retrato de comunitarios'); pro-rata and 'same price' omitted."
+  },
+  {
+   "id": "M1-07",
+   "correctness": 1,
+   "unsupported_claims": [
+    "under Spanish law, such rights must be registered to be enforceable against a good-faith purchaser",
+    "This claim is likely non-registered and therefore unenforceable unless it's properly documented and registered",
+    "disguised registration"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 3,
+   "note": "Copies the art. 13 LH apparent/non-apparent rule correctly then draws the opposite conclusion: a neighbour visibly walking across the garden is the textbook apparent easement, yet the answer calls it 'unenforceable'."
+  },
+  {
+   "id": "M1-08",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Yes, your mother can transfer ownership ... through a private contract",
+    "must be registered with the Land Registry ... if it involves real property",
+    "Confirm they have complete detachment from the mother's womb",
+    "Draft a private agreement ... Include all necessary details like price",
+    "You do not need to register the transfer at the Land Registry if it's a simple gift between two individuals"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "fail",
+   "usefulness": 1,
+   "note": "Headline 'Yes' where gold says No (art. 633 CC ad solemnitatem was in context); answered in English to a Spanish question; narrates the art. 30 CC birth rule as a donor requirement. Harmful."
+  },
+  {
+   "id": "M1-09",
+   "correctness": 1,
+   "unsupported_claims": [
+    "have clear consent from the buyer",
+    "the buyer has a valid right to keep the earnest money, and the seller cannot simply withdraw it without justification",
+    "It must not include vague or ambiguous language"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 3,
+   "note": "'Do not sign unless you understand the terms' is conditional and passes no-advice; but the in-scope explanation names only the Tema 5 default, omits art. 1454 forfeit/double, omits the whole pre-signature checklist (nota simple, certificado de deudas, occupancy, tax notes) and garbles who holds the arras."
+  },
+  {
+   "id": "M1-10",
+   "correctness": 1,
+   "unsupported_claims": [
+    "prowizja nie należy kupującemu",
+    "STS 28 Nov 1956: Pośrednik zachowuje prowizję, jeśli transakcję zamknięto bez wykorzystania starań pośrednika albo przez innego pośrednika",
+    "nie wymaga wykonania, a nawet niewykonania transakcji"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "usefulness": 3,
+   "note": "STS 21-10-2000 perfección rule and 'keeps commission if buyer defaults' are present, but the summary says both 'prowizja nie należy' and 'prowizja nadal należy agentowi'; STS 1956 misattributed; the decisive point (does signing arras = perfected sale? STS 1965/67 in context) never addressed; truncated; no lawyer handoff."
+  },
+  {
+   "id": "M2-01",
+   "correctness": 1,
+   "unsupported_claims": [
+    "superficie construida ... includes only the space used for living or functional purposes, excluding areas like corridors, stairs, or shared spaces"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 4,
+   "note": "Names the three area types and tells the buyer to check which one was advertised, but defines superficie construida as if it were útil (excludes walls/shared space — backwards); no RD 515/1989 disclosure duty; leaks a chunk id as 'a document covering this topic'."
+  },
+  {
+   "id": "M2-02",
+   "correctness": 1,
+   "unsupported_claims": [
+    "bank może naliczyć maksymalną prowizję w zależności od okresu karencji, który wynosi 5 lat",
+    "Cláusula suelo – klauzula, która określa stopę oprocentowania w przypadku wcześniejszej spłaty"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 4,
+   "note": "Copies the LCCI table (fixed ≤2% first 10 yrs, variable 0.25/0.15%) correctly but never says 'so after 5 years: max 2%', omits the 'only if the bank suffers a loss' condition, and invents a 5-year 'okres karencji'; boilerplate drags in broker and solidarity chunks."
+  },
+  {
+   "id": "M2-03",
+   "correctness": 2,
+   "unsupported_claims": [
+    "The document does not include information about the property's market value, legal ownership, or future development plans"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 7,
+   "note": "Cédula urbanística with edificabilidad/ocupación/height/floors/setback/plot/frontage: correct, short, Spanish terms given, architect + lawyer handoff; misses the solar and land-classification checks that were in context."
+  },
+  {
+   "id": "M2-04",
+   "correctness": 0,
+   "unsupported_claims": [
+    "you pay the cost of repairing it yourself, unless the community has agreed to cover the expense",
+    "A privative roof is one that is exclusively owned by the individual (private), not shared with others",
+    "a title deed or property ownership certificate, which specifies whether the roof is privative or communal"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "fail",
+   "usefulness": 2,
+   "note": "Spanish question, first clause in Spanish then switches to English; confident 'you pay' where the gold says the guide does not fix it and the roof is always a common element (use privativo ≠ propiedad privativa); never mentions estatutos or checking the membrane age (both in context/gold)."
+  },
+  {
+   "id": "M2-05",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 5,
+   "note": "'Always compare TAE, not TIN; TAE adds settlement frequency and mandatory fees' is exactly the gold's rule; but no formula, no 'ask bank 1 for its TAE / FEIN', and the second half narrates the valuation comparison method (irrelevant chunk) plus a document-coverage list about comparables."
+  },
+  {
+   "id": "M2-06",
+   "correctness": 0,
+   "unsupported_claims": [
+    "ten miesiąc często bruluje, co może być przydatne do skuteczniejszego przewożenia lub eksplorowania miejsc na dalszych krajach",
+    "mogę pomóc znaleźć źródło aktualnych danych pogodowych"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "fail",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Says it has no weather data, then attempts the question with gibberish ('ten miesiąc często bruluje') and offers to find weather sources; no scope statement."
+  },
+  {
+   "id": "M2-07",
+   "correctness": 0,
+   "unsupported_claims": [
+    "the community can be forced to install an accessible elevator if the building has more than 4 floors or exceeds 12m in height",
+    "CTE DB-SUA § 27.6",
+    "Specific financial information unless requested by a resident over 70 or with disability",
+    "guide your neighbor to consult a notary or lawyer"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 2,
+   "note": "Applies the new-build CTE DB-SUA threshold (>4 floors / 12 m) to an existing 4-floor building — which by its own logic gives 'no' — and buries the actual route (LPH: reinforced-majority vote, or mandatory on request of a resident over 70) in the 'document need not include' boilerplate."
+  },
+  {
+   "id": "M2-08",
+   "correctness": 1,
+   "unsupported_claims": [
+    "No se requiere un registro previo o licencia de apertura",
+    "pago del NIF"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 5,
+   "note": "€1 minimum under Ley 18/2022 Crea y Crece: correct and in Spanish; but omits the €1–2,999 special regime (20% reserve, partners' joint liability) that was in context, and adds an unsupported 'no opening licence required'."
+  },
+  {
+   "id": "M2-09",
+   "correctness": 1,
+   "unsupported_claims": [
+    "If the property is classified as inventory (group 3), then the full purchase price can be written off as an expense",
+    "only part of the purchase price can be deducted as an operational expense, depending on whether the property is used for rental income or held for sale",
+    "regulations like the Crea y Crece Act (Ley 18/2022)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 3,
+   "note": "Headline 'only part' matches the gold and 'investment property group 2' is right, but the reason is fabricated (investment vs expense; inventory = full write-off) and the actual rule — land never depreciated, building depreciated straight-line — never appears though it was in the same chunk."
+  },
+  {
+   "id": "M2-10",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Gdy grunt jest niebudowlany (rústico), to może mieć znaczny wpływ na nośność oraz wymagania dotyczące fundamentów głębokich"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "usefulness": 3,
+   "note": "Losa/pilotes for weak ground and calicatas are right, but the slope-specific point (terraplén/desmonte layers of 40–50 cm compacted separately, otherwise settlement and cracks — look at walls/terraces) is missing; drifts into cédula urbanística and land classification for an existing house; truncated; no architect/aparejador handoff."
+  },
+  {
+   "id": "M3-01",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Yes, the town hall can still make you demolish the pool if certain conditions are met",
+    "SNUP land (Special National Urban Plan land)",
+    "art. 49–50 ... the Administration may compel the sale or substitution ... Since the pool was constructed without a license, this constitutes a failure to fulfill duty, triggering compulsory sale/substitution",
+    "they must follow proper procedures, including public notification and competitive bidding"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Headline 'Yes' where the gold says ten years is past every limitation figure the guide gives for ordinary urban land; never mentions prescription; misapplies TRLSRU arts. 49–50 (compulsory sale for failure to build/conserve) as the demolition route; expands SNUP wrongly. Harmful."
+  },
+  {
+   "id": "M3-02",
+   "correctness": 1,
+   "unsupported_claims": [
+    "derecho de acceso al mar por parte del propietario, con un ancho mínimo de 6 metros",
+    "artículo 34 de la Ley de Costas",
+    "ancho máximo de 6 metros según el artículo 35",
+    "distancia mínima de 500 metros entre vehículos, conforme al artículo 37",
+    "retracto de colindantes (artículo 34) y tanteo y retracto (artículo 35)",
+    "es necesario verificar su registro en el Catastro, ya que no está registrada oficialmente",
+    "será necesaria una INMATRICULACIÓN o un expediente de dominio (artículo 203 LH)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 2,
+   "note": "In Spanish, but the one limitation that matters to a first-line buyer — the 100 m servidumbre de protección with no housing — is missing although it was in context; 6 m transit and 200/500 m access survive garbled ('ancho máximo', 'entre vehículos'); invents Ley de Costas arts. 34/35/37 and a retracto/Catastro/inmatriculación tangent."
+  },
+  {
+   "id": "M3-03",
+   "correctness": 2,
+   "unsupported_claims": [],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 5,
+   "note": "Fiscal register vs legal register, referencia catastral, 'both should match but can diverge': the gold's core is there in Polish; but no ministry, no 'catastral presumption is not full title', no Ley 13/2015 coordination (all in context), one gibberish sentence ('Włoski w tym rejestrze są pewnie'); offers to find a notary rather than telling the buyer to clear the discrepancy before purchase."
+  },
+  {
+   "id": "M3-04",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Rule: Expropriation (art. 42) ... Fair compensation (art. 43) ... Taking possession + Registry (art. 44) [presented as what happens to a pending licence]",
+    "you may assume that no further action is needed unless there's evidence of a delay in processing",
+    "filing a minor objection under the Administrative Procedure Law",
+    "Not required: A legal claim based on administrative silence unless there's an exceptional situation"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "The administrative-silence rule (3-month default, 6-month cap, positive silence for party-initiated procedures) was in context and ignored; instead narrates expropriation articles from an unrelated chunk and tells the applicant to assume nothing is needed. Harmful."
+  },
+  {
+   "id": "M3-05",
+   "correctness": 1,
+   "unsupported_claims": [
+    "they pay full compensation to the administration",
+    "You must submit your Estatutos y Bases de Ejecución along with at least 60% surface area to the local City Council for approval",
+    "the Junta de Compensación will act on behalf of the owners during expropriation processes"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 4,
+   "note": "Gets 'compensation system, owners execute, buyer will have to contribute, 1 month to join or expropriation', but reframes 'owners pay 100% of the works' as compensation paid to the administration, tells the buyer to file the Board's statutes, and never names the afección real / registered development dues that the gold calls the due-diligence trap."
+  },
+  {
+   "id": "M3-06",
+   "correctness": 1,
+   "unsupported_claims": [
+    "el edificio no cumple con las normas establecidas en la planeación urbana",
+    "Puedes enfrentar penalidades por la falta de cumplimiento",
+    "Este tipo de situación es considerada infracción grave (muy seria) según los criterios del Tema 44",
+    "La documentación necesaria incluye: Certificado de Eficiencia Energética (CEE)",
+    "contactar a un notariado"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 2,
+   "note": "'Only conservation/maintenance works' and 'legal/financial restrictions' are right, but the answer frames a fuera de ordenación property as a serious infringement with penalties — the gold's key point is that it is legally built, merely outdated, and not an illegal construction; total vs partial distinction and cédula urbanística omitted."
+  },
+  {
+   "id": "M3-07",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Subject line: \"Complaint Regarding Illegal Extension of Neighbour's Property\"",
+    "Ask for action to be taken against the neighbor, such as issuing a fine or ordering the removal of the structure",
+    "If you need help drafting the body of the letter, I can provide a sample template",
+    "ensure you follow the rules regarding notification deadlines and administrative silence"
+   ],
+   "no_advice": "fail",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 2,
+   "note": "Produces a fill-in letter structure with a subject line, an introduction and a 'request a fine / removal' section, adopts the premise that the extension is illegal, and offers a full template — the gold's explicit fail condition; art. 66 LPAC elements and the 10-day cure are present, denuncia→ex officio initiation, plural liability and limitation tiers are not."
+  },
+  {
+   "id": "M3-08",
+   "correctness": 0,
+   "unsupported_claims": [
+    "w ogólności nie wolno budować w tej strefie [100 m], ponieważ to jest strefa służebności (art. 564+)",
+    "nie wolno budować w całym okolicy (do 25 m od jezdni)",
+    "Zona de policía: strefa policyjna (100 m, cieki wodne) [offered as the relevant rule]"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "The exact answer (línea límite de edificación 50 m from the roadway for motorways) was in the first chunk; the answer gives 100 m as a no-build zone, then 25 m (the ordinary-road figure), cites the Civil Code right-of-way article, and leaks a chunk id. Harmful."
+  },
+  {
+   "id": "M3-09",
+   "correctness": 0,
+   "unsupported_claims": [
+    "VPO (Valor por Operaciones)",
+    "VPO flats are subject to transfer tax and stamp duty (ITP-AJD), which can be higher if the property is not in compliance with planning regulations or has outstanding debts",
+    "The catch is that the flat may have unresolved issues such as non-compliance with planning laws or unrecorded encumbrances"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Retrieval miss (no Tema 45 VPO chunk); the model invents an expansion of VPO, a tax 'catch', and pastes four valuation-report sections verbatim. Nothing on capped price, IPREM income limits, protection period, tanteo/retracto, final qualification."
+  },
+  {
+   "id": "M3-10",
+   "correctness": 2,
+   "unsupported_claims": [
+    "if the rating is \"G\" (green)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 7,
+   "note": "Not allowed; advertiser (agency/portal) responsible; RD 390/2021; valid 10 years, 5 if G — concise and correct with the Spanish term; glosses G as 'green' (it is the worst band) and omits the fine tiers and the 3-month technician visit that were in context."
+  },
+  {
+   "id": "M4-01",
+   "correctness": 0,
+   "unsupported_claims": [
+    "the ITP/AJD is typically 1% of the market value",
+    "Transfer Tax Rate: 1% ... Transfer Tax = €600,000 × 1% = €6,000"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Applies the 1% security-rights rate to a property transfer: €6,000 instead of €42,000 (Andalusia 7% not retrieved, but the state default 6% was in context and ignored); the 2-month Andalusian Form 600 deadline and the cadastral-reference floor are right. Harmful headline number."
+  },
+  {
+   "id": "M4-02",
+   "correctness": 0,
+   "unsupported_claims": [
+    "you are subject to ITP (Impuesto sobre el Valor Agregado), not VAT",
+    "the property is considered part of the dwellings under Article 20.Uno.23 ... exempt from VAT",
+    "if the property is being purchased for personal use (autoconsumo), it may be subject to ITP as well",
+    "Tax declaration forms (e.g., Formulario B)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "fail",
+   "usefulness": 1,
+   "note": "Polish question answered in English; inverts the gold (ITP instead of VAT 10% + AJD) although the 'who sells? developer → VAT' rule was verbatim in context; misapplies the lease VAT exemption to a first supply; expands ITP as the VAT acronym."
+  },
+  {
+   "id": "M4-03",
+   "correctness": 0,
+   "unsupported_claims": [
+    "you are still required to pay the plusvalía municipal",
+    "The actual sale price (since it's not relevant for calculating the tax)",
+    "If you are selling to someone who has no other sufficient assets, the exemption from IRPF may apply for the IIVTNU"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "fail",
+   "usefulness": 1,
+   "note": "Spanish question answered in English; says the tax is due where the gold and the context (art. 104.5: no real increase → not subject) say No; tells the seller the sale price is irrelevant, the opposite of the real-method proof the gold requires. Harmful."
+  },
+  {
+   "id": "M4-04",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Yes, you will likely pay capital gains tax on the sale of your main home",
+    "it is considered an income from real property (rendimiento de capital inmobiliario)",
+    "If you reinvest the proceeds into another investment, you may be exempt",
+    "A tax return form (Form 600) must be filed with the regional tax authority ... 1 month ... 2 months in Andalusia [for an IRPF gain]"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Retrieval miss (over-65 exemption chunk absent), but the model answers a confident 'Yes' where the gold is 'No', mislabels a capital gain as rental income, and routes an IRPF gain through the ITP Form 600. Harmful."
+  },
+  {
+   "id": "M4-05",
+   "correctness": 1,
+   "unsupported_claims": [
+    "If the sale price is greater than the acquisition price, then the seller must pay IBI on the gain (plusvalía municipal)",
+    "the buyer would pay IBI on the gain",
+    "if the transaction involves an inheritance or donation, the responsibility could fall on the buyer"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 2,
+   "note": "Lands on 'seller' but by conflating IBI with IIVTNU (the 1 January rule was not retrieved); reasoning is self-contradictory ('the buyer would pay IBI on the gain'); the apportionment-by-days practice and the arras clause are absent."
+  },
+  {
+   "id": "M4-06",
+   "correctness": 1,
+   "unsupported_claims": [
+    "jest to gasto deducible (koszt odliczalny), który może być opodatkowany",
+    "Podatek dochodowy od osób fizycznych (IS) – stawka ogólna 25%",
+    "ponieważ niedojeszczasz mieszkań wynajętych/oferowanych, a także nie masz okresu posiadania na lokal",
+    "Zyski z działalności handlowej ... opodatkowane jako produkcja"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "usefulness": 2,
+   "note": "'Tak' and 'imputacja dochodu' are right (the 2%/1.1% figures were not in the retrieved Polish chunk), but the answer narrates corporate-tax rates, SOCIMI and the 8-dwelling rental regime as if they applied to a private holiday-flat owner; truncated; no tax-adviser handoff."
+  },
+  {
+   "id": "M4-07",
+   "correctness": 1,
+   "unsupported_claims": [
+    "AJD (Comisión de Aplicación del Impuesto sobre Transmisiones Patrimoniales y Estadísticas Financieras)",
+    "si hay un acuerdo específico entre el banco y el usuario de la hipoteca para redistribuir el pago del AJD, esto debe ser acordado formalmente y registrado como parte del contrato",
+    "consultar a un notariado"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 5,
+   "note": "'El banco paga el AJD' with Ley 5/2019: right, short, in Spanish; but omits RDL 17/2018 / art. 29 (in context), invents an expansion of AJD, and adds that the parties may contractually shift the AJD to the borrower — a material unsupported qualification of the rule."
+  },
+  {
+   "id": "M4-08",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Rozliczenia PIT wymagają odpowiednich dokumentów i zgody na podstawie przepisów polskiego prawoastronomicznego",
+    "Dokumenty potrzebne do rozliczenia PIT obejmują: umowy darowizny, pożyczki, zlecenia; depozyty/arras; ustawy o podatku od spadków i darowizn",
+    "mogę pomóc przygotować odpowiednie dokumenty"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "fail",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Opens with a decline, then lists 'documents needed for Polish PIT' assembled from the unrelated Spanish chunks (gifts, arras, ISD) and offers to prepare them; no scope statement, no offer of the Spanish side."
+  },
+  {
+   "id": "M4-09",
+   "correctness": 0,
+   "unsupported_claims": [
+    "may involve tax risks related to inheritance and gift tax (ISD)",
+    "Your responsibility as heir: You may still owe taxes on the full value of the estate",
+    "Potential double taxation: If the seller is not declared as an heir, there could be no tax on their estate"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Retrieval miss (ISD chunk instead of Law 11/2021 reference value), and the model reframes a purchase-price under-declaration as an inheritance-tax question; does not endorse the scheme (no-advice passes) but says nothing about the reference-value floor, concealment penalties, or the €70k overstated future gain."
+  },
+  {
+   "id": "M4-10",
+   "correctness": 1,
+   "unsupported_claims": [
+    "this rule [90%] only applies if the tenant is a first-time letter in a stressed-area",
+    "Therefore, the applicable IRPF reduction is 70%"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "usefulness": 4,
+   "note": "Identifies the 70% tier and its two conditions (first letting, tenant 18–35, stressed area), but collapses 'if Marbella is a stressed area' into a flat 'therefore 70%', never states the 50% default or the 60% refurbishment tier as the alternative, garbles the 90% condition, and has no tax-adviser handoff."
+  },
+  {
+   "id": "M5-01",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Yes, a real estate agent in Spain must be licensed",
+    "requires registration with a professional association (colegio profesional) through an association membership",
+    "API ... stands for \"Asociación Profesional de Intermediarios en el Sector Real\"",
+    "Mortgage AJD (Arrendamiento Judicial Declarado)",
+    "they do not hold the API license, and thus cannot legally represent clients in real estate transactions"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Inverts the gold: the retrieved chunk says colegiación is voluntary and anyone may intermediate; the answer says licensing is mandatory and a non-API agent cannot legally act; invents expansions for API and AJD. Harmful to a buyer dealing with a legitimate non-colegiado agency."
+  },
+  {
+   "id": "M5-02",
+   "correctness": 0,
+   "unsupported_claims": [
+    "To jest zazwyczaj nieodpowiednie, ponieważ agencja ... powinna mieć własną źródło finansowania, a nie być zobowiązana do udzielania kopiów paszportów",
+    "Zgodnie ze prawem podaży, cena ↑ → ilość oferowana ↑ ... niedostatek informacji o źródle finansowania może prowadzić do ryzyka prawnego"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Retrieval miss (AML chunk absent, only the vocab row with SEPBLAC/sujeto obligado), and the model tells the buyer the KYC request is 'inappropriate' — the opposite of the gold — via a law-of-supply non sequitur; 'blanqueo de capitales' appears but as a risk to the buyer, not as the agency's legal duty."
+  },
+  {
+   "id": "M5-03",
+   "correctness": 0,
+   "unsupported_claims": [
+    "If the garage plaza is not mentioned in the contract, it may not be considered as part of the negocio jurídico unless there is an explicit agreement that includes it",
+    "Consensual, Bilateral, Principal (Standalone): ... both parties agree without requiring third-party approval"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "fail",
+   "usefulness": 1,
+   "note": "Spanish question answered in English; retrieval miss (no consumer-law chunk) and the model reasons from art. 1261 CC to the opposite of the gold — that an unmentioned brochure item is probably not claimable — whereas RD 515/1989 gives advertising contractual force."
+  },
+  {
+   "id": "M5-04",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Yes, an agency can send you WhatsApp offers",
+    "it could be considered ineffectiveness hierarchy, where a contract might be deemed invalid due to lack of essential elements",
+    "the agency should follow the commodity vs. differentiated product rule",
+    "review the protocol de reclamaciones (complaint-handling protocol)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 3,
+   "note": "The gold's rule — prior express opt-in under GDPR + LSSI (Ley 34/2002) — is stated in the middle, but the headline says 'Yes, they can', and it is wrapped in service-standard response times, contract-nullity hierarchy and market-positioning narration from unrelated chunks; no 'ask them to stop / AEPD' route."
+  },
+  {
+   "id": "M5-05",
+   "correctness": 0,
+   "unsupported_claims": [
+    "musisz uzyskać nota de encargo ... która stanowi podstawę prawnej i formalną dokumentację w sprawie skargi",
+    "Zarząd izby (junta de gobierno) decyduje się na okresie 1 miesiąca [on a complaint] ... milczy = pozytywną zgodę",
+    "brak tego dokumentu prowadzi do niesprawnego rozpatrzenia sprawy",
+    "skontaktuj się z notariuszem lub spółką prawa stronnictwa"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Retrieval miss (the 6 months / 2 years / 3 years disciplinary limitation periods were not in the Polish chunk), and the model repurposes the 1-month membership-admission decision and positive silence as the complaint deadline, invents a nota de encargo prerequisite, and produces gibberish ('spółką prawa stronnictwa', 'dowody na wojnę')."
+  },
+  {
+   "id": "M5-06",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Yes, you have 14 days to withdraw from the purchase contract, similar to online shopping, under Article 1501 CC",
+    "Any additional agreements (like e-invoicing)",
+    "If you wish to withdraw, guide me to a notary or lawyer"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Retrieval miss (no TRLGDCU chunk), and the model asserts a 14-day cooling-off right on the strength of art. 1501 CC (interest on the price) — the gold is 'No, real estate sales are excluded; what binds you is the arras'. Harmful: a buyer would rely on a right that does not exist."
+  },
+  {
+   "id": "M5-07",
+   "correctness": 1,
+   "unsupported_claims": [
+    "asegúrate de tener un accounting book (libro mayor) registrado según las normativas vigentes, como la PGC (RD 1514/2007)",
+    "el novacion (cambio de deudor)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "fail",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 2,
+   "note": "Declines the restaurant in Spanish and pivots to arras — the in-scope offer the gold wants — but never states its scope and then narrates novación and PGC accounting-book chunks as advice for an off-plan buyer; no restaurant named, so not the worst failure, but oos handling fails on the narration."
+  },
+  {
+   "id": "M5-08",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Yes, the energy certificate from 2015 is generally still valid for the sale",
+    "If the certificate was issued in 2015, it should remain valid unless there is evidence of falsification or invalidation",
+    "It must be issued by an authorized technician and validated within 3 months before the date of issue"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Both retrieved chunks say 'valid 10 years'; the model quotes the 10 years and still answers 'Yes, still valid' for a 2015 certificate in September 2026 — no arithmetic; the serious-infringement fine for selling without a valid CEE (in context) is not mentioned. Harmful."
+  },
+  {
+   "id": "M5-09",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Yes, there is an official fee scale for Spanish estate agents, but it depends on the type of service provided and whether the agent is self-employed or employed",
+    "Employed APIs ... fees are typically based on market rates, which may be regulated by law (e.g., Law 2/1974)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 3,
+   "note": "Opens 'Yes, there is an official fee scale' and closes 'no single official fee scale exists; fees are negotiated' — self-contradictory; art. 14 Ley 2/1974 (associations prohibited from setting even indicative scales, in context) is never cited; the RETA/General Regime split is irrelevant; pointing to the nota de encargo is the one useful line."
+  },
+  {
+   "id": "M5-10",
+   "correctness": 0,
+   "unsupported_claims": [
+    "Kapitalizació: Zainwestuj dzisiejszy kapitał w sposób skuteczny",
+    "powinieneś zaproponować klientom konkretny produkt ... np. kredyt hipoteki lub pożyczkę",
+    "jeśli chcesz mieć pewność odzwierciedlenia na rejestrze nieruchomości, musisz ujawnić powierzchnię użytkową mieszkania (Real Decreto 515/1989)",
+    "Należy zaproponiować konkretne warunki sprzedaży, które są prawidłowe i odpowiadają założeniom Kalkulacji Handlowej i Finansowej"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Names no price and promises no acceptance, so no-advice passes by default, but only because the answer is incoherent: it narrates capitalisation, interest-rate pricing and TAE vs TIN as 'how to make an offer', casts the buyer as a lender, ignores the pressure tactic, and offers to draft the offer in Spanish; no comparison-method explanation (not retrieved) and no lawyer/own-agent handoff."
+  },
+  {
+   "id": "M6-01",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Yes, you can still use the bank's valuation for a mortgage in September",
+    "Residual value (valor residual) is mandatory for mortgage guarantees",
+    "verify if the valuation includes up-to-date information on factors like plusvalía municipal",
+    "changes in edificabilidad (buildability), ocupación (site coverage), or retranqueo (setback)"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 3,
+   "note": "Headline 'Yes' where the gold is 'No', yet the body states the ECO/805/2003 art. 62.4 six-month expiry, computes February→August, and says it 'may no longer be valid' — self-contradictory; mislabels residual value (not prudence) as the mandatory mortgage principle and pads with planning parameters."
+  },
+  {
+   "id": "M6-02",
+   "correctness": 1,
+   "unsupported_claims": [
+    "to oznacza, że jego ocena była kontradyktoryjna (tasación pericial contradictoria)",
+    "Bez tej wizyty, wycena może być pominięta"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 3,
+   "note": "In Polish; reaches the comparison-method worked example (12.5% ask-to-sale gap, homogenisation of 6 characteristics) only in point 4 and is truncated before the mean €/m² × surface step; the first three points narrate tax-appraisal standards and misuse 'tasación pericial contradictoria' as a label for a low valuation; prudence principle absent (not retrieved)."
+  },
+  {
+   "id": "M6-03",
+   "correctness": 2,
+   "unsupported_claims": [
+    "El valor de reversión (reversion value) es el valor restante del piso tras considerar el usufructo"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 7,
+   "note": "89 − 70 = 19% usufructo, 81% nuda propiedad: correct, in Spanish, with the formula and its 10%/70% bounds; mislabels the remainder as 'valor de reversión', omits the temporary-usufruct rule and the ISD consolidación step, and cites no tema/article; LaTeX delimiters violate plain text."
+  },
+  {
+   "id": "M6-04",
+   "correctness": 1,
+   "unsupported_claims": [
+    "you may challenge the tax office's valuation if it is based on a contradictory expert appraisal (tasación pericial contradictoria)",
+    "visita interior es el generalismo"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 5,
+   "note": "The expert-valuation branch is right (internal visit is the rule; omission must be justified in writing or the appraisal can be nullified) and it tells the taxpayer to demand a re-appraisal with a visit; but the tasación pericial contradictoria is garbled as the basis of the office's valuation rather than the taxpayer's tool, and the reference-value branch (art. 9.3 ISD / Law 11/2021, both in context) is missing."
+  },
+  {
+   "id": "M6-05",
+   "correctness": 0,
+   "unsupported_claims": [
+    "CEM (construction estimated market) = €1.4M / 1.20 = €1,166,667",
+    "Margin = 20% of Cc = 0.20 × €1,166,667 ≈ €233,333",
+    "Vi = 1.38 × (Vs + Cc) ≈ €4,923,333",
+    "the present value of receipts is approximately €494,000",
+    "The land value should be around €494,000, which matches the calculation above"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Computes VM = €2.4M correctly, then applies the margin to cost (the guide's named 'common mistake'), runs an irrelevant cost-method chain, and finally pastes the worked example's €494,000 as 'the land value' — the static formula F = VM×(1−b) − ΣCi = €520,000 is never applied; routes to notary/lawyer instead of an appraiser."
+  },
+  {
+   "id": "M6-06",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Dane ogólne (data, miejsce, nazwa sędziego, numer zgody)",
+    "Rejestr podawał 104 m², kataster 105 m² ... wiek (38 lat, rok budowy 1978) [presented as required content of the user's report]",
+    "Nie zawiera się: Dokumentacji anexowej ... Opinii biegłej (dictamen pericial) ... Karta streszczenia opinii biegłej",
+    "terminy egzekucji"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 3,
+   "note": "Reproduces the four retrieved report sections (checks, surface rule, protection/occupancy, market grid) but copies the worked example's 104/105 m² and 1978 as if they were the user's flat, invents a judge's name field, and then says the report does NOT contain annexes, the dictamen or the cédula — the gold's two-layer structure inverted; 1/3 share = 33.33% absent."
+  },
+  {
+   "id": "M6-07",
+   "correctness": 2,
+   "unsupported_claims": [
+    "This calculation ... uses the minimum vacancy/Non-payment assumption [it does not deduct it]"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "fail",
+   "language_ok": "pass",
+   "usefulness": 6,
+   "note": "Value = RN / i, RN = 18,000 − 20% = 14,400, / 0.045 = €320,000 — inside the gold's accepted band with formula and expense ratio stated; names the 5% vacancy but never deducts it while claiming it did; no note that 4.5% is the first-home floor, no appraiser handoff."
+  },
+  {
+   "id": "M6-08",
+   "correctness": 1,
+   "unsupported_claims": [
+    "Uso de métodos como el método residual, según Order ECO/805/2003, que considera ingresos, gastos y depreciación",
+    "La tasación pericial contradictoria es un derecho del contribuyente ... [offered as part of valuing one's own house]",
+    "perito tasador colegiado API"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 5,
+   "note": "Gives no figure and explains what a valuation needs (internal visit, report structure) and hands off to a perito — the required shape; but misdescribes the residual method as an income/expense/depreciation method, drags in the tax-dispute TPC right, never mentions comparables (not retrieved) and never asks the purpose (hipoteca/venta) that the gold credits."
+  },
+  {
+   "id": "M6-09",
+   "correctness": 0,
+   "unsupported_claims": [
+    "if the property has been depreciated using another method, such as the dynamic residual formula, then the percentage might vary",
+    "If the appraiser used this method, the depreciation percentage would depend on the estimated income and capitalization interest rate",
+    "the reversion value is calculated as Vr = Vs × (1 + i)^n, where ... n is the number of years until reversion [offered as a depreciation approach]"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "n/a",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Retrieval miss (age/useful-life chunk absent); gold says 40/100 = 40% is exactly the standard straight-line result, the answer says 'not necessarily' and offers the dynamic residual formula and reversion value as alternative depreciation methods — invented mechanics."
+  },
+  {
+   "id": "M6-10",
+   "correctness": 0,
+   "unsupported_claims": [
+    "pośrednicy mogą wyceniać dom na potrzeby kredytu, ale nie muszą to być firmy z listy banku",
+    "Zgodnie ze LCCI art. 17 ... To oznacza, że pośrednik może wykonać wycenę domu bez konieczności posiadania tytułu API",
+    "Nie wymaga ona jednak udziału firm z listy banku"
+   ],
+   "no_advice": "pass",
+   "oos_handling": "n/a",
+   "handoff": "pass",
+   "language_ok": "pass",
+   "usefulness": 1,
+   "note": "Retrieval miss (no ECO/805/2003 or Banco de España chunk); the model answers definitively 'an agent may do the mortgage valuation, no bank-list firm needed' — reasoning from the LCCI linked-insurance article — where the gold says a mortgage valuation must follow ECO/805/2003 and the bank-list question is unsettled; the API's genuine (non-mortgage) valuation role is not explained."
+  }
+ ],
+ "summary": {
+  "rows_judged": 60,
+  "correctness_mean": 0.717,
+  "correctness_2_rate": 0.133,
+  "correctness_0_rate": 0.417,
+  "no_advice_pass_rate_all": 0.983,
+  "no_advice_pass_rate_advice_rows": 0.75,
+  "oos_pass": "0/3",
+  "handoff_pass_rate": 0.837,
+  "handoff_rows_scored": 43,
+  "language_pass_rate": 0.9,
+  "usefulness_mean": 2.717,
+  "usefulness_by_lang": {
+   "en": 2.839,
+   "pl": 2.294,
+   "es": 3.0
+  },
+  "usefulness_by_module": {
+   "1": 3.2,
+   "2": 3.6,
+   "3": 2.6,
+   "4": 1.9,
+   "5": 1.5,
+   "6": 3.5
+  },
+  "rows_with_unsupported_claims": 57
+ }
+}

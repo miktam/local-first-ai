@@ -1,0 +1,71 @@
+{
+  "version": "v2",
+  "built": "2026-09-22T07:09:00",
+  "base_model": "Qwen/Qwen3-4B",
+  "adapter": {
+    "rank": 16,
+    "alpha": 32,
+    "scale": 2.0,
+    "dropout": 0.05,
+    "lr": 0.0002,
+    "epochs": 2,
+    "batch": 2,
+    "max_seq_length": 2560,
+    "iters": 364,
+    "mask_prompt": true,
+    "seed": 35
+  },
+  "data": {
+    "train": "/Users/miktam02/REPOS/casasol/coapi_voice/models/v2/data/train.jsonl",
+    "train_rows": 363,
+    "train_sha256": "3c854250bd2a514941967236381fc0cec1319503076674638f244fd7b4cf8598",
+    "valid": "/Users/miktam02/REPOS/casasol/coapi_voice/models/v2/data/valid.jsonl",
+    "valid_rows": 14,
+    "valid_sha256": "b3658d7dccdee388075c91ad9ea5d4893a2bfb9d8f7b332fc39cd097063ff8f8",
+    "split_manifest": "coapi_voice/data/eval/split_manifest_v1.json"
+  },
+  "artefacts": {
+    "coapi-voice-v2-Q4_K_M.gguf": "924df1f2fee22dbb2640f98abd53e46c1bd2e7952534845399c9d6d1943792b2",
+    "coapi-voice-v2-Q8_0.gguf": "7eaecfa97e03b4aefc4715c6b0d70f5cae5f6e0f7c5eb70dba6dcfd0948e8a7e"
+  },
+  "sizes_bytes": {
+    "coapi-voice-v2-Q4_K_M.gguf": 2497280736,
+    "coapi-voice-v2-Q8_0.gguf": 4280405216
+  },
+  "sampling_shipped": {
+    "temperature": 0.7,
+    "top_k": 20,
+    "top_p": 0.8,
+    "min_p": 0.05,
+    "repeat_penalty": 1.05,
+    "presence_penalty": 0.0,
+    "repeat_last_n": 256,
+    "num_predict": 512,
+    "thinking": false
+  },
+  "ollama_tag": "coapi-voice:v2",
+  "environment": {
+    "recorded": "2026-09-21T15:15:46",
+    "host": "miktam02 (Mac Mini M4 Pro, 64 GB)",
+    "os": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+    "python": "3.14.7",
+    "mlx": "0.32.2",
+    "mlx_lm": "0.31.3",
+    "gguf": "0.19.0",
+    "llama_cpp_brew": "llama.cpp 0.4.1",
+    "llama_cpp_repo_commit": "6f41ac59e0a49a00483a316a22ada6b04edd2950",
+    "ollama": "0.33.0",
+    "base_model_hf": "Qwen/Qwen3-1.7B (safetensors, for MLX LoRA)",
+    "base_model_gguf_reference": "hf.co/unsloth/Qwen3-1.7B-GGUF:Q4_K_M (Ollama id 75cb860e23c2) \u2014 the phone's file; B1/B2m measured on it",
+    "lora_plan": {
+      "r": 16,
+      "alpha": 32,
+      "dropout": 0.05,
+      "lr": 0.0002,
+      "epochs": 2,
+      "checkpoint_every": 50,
+      "mask_prompt": true
+    }
+  },
+  "git": "9f34dfb392a0cead045c047ebc599ddec226683b"
+}

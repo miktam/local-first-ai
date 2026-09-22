@@ -1,0 +1,24 @@
+{
+  "run": "glue_gemma-3-4b-it-GGUF-Q4-K-M_G3_20260922-1758",
+  "rows": 60,
+  "language_compliance": "100.0% (60/60)",
+  "in_scope_answer_rate": "100.0% (57/57)",
+  "out_of_scope_refusal": "100.0% (3/3)",
+  "handoff_present": " 98.2% (56/57)",
+  "plain_text": "100.0% (60/60)",
+  "citation_in_context": " 98.7% (154/156)   [rows with ≥1 citation: 49/60]",
+  "numeric_preservation": "100.0% (199/199)   [in context 191, in gold 4, derived 4, unsupported 0]",
+  "spanish_term_inclusion": "100.0% (46/46)   [in-scope EN/PL answers; glossary term or Spanish acronym]",
+  "retrieval_hit": " 93.3% (56/60)",
+  "truncated_at_cap": 1,
+  "answer_lang_counts": {
+    "en": 31,
+    "pl": 17,
+    "es": 12
+  },
+  "per_lang_language_compliance": {
+    "en": "100.0% (31/31)",
+    "pl": "100.0% (17/17)",
+    "es": "100.0% (12/12)"
+  }
+}

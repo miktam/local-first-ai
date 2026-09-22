@@ -1,0 +1,35 @@
+{
+  "eval_set": "coapi_voice/data/eval/coapi_eval_v1.jsonl",
+  "sha256": "efc16ab220cb38918262cc854f79c6b65033f8402cba8465a81fc1aff9e2fe1c",
+  "rows": 60,
+  "sealed_at": "2026-09-21",
+  "sealed_by": "Andrei ('Assume all is good', chat, 2026-09-21) after Fable review; provenance eval_v1_draft.jsonl → review/M*.review.json → eval_v1_reviewed.jsonl",
+  "guide_hashes": "see coapi_voice/RIGHTS.md (sha256 of casasol.ai/guide/src/{en,pl})",
+  "training_split_by_tema": {
+    "train": "Módulos 1–4 all temas + Módulo 5 Temas 39, 40, 41",
+    "validation": "Módulo 5 Temas 42, 43",
+    "test_sealed": "Módulo 6 (all temas incl. summary) — burned after one evaluation"
+  },
+  "eval_rows_by_module": {
+    "1": 10,
+    "2": 10,
+    "3": 10,
+    "4": 10,
+    "5": 10,
+    "6": 10
+  },
+  "eval_rows_by_lang": {
+    "en": 31,
+    "pl": 17,
+    "es": 12
+  },
+  "eval_rows_by_type": {
+    "simple": 16,
+    "numeric": 23,
+    "multi": 14,
+    "advice": 4,
+    "oos": 3
+  },
+  "note": "The 60-row eval spans all módulos; rows on Módulos 1–5 measure in-distribution temas, Módulo 6 rows are the out-of-distribution test. Claim rule (§8): improvement claimed only against this file, only once per cell, only if this manifest predates the run.",
+  "open_items": "16 guide conflicts + 43 guide gaps in coapi_voice/data/ADJUDICATION.md remain open; golds follow the tema in `expect` where the guide disagrees with itself."
+}
