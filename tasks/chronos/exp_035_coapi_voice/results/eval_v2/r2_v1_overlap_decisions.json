@@ -1,0 +1,283 @@
+{
+ "method": "v1_overlap.py lists every v1 gold sharing an article, law, number (whole-word), parenthesised Spanish term or tema with the row; every listed v1 gold on the same tema or with a non-numeric hit was read in full against the row's key rule(s). Criterion (amendment 10): no v2 key rule stated anywhere in any v1 gold.",
+ "decided_by": "orchestrator (Claude Opus 5.5), 2026-09-23, before the round-2 review",
+ "kept_round1": {
+  "V2-M1-03": {
+   "decision": "pass",
+   "v1_read": [
+    "M1-04",
+    "M1-08",
+    "M6-03",
+    "M6-06"
+   ],
+   "reason": "tracto abreviado + ISD-before-registration not stated in any v1 gold (hits were '29/1987' in a usufruct gold and 'art. 335' LEC)"
+  },
+  "V2-M1-05": {
+   "decision": "pass",
+   "v1_read": [
+    "M1-08",
+    "M1-09",
+    "M3-04"
+   ],
+   "reason": "ownership-without-possession / no self-help not stated; hits were 'entrega de posesión' and 'first-occupancy'"
+  },
+  "V2-M2-05": {
+   "decision": "pass",
+   "v1_read": [
+    "M2-05"
+   ],
+   "reason": "late-payment interest cap not stated; v1 M2-05 is TIN vs TAE"
+  },
+  "V2-M3-03": {
+   "decision": "pass",
+   "v1_read": [
+    "M3-04",
+    "M3-07"
+   ],
+   "reason": "10-day e-notification and appeal deadlines not stated; v1 M3-04 shares only art. 30 month-counting as a side point"
+  },
+  "V2-M5-05": {
+   "decision": "pass",
+   "v1_read": [],
+   "reason": "no v1 row on M5:T43; Ley 6/2020 absent from v1 golds"
+  }
+ },
+ "round2": {
+  "V2-M1-01": {
+   "decision": "pass",
+   "v1_read": [
+    "M1-07",
+    "M3-03"
+   ],
+   "reason": "exceso de cabida ≤10% (art. 201.3 LH) not stated; M3-03 mentions Ley 13/2015 coordination only"
+  },
+  "V2-M1-02": {
+   "decision": "pass",
+   "v1_read": [
+    "M1-03",
+    "M1-09"
+   ],
+   "reason": "Ley 57/1968 off-plan guarantees not stated"
+  },
+  "V2-M1-04": {
+   "decision": "pass",
+   "v1_read": [],
+   "reason": "auction reserve 75% / 50% award / purge of subsequent charges not stated; only numeric noise"
+  },
+  "V2-M2-01": {
+   "decision": "pass",
+   "v1_read": [
+    "M2-02",
+    "M2-05"
+   ],
+   "reason": "LCCI acceleration thresholds (12/3%, 15/7%) not stated; M2-02 covers fee caps and partial repayment only"
+  },
+  "V2-M2-02": {
+   "decision": "pass",
+   "v1_read": [
+    "M2-08"
+   ],
+   "reason": "ERL (Ley 14/2013) not stated; M2-08 covers SL/SA capital and IAE"
+  },
+  "V2-M2-03": {
+   "decision": "fail",
+   "v1_read": [
+    "M2-04",
+    "M2-07"
+   ],
+   "reason": "M2-04: 'la lámina ... envejece y filtra, conviene comprobar su antigüedad antes de comprar' = this row's first key rule",
+   "superseded_by": "round2b"
+  },
+  "V2-M3-01": {
+   "decision": "pass",
+   "v1_read": [
+    "M3-02",
+    "M3-08",
+    "M3-09"
+   ],
+   "reason": "Water Act 5 m / 100 m zones not stated; M3-02's 'en ríos puede reducirse a 20 m' is the Coastal Act protection easement"
+  },
+  "V2-M3-02": {
+   "decision": "pass",
+   "v1_read": [
+    "M3-06"
+   ],
+   "reason": "surface right, reversion without compensation, 99 years not stated"
+  },
+  "V2-M3-04": {
+   "decision": "pass",
+   "v1_read": [],
+   "reason": "Estudio de Detalle limits not stated; no candidates"
+  },
+  "V2-M3-05": {
+   "decision": "pass",
+   "v1_read": [
+    "M3-01",
+    "M3-06"
+   ],
+   "reason": "conservation duty capped at 50% / ruina not stated; M3-06 mentions conservation works for fuera de ordenación only"
+  },
+  "V2-M4-01": {
+   "decision": "fail",
+   "v1_read": [
+    "M4-02",
+    "M3-09"
+   ],
+   "reason": "M4-02: 'Druga i kolejna sprzedaż budynku jest zwolniona z VAT i podlega ITP (art. 20.Uno.22 LIVA)' = the rule the headline rests on",
+   "superseded_by": "round2b"
+  },
+  "V2-M4-02": {
+   "decision": "fail",
+   "v1_read": [
+    "M4-07",
+    "M3-09",
+    "M4-01",
+    "M4-09"
+   ],
+   "reason": "M4-07: 'La cancelación de hipoteca está exenta de AJD' = this row's key rule",
+   "superseded_by": "round2b"
+  },
+  "V2-M4-03": {
+   "decision": "pass",
+   "v1_read": [
+    "M4-03",
+    "M4-09"
+   ],
+   "reason": "tasa vs ICIO, ICIO base and 4% cap not stated; 'icio' hits were substrings (servicio, beneficio)"
+  },
+  "V2-M4-04": {
+   "decision": "pass",
+   "v1_read": [
+    "M4-03",
+    "M4-05"
+   ],
+   "reason": "optional IBI reliefs not stated; M4-05 covers accrual and apportionment"
+  },
+  "V2-M5-01": {
+   "decision": "fail",
+   "v1_read": [
+    "M3-10",
+    "M5-08"
+   ],
+   "reason": "headline (CEE for any rental, 4-month threshold gone) is new, but the question's second half is answered by M3-10/M5-08's in-person visit within 3 months and 'advertiser displays the rating'",
+   "superseded_by": "round2b"
+  },
+  "V2-M5-02": {
+   "decision": "pass",
+   "v1_read": [
+    "M5-04"
+   ],
+   "reason": "visit protocol not stated"
+  },
+  "V2-M5-03": {
+   "decision": "pass",
+   "v1_read": [
+    "M5-03"
+   ],
+   "reason": "consumer definition + vulnerable consumer + business buyer is not a consumer are not stated; M5-03 cites arts. 3-4 TRLGDCU only as the condition that the SELLER be a trader (shared citation noted)"
+  },
+  "V2-M5-04": {
+   "decision": "fail",
+   "v1_read": [
+    "M5-01",
+    "M5-05",
+    "M5-09"
+   ],
+   "reason": "M5-01: colegiados 'are covered by the Colegio's collective professional civil-liability insurance (art. 11 RD 1294/2007)... no collective insurance behind' a non-API = this row's decisive content",
+   "superseded_by": "round2b"
+  },
+  "V2-M6-01": {
+   "decision": "pass_with_edit",
+   "v1_read": [
+    "M6-03",
+    "M6-07",
+    "M6-09"
+   ],
+   "reason": "cost build-up 1.20 × CEM / 1.38 not stated; delete the closing clause 'the cost method values only the building, the land value coming from the comparison or residual method' (M6-09 side point)"
+  },
+  "V2-M6-02": {
+   "decision": "pass",
+   "v1_read": [
+    "M6-05",
+    "M6-10"
+   ],
+   "reason": "valor de repercusión / valor unitario not stated; M6-05 notes buildability ≠ plot surface only"
+  },
+  "V2-M6-03": {
+   "decision": "pass",
+   "v1_read": [
+    "M6-01",
+    "M6-02",
+    "M6-08",
+    "M6-10"
+   ],
+   "reason": "ECO market-value definition excluding taxes and marketing costs not stated"
+  },
+  "V2-M6-04": {
+   "decision": "pass",
+   "v1_read": [
+    "M6-02",
+    "M6-08"
+   ],
+   "reason": "method not applicable without a representative market, and never mixing built/usable m² in one sample, are not stated; M6-02's step '(3) wybór reprezentatywnej próbki' is a procedure step, noted"
+  },
+  "V2-M6-05": {
+   "decision": "pass_with_edit",
+   "v1_read": [
+    "M6-05",
+    "M6-10"
+   ],
+   "reason": "negative F = not viable and i = risk-free + premium raised with leverage not stated; delete the leverage-effect clause 'because the land only receives what is left over ... disproportionate swings in F' (M6-05 side point)"
+  }
+ },
+ "round2b": {
+  "V2-M2-03": {
+   "decision": "pass",
+   "v1_read": [
+    "M2-01"
+   ],
+   "reason": "scale reading 1:500 + trapezoid area not stated; M2-01 is útil vs construida; numeric hits are noise"
+  },
+  "V2-M4-01": {
+   "decision": "pass",
+   "v1_read": [
+    "M2-09",
+    "M4-04",
+    "M4-06",
+    "M4-09",
+    "M4-10"
+   ],
+   "reason": "IS special regime for residential-letting entities (85% relief, arts. 48-52 LIS) not stated; M2-09 cites LIS only for depreciation coefficients; '85' hit is art. 85 LIRPF"
+  },
+  "V2-M4-02": {
+   "decision": "pass",
+   "v1_read": [
+    "M4-02",
+    "M3-09"
+   ],
+   "reason": "dwelling leases VAT-exempt (art. 20.Uno.23 LIVA) not stated; M4-02 states the different art. 20.Uno.22 second-supply rule (shared citation family noted)"
+  },
+  "V2-M5-01": {
+   "decision": "pass",
+   "v1_read": [
+    "M3-10",
+    "M5-01",
+    "M5-02",
+    "M5-03",
+    "M5-04",
+    "M5-05",
+    "M5-08"
+   ],
+   "reason": "office video surveillance (art. 22 LOPDGDD: sign, 1-month retention) not stated in any M5:T40 gold"
+  },
+  "V2-M5-04": {
+   "decision": "pass",
+   "v1_read": [
+    "M5-01",
+    "M5-05",
+    "M5-09"
+   ],
+   "reason": "visado colegial not automatic (art. 13 Ley 2/1974) not stated; M5-09 shares Ley 2/1974 and the 2009 Ómnibus reform for the different art. 14 fee-scale rule"
+  }
+ }
+}

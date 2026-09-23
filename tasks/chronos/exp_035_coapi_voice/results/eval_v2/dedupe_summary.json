@@ -1,0 +1,1438 @@
+{
+ "round1_draft": {
+  "threshold": 0.45,
+  "sources": {
+   "v1_eval": 60,
+   "doc2query": 1652,
+   "train": 377
+  },
+  "flagged": [
+   "V2-M4-01"
+  ],
+  "max_per_source": {
+   "v1_eval": {
+    "jaccard": 0.494,
+    "row": "V2-M4-01",
+    "nearest": "M4-01"
+   },
+   "doc2query": {
+    "jaccard": 0.339,
+    "row": "V2-M2-01",
+    "nearest": "M2_r2:16"
+   },
+   "train": {
+    "jaccard": 0.289,
+    "row": "V2-M3-04",
+    "nearest": "T-M3-T38-es-1"
+   }
+  },
+  "rows": [
+   {
+    "id": "V2-M1-01",
+    "v1_eval": {
+     "max": 0.248,
+     "nearest": "M1-01"
+    },
+    "doc2query": {
+     "max": 0.224,
+     "nearest": "M1_r2:129"
+    },
+    "train": {
+     "max": 0.171,
+     "nearest": "T-M2-T20-en-2"
+    }
+   },
+   {
+    "id": "V2-M1-02",
+    "v1_eval": {
+     "max": 0.163,
+     "nearest": "M5-10"
+    },
+    "doc2query": {
+     "max": 0.227,
+     "nearest": "M1_r2:202"
+    },
+    "train": {
+     "max": 0.181,
+     "nearest": "T-M4-T5-pl-2"
+    }
+   },
+   {
+    "id": "V2-M1-03",
+    "v1_eval": {
+     "max": 0.21,
+     "nearest": "M3-02"
+    },
+    "doc2query": {
+     "max": 0.259,
+     "nearest": "M4_r2:80"
+    },
+    "train": {
+     "max": 0.23,
+     "nearest": "T-M3-T36-es-1"
+    }
+   },
+   {
+    "id": "V2-M1-04",
+    "v1_eval": {
+     "max": 0.206,
+     "nearest": "M1-03"
+    },
+    "doc2query": {
+     "max": 0.23,
+     "nearest": "M1_r2:57"
+    },
+    "train": {
+     "max": 0.186,
+     "nearest": "T-M1-T6-en-2"
+    }
+   },
+   {
+    "id": "V2-M1-05",
+    "v1_eval": {
+     "max": 0.197,
+     "nearest": "M1-09"
+    },
+    "doc2query": {
+     "max": 0.203,
+     "nearest": "M4_r2:31"
+    },
+    "train": {
+     "max": 0.172,
+     "nearest": "T-M3-T36-en-1"
+    }
+   },
+   {
+    "id": "V2-M2-01",
+    "v1_eval": {
+     "max": 0.179,
+     "nearest": "M1-05"
+    },
+    "doc2query": {
+     "max": 0.339,
+     "nearest": "M2_r2:16"
+    },
+    "train": {
+     "max": 0.281,
+     "nearest": "T-M2-T20-en-3"
+    }
+   },
+   {
+    "id": "V2-M2-02",
+    "v1_eval": {
+     "max": 0.118,
+     "nearest": "M6-06"
+    },
+    "doc2query": {
+     "max": 0.247,
+     "nearest": "M2_r2:105"
+    },
+    "train": {
+     "max": 0.125,
+     "nearest": "T-M1-T7-pl-1"
+    }
+   },
+   {
+    "id": "V2-M2-03",
+    "v1_eval": {
+     "max": 0.153,
+     "nearest": "M2-03"
+    },
+    "doc2query": {
+     "max": 0.251,
+     "nearest": "M6:19"
+    },
+    "train": {
+     "max": 0.174,
+     "nearest": "T-M2-T25-en-1"
+    }
+   },
+   {
+    "id": "V2-M2-04",
+    "v1_eval": {
+     "max": 0.163,
+     "nearest": "M3-02"
+    },
+    "doc2query": {
+     "max": 0.239,
+     "nearest": "M1_r2:111"
+    },
+    "train": {
+     "max": 0.185,
+     "nearest": "T-M4-T2-es-1"
+    }
+   },
+   {
+    "id": "V2-M2-05",
+    "v1_eval": {
+     "max": 0.235,
+     "nearest": "M2-02"
+    },
+    "doc2query": {
+     "max": 0.181,
+     "nearest": "M2:8"
+    },
+    "train": {
+     "max": 0.181,
+     "nearest": "T-M2-T20-pl-2"
+    }
+   },
+   {
+    "id": "V2-M3-01",
+    "v1_eval": {
+     "max": 0.164,
+     "nearest": "M2-03"
+    },
+    "doc2query": {
+     "max": 0.24,
+     "nearest": "M3:70"
+    },
+    "train": {
+     "max": 0.201,
+     "nearest": "T-M2-T26-en-2"
+    }
+   },
+   {
+    "id": "V2-M3-02",
+    "v1_eval": {
+     "max": 0.244,
+     "nearest": "M3-05"
+    },
+    "doc2query": {
+     "max": 0.19,
+     "nearest": "M3:98"
+    },
+    "train": {
+     "max": 0.19,
+     "nearest": "T-M3-T43-en-3"
+    }
+   },
+   {
+    "id": "V2-M3-03",
+    "v1_eval": {
+     "max": 0.113,
+     "nearest": "M5-10"
+    },
+    "doc2query": {
+     "max": 0.165,
+     "nearest": "M2_r2:65"
+    },
+    "train": {
+     "max": 0.163,
+     "nearest": "T-M3-T36-pl-2"
+    }
+   },
+   {
+    "id": "V2-M3-04",
+    "v1_eval": {
+     "max": 0.19,
+     "nearest": "M1-04"
+    },
+    "doc2query": {
+     "max": 0.289,
+     "nearest": "M3:38"
+    },
+    "train": {
+     "max": 0.289,
+     "nearest": "T-M3-T38-es-1"
+    }
+   },
+   {
+    "id": "V2-M3-05",
+    "v1_eval": {
+     "max": 0.24,
+     "nearest": "M3-10"
+    },
+    "doc2query": {
+     "max": 0.232,
+     "nearest": "M5:15"
+    },
+    "train": {
+     "max": 0.232,
+     "nearest": "T-M5-T40-en-2"
+    }
+   },
+   {
+    "id": "V2-M4-01",
+    "v1_eval": {
+     "max": 0.494,
+     "nearest": "M4-01"
+    },
+    "doc2query": {
+     "max": 0.221,
+     "nearest": "M4:72"
+    },
+    "train": {
+     "max": 0.198,
+     "nearest": "T-M4-T3-en-1"
+    }
+   },
+   {
+    "id": "V2-M4-02",
+    "v1_eval": {
+     "max": 0.23,
+     "nearest": "M1-10"
+    },
+    "doc2query": {
+     "max": 0.261,
+     "nearest": "M4_r2:76"
+    },
+    "train": {
+     "max": 0.174,
+     "nearest": "T-M4-T7-pl-2"
+    }
+   },
+   {
+    "id": "V2-M4-03",
+    "v1_eval": {
+     "max": 0.205,
+     "nearest": "M5-03"
+    },
+    "doc2query": {
+     "max": 0.268,
+     "nearest": "M1_r2:94"
+    },
+    "train": {
+     "max": 0.237,
+     "nearest": "T-M1-T6-es-1"
+    }
+   },
+   {
+    "id": "V2-M4-04",
+    "v1_eval": {
+     "max": 0.155,
+     "nearest": "M6-07"
+    },
+    "doc2query": {
+     "max": 0.245,
+     "nearest": "M4_r2:85"
+    },
+    "train": {
+     "max": 0.217,
+     "nearest": "T-M4-T5-en-1"
+    }
+   },
+   {
+    "id": "V2-M4-05",
+    "v1_eval": {
+     "max": 0.134,
+     "nearest": "M4-06"
+    },
+    "doc2query": {
+     "max": 0.165,
+     "nearest": "M2:8"
+    },
+    "train": {
+     "max": 0.165,
+     "nearest": "T-M2-T20-pl-2"
+    }
+   },
+   {
+    "id": "V2-M5-01",
+    "v1_eval": {
+     "max": 0.157,
+     "nearest": "M1-10"
+    },
+    "doc2query": {
+     "max": 0.233,
+     "nearest": "M5:34"
+    },
+    "train": {
+     "max": 0.233,
+     "nearest": "T-M5-T41-pl-2"
+    }
+   },
+   {
+    "id": "V2-M5-02",
+    "v1_eval": {
+     "max": 0.219,
+     "nearest": "M5-04"
+    },
+    "doc2query": {
+     "max": 0.231,
+     "nearest": "M5_r2:45"
+    },
+    "train": {
+     "max": 0.184,
+     "nearest": "T-M5-T40-en-3"
+    }
+   },
+   {
+    "id": "V2-M5-03",
+    "v1_eval": {
+     "max": 0.162,
+     "nearest": "M2-07"
+    },
+    "doc2query": {
+     "max": 0.22,
+     "nearest": "M5_r2:17"
+    },
+    "train": {
+     "max": 0.185,
+     "nearest": "T-M4-T3-en-1"
+    }
+   },
+   {
+    "id": "V2-M5-04",
+    "v1_eval": {
+     "max": 0.151,
+     "nearest": "M3-02"
+    },
+    "doc2query": {
+     "max": 0.275,
+     "nearest": "M5_r2:10"
+    },
+    "train": {
+     "max": 0.221,
+     "nearest": "T-M1-T16-es-1"
+    }
+   },
+   {
+    "id": "V2-M5-05",
+    "v1_eval": {
+     "max": 0.125,
+     "nearest": "M4-06"
+    },
+    "doc2query": {
+     "max": 0.293,
+     "nearest": "M5:62"
+    },
+    "train": {
+     "max": 0.196,
+     "nearest": "T-M5-T43-pl-1"
+    }
+   },
+   {
+    "id": "V2-M6-01",
+    "v1_eval": {
+     "max": 0.215,
+     "nearest": "M6-09"
+    },
+    "doc2query": {
+     "max": 0.314,
+     "nearest": "M1:266"
+    },
+    "train": {
+     "max": 0.187,
+     "nearest": "T-M1-T20-en-2"
+    }
+   },
+   {
+    "id": "V2-M6-02",
+    "v1_eval": {
+     "max": 0.132,
+     "nearest": "M6-10"
+    },
+    "doc2query": {
+     "max": 0.145,
+     "nearest": "M1:104"
+    },
+    "train": {
+     "max": 0.145,
+     "nearest": "T-M1-T8-pl-1"
+    }
+   },
+   {
+    "id": "V2-M6-03",
+    "v1_eval": {
+     "max": 0.202,
+     "nearest": "M3-06"
+    },
+    "doc2query": {
+     "max": 0.225,
+     "nearest": "M5_r2:52"
+    },
+    "train": {
+     "max": 0.213,
+     "nearest": "T-M3-T43-es-1"
+    }
+   },
+   {
+    "id": "V2-M6-04",
+    "v1_eval": {
+     "max": 0.335,
+     "nearest": "M6-05"
+    },
+    "doc2query": {
+     "max": 0.23,
+     "nearest": "M4_r2:31"
+    },
+    "train": {
+     "max": 0.178,
+     "nearest": "T-M3-T39-en-1"
+    }
+   },
+   {
+    "id": "V2-M6-05",
+    "v1_eval": {
+     "max": 0.153,
+     "nearest": "M6-04"
+    },
+    "doc2query": {
+     "max": 0.261,
+     "nearest": "M6:70"
+    },
+    "train": {
+     "max": 0.156,
+     "nearest": "T-M1-T10-en-3"
+    }
+   }
+  ]
+ },
+ "round1_reviewed": {
+  "threshold": 0.45,
+  "sources": {
+   "v1_eval": 60,
+   "doc2query": 1652,
+   "train": 377
+  },
+  "flagged": [],
+  "max_per_source": {
+   "v1_eval": {
+    "jaccard": 0.315,
+    "row": "V2-M6-04",
+    "nearest": "M6-05"
+   },
+   "doc2query": {
+    "jaccard": 0.314,
+    "row": "V2-M6-01",
+    "nearest": "M1:266"
+   },
+   "train": {
+    "jaccard": 0.289,
+    "row": "V2-M3-04",
+    "nearest": "T-M3-T38-es-1"
+   }
+  },
+  "rows": [
+   {
+    "id": "V2-M1-01",
+    "v1_eval": {
+     "max": 0.248,
+     "nearest": "M1-01"
+    },
+    "doc2query": {
+     "max": 0.224,
+     "nearest": "M1_r2:129"
+    },
+    "train": {
+     "max": 0.171,
+     "nearest": "T-M2-T20-en-2"
+    }
+   },
+   {
+    "id": "V2-M1-02",
+    "v1_eval": {
+     "max": 0.163,
+     "nearest": "M5-10"
+    },
+    "doc2query": {
+     "max": 0.227,
+     "nearest": "M1_r2:202"
+    },
+    "train": {
+     "max": 0.181,
+     "nearest": "T-M4-T5-pl-2"
+    }
+   },
+   {
+    "id": "V2-M1-03",
+    "v1_eval": {
+     "max": 0.19,
+     "nearest": "M3-02"
+    },
+    "doc2query": {
+     "max": 0.255,
+     "nearest": "M4_r2:80"
+    },
+    "train": {
+     "max": 0.252,
+     "nearest": "T-M3-T36-es-1"
+    }
+   },
+   {
+    "id": "V2-M1-04",
+    "v1_eval": {
+     "max": 0.206,
+     "nearest": "M1-03"
+    },
+    "doc2query": {
+     "max": 0.23,
+     "nearest": "M1_r2:57"
+    },
+    "train": {
+     "max": 0.186,
+     "nearest": "T-M1-T6-en-2"
+    }
+   },
+   {
+    "id": "V2-M1-05",
+    "v1_eval": {
+     "max": 0.197,
+     "nearest": "M1-09"
+    },
+    "doc2query": {
+     "max": 0.203,
+     "nearest": "M4_r2:31"
+    },
+    "train": {
+     "max": 0.172,
+     "nearest": "T-M3-T36-en-1"
+    }
+   },
+   {
+    "id": "V2-M2-01",
+    "v1_eval": {
+     "max": 0.183,
+     "nearest": "M2-09"
+    },
+    "doc2query": {
+     "max": 0.305,
+     "nearest": "M2_r2:16"
+    },
+    "train": {
+     "max": 0.253,
+     "nearest": "T-M2-T20-en-3"
+    }
+   },
+   {
+    "id": "V2-M2-02",
+    "v1_eval": {
+     "max": 0.124,
+     "nearest": "M6-06"
+    },
+    "doc2query": {
+     "max": 0.242,
+     "nearest": "M2_r2:105"
+    },
+    "train": {
+     "max": 0.13,
+     "nearest": "T-M5-T42-pl-2"
+    }
+   },
+   {
+    "id": "V2-M2-03",
+    "v1_eval": {
+     "max": 0.153,
+     "nearest": "M2-03"
+    },
+    "doc2query": {
+     "max": 0.251,
+     "nearest": "M6:19"
+    },
+    "train": {
+     "max": 0.174,
+     "nearest": "T-M2-T25-en-1"
+    }
+   },
+   {
+    "id": "V2-M2-04",
+    "v1_eval": {
+     "max": 0.168,
+     "nearest": "M3-02"
+    },
+    "doc2query": {
+     "max": 0.237,
+     "nearest": "M1_r2:111"
+    },
+    "train": {
+     "max": 0.19,
+     "nearest": "T-M4-T2-es-1"
+    }
+   },
+   {
+    "id": "V2-M2-05",
+    "v1_eval": {
+     "max": 0.235,
+     "nearest": "M2-02"
+    },
+    "doc2query": {
+     "max": 0.181,
+     "nearest": "M2:8"
+    },
+    "train": {
+     "max": 0.181,
+     "nearest": "T-M2-T20-pl-2"
+    }
+   },
+   {
+    "id": "V2-M3-01",
+    "v1_eval": {
+     "max": 0.177,
+     "nearest": "M2-03"
+    },
+    "doc2query": {
+     "max": 0.233,
+     "nearest": "M4_r2:30"
+    },
+    "train": {
+     "max": 0.19,
+     "nearest": "T-M2-T26-en-2"
+    }
+   },
+   {
+    "id": "V2-M3-02",
+    "v1_eval": {
+     "max": 0.244,
+     "nearest": "M3-05"
+    },
+    "doc2query": {
+     "max": 0.19,
+     "nearest": "M3:98"
+    },
+    "train": {
+     "max": 0.19,
+     "nearest": "T-M3-T43-en-3"
+    }
+   },
+   {
+    "id": "V2-M3-03",
+    "v1_eval": {
+     "max": 0.113,
+     "nearest": "M5-10"
+    },
+    "doc2query": {
+     "max": 0.165,
+     "nearest": "M2_r2:65"
+    },
+    "train": {
+     "max": 0.163,
+     "nearest": "T-M3-T36-pl-2"
+    }
+   },
+   {
+    "id": "V2-M3-04",
+    "v1_eval": {
+     "max": 0.19,
+     "nearest": "M1-04"
+    },
+    "doc2query": {
+     "max": 0.289,
+     "nearest": "M3:38"
+    },
+    "train": {
+     "max": 0.289,
+     "nearest": "T-M3-T38-es-1"
+    }
+   },
+   {
+    "id": "V2-M3-05",
+    "v1_eval": {
+     "max": 0.24,
+     "nearest": "M3-10"
+    },
+    "doc2query": {
+     "max": 0.232,
+     "nearest": "M5:15"
+    },
+    "train": {
+     "max": 0.232,
+     "nearest": "T-M5-T40-en-2"
+    }
+   },
+   {
+    "id": "V2-M4-01",
+    "v1_eval": {
+     "max": 0.243,
+     "nearest": "M4-01"
+    },
+    "doc2query": {
+     "max": 0.197,
+     "nearest": "M4_r2:18"
+    },
+    "train": {
+     "max": 0.172,
+     "nearest": "T-M1-T5-en-3"
+    }
+   },
+   {
+    "id": "V2-M4-02",
+    "v1_eval": {
+     "max": 0.23,
+     "nearest": "M1-10"
+    },
+    "doc2query": {
+     "max": 0.261,
+     "nearest": "M4_r2:76"
+    },
+    "train": {
+     "max": 0.174,
+     "nearest": "T-M4-T7-pl-2"
+    }
+   },
+   {
+    "id": "V2-M4-03",
+    "v1_eval": {
+     "max": 0.205,
+     "nearest": "M5-03"
+    },
+    "doc2query": {
+     "max": 0.268,
+     "nearest": "M1_r2:94"
+    },
+    "train": {
+     "max": 0.237,
+     "nearest": "T-M1-T6-es-1"
+    }
+   },
+   {
+    "id": "V2-M4-04",
+    "v1_eval": {
+     "max": 0.169,
+     "nearest": "M1-05"
+    },
+    "doc2query": {
+     "max": 0.252,
+     "nearest": "M4_r2:85"
+    },
+    "train": {
+     "max": 0.196,
+     "nearest": "T-M4-T5-en-1"
+    }
+   },
+   {
+    "id": "V2-M4-05",
+    "v1_eval": {
+     "max": 0.134,
+     "nearest": "M4-06"
+    },
+    "doc2query": {
+     "max": 0.165,
+     "nearest": "M2:8"
+    },
+    "train": {
+     "max": 0.165,
+     "nearest": "T-M2-T20-pl-2"
+    }
+   },
+   {
+    "id": "V2-M5-01",
+    "v1_eval": {
+     "max": 0.153,
+     "nearest": "M1-10"
+    },
+    "doc2query": {
+     "max": 0.218,
+     "nearest": "M5:34"
+    },
+    "train": {
+     "max": 0.218,
+     "nearest": "T-M5-T41-pl-2"
+    }
+   },
+   {
+    "id": "V2-M5-02",
+    "v1_eval": {
+     "max": 0.198,
+     "nearest": "M5-04"
+    },
+    "doc2query": {
+     "max": 0.192,
+     "nearest": "M2:56"
+    },
+    "train": {
+     "max": 0.161,
+     "nearest": "T-M4-T4-en-3"
+    }
+   },
+   {
+    "id": "V2-M5-03",
+    "v1_eval": {
+     "max": 0.168,
+     "nearest": "M2-09"
+    },
+    "doc2query": {
+     "max": 0.206,
+     "nearest": "M5_r2:17"
+    },
+    "train": {
+     "max": 0.177,
+     "nearest": "T-M4-T3-en-1"
+    }
+   },
+   {
+    "id": "V2-M5-04",
+    "v1_eval": {
+     "max": 0.151,
+     "nearest": "M3-02"
+    },
+    "doc2query": {
+     "max": 0.275,
+     "nearest": "M5_r2:10"
+    },
+    "train": {
+     "max": 0.221,
+     "nearest": "T-M1-T16-es-1"
+    }
+   },
+   {
+    "id": "V2-M5-05",
+    "v1_eval": {
+     "max": 0.125,
+     "nearest": "M4-06"
+    },
+    "doc2query": {
+     "max": 0.293,
+     "nearest": "M5:62"
+    },
+    "train": {
+     "max": 0.196,
+     "nearest": "T-M5-T43-pl-1"
+    }
+   },
+   {
+    "id": "V2-M6-01",
+    "v1_eval": {
+     "max": 0.215,
+     "nearest": "M6-09"
+    },
+    "doc2query": {
+     "max": 0.314,
+     "nearest": "M1:266"
+    },
+    "train": {
+     "max": 0.187,
+     "nearest": "T-M1-T20-en-2"
+    }
+   },
+   {
+    "id": "V2-M6-02",
+    "v1_eval": {
+     "max": 0.132,
+     "nearest": "M6-10"
+    },
+    "doc2query": {
+     "max": 0.145,
+     "nearest": "M1:104"
+    },
+    "train": {
+     "max": 0.145,
+     "nearest": "T-M1-T8-pl-1"
+    }
+   },
+   {
+    "id": "V2-M6-03",
+    "v1_eval": {
+     "max": 0.202,
+     "nearest": "M3-06"
+    },
+    "doc2query": {
+     "max": 0.225,
+     "nearest": "M5_r2:52"
+    },
+    "train": {
+     "max": 0.213,
+     "nearest": "T-M3-T43-es-1"
+    }
+   },
+   {
+    "id": "V2-M6-04",
+    "v1_eval": {
+     "max": 0.315,
+     "nearest": "M6-05"
+    },
+    "doc2query": {
+     "max": 0.219,
+     "nearest": "M6_r2:56"
+    },
+    "train": {
+     "max": 0.173,
+     "nearest": "T-M3-T39-en-1"
+    }
+   },
+   {
+    "id": "V2-M6-05",
+    "v1_eval": {
+     "max": 0.151,
+     "nearest": "M6-04"
+    },
+    "doc2query": {
+     "max": 0.25,
+     "nearest": "M6:70"
+    },
+    "train": {
+     "max": 0.15,
+     "nearest": "T-M1-T10-en-3"
+    }
+   }
+  ]
+ },
+ "final_reviewed": {
+  "threshold": 0.45,
+  "sources": {
+   "v1_eval": 60,
+   "doc2query": 1652,
+   "train": 377
+  },
+  "flagged": [],
+  "max_per_source": {
+   "v1_eval": {
+    "jaccard": 0.259,
+    "row": "V2-M1-02",
+    "nearest": "M4-02"
+   },
+   "doc2query": {
+    "jaccard": 0.391,
+    "row": "V2-M3-04",
+    "nearest": "M3:97"
+   },
+   "train": {
+    "jaccard": 0.391,
+    "row": "V2-M3-04",
+    "nearest": "T-M3-T42-es-2"
+   }
+  },
+  "rows": [
+   {
+    "id": "V2-M1-01",
+    "v1_eval": {
+     "max": 0.171,
+     "nearest": "M6-05"
+    },
+    "doc2query": {
+     "max": 0.184,
+     "nearest": "M1_r2:296"
+    },
+    "train": {
+     "max": 0.179,
+     "nearest": "T-M1-T22-en-2"
+    }
+   },
+   {
+    "id": "V2-M1-02",
+    "v1_eval": {
+     "max": 0.259,
+     "nearest": "M4-02"
+    },
+    "doc2query": {
+     "max": 0.303,
+     "nearest": "M1:78"
+    },
+    "train": {
+     "max": 0.303,
+     "nearest": "T-M1-T6-pl-1"
+    }
+   },
+   {
+    "id": "V2-M1-03",
+    "v1_eval": {
+     "max": 0.19,
+     "nearest": "M3-02"
+    },
+    "doc2query": {
+     "max": 0.255,
+     "nearest": "M4_r2:80"
+    },
+    "train": {
+     "max": 0.252,
+     "nearest": "T-M3-T36-es-1"
+    }
+   },
+   {
+    "id": "V2-M1-04",
+    "v1_eval": {
+     "max": 0.151,
+     "nearest": "M6-05"
+    },
+    "doc2query": {
+     "max": 0.22,
+     "nearest": "M1_r2:283"
+    },
+    "train": {
+     "max": 0.167,
+     "nearest": "T-M2-T20-en-3"
+    }
+   },
+   {
+    "id": "V2-M1-05",
+    "v1_eval": {
+     "max": 0.197,
+     "nearest": "M1-09"
+    },
+    "doc2query": {
+     "max": 0.203,
+     "nearest": "M4_r2:31"
+    },
+    "train": {
+     "max": 0.172,
+     "nearest": "T-M3-T36-en-1"
+    }
+   },
+   {
+    "id": "V2-M2-01",
+    "v1_eval": {
+     "max": 0.164,
+     "nearest": "M2-09"
+    },
+    "doc2query": {
+     "max": 0.257,
+     "nearest": "M2_r2:18"
+    },
+    "train": {
+     "max": 0.213,
+     "nearest": "T-M2-T21-en-3"
+    }
+   },
+   {
+    "id": "V2-M2-02",
+    "v1_eval": {
+     "max": 0.153,
+     "nearest": "M1-02"
+    },
+    "doc2query": {
+     "max": 0.259,
+     "nearest": "M2:64"
+    },
+    "train": {
+     "max": 0.194,
+     "nearest": "T-M2-T23-pl-2"
+    }
+   },
+   {
+    "id": "V2-M2-03",
+    "v1_eval": {
+     "max": 0.154,
+     "nearest": "M3-05"
+    },
+    "doc2query": {
+     "max": 0.208,
+     "nearest": "M2:72"
+    },
+    "train": {
+     "max": 0.208,
+     "nearest": "T-M2-T25-en-3"
+    }
+   },
+   {
+    "id": "V2-M2-04",
+    "v1_eval": {
+     "max": 0.168,
+     "nearest": "M3-02"
+    },
+    "doc2query": {
+     "max": 0.237,
+     "nearest": "M1_r2:111"
+    },
+    "train": {
+     "max": 0.19,
+     "nearest": "T-M4-T2-es-1"
+    }
+   },
+   {
+    "id": "V2-M2-05",
+    "v1_eval": {
+     "max": 0.235,
+     "nearest": "M2-02"
+    },
+    "doc2query": {
+     "max": 0.181,
+     "nearest": "M2:8"
+    },
+    "train": {
+     "max": 0.181,
+     "nearest": "T-M2-T20-pl-2"
+    }
+   },
+   {
+    "id": "V2-M3-01",
+    "v1_eval": {
+     "max": 0.129,
+     "nearest": "M3-04"
+    },
+    "doc2query": {
+     "max": 0.168,
+     "nearest": "M3:126"
+    },
+    "train": {
+     "max": 0.15,
+     "nearest": "T-M2-T27-en-1"
+    }
+   },
+   {
+    "id": "V2-M3-02",
+    "v1_eval": {
+     "max": 0.162,
+     "nearest": "M1-07"
+    },
+    "doc2query": {
+     "max": 0.344,
+     "nearest": "M3:60"
+    },
+    "train": {
+     "max": 0.344,
+     "nearest": "T-M3-T40-en-3"
+    }
+   },
+   {
+    "id": "V2-M3-03",
+    "v1_eval": {
+     "max": 0.113,
+     "nearest": "M5-10"
+    },
+    "doc2query": {
+     "max": 0.165,
+     "nearest": "M2_r2:65"
+    },
+    "train": {
+     "max": 0.163,
+     "nearest": "T-M3-T36-pl-2"
+    }
+   },
+   {
+    "id": "V2-M3-04",
+    "v1_eval": {
+     "max": 0.221,
+     "nearest": "M2-04"
+    },
+    "doc2query": {
+     "max": 0.391,
+     "nearest": "M3:97"
+    },
+    "train": {
+     "max": 0.391,
+     "nearest": "T-M3-T42-es-2"
+    }
+   },
+   {
+    "id": "V2-M3-05",
+    "v1_eval": {
+     "max": 0.175,
+     "nearest": "M1-07"
+    },
+    "doc2query": {
+     "max": 0.25,
+     "nearest": "M3_r2:72"
+    },
+    "train": {
+     "max": 0.237,
+     "nearest": "T-M3-T44-en-3"
+    }
+   },
+   {
+    "id": "V2-M4-01",
+    "v1_eval": {
+     "max": 0.198,
+     "nearest": "M2-09"
+    },
+    "doc2query": {
+     "max": 0.232,
+     "nearest": "M4:89"
+    },
+    "train": {
+     "max": 0.232,
+     "nearest": "T-M4-T7-en-3"
+    }
+   },
+   {
+    "id": "V2-M4-02",
+    "v1_eval": {
+     "max": 0.173,
+     "nearest": "M1-02"
+    },
+    "doc2query": {
+     "max": 0.197,
+     "nearest": "M4_r2:35"
+    },
+    "train": {
+     "max": 0.191,
+     "nearest": "T-M4-T5-pl-2"
+    }
+   },
+   {
+    "id": "V2-M4-03",
+    "v1_eval": {
+     "max": 0.202,
+     "nearest": "M3-02"
+    },
+    "doc2query": {
+     "max": 0.295,
+     "nearest": "M4_r2:53"
+    },
+    "train": {
+     "max": 0.223,
+     "nearest": "T-M1-T9-es-2"
+    }
+   },
+   {
+    "id": "V2-M4-04",
+    "v1_eval": {
+     "max": 0.17,
+     "nearest": "M2-09"
+    },
+    "doc2query": {
+     "max": 0.3,
+     "nearest": "M4:71"
+    },
+    "train": {
+     "max": 0.3,
+     "nearest": "T-M4-T6-en-1"
+    }
+   },
+   {
+    "id": "V2-M4-05",
+    "v1_eval": {
+     "max": 0.134,
+     "nearest": "M4-06"
+    },
+    "doc2query": {
+     "max": 0.165,
+     "nearest": "M2:8"
+    },
+    "train": {
+     "max": 0.165,
+     "nearest": "T-M2-T20-pl-2"
+    }
+   },
+   {
+    "id": "V2-M5-01",
+    "v1_eval": {
+     "max": 0.152,
+     "nearest": "M1-10"
+    },
+    "doc2query": {
+     "max": 0.192,
+     "nearest": "M2:65"
+    },
+    "train": {
+     "max": 0.192,
+     "nearest": "T-M2-T24-pl-2"
+    }
+   },
+   {
+    "id": "V2-M5-02",
+    "v1_eval": {
+     "max": 0.209,
+     "nearest": "M1-07"
+    },
+    "doc2query": {
+     "max": 0.209,
+     "nearest": "M5_r2:43"
+    },
+    "train": {
+     "max": 0.165,
+     "nearest": "T-M2-T27-en-3"
+    }
+   },
+   {
+    "id": "V2-M5-03",
+    "v1_eval": {
+     "max": 0.218,
+     "nearest": "M2-09"
+    },
+    "doc2query": {
+     "max": 0.226,
+     "nearest": "M5:32"
+    },
+    "train": {
+     "max": 0.155,
+     "nearest": "T-M2-T24-en-2"
+    }
+   },
+   {
+    "id": "V2-M5-04",
+    "v1_eval": {
+     "max": 0.193,
+     "nearest": "M1-04"
+    },
+    "doc2query": {
+     "max": 0.299,
+     "nearest": "M5_r2:27"
+    },
+    "train": {
+     "max": 0.199,
+     "nearest": "T-M5-T39-es-2"
+    }
+   },
+   {
+    "id": "V2-M5-05",
+    "v1_eval": {
+     "max": 0.125,
+     "nearest": "M4-06"
+    },
+    "doc2query": {
+     "max": 0.293,
+     "nearest": "M5:62"
+    },
+    "train": {
+     "max": 0.196,
+     "nearest": "T-M5-T43-pl-1"
+    }
+   },
+   {
+    "id": "V2-M6-01",
+    "v1_eval": {
+     "max": 0.192,
+     "nearest": "M6-05"
+    },
+    "doc2query": {
+     "max": 0.23,
+     "nearest": "M6_r2:56"
+    },
+    "train": {
+     "max": 0.209,
+     "nearest": "T-M3-T39-en-1"
+    }
+   },
+   {
+    "id": "V2-M6-02",
+    "v1_eval": {
+     "max": 0.11,
+     "nearest": "M3-08"
+    },
+    "doc2query": {
+     "max": 0.152,
+     "nearest": "M1_r2:315"
+    },
+    "train": {
+     "max": 0.126,
+     "nearest": "T-M3-T42-pl-2"
+    }
+   },
+   {
+    "id": "V2-M6-03",
+    "v1_eval": {
+     "max": 0.17,
+     "nearest": "M1-04"
+    },
+    "doc2query": {
+     "max": 0.239,
+     "nearest": "M6:13"
+    },
+    "train": {
+     "max": 0.225,
+     "nearest": "T-M5-T42-es-1"
+    }
+   },
+   {
+    "id": "V2-M6-04",
+    "v1_eval": {
+     "max": 0.177,
+     "nearest": "M3-10"
+    },
+    "doc2query": {
+     "max": 0.199,
+     "nearest": "M5_r2:18"
+    },
+    "train": {
+     "max": 0.163,
+     "nearest": "T-M4-T7-en-3"
+    }
+   },
+   {
+    "id": "V2-M6-05",
+    "v1_eval": {
+     "max": 0.17,
+     "nearest": "M1-01"
+    },
+    "doc2query": {
+     "max": 0.225,
+     "nearest": "M6_r2:58"
+    },
+    "train": {
+     "max": 0.169,
+     "nearest": "T-M1-T7-en-1"
+    }
+   }
+  ]
+ }
+}

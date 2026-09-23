@@ -1,0 +1,234 @@
+{
+ "what": "Rule-level overlap of the round-1 reviewed v2 set (r1_eval_v2_reviewed.jsonl) with the 60 v1 golds (exp_035 amendments 9-10).",
+ "recorded": "2026-09-23 07:18 (clock-read), from the row-by-row reading done 2026-09-23 06:11-06:19, before amendments 9-10 were written",
+ "method": "Each in-scope round-1 row's key rule was read against the v1 golds on the same tema and against v1 golds sharing an article, law or term with it (v1_overlap.py candidates). 'headline' = the rule is the headline of a v1 gold; 'supporting_sentence' = the rule is stated as a supporting sentence inside a v1 gold.",
+ "counts": {
+  "in_scope": 28,
+  "headline": 18,
+  "supporting_sentence": 5,
+  "fresh": 5,
+  "out_of_scope_rows": 2,
+  "flagged_by_wording_similarity": 1,
+  "flagged_row": "V2-M4-01 (round-1 draft, Jaccard 0.494 vs v1 M4-01; replaced by the reviewer with a row that still overlapped v1 M4-09)"
+ },
+ "rows": [
+  {
+   "id": "V2-M1-01",
+   "overlap": "headline",
+   "v1_rows": [
+    "M1-01"
+   ],
+   "rule": "community-fee arrears attach to the flat (art. 9 LPH)"
+  },
+  {
+   "id": "V2-M1-02",
+   "overlap": "headline",
+   "v1_rows": [
+    "M1-08"
+   ],
+   "rule": "donation of real estate needs a public deed (art. 633 CC)"
+  },
+  {
+   "id": "V2-M1-04",
+   "overlap": "headline",
+   "v1_rows": [
+    "M1-03",
+    "M1-09"
+   ],
+   "rule": "penitential arras: seller returns double (art. 1454 CC)"
+  },
+  {
+   "id": "V2-M2-01",
+   "overlap": "headline",
+   "v1_rows": [
+    "M2-02"
+   ],
+   "rule": "early-repayment fee cap on a fixed-rate mortgage (LCCI)"
+  },
+  {
+   "id": "V2-M2-02",
+   "overlap": "headline",
+   "v1_rows": [
+    "M2-04"
+   ],
+   "rule": "roof / azotea is a common element unless the bylaws grant exclusive use"
+  },
+  {
+   "id": "V2-M3-01",
+   "overlap": "headline",
+   "v1_rows": [
+    "M3-02"
+   ],
+   "rule": "Coastal Act protection easement (100 m), residential use prohibited"
+  },
+  {
+   "id": "V2-M3-02",
+   "overlap": "headline",
+   "v1_rows": [
+    "M3-05"
+   ],
+   "rule": "pending development dues attach to the plot and bind a buyer"
+  },
+  {
+   "id": "V2-M3-05",
+   "overlap": "headline",
+   "v1_rows": [
+    "M3-10"
+   ],
+   "rule": "CEE fines: no rating in adverts €300–600, selling without the CEE €601–1,000"
+  },
+  {
+   "id": "V2-M4-01",
+   "overlap": "headline",
+   "v1_rows": [
+    "M4-09"
+   ],
+   "rule": "ITP base = higher of price and cadastral reference value (Law 11/2021)"
+  },
+  {
+   "id": "V2-M4-02",
+   "overlap": "headline",
+   "v1_rows": [
+    "M4-05"
+   ],
+   "rule": "IBI accrues on 1 January, seller liable, apportionment by agreement"
+  },
+  {
+   "id": "V2-M4-03",
+   "overlap": "headline",
+   "v1_rows": [
+    "M4-02",
+    "M4-07"
+   ],
+   "rule": "developer sale → VAT 10%; AJD on mortgage deeds paid by the lender"
+  },
+  {
+   "id": "V2-M4-04",
+   "overlap": "headline",
+   "v1_rows": [
+    "M4-06"
+   ],
+   "rule": "imputed income on a non-let second home, 2% / 1.1% (art. 85 LIRPF)"
+  },
+  {
+   "id": "V2-M5-02",
+   "overlap": "headline",
+   "v1_rows": [
+    "M5-04"
+   ],
+   "rule": "commercial WhatsApp/email needs prior opt-in and an opt-out (LSSI + GDPR)"
+  },
+  {
+   "id": "V2-M5-03",
+   "overlap": "headline",
+   "v1_rows": [
+    "M5-02"
+   ],
+   "rule": "AML: the agent is an obliged entity and must identify the client"
+  },
+  {
+   "id": "V2-M5-04",
+   "overlap": "headline",
+   "v1_rows": [
+    "M5-09"
+   ],
+   "rule": "colegios may not set fee scales (art. 14 Ley 2/1974)"
+  },
+  {
+   "id": "V2-M6-01",
+   "overlap": "headline",
+   "v1_rows": [
+    "M6-03"
+   ],
+   "rule": "life usufruct = 89 − age (min 10%, max 70%)"
+  },
+  {
+   "id": "V2-M6-02",
+   "overlap": "headline",
+   "v1_rows": [
+    "M6-01"
+   ],
+   "rule": "valuation report valid 6 months (art. 62.4 ECO/805/2003)"
+  },
+  {
+   "id": "V2-M6-04",
+   "overlap": "headline",
+   "v1_rows": [
+    "M6-05"
+   ],
+   "rule": "static residual method F = VM(1 − b) − ΣCi"
+  },
+  {
+   "id": "V2-M2-03",
+   "overlap": "supporting_sentence",
+   "v1_rows": [
+    "M2-03"
+   ],
+   "rule": "edificabilidad = m² built per m² of plot (listed among the cédula's contents)"
+  },
+  {
+   "id": "V2-M3-04",
+   "overlap": "supporting_sentence",
+   "v1_rows": [
+    "M3-03"
+   ],
+   "rule": "referencia catastral compulsory in deeds, contracts and tax returns"
+  },
+  {
+   "id": "V2-M5-01",
+   "overlap": "supporting_sentence",
+   "v1_rows": [
+    "M5-03"
+   ],
+   "rule": "complaint service must answer within 15 days; OMIC; consumer arbitration"
+  },
+  {
+   "id": "V2-M6-03",
+   "overlap": "supporting_sentence",
+   "v1_rows": [
+    "M6-02",
+    "M6-08"
+   ],
+   "rule": "comparables of the same zone, use and building type"
+  },
+  {
+   "id": "V2-M6-05",
+   "overlap": "supporting_sentence",
+   "v1_rows": [
+    "M6-06"
+   ],
+   "rule": "undivided share = full value × share, stated without deducting charges"
+  },
+  {
+   "id": "V2-M1-03",
+   "overlap": "none",
+   "v1_rows": [],
+   "rule": null
+  },
+  {
+   "id": "V2-M1-05",
+   "overlap": "none",
+   "v1_rows": [],
+   "rule": null
+  },
+  {
+   "id": "V2-M2-05",
+   "overlap": "none",
+   "v1_rows": [],
+   "rule": null
+  },
+  {
+   "id": "V2-M3-03",
+   "overlap": "none",
+   "v1_rows": [],
+   "rule": null
+  },
+  {
+   "id": "V2-M5-05",
+   "overlap": "none",
+   "v1_rows": [],
+   "rule": null
+  }
+ ],
+ "outcome": "The 23 overlapping rows were rewritten in round 2 (18 + 5, amendment 10); 5 of those failed the check again and were rewritten in round 2b. See r2_v1_overlap_decisions.json."
+}
