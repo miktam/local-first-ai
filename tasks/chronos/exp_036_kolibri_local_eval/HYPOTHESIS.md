@@ -823,3 +823,5 @@ The "Signed off by" line must read `Signed off by: Andrei (typed by Andrei on th
 ---
 
 *Experiment design: Andrei + Claude Opus 5.5 · 2026-10-03*
+
+Pre-registration commit: 725d628a322007761dde013bd807d312dfbad1ea
