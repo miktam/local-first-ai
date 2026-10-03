@@ -1,0 +1,696 @@
+{
+  "schema": "exp_036 mbp preflight v3",
+  "schema_changes_from_v1": [
+    "downloads.hf_download_processes_running (counted processes, including the caffeinate wrapper) is replaced by hf_downloads_running (distinct --local-dir targets) and hf_download_targets",
+    "smoke_test gains model, revision, runs[] (command, source, started_utc_window, loaded, exit_code, german_text, detail) and not_recorded",
+    "rows may carry revision_note",
+    "top-level row_conventions (replacing the v1 size_ok note) and previous_preflight added"
+  ],
+  "schema_changes_from_v2": [
+    "downloads.pending_manifest and downloads.pending_manifest_note added, for mini-approved assets not yet in assets.json (fineweb-2, RGB-src, ifbench-venv, nltk_data)",
+    "gated dataset rows carry verification: method, and files[] with file, bytes, rows, sha256 (and columns for parquet)",
+    "smoke_test gains carried_over_from; runs[] and not_recorded are copied verbatim from v2",
+    "row_conventions extended: revision_ok null also for assets with no revision (venv, NLTK data); fineweb-2 size_ok uses exact Hub bytes; data_files defined",
+    "schema_changes_from_v2 added; schema_changes_from_v1 kept unchanged"
+  ],
+  "row_conventions": "revision_ok: true = every recorded .metadata matches the pin (for code rows: the checked-out commit matches pinned_commit) and the asset is complete; false = folder absent or a recorded revision differs; null = cannot be judged yet (download in progress, or only README.md recorded) or the asset has no revision (venv, NLTK data). size_ok: within 1% of manifest bytes with no .incomplete files (pending_manifest fineweb-2: exact match with the Hub's file size); where no size is pinned, null if data files are present and false if none are. files and data_files count only files outside .cache/; data_files = those other than README.md and .gitattributes.",
+  "utc": "2026-10-03T19:10:25Z",
+  "manifest_recorded_utc": "2026-10-03T16:00:28Z",
+  "previous_preflight": "mbp_preflight_20261003T170152Z.json",
+  "chip": "Apple M5 Max",
+  "memory_bytes": 137438953472,
+  "macos": {
+    "product_version": "27.0",
+    "build": "26A428"
+  },
+  "mx_device_info": {
+    "device_name": "Apple M5 Max",
+    "max_recommended_working_set_size": 115448725504,
+    "memory_size": 137438953472,
+    "architecture": "applegpu_g17s",
+    "max_buffer_length": 86586540032,
+    "resource_limit": 499000
+  },
+  "wired_limit_mb": 0,
+  "wired_limit_note": "0 means the macOS default; nothing was changed",
+  "disk_free": {
+    "volume": "home data volume",
+    "size": "3.6Ti",
+    "avail": "2.7Ti",
+    "avail_bytes": 2977113190400,
+    "assets_md_requirement": "keep ~450 GB free"
+  },
+  "python": "3.12.13",
+  "mlx": "0.31.2",
+  "mlx_metal": "0.31.2",
+  "mlx_lm": "0.31.3",
+  "pip_freeze": [
+    "annotated-doc==0.0.5",
+    "anyio==4.15.1",
+    "certifi==2026.7.22",
+    "click==8.5.0",
+    "filelock==4.0.9",
+    "fsspec==2026.9.0",
+    "h11==0.16.0",
+    "hf-xet==1.6.0",
+    "httpcore==1.0.9",
+    "httpx==0.28.1",
+    "huggingface-hub==1.33.0",
+    "idna==3.20",
+    "jinja2==3.1.6",
+    "markdown-it-py==4.2.0",
+    "markupsafe==3.0.4",
+    "mdurl==0.1.2",
+    "mlx==0.31.2",
+    "mlx-lm==0.31.3",
+    "mlx-metal==0.31.2",
+    "numpy==2.5.3",
+    "packaging==26.3",
+    "protobuf==7.36.2",
+    "pygments==2.21.0",
+    "pyyaml==6.0.3",
+    "regex==2026.9.29",
+    "rich==15.0.0",
+    "safetensors==0.8.0",
+    "sentencepiece==0.2.2",
+    "shellingham==1.5.4",
+    "tokenizers==0.23.2",
+    "tqdm==4.70.1",
+    "transformers==5.18.0",
+    "typer==0.27.2",
+    "typing-extensions==4.16.0"
+  ],
+  "venv": {
+    "path": "~/models/exp036/venv",
+    "created_by_this_preflight": false,
+    "pre_existing_since_utc": "2026-10-03T16:08:57Z",
+    "built_with": "uv 0.11.21 per pyvenv.cfg (~/.local/bin/uv); /opt/homebrew/bin/uv 0.12.0 is first on PATH",
+    "pins": {
+      "mlx": "0.31.2",
+      "mlx-lm": "0.31.3",
+      "source": "preflight brief, step 3 install command; ASSETS.md and assets.json pin no mlx versions"
+    },
+    "matches_pins": true
+  },
+  "downloads": {
+    "checked_utc": "2026-10-03T19:10:25Z",
+    "hf_downloads_running": 1,
+    "hf_download_targets": [
+      "~/models/exp036/gemma-4-26b-a4b-it-8bit"
+    ],
+    "models": [
+      {
+        "repo": "Aleph-Alpha/Kolibri-1-BF16",
+        "path": "$EXP036_MODELS/Kolibri-1-BF16",
+        "pinned_revision": "7a8f290e7858825c3cf5e4c447ba68345de9f1d3",
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 156228414296,
+        "bytes_manifest": 156228414296,
+        "size_ok": true,
+        "recorded_revisions": [
+          "7a8f290e7858825c3cf5e4c447ba68345de9f1d3"
+        ],
+        "revision_ok": true,
+        "incomplete_files": 0,
+        "complete": true
+      },
+      {
+        "repo": "mlx-community/gemma-4-26b-a4b-it-8bit",
+        "path": "$EXP036_MODELS/gemma-4-26b-a4b-it-8bit",
+        "pinned_revision": "33c6d23798a0af159529890f79329206dbfbd73c",
+        "present": true,
+        "still_downloading": true,
+        "bytes_on_disk": 32382799,
+        "bytes_manifest": 28000000000,
+        "size_ok": false,
+        "recorded_revisions": [
+          "33c6d23798a0af159529890f79329206dbfbd73c"
+        ],
+        "revision_ok": null,
+        "incomplete_files": 6,
+        "complete": false,
+        "revision_note": "cannot be judged yet: download in progress; the 9 finished files recorded so far are all at the pin"
+      },
+      {
+        "repo": "mlx-community/Qwen3.6-35B-A3B-8bit",
+        "path": "$EXP036_MODELS/Qwen3.6-35B-A3B-8bit",
+        "pinned_revision": "e06a74e6236a60c8367e1a3214e83d8b61b637b0",
+        "present": false,
+        "still_downloading": false,
+        "size_ok": false,
+        "revision_ok": false,
+        "bytes_on_disk": 0,
+        "bytes_manifest": 37700000000,
+        "recorded_revisions": [],
+        "incomplete_files": 0,
+        "complete": false
+      },
+      {
+        "repo": "mlx-community/Qwen3.8-27B-8bit",
+        "path": "$EXP036_MODELS/Qwen3.8-27B-8bit",
+        "pinned_revision": "815b83c0df8ffd1d1b5244cf75fd6ef14fca9ef9",
+        "present": false,
+        "still_downloading": false,
+        "size_ok": false,
+        "revision_ok": false,
+        "bytes_on_disk": 0,
+        "bytes_manifest": 29500000000,
+        "recorded_revisions": [],
+        "incomplete_files": 0,
+        "complete": false
+      },
+      {
+        "repo": "mlx-community/gemma-4-26b-a4b-it-4bit",
+        "path": "$EXP036_MODELS/gemma-4-26b-a4b-it-4bit",
+        "pinned_revision": "0d77464eeb233a2da68ebf9d7dc4edaac7db956d",
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 15373588575,
+        "bytes_manifest": 15400000000,
+        "size_ok": true,
+        "recorded_revisions": [
+          "0d77464eeb233a2da68ebf9d7dc4edaac7db956d"
+        ],
+        "revision_ok": true,
+        "incomplete_files": 0,
+        "complete": true
+      },
+      {
+        "repo": "mlx-community/Qwen3.6-35B-A3B-4bit",
+        "path": "$EXP036_MODELS/Qwen3.6-35B-A3B-4bit",
+        "pinned_revision": "38740b847e4cb78f352aba30aa41c76e08e6eb46",
+        "present": false,
+        "still_downloading": false,
+        "size_ok": false,
+        "revision_ok": false,
+        "bytes_on_disk": 0,
+        "bytes_manifest": 20400000000,
+        "recorded_revisions": [],
+        "incomplete_files": 0,
+        "complete": false
+      },
+      {
+        "repo": "mlx-community/Qwen3.8-27B-4bit",
+        "path": "$EXP036_MODELS/Qwen3.8-27B-4bit",
+        "pinned_revision": "10c35caafbb80f7dc6a7a432cdd11af10a6d4818",
+        "present": false,
+        "still_downloading": false,
+        "size_ok": false,
+        "revision_ok": false,
+        "bytes_on_disk": 0,
+        "bytes_manifest": 16100000000,
+        "recorded_revisions": [],
+        "incomplete_files": 0,
+        "complete": false
+      }
+    ],
+    "datasets": [
+      {
+        "repo": "math-ai/aime26",
+        "path": "$EXP036_MODELS/data/aime26",
+        "pinned_revision": "79037aebdb6580008fb960d17cb21fd3099083e3",
+        "gated": false,
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 16488,
+        "files": 3,
+        "data_files": 1,
+        "incomplete_files": 0,
+        "size_ok": null,
+        "size_note": "manifest records no size for datasets",
+        "recorded_revisions": [
+          "79037aebdb6580008fb960d17cb21fd3099083e3"
+        ],
+        "revision_ok": true,
+        "complete": true
+      },
+      {
+        "repo": "ellamind/aime26-multilingual",
+        "path": "$EXP036_MODELS/data/aime26-multilingual",
+        "pinned_revision": "3c8bc18f6c185ed2d66803dbd394839a3917fd82",
+        "gated": false,
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 87299,
+        "files": 6,
+        "data_files": 4,
+        "incomplete_files": 0,
+        "size_ok": null,
+        "size_note": "manifest records no size for datasets",
+        "recorded_revisions": [
+          "3c8bc18f6c185ed2d66803dbd394839a3917fd82"
+        ],
+        "revision_ok": true,
+        "complete": true
+      },
+      {
+        "repo": "allenai/IFBench_test",
+        "path": "$EXP036_MODELS/data/IFBench_test",
+        "pinned_revision": "2e8a48de45ff3bf41242f927254ca81b59ca3ae2",
+        "gated": false,
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 99777,
+        "files": 3,
+        "data_files": 1,
+        "incomplete_files": 0,
+        "size_ok": null,
+        "size_note": "manifest records no size for datasets",
+        "recorded_revisions": [
+          "2e8a48de45ff3bf41242f927254ca81b59ca3ae2"
+        ],
+        "revision_ok": true,
+        "complete": true
+      },
+      {
+        "repo": "li-lab/MMLU-ProX-Lite",
+        "path": "$EXP036_MODELS/data/MMLU-ProX-Lite",
+        "pinned_revision": "e82aafb9460529687d3c7e51b401d8dd1dd309dd",
+        "gated": false,
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 11552384,
+        "files": 60,
+        "data_files": 58,
+        "incomplete_files": 0,
+        "size_ok": null,
+        "size_note": "manifest records no size for datasets",
+        "recorded_revisions": [
+          "e82aafb9460529687d3c7e51b401d8dd1dd309dd"
+        ],
+        "revision_ok": true,
+        "complete": true
+      },
+      {
+        "repo": "li-lab/MMLU-ProX",
+        "path": "$EXP036_MODELS/data/MMLU-ProX",
+        "pinned_revision": "8e6106a6c6ce1c5027e66cc338143cf997b2aa09",
+        "gated": false,
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 178260098,
+        "files": 60,
+        "data_files": 58,
+        "incomplete_files": 0,
+        "size_ok": null,
+        "size_note": "manifest records no size for datasets",
+        "recorded_revisions": [
+          "8e6106a6c6ce1c5027e66cc338143cf997b2aa09"
+        ],
+        "revision_ok": true,
+        "complete": true
+      },
+      {
+        "repo": "Idavidrein/gpqa",
+        "path": "$EXP036_MODELS/data/gpqa",
+        "pinned_revision": "83022cefff930aea54f654c0b282e74b9eeda5c6",
+        "gated": true,
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 8713057,
+        "files": 8,
+        "data_files": 6,
+        "incomplete_files": 0,
+        "size_ok": null,
+        "size_note": "manifest records no size for datasets",
+        "recorded_revisions": [
+          "83022cefff930aea54f654c0b282e74b9eeda5c6"
+        ],
+        "revision_ok": true,
+        "complete": true,
+        "verification": {
+          "method": "file listing, row counts (CSV parser; parquet footer, which also gives the column count), sha256; no item text printed",
+          "files": [
+            {
+              "file": "gpqa/gpqa_diamond.csv",
+              "bytes": 1373492,
+              "rows": 198,
+              "sha256": "41d1213cd7a4998605a26c2798500652572007161b3a92817ba46b35befcd305"
+            },
+            {
+              "file": "gpqa/gpqa_experts.csv",
+              "bytes": 26636,
+              "rows": 60,
+              "sha256": "ed1c6864ddfe4c8aaf67b665d9901d36ec4fa8c09f08c5c4e5509865bc41a672"
+            },
+            {
+              "file": "gpqa/gpqa_extended.csv",
+              "bytes": 4091077,
+              "rows": 546,
+              "sha256": "0926ee24949d02ed6748eb75a2611546c34479e30ddc42efd01d6f1681aaa48a"
+            },
+            {
+              "file": "gpqa/gpqa_main.csv",
+              "bytes": 3214603,
+              "rows": 448,
+              "sha256": "acdeeac8f622267f2cd727d7d474202ea08dec80f7d3c3593b3ef8644f19b8e3"
+            }
+          ]
+        }
+      },
+      {
+        "repo": "ellamind/gpqa-multilingual",
+        "path": "$EXP036_MODELS/data/gpqa-multilingual",
+        "pinned_revision": "bc70ca1791afa241a98c972e126c2decaf0a367d",
+        "gated": true,
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 2225857,
+        "files": 11,
+        "data_files": 9,
+        "incomplete_files": 0,
+        "size_ok": null,
+        "size_note": "manifest records no size for datasets",
+        "recorded_revisions": [
+          "bc70ca1791afa241a98c972e126c2decaf0a367d"
+        ],
+        "revision_ok": true,
+        "complete": true,
+        "verification": {
+          "method": "file listing, row counts (CSV parser; parquet footer, which also gives the column count), sha256; no item text printed",
+          "files": [
+            {
+              "file": "gpqa-multilingual/ces/train-00000-of-00001.parquet",
+              "bytes": 266323,
+              "rows": 448,
+              "columns": 17,
+              "sha256": "d46ba679268e16624ca054c5607c9567b72cd39038ec3c2a88726ab2d41e6765"
+            },
+            {
+              "file": "gpqa-multilingual/dan/train-00000-of-00001.parquet",
+              "bytes": 263334,
+              "rows": 448,
+              "columns": 17,
+              "sha256": "e39e925d1f2a1559470c2d5a6e41f979b965b65e5577e797722de0c42d9220b3"
+            },
+            {
+              "file": "gpqa-multilingual/deu/train-00000-of-00001.parquet",
+              "bytes": 283090,
+              "rows": 448,
+              "columns": 17,
+              "sha256": "57af6d21b693585db9321d57532cf0d06b28956d7803f46032cf8e846b5e68fd"
+            },
+            {
+              "file": "gpqa-multilingual/fin/train-00000-of-00001.parquet",
+              "bytes": 43051,
+              "rows": 50,
+              "columns": 17,
+              "sha256": "3e9798e2768a2ece6ff226eabbd62ce1e0f5775a8dc8f8316e273005222ffec3"
+            },
+            {
+              "file": "gpqa-multilingual/fra/train-00000-of-00001.parquet",
+              "bytes": 279560,
+              "rows": 448,
+              "columns": 17,
+              "sha256": "23a23e9c8876c16cf6d81e5d02b715e6afc6c74a4e0bc1e52698e8d65ed5b14c"
+            },
+            {
+              "file": "gpqa-multilingual/ita/train-00000-of-00001.parquet",
+              "bytes": 266488,
+              "rows": 448,
+              "columns": 17,
+              "sha256": "d7b501c4a56f817567deaccfc8f72c875af71d2d6dd156db5e05498ab993b337"
+            },
+            {
+              "file": "gpqa-multilingual/nld/train-00000-of-00001.parquet",
+              "bytes": 261432,
+              "rows": 448,
+              "columns": 17,
+              "sha256": "98bf48f016eef2953caefb2371bd36e44686a79ab336f5790a67d09ac5f2540f"
+            },
+            {
+              "file": "gpqa-multilingual/pol/train-00000-of-00001.parquet",
+              "bytes": 282972,
+              "rows": 448,
+              "columns": 17,
+              "sha256": "eaafc91b219a083984f936f7ec53fd6bd765853e096ef101b1c01fb007f640fc"
+            },
+            {
+              "file": "gpqa-multilingual/spa/train-00000-of-00001.parquet",
+              "bytes": 272456,
+              "rows": 448,
+              "columns": 17,
+              "sha256": "2f7a9dee6fb71283253bae1129e51ddee46312f97482e45e9c4eaa655b8a07b5"
+            }
+          ]
+        }
+      }
+    ],
+    "code": [
+      {
+        "repo": "https://github.com/allenai/IFBench",
+        "path": "$EXP036_MODELS/data/IFBench-src",
+        "pinned_commit": "1c40f0c10d9b5c5c2f10a175a28007ebb64f7f4d",
+        "present": true,
+        "size_ok": null,
+        "size_note": "git checkout; no size in manifest",
+        "recorded_commit": "1c40f0c10d9b5c5c2f10a175a28007ebb64f7f4d",
+        "revision_ok": true,
+        "working_tree_clean": true,
+        "still_downloading": false,
+        "complete": true
+      }
+    ],
+    "pending_manifest": [
+      {
+        "repo": "HuggingFaceFW/fineweb-2",
+        "file": "data/deu_Latn/test/000_00000.parquet",
+        "path": "$EXP036_MODELS/data/fineweb-2",
+        "pinned_revision": "af9c13333eb981300149d5ca60a8e9d659b276b9",
+        "command": "hf download HuggingFaceFW/fineweb-2 data/deu_Latn/test/000_00000.parquet --repo-type dataset --revision af9c13333eb981300149d5ca60a8e9d659b276b9 --local-dir $EXP036_MODELS/data/fineweb-2",
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 104264728,
+        "bytes_hub": 104264728,
+        "sha256": "f370564f527a10cf125f267d8f10175d6a6366390480620e90a469bbf80a2a46",
+        "sha256_hub_lfs": "f370564f527a10cf125f267d8f10175d6a6366390480620e90a469bbf80a2a46",
+        "rows": 65176,
+        "columns": 11,
+        "recorded_revisions": [
+          "af9c13333eb981300149d5ca60a8e9d659b276b9"
+        ],
+        "incomplete_files": 0,
+        "size_ok": true,
+        "revision_ok": true,
+        "fetched_by": "this host's Claude session, on the mini session's brief of 2026-10-03, as the brief specified; the row's command, built_with or downloaded_with field holds what was run (the git clone and checkout also had -q, which only silences output)",
+        "complete": true
+      },
+      {
+        "repo": "https://github.com/chen700564/RGB",
+        "path": "$EXP036_MODELS/data/RGB-src",
+        "pinned_commit": "65ec39e40e7dc9abb50e9bf1b4f32be3f6f16615",
+        "present": true,
+        "command": "git clone https://github.com/chen700564/RGB $EXP036_MODELS/data/RGB-src && git -C $EXP036_MODELS/data/RGB-src checkout 65ec39e40e7dc9abb50e9bf1b4f32be3f6f16615",
+        "recorded_commit": "65ec39e40e7dc9abb50e9bf1b4f32be3f6f16615",
+        "revision_ok": true,
+        "working_tree_clean": true,
+        "size_ok": null,
+        "size_note": "git checkout; no size pinned",
+        "still_downloading": false,
+        "license_github_api": "Other (spdx NOASSERTION); LICENSE.txt is in the checkout, not reviewed here",
+        "verification": {
+          "method": "file listing, record counts by parsing, sha256; no item text printed",
+          "files": [
+            {
+              "file": "RGB-src/data/en.json",
+              "bytes": 10808210,
+              "records": 300,
+              "format": "json lines",
+              "sha256": "872fc551cfb609895326bb9d76754855164d5cc715fe22694daeded8962f5285"
+            },
+            {
+              "file": "RGB-src/data/en_fact.json",
+              "bytes": 241320,
+              "records": 100,
+              "format": "json lines",
+              "sha256": "92f4b2330ee407f74fbd923197028ef5140cfbc1f4b4092efec2d4d10ae6c9e5"
+            },
+            {
+              "file": "RGB-src/data/en_int.json",
+              "bytes": 5138444,
+              "records": 100,
+              "format": "json lines",
+              "sha256": "ab824393a15bb3e0a6b2c9037c8b50f2865874fc7984091ffdec1961f9b37bdf"
+            },
+            {
+              "file": "RGB-src/data/en_refine.json",
+              "bytes": 7229738,
+              "records": 300,
+              "format": "json lines",
+              "sha256": "1be6ec4b85364b5590c7683ed4df8d47535ae21bc021bbcd3f44a71579f64bcb"
+            },
+            {
+              "file": "RGB-src/data/zh.json",
+              "bytes": 5855124,
+              "records": 300,
+              "format": "json lines",
+              "sha256": "7095ec1b833a6cb1ecf851066738037fa076d0bd2351a7af8a39a43ab809e336"
+            },
+            {
+              "file": "RGB-src/data/zh_fact.json",
+              "bytes": 320481,
+              "records": 100,
+              "format": "json lines",
+              "sha256": "171c4bc97860635092ce099f2da095c6ba8d07f0c6f7a19d0231373192f07da0"
+            },
+            {
+              "file": "RGB-src/data/zh_int.json",
+              "bytes": 3024012,
+              "records": 100,
+              "format": "json lines",
+              "sha256": "e2ddb0461e2130f4b006996a574a89d5898989ff8b15f51d900c17162c7d1b17"
+            },
+            {
+              "file": "RGB-src/data/zh_refine.json",
+              "bytes": 3893494,
+              "records": 300,
+              "format": "json lines",
+              "sha256": "7a5c7547dcfa1b83429b53a41644453508f820f502d3817312cbf8051afb4563"
+            }
+          ]
+        },
+        "complete": true,
+        "fetched_by": "this host's Claude session, on the mini session's brief of 2026-10-03, as the brief specified; the row's command, built_with or downloaded_with field holds what was run (the git clone and checkout also had -q, which only silences output)"
+      },
+      {
+        "path": "$EXP036_MODELS/ifbench-venv",
+        "present": true,
+        "built_with": "(cd $EXP036_MODELS/data/IFBench-src && UV_PROJECT_ENVIRONMENT=$EXP036_MODELS/ifbench-venv uv sync --frozen --python 3.12)",
+        "uv": "0.12.0",
+        "python": "3.12.13",
+        "python_note": "pyvenv.cfg pins only version_info = 3.12; the interpreter resolves through uv's cpython-3.12 minor-version link, so a later uv install of another 3.12.x would change it",
+        "lockfile": "$EXP036_MODELS/data/IFBench-src/uv.lock",
+        "lockfile_sha256": "1c235a49f73d79274797746a083a6b675af284e6652cb6b788f9100e41e3001a",
+        "pip_freeze": [
+          "absl-py==2.3.1",
+          "annotated-types==0.7.0",
+          "anyio==4.12.0",
+          "certifi==2025.11.12",
+          "click==8.3.1",
+          "coverage==7.13.0",
+          "emoji==2.15.0",
+          "h11==0.16.0",
+          "httpcore==1.0.9",
+          "httpx==0.28.1",
+          "idna==3.11",
+          "-e ~/models/exp036/data/IFBench-src",
+          "immutabledict==4.2.2",
+          "iniconfig==2.3.0",
+          "joblib==1.5.3",
+          "langdetect==1.0.9",
+          "nltk==3.9.2",
+          "packaging==25.0",
+          "pluggy==1.6.0",
+          "pydantic==2.12.5",
+          "pydantic-core==2.41.5",
+          "pydantic-settings==2.12.0",
+          "pygments==2.19.2",
+          "pytest==9.0.2",
+          "pytest-cov==7.0.0",
+          "python-dotenv==1.2.1",
+          "regex==2025.11.3",
+          "six==1.17.0",
+          "syllapy==0.8.0",
+          "tqdm==4.67.1",
+          "typing-extensions==4.15.0",
+          "typing-inspection==0.4.2"
+        ],
+        "import_check": "PYTHONDONTWRITEBYTECODE=1 NLTK_DATA=$EXP036_MODELS/nltk_data python -c 'import nltk, langdetect, ifbench' succeeded; no IFBench evaluation was run",
+        "size_ok": null,
+        "revision_ok": null,
+        "revision_note": "a venv has no revision; pinned by the IFBench-src uv.lock (--frozen)",
+        "still_downloading": false,
+        "complete": true,
+        "fetched_by": "this host's Claude session, on the mini session's brief of 2026-10-03, as the brief specified; the row's command, built_with or downloaded_with field holds what was run (the git clone and checkout also had -q, which only silences output)"
+      },
+      {
+        "path": "$EXP036_MODELS/nltk_data",
+        "present": true,
+        "packages": [
+          "punkt",
+          "punkt_tab",
+          "stopwords",
+          "averaged_perceptron_tagger_eng"
+        ],
+        "downloaded_with": "$EXP036_MODELS/ifbench-venv/bin/python -c \"import nltk; [nltk.download(p, download_dir='$EXP036_MODELS/nltk_data') for p in ['punkt','punkt_tab','stopwords','averaged_perceptron_tagger_eng']]\"",
+        "nltk": "3.9.2",
+        "zips": [
+          {
+            "file": "nltk_data/corpora/stopwords.zip",
+            "bytes": 37733,
+            "sha256": "48c0e52d8b52546e827f53761fb30300c0ab94f70660d28bd65ba0a86270946b"
+          },
+          {
+            "file": "nltk_data/taggers/averaged_perceptron_tagger_eng.zip",
+            "bytes": 1539115,
+            "sha256": "6025f530624335c67d6547d44757b357b4e79bae030a0383e9887a92c1718f0b"
+          },
+          {
+            "file": "nltk_data/tokenizers/punkt.zip",
+            "bytes": 13905355,
+            "sha256": "51c3078994aeaf650bfc8e028be4fb42b4a0d177d41c012b6a983979653660ec"
+          },
+          {
+            "file": "nltk_data/tokenizers/punkt_tab.zip",
+            "bytes": 4319076,
+            "sha256": "e57f64187974277726a3417ca6f181ec5403676c717672eef6a748a7b20e0106"
+          }
+        ],
+        "size_ok": null,
+        "revision_ok": null,
+        "revision_note": "NLTK data packages carry no revision; zip sha256 recorded instead",
+        "still_downloading": false,
+        "complete": true,
+        "fetched_by": "this host's Claude session, on the mini session's brief of 2026-10-03, as the brief specified; the row's command, built_with or downloaded_with field holds what was run (the git clone and checkout also had -q, which only silences output)"
+      }
+    ],
+    "pending_manifest_note": "approved by the mini session, not yet in ASSETS.md/assets.json; fetched as its brief gave them"
+  },
+  "fits_8bit_kolibri": {
+    "answer": "yes",
+    "raise_wired_limit_needed": false,
+    "arithmetic": "max_recommended_working_set_size = 115448725504 B = 107.52 GiB; 0.9 x that = 103903852953.6 B = 96.77 GiB; 8-bit Kolibri ~78 GiB = 83751862272 B; headroom = 18.77 GiB",
+    "scope": "weights only; KV cache and activations come out of the headroom"
+  },
+  "smoke_test": {
+    "status": "failed",
+    "reason": "The brief's step 5 command loaded the model and exited 0 but produced no German text within its 30 tokens: the model spent them in a '<|channel>thought' thinking channel. Whether this blocks anything is for Andrei to decide.",
+    "model": "$EXP036_MODELS/gemma-4-26b-a4b-it-4bit",
+    "revision": "0d77464eeb233a2da68ebf9d7dc4edaac7db956d",
+    "runs": [
+      {
+        "command": "mlx_lm.generate --model ~/models/exp036/gemma-4-26b-a4b-it-4bit --prompt \"Sag Hallo.\" --max-tokens 30",
+        "source": "preflight brief, step 5",
+        "started_utc_window": "between 2026-10-03T16:49:07Z and 16:50:46Z (16:49:07Z: gemma hf process seen exited; 16:50:46Z: date -u taken after both runs); exact start not logged",
+        "loaded": true,
+        "exit_code": 0,
+        "german_text": false,
+        "detail": "the token budget ran out inside the thinking channel, before any answer"
+      },
+      {
+        "command": "mlx_lm.generate --model ~/models/exp036/gemma-4-26b-a4b-it-4bit --prompt \"Sag Hallo.\" --max-tokens 400",
+        "source": "deviation from brief step 5: an extra diagnostic run, not requested, made after seeing the 30-token result, to tell token budget apart from capability",
+        "started_utc_window": "after the 30-token run, before 2026-10-03T16:50:46Z (16:49:07Z: gemma hf process seen exited; 16:50:46Z: date -u taken after both runs); exact start not logged",
+        "loaded": true,
+        "exit_code": 0,
+        "german_text": true,
+        "detail": "the thinking channel closed and German text followed"
+      }
+    ],
+    "not_recorded": "output text, tokens/s, peak memory and timings; the speed and memory lines were filtered out before display",
+    "carried_over_from": "mbp_preflight_20261003T170152Z.json; not re-run"
+  },
+  "notes": [
+    "Follow-up to mbp_preflight_20261003T170152Z.json; both earlier preflights are unchanged. This file re-measures every asset and adds the assets from the mini session's second brief.",
+    "Kolibri-1-BF16 is complete. Andrei started the download, and its hf process was seen exited at 2026-10-03T18:57:35Z. All 40 files are recorded at the pinned revision, the bytes equal the manifest exactly (156228414296), every one of the 32 shards named in model.safetensors.index.json is present, and there are no .incomplete files.",
+    "Peer builds: gemma-4-26b-a4b-it-4bit is complete (unchanged). gemma-4-26b-a4b-it-8bit was downloading at check time, started by Andrei. The other four peer folders were not present at check time.",
+    "Next step: Andrei starts the four Qwen peer downloads (Qwen3.6-35B-A3B-8bit, Qwen3.8-27B-8bit, Qwen3.6-35B-A3B-4bit, Qwen3.8-27B-4bit) with their ASSETS.md commands, unless they are already queued behind gemma-4-26b-a4b-it-8bit in his terminal.",
+    "GPQA is complete. Andrei accepted both gates and fetched the data files himself with the two ASSETS.md commands: by file time, the gpqa files were written 17:23:27Z-17:23:36Z and the gpqa-multilingual files 17:23:39Z-17:24:07Z. On the mini session's brief, this session then re-ran both commands at about 18:32Z; both exited 0 and changed no data file or .metadata (8 and 11 files at the pins); hf only added .lock files and a trees/ cache entry. Rows: gpqa diamond 198, main 448, extended 546, experts 60. gpqa-multilingual has 448 rows in each language except fin, which has 50. Checked by file listing, CSV-parser row counts, parquet footers and sha256; nothing but counts and hashes was printed.",
+    "pending_manifest holds the mini-approved assets that are not yet in assets.json. FineWeb-2 was fetched by naming the file (not --include); its bytes and sha256 equal the Hub's LFS record, with 65176 rows. RGB-src is at the pinned commit with a clean tree; its record counts and sha256 are recorded, and GitHub's API reports its licence as Other (NOASSERTION).",
+    "ifbench-venv was built with Homebrew uv 0.12.0, first on PATH (the main venv used uv 0.11.21), using --frozen from the IFBench-src uv.lock, whose sha256 is recorded. The default dependency groups, including dev tools (pytest, coverage), were installed. IFBench-src is still clean at its pinned commit after the sync and the import check.",
+    "nltk_data holds the four packages from the brief. NLTK data carries no revision pin, so each zip's sha256 is recorded.",
+    "Counts and hashes were computed in a throwaway uv environment with pyarrow, outside both pinned venvs.",
+    "No model was run after the smoke test, no benchmark item text was printed, and no speed or memory figure was measured or recorded."
+  ]
+}
