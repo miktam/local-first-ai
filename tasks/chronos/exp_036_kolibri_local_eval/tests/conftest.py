@@ -1,0 +1,136 @@
+"""Shared pytest setup for the exp_036 tests.
+
+Puts the experiment directory (port/, reference/) and this tests/ directory on
+sys.path, provides the tiny checkpoints, and resolves the Kolibri tokenizer
+from the environment. Nothing here touches the network.
+
+Environment (BUILD_SPEC 1 and 6):
+  EXP036_TOK            the Kolibri tokenizer directory (tokenizer.json and
+                        tokenizer_config.json); EXP036_TOKENIZER_DIR is the
+                        older name and still accepted.
+  EXP036_REQUIRE_ALL=1  every skip becomes a failure (the pre-push run on the
+                        mini), so a missing fixture or sibling module can never
+                        pass silently. EXP036_REQUIRE_ALL=run-host (the mbp,
+                        RUNBOOK step 3) does the same except for skips marked
+                        "build-host only:" (files only the mini holds).
+"""
+
+from __future__ import annotations
+
+import os
+import sys
+from pathlib import Path
+
+import pytest
+
+# Do not leave __pycache__ in port/ and reference/ (or here) after a test run.
+sys.dont_write_bytecode = True
+
+TESTS_DIR = Path(__file__).resolve().parent
+EXP_DIR = TESTS_DIR.parent
+
+for _p in (str(EXP_DIR), str(TESTS_DIR)):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+
+# Tokenizer tests must never reach the Hub (transformers' Mistral-regex check
+# can call hf_api for non-local paths).
+os.environ.setdefault("HF_HUB_OFFLINE", "1")
+os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
+
+import tiny_checkpoint  # noqa: E402
+
+
+def _write(tmp_path_factory, preset: str) -> Path:
+    out = tmp_path_factory.mktemp(f"tiny_{preset}")
+    return tiny_checkpoint.write_tiny_checkpoint(
+        out,
+        seed=0,
+        preset=preset,
+        # The port file may not exist yet; reference-only tests do not need it.
+        copy_port=tiny_checkpoint.PORT_MODEL_FILE.exists(),
+    )
+
+
+@pytest.fixture(scope="session")
+def tiny_vendor_dir(tmp_path_factory) -> Path:
+    return _write(tmp_path_factory, "vendor")
+
+
+@pytest.fixture(scope="session")
+def tiny_pattern5_dir(tmp_path_factory) -> Path:
+    return _write(tmp_path_factory, "pattern5")
+
+
+@pytest.fixture(scope="session")
+def tiny_checkpoint_factory(tmp_path_factory):
+    """make(preset, seed) -> checkpoint dir, written once per (preset, seed)
+    per session, for tests that run both presets at several weight seeds."""
+    made: dict[tuple[str, int], Path] = {}
+
+    def make(preset: str, seed: int) -> Path:
+        key = (preset, seed)
+        if key not in made:
+            out = tmp_path_factory.mktemp(f"tiny_{preset}_s{seed}")
+            made[key] = tiny_checkpoint.write_tiny_checkpoint(
+                out,
+                seed=seed,
+                preset=preset,
+                copy_port=tiny_checkpoint.PORT_MODEL_FILE.exists(),
+            )
+        return made[key]
+
+    return make
+
+
+# EXP036_REQUIRE_ALL=1         every skip is a failure (the pre-push run on the build host, the mini).
+# EXP036_REQUIRE_ALL=run-host  every skip is a failure except a "build-host only:" skip (a test that compares with
+#                              files only the mini holds: upstream peer files, the eval-framework checkout); RUNBOOK
+#                              step 3 on the mbp. Those tests already passed on the mini before the push.
+REQUIRE_ALL = os.environ.get("EXP036_REQUIRE_ALL", "") in ("1", "run-host")
+RUN_HOST = os.environ.get("EXP036_REQUIRE_ALL", "") == "run-host"
+BUILD_HOST_ONLY = "build-host only:"
+
+
+def _no_skips(report) -> None:
+    if REQUIRE_ALL and report.skipped and not hasattr(report, "wasxfail"):
+        reason = report.longrepr[-1] if isinstance(report.longrepr, tuple) else str(report.longrepr)
+        if RUN_HOST and BUILD_HOST_ONLY in str(reason):
+            return
+        report.outcome = "failed"
+        report.longrepr = (f"EXP036_REQUIRE_ALL={os.environ.get('EXP036_REQUIRE_ALL')}: "
+                           f"skipped tests count as failures ({reason})")
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    _no_skips(outcome.get_result())
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_make_collect_report(collector):
+    outcome = yield
+    _no_skips(outcome.get_result())
+
+
+@pytest.fixture(scope="session")
+def tokenizer_dir() -> Path:
+    """Directory holding tokenizer.json + tokenizer_config.json of Kolibri 1.
+
+    $EXP036_TOK, else $EXP036_TOKENIZER_DIR, else $EXP036_MODELS/Kolibri-1-BF16,
+    else skip.
+    """
+    candidates = []
+    for var in ("EXP036_TOK", "EXP036_TOKENIZER_DIR"):
+        if os.environ.get(var):
+            candidates.append(Path(os.environ[var]).expanduser())
+    if os.environ.get("EXP036_MODELS"):
+        candidates.append(Path(os.environ["EXP036_MODELS"]).expanduser() / "Kolibri-1-BF16")
+    for d in candidates:
+        if (d / "tokenizer.json").is_file() and (d / "tokenizer_config.json").is_file():
+            return d
+    pytest.skip(
+        "no Kolibri tokenizer: set EXP036_TOK (or EXP036_TOKENIZER_DIR) or EXP036_MODELS "
+        f"(checked: {[str(c) for c in candidates] or 'nothing set'})"
+    )

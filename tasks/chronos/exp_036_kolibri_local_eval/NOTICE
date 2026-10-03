@@ -1,0 +1,378 @@
+Chronos Experiment 036 (Kolibri-1 local evaluation)
+Copyright (c) 2026 Miktam
+
+This directory is part of the local-first-ai repository, which is licensed
+under the MIT License (see LICENSE at the repository root). The files listed
+in sections 1 to 5 below are the exceptions: they are covered by the Apache
+License, Version 2.0, whose full text is in LICENSE-APACHE-2.0 in this
+directory. Sections 6 to 8 attribute data and code that the kit reads in place
+or records facts about, without redistributing them. Section 9 covers
+everything else. tests/test_notice.py checks that every Apache-derived or
+copied file is named here.
+
+
+1. Files derived from aleph-alpha-inference
+-------------------------------------------
+
+aleph-alpha-inference 1.0.0, the vLLM plugin that serves Kolibri 1
+  Copyright 2026 Aleph Alpha GmbH
+  Licensed under the Apache License, Version 2.0
+  Source: https://github.com/Aleph-Alpha/aleph-alpha-inference
+  Commit: 049a6a7bd2405b27d6d280d256bd3d585191c7ae
+
+The following files are derived works of that source. Each carries an
+"SPDX-License-Identifier: Apache-2.0" header and a line stating that it was
+modified for MLX/numpy by Miktam for Chronos exp_036 on 2026-10-03.
+
+  port/kolibri1.py
+      MLX re-implementation of aleph_alpha_inference/kolibri1.py (the
+      Kolibri1 attention, routing, MoE block and decoder layer) for mlx_lm.
+      convert.py copies this file, unchanged, into every converted model
+      directory, so it is distributed with each converted checkpoint.
+
+  reference/kolibri_ref.py
+      Independent float32 numpy re-implementation of the same forward pass,
+      including the vendor's sigmoid_logit_add_routing.
+
+  reference/mutants.py
+      The seven G3 reference mutants (HYPOTHESIS Phase 0, G3): subclasses of
+      the numpy reference, each re-expressing one plausible misreading of the
+      vendor's Kolibri1 forward pass (routing, RoPE, RMSNorm, norm order).
+
+  gate/port_mutants.py
+      The 15 port mutants of HYPOTHESIS Phase 0: patches of a fresh copy of
+      port/kolibri1.py's module that re-express parts of the Kolibri1
+      attention, router and MoE code in deliberately wrong variants.
+      port/kolibri1.py itself is never edited.
+
+  tests/tiny_checkpoint.py
+      numpy re-expression of the vendor's tests/checkpoints.py (tiny random
+      checkpoint with the real tensor names and the vendor test config).
+
+  tests/test_routing.py
+      numpy re-expression of the vendor's test_routing_semantics from
+      tests/test_kolibri1.py.
+
+Modifications: the code was rewritten from PyTorch/vLLM to MLX (port) and
+numpy (reference, mutants, tests). aleph-alpha-inference ships no NOTICE file
+of its own.
+
+
+2. Model configuration files copied as test fixtures
+----------------------------------------------------
+
+Kolibri 1 model files, Copyright 2026 Aleph Alpha GmbH, released under the
+Apache License, Version 2.0. Copied unmodified; provenance and sha256 are
+recorded in tests/fixtures/README.md.
+
+  tests/fixtures/kolibri1_chat_template.tokenizer_config.jinja
+      The chat_template string of tokenizer_config.json in
+      Aleph-Alpha/Kolibri-1-BF16, revision
+      7a8f290e7858825c3cf5e4c447ba68345de9f1d3, written out verbatim.
+
+  tests/fixtures/kolibri1_chat_template.vendor.jinja
+      tests/kolibri1_chat_template.jinja of aleph-alpha-inference, commit
+      049a6a7bd2405b27d6d280d256bd3d585191c7ae (the same template with a
+      leading comment).
+
+The Kolibri 1 weights, tokenizer and config.json are not part of this
+repository. They are downloaded separately (see ASSETS.md) and remain
+Aleph Alpha GmbH's, under the Apache License, Version 2.0. The gate reads the
+fixtures above (and the tokenizer from the run host); it copies nothing else.
+
+
+3. Files copied from or derived from eval-framework
+---------------------------------------------------
+
+eval-framework v0.14.2, Aleph-Alpha-Research
+  Copyright 2025 Aleph Alpha Research GmbH
+  Licensed under the Apache License, Version 2.0
+  Source: https://github.com/Aleph-Alpha-Research/eval-framework
+  Tag v0.14.2, commit 3532e9f16e19e396fc2b4d4543878cdccc4d04da
+
+The files below are vendored under tasks/vendored_evalfw/ at their upstream
+relative paths. tasks/vendored_evalfw/MANIFEST.json records each file's sha256
+next to its upstream sha256, and tasks/vendored_evalfw/SOURCE.md describes the
+one modification. eval-framework ships no NOTICE file of its own; its LICENSE
+is copied unchanged.
+
+Copied byte for byte (unmodified):
+
+  tasks/vendored_evalfw/LICENSE
+  tasks/vendored_evalfw/src/eval_framework/answer.py
+  tasks/vendored_evalfw/src/eval_framework/choices.py
+  tasks/vendored_evalfw/src/eval_framework/eval_kind.py
+  tasks/vendored_evalfw/src/eval_framework/benchmarks/cot.py
+  tasks/vendored_evalfw/src/eval_framework/benchmarks/gpqa_ellamind.py
+  tasks/vendored_evalfw/src/eval_framework/benchmarks/mmlu_pro.py
+  tasks/vendored_evalfw/src/eval_framework/benchmarks/math_reasoning.py
+  tasks/vendored_evalfw/src/eval_framework/tasks/task_style.py
+  tasks/vendored_evalfw/src/eval_framework/tasks/utils.py
+  tasks/vendored_evalfw/src/eval_framework/metrics/completion/minerva_math_utils.py
+
+Modified (Apache-2.0 section 4(b)). The file carries an
+"SPDX-License-Identifier: Apache-2.0" header, the upstream copyright and a
+"Modified by Miktam for Chronos exp_036" line:
+
+  tasks/vendored_evalfw/src/eval_framework/benchmarks/gpqa.py
+      Modification (2026-10-03): the string literal _OVERLONG_QUESTION, the
+      full text of one GPQA question, is replaced by _OVERLONG_QUESTION_SHA256,
+      its sha256; the dataset filter compares sha256(row["Question"]) with that
+      constant. GPQA's terms forbid publishing examples. Nothing else changed.
+      Upstream sha256
+      0b7e50fe08716fa7ac9e9f045307838a22807095a1ec929a21558977469f5a5a.
+
+Files that use the vendored code and carry an "SPDX-License-Identifier:
+Apache-2.0" header and a "Modified by Miktam for Chronos exp_036" line:
+
+  scorers/mc.py
+      GPQA / MMLU answer-letter extraction. Uses the vendored
+      tulu_answer_v2(4), tulu_answer_v2(10) and tulu_answer_de() unchanged.
+      Modification: for MMLU-ProX DE the pattern of tulu_answer_de() is taken
+      from the vendored object and its letter class [A-D] is widened to [A-J];
+      nothing else.
+
+  scorers/aime.py
+      AIME scoring. Uses the vendored _extract_boxed and
+      _strip_string_with_bug unchanged. Modification: the extracted answer is
+      compared with the gold as an integer instead of eval-framework's
+      sympy-based MathReasoningCompletion metric.
+
+Derived from an Apache-2.0 prompt (translated):
+
+  tasks/prompts/aime_de.txt
+      German translation of eval-framework's _AIME_QUERY_TEMPLATE, which is
+      NVIDIA NeMo-Skills' llama3-instruct math prompt (Apache-2.0), by Miktam
+      for Chronos exp_036 (2026-10-03). The file is sent to the model verbatim,
+      so it can carry no header; this entry and
+      tasks/prompts/mmlu_prox_de_note.md are its notice. Translation choices
+      are recorded in that note.
+
+Third-party material inside the vendored files, credited by upstream in its
+comments: math_reasoning.py's _AIME_QUERY_TEMPLATE comes from NVIDIA
+NeMo-Skills (llama3-instruct/math.yaml, Apache-2.0), and its _QUERY_TEMPLATE
+comes from OpenAI simple-evals (MIT, (c) 2024 OpenAI). The kit uses only the
+former.
+
+Original work in the vendored directory (MIT, section 9; listed here because
+they sit next to the vendored files, not because they are Apache-derived):
+
+  tasks/vendored_evalfw/shim.py
+      executes the vendored files unchanged with stubs for unused imports;
+      copies no upstream code
+  tasks/vendored_evalfw/vendor.py
+      re-derives and checks the vendored tree from an upstream checkout
+  tasks/vendored_evalfw/SOURCE.md
+  tasks/vendored_evalfw/MANIFEST.json
+
+
+4. Code derived from vLLM
+-------------------------
+
+vLLM v0.29.0
+  Copyright contributors to the vLLM project
+  Licensed under the Apache License, Version 2.0
+  Source: https://github.com/vllm-project/vllm (tag v0.29.0),
+          vllm/v1/sample/ops/topk_topp_sampler.py (apply_top_k_top_p,
+          apply_top_k_only)
+
+  runner/sampler.py
+      filter_np() is a numpy transcription of apply_top_k_top_p and
+      apply_top_k_only (temperature, then top-k with ties kept, then top-p
+      over the renormalised top-k distribution, the largest value always
+      kept). filter_top_k_top_p() re-expresses the same mask for MLX as a
+      value threshold. The file carries "SPDX-License-Identifier: Apache-2.0"
+      and a line stating that it was modified by Miktam for Chronos exp_036 on
+      2026-10-03 (rewritten from PyTorch to numpy and MLX).
+
+The reference's semantics are resolved against further vLLM v0.29.0 files
+(listed in reference/DERIVATION.md). No code from them is copied; the
+reference cites them line by line.
+
+
+5. Peer chat templates copied as configuration files
+----------------------------------------------------
+
+Copied unmodified, byte for byte, from the upstream model repositories
+(Apache License, Version 2.0, per each repository's metadata). The runner
+renders every peer prompt with them. They carry no header, because byte
+parity with upstream is part of the protocol. Provenance, bytes and sha256 are
+recorded in runner/templates/SOURCE.md and runner/templates/MANIFEST.json
+(both original work, section 9).
+
+  runner/templates/gemma4.jinja
+      chat_template.jinja of google/gemma-4-26B-A4B-it at revision
+      20da991ab4afab98e8f910c4a2e8f4fbefc404ad. Copyright Google LLC.
+      sha256 36e3a42e5cf14cd0020e72d92e1fdd9970f59b82170e421f0cbe1bb42bead3f0
+
+  runner/templates/qwen3_6.jinja
+      chat_template.jinja of Qwen/Qwen3.6-35B-A3B at revision
+      995ad96eacd98c81ed38be0c5b274b04031597b0. Copyright the Qwen team,
+      Alibaba Cloud.
+      sha256 e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259
+
+  runner/templates/qwen3_8.jinja
+      chat_template.jinja of Qwen/Qwen3.8-27B at revision
+      1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0. Copyright the Qwen team,
+      Alibaba Cloud.
+      sha256 c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041
+
+tools/peer_check.py reads the peers' own chat_template.jinja and tokenizer
+files from the model directories at run time and compares them with these
+copies. It copies nothing.
+
+
+6. Third-party code used in place, never redistributed
+------------------------------------------------------
+
+  allenai/IFBench @ 1c40f0c10d9b5c5c2f10a175a28007ebb64f7f4d
+      Apache-2.0, Copyright 2025 Allen Institute for AI and The Google
+      Research Authors. scorers/ifbench_adapter.py runs IFBench's own
+      evaluation_lib.py and checkers from the local checkout
+      ($EXP036_DATA/IFBench-src) inside IFBench's own venv, through
+      scorers/ifbench_driver.py. No IFBench file is part of this repository.
+
+  chen700564/RGB @ 65ec39e40e7dc9abb50e9bf1b4f32be3f6f16615
+      Chen, Lin, Han and Sun, "Benchmarking Large Language Models in
+      Retrieval-Augmented Generation", AAAI 2024. Its README, at that commit,
+      licenses both its code and its data under CC BY-NC-SA 4.0. No RGB code
+      or text is copied. scorers/rgb.py implements the answer rule RGB
+      describes (original work, section 9, with RGB cited as the source of the
+      rule), and tasks/rgb.py re-expresses RGB's prompt construction
+      (evalue.py processdata and predict); prompts are rendered at run time
+      from the local checkout. RGB's own checkanswer and processdata run in
+      place from the local checkout only in tests/test_scorers_rgb.py and
+      tests/test_tasks_rgb_prompts.py, to check that the two agree. RGB also
+      ships data/en_refine.json (refined documents and answers, 2024-03); the
+      pre-registration uses data/en.json, and en_refine.json is recorded as a
+      known limitation.
+
+  mlx and mlx_lm (Copyright Apple Inc., MIT License), tokenizers and pyarrow
+  (Apache-2.0), transformers (Apache-2.0)
+      Installed dependencies (env/requirements-mbp.txt). The MLX port builds on
+      mlx and mlx_lm; runner/generate.py drives mlx_lm's BatchGenerator.
+      Nothing from them is copied or redistributed.
+      reference/mlx_affine_np.py was written from MLX's documented storage
+      format; it copies no mlx code and does not import mlx.
+
+
+7. Data used in place, never redistributed (attribution)
+--------------------------------------------------------
+
+  allenai/IFBench_test @ 2e8a48de45ff3bf41242f927254ca81b59ca3ae2
+      ODC-BY 1.0 (Allen Institute for AI). tasks/ifbench.py reads it locally.
+      tasks/manifests/ifbench*.json hold only item ids and sha256 values
+      derived from it; raw outputs on its prompts are published.
+
+  li-lab/MMLU-ProX @ 8e6106a6 and li-lab/MMLU-ProX-Lite @ e82aafb9
+      MIT, (c) li-lab. tasks/mmlu_prox.py reads them locally. The MMLU-ProX
+      manifests hold ids, sha256, category and gold letter, never question
+      text.
+
+  math-ai/aime26 @ 79037aeb
+      Apache-2.0 as labelled by the uploader; the problems are (c) MAA. The
+      manifest holds ids, sha256 and the gold integers.
+
+  Idavidrein/gpqa @ 83022cef (CC BY 4.0 plus gate terms: do not reveal
+  examples online), ellamind/gpqa-multilingual @ bc70ca17 (gated),
+  ellamind/aime26-multilingual @ 3c8bc18f (no licence stated)
+      Read locally. Only ids and sha256 values enter the repository; text,
+      gold and raw outputs stay under $EXP036_PRIVATE.
+
+  HuggingFaceFW/fineweb-2 @ af9c13333eb981300149d5ca60a8e9d659b276b9
+  (deu_Latn test shard 000_00000)
+      ODC-By 1.0, subject to Common Crawl's terms of use. tasks/fineweb2.py,
+      bench/tokenizer_ratio.py (H5) and gate/build_gate_text.py read it
+      locally. H5 writes only per-document counts (bytes, characters, ASCII
+      digits, token counts) and one corpus sha256; H8 (bench/kl_8v4.py) reads
+      gate texts T5 and T6 from $EXP036_WORK and writes only per-block sums and
+      the texts' sha256. For T5, T6 and the web part of T9 only parquet row
+      indices, token counts and sha256 are committed. No FineWeb text enters
+      any committed file.
+
+  The exp_007 padding fixtures
+  (tasks/chronos/exp_007_hardware_comparison/fixtures/padding/) are this
+  repository's own files and are read in place by bench/.
+
+
+8. Facts, figures and texts recorded
+------------------------------------
+
+  analysis/vendor_values.json
+      Individual benchmark figures (numbers only) from Aleph Alpha's Kolibri
+      technical report (sha256 01520e07506e67d53aebfb16b5298384940870d652409ea3943fe990f7a68b0e,
+      retrieved 2026-10-03), each cited as "p. N/189". The report itself is not
+      part of this repository; Aleph Alpha GmbH retains all rights to it. The
+      same file records the per-category question counts of the
+      TIGER-Lab/MMLU-Pro test split (12,032 questions).
+
+  tools/kolibri_lfs_oids.json
+      The LFS sha256 and byte size of each of the 32 shards of
+      Aleph-Alpha/Kolibri-1-BF16 at revision
+      7a8f290e7858825c3cf5e4c447ba68345de9f1d3, plus the git blob ids of the
+      non-LFS files. Hashes and sizes only; no model content.
+
+  tools/peer_parity_build.json
+      Output of tools/peer_check.py --parity on the build host: sha256 of the
+      peer tokenizer, template and config files (mlx-community and upstream)
+      and token-id and template-render parity counts. No file content.
+
+  tools/withheld_shingles.sha256 (written on the run host at RUNBOOK step 7)
+      Truncated sha256 hashes of normalised 8-word shingles and full sha256
+      hashes of option strings of the withheld sets (GPQA, ellamind
+      gpqa-multilingual, ellamind aime26-multilingual German, RGB). Hashes
+      only; no text of those datasets.
+
+  gate/texts/
+      The Phase 0 gate texts as token ids with their decoded text and their
+      full sources:
+      - T1 and T2 are the bodies (front matter removed) of two localfirstai.eu
+        posts, "We Trained It Three Times. Then We Stopped." (2026-09-22) and
+        "The Part That Looked Fine" (2026-09-30), our own work under the
+        repository's licence; their origin file sha256 is in
+        gate/texts/src/SOURCES.json.
+      - T3 is German prose written by Claude for exp_036 (labelled so in
+        gate/texts/MANIFEST.json), committed under the repository's licence.
+      - T4 is Articles 1-19 of the Grundgesetz fuer die Bundesrepublik
+        Deutschland, extracted from https://www.gesetze-im-internet.de/gg/xml.zip
+        (zip sha256
+        b0dbbb71c7d04ed323f16c1926d1826e640103a531458dd52892864b7705fc37, XML
+        builddate 20260506174650). It is an amtliches Werk under section 5
+        UrhG and not protected by copyright.
+      - T5, T6 and the web part of T9 are FineWeb-2 documents (section 7):
+        indices, counts and sha256 only.
+      - T7_chat_en_high.json and T8_chat_de_none.json are chat renders of
+        further paragraphs of the T2 and T4 sources (our own post; the
+        Grundgesetz), and G5_prompts.json holds 8 excerpts of the T1-T4
+        sources (our two posts, Claude's German prose, the Grundgesetz). Each
+        is a user turn of one short instruction written by Claude plus the
+        excerpt, rendered with the vendor chat template (whose reasoning-effort
+        system text is Aleph Alpha GmbH's, Apache-2.0, as in section 1). They
+        carry no other text (attribution corrected 2026-10-03).
+      The Kolibri tokenizer that produced the ids is Aleph Alpha GmbH's
+      (Apache-2.0); it is not copied into the gate.
+
+  gate/behaviour_prompts.json (20 prompts), gate/template_cases.json
+  (12 conversations)
+      Written by Claude for exp_036; original work (section 9).
+
+
+9. Everything else
+------------------
+
+All other files in this directory are original work for Chronos exp_036 and
+are licensed under the MIT License of the repository. Among them:
+port/convert.py, port/convert_streaming.py, reference/__init__.py,
+reference/safetensors_np.py, reference/mlx_affine_np.py, the remaining gate/
+files (run_gate.py, checks/, common.py, harness.py, textset.py,
+vendor_template.py, build_gate_text.py, tokenizer_lines.py, thresholds.json),
+every runner/ file not named in sections 4 and 5, every tasks/ file not named
+in section 3 (loaders, renderers, build_manifests.py, selection_rules.json,
+prompts/rgb_forced_en.txt, prompts/mmlu_prox_de_note.md, the generated
+manifests), every scorers/ file not named in section 3 (reasoning.py, rgb.py,
+lang_tag.py, abstain_lexicon.json, ifbench_adapter.py, ifbench_driver.py,
+score_all.py, the synthetic golden fixtures under scorers/golden/), bench/,
+analysis/, tools/, env/, the remaining files in tests/ (their fixtures are
+synthetic; tests/test_bench_support.py re-expresses the published GPT-2
+byte-to-unicode table to build a tiny offline tokenizer), and all
+documentation.

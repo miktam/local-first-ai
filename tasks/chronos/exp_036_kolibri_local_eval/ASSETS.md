@@ -55,6 +55,26 @@ hf download Idavidrein/gpqa              --repo-type dataset --revision 83022cef
 hf download ellamind/gpqa-multilingual   --repo-type dataset --revision bc70ca1791afa241a98c972e126c2decaf0a367d --local-dir $D/gpqa-multilingual
 ```
 
-Disk: about 303 GB of downloads plus about 127 GB for the two Kolibri conversions — keep ~450 GB free.
+## Added 2026-10-03 18:20 UTC (approved by Andrei for the pre-registration)
+
+| Folder | Source | Pin | Note |
+|---|---|---|---|
+| `data/fineweb-2` | HuggingFaceFW/fineweb-2, file `data/deu_Latn/test/000_00000.parquet` | `af9c1333` | 104 MB; German tokenizer test (H5) and local-only gate texts. Never committed. |
+| `data/RGB-src` | github.com/chen700564/RGB | `65ec39e4` | ~25 MB of data; CC BY-NC-SA 4.0 (code and data). Scores only are published. |
+| `ifbench-venv` | built from `data/IFBench-src/uv.lock` | uv.lock `1c235a49` | IFBench checker environment |
+| `nltk_data` | NLTK packages punkt, punkt_tab, stopwords, averaged_perceptron_tagger_eng | — | keeps IFBench scoring offline |
+
+```bash
+M=~/models/exp036; D=$M/data
+# FineWeb-2: name the file positionally — `hf download --include` silently skipped files on the mini (hf 2.1.1)
+hf download HuggingFaceFW/fineweb-2 data/deu_Latn/test/000_00000.parquet --repo-type dataset --revision af9c13333eb981300149d5ca60a8e9d659b276b9 --local-dir $D/fineweb-2
+git clone https://github.com/chen700564/RGB $D/RGB-src && git -C $D/RGB-src checkout 65ec39e40e7dc9abb50e9bf1b4f32be3f6f16615
+(cd $D/IFBench-src && UV_PROJECT_ENVIRONMENT=$M/ifbench-venv uv sync --frozen --python 3.12)
+$M/ifbench-venv/bin/python -c "import nltk; [nltk.download(p, download_dir='$M/nltk_data') for p in ['punkt','punkt_tab','stopwords','averaged_perceptron_tagger_eng']]"
+```
+
+The kit's preflight checks each of these against `assets.json` (revision, sha256 where recorded) before any run.
+
+Disk: about 303 GB of downloads plus about 127 GB for the two Kolibri conversions, plus run outputs and the gate's working files — keep **~600 GB** free (the mbp has 2.9 TiB).
 
 The vendor's technical report is not committed (Aleph Alpha keeps the rights to it). It is <https://aleph-alpha.com/downloads/tech-report.pdf>, read as retrieved 2026-10-03: 3,465,511 bytes, sha256 `01520e07506e67d53aebfb16b5298384940870d652409ea3943fe990f7a68b0e`.

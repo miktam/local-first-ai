@@ -1,0 +1,339 @@
+"""Refusal checks (BUILD_SPEC §5.4 runner/guard.py; §2 Identity; HYPOTHESIS
+"Verdict and refusal", rule 5 "Freeze", "K8 working-set rule").
+
+Every function either returns (possibly a record) or prints one clear line
+to stderr and exits non-zero (GuardError, a SystemExit with code 1). Nothing
+here writes anything.
+"""
+
+from __future__ import annotations
+
+import glob
+import importlib
+import json
+import re
+import sys
+from pathlib import Path
+from typing import Callable, Iterable
+
+from runner.common import EXP_DIR, KOLIBRI_ARMS, git, sha256_bytes, sha256_file
+
+IDENTITY = ("Miktam", "hello@localfirstai.eu")
+SIGNOFF_RE = re.compile(r"^- Signed off by: Andrei \(.+\)$", re.M)
+AMEND_RE = re.compile(r"^## Amendment (\d+) [—–-] (.+?) \((.+?)\)\s*$", re.M)
+PLAN_FILE_RE = re.compile(r"plan_fixed: `(results/plan_fixed_[0-9TZ]+\.json)`, sha256 `([0-9a-f]{64})`")
+SCORERS_RE = re.compile(r"Scorers tree sha256: `([0-9a-f]{64})`")
+
+
+class GuardError(SystemExit):
+    def __init__(self, message: str, code: int = 1):
+        super().__init__(code)
+        self.message = message
+
+    def __str__(self) -> str:
+        return self.message
+
+
+def refuse(message: str, code: int = 1):
+    print(f"REFUSED: {message}", file=sys.stderr)
+    raise GuardError(message, code)
+
+
+def _rel_exp(exp_dir: Path) -> tuple[Path, str]:
+    top = git(["rev-parse", "--show-toplevel"], exp_dir)
+    if not top:
+        refuse(f"{exp_dir} is not inside a git repository")
+    top_p = Path(top).resolve()
+    return top_p, Path(exp_dir).resolve().relative_to(top_p).as_posix()
+
+
+def _head_file(exp_dir: Path, rel_in_exp: str) -> bytes | None:
+    import subprocess
+
+    top, rel = _rel_exp(exp_dir)
+    try:
+        out = subprocess.run(["git", "show", f"HEAD:{rel}/{rel_in_exp}"], cwd=top, capture_output=True, timeout=30)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return out.stdout if out.returncode == 0 else None
+
+
+# ---------------------------------------------------------------- identity
+
+
+def require_identity(exp_dir: Path | None = None) -> None:
+    d = Path(exp_dir or EXP_DIR)
+    name = git(["config", "user.name"], d)
+    email = git(["config", "user.email"], d)
+    if (name, email) != IDENTITY:
+        refuse(
+            f'git identity is "{name} <{email}>", expected "{IDENTITY[0]} <{IDENTITY[1]}>": '
+            f'run git config user.name "{IDENTITY[0]}" && git config user.email "{IDENTITY[1]}" (RUNBOOK step 2)'
+        )
+
+
+def require_clean_tree(allow: Iterable[str] = ("results/", "aborted/", "evidence/"), exp_dir: Path | None = None) -> None:
+    d = Path(exp_dir or EXP_DIR)
+    top, rel = _rel_exp(d)
+    out = git(["status", "--porcelain", "--untracked-files=all"], top)
+    if out is None:
+        refuse("git status failed")
+    allowed = tuple(f"{rel}/{a}" for a in allow)
+    bad = []
+    for line in out.splitlines():
+        path = line[3:]
+        if " -> " in path:
+            path = path.split(" -> ", 1)[1]
+        path = path.strip().strip('"')
+        if not path.startswith(allowed):
+            bad.append(path)
+    if bad:
+        refuse(f"working tree has changes outside {', '.join(allow)}: {bad[:10]}{' …' if len(bad) > 10 else ''}")
+
+
+def require_signoff(exp_dir: Path | None = None) -> None:
+    d = Path(exp_dir or EXP_DIR)
+    text = _head_file(d, "HYPOTHESIS.md")
+    if text is None:
+        refuse("HYPOTHESIS.md is not committed at HEAD")
+    if not SIGNOFF_RE.search(text.decode("utf-8")):
+        refuse('HYPOTHESIS.md at HEAD has no line "- Signed off by: Andrei (…)": Andrei signs off first (RUNBOOK step 6)')
+
+
+# -------------------------------------------------------------------- gate
+
+
+def require_gate(arm: str, results: Path | None = None):
+    """Kolibri arms only: the latest gate record says PASS for `arm`, bound to
+    the current port, converted manifest, thresholds and reference shas.
+    Delegates to gate/run_gate.py:require_pass (the one implementation);
+    `results` overrides its results directory (tests)."""
+    if arm not in KOLIBRI_ARMS:
+        return None
+    try:
+        run_gate = importlib.import_module("gate.run_gate")
+    except ModuleNotFoundError as e:
+        refuse(f"cannot verify a gate PASS for {arm}: gate/run_gate.py is not importable ({e.name})")
+    fn = getattr(run_gate, "require_pass", None)
+    if fn is None:
+        refuse("gate/run_gate.py has no require_pass(arm)")
+    try:
+        rec = fn(arm) if results is None else fn(arm, results_dir=Path(results))
+    except SystemExit as e:
+        refuse(f"no gate PASS for {arm}: {e}")
+    except Exception as e:  # a missing or unreadable record is a refusal, not a crash
+        refuse(f"no gate PASS for {arm}: {type(e).__name__}: {e}")
+    if rec is None or rec is False:
+        refuse(f"no gate PASS for {arm}")
+    verdict = rec.get("verdict") if isinstance(rec, dict) else getattr(rec, "verdict", "PASS")
+    if isinstance(verdict, dict):
+        verdict = verdict.get(arm)
+    if verdict not in ("PASS", None):
+        refuse(f"gate verdict for {arm} is {verdict!r}, not PASS")
+    return rec
+
+
+# ------------------------------------------------------------------- peers
+
+
+def newest(results: Path, pattern: str) -> Path | None:
+    files = sorted(glob.glob(str(Path(results) / pattern)))
+    return Path(files[-1]) if files else None
+
+
+def require_peers(arm: str, results: Path | None = None) -> dict | None:
+    """Peer arms only: the newest results/peers_<UTC>.json marks `arm` ok."""
+    if arm in KOLIBRI_ARMS:
+        return None
+    results = Path(results or EXP_DIR / "results")
+    p = newest(results, "peers_*.json")
+    if p is None:
+        refuse(f"no results/peers_<UTC>.json: run the peer check first (RUNBOOK step 9)")
+    rec = json.loads(p.read_text(encoding="utf-8"))
+    arms = rec.get("arms", rec)
+    entry = arms.get(arm) if isinstance(arms, dict) else None
+    if not isinstance(entry, dict):
+        refuse(f"{p.name} has no entry for {arm}")
+    # tools/peer_check.py writes verdict "ok" | "B=1" | "fail" per arm; "B=1"
+    # (only the batched path failed) runs at B = 1 by the plan rule.
+    if "verdict" in entry:
+        ok = str(entry["verdict"]).lower() in ("ok", "b=1")
+    else:
+        ok = entry.get("ok")
+        if ok is None:
+            ok = str(entry.get("status", "")).lower() in ("ok", "pass", "b=1")
+    if not ok:
+        refuse(f"peer check did not pass for {arm} ({p.name})")
+    return entry
+
+
+def excluded_arms(results: Path | None = None) -> dict[str, str]:
+    """{arm: reason} for the arms the records exclude from the run (review fix 2026-10-03):
+
+    - K4, when the latest real gate record says K8 PASS and K4 FAIL: the run continues without K4 once the fix
+      cycles are used up, and H1, H7, H8 and D1 are NOT RUN (HYPOTHESIS Phase 0 "Verdict and refusal", exit 4);
+    - every arm whose newest peer-check verdict is "fail": dropped by amendment before any scored run (HYPOTHESIS
+      "Peers are verified, not gated"); "B=1" is not a drop.
+
+    Read by `runner/run.py pilot --without` (which refuses any other exclusion) and by runner/plan_fix.py."""
+    results = Path(results or EXP_DIR / "results")
+    out: dict[str, str] = {}
+    gates = sorted(p for p in (results / "gate").glob("gate_*.json") if re.fullmatch(r"gate_\d{8}T\d{6}Z\.json", p.name))
+    if gates:
+        try:
+            rec = json.loads(gates[-1].read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            rec = {}
+        v = rec.get("verdict") if isinstance(rec.get("verdict"), dict) else {}
+        if rec.get("mode") == "real" and v.get("K8") == "PASS" and v.get("K4") == "FAIL":
+            out["K4"] = f"gate K4 FAIL ({gates[-1].name})"
+    p = newest(results, "peers_*.json")
+    if p is not None:
+        try:
+            rec = json.loads(p.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            rec = {}
+        arms = rec.get("arms", rec) if isinstance(rec, dict) else {}
+        for a, e in sorted(arms.items()) if isinstance(arms, dict) else []:
+            if isinstance(e, dict) and str(e.get("verdict", "")).lower() == "fail":
+                out[a] = f"peer check fail ({p.name})"
+    return out
+
+
+# -------------------------------------------------------------------- plan
+
+
+def amendments(text: str) -> list[dict]:
+    """[{k, type, utc, body}] for every "## Amendment k — type (UTC)" block."""
+    out = []
+    ms = list(AMEND_RE.finditer(text))
+    for i, m in enumerate(ms):
+        end = ms[i + 1].start() if i + 1 < len(ms) else len(text)
+        nxt = re.search(r"^## ", text[m.end():end], re.M)
+        body_end = m.end() + nxt.start() if nxt else end
+        out.append({"k": int(m.group(1)), "type": m.group(2).strip(), "utc": m.group(3), "body": text[m.end():body_end]})
+    return out
+
+
+def scorers_tree_sha256(exp_dir: Path | None = None) -> str:
+    root = Path(exp_dir or EXP_DIR)
+    try:
+        ht = importlib.import_module("tools.hash_tree")
+        return ht.scope_value(ht.BY_NAME["scorers"], root)
+    except ModuleNotFoundError:
+        from runner.common import tree_sha256
+
+        return tree_sha256(root / "scorers")
+
+
+def require_plan(exp_dir: Path | None = None, scorers_sha: Callable[[Path], str] = scorers_tree_sha256) -> dict:
+    """The newest "plan" amendment at HEAD, its plan_fixed JSON committed at
+    HEAD and unchanged, HEAD == @{u}, the scorers/ tree unchanged, and the
+    plan's status FIXED. Returns the plan dict."""
+    d = Path(exp_dir or EXP_DIR)
+    text = _head_file(d, "HYPOTHESIS.md")
+    if text is None:
+        refuse("HYPOTHESIS.md is not committed at HEAD")
+    plans = [a for a in amendments(text.decode("utf-8")) if a["type"] == "plan"]
+    if not plans:
+        refuse("no plan amendment at HEAD: run runner/plan_fix.py and commit its amendment (RUNBOOK step 13)")
+    a = max(plans, key=lambda x: x["k"])
+    m = PLAN_FILE_RE.search(a["body"])
+    s = SCORERS_RE.search(a["body"])
+    if not m or not s:
+        refuse(f"Amendment {a['k']} does not name its plan_fixed file, sha256 and scorers tree sha256")
+    rel, want = m.group(1), m.group(2)
+    committed = _head_file(d, rel)
+    if committed is None:
+        refuse(f"{rel} is not committed at HEAD")
+    if sha256_bytes(committed) != want:
+        refuse(f"{rel} at HEAD does not match the sha256 in Amendment {a['k']}")
+    if not (d / rel).is_file() or sha256_file(d / rel) != want:
+        refuse(f"{rel} in the working tree differs from Amendment {a['k']}")
+    head = git(["rev-parse", "HEAD"], d)
+    up = git(["rev-parse", "@{u}"], d)
+    if up is None:
+        refuse("the branch has no upstream: push the plan amendment first")
+    if head != up:
+        refuse("HEAD is not equal to its upstream: pull or push so that the plan amendment is the pushed HEAD")
+    cur = scorers_sha(d)
+    if cur != s.group(1):
+        refuse(f"scorers/ tree sha256 {cur[:12]}… differs from Amendment {a['k']} ({s.group(1)[:12]}…)")
+    plan = json.loads(committed.decode("utf-8"))
+    if plan.get("status") != "FIXED":
+        refuse(f"Amendment {a['k']} is {plan.get('status')}, not a fixed plan: no scored run")
+    plan["_amendment_k"] = a["k"]
+    plan["_plan_file"] = rel
+    plan["_plan_sha256"] = want
+    return plan
+
+
+def require_metal_limit(plan: dict, limit_fn: Callable | None = None, k8_queued: bool = True) -> int:
+    """Refuse when any K8 cell is queued and the current L is below the L the
+    plan used (the sysctl resets at reboot)."""
+    from runner import memory
+
+    L, _ = (limit_fn or memory.effective_limit)()
+    used = int(plan.get("L_used") or 0)
+    if k8_queued and L < used:
+        mb = plan.get("sysctl_advice_mb", 114688)
+        refuse(
+            f"Metal limit {L / 2**30:.2f} GiB is below the {used / 2**30:.2f} GiB the plan used for K8. "
+            f"Andrei runs: sudo sysctl iogpu.wired_limit_mb={mb}"
+        )
+    return L
+
+
+def _head_amendment_files(exp_dir: Path) -> list[bytes]:
+    """Contents of every amendments/*.md committed at HEAD (the mini pushes its
+    amendments as such files; RUNBOOK "HYPOTHESIS.md has one writer")."""
+    import subprocess
+
+    top, rel = _rel_exp(exp_dir)
+    try:
+        out = subprocess.run(["git", "-c", "core.quotepath=off", "ls-tree", "--name-only", "HEAD", f"{rel}/amendments/"],
+                             cwd=top, capture_output=True, text=True, timeout=30)
+    except (OSError, subprocess.SubprocessError):
+        return []
+    blobs = []
+    for path in out.stdout.splitlines() if out.returncode == 0 else []:
+        if path.endswith(".md"):
+            b = _head_file(exp_dir, "amendments/" + path.rsplit("/", 1)[-1])
+            if b is not None:
+                blobs.append(b)
+    return blobs
+
+
+def tier2_at_head(exp_dir: Path | None = None) -> bool:
+    """A "Tier-2 analysis" amendment is committed at HEAD: appended to
+    HYPOTHESIS.md, or as the mini's amendments/<k>_tier2_<UTC>.md file (HYPOTHESIS
+    "What counts as evidence": frozen by its own amendment, pushed from the mini;
+    the mbp appends the file verbatim at its next commit). Review fix 2026-10-03:
+    the file alone counts, so a pull is enough before B4 and scoring."""
+    d = Path(exp_dir or EXP_DIR)
+    text = _head_file(d, "HYPOTHESIS.md")
+    texts = [text] if text is not None else []
+    texts += _head_amendment_files(d)
+    return any(a["type"] == "Tier-2 analysis" for t in texts for a in amendments(t.decode("utf-8")))
+
+
+def require_tier2(exp_dir: Path | None = None) -> None:
+    if not tier2_at_head(exp_dir):
+        refuse('no "Tier-2 analysis" amendment at HEAD, neither in HYPOTHESIS.md nor as a committed '
+               'amendments/ file (BUILD_SPEC "Build tiers"): B4 cells and scoring wait for it; pull first')
+
+
+def require_assets(name: str) -> None:
+    """The named asset (arm folder or dataset) is present at its pinned
+    revision, via tasks/assets.py."""
+    try:
+        assets = importlib.import_module("tasks.assets")
+    except ModuleNotFoundError as e:
+        refuse(f"cannot verify asset {name}: tasks/assets.py is not importable ({e.name})")
+    try:
+        a = assets.asset(name)
+        ok, found = assets.verify_revision(a)
+    except Exception as e:
+        refuse(f"asset {name}: {type(e).__name__}: {e}")
+    if not ok:
+        refuse(f"asset {name} is not at its pinned revision (found {found})")

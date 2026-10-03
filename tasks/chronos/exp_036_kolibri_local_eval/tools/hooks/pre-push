@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# exp_036 pre-push hook (BUILD_SPEC §5.9): runs tools/leak_check.py over every
+# commit being pushed plus the index. Install by copying (RUNBOOK step 2), with an
+# absolute hooks path (a plain --git-path is relative to the repository top):
+#   h="$(git -C "$LFA" rev-parse --path-format=absolute --git-path hooks)"
+#   cp tools/hooks/pre-push "$h/pre-push" && chmod +x "$h/pre-push"
+# core.hooksPath is not used.
+#
+# git passes "<local ref> <local sha> <remote ref> <remote sha>" lines on stdin.
+# Each pushed ref is checked as <remote sha>..<local sha>; a new branch as
+# <local sha> --not --remotes. Without stdin lines it falls back to
+# --range @{u}..HEAD. A finding (exit 1) or a missing withheld-text source
+# (exit 3) blocks the push. The hook fails closed: if the checker is missing,
+# the push is blocked too (bypass deliberately with git push --no-verify).
+set -u
+
+top=$(git rev-parse --show-toplevel) || exit 1
+exp="$top/tasks/chronos/exp_036_kolibri_local_eval"
+checker="$exp/tools/leak_check.py"
+if [ ! -f "$checker" ]; then
+  echo "pre-push: $checker not found in this checkout; push blocked (exp_036 leak check)." >&2
+  exit 1
+fi
+
+py="${PY:-}"
+if [ -z "$py" ]; then
+  for cand in "${EXP036_MODELS:-$HOME/models/exp036}/venv/bin/python" "$HOME/models/exp036-mini/venv312/bin/python" python3; do
+    if command -v "$cand" >/dev/null 2>&1; then py="$cand"; break; fi
+  done
+fi
+[ -n "$py" ] || { echo "pre-push: no python found for the leak check; push blocked." >&2; exit 1; }
+
+args=()
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ -z "${local_sha:-}" ] && continue
+  case "$local_sha" in *[!0]*) ;; *) continue ;; esac           # ref deletion: nothing to check
+  case "$remote_sha" in
+    *[!0]*) args+=(--range "$remote_sha..$local_sha") ;;
+    *)      args+=(--new-tip "$local_sha") ;;                    # new branch on the remote
+  esac
+done
+[ ${#args[@]} -eq 0 ] && args=(--range '@{u}..HEAD')
+
+"$py" "$checker" "${args[@]}" --staged
+rc=$?
+if [ $rc -ne 0 ]; then
+  echo "pre-push: exp_036 leak check exited $rc; push blocked." >&2
+fi
+exit $rc

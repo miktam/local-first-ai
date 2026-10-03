@@ -1,0 +1,106 @@
+{
+  "version": "exp036-behaviour-2",
+  "note": "G5 behaviour check (HYPOTHESIS Phase 0, BUILD_SPEC 5.3): 20 short factual or one-step prompts, 10 EN and 10 DE, written by Claude for exp_036 and frozen in the gate code hash. Each is sent as a single user turn through the vendor template at effort high (cap 8,192 tokens) and at effort none. Only loops, a missing EOS, lang_tag 'unknown' and the think format are checked; the answers are never scored. Version 2 (integration, 2026-10-03): every prompt asks for two complete sentences, because scorers/lang_tag.py needs at least two function words and returns 'unknown' for a correct one-word or number-only answer, which the blocking rule (>= 2/20 'unknown') would count.",
+  "prompts": [
+    {
+      "id": "B01",
+      "lang": "en",
+      "text": "What is the capital of Portugal? Answer in two complete sentences: first the answer, then how you know it."
+    },
+    {
+      "id": "B02",
+      "lang": "en",
+      "text": "How many days are there in a leap year? Answer in two complete sentences: first the answer, then how you know it."
+    },
+    {
+      "id": "B03",
+      "lang": "en",
+      "text": "Convert 5 kilometres to metres. Answer in two complete sentences: first the answer, then how you know it."
+    },
+    {
+      "id": "B04",
+      "lang": "en",
+      "text": "What is the chemical symbol for gold? Answer in two complete sentences: first the answer, then how you know it."
+    },
+    {
+      "id": "B05",
+      "lang": "en",
+      "text": "What is 17 multiplied by 3? Answer in two complete sentences: first the answer, then how you know it."
+    },
+    {
+      "id": "B06",
+      "lang": "en",
+      "text": "Which planet is closest to the Sun? Answer in two complete sentences: first the answer, then how you know it."
+    },
+    {
+      "id": "B07",
+      "lang": "en",
+      "text": "What is the past tense of the verb 'swim'? Answer in two complete sentences: first the answer, then how you know it."
+    },
+    {
+      "id": "B08",
+      "lang": "en",
+      "text": "A train leaves at 14:20 and the trip takes 45 minutes. When does it arrive? Answer in two complete sentences: first the answer, then how you know it."
+    },
+    {
+      "id": "B09",
+      "lang": "en",
+      "text": "Name the three primary colours of light. Answer in two complete sentences: first the answer, then how you know it."
+    },
+    {
+      "id": "B10",
+      "lang": "en",
+      "text": "Write two sentences that explain what a thermometer measures."
+    },
+    {
+      "id": "B11",
+      "lang": "de",
+      "text": "Was ist die Hauptstadt von Österreich? Antworte in zwei vollständigen Sätzen: zuerst die Antwort, dann wie du darauf kommst."
+    },
+    {
+      "id": "B12",
+      "lang": "de",
+      "text": "Wie viele Minuten hat ein Tag? Antworte in zwei vollständigen Sätzen: zuerst die Antwort, dann wie du darauf kommst."
+    },
+    {
+      "id": "B13",
+      "lang": "de",
+      "text": "Wie lautet das chemische Symbol für Eisen? Antworte in zwei vollständigen Sätzen: zuerst die Antwort, dann wie du darauf kommst."
+    },
+    {
+      "id": "B14",
+      "lang": "de",
+      "text": "Was ist 12 mal 12? Antworte in zwei vollständigen Sätzen: zuerst die Antwort, dann wie du darauf kommst."
+    },
+    {
+      "id": "B15",
+      "lang": "de",
+      "text": "Welcher Fluss fließt durch Köln? Antworte in zwei vollständigen Sätzen: zuerst die Antwort, dann wie du darauf kommst."
+    },
+    {
+      "id": "B16",
+      "lang": "de",
+      "text": "Nenne das Gegenteil von „schnell“. Antworte in zwei vollständigen Sätzen: zuerst die Antwort, dann wie du darauf kommst."
+    },
+    {
+      "id": "B17",
+      "lang": "de",
+      "text": "Wie viele Bundesländer hat Deutschland? Antworte in zwei vollständigen Sätzen: zuerst die Antwort, dann wie du darauf kommst."
+    },
+    {
+      "id": "B18",
+      "lang": "de",
+      "text": "Ein Brot kostet 3,20 Euro. Was kosten drei Brote? Antworte in zwei vollständigen Sätzen: zuerst die Antwort, dann wie du darauf kommst."
+    },
+    {
+      "id": "B19",
+      "lang": "de",
+      "text": "In welchem Monat beginnt in Deutschland der meteorologische Herbst? Antworte in zwei vollständigen Sätzen: zuerst die Antwort, dann wie du darauf kommst."
+    },
+    {
+      "id": "B20",
+      "lang": "de",
+      "text": "Schreibe zwei Sätze, die erklären, wofür man einen Regenschirm benutzt."
+    }
+  ]
+}

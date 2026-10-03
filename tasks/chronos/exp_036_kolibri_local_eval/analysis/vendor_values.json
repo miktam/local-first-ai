@@ -1,0 +1,184 @@
+{
+  "version": "exp036-vendor-1",
+  "source": {
+    "report": "Aleph Alpha, Kolibri technical report, https://aleph-alpha.com/downloads/tech-report.pdf, retrieved 2026-10-03",
+    "sha256": "01520e07506e67d53aebfb16b5298384940870d652409ea3943fe990f7a68b0e",
+    "bytes": 3465511,
+    "committed": false,
+    "cite_as": "p. N/189",
+    "unit": "values are percent as printed in the report (84.3 = 84.3 %); code divides by 100",
+    "checked": "every value cross-checked 2026-10-03 against HYPOTHESIS.md and the report text (Tables 27-29); they agree"
+  },
+  "models": {
+    "kolibri": "Kolibri (post-trained, effort high)",
+    "gemma4": "Gemma 4 26B-A4B IT",
+    "qwen3_6": "Qwen3.6 35B-A3B",
+    "qwen3_8": "Qwen3.8 27B (dense)"
+  },
+  "rows": {
+    "gpqa_en": {
+      "name": "GPQA Diamond EN",
+      "label": "V",
+      "page": "p. 100/189",
+      "table": "Table 28",
+      "values": {"kolibri": 84.3, "gemma4": 81.1, "qwen3_6": 83.4, "qwen3_8": 89.2},
+      "N_v": 8,
+      "N_v_page": "p. 96/189 (Table 27: avg@8)",
+      "n_v": 197,
+      "n_v_note": "eval-framework set (the overlong item excluded), which the vendor ran; 198 is our sensitivity"
+    },
+    "gpqa_de": {
+      "name": "GPQA Diamond DE",
+      "label": "V",
+      "page": "p. 100/189",
+      "table": "Table 28",
+      "values": {"kolibri": 81.3, "gemma4": 80.1, "qwen3_6": 80.6, "qwen3_8": 88.1},
+      "N_v": 8,
+      "N_v_page": "p. 96/189 (Table 27: avg@8)",
+      "n_v": 198,
+      "n_v_note": "ellamind gpqa-multilingual deu, is_diamond"
+    },
+    "mmlu_en": {
+      "name": "MMLU-Pro CoT EN",
+      "label": "R",
+      "page": "p. 100/189",
+      "table": "Table 28",
+      "values": {"kolibri": 80.0, "gemma4": 84.5, "qwen3_6": 84.3, "qwen3_8": 85.0},
+      "N_v": 1,
+      "N_v_page": "p. 96/189 (Table 27: no avg@N; full set run once)",
+      "n_v": 12032,
+      "n_v_note": "full MMLU-Pro test split; our row is MMLU-ProX-Lite EN, post-stratified; vendor avg@N term is 0"
+    },
+    "mmlu_de": {
+      "name": "MMLU-ProX CoT DE",
+      "label": "R",
+      "page": "p. 100/189",
+      "table": "Table 28",
+      "values": {"kolibri": 75.5, "gemma4": 81.1, "qwen3_6": 81.9, "qwen3_8": 82.4},
+      "N_v": 1,
+      "N_v_page": "p. 96/189 (Table 27: no avg@N; full set run once)",
+      "n_v": null,
+      "n_v_note": "full MMLU-ProX DE test split (not stated in the report; counted at manifest build); vendor avg@N term is 0"
+    },
+    "ifbench": {
+      "name": "IFBench loose-prompt",
+      "label": "R",
+      "page": "p. 101/189",
+      "table": "Table 29",
+      "values": {"kolibri": 78.1, "gemma4": 79.9, "qwen3_6": 66.1, "qwen3_8": 81.9},
+      "N_v": 5,
+      "N_v_page": "p. 96/189 (Table 27: avg@5)",
+      "n_v": 300
+    },
+    "aime_en": {
+      "name": "AIME 2026 EN",
+      "label": "V",
+      "page": "p. 100/189",
+      "table": "Table 28",
+      "values": {"kolibri": 96.0, "gemma4": 87.5, "qwen3_6": 91.0, "qwen3_8": 97.7},
+      "N_v": 16,
+      "N_v_page": "p. 96/189 (Table 27: avg@16)",
+      "n_v": 30
+    },
+    "aime_de": {
+      "name": "AIME 2026 DE",
+      "label": "R",
+      "page": "p. 100/189",
+      "table": "Table 28",
+      "values": {"kolibri": 90.0, "gemma4": 88.1, "qwen3_6": 84.4, "qwen3_8": 96.9},
+      "N_v": 16,
+      "N_v_page": "p. 96/189 (Table 27: avg@16)",
+      "n_v": 30,
+      "n_v_note": "our DE row uses the frozen German NeMo-Skills wrapper (R)"
+    },
+    "rgb_cb": {
+      "name": "RGB Closed-Book",
+      "label": "R",
+      "page": "p. 101/189",
+      "table": "Table 29",
+      "values": {"kolibri": 51.0, "gemma4": 79.0, "qwen3_6": 79.0, "qwen3_8": 73.0},
+      "N_v": 1,
+      "n_v": 100,
+      "n_v_note": "inferred from integer scores (HYPOTHESIS C14), unknown subset; our 400 items differ"
+    },
+    "rgb_neg": {
+      "name": "RGB Negative (Abstention)",
+      "label": "R",
+      "page": "p. 101/189",
+      "table": "Table 29",
+      "values": {"kolibri": 85.6, "gemma4": 86.0, "qwen3_6": 79.6, "qwen3_8": 70.6},
+      "N_v": 1,
+      "n_v": 299,
+      "n_v_note": "inferred (HYPOTHESIS C14); ours 300"
+    },
+    "rgb_fact": {
+      "name": "RGB Fact-Check (Error Correction)",
+      "label": "R",
+      "page": "p. 101/189",
+      "table": "Table 29",
+      "values": {"kolibri": 34.0, "gemma4": 61.0, "qwen3_6": 74.0, "qwen3_8": 53.0},
+      "N_v": 1,
+      "n_v": 100,
+      "n_v_note": "en_fact 100 (assumed; not stated in the report)"
+    }
+  },
+  "h2_rows": ["gpqa_en", "gpqa_de", "mmlu_en", "mmlu_de", "ifbench"],
+  "h2_secondary_rows": ["aime_en", "aime_de"],
+  "vendor_gaps": {
+    "H3_mmlu_kolibri_minus_peer_mean": {"en": -4.4, "de": -6.0, "pooled": -5.2, "page": "p. 100/189", "derived_from": "mmlu_en, mmlu_de rows, peers gemma4 and qwen3_6"},
+    "H3_en_to_de_drop": {"kolibri": 4.5, "gemma4": 3.4, "qwen3_6": 2.4, "page": "p. 100/189"},
+    "H4_ifbench_kolibri_minus_qwen3_6": {"value": 12.0, "page": "p. 101/189"},
+    "H4_ifbench_kolibri_minus_gemma4": {"value": -1.8, "page": "p. 101/189"},
+    "H6_rgb_cb_kolibri_minus_peer_mean": {"value": -28.0, "page": "p. 101/189"},
+    "E10_gpqa_de_qwen3_8_minus_kolibri": {"value": 6.8, "page": "p. 100/189"}
+  },
+  "tokenizer": {
+    "unit": "UTF-8 bytes per token",
+    "de_fineweb2": {"kolibri": 4.90, "gpt5": 4.35, "gemma4": 4.13, "qwen3_5_to_3_8": 4.17},
+    "en_fineweb": {"kolibri": 4.58, "gpt5": 4.67, "gemma4": 4.49, "qwen3_5_to_3_8": 4.47},
+    "page": "p. 10/189 (text: Kolibri 4.90 DE, 4.58 EN; GPT-5 4.35 DE, 4.67 EN) and p. 11/189 (Fig. 5: Gemini/Gemma 4 4.13 DE, Qwen3.5-3.8 4.17 DE)",
+    "implied_ratios_de": {"vs_gemma4": 1.186, "vs_qwen3_6": 1.175, "vs_gpt5": 1.126},
+    "H5_note": "4.90/4.13 = 1.186, 4.90/4.17 = 1.175 (HYPOTHESIS H5)"
+  },
+  "other": {
+    "aa_omniscience_non_hallucination": {"kolibri": 44.0, "gemma4": 14.3, "qwen3_6": 56.7, "qwen3_8": 67.3, "page": "p. 101/189", "used_by": "E2 prediction"},
+    "aime_de_reasoning_language_after_rl": {"value": 99, "page": "p. 79/189 (Fig. 34)", "used_by": "E4 prediction"},
+    "sft_effort_14_benchmarks": {"none": 38.4, "low": 64.9, "high": 67.8, "medium_to_high": 0.7, "none_gap": 26.5, "page": "p. 63-64/189", "note": "SFT checkpoint, not the released model", "used_by": "E5"},
+    "effort_none_outside_rl_mix": {"page": "p. 183/189 (Table 59: RL effort weights low/medium/high 0.1/0.1/0.8)", "used_by": "E5, E12 label"},
+    "layer01_routed_intervention_rate": {"value": 98.5, "page": "p. 137-140/189", "note": "at pre-training", "used_by": "E11"},
+    "qk_norm_fp8_bound": {"value": 448, "page": "p. 180/189 (the E4M3 maximum of 448); the QK-norm bound itself is introduced on p. 12/189", "used_by": "E11"},
+    "e1_vendor_composites": {
+      "public_10_rows": {"kolibri": 75.6, "gemma4": 80.8, "qwen3_6": 80.4, "qwen3_8": 81.8},
+      "selection_7_rows": {"kolibri": 83.6, "gemma4": 83.2, "qwen3_6": 81.7},
+      "rgb_3_rows": {"kolibri": 56.9, "gemma4": 75.3, "qwen3_6": 77.5},
+      "tier_a_6_rows": {"kolibri": 67.4, "gemma4": 78.6, "qwen3_6": 77.5},
+      "page": "derived from p. 100-101/189 (Tables 28-29); recomputed by analysis/exploratory.py",
+      "rows": {
+        "public_10_rows": ["gpqa_en", "gpqa_de", "mmlu_en", "mmlu_de", "aime_en", "aime_de", "ifbench", "rgb_cb", "rgb_neg", "rgb_fact"],
+        "selection_7_rows": ["gpqa_en", "gpqa_de", "mmlu_en", "mmlu_de", "aime_en", "aime_de", "ifbench"],
+        "rgb_3_rows": ["rgb_cb", "rgb_neg", "rgb_fact"],
+        "tier_a_6_rows": ["mmlu_en", "mmlu_de", "ifbench", "rgb_cb", "rgb_neg", "rgb_fact"]
+      }
+    }
+  },
+  "mmlu_pro_category_counts": {
+    "source": "TIGER-Lab/MMLU-Pro test split (12,032 questions), per category; for comparison with our post-stratification counts (HYPOTHESIS H2 Measurement). Not a vendor number. Carried from the design arithmetic of 2026-10-03; tasks/build_manifests.py counts the MMLU-ProX full splits that are actually used.",
+    "total": 12032,
+    "counts": {
+      "biology": 717,
+      "business": 789,
+      "chemistry": 1132,
+      "computer science": 410,
+      "economics": 844,
+      "engineering": 969,
+      "health": 818,
+      "history": 381,
+      "law": 1101,
+      "math": 1351,
+      "other": 924,
+      "philosophy": 499,
+      "physics": 1299,
+      "psychology": 798
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "files": {
+    "LICENSE": {
+      "modified": false,
+      "sha256": "ce092128ecb62f6f90eb7ab27952bbc69b364b8715f0f1375148c999a3033b6e",
+      "upstream_sha256": "ce092128ecb62f6f90eb7ab27952bbc69b364b8715f0f1375148c999a3033b6e"
+    },
+    "src/eval_framework/answer.py": {
+      "modified": false,
+      "sha256": "6754b52c520765dc378656cd7972dc9f82de455879c22a74ce56372a41603b93",
+      "upstream_sha256": "6754b52c520765dc378656cd7972dc9f82de455879c22a74ce56372a41603b93"
+    },
+    "src/eval_framework/benchmarks/cot.py": {
+      "modified": false,
+      "sha256": "f8ecb78137838f86d56b4ca37c6264cd0277e120c9e140426abc0e570fc8a0c2",
+      "upstream_sha256": "f8ecb78137838f86d56b4ca37c6264cd0277e120c9e140426abc0e570fc8a0c2"
+    },
+    "src/eval_framework/benchmarks/gpqa.py": {
+      "modification": "_OVERLONG_QUESTION string literal replaced by _OVERLONG_QUESTION_SHA256 (sha256 of the string, UTF-8); the filter compares sha256(row['Question']) with it; SPDX, copyright and 'Modified by Miktam for Chronos exp_036' header lines added",
+      "modified": true,
+      "sha256": "027d5ea874774089df50cc03f798be52d156e8b33a949dec443ff697803555f1",
+      "upstream_sha256": "0b7e50fe08716fa7ac9e9f045307838a22807095a1ec929a21558977469f5a5a"
+    },
+    "src/eval_framework/benchmarks/gpqa_ellamind.py": {
+      "modified": false,
+      "sha256": "ef5d92ebdd84b59c13c2acefc109652bc6b0fd0fc9a8ed31d20a1964526efbc2",
+      "upstream_sha256": "ef5d92ebdd84b59c13c2acefc109652bc6b0fd0fc9a8ed31d20a1964526efbc2"
+    },
+    "src/eval_framework/benchmarks/math_reasoning.py": {
+      "modified": false,
+      "sha256": "a04b42718c50c5205f8a414c98e47e9ea6e57fa76df676d24100935de5797360",
+      "upstream_sha256": "a04b42718c50c5205f8a414c98e47e9ea6e57fa76df676d24100935de5797360"
+    },
+    "src/eval_framework/benchmarks/mmlu_pro.py": {
+      "modified": false,
+      "sha256": "53327bfc94ab57a953d57acb29e77b9f5c6ed64f3080c7cf4d1b36546f277053",
+      "upstream_sha256": "53327bfc94ab57a953d57acb29e77b9f5c6ed64f3080c7cf4d1b36546f277053"
+    },
+    "src/eval_framework/choices.py": {
+      "modified": false,
+      "sha256": "9db7aeb8b41f7dad605c8533bac199612ef808ffb7f300f4ae09ff904c6b9475",
+      "upstream_sha256": "9db7aeb8b41f7dad605c8533bac199612ef808ffb7f300f4ae09ff904c6b9475"
+    },
+    "src/eval_framework/eval_kind.py": {
+      "modified": false,
+      "sha256": "cd4409c74a84e10b8d07919f21dc752bbe10b24d18cc72ed6d5d344101816663",
+      "upstream_sha256": "cd4409c74a84e10b8d07919f21dc752bbe10b24d18cc72ed6d5d344101816663"
+    },
+    "src/eval_framework/metrics/completion/minerva_math_utils.py": {
+      "modified": false,
+      "sha256": "e17be5e5d9e2eac9450842a126766492f98143264e6bb65f73685a91943cb5f7",
+      "upstream_sha256": "e17be5e5d9e2eac9450842a126766492f98143264e6bb65f73685a91943cb5f7"
+    },
+    "src/eval_framework/tasks/task_style.py": {
+      "modified": false,
+      "sha256": "bcd3b5f7f2953154965f3e215dfad01a9f95692464adaf40b423ea3285b44f30",
+      "upstream_sha256": "bcd3b5f7f2953154965f3e215dfad01a9f95692464adaf40b423ea3285b44f30"
+    },
+    "src/eval_framework/tasks/utils.py": {
+      "modified": false,
+      "sha256": "c742fc5a0a517c8c876e7c4a955da46d2fd31f9caf89c26093ccc620ac2a648c",
+      "upstream_sha256": "c742fc5a0a517c8c876e7c4a955da46d2fd31f9caf89c26093ccc620ac2a648c"
+    }
+  },
+  "overlong_question_sha256": "04e898b3dfc33cd195ea9efa91d1ffa6c3faf1fcdc3d751f16fe9c16b9150241",
+  "schema": "exp036 vendored eval-framework manifest v1",
+  "source": {
+    "commit": "3532e9f16e19e396fc2b4d4543878cdccc4d04da",
+    "licence": "Apache-2.0",
+    "repo": "https://github.com/Aleph-Alpha-Research/eval-framework",
+    "tag": "v0.14.2"
+  }
+}

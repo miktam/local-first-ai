@@ -1,0 +1,47 @@
+# exp_036 (BUILD_SPEC §1). Withheld text, weights, web text and work files never enter the repo.
+
+# Python and test caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Arrays, weights, datasets, documents (the leak check refuses them too)
+*.npy
+*.npz
+*.safetensors
+*.parquet
+*.pdf
+# Archives and binary formats (review fix 2026-10-03; the leak check refuses them inside the kit)
+*.gz
+*.zip
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.zst
+*.arrow
+*.bin
+*.pt
+*.pth
+*.gguf
+*.h5
+
+# Private, withheld and work directories, at any depth
+private/
+withheld/
+work/
+**/private/
+**/withheld/
+**/work/
+
+# Host-local overrides of env/exp036.env (paths, LFA, PY) and editor files
+env/exp036.local.env
+*.local.env
+.DS_Store
+*.swp
+*~
+
+# Temporary files of tools/hash_tree.py and tools/status.py
+*.hash_tree.tmp
+*.status.tmp

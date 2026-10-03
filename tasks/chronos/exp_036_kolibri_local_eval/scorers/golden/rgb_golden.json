@@ -1,0 +1,40 @@
+{
+  "about": "Hand-written synthetic answers about invented facts (no RGB text). Gold uses RGB's shape: a list of slots, each a string or a list of aliases; a bare string is one slot.",
+  "closed_book": [
+    {"answer": "The capital of Quorvia is Lunaport.", "gold": ["Lunaport"], "expected": "correct", "why": "gold contained"},
+    {"answer": "It is luna port, as far as I recall.", "gold": [["Lunaport", "Luna Port"]], "expected": "correct", "why": "one alias, lower-cased containment"},
+    {"answer": "I am not sure, but I think it is Lunaport.", "gold": ["Lunaport"], "expected": "correct", "why": "overlap: gold string plus a lexicon hedge stays correct"},
+    {"answer": "Lunaport. However, there is insufficient information in the documents.", "gold": ["Lunaport"], "expected": "abstain", "why": "overlap: gold string plus 'insufficient information' is not correct"},
+    {"answer": "Insufficient information to answer.", "gold": ["Lunaport"], "expected": "abstain", "why": "capitalised: not RGB's case-sensitive string, but a lexicon hit"},
+    {"answer": "It is Sandmere.", "gold": ["Lunaport"], "expected": "wrong", "why": "no gold, no abstention"},
+    {"answer": "Ada Brightwell won it in 2031.", "gold": [["Ada Brightwell", "A. Brightwell"], ["2031"]], "expected": "correct", "why": "both slots"},
+    {"answer": "Ada Brightwell won it.", "gold": [["Ada Brightwell", "A. Brightwell"], ["2031"]], "expected": "wrong", "why": "one slot missing"},
+    {"answer": "Lunaport and Sandmere.", "gold": ["Lunaport", "Sandmere"], "expected": "correct", "why": "flat list = two required slots, both present"},
+    {"answer": "Only Lunaport.", "gold": ["Lunaport", "Sandmere"], "expected": "wrong", "why": "flat list = two required slots, one missing"},
+    {"answer": "Anything at all.", "gold": [], "expected": "wrong", "why": "no slot: never correct (RGB needs a 1 label)"},
+    {"answer": "lunaport!", "gold": "Lunaport", "expected": "correct", "why": "bare-string gold is one slot"},
+    {"answer": "I don’t know.", "gold": ["Lunaport"], "expected": "abstain", "why": "curly apostrophe normalised"},
+    {"answer": "The documents do not mention it.", "gold": ["Lunaport"], "expected": "abstain", "why": "lexicon"},
+    {"answer": "She was unable to answerphone him.", "gold": ["Lunaport"], "expected": "wrong", "why": "phrase boundary: 'unable to answer' is followed by a letter"},
+    {"answer": "Lunaportia is the capital.", "gold": ["Lunaport"], "expected": "correct", "why": "RGB's rule is plain containment, no word boundary"},
+    {"answer": "", "gold": ["Lunaport"], "expected": "wrong", "why": "empty answer"}
+  ],
+  "negative": [
+    {"answer": "There is insufficient information in the documents to answer.", "expected": "rejected"},
+    {"answer": "The provided documents do not contain the answer.", "expected": "rejected"},
+    {"answer": "INSUFFICIENT INFORMATION.", "expected": "rejected"},
+    {"answer": "Lunaport.", "expected": "not"},
+    {"answer": "Sorry, the information isn’t available in the text.", "expected": "rejected"},
+    {"answer": "Nobody knows; it was Sandmere.", "expected": "not"}
+  ],
+  "fact_check": [
+    {"answer": "The documents contain factual errors; the capital is Lunaport.", "true": ["Lunaport"], "fake": "Sandmere", "expected": "corrected"},
+    {"answer": "The supplied passages contain factual errors.", "true": ["Lunaport"], "fake": "Sandmere", "expected": "detected"},
+    {"answer": "The capital is Sandmere.", "true": ["Lunaport"], "fake": "Sandmere", "expected": "deferred"},
+    {"answer": "The capital is Lunaport.", "true": ["Lunaport"], "fake": "Sandmere", "expected": "other"},
+    {"answer": "The document is incorrect: it is Lunaport, not Sandmere.", "true": [["Lunaport", "Luna Port"]], "fake": "Sandmere", "expected": "corrected"},
+    {"answer": "Both Sandmere and Lunaport appear.", "true": ["Lunaport"], "fake": "Sandmere", "expected": "other"},
+    {"answer": "I don't know.", "true": "Lunaport", "fake": "Sandmere", "expected": "other"},
+    {"answer": "Factual Errors exist here, so I would say Sandmere.", "true": "Lunaport", "fake": "Sandmere", "expected": "detected"}
+  ]
+}

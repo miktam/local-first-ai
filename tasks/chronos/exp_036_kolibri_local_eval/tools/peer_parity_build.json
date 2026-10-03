@@ -1,0 +1,284 @@
+{
+  "families": {
+    "gemma4": {
+      "committed_template": {
+        "equal_to_upstream": true,
+        "file": "runner/templates/gemma4.jinja",
+        "sha256": "36e3a42e5cf14cd0020e72d92e1fdd9970f59b82170e421f0cbe1bb42bead3f0"
+      },
+      "other_upstream_revisions": {
+        "4d7ae4984b7db7de8f8457170b3f1a419ee76d52": {
+          "files": {
+            "chat_template.jinja": "ae53464bf3be25802b3a5b37def7fd89667067d7577049b3b2d74c4d8de4c6d4",
+            "config.json": "ed0c1eb3633de771906e9ba004a44cc5635bcc06ee2062077c3d2e88a50707d3",
+            "generation_config.json": "d4226bbe3117d2d253ba4609720ba82c6c4ce4627a9a6ae05387c78983ac03de",
+            "tokenizer.json": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+            "tokenizer_config.json": "9f4fec4b1dc6ecddf8f4a92e9caea5971c0e67d81309f3f9066a2bee8c362633"
+          },
+          "template_vs_mlx": {
+            "cases": 15,
+            "render_mismatches": [],
+            "rendered_ids_mismatches": []
+          }
+        }
+      },
+      "peers": {
+        "G4": {
+          "byte_equal_to_upstream": {
+            "chat_template.jinja": true,
+            "config.json": false,
+            "generation_config.json": true,
+            "tokenizer.json": true,
+            "tokenizer_config.json": false
+          },
+          "default_template_is_chat_template_jinja": true,
+          "dir": "gemma-4-26b-a4b-it-4bit",
+          "files": {
+            "chat_template.jinja": "36e3a42e5cf14cd0020e72d92e1fdd9970f59b82170e421f0cbe1bb42bead3f0",
+            "config.json": "419e13a27ec359654c1ce7dd06d1a87149fd07d0c8af9f770494185e62e1b2ba",
+            "generation_config.json": "d4226bbe3117d2d253ba4609720ba82c6c4ce4627a9a6ae05387c78983ac03de",
+            "tokenizer.json": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+            "tokenizer_config.json": "080d9e1aff284e2f6043889cd05367966f7c7b80e025fbc0b06745e218158656"
+          },
+          "present": true,
+          "template": {
+            "cases": 15,
+            "render_mismatches": [],
+            "rendered_ids_mismatches": []
+          },
+          "token_ids": {
+            "decode_roundtrip_differs": 0,
+            "mismatches": [],
+            "n": 30,
+            "strings_sha256": "785f175a446a96467a9e7c87ffbd148289638836ae1b4988b7562ef19cc2b32d"
+          }
+        },
+        "G8": {
+          "byte_equal_to_upstream": {
+            "chat_template.jinja": true,
+            "config.json": false,
+            "generation_config.json": true,
+            "tokenizer.json": true,
+            "tokenizer_config.json": false
+          },
+          "default_template_is_chat_template_jinja": true,
+          "dir": "gemma-4-26b-a4b-it-8bit",
+          "files": {
+            "chat_template.jinja": "36e3a42e5cf14cd0020e72d92e1fdd9970f59b82170e421f0cbe1bb42bead3f0",
+            "config.json": "ea476b39447dca4e9361f8f449c2941c2cacd7c80f072b940695407cc54306ad",
+            "generation_config.json": "d4226bbe3117d2d253ba4609720ba82c6c4ce4627a9a6ae05387c78983ac03de",
+            "tokenizer.json": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+            "tokenizer_config.json": "080d9e1aff284e2f6043889cd05367966f7c7b80e025fbc0b06745e218158656"
+          },
+          "present": true,
+          "template": {
+            "cases": 15,
+            "render_mismatches": [],
+            "rendered_ids_mismatches": []
+          },
+          "token_ids": {
+            "decode_roundtrip_differs": 0,
+            "mismatches": [],
+            "n": 30,
+            "strings_sha256": "785f175a446a96467a9e7c87ffbd148289638836ae1b4988b7562ef19cc2b32d"
+          }
+        }
+      },
+      "upstream": {
+        "files": {
+          "chat_template.jinja": "36e3a42e5cf14cd0020e72d92e1fdd9970f59b82170e421f0cbe1bb42bead3f0",
+          "config.json": "ed0c1eb3633de771906e9ba004a44cc5635bcc06ee2062077c3d2e88a50707d3",
+          "generation_config.json": "d4226bbe3117d2d253ba4609720ba82c6c4ce4627a9a6ae05387c78983ac03de",
+          "tokenizer.json": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+          "tokenizer_config.json": "90c3a3ba5bf53818383a58e1a776cbcacd2a038d4812eaa373e1522f2d06f3df"
+        },
+        "present": true,
+        "repo": "google/gemma-4-26B-A4B-it",
+        "revision": "20da991ab4afab98e8f910c4a2e8f4fbefc404ad"
+      }
+    },
+    "qwen3_6": {
+      "committed_template": {
+        "equal_to_upstream": true,
+        "file": "runner/templates/qwen3_6.jinja",
+        "sha256": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259"
+      },
+      "peers": {
+        "Q36-4": {
+          "byte_equal_to_upstream": {
+            "chat_template.jinja": true,
+            "config.json": false,
+            "generation_config.json": true,
+            "tokenizer.json": false,
+            "tokenizer_config.json": false
+          },
+          "default_template_is_chat_template_jinja": true,
+          "dir": "Qwen3.6-35B-A3B-4bit",
+          "files": {
+            "chat_template.jinja": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+            "config.json": "a822a9e48b0aafbe3144ec37d4fb067e178ed96615ce6e4420b3149893cc5767",
+            "generation_config.json": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e",
+            "tokenizer.json": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+            "tokenizer_config.json": "e98f1901ac6f0adff67b1d540bfa0c36ac1a0cf59eb72ed78146ef89aafa1182"
+          },
+          "present": true,
+          "template": {
+            "cases": 15,
+            "render_mismatches": [],
+            "rendered_ids_mismatches": []
+          },
+          "token_ids": {
+            "decode_roundtrip_differs": 0,
+            "mismatches": [],
+            "n": 30,
+            "strings_sha256": "785f175a446a96467a9e7c87ffbd148289638836ae1b4988b7562ef19cc2b32d"
+          }
+        },
+        "Q36-8": {
+          "byte_equal_to_upstream": {
+            "chat_template.jinja": true,
+            "config.json": false,
+            "generation_config.json": true,
+            "tokenizer.json": false,
+            "tokenizer_config.json": false
+          },
+          "default_template_is_chat_template_jinja": true,
+          "dir": "Qwen3.6-35B-A3B-8bit",
+          "files": {
+            "chat_template.jinja": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+            "config.json": "5da49c3a84c5a4a751b720b62b9f8703bdb8a0796b5fc55df3278f8b9d6ce296",
+            "generation_config.json": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e",
+            "tokenizer.json": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+            "tokenizer_config.json": "e98f1901ac6f0adff67b1d540bfa0c36ac1a0cf59eb72ed78146ef89aafa1182"
+          },
+          "present": true,
+          "template": {
+            "cases": 15,
+            "render_mismatches": [],
+            "rendered_ids_mismatches": []
+          },
+          "token_ids": {
+            "decode_roundtrip_differs": 0,
+            "mismatches": [],
+            "n": 30,
+            "strings_sha256": "785f175a446a96467a9e7c87ffbd148289638836ae1b4988b7562ef19cc2b32d"
+          }
+        }
+      },
+      "upstream": {
+        "files": {
+          "chat_template.jinja": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+          "config.json": "93a4693fa9d8392fbfccd4b3c9873f4bfdcb14fdede978b123d07d19675efe99",
+          "generation_config.json": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e",
+          "tokenizer.json": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+          "tokenizer_config.json": "5186f0defcd7f232382c7f0aebcd2252d073bb921ab240e407b7ae8745d2b29b"
+        },
+        "present": true,
+        "repo": "Qwen/Qwen3.6-35B-A3B",
+        "revision": "995ad96eacd98c81ed38be0c5b274b04031597b0"
+      }
+    },
+    "qwen3_8": {
+      "committed_template": {
+        "equal_to_upstream": true,
+        "file": "runner/templates/qwen3_8.jinja",
+        "sha256": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041"
+      },
+      "peers": {
+        "Q38-4": {
+          "byte_equal_to_upstream": {
+            "chat_template.jinja": true,
+            "config.json": false,
+            "generation_config.json": true,
+            "tokenizer.json": false,
+            "tokenizer_config.json": false
+          },
+          "default_template_is_chat_template_jinja": true,
+          "dir": "Qwen3.8-27B-4bit",
+          "files": {
+            "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+            "config.json": "14b65a0ee06517060a6bbd979bb1a8ff54e7b304b1a1f01d54344b88b8285e85",
+            "generation_config.json": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e",
+            "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+            "tokenizer_config.json": "792fa3f0cb88b111e54ef3134c873531008c4df471d108da17903426e308aa7b"
+          },
+          "present": true,
+          "template": {
+            "cases": 15,
+            "render_mismatches": [],
+            "rendered_ids_mismatches": []
+          },
+          "token_ids": {
+            "decode_roundtrip_differs": 0,
+            "mismatches": [],
+            "n": 30,
+            "strings_sha256": "785f175a446a96467a9e7c87ffbd148289638836ae1b4988b7562ef19cc2b32d"
+          }
+        },
+        "Q38-8": {
+          "byte_equal_to_upstream": {
+            "chat_template.jinja": true,
+            "config.json": false,
+            "generation_config.json": true,
+            "tokenizer.json": false,
+            "tokenizer_config.json": false
+          },
+          "default_template_is_chat_template_jinja": true,
+          "dir": "Qwen3.8-27B-8bit",
+          "files": {
+            "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+            "config.json": "8f80874ac3ad8fa386d3f6dc0ea85377f703376e009a03dee0360e08e289a25d",
+            "generation_config.json": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e",
+            "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+            "tokenizer_config.json": "792fa3f0cb88b111e54ef3134c873531008c4df471d108da17903426e308aa7b"
+          },
+          "present": true,
+          "template": {
+            "cases": 15,
+            "render_mismatches": [],
+            "rendered_ids_mismatches": []
+          },
+          "token_ids": {
+            "decode_roundtrip_differs": 0,
+            "mismatches": [],
+            "n": 30,
+            "strings_sha256": "785f175a446a96467a9e7c87ffbd148289638836ae1b4988b7562ef19cc2b32d"
+          }
+        }
+      },
+      "upstream": {
+        "files": {
+          "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+          "config.json": "191e0af232104ed8b65258cf3fb2b842e288008baca7633c11b82a1ac7203aab",
+          "generation_config.json": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e",
+          "tokenizer.json": "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3",
+          "tokenizer_config.json": "b11349aafa7cdc6a320767cf7ceb29ed82f7eda5d65e8e0819e76f0ce947bf27"
+        },
+        "present": true,
+        "repo": "Qwen/Qwen3.8-27B",
+        "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0"
+      }
+    }
+  },
+  "method": "transformers AutoTokenizer (local files only); apply_chat_template(tokenize=False, add_generation_prompt=True) with each template string through the mlx-community tokenizer",
+  "n_fixed_strings": 30,
+  "schema": "exp036 peer parity v1",
+  "template_cases": [
+    "user_en/default",
+    "user_en/thinking_on",
+    "user_en/thinking_off",
+    "system_user_de/default",
+    "system_user_de/thinking_on",
+    "system_user_de/thinking_off",
+    "multi_turn/default",
+    "multi_turn/thinking_on",
+    "multi_turn/thinking_off",
+    "assistant_reasoning/default",
+    "assistant_reasoning/thinking_on",
+    "assistant_reasoning/thinking_off",
+    "tools/default",
+    "tools/thinking_on",
+    "tools/thinking_off"
+  ],
+  "utc": "2026-10-03T18:49:11Z"
+}

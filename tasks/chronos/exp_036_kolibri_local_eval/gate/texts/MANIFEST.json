@@ -1,0 +1,313 @@
+{
+  "g5_prompts": {
+    "file": "G5_prompts.json",
+    "ids_sha256": [
+      "07ec253d0d8812fe022d48eab52906ad7bbb95603e6937ad97654237c7784687",
+      "f51d900bc57295a07f3e09802e57e6ad90254012ae8c20dccfec3388db50ef86",
+      "713cd0f8f61dc5b2aae2dde31f22d13a0b1d02eefc3bc6d817c93424fcc3156e",
+      "a3b2d058ec19053459e33f4a7a7088ca39b94385f36a1670625fa832467baff8",
+      "a7b2d7b4826ac3274e055c3f74c94266f9177a4e3f3d40ce4c07c106e0014147",
+      "5d3147892820a500178fbe9055aa9d82f1d5caafb795a9303b0094dab6ce6cc5",
+      "1e55859e901e6f670ec292fecf0b8def1a071adb093c7f26d27001c813fc7f97",
+      "bbbd42d048f6b91ec5e87b1a839e6298e1320a45bcd37c784479d0ce3794733d"
+    ],
+    "n_tokens": [673, 738, 701, 646, 678, 625, 631, 785]
+  },
+  "ids_sha256_rule": "sha256 of the decimal token ids joined by ',' (no spaces, no brackets), UTF-8",
+  "n_tokens_per_text": 1536,
+  "texts": {
+    "T1": {
+      "files": [
+        "T1_exp035_post.ids.json",
+        "T1_exp035_post.txt"
+      ],
+      "id": "T1",
+      "ids_sha256": "310c7e0164c727e7b0a67ac113b7d619d99b77372d062e90feb91e88079fab61",
+      "kind": "plain",
+      "lang": "en",
+      "n_tokens": 1536,
+      "origin": {
+        "origin": "local-first-ai-blog/content/posts/2026-09-22-we-trained-it-three-times-then-stopped.md",
+        "origin_sha256": "4c0c271b320d38f2982513f60284184573e7039b0080a3710da6c9a359389cff",
+        "published": "2026-09-22",
+        "rule": "front matter removed: the body is everything after the closing '---' line",
+        "source_sha256": "6d36874168b2236b40c9a6d5792ffe2dbb7250728773c4e3ad170169b6159c44"
+      },
+      "rule": "first 1536 tokens of the source (advance one word on a U+FFFD cut)",
+      "source": "src/T1_source.txt",
+      "source_sha256": "6d36874168b2236b40c9a6d5792ffe2dbb7250728773c4e3ad170169b6159c44",
+      "source_tokens": 3910,
+      "text_sha256": "9fc601081bf27602b7f1b451f070034798c0c8542f09fc21a8303270bec0c3e0",
+      "words_advanced": 0
+    },
+    "T2": {
+      "files": [
+        "T2_malaga_ai_post.ids.json",
+        "T2_malaga_ai_post.txt"
+      ],
+      "id": "T2",
+      "ids_sha256": "1a90f611e5549e8a813163518a25ff43ad01409ef60b127d6450ffbb3de8a944",
+      "kind": "plain",
+      "lang": "en",
+      "n_tokens": 1536,
+      "origin": {
+        "origin": "local-first-ai-blog/content/posts/2026-09-30-the-part-that-looked-fine.md",
+        "origin_sha256": "1cf5082e72f5bc06ed239f019eb0abe308713e52081dcce88c1c2013bd12075a",
+        "published": "2026-09-30",
+        "rule": "front matter removed: the body is everything after the closing '---' line",
+        "source_sha256": "df8329de59a9a965eea715d3cb5e9c8d41b3d9c1f1193cce7a9f8f6c9fc2149c"
+      },
+      "rule": "first 1536 tokens of the source (advance one word on a U+FFFD cut)",
+      "source": "src/T2_source.txt",
+      "source_sha256": "df8329de59a9a965eea715d3cb5e9c8d41b3d9c1f1193cce7a9f8f6c9fc2149c",
+      "source_tokens": 3626,
+      "text_sha256": "1da002ced80d4ae23099f6830ce22543973ef6c0c01aa58875c990f63ad7fefe",
+      "words_advanced": 0
+    },
+    "T3": {
+      "files": [
+        "T3_de_prose_claude.ids.json",
+        "T3_de_prose_claude.txt"
+      ],
+      "id": "T3",
+      "ids_sha256": "17350bba6a46c2f5bec3ea0917e52e5cf7d5b2e549809583c226e5c8703c9e5b",
+      "kind": "plain",
+      "lang": "de",
+      "n_tokens": 1536,
+      "origin": {
+        "label": "written by Claude for exp_036",
+        "origin": "gate/texts/src/T3_source.txt",
+        "rule": "German prose written for exp_036 after Kolibri's 2026-06-18 cutoff; Andrei's choice 2026-10-03",
+        "source_sha256": "09ba7155c5bb04b701efcb3a4f07ba760d0c3803fa2bb20a0085af264c675bb7"
+      },
+      "rule": "first 1536 tokens of the source (advance one word on a U+FFFD cut)",
+      "source": "src/T3_source.txt",
+      "source_sha256": "09ba7155c5bb04b701efcb3a4f07ba760d0c3803fa2bb20a0085af264c675bb7",
+      "source_tokens": 1687,
+      "text_sha256": "3d154c6400554b57fb561363f76ac899298d668cb8308f737c17303829b73534",
+      "words_advanced": 0
+    },
+    "T4": {
+      "files": [
+        "T4_grundgesetz_art1_19.ids.json",
+        "T4_grundgesetz_art1_19.txt"
+      ],
+      "id": "T4",
+      "ids_sha256": "6a3defb318e3a32de7f6725436019e9096aa09476981624fca439d278916605e",
+      "kind": "plain",
+      "lang": "de",
+      "n_tokens": 1536,
+      "origin": {
+        "articles": [
+          "Art 1",
+          "Art 2",
+          "Art 3",
+          "Art 4",
+          "Art 5",
+          "Art 6",
+          "Art 7",
+          "Art 8",
+          "Art 9",
+          "Art 10",
+          "Art 11",
+          "Art 12",
+          "Art 12a",
+          "Art 13",
+          "Art 14",
+          "Art 15",
+          "Art 16",
+          "Art 16a",
+          "Art 17",
+          "Art 17a",
+          "Art 18",
+          "Art 19"
+        ],
+        "builddate": "20260506174650",
+        "licence": "amtliches Werk, § 5 UrhG (public domain)",
+        "origin": "https://www.gesetze-im-internet.de/gg/xml.zip",
+        "origin_sha256": "b0dbbb71c7d04ed323f16c1926d1826e640103a531458dd52892864b7705fc37",
+        "rule": "Art 1 to Art 19 (incl. 12a, 16a, 17a); label line, one line per <P>, blank line between articles; footnotes excluded",
+        "source_sha256": "75e0b8ea4c84015afd14a5e2d59fa94600274a2d24f2f5180163730d1769c6a5",
+        "xml_file": "BJNR000010949.xml",
+        "xml_sha256": "68b3a55f7d63d0315d5f6e41a6236088c1129c356b32235ba63baeb3b10ad42c"
+      },
+      "rule": "first 1536 tokens of the source (advance one word on a U+FFFD cut)",
+      "source": "src/T4_source.txt",
+      "source_sha256": "75e0b8ea4c84015afd14a5e2d59fa94600274a2d24f2f5180163730d1769c6a5",
+      "source_tokens": 3419,
+      "text_sha256": "56b562527fee93ccafc3d5e2e94766f09effc325bdf170146209402c036bca48",
+      "words_advanced": 0
+    },
+    "T7": {
+      "effort": "high",
+      "files": [
+        "T7_chat_en_high.json"
+      ],
+      "id": "T7",
+      "ids_sha256": "2c9c9eee83fba65a49362ffc951856889c7af70396f5ecb1b5b18be28e4daa92",
+      "kind": "chat",
+      "lang": "en",
+      "n_tokens": 1536,
+      "rule": "user turn: instruction + paragraphs of T2_source after its 1536-token cut until >= 450 tokens; assistant content: the following paragraphs, cut at the token level so the render is exactly 1536 tokens",
+      "text_sha256": "e7dc9c19e307644860fe1815484c707d6a5f0e0b9aa38fae6c14baa01a4d89e6"
+    },
+    "T8": {
+      "effort": "none",
+      "files": [
+        "T8_chat_de_none.json"
+      ],
+      "id": "T8",
+      "ids_sha256": "b395a450de6c3e151cebcb3da156751c2176d899908cc24b8ad580bdb57716eb",
+      "kind": "chat",
+      "lang": "de",
+      "n_tokens": 1536,
+      "rule": "user turn: instruction + paragraphs of T4_source after its 1536-token cut until >= 450 tokens; assistant content: the following paragraphs, cut at the token level so the render is exactly 1536 tokens",
+      "text_sha256": "dada2938306cbaa170de90e17489545b1188e205fd05a5f5deb79d27140ebdf8"
+    }
+  },
+  "tokenizer": {
+    "encode": "tokenizers.Tokenizer.encode(text, add_special_tokens=False)",
+    "source": "Aleph-Alpha/Kolibri-1-BF16 @ 7a8f290e7858825c3cf5e4c447ba68345de9f1d3",
+    "tokenizer_config_sha256": "876849ec94a65a6b72e3fd1c8d37cc00db9892d4fd84279eb51602ea06cd1b46",
+    "tokenizer_json_sha256": "5d4798f2a8c9d598d6dc005614216989d4b6aeffaf9f6f5e136f0ec5fc4a4c13"
+  },
+  "vendor_template_sha256": "51b9ae6f83e7a30d428fccc75da306653801be73d4ed936e838667d5de7a6617",
+  "version": "exp036-gate-texts-1",
+  "web": {
+    "T5": {
+      "doc_text_sha256": "baa9709e71cf52af36bf8ee1c11016989ab8eab2fe0243a540aceb01523bd03f",
+      "doc_tokens": 1681,
+      "id": "T5",
+      "ids_sha256": "62341c25463d75f3cf702a6f12714ea86290849f6e38d8c5ecbf973ad51d2336",
+      "kind": "web",
+      "lang": "de",
+      "n_tokens": 1536,
+      "row": 5000,
+      "rule": "the first document at file index >= 5000 with >= 1536 Kolibri tokens; its first 1536 tokens",
+      "text_sha256": "f10012eb89e01cf7fb02a4db8ed18c9f486895ed94bda15b0557558f31508c14",
+      "words_advanced": 0
+    },
+    "T6": {
+      "doc_text_sha256": "fa10925efe707e9abbff81d917af3324c1f582d9c4b4b4c208bb68007c4ed395",
+      "doc_tokens": 2697,
+      "id": "T6",
+      "ids_sha256": "55efe4bf6656a4d10bd60f758f10faff9fefef87475903b208765187dc9df3e1",
+      "kind": "web",
+      "lang": "de",
+      "n_tokens": 1536,
+      "row": 5019,
+      "rule": "the second document at file index >= 5000 with >= 1536 Kolibri tokens; its first 1536 tokens",
+      "text_sha256": "a2c2b4704ee2480e9104cb64f6849a6460e3420b3e3aefbb3413fee9e5b189ad",
+      "words_advanced": 0
+    },
+    "T9": {
+      "components": [
+        {
+          "n_tokens": 3910,
+          "source_sha256": "6d36874168b2236b40c9a6d5792ffe2dbb7250728773c4e3ad170169b6159c44",
+          "what": "T1 source in full"
+        },
+        {
+          "n_tokens": 3419,
+          "source_sha256": "75e0b8ea4c84015afd14a5e2d59fa94600274a2d24f2f5180163730d1769c6a5",
+          "what": "T4 source in full"
+        },
+        {
+          "n_tokens": 1687,
+          "source_sha256": "09ba7155c5bb04b701efcb3a4f07ba760d0c3803fa2bb20a0085af264c675bb7",
+          "what": "T3 source in full"
+        },
+        {
+          "doc_text_sha256": "baa9709e71cf52af36bf8ee1c11016989ab8eab2fe0243a540aceb01523bd03f",
+          "n_tokens": 1681,
+          "row": 5000,
+          "what": "FineWeb-2 document"
+        },
+        {
+          "doc_text_sha256": "fa10925efe707e9abbff81d917af3324c1f582d9c4b4b4c208bb68007c4ed395",
+          "n_tokens": 2697,
+          "row": 5019,
+          "what": "FineWeb-2 document"
+        },
+        {
+          "doc_text_sha256": "6d4e392c004c73d858f531464cb328bcd98db32466e755a9b21b433669bd63c1",
+          "n_tokens": 91,
+          "row": 5020,
+          "what": "FineWeb-2 document"
+        },
+        {
+          "doc_text_sha256": "2d124689c95953329ae6798a3c02b987949626cfb22543caa6117980450b3f0b",
+          "n_tokens": 97,
+          "row": 5021,
+          "what": "FineWeb-2 document"
+        },
+        {
+          "doc_text_sha256": "69d134c89c39091fd7f5e86a93d59313caa35cae54425a02d720ec50be06134e",
+          "n_tokens": 486,
+          "row": 5022,
+          "what": "FineWeb-2 document"
+        },
+        {
+          "doc_text_sha256": "b10a8b5bfb32af337f774a10fcead37e9c1e520abf2ad55cc3d8d870625cf879",
+          "n_tokens": 162,
+          "row": 5023,
+          "what": "FineWeb-2 document"
+        },
+        {
+          "doc_text_sha256": "8a77cf2ddefeb3bce93b1c5ede00ffe50dda0750598e02319db4533f5633db89",
+          "n_tokens": 150,
+          "row": 5024,
+          "what": "FineWeb-2 document"
+        },
+        {
+          "doc_text_sha256": "08553197d1c97253cad92b4748fd4416d70461b5eb98343834980252a0cd9ce2",
+          "n_tokens": 246,
+          "row": 5025,
+          "what": "FineWeb-2 document"
+        },
+        {
+          "doc_text_sha256": "edc837c6d1b20d2e66407481f3c973c326c90f1f2479442deaca0adb03021179",
+          "n_tokens": 485,
+          "row": 5026,
+          "what": "FineWeb-2 document"
+        },
+        {
+          "doc_text_sha256": "7544b2f21bf43088fa6a52fefaa83f6fc2c4e9b7e988af366e335a45f8ffb6bb",
+          "n_tokens": 813,
+          "row": 5027,
+          "what": "FineWeb-2 document"
+        },
+        {
+          "doc_text_sha256": "10bc154635e8822f319defd8a5aa0d22abef81c7f3cd7a82eb6db9eb1e44fcb5",
+          "n_tokens": 203,
+          "row": 5028,
+          "what": "FineWeb-2 document"
+        },
+        {
+          "doc_text_sha256": "fec9036b0e76ef3bf7c01e5aff9d5ac04003bfce2430c31b88d2e005951be1ba",
+          "n_tokens": 145,
+          "row": 5029,
+          "what": "FineWeb-2 document"
+        },
+        {
+          "doc_text_sha256": "59311750c991408c0b16b908e363619e94b0fd3ae652e4e38881b4f502eb58be",
+          "n_tokens": 670,
+          "row": 5030,
+          "what": "FineWeb-2 document"
+        }
+      ],
+      "id": "T9",
+      "ids_sha256": "04254baabc98ddbf58c01caa78a89c398d19b6205740b5c86b801e2a9d776e4a",
+      "kind": "long",
+      "lang": "en+de",
+      "n_tokens": 16384,
+      "rule": "T1, T4 and T3 sources in full, then T5's and T6's documents in full, then the following deu_Latn test documents in file order; each tokenised alone, joined with the ids of '\\n\\n', cut at 16384 tokens",
+      "separator": "\n\n"
+    },
+    "licence": "ODC-By 1.0; subject to Common Crawl terms. No web text is committed.",
+    "parquet": "$EXP036_DATA/fineweb-2/data/deu_Latn/test/000_00000.parquet",
+    "parquet_sha256": "f370564f527a10cf125f267d8f10175d6a6366390480620e90a469bbf80a2a46",
+    "revision": "af9c13333eb981300149d5ca60a8e9d659b276b9",
+    "work_dir": "$EXP036_WORK/gate_texts"
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "version": "exp036-selection-1",
+  "frozen": "HYPOTHESIS.md hash table, 'Manifest rule' = tasks/selection_rules.json + tasks/build_manifests.py",
+  "selection_seed": 36,
+  "order_rule": "a pool's ids are sorted ascending by the hex sha256 of 'exp036|<pool>|<seed>|<id>' (UTF-8); a selection of n takes a prefix",
+  "rgb_seed": 2333,
+  "rgb_seed_rule": "RGB's evalue.py calls random.seed(2333) before processdata for every instance; reproduced per item with random.Random(2333); the chosen document indices are written to the manifest and the run host renders from them",
+  "hash_rules": {
+    "canonical_json": "json.dumps(sort_keys=True, ensure_ascii=False, separators=(',', ':')) encoded UTF-8",
+    "item_sha256": "sha256 of canonical_json of the source fields the loader reads (see each tasks/<set>.py)",
+    "prompt_sha256": "sha256 of canonical_json of the message list [{'role', 'content'}, ...] before any chat template"
+  },
+  "tasks": {
+    "gpqa_en":    {"cap_family": "gpqa",    "withheld": true,  "label": "V", "prompt": "eval-framework GPQA_DIAMOND_COT_V2", "extractor": "tulu_answer_v2(4)"},
+    "gpqa_de":    {"cap_family": "gpqa",    "withheld": true,  "label": "V", "prompt": "eval-framework GPQA_ELLAMIND_DIAMOND_COT_DE", "extractor": "tulu_answer_de"},
+    "mmlu_en":    {"cap_family": "mmlu",    "withheld": false, "label": "R", "prompt": "eval-framework MMLU_PRO_COT_V2 on MMLU-ProX EN", "extractor": "tulu_answer_v2(10)"},
+    "mmlu_de":    {"cap_family": "mmlu",    "withheld": false, "label": "R", "prompt": "vendored Cot + MmluProReader + tulu3_cot_prompt_de (tasks/prompts/mmlu_prox_de_note.md)", "extractor": "tulu_answer_de widened to A-J"},
+    "aime_en":    {"cap_family": "aime",    "withheld": false, "label": "V", "prompt": "eval-framework AIME2026", "extractor": "boxed + _strip_string_with_bug, integer compare"},
+    "aime_de":    {"cap_family": "aime",    "withheld": true,  "label": "R", "prompt": "tasks/prompts/aime_de.txt", "extractor": "as aime_en"},
+    "ifbench":    {"cap_family": "ifbench", "withheld": false, "label": "R", "prompt": "IFBench prompt verbatim", "extractor": "official IFBench checkers (loose and strict)"},
+    "rgb_cb":     {"cap_family": "rgb",     "withheld": true,  "label": "R", "prompt": "RGB instruction.yaml, passage_num 0, no system message", "extractor": "scorers/rgb.py classify_cb"},
+    "rgb_forced": {"cap_family": "rgb",     "withheld": true,  "label": "R", "prompt": "tasks/prompts/rgb_forced_en.txt, no system message", "extractor": "scorers/rgb.py classify_cb"},
+    "rgb_neg":    {"cap_family": "rgb",     "withheld": true,  "label": "R", "prompt": "RGB system + instruction.yaml, 5 negative passages (noise 1.0)", "extractor": "scorers/rgb.py classify_neg"},
+    "rgb_fact":   {"cap_family": "rgb",     "withheld": true,  "label": "R", "prompt": "RGB system + instruction.yaml, positive_wrong passages (instruction_fact.yaml absent at the pin)", "extractor": "scorers/rgb.py classify_fact"}
+  },
+  "gpqa": {
+    "diamond_en": {"file": "gpqa_diamond.csv", "id_field": "Record ID", "n": 198, "primary_n": 197,
+                   "primary_rule": "drop the row with sha256(Question, UTF-8) == vendored gpqa.py _OVERLONG_QUESTION_SHA256 (exactly one)"},
+    "diamond_de": {"config": "deu", "split": "train", "filter": "is_diamond", "n": 198,
+                   "id_rule": "first of ['Record ID', 'record_id', 'id', 'question_id', 'original_id'] present and non-empty in every row, else the 0-based row index; recorded as id_source"},
+    "pilot_en":   {"file": "gpqa_main.csv", "exclude": "Record ID in gpqa_diamond.csv; the over-long question", "pool": "gpqa_pilot_en", "n": 8},
+    "pilot_de":   {"config": "deu", "filter": "not is_diamond", "exclude": "ids that are Diamond Record IDs", "pool": "gpqa_pilot_de", "n": 8}
+  },
+  "mmlu_prox": {
+    "lite_split": "test",
+    "languages": ["en", "de"],
+    "categories_source": "vendored mmlu_pro.py MMLU_PRO_SUBJECTS (14, English names; a DE row takes the EN category of the same question_id)",
+    "per_category_lite": 42,
+    "lite_pool": "mmlu_prox_lite|<category>",
+    "nM_ladder": [588, 504, 406, 350, 294, 252, 196, 154],
+    "nM_rule": "n_M/14 ids per category = a prefix of that category's order; listed interleaved by rank (rank 0 of every category in subject order, then rank 1, ...)",
+    "options_rule": "options = 'options' list, or option_0..option_9 in order; trailing null, empty or 'N/A' options are dropped; answer_index must index the options and agree with the 'answer' letter",
+    "full_pool": "mmlu_prox_full",
+    "full_pool_rule": "ids of the full test split present in en and de, not in Lite (ids of either language) and whose normalised EN question is not a Lite EN question",
+    "full_layout": {"pilot": [0, 8], "c1": [8, 108], "peer_check": [108, 138]},
+    "category_counts": "full test split, per language, per (English) category"
+  },
+  "aime": {
+    "en_split": "test",
+    "de_config": "deu",
+    "id_rule": "first of ['id', 'problem_id', 'ID'] present in every row, else the 0-based row index",
+    "n": 30,
+    "pilot_pool": "aime_pilot_en",
+    "pilot_n": 4
+  },
+  "ifbench": {"n": 300, "pilot_pool": "ifbench_pilot", "pilot_n": 8, "kwargs_rule": "null-valued kwargs keys dropped"},
+  "rgb": {
+    "cb": {"files": ["en.json", "en_fact.json"], "n": 400, "id_rule": "<file stem>-<id>"},
+    "forced": {"same_items_as": "cb", "n": 400},
+    "negative": {"file": "en.json", "n": 300, "noise_rate": 1.0, "passage_num": 5, "doc_source": "negative"},
+    "fact": {"file": "en_fact.json", "n": 100, "noise_rate": 0.0, "correct_rate": 0.0, "passage_num": 5, "doc_source": "positive_wrong",
+             "prompt": "config/instruction.yaml (system + instruction): RGB's README procedure for counterfactual robustness; config/instruction_fact.yaml does not exist at 65ec39e4"},
+    "pilot": {"file": "en_int.json", "pool": "rgb_pilot", "n_cb": 16, "n_forced": 8, "forced_rule": "the first 8 of the 16 closed-book pilot items"},
+    "known_limitation": "RGB also ships data/en_refine.json (2024-03 refined documents and answers); the pre-registration uses en.json"
+  },
+  "pilot": {
+    "rule": "HYPOTHESIS 'Pilot': per arm, task-grouped, at the memory-rule B and the initial caps; never scored for accuracy",
+    "K8":    [{"task": "gpqa_en", "manifest": "gpqa_pilot_en"}, {"task": "gpqa_de", "manifest": "gpqa_pilot_de"},
+              {"task": "mmlu_en", "manifest": "mmlu_prox_full_pilot_en"}, {"task": "mmlu_de", "manifest": "mmlu_prox_full_pilot_de"},
+              {"task": "ifbench", "manifest": "ifbench_pilot"},
+              {"task": "rgb_cb", "manifest": "rgb_pilot_cb"}, {"task": "rgb_forced", "manifest": "rgb_pilot_forced"},
+              {"task": "aime_en", "manifest": "aime_pilot_en"}],
+    "G8":    [{"task": "gpqa_en", "manifest": "gpqa_pilot_en"}, {"task": "gpqa_de", "manifest": "gpqa_pilot_de"},
+              {"task": "mmlu_en", "manifest": "mmlu_prox_full_pilot_en"}, {"task": "mmlu_de", "manifest": "mmlu_prox_full_pilot_de"},
+              {"task": "ifbench", "manifest": "ifbench_pilot"},
+              {"task": "rgb_cb", "manifest": "rgb_pilot_cb"}, {"task": "rgb_forced", "manifest": "rgb_pilot_forced"}],
+    "Q36-8": [{"task": "gpqa_en", "manifest": "gpqa_pilot_en"}, {"task": "gpqa_de", "manifest": "gpqa_pilot_de"},
+              {"task": "mmlu_en", "manifest": "mmlu_prox_full_pilot_en"}, {"task": "mmlu_de", "manifest": "mmlu_prox_full_pilot_de"},
+              {"task": "ifbench", "manifest": "ifbench_pilot"},
+              {"task": "rgb_cb", "manifest": "rgb_pilot_cb"}, {"task": "rgb_forced", "manifest": "rgb_pilot_forced"}],
+    "K4":    [{"task": "gpqa_en", "manifest": "gpqa_pilot_en"}, {"task": "gpqa_de", "manifest": "gpqa_pilot_de"},
+              {"task": "mmlu_en", "manifest": "mmlu_prox_full_pilot_en"}, {"task": "mmlu_de", "manifest": "mmlu_prox_full_pilot_de"},
+              {"task": "ifbench", "manifest": "ifbench_pilot"},
+              {"task": "rgb_cb", "manifest": "rgb_pilot_cb"}]
+  },
+  "c1": {"task": "mmlu_en", "manifest": "mmlu_prox_c1_en", "n": 100, "effort": "none", "decoding": "greedy"},
+  "peer_check": {"task": "mmlu_en", "manifest": "mmlu_prox_peercheck_en", "n": 30, "thinking": "off", "decoding": "greedy"},
+  "fineweb2": {
+    "file": "data/deu_Latn/test/000_00000.parquet",
+    "h5": {"start": 0, "n": 5000},
+    "gate": {"start": 5000, "min_tokens": 1536, "k": 2, "t9_continues_from": "the documents after T6 at index >= 5000, in file order"}
+  },
+  "shingles": {
+    "file": "tools/withheld_shingles.sha256",
+    "rule": "tools/shingles.py write_shingle_file (the leak check's own normalisation: NFKC, lower-case, characters that are neither letters, digits nor whitespace removed, whitespace collapsed); 8-word shingles as 12-hex sha256 prefixes; the full sha256 of every normalised option string of >= 3 words that is not a generic phrase",
+    "sources": ["GPQA EN questions and options (options also as option hashes), gpqa_diamond.csv and gpqa_main.csv",
+                "German GPQA questions and options (options also as option hashes), every row of the deu config",
+                "AIME-DE problems",
+                "RGB queries and answers (en, en_fact, en_int)",
+                "RGB instruction.yaml system and instruction strings (the instruction also as an option hash)"]
+  }
+}

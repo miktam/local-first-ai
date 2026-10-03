@@ -1,0 +1,46 @@
+# exp_036 run-host environment, exact pins (BUILD_SPEC §3). Python 3.12.
+# Installed into $EXP036_MODELS/venv by env/setup.sh (RUNBOOK step 3).
+# First block: the pins of BUILD_SPEC §3 (matching host/mbp_preflight_20261003T170152Z.json),
+# plus pyarrow and pytest, which the kit adds (versions resolved for Python 3.12 on 2026-10-03).
+# Second block: everything else in the mbp venv's freeze of 2026-10-03 (the mini's venv312
+# mirrors it) and pytest's dependencies, so a sync keeps the hf CLI. No torch anywhere.
+
+mlx==0.31.2
+mlx-metal==0.31.2
+mlx-lm==0.31.3
+numpy==2.5.3
+safetensors==0.8.0
+tokenizers==0.23.2
+transformers==5.18.0
+jinja2==3.1.6
+pyyaml==6.0.3
+pyarrow==25.0.1
+pytest==9.1.1
+
+annotated-doc==0.0.5
+anyio==4.15.1
+certifi==2026.7.22
+click==8.5.0
+filelock==4.0.9
+fsspec==2026.9.0
+h11==0.16.0
+hf-xet==1.6.0
+httpcore==1.0.9
+httpx==0.28.1
+huggingface-hub==1.33.0
+idna==3.20
+iniconfig==2.3.0
+markdown-it-py==4.2.0
+markupsafe==3.0.4
+mdurl==0.1.2
+packaging==26.3
+pluggy==1.6.0
+protobuf==7.36.2
+pygments==2.21.0
+regex==2026.9.29
+rich==15.0.0
+sentencepiece==0.2.2
+shellingham==1.5.4
+tqdm==4.70.1
+typer==0.27.2
+typing-extensions==4.16.0
