@@ -944,3 +944,79 @@ hash_tree: TOOLS_SHA256 = 4b2b15c36d0749cb7cb853fb25c8365e8d5d15e5798e19f328531f
 3. Re-run step 3 and expect 1,206 passed.
 4. Run `"$PY" tools/hash_tree.py --check HYPOTHESIS.md` and expect 17 matches.
 5. Re-run step 7. The GPQA EN manifest should show `primary_n` 198 and `overlong_excluded` 0.
+
+## Amendment 4 — item-set correction (2026-10-04T11:45:26Z)
+
+*Written by the main session on the mini before any scored run, pushed as `amendments/4_itemset_20261004T114526Z.md`, and appended verbatim by the mbp session (one writer). It changes a pre-registered sampling rule and an item pool, so both are Andrei's decisions.*
+
+**Andrei's decisions.** 2026-10-04, in the mini session.
+- On how to draw the MMLU sample now that MMLU-ProX-Lite is not 42 × 14, he chose **"Proportional (Recommended)"**.
+- On full-split rows whose two gold fields disagree, he chose **"Exclude, record id (Recommended)"**.
+
+**Why.** RUNBOOK step 7 stopped on the mbp at the MMLU sets (`aborted/20261004T095549Z-manifests-partial/NOTE.md`, commit 63e4593). The other 15 of 21 sets built.
+
+1. **MMLU-ProX-Lite @ `e82aafb9` is not 42 × 14.** It has 588 items per language, with the same parallel ids in EN and DE, split by category as: biology 36, business 40, chemistry 56, computer science 20, economics 42, engineering 48, health 35, history 19, law 48, math 68, other 46, philosophy 25, physics 65, psychology 40. The counts are roughly proportional to the full test split. The registered rule, n_M/14 items per category, is impossible above 19 per category, so ladder rungs 588 to 294 could not be built.
+2. **One full-split row has inconsistent gold.** In the full MMLU-ProX test split @ `8e6106a6`, `question_id` 3787 has answer letter `C` but `answer_index` 1, in both EN and DE. It is the only such row of 11,759 per language, and Lite has none. The registered options rule requires the two to agree, so the full-pool sets (pilot, Control C1, peer check) stopped.
+
+**What changes.**
+1. **Allocation.** For every n_M on the unchanged ladder (588, 504, 406, 350, 294, 252, 196, 154), the per-category counts are a house-monotone Webster (Sainte-Laguë) allocation, proportional to Lite's own counts.
+   - **Built seat by seat.** Each next item goes to the category with the largest c_k / (2·a_k + 1) among categories not yet full, using exact integer comparison.
+   - **Ties.** A tie goes to the category that comes first in eval-framework's `MMLU_PRO_SUBJECTS` order: engineering, physics, psychology, chemistry, biology, law, philosophy, computer science, other, economics, business, history, math, health.
+   - **Properties.** Smaller sets are subsets of larger ones. Within a category, items are a prefix of the registered seed-36 order. n_M = 588 is all of Lite, and EN and DE get identical ids. n_M no longer has to be a multiple of 14; the ladder values are unchanged.
+   - Every category has at least 5 items at every rung:
+
+| n_M | bio | bus | chem | cs | econ | eng | health | hist | law | math | other | phil | phys | psych |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 588 | 36 | 40 | 56 | 20 | 42 | 48 | 35 | 19 | 48 | 68 | 46 | 25 | 65 | 40 |
+| 504 | 31 | 34 | 48 | 17 | 36 | 41 | 30 | 16 | 41 | 58 | 40 | 22 | 56 | 34 |
+| 406 | 25 | 27 | 39 | 14 | 29 | 33 | 24 | 13 | 33 | 47 | 32 | 17 | 45 | 28 |
+| 350 | 21 | 24 | 33 | 12 | 25 | 29 | 21 | 11 | 29 | 40 | 27 | 15 | 39 | 24 |
+| 294 | 18 | 20 | 28 | 10 | 21 | 24 | 17 | 9 | 24 | 34 | 23 | 13 | 33 | 20 |
+| 252 | 15 | 17 | 24 | 9 | 18 | 21 | 15 | 8 | 20 | 29 | 20 | 11 | 28 | 17 |
+| 196 | 12 | 13 | 19 | 7 | 14 | 16 | 12 | 6 | 16 | 23 | 15 | 8 | 22 | 13 |
+| 154 | 9 | 10 | 15 | 5 | 11 | 13 | 9 | 5 | 13 | 18 | 12 | 7 | 17 | 10 |
+
+2. **Estimand consequences.** H2's MMLU rows remain post-stratified to the full split's category shares, unchanged. H3 and H7 use plain item means over the n_M set. Their categories are therefore weighted by the Webster allocation, close to the full split's shares, not equally as the balanced design implied. The stratified bootstrap remains correct.
+   - **Power.** The registered design effect of 1.11, and the power tables built on it, are kept. Under proportional allocation the design effect is about 1.003, computed with MMLU-Pro's 12,032 category shares, so the registered tables are conservative.
+3. **Full-split pools.** The pilot, Control C1 and peer-check pools use non-Lite rows whose answer letter agrees with `answer_index` in both EN and DE.
+   - **Expected list.** Every build requires the excluded list to equal exactly {"en": ["3787"], "de": ["3787"]}, or it stops. The list is recorded as `gold_inconsistent_excluded` in the four full-pool manifests and as `checks.mmlu_prox_full_gold_inconsistent_excluded` in the build output.
+   - **Category counts.** The full-split category counts used for post-stratification still count 3787, since its category is valid; `_meta.gold_inconsistent_counted` records this.
+   - **Lite.** Lite stays strict: a disagreement there still stops the build.
+4. **Also enforced or recorded.** On an enforced build, Lite's per-category counts must equal the counts above. The plan amendment records `mmlu_allocation` at the fixed n_M. The dry run's scaled ladder becomes n_M 28 / 16, because at 14 two categories would get no item.
+
+**Superseded wording in HYPOTHESIS.md.**
+- **Allocation:** C14 ("42 in each of 14 categories", "the n_M ladder keeps every category equal"); the ladder note ("always a multiple of 14 … category-balanced"); H3's "category-balanced"; and the Task-sets row for MMLU-ProX-Lite ("category-balanced").
+- **Pools:** every definition of the pilot, C1, peer-check and full-split pools as plain "MMLU-ProX full (non-Lite)", including the Task-sets row and C19 by reference.
+
+**What does not change.** Every margin, threshold, verdict rule, ladder value and budget; H2's post-stratification; GPQA, AIME, IFBench and RGB; the vendored eval-framework.
+
+**Frozen artefacts.** `tasks/selection_rules.json` changed: `lite_category_counts` replaces `per_category_lite: 42`, and the new `nM_rule`, `gold_rule` and `gold_inconsistent_expected` are added. The kit's builder therefore rebuilt `tasks/manifests/ifbench.json` and `ifbench_pilot.json` from the public IFBench data. Each differs from the previous commit only in `selection_rules_sha256` (`87f9247c…` → `7fc43f2d…`); the items are byte-identical.
+
+**New tree hashes.** Every other scope keeps its earlier value.
+
+hash_tree: RUNNER_SHA256 = c3aa30831ee1ae7fd427bb774849077a3d678a2158fb7e24a2676d176e5451f7
+hash_tree: TASKS_CODE_SHA256 = 306861c155653ddff747cc78c4ad5a49262c926b1d256890c9a7555a53d11334
+hash_tree: MANIFEST_RULE_SHA256 = 4c3fa6803e74b4a58f7282ed19965769f1de62d16d53979b7854a84b77f69857
+hash_tree: ANALYSIS_SHA256 = b23b66634f8b6dc5817f00e1f431708cfb494100a66ab0c658a947ff8fbfb7cb
+hash_tree: TOOLS_SHA256 = 1dc0c666027365fbe133b290df0f37c3ab4784c5560a6699a66010c23ac25ed6
+
+**Verified on the mini.**
+- 1,225 tests pass in Python 3.12 and 3.14 with every test required, including new tests:
+  - the Webster allocation is nested, within one item of quota and a valid Webster allocation for every n from 1 to 588;
+  - the hand-computed post-stratified mean with unequal n;
+  - the 3787 exclusion, and Lite staying strict.
+- `tools/dry_run.py` passes all 17 stages. Its checks read `gpqa_diamond_en_overlong_excluded: 0` and `mmlu_prox_full_gold_inconsistent_excluded: {en: [3787], de: [3787]}`.
+- The leak check finds 0 findings.
+- `hash_tree --check` matches all 17 scopes with this amendment appended.
+
+**What the mbp does.**
+1. Pull, run `"$PY" tools/status.py --sync-amendments`, and commit.
+2. Re-run step 3: 1,225 tests, of which 8 are build-host-only skips.
+3. Run `"$PY" tools/hash_tree.py --check HYPOTHESIS.md` and expect 17 matches.
+4. Re-run step 7.
+   - The checks line should match the dry run's.
+   - Both Lite manifests should list the same 588 ids, with an `nM_allocation` that equals the table above.
+   - The four full-pool manifests should carry `gold_inconsistent_excluded`.
+   - Each language should total 11,759.
+   - Please also report whether 3787 would have fallen inside the first 138 pool ids; the mini estimates it would not.
+5. If step 3c is re-run, it now writes to a fresh dated folder.
