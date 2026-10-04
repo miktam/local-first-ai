@@ -58,7 +58,7 @@ git clone https://github.com/chen700564/RGB "$D/RGB-src" && git -C "$D/RGB-src" 
 env -u HF_HUB_OFFLINE -u TRANSFORMERS_OFFLINE "$M/ifbench-venv/bin/python" -c "import nltk,sys; [nltk.download(p, download_dir=sys.argv[1]) for p in ['punkt','punkt_tab','stopwords','averaged_perceptron_tagger_eng']]" "$M/nltk_data"
 ```
 Check:
-- `RGB-src/data/en.json`, `en_fact.json`, `en_int.json`, `config/instruction.yaml`, `evalue.py`, `README.md`. There is **no** `config/instruction_fact.yaml` at this commit; Fact-Check uses `config/instruction.yaml` with the `positive_wrong` documents (`tasks/selection_rules.json` "rgb" › "fact"). `data/en_refine.json` also exists and is not used (a recorded limitation).
+- `RGB-src/data/en.json`, `en_fact.json`, `en_int.json`, `config/instruction.yaml`, `evalue.py`, `readme.md` (lower-case at this commit). There is **no** `config/instruction_fact.yaml` at this commit; Fact-Check uses `config/instruction.yaml` with the `positive_wrong` documents (`tasks/selection_rules.json` "rgb" › "fact"). `data/en_refine.json` also exists and is not used (a recorded limitation).
 - `fineweb-2/data/deu_Latn/test/000_00000.parquet`, 104,264,728 bytes.
 - `ifbench-venv/bin/python` exists and `nltk_data/` holds the four packages.
 - If `RGB_REV` comes out empty, take the RGB commit from ASSETS.md. Preflight (step 4) checks every revision and recorded sha256.
@@ -88,7 +88,7 @@ git -C "$LFA" status --porcelain && \
 grep -c '{{' HYPOTHESIS.md; grep -c '^Pre-registration commit:' HYPOTHESIS.md
 ```
 Check:
-- HEAD contains `chronos/exp_036: pre-registration — kit, gate, hypotheses`.
+- HEAD contains the commit named on HYPOTHESIS.md's last line, `Pre-registration commit: 725d628a…` (actual subject: `chronos/exp_036: pre-registration, MLX port and kit, awaiting Andrei's sign-off`). Check it by sha, not by subject: `git merge-base --is-ancestor "$(sed -n 's/^Pre-registration commit: //p' HYPOTHESIS.md)" HEAD && echo ok`.
 - `git status --porcelain` prints nothing: the **whole** checkout is clean. The runner refuses pilot, session and cell runs while any path outside the kit's `results/`, `aborted/` and `evidence/` is modified or untracked, anywhere in the repository; unrelated local work (blog, other experiments) is committed elsewhere or stashed before Session 1.
 - The first `grep -c` prints `0`, the second `1` (the `Pre-registration commit:` line exists).
 

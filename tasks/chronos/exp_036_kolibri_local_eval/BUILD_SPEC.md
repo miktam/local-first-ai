@@ -768,7 +768,7 @@ The IFBench adapter test (`tests/test_scorers_ifbench.py`) is part of `tests/`: 
 5. `tools/leak_check.py --all --no-gpqa-source` finds nothing over the whole directory; `.git/hooks/pre-push` installed.
 6. `NOTICE` and `LICENSE-APACHE-2.0` present; every Apache-derived or copied file named (`test_notice.py`).
 7. README rows with status "Pre-registered" in `README.md` (Experiments table) and `tasks/chronos/README.md` (Current contents), if Andrei agreed.
-8. Commits: `scientific_log: exp_036 Kolibri pre-registration` (pointer only) and `chronos/exp_036: pre-registration — kit, gate, hypotheses` (plus `readme: exp_036 row` if item 7), each ending with the Co-Authored-By trailer.
+8. Commits: `scientific_log: exp_036 Kolibri pre-registration` (pointer only) and `chronos/exp_036: pre-registration — kit, gate, hypotheses` (plus `readme: exp_036 row` if item 7). As made on 2026-10-03 the second commit is 725d628, subject `chronos/exp_036: pre-registration, MLX port and kit, awaiting Andrei's sign-off`; checks go by the sha on HYPOTHESIS.md's last line, never by subject, each ending with the Co-Authored-By trailer.
 9. Push (approved by Andrei for the kit and the pre-registration). Then append `Pre-registration commit: <sha>` to HYPOTHESIS.md and push that one-line commit.
 10. Locally: workspace symlink and pointer bump; add `kolibri-experiment/` to the workspace chronos submodule's `.gitignore` (the vendor PDF is never committed).
 
