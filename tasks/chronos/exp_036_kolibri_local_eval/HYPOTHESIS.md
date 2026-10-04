@@ -1020,3 +1020,70 @@ hash_tree: TOOLS_SHA256 = 1dc0c666027365fbe133b290df0f37c3ab4784c5560a6699a66010
    - Each language should total 11,759.
    - Please also report whether 3787 would have fallen inside the first 138 pool ids; the mini estimates it would not.
 5. If step 3c is re-run, it now writes to a fresh dated folder.
+
+## Amendment 5 — measurement correction (2026-10-04T16:45:02Z)
+
+*Written by the main session on the mini before any scored run, pushed as `amendments/5_measurement_20261004T164502Z.md`, and appended verbatim by the mbp session (one writer). It changes how H8 and the peer-check fidelity rule are measured, so it is Andrei's decision. No threshold, margin or verdict rule changes. None of the listed types fits a change of measurement regime, hence the new type; no tool looks it up by type.*
+
+**Andrei's decisions.** 2026-10-04, in the mini session.
+- On how to measure 8-vs-4-bit fidelity, he chose **"Chat-wrapped (Recommended)"**.
+- On the greedy-flip rule, he chose **"Keep as registered (Recommended)"**.
+
+**Why.** RUNBOOK step 9 (the peer check) failed G8, G4 and Q36-8 (`aborted/20261004T143051Z-peercheck/NOTE.md`, commit 381b1bd).
+
+1. **Gemma 4.** Teacher-forced on raw text after `<bos>`, Gemma 4 IT gave NLL 10.2 / 10.7 nats/token at 8 / 4 bits, close to uniform over its 262,144-token vocabulary, and KL(8‖4) 4.57.
+   - **The cause was reproduced on the mini** with `mlx-community/gemma-4-26B-A4B-it-OptiQ-4bit`.
+   - **It is not the weights, the loader, the cache or the chunking.** Cached and uncached forwards agree exactly.
+   - **Raw text is out of distribution for this chat-native model.** Greedy from `<bos>The capital of France is`, it emits `thought\n<channel|>…`, its thinking-channel format.
+   - **Scored as the assistant turn after "Write a text."**, in its own chat template with thinking off, it behaves like a normal language model: NLL 4.06 / 2.03 / 1.90, top-1 0.39 / 0.66 / 0.78 on the first 1,000 tokens of T1 / T3 / T4.
+   - **H8 would have been biased.** The registered raw-text measurement gives Gemma meaningless values, and H8, which compares Kolibri's KL(8‖4) with the peers' median, would have been biased in Kolibri's favour.
+2. **The greedy flip.** G8 and Q36-8 each flipped 1 of 30 greedy answers between B = 8 and B = 1. The registered limit (≤ 2 % of 30) fails on any single flip. HYPOTHESIS ("Peers are verified, not gated") and RUNBOOK step 9 class the greedy flip as part of the batched-path check, whose consequence is **B = 1**. The code had instead filed it as a general problem, which made it a drop. That was a misclassification in the code; the rule itself is unchanged.
+
+**What changes.**
+1. **Fidelity is measured chat-wrapped.**
+   - **Scope.** It applies to H8 (KL(8‖4) per UTF-8 byte on T1–T6) and to the peer check's NLL(8) ≤ NLL(4) + 0.02 and KL(8‖4) < 0.2 rule.
+   - **Procedure.**
+     - Every model, Kolibri and all six peer builds alike, scores each gate text as the assistant turn after the single user message "Write a text.".
+     - The message is rendered through the model's own chat template with thinking off: Kolibri with `reasoning_effort="none"`; Gemma 4, Qwen3.6 and Qwen3.8 with `enable_thinking=False`. The rendering is `runner/chat.py`'s, the same as the scored runs use, and the templates are in `runner/templates/`.
+     - The text is tokenised alone and appended. Only the text's tokens are scored. Bytes, blocks and normalisation are unchanged, and no extra BOS is added.
+   - **Recorded.** Every output records the wrapper: the message, the kwargs, the template sha256 and the rendered prompt ids. The 8-bit and 4-bit builds of a family must render identical prompt ids.
+   - **The batched-path teacher-forced parity** (B = 8 vs B = 1 under the G5 noise-floor rule) had also forced the raw T1–T4 stream. It now runs on the wrapper followed by the stream, with the registered prompt lengths 37–1,100 kept. On the Gemma stand-in, `floor_kl` drops from 0.23 to 0.011, against 0.009 for Q36-8.
+   - **Unchanged.** Raw-text NLL is still computed and stays where gate G3's plausibility check reads it (`arms.<a>.nll`). G3 and every Kolibri gate check remain raw-text and unchanged.
+2. **A known boundary effect.** For Kolibri, Qwen3.6 and Qwen3.8, the first text token of T1, T2 and T6, which start with a newline, follows the template's trailing "\n\n" as a separate token, so it is not merged as joint encoding would merge it. Gemma 4 is unaffected. On a proxy this adds about 0.5 % to each affected text's KL sum, in block 0. Each H8 record carries `wrapper_boundary` and `first_rows`, so a descriptive sensitivity that excludes the first two text rows can be reported without a re-run. It is descriptive only.
+3. **A flip failure gives B = 1.**
+   - **Rule.** A batched-path failure, whether parity, greedy flip or both, gives the verdict `B=1`; any other problem is still `fail`. `FLIP_MAX` 0.02 and `FLIP_ITEMS` 30 are unchanged.
+   - **Effect.** Every Tier A and Tier B cell of a `B=1` arm runs at B = 1. The plan lists such arms under `peer_b1` and projects them at B = 1. The per-step time model is fitted on pilot steps down to one live sequence, so a batched pilot is enough for that projection.
+   - **Not a drop.** A `B=1` arm is not excluded: it stays a peer in H1, H3, H6 and H8.
+
+**Superseded wording in HYPOTHESIS.md.**
+- C3: "NLL(8-bit) ≤ NLL(4-bit) + 0.02 nats/token on the gate text, KL(8‖4) < 0.2". It is now measured chat-wrapped as above; the thresholds are unchanged.
+- "Peers are verified, not gated":
+  - "(G3 uses its NLL)" means the raw-text NLL;
+  - "B = 8 vs B = 1 teacher-forced under the G5 noise-floor rule" now runs on the wrapper plus the stream;
+  - the greedy flip is part of the batched-path check.
+- H8 Measurement: "Every model teacher-forces the same bytes (the decoded text of T1–T6, ≈ 43 kB) with its own tokenizer". The texts are now the assistant turn as above, with only their tokens scored and the bytes unchanged.
+- G3: "on the same bytes, from the peer check" refers to the raw-text value.
+
+**Disclosure.** The measurement regime was changed after seeing Gemma 4's raw-text peer-check values, and the peers' raw-text KL values are known: Qwen3.6 0.177, Qwen3.8 0.100. No Kolibri fidelity value had been measured. The change is forced by the raw-text measurement's invalidity for a chat-native model, not chosen for an outcome.
+
+**New tree hashes.** Every other scope keeps its earlier value.
+
+hash_tree: RUNNER_SHA256 = 1fc95a1accb7e9b8062360916724e07cf577a6c3f422aed602dcb8929e0b7b70
+hash_tree: BENCH_SHA256 = 7f024661e956d7b7d5bc9384cae4201e63cb9b6f17527bc70efdbf12e166ba73
+hash_tree: TOOLS_SHA256 = 2858d1e690c20a4457e57272048d215d865cb236c3a269934d27e8c4d7359b2c
+
+**Verified on the mini.**
+- **Tests.** 1,242 pass in Python 3.12 and 3.14 with every test required. The new tests cover:
+  - the wrapper per family and the scored rows;
+  - the boundary split on the real gate texts;
+  - flip-only failures giving `B=1` and NLL/KL failures giving `fail`;
+  - `B=1` carried from the peers record into every cell of the plan through `plan_fix.build_context`.
+- **Dry run.** `tools/dry_run.py` passes all 17 stages.
+- **Real Gemma smoke test.** Chat-wrapped NLL matches the probe; the model compared with itself gives KL 0.
+- **Leak check.** 0 findings.
+- **Hashes.** `hash_tree --check` matches all 17 scopes with this amendment appended.
+
+**What the mbp does.**
+1. Pull, run `"$PY" tools/status.py --sync-amendments`, and commit.
+2. Re-run step 3 (1,242 tests, of which 8 are build-host-only skips) and `"$PY" tools/hash_tree.py --check HYPOTHESIS.md` (17 matches).
+3. Re-run step 9, the peer check. Expect Gemma's chat-wrapped NLL to be about 2–4 nats/token, and G8 and Q36-8 to read `B=1` if their single flips recur. Any other `fail` stops the run for a decision.
