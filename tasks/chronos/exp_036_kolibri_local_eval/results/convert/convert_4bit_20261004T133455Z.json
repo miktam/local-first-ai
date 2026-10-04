@@ -1,0 +1,139 @@
+{
+  "bits": 4,
+  "converter": "mlx_lm.convert.convert",
+  "dtype": "bfloat16",
+  "experiment": "exp_036",
+  "files": {
+    "README.md": {
+      "bytes": 81,
+      "sha256": "748c964f9b7e5f2c3770ce013bbc0153be7c54311d9692c343b6188eefe77ac6"
+    },
+    "config.json": {
+      "bytes": 2639,
+      "sha256": "4630308774a4ac5df78244bd37bdb3d2f06eb670c76eaa51ab3f53992c1975dc"
+    },
+    "generation_config.json": {
+      "bytes": 152,
+      "sha256": "40e0edd01855fc8abdfd2f7b0d4a54c52cf6dea3c678dc68b32c05f19c464450"
+    },
+    "kolibri1.py": {
+      "bytes": 27267,
+      "sha256": "cd6153b8b00b81f7058e786f33672a07b46c494be0203ad75b04372179dc5584"
+    },
+    "model-00001-of-00009.safetensors": {
+      "bytes": 5147091794,
+      "sha256": "17b69e87bb2d54b43e24a80a1a97525cbdfdf57c8aed3563b39a8821b2027570"
+    },
+    "model-00002-of-00009.safetensors": {
+      "bytes": 5248121288,
+      "sha256": "3e152e18b4314eb17e3a6ba06a640bfefca9a77203de5063ba5807ca54ae4ace"
+    },
+    "model-00003-of-00009.safetensors": {
+      "bytes": 5248121500,
+      "sha256": "bf8052ffafb066d239e8fda8697b8f0feed5d4c31f57b09d006af521b63e50b0"
+    },
+    "model-00004-of-00009.safetensors": {
+      "bytes": 5248121514,
+      "sha256": "d52853fbae69be94a694f619cb03b6d708ba6cce1da0285d992c6fd15221d5c5"
+    },
+    "model-00005-of-00009.safetensors": {
+      "bytes": 5248121464,
+      "sha256": "7c52c23b14f88fe20eae393e650a7adb1abc0e6ae7ba081633a6672c821413f7"
+    },
+    "model-00006-of-00009.safetensors": {
+      "bytes": 5248121464,
+      "sha256": "e3693efa20e71293ec64c484449d51170a8f0fe7eb15b92681dd5b6669f01c27"
+    },
+    "model-00007-of-00009.safetensors": {
+      "bytes": 5248121410,
+      "sha256": "9b1e8ff42a3d41b214e9fb472ebd86fa7b5a8f9da211b1183c32530aa7ba85e5"
+    },
+    "model-00008-of-00009.safetensors": {
+      "bytes": 5248121500,
+      "sha256": "8296681402edc64f20ef010446b65cc4d84db3537c5eaafa00e8022228f9a4c6"
+    },
+    "model-00009-of-00009.safetensors": {
+      "bytes": 2219049126,
+      "sha256": "0d9a47d974e71065e21b29fae259058a5dd706a33fcf0a0d92e990f889ca61bb"
+    },
+    "model.safetensors.index.json": {
+      "bytes": 173468,
+      "sha256": "ed32762ced5948c113c05809df24c62522d90a67f73aae220486c1f531624573"
+    },
+    "tokenizer.json": {
+      "bytes": 9454692,
+      "sha256": "5d4798f2a8c9d598d6dc005614216989d4b6aeffaf9f6f5e136f0ec5fc4a4c13"
+    },
+    "tokenizer_config.json": {
+      "bytes": 8513,
+      "sha256": "876849ec94a65a6b72e3fd1c8d37cc00db9892d4fd84279eb51602ea06cd1b46"
+    }
+  },
+  "flags": {
+    "force": false,
+    "quantize_embeddings": true,
+    "quantize_lm_head": true,
+    "streaming": false
+  },
+  "group_size": 64,
+  "head_policy": "quantised_head",
+  "manifest_sha256": "28ede862af9b781c75ea1a02cf35f0e7acf18456da0e2edd2f7197b5b16d0f3c",
+  "memory_guard": {
+    "footprint_limit_bytes": 109951162777,
+    "footprint_max_sampled_bytes": 16842843232,
+    "interval_s": 10.0,
+    "samples": 3,
+    "swap_growth_bytes": 0,
+    "swap_growth_limit_bytes": 2000000000,
+    "swap_used_start_bytes": 0,
+    "tripped": null
+  },
+  "mlx": "0.31.2",
+  "mlx_lm": "0.31.3",
+  "mlx_metal": "0.31.2",
+  "mode": "affine",
+  "out": "$EXP036_MODELS/Kolibri-1-MLX-4bit-g64",
+  "out_name": "Kolibri-1-MLX-4bit-g64",
+  "peak_footprint_bytes": 16900089000,
+  "peak_rss_bytes": 11950784512,
+  "port_sha256": "cd6153b8b00b81f7058e786f33672a07b46c494be0203ad75b04372179dc5584",
+  "python": "3.12.13",
+  "quant_predicate": "kolibri1.make_quant_predicate (no mlx_lm recipe)",
+  "quantization": {
+    "bits": 4,
+    "group_size": 64,
+    "mode": "affine"
+  },
+  "quantize_embeddings": true,
+  "quantize_lm_head": true,
+  "scales_biases_dtype": "bfloat16",
+  "schema": "exp036-convert-record-2",
+  "spec_version": "exp036-port-2",
+  "src": "$EXP036_MODELS/Kolibri-1-BF16",
+  "src_bytes": 156213402552,
+  "src_config_sha256": "2577f567b37487b1ee24ccc9f7e9d9895b01ce6d8ae248f481a41130b04be256",
+  "src_index_sha256": "370e3721203856717b806a3c1c7f07e5b149dc3e534096f047f6de9e34977c0d",
+  "src_revision": {
+    "commit": "7a8f290e7858825c3cf5e4c447ba68345de9f1d3",
+    "commits_distinct": [
+      "7a8f290e7858825c3cf5e4c447ba68345de9f1d3"
+    ],
+    "files_with_metadata": 40,
+    "source": ".cache/huggingface/download/*.metadata"
+  },
+  "swap_growth_bytes": 0,
+  "t_end": "2026-10-04T13:34:55Z",
+  "t_start": "2026-10-04T13:34:23Z",
+  "tensor_policy": {
+    "attention": "arm_bits",
+    "embed_tokens": "arm_bits",
+    "expert_bias": "fp32",
+    "lm_head": "arm_bits",
+    "norms": "bf16",
+    "routed_experts": "arm_bits",
+    "router_weight": "fp32",
+    "shared_experts": "arm_bits"
+  },
+  "tokenizer_files": "byte copies of the source files",
+  "utc": "2026-10-04T13:34:55Z"
+}
