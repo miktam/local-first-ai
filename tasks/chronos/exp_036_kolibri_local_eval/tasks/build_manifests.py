@@ -8,7 +8,8 @@ Writes:
   {id, item_sha256, prompt_sha256} plus category, gold, cat_rank and n_options where they apply. Withheld sets
   (GPQA EN/DE, AIME-DE, RGB) hold {id, item_sha256, prompt_sha256}, plus the RGB document indices and the GPQA
   `in_primary` flag. No manifest holds item text, and no withheld manifest holds gold (a hash of a letter or an
-  integer would be trivially reversible).
+  integer would be trivially reversible). The GPQA EN manifest also records `primary_n` and `overlong_excluded`,
+  the number of Diamond rows eval-framework's over-long filter removed: 0 by Amendment 3, asserted at every build.
 - tasks/manifests/mmlu_prox_category_counts.json: full test split counts per language and category (H2 weights).
 - $EXP036_PRIVATE/manifests/<name>.jsonl (withheld sets only): the same items with messages and gold (for RGB
   `gold` is the answer as RGB stores it and `gold_fake` the counterfactual answer); scorers/score_all.py reads
@@ -17,7 +18,8 @@ Writes:
   for writer and leak check) over the sources BUILD_SPEC §5.5 names: GPQA EN/DE questions and options
   (options also as full option hashes), AIME-DE problems, RGB queries and answers, plus RGB's instruction.yaml
   strings.
-- results/manifests_<UTC>.json: sha256 of every file above (all sets only; needs the git identity).
+- results/manifests_<UTC>.json: sha256 of every file above and the `checks` (the GPQA EN over-long count) (all
+  sets only; needs the git identity).
 
 The same data in gives byte-identical manifests out: no timestamp is written into a manifest, every JSON file
 has sorted keys, and every order is a frozen rule. An existing output with different content is never
@@ -144,8 +146,14 @@ class Context:
 
 
 def _gpqa_diamond_en(ctx: Context, enforce: bool) -> list[Item]:
+    """Every Diamond row, flagged in_primary. Amendment 3 (2026-10-04): the vendored over-long filter stays in
+    force and must exclude exactly `overlong_excluded` (0) rows; that is asserted on every build, counts enforced
+    or not (the dry run, items_for on the run host), so a change in the data cannot slip through."""
     items = ctx.gpqa_diamond()
-    primary = {it.id for it in gpqa.primary_197(items)} if enforce else {it.id for it in items if not gpqa.is_overlong(it.source)}
+    rule = rules()["gpqa"]["diamond_en"]
+    primary = {it.id for it in gpqa.primary_en(items, expect_excluded=rule["overlong_excluded"])}
+    if enforce and len(primary) != rule["primary_n"]:
+        raise ValueError(f"expected a primary set of {rule['primary_n']} items, got {len(primary)}")
     for it in items:
         it.public["in_primary"] = it.id in primary
     return items
@@ -336,6 +344,10 @@ def manifest_doc(sd: SetDef, items: list[Item], sources: list[dict]) -> dict:
     }
     if id_sources:
         doc["id_source"] = id_sources[0] if len(id_sources) == 1 else id_sources
+    flags = [it.public["in_primary"] for it in items if "in_primary" in it.public]
+    if flags:  # GPQA EN: the recorded over-long count (Amendment 3: 0)
+        doc["primary_n"] = sum(1 for f in flags if f)
+        doc["overlong_excluded"] = len(flags) - doc["primary_n"]
     if sd.name in ("rgb_negative", "rgb_fact"):
         doc["doc_source"] = "negative" if sd.name == "rgb_negative" else "positive_wrong"
     return doc
@@ -422,7 +434,7 @@ def build_all(out_dir: Path = MANIFESTS_DIR, private: Path | None = None, data: 
     ctx = Context(data, check_revisions)
     defs = set_defs() if sets is None else [set_def(n) for n in sets]
     every_set = sets is None
-    summary: dict = {"manifests": {}, "private": {}, "counts": {}, "status": {}}
+    summary: dict = {"manifests": {}, "private": {}, "counts": {}, "status": {}, "checks": {}}
     source_cache: dict[str, dict] = {}
     for sd in defs:
         try:
@@ -433,6 +445,8 @@ def build_all(out_dir: Path = MANIFESTS_DIR, private: Path | None = None, data: 
                 if k not in source_cache:
                     source_cache[k] = ctx.source_record(k)
             doc = manifest_doc(sd, items, [source_cache[k] for k in sd.sources])
+            if "overlong_excluded" in doc:
+                summary["checks"][f"{sd.name}_overlong_excluded"] = doc["overlong_excluded"]
             pub_path = out_dir / f"{sd.name}.json"
             summary["status"][pub_path.name] = _write_once(pub_path, json_bytes(doc))
             summary["manifests"][f"tasks/manifests/{pub_path.name}"] = sha256_hex(pub_path.read_bytes())
@@ -478,7 +492,7 @@ def build_all(out_dir: Path = MANIFESTS_DIR, private: Path | None = None, data: 
         record = {"ts": ts, "selection_rules_sha256": rules_sha256(),
                   "build_manifests_sha256": sha256_hex(Path(__file__).read_bytes()),
                   "manifests": summary["manifests"], "private": summary["private"],
-                  "shingles": summary.get("shingles"), "counts": summary["counts"]}
+                  "shingles": summary.get("shingles"), "counts": summary["counts"], "checks": summary["checks"]}
         p = Path(results_dir) / f"manifests_{ts}.json"
         if p.exists():
             raise FileExistsError(p.name)
@@ -560,7 +574,7 @@ def main(argv: list[str] | None = None) -> int:
     except Exception as e:
         print(json.dumps({"ok": False, "error": str(e)}, ensure_ascii=False))
         return 1
-    print(json.dumps({"ok": True, **{k: summary[k] for k in ("counts", "status")}, "results": summary.get("results")},
+    print(json.dumps({"ok": True, **{k: summary[k] for k in ("counts", "status", "checks")}, "results": summary.get("results")},
                      sort_keys=True, ensure_ascii=False))
     return 0
 

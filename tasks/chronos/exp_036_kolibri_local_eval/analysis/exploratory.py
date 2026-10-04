@@ -135,7 +135,7 @@ def _row_D(ctx, arm, row):
 
 
 def _row_scores(ctx, arms, rows):
-    """{row: {arm: our score}} for rows every arm ran (MMLU post-stratified; GPQA EN primary 197)."""
+    """{row: {arm: our score}} for rows every arm ran (MMLU post-stratified; GPQA EN every Diamond item, Amendment 3)."""
     out = {}
     for row in rows:
         try:

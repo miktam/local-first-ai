@@ -8,6 +8,7 @@ run on them unchanged.
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 from pathlib import Path
 
@@ -41,12 +42,23 @@ def gpqa_row(i: int) -> dict:
     }
 
 
-def write_gpqa_en(root: Path, n_diamond: int = 6, n_main_extra: int = 10) -> Path:
+# The synthetic stand-in for eval-framework's over-long question. As on the real data (Amendment 3, 2026-10-04:
+# by hash, 0 of 198 gpqa_diamond.csv rows, 0 of 448 gpqa_main.csv rows, 1 gpqa_extended.csv row), it is a row of
+# gpqa_extended.csv only. The real _OVERLONG_QUESTION_SHA256 matches no synthetic row; tests that need the filter
+# to fire pass OVERLONG_SHA256 (or patch the vendored constant) instead.
+OVERLONG_ROW_INDEX = 900
+OVERLONG_SHA256 = hashlib.sha256(gpqa_row(OVERLONG_ROW_INDEX)["Question"].encode()).hexdigest()
+
+
+def write_gpqa_en(root: Path, n_diamond: int = 6, n_main_extra: int = 10, n_extended_extra: int = 3) -> Path:
+    """gpqa_diamond.csv ⊂ gpqa_main.csv ⊂ gpqa_extended.csv, as in Idavidrein/gpqa; the over-long stand-in
+    (OVERLONG_ROW_INDEX) is the last row of gpqa_extended.csv, in neither of the files the kit reads."""
     d = root / "gpqa"
     d.mkdir(parents=True, exist_ok=True)
     diamond = [gpqa_row(i) for i in range(n_diamond)]
     main = diamond + [gpqa_row(i) for i in range(100, 100 + n_main_extra)]
-    for name, rows in (("gpqa_diamond.csv", diamond), ("gpqa_main.csv", main)):
+    extended = main + [gpqa_row(i) for i in range(500, 500 + n_extended_extra)] + [gpqa_row(OVERLONG_ROW_INDEX)]
+    for name, rows in (("gpqa_diamond.csv", diamond), ("gpqa_main.csv", main), ("gpqa_extended.csv", extended)):
         with (d / name).open("w", encoding="utf-8", newline="") as f:
             w = csv.DictWriter(f, fieldnames=GPQA_COLUMNS)
             w.writeheader()

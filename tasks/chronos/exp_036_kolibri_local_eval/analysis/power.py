@@ -77,6 +77,9 @@ def mmlu_deff(counts: dict | None = None) -> float:
 DEFAULTS = {
     "H1": {"true": 0.80, "sd": 0.042, "n_blocks": 10, "margin": 0.75},
     "H2": {"true": 0.0, "margin": -0.04, "four_rows": False,
+           # GPQA EN at n = 197, as the HYPOTHESIS power tables were computed. Amendment 3 makes the set 198; that
+           # moves no tabled power by more than 0.001 (SE at n_M = 154: 1.3854 -> 1.3849 pp), so the registered
+           # tables are kept and reproduced as they stand.
            "rows_full": [[0.843, 197, 8], [0.813, 198, 8], [0.781, 300, 5]],
            "rows_mmlu": [0.80, 0.755]},
     "H2_refute": {"true": -0.08, "margin": -0.04, "four_rows": False},
@@ -231,7 +234,9 @@ def power_at_plan(n_M: int, h2_rows: int = 5) -> dict:
         "H7_-1": {"a8": power("H7", n_M, "a8", {"true": -0.01}), "a3": power("H7", n_M, "a3", {"true": -0.01})},
         "H4_+12": {"a8": power("H4", None, "a8"), "a3": power("H4", None, "a3")},
         "H6_-15": {"a8": power("H6", None, "a8", {"true": -0.15}), "a3": power("H6", None, "a3", {"true": -0.15})},
-        "assumptions": "HYPOTHESIS power tables (SDs and true effects as pre-registered)",
+        "assumptions": ("HYPOTHESIS power tables (SDs and true effects as pre-registered); H2 GPQA EN n = 197 as "
+                        "registered, although Amendment 3 runs all 198 items (no H2 power here moves by more "
+                        "than 0.001)"),
     }
 
 

@@ -131,7 +131,7 @@ def test_e4_e5_e6_e7(rich):
     e5 = e["E5"]
     assert set(e5["efforts"]) == {"none", "low", "medium", "high"}
     assert e5["prediction_checks"]["tokens_increasing"] and e5["prediction_checks"]["low_minus_none_ge_10pp"]
-    assert e5["efforts"]["high"]["n"] == 197
+    assert e5["efforts"]["high"]["n"] == 198                       # every Diamond item (Amendment 3)
     e6 = e["E6"]
     assert e6["prediction_checks"]["K4_no_cliff_65536"]
     assert e6["arms"]["K4"]["kv_slope_bytes_per_token"] == pytest.approx(20480, rel=1e-6)

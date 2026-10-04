@@ -11,8 +11,12 @@ built by eval-framework's own composition (tasks/vendored_evalfw/shim.py):
 - DE: GPQA_ELLAMIND_DIAMOND_COT_DE — GpqaReader (shuffle_correct_with_distractors, seed = question + answer)
   + tulu3_cot_prompt_de.
 
-The EN primary set has 197 items: eval-framework drops one over-long question, identified here only by the
-sha256 constant of the patched vendored gpqa.py (C14: 197 primary, 198 as a sensitivity check).
+The EN primary set is all 198 Diamond items (Amendment 3, 2026-10-04). eval-framework's dataset filter drops
+one over-long question, identified here only by the sha256 constant of the patched vendored gpqa.py; that question
+is in gpqa_extended.csv only, not in gpqa_diamond.csv or gpqa_main.csv, so the filter removes no Diamond item and
+the vendor's GPQA_DIAMOND_COT scored 198 too. The filter stays in force and `primary_en` asserts the number it
+excludes (0), so a change in the data cannot slip through. The pre-registered 197-primary / 198-sensitivity split
+(HYPOTHESIS C14) assumed the question was in Diamond; Amendment 3 drops that sensitivity check.
 """
 
 from __future__ import annotations
@@ -114,12 +118,19 @@ def is_overlong(row: dict, overlong_sha256: str | None = None) -> bool:
     return hashlib.sha256(row["Question"].encode()).hexdigest() == overlong_sha256
 
 
-def primary_197(items: list[Item], overlong_sha256: str | None = None, expect_excluded: int = 1) -> list[Item]:
-    """The eval-framework set: the Diamond items minus the over-long question (by hash only).
+# Amendment 3 (2026-10-04): the number of gpqa_diamond.csv rows the vendored over-long filter excludes.
+DIAMOND_OVERLONG_EXCLUDED = 0
 
-    Upstream compares the raw `Question`; its text has no surrounding whitespace, so the stripped question
-    gives the same hash (BUILD_SPEC wording). If a row matched only after stripping, upstream would not
-    drop it, so that case is an error rather than a silent choice. Exactly `expect_excluded` items must go.
+
+def primary_en(items: list[Item], overlong_sha256: str | None = None,
+               expect_excluded: int = DIAMOND_OVERLONG_EXCLUDED) -> list[Item]:
+    """The eval-framework set: the Diamond items the vendored over-long filter keeps (by hash only).
+
+    Amendment 3: the filter excludes no Diamond item, so this is all 198 items, and exactly `expect_excluded`
+    (default 0) items may go; any other count is an error, so a change in the data cannot slip through.
+    Upstream compares the raw `Question`; its text has no surrounding whitespace, so the stripped question gives
+    the same hash (BUILD_SPEC wording). If a row matched only after stripping, upstream would not drop it, so that
+    case is an error rather than a silent choice.
     """
     target = overlong_sha256 or shim.overlong_question_sha256()
     keep, dropped = [], []
@@ -205,7 +216,8 @@ def load_pilot_main(path: Path | None, diamond_ids: set[str], n: int = 8, seed: 
     """n non-Diamond items in the seed-`seed` order.
 
     EN: rows of gpqa_main.csv whose Record ID is not in gpqa_diamond.csv (and not the over-long question,
-    which eval-framework drops from every config). DE: `is_diamond` false rows of the deu config, also
+    which eval-framework drops from every config; on the pinned data it is in gpqa_extended.csv only, so this
+    removes nothing, Amendment 3). DE: `is_diamond` false rows of the deu config, also
     excluding any row whose id is a Diamond Record ID when the German data carries Record IDs.
     """
     if lang == "en":

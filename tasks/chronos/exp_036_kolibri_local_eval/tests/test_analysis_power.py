@@ -126,6 +126,24 @@ def test_power_at_plan_shape():
     assert r["H3_vendor_gap"]["a8"] == pytest.approx(0.53, abs=TOL)
     r4 = P.power_at_plan(154, h2_rows=4)
     assert r4["H2_D0"]["a8"] == pytest.approx(0.52, abs=TOL)
+    assert "GPQA EN n = 197 as registered" in r["assumptions"]
+
+
+def test_h2_power_gpqa_en_197_vs_198_under_0001():
+    """Amendment 3: GPQA EN runs all 198 Diamond items, but the H2 power arithmetic stays at the
+    registered n = 197. Check that this moves no registered H2 design point by 0.001 or more."""
+    rows = P.DEFAULTS["H2"]["rows_full"]
+    assert rows[0][1] == 197
+    rows198 = [[rows[0][0], 198, rows[0][2]]] + [list(r) for r in rows[1:]]
+    worst = 0.0
+    for n_M in P.NM_LADDER:
+        for four in (False, True):
+            for true in (0.0, -0.01, -0.02, -0.03):
+                for a in ("a8", "a3"):
+                    p197 = P.power("H2", n_M, a, {"true": true, "four_rows": four})
+                    p198 = P.power("H2", n_M, a, {"true": true, "four_rows": four, "rows_full": rows198})
+                    worst = max(worst, abs(p197 - p198))
+    assert 0.0 < worst < 0.001
 
 
 # ---------------------------------------------------------------- budget

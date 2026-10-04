@@ -24,8 +24,8 @@
     "rgb_fact":   {"cap_family": "rgb",     "withheld": true,  "label": "R", "prompt": "RGB system + instruction.yaml, positive_wrong passages (instruction_fact.yaml absent at the pin)", "extractor": "scorers/rgb.py classify_fact"}
   },
   "gpqa": {
-    "diamond_en": {"file": "gpqa_diamond.csv", "id_field": "Record ID", "n": 198, "primary_n": 197,
-                   "primary_rule": "drop the row with sha256(Question, UTF-8) == vendored gpqa.py _OVERLONG_QUESTION_SHA256 (exactly one)"},
+    "diamond_en": {"file": "gpqa_diamond.csv", "id_field": "Record ID", "n": 198, "primary_n": 198, "overlong_excluded": 0,
+                   "primary_rule": "every row (Amendment 3): the vendored gpqa.py filter, sha256(Question, UTF-8) == _OVERLONG_QUESTION_SHA256, is applied and must exclude exactly overlong_excluded = 0 rows; that question is in gpqa_extended.csv only"},
     "diamond_de": {"config": "deu", "split": "train", "filter": "is_diamond", "n": 198,
                    "id_rule": "first of ['Record ID', 'record_id', 'id', 'question_id', 'original_id'] present and non-empty in every row, else the 0-based row index; recorded as id_source"},
     "pilot_en":   {"file": "gpqa_main.csv", "exclude": "Record ID in gpqa_diamond.csv; the over-long question", "pool": "gpqa_pilot_en", "n": 8},

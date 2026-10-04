@@ -22,8 +22,9 @@ Stages (RUNBOOK order; each must pass):
   preregister   hash_tree --fill and --stamp, the pre-registration commit and push (pre-push hook)
   preflight     tools/preflight.py --quick --not-run-host --out ...      (the mini's mode)
   signoff       a placeholder sign-off line (this temporary copy only), status --record-block, commit, push
-  manifests     tasks/build_manifests.build_all on the synthetic data (counts not enforced: the sets are small,
-                and the GPQA over-long question cannot be synthesised); gate/build_gate_text.py --work-only
+  manifests     tasks/build_manifests.build_all on the synthetic data (counts not enforced: the sets are small;
+                the GPQA over-long filter must exclude 0 Diamond items, as on the real data, Amendment 3);
+                gate/build_gate_text.py --work-only
   convert       port/convert.py for K8 and K4, exactly as RUNBOOK step 8
   peers         tools/peer_check.py --checks load,nll,kl,batch on the stand-ins (the batched path through the
                 gate's G5 functions), then a dry-run peers record that marks every stand-in ok
@@ -514,15 +515,16 @@ def write_synthetic_gate_texts(w: World) -> None:
 
 def stage_manifests() -> dict:
     """tasks/build_manifests.build_all on the synthetic data. Counts are not enforced: the synthetic sets are
-    small, and the GPQA over-long question (eval-framework's, excluded by hash) cannot be synthesised. Revisions
-    are checked (the synthetic snapshots carry the pinned revision metadata)."""
+    small. The GPQA over-long assertion runs as on the real data (Amendment 3: eval-framework's filter excludes 0
+    Diamond items; the question's text never enters the kit, and no synthetic Diamond row matches its hash).
+    Revisions are checked (the synthetic snapshots carry the pinned revision metadata)."""
     sys.path.insert(0, str(EXP_DIR))
     from runner.guard import require_identity
     from tasks import build_manifests as bm
 
     require_identity()
     s = bm.build_all(results_dir=EXP_DIR / "results", enforce_counts=False, check_revisions=True)
-    return {"counts": s["counts"], "results": s.get("results"), "shingles": bool(s.get("shingles"))}
+    return {"counts": s["counts"], "checks": s["checks"], "results": s.get("results"), "shingles": bool(s.get("shingles"))}
 
 
 def stage_peers_record() -> str:

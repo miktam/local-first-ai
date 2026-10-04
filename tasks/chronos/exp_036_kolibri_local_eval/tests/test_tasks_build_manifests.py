@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -62,7 +63,12 @@ def test_public_sets_carry_gold_and_category(built):
     assert all(isinstance(e["gold"], int) for e in docs["aime_en"]["items"])
     assert all(set(e) == set(bm.BASE_FIELDS) for e in docs["ifbench"]["items"])
     assert {e["id"] for e in docs["gpqa_diamond_en"]["items"]} >= {"recSYN0000"}
+    # Amendment 3: every Diamond item is primary, and the over-long count (0) is recorded in the manifest
     assert all(e["in_primary"] is True for e in docs["gpqa_diamond_en"]["items"])
+    g = docs["gpqa_diamond_en"]
+    assert g["primary_n"] == g["n"] == 6 and g["overlong_excluded"] == 0
+    assert built["summary"]["checks"] == {"gpqa_diamond_en_overlong_excluded": 0}
+    assert all("overlong_excluded" not in d for n, d in docs.items() if n != "gpqa_diamond_en")
     assert all(len(e["doc_indices"]) >= 1 for e in docs["rgb_negative"]["items"])
     assert docs["rgb_negative"]["doc_source"] == "negative" and docs["rgb_fact"]["doc_source"] == "positive_wrong"
     counts = docs["mmlu_prox_category_counts"]
@@ -103,6 +109,7 @@ def test_results_record_and_shingles(built):
     rec = json.loads(rec_path.read_text(encoding="utf-8"))
     assert rec["manifests"] == built["summary"]["manifests"] and rec["private"] == built["summary"]["private"]
     assert rec["selection_rules_sha256"] == bm.rules_sha256()
+    assert rec["checks"] == {"gpqa_diamond_en_overlong_excluded": 0}
     tool_shingles = pytest.importorskip("tools.shingles", reason="tools/shingles.py (tools area) not present")
     listed = tool_shingles.read_shingle_file(built["sh"])
     assert listed.prefixes and listed.options and built["summary"]["shingles"]["prefixes"] == len(listed.prefixes)
@@ -121,6 +128,40 @@ def test_counts_enforced_by_default(built, tmp_path):
     with pytest.raises(RuntimeError, match="expected 300 items"):
         bm.build_all(tmp_path / "m", tmp_path / "p", built["root"], ["ifbench"], None, None,
                      enforce_counts=True, check_revisions=False)
+    with pytest.raises(RuntimeError, match="expected a primary set of 198 items, got 6"):
+        bm.build_all(tmp_path / "m", tmp_path / "p", built["root"], ["gpqa_diamond_en"], None, None,
+                     enforce_counts=True, check_revisions=False)
+
+
+def _plant_overlong(monkeypatch, sha):
+    """Point the vendored over-long filter at a synthetic question (the real text never enters the kit)."""
+    from tasks.vendored_evalfw import shim
+
+    monkeypatch.setattr(shim, "overlong_question_sha256", lambda: sha)
+    monkeypatch.setattr(shim, "gpqa_overlong_filter",
+                        lambda: (lambda row: hashlib.sha256(row["Question"].encode()).hexdigest() != sha))
+
+
+def test_overlong_question_outside_diamond_excludes_nothing(built, tmp_path, monkeypatch):
+    """Amendment 3, as on the real data: the over-long question is a gpqa_extended.csv row, so the filter keeps
+    every Diamond item and the build records 0 (counts enforced or not)."""
+    _plant_overlong(monkeypatch, syn.OVERLONG_SHA256)
+    s = bm.build_all(tmp_path / "m", tmp_path / "p", built["root"], ["gpqa_diamond_en", "gpqa_pilot_en"], None, None,
+                     enforce_counts=False, check_revisions=False)
+    assert s["checks"] == {"gpqa_diamond_en_overlong_excluded": 0}
+    assert (tmp_path / "m" / "gpqa_diamond_en.json").read_bytes() == (built["out"] / "gpqa_diamond_en.json").read_bytes()
+    assert (tmp_path / "m" / "gpqa_pilot_en.json").read_bytes() == (built["out"] / "gpqa_pilot_en.json").read_bytes()
+
+
+def test_overlong_question_inside_diamond_stops_the_build(built, tmp_path, monkeypatch):
+    """A data change that put the over-long question into Diamond cannot slip through: the build stops (also with
+    counts not enforced, as in the dry run and in items_for on the run host)."""
+    _plant_overlong(monkeypatch, hashlib.sha256(syn.gpqa_row(3)["Question"].encode()).hexdigest())
+    with pytest.raises(RuntimeError, match="expected 0 over-long item"):
+        bm.build_all(tmp_path / "m", tmp_path / "p", built["root"], ["gpqa_diamond_en"], None, None,
+                     enforce_counts=False, check_revisions=False)
+    with pytest.raises(ValueError, match="expected 0 over-long item"):
+        bm.items_for("gpqa_diamond_en", built["root"], built["out"], check_revisions=False)
 
 
 def test_items_for_round_trip_and_mismatch(built, tmp_path):

@@ -44,16 +44,30 @@ def test_shuffle_matches_vendored_reader_and_is_stable(data):
     assert len({it.gold for it in a}) > 1
 
 
-def test_primary_excludes_by_hash_only(data):
+def test_primary_is_every_diamond_item_and_asserts_zero_excluded(data):
+    """Amendment 3 (2026-10-04): eval-framework's over-long question is in gpqa_extended.csv only, so the vendored
+    filter keeps every Diamond item and primary_en asserts that it excluded exactly 0."""
+    items = gpqa.load_diamond_en(data / "gpqa")
+    assert gpqa.DIAMOND_OVERLONG_EXCLUDED == 0
+    # the production call: the real constant matches no Diamond row, so all items are primary
+    assert [it.id for it in gpqa.primary_en(items)] == [it.id for it in items]
+    # the synthetic over-long stand-in lives in gpqa_extended.csv only, as on the real data: nothing goes
+    assert [it.id for it in gpqa.primary_en(items, overlong_sha256=syn.OVERLONG_SHA256)] == [it.id for it in items]
+    ext = gpqa.en_rows(data / "gpqa", "gpqa_extended.csv")
+    assert [gpqa.is_overlong(r, syn.OVERLONG_SHA256) for r in ext].count(True) == 1
+    assert not any(gpqa.is_overlong(r, syn.OVERLONG_SHA256) for r in gpqa.en_rows(data / "gpqa", "gpqa_main.csv"))
+
+
+def test_primary_refuses_a_diamond_match_so_a_data_change_cannot_slip_through(data):
+    """If a Diamond row ever matched the over-long hash (a different data revision), the build stops instead of
+    silently shrinking the primary set; the filter itself still works by hash only."""
     items = gpqa.load_diamond_en(data / "gpqa")
     target = hashlib.sha256(items[2].source["Question"].encode()).hexdigest()
-    kept = gpqa.primary_197(items, overlong_sha256=target)
+    with pytest.raises(ValueError, match="expected 0 over-long item"):
+        gpqa.primary_en(items, overlong_sha256=target)
+    # the predicate drops by hash only: told to expect one, it removes exactly that row
+    kept = gpqa.primary_en(items, overlong_sha256=target, expect_excluded=1)
     assert [it.id for it in kept] == [it.id for i, it in enumerate(items) if i != 2]
-    with pytest.raises(ValueError, match="expected 1"):
-        gpqa.primary_197(items, overlong_sha256="0" * 64)
-    # the real constant matches none of the synthetic rows, so the production call refuses
-    with pytest.raises(ValueError, match="expected 1"):
-        gpqa.primary_197(items)
 
 
 def test_primary_refuses_a_strip_only_match(data):
@@ -61,7 +75,7 @@ def test_primary_refuses_a_strip_only_match(data):
     items[1].source = dict(items[1].source, Question="  " + items[1].source["Question"] + " ")
     target = hashlib.sha256(items[1].source["Question"].strip().encode()).hexdigest()
     with pytest.raises(ValueError, match="only after stripping"):
-        gpqa.primary_197(items, overlong_sha256=target)
+        gpqa.primary_en(items, overlong_sha256=target)
 
 
 def test_diamond_de_filters_is_diamond(data):
@@ -94,10 +108,13 @@ def test_pilot_disjoint_from_diamond_and_seeded(data):
     assert [it.id for it in en] == [it.id for it in again]
     other_seed = gpqa.load_pilot_main(data / "gpqa", diamond, n=8, seed=37)
     assert [it.id for it in en] != [it.id for it in other_seed]
-    # the over-long question is excluded from the pilot pool too
+    # eval-framework's filter applies to the pilot pool too: a main row matching the hash would be dropped ...
     target = hashlib.sha256(en[0].source["Question"].encode()).hexdigest()
     shifted = gpqa.load_pilot_main(data / "gpqa", diamond, n=8, overlong_sha256=target)
     assert en[0].id not in {it.id for it in shifted}
+    # ... but the over-long question is in gpqa_extended.csv only (Amendment 3): the pool is main minus Diamond
+    same = gpqa.load_pilot_main(data / "gpqa", diamond, n=8, overlong_sha256=syn.OVERLONG_SHA256)
+    assert [it.id for it in same] == [it.id for it in en]
 
 
 def test_missing_column_is_an_error(tmp_path):

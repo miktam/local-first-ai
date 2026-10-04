@@ -29,7 +29,9 @@ GIB = 2 ** 30
 
 N_TASK = {"gpqa_en": 198, "gpqa_de": 198, "ifbench": 300, "rgb_cb": 400, "rgb_forced": 400,
           "rgb_neg": 300, "rgb_fact": 100, "aime_en": 30, "aime_de": 30}
-GPQA_EXCLUDED = "gq_en_197"
+# Amendment 3 (2026-10-04): eval-framework's over-long filter excludes no GPQA Diamond item, so the recorded
+# exclusion list is empty and the primary GPQA EN set is all 198 items.
+GPQA_EN_EXCLUDED: list = []
 
 # Vendor values (fractions) of the rows, per arm family, from analysis/vendor_values.json.
 VENDOR = V.load_vendor()
@@ -91,7 +93,7 @@ class World:
         self.c1_summary = None
         self.ladder = None
         self.gate = None
-        self.plan = {"plan": "P0", "n_M": n_M, "gpqa_en_excluded": [GPQA_EXCLUDED],
+        self.plan = {"plan": "P0", "n_M": n_M, "gpqa_en_excluded": list(GPQA_EN_EXCLUDED),
                      "post_strat_counts": POST_STRAT, "peers": ["G8", "Q36-8"], "tier_b": []}
 
     # ---- scores

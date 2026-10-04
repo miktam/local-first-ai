@@ -593,7 +593,7 @@ def test_plan_fix_output_with_a_dropped_peer_feeds_the_verdicts():
     from datetime import datetime, timezone
 
     from analysis import verdicts as V
-    from test_analysis_world import GPQA_EXCLUDED, POST_STRAT, all_confirmed_world
+    from test_analysis_world import GPQA_EN_EXCLUDED, POST_STRAT, all_confirmed_world
 
     pilot, steps, s1, ctx = synthetic(0, edit=lambda p: _without(p, {"Q36-8"}))
     steps.pop("Q36-8")
@@ -602,7 +602,7 @@ def test_plan_fix_output_with_a_dropped_peer_feeds_the_verdicts():
     w = all_confirmed_world()
     for k in [k for k in w.rates if k[0] == "Q36-8"]:
         del w.rates[k]
-    plan.update({"gpqa_en_excluded": [GPQA_EXCLUDED], "post_strat_counts": POST_STRAT, "cells": []})
+    plan.update({"gpqa_en_excluded": list(GPQA_EN_EXCLUDED), "post_strat_counts": POST_STRAT, "cells": []})
     w.plan = plan
     v = w.compute(now=datetime(2026, 10, 10, tzinfo=timezone.utc), exploratory=False)
     assert v["config"]["peers"] == ["G8"]

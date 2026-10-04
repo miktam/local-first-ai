@@ -22,7 +22,7 @@ import pytest
 
 from analysis import stats
 from analysis import verdicts as V
-from test_analysis_world import (GPQA_EXCLUDED, World, all_confirmed_world, fit_records, kl_blob,
+from test_analysis_world import (GPQA_EN_EXCLUDED, World, all_confirmed_world, fit_records, kl_blob,
                                  speed_blocks, tokenizer_docs, vend)
 
 NOW = datetime(2026, 10, 10, 12, 0, 0, tzinfo=timezone.utc)
@@ -62,8 +62,9 @@ def test_all_confirmed_details(confirmed):
     vd = confirmed["verdicts"]
     h2 = vd["H2_detail"]["detail"]
     assert set(h2["rows"]) == {"gpqa_en", "gpqa_de", "mmlu_en", "mmlu_de", "ifbench"}
-    assert h2["rows"]["gpqa_en"]["n"] == 197                      # eval-framework primary set
-    assert h2["gpqa198_sensitivity"]["gpqa_en_n"] == 198
+    assert h2["rows"]["gpqa_en"]["n"] == 198                      # every Diamond item (Amendment 3)
+    assert h2["gpqa_en_primary"]["n"] == 198 and h2["gpqa_en_primary"]["excluded"] == []
+    assert "gpqa198_sensitivity" not in h2                        # dropped by Amendment 3 (197 = 198 set)
     assert h2["reconstructed_rows"] == ["mmlu_en", "mmlu_de", "ifbench"]
     assert h2["protocol_control"]["peers_within_band"]
     assert vd["H1_detail"]["estimate"] == pytest.approx(0.90, rel=1e-9)
@@ -478,23 +479,30 @@ def test_plain_answers_q3_planned_tier_b_that_never_ran_does_not_count():
 # H2 details
 # ======================================================================
 
-def test_h2_gpqa_primary_excludes_the_overlong_item(tmp_path):
+def test_h2_gpqa_primary_is_every_diamond_item(tmp_path):
+    """Amendment 3 (2026-10-04): eval-framework's over-long filter excludes no Diamond item, so the GPQA EN
+    primary set is all 198 items; an empty exclusion list works end to end, and so does no record at all."""
     w = World()
     w.set("K8", "gpqa_en", 0.5)
     w.plan["h2_rows"] = ["gpqa_en"]
+    assert w.plan["gpqa_en_excluded"] == GPQA_EN_EXCLUDED == []
     ctx = w.ctx()
     cell = ctx.cell("K8", "gpqa_en")
     items = ctx.primary_items("gpqa_en", cell)
-    assert len(items) == 197 and GPQA_EXCLUDED not in items
+    assert len(items) == 198 and items == sorted(cell)
     r = V.h2(ctx, 2000)
     want = np.mean([cell[i].score for i in items]) - vend("gpqa_en", "K8")
     assert r["estimate"] == pytest.approx(want)
+    assert r["detail"]["rows"]["gpqa_en"]["n"] == 198 and r["detail"]["gpqa_en_primary"]["excluded"] == []
+    # No exclusion in the plan and no manifest with in_primary flags (an empty manifests dir, so the test does not
+    # depend on whether the real tasks/manifests/gpqa_diamond_en.json exists yet): still every item.
     w.plan.pop("gpqa_en_excluded")
-    # No exclusion in the plan and no manifest with in_primary flags: an empty manifests dir, so the test does not
-    # depend on whether the real tasks/manifests/gpqa_diamond_en.json exists yet (RUNBOOK step 7; review fix
-    # 2026-10-03: found by running the suite on a late-run copy in run-host mode).
     w.plan["manifests_dir"] = str(tmp_path)
-    with pytest.raises(V.ConfigError):
+    r2 = V.h2(w.ctx(), 2000)
+    assert r2["estimate"] == pytest.approx(want) and r2["detail"]["rows"]["gpqa_en"]["n"] == 198
+    # An exclusion in the plan contradicts the amended rule: refused, never a silent drop.
+    w.plan["gpqa_en_excluded"] = ["gq_en_197"]
+    with pytest.raises(V.ConfigError, match="Amendment 3"):
         V.h2(w.ctx(), 2000)
 
 
@@ -753,7 +761,7 @@ def test_normalise_plan_reads_plan_fix_output():
 def test_plan_fix_shaped_plan_end_to_end():
     w = all_confirmed_world()
     plan = _plan_fixed(peers=("G8",))
-    plan.update({"gpqa_en_excluded": [GPQA_EXCLUDED], "post_strat_counts": w.plan["post_strat_counts"]})
+    plan.update({"gpqa_en_excluded": list(GPQA_EN_EXCLUDED), "post_strat_counts": w.plan["post_strat_counts"]})
     w.plan = plan
     v = w.compute(now=NOW, exploratory=False)
     assert v["verdicts"]["H4_detail"]["verdict"] == V.NOT_RUN       # Qwen3.6 dropped
@@ -762,18 +770,31 @@ def test_plan_fix_shaped_plan_end_to_end():
 
 
 def test_gpqa_primary_from_the_manifest_in_primary_flags(tmp_path):
+    """The manifest's flags are the record when the plan has none: all true (Amendment 3, overlong_excluded 0)
+    gives every item; a false flag (a data change) is refused rather than silently dropped."""
     w = World()
     w.set("K8", "gpqa_en", 0.5)
     w.plan.pop("gpqa_en_excluded")
     mdir = tmp_path / "manifests"
     mdir.mkdir()
-    items = [{"id": f"gq_en_{j:03d}", "item_sha256": "0" * 64, "prompt_sha256": "0" * 64, "in_primary": j != 42}
-             for j in range(198)]
-    (mdir / "gpqa_diamond_en.json").write_text(json.dumps({"items": items}), encoding="utf-8")
+
+    def write(flag):
+        items = [{"id": f"gq_en_{j:03d}", "item_sha256": "0" * 64, "prompt_sha256": "0" * 64, "in_primary": flag(j)}
+                 for j in range(198)]
+        doc = {"items": items, "n": 198, "primary_n": sum(flag(j) for j in range(198)),
+               "overlong_excluded": sum(not flag(j) for j in range(198))}
+        (mdir / "gpqa_diamond_en.json").write_text(json.dumps(doc), encoding="utf-8")
+
+    write(lambda j: True)
     w.plan["manifests_dir"] = str(mdir)
     ctx = w.ctx()
     prim = ctx.primary_items("gpqa_en", ctx.cell("K8", "gpqa_en"))
-    assert len(prim) == 197 and "gq_en_042" not in prim
+    assert len(prim) == 198 and "gq_en_042" in prim and ctx.gpqa_en_excluded() == []
+    write(lambda j: j != 42)
+    ctx = w.ctx()
+    assert ctx.gpqa_en_excluded() == ["gq_en_042"]
+    with pytest.raises(V.ConfigError, match="Amendment 3"):
+        ctx.primary_items("gpqa_en", ctx.cell("K8", "gpqa_en"))
 
 
 # ======================================================================
@@ -801,7 +822,7 @@ def test_h2_b10_two_pass_per_row_and_truncation_over_both_passes():
     rows = r["detail"]["rows"]
     assert rows["gpqa_en"]["two_pass"] and not rows["gpqa_de"]["two_pass"]
     assert rows["gpqa_en"]["D_excluding_truncated"] is not None
-    assert rows["gpqa_en"]["truncation_rate"] == pytest.approx(10 / 197, abs=0.01)
+    assert rows["gpqa_en"]["truncation_rate"] == pytest.approx(10 / 198, abs=0.01)
 
 
 def test_h7_b8_rows_that_did_not_run_are_dropped_and_recorded():

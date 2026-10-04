@@ -140,7 +140,7 @@ cd ~/REPOS/local-first-ai/tasks/chronos/exp_036_kolibri_local_eval && source env
 SETS=$("$PY" tasks/build_manifests.py --list | cut -f1 | paste -sd, -) && \
 "$PY" tasks/build_manifests.py --sets "$SETS" --out "$EXP036_WORK/manifest_check/public" --private "$EXP036_WORK/manifest_check/private"
 ```
-Check: the last line is JSON with `"ok": true` and the counts GPQA-D EN 198 (one over-long item flagged out of the primary 197), GPQA-D DE 198, MMLU-ProX-Lite EN/DE 588 each, AIME EN/DE 30, IFBench 300, RGB closed-book 400, Negative 300, Fact-Check 100. A failure goes to the main session before step 6.
+Check: the last line is JSON with `"ok": true`, `"checks": {"gpqa_diamond_en_overlong_excluded": 0}` (Amendment 3: eval-framework's over-long filter excludes no Diamond item, so all 198 are primary) and the counts GPQA-D EN 198, GPQA-D DE 198, MMLU-ProX-Lite EN/DE 588 each, AIME EN/DE 30, IFBench 300, RGB closed-book 400, Negative 300, Fact-Check 100. A failure goes to the main session before step 6.
 
 ### 4. Preflight
 **4a. Quick.** *Claude may run; < 1 min.*
@@ -212,6 +212,7 @@ cd ~/REPOS/local-first-ai/tasks/chronos/exp_036_kolibri_local_eval && source env
 Check:
 - Both exit 0.
 - `tasks/manifests/` holds hash-only manifests for GPQA EN/DE, RGB and AIME-DE (no `text`, no `gold`), and manifests with category and gold for MMLU-ProX and AIME EN; `mmlu_prox_category_counts.json` is present.
+- `gpqa_diamond_en.json` records `"n": 198`, `"primary_n": 198` and `"overlong_excluded": 0` (Amendment 3), and the stdout JSON shows `"checks": {"gpqa_diamond_en_overlong_excluded": 0}`. The build stops by itself on any other count.
 - `$EXP036_PRIVATE/manifests/` holds the text and gold of the withheld sets. The RGB document indices are recorded.
 - `tools/withheld_shingles.sha256` exists.
 - T5, T6 and T9 are in `$EXP036_WORK/gate_texts/`; their indices and sha256 match `gate/texts/MANIFEST.json` if the main session filled them, otherwise they are written to `results/gate_texts_<UTC>.json`. No web text is in the repo.

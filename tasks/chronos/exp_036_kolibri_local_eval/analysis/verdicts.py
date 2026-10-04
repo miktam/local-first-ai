@@ -63,9 +63,11 @@ plan (plan_fixed_<UTC>.json), keys read by normalise_plan(); defaults in bracket
     cells [[{"arm", "task", "effort", "n"}]] for completeness checks,
     post_strat_counts [{"en": {category: n}, "de": {...}}; else the plan's
     category_counts (runner/plan_fix.py's frozen copy); else
-    tasks/manifests/mmlu_prox_category_counts.json], gpqa_en_excluded (the item id
-    of eval-framework's overlong question; required when the GPQA EN cell has 198
-    items), h8_texts [T1..T6], h8_peers [gemma4, qwen3_6, qwen3_8].
+    tasks/manifests/mmlu_prox_category_counts.json], gpqa_en_excluded [the
+    in_primary false ids of tasks/manifests/gpqa_diamond_en.json; else none]:
+    Amendment 3 makes the GPQA EN primary set every Diamond item, so it must be
+    empty (any id is a ConfigError), h8_texts [T1..T6], h8_peers [gemma4,
+    qwen3_6, qwen3_8].
 
 CLI: python analysis/verdicts.py [--results DIR] [--plan FILE] [--no-exploratory]
 writes results/verdicts_<UTC>.json and results/verdicts_<UTC>.md and never
@@ -607,22 +609,27 @@ class Context:
             return False
 
     # -- item sets
-    def primary_items(self, task: str, items: Iterable[str], full: bool = False) -> list[str]:
-        """GPQA EN primary = eval-framework's 197 (HYPOTHESIS C14); 198 is the sensitivity."""
+    def primary_items(self, task: str, items: Iterable[str]) -> list[str]:
+        """GPQA EN primary = every Diamond item (Amendment 3, 2026-10-04): eval-framework's over-long question is
+        not in gpqa_diamond.csv, so its filter excludes nothing and the vendor ran all 198 too. The pre-registered
+        197 primary / 198 sensitivity split (HYPOTHESIS C14) is gone. The exclusion record (plan gpqa_en_excluded,
+        else the manifest's in_primary flags) is still read: empty is the expected record, and any excluded id
+        contradicts the amended rule, so it is a ConfigError rather than a silent drop."""
         items = sorted(items)
-        if task != "gpqa_en" or full:
+        if task != "gpqa_en":
             return items
+        excluded = self.gpqa_en_excluded()
+        if excluded:
+            raise ConfigError(f"GPQA EN exclusions {sorted(excluded)[:5]} ({len(excluded)}): Amendment 3 makes the "
+                              "primary set every Diamond item (eval-framework's over-long filter excludes none)")
+        return items
+
+    def gpqa_en_excluded(self) -> list[str]:
+        """The recorded GPQA EN exclusions: plan gpqa_en_excluded, else the manifest's, else none."""
         excluded = self.plan.get("gpqa_en_excluded")
         if excluded is None:
             excluded = self._gpqa_manifest_excluded()
-        if excluded is None:
-            if len(items) >= 198:
-                raise ConfigError("no gpqa_en_excluded in the plan and no tasks/manifests/gpqa_diamond_en.json "
-                                  "with in_primary flags: the GPQA EN cell has 198 items and the primary set is "
-                                  "eval-framework's 197 (HYPOTHESIS C14)")
-            return items
-        ex = {str(x) for x in excluded}
-        return [i for i in items if i not in ex]
+        return [str(x) for x in (excluded or [])]
 
     def _gpqa_manifest_excluded(self) -> list[str] | None:
         """Item ids with in_primary == false in the GPQA EN manifest (tasks/build_manifests.py)."""
@@ -636,10 +643,10 @@ class Context:
             return None
         return [str(e["id"]) for e in items if not e["in_primary"]]
 
-    def common_items(self, arms: Iterable[str], task: str, full: bool = False, pass_: int = 0) -> list[str]:
+    def common_items(self, arms: Iterable[str], task: str, pass_: int = 0) -> list[str]:
         sets = [set(self.cell(a, task, pass_)) for a in arms]
         common = set.intersection(*sets) if sets else set()
-        return self.primary_items(task, common, full=full)
+        return self.primary_items(task, common)
 
     # -- post-stratification weights (HYPOTHESIS H2 Measurement)
     def post_strat(self, lang: str) -> dict[str, float]:
@@ -877,10 +884,9 @@ def d1(ctx: Context) -> dict:
 # H2 — scorecard
 # --------------------------------------------------------------------------
 
-def _h2_row_spec(ctx: Context, arm: str, row: str, full_gpqa: bool = False,
-                 exclude_truncated: bool = False) -> dict:
+def _h2_row_spec(ctx: Context, arm: str, row: str, exclude_truncated: bool = False) -> dict:
     cell = ctx.cell(arm, row)
-    items = ctx.primary_items(row, cell, full=full_gpqa)
+    items = ctx.primary_items(row, cell)
     if exclude_truncated:
         items = [i for i in items if not cell[i].truncated]
     if not items:
@@ -897,7 +903,7 @@ def _h2_row_spec(ctx: Context, arm: str, row: str, full_gpqa: bool = False,
     cell2 = ctx.cell(arm, row, pass_=1) if row in GPQA_ROWS and ctx.has_cell(arm, row, 1) else None
     if row in GPQA_ROWS and ctx.plan["b10"] and cell2 is None:
         spec["two_pass_note"] = f"B10 pass 1 of {arm} {row} is missing or incomplete: single pass"
-    all_items = ctx.primary_items(row, cell, full=full_gpqa)
+    all_items = ctx.primary_items(row, cell)
     if cell2 is not None:
         both = [i for i in items if i in cell2]
         if exclude_truncated:
@@ -923,9 +929,9 @@ def _h2_row_spec(ctx: Context, arm: str, row: str, full_gpqa: bool = False,
 
 
 def h2_like(ctx: Context, arm: str, rows: list[str], B: int, h_id: str,
-            full_gpqa: bool = False, exclude_truncated: bool = False) -> dict:
+            exclude_truncated: bool = False) -> dict:
     """D-bar over rows for one arm, with the H2 bootstrap (also used for sensitivities and E8)."""
-    specs = [_h2_row_spec(ctx, arm, r, full_gpqa, exclude_truncated) for r in rows]
+    specs = [_h2_row_spec(ctx, arm, r, exclude_truncated) for r in rows]
     boot = stats.boot_mean_rows(specs, B, stats.rng(h_id))
     point_rows = {s["name"]: s["point"] - s["vendor"] for s in specs}
     point = float(np.mean(list(point_rows.values())))
@@ -970,18 +976,12 @@ def h2(ctx: Context, B: int) -> dict:
     detail["rows_abs_D_gt_5pp"] = [r for r in rows if abs(detail["rows"][r]["D"]) > named + EPS]
     upper = float(m["H2_row_upper_named"])
     detail["rows_upper_bound_below_minus_8pp"] = [r for r in rows if detail["rows"][r]["ci95"][1] < upper - EPS]
-    # GPQA-198 sensitivity (C14).
+    # GPQA EN primary set (Amendment 3): every Diamond item; the pre-registered GPQA-198 sensitivity (C14) is
+    # dropped, because eval-framework's over-long filter excludes no Diamond item (197 and 198 are the same set).
     if "gpqa_en" in rows:
-        try:
-            s = h2_like(ctx, ctx.K, rows, B, "H2|gpqa198", full_gpqa=True)
-            lo, hi = stats.percentile_ci(s["samples"], float(m["ci_level"]))
-            detail["gpqa198_sensitivity"] = {
-                "estimate": s["point"], "ci95": [lo, hi],
-                "p": stats.p_one_sided(s["samples"], float(m["H2"]), "le"),
-                "p_rev": stats.p_one_sided(s["samples"], float(m["H2"]), "ge"),
-                "gpqa_en_n": s["rows"]["gpqa_en"]["n"]}
-        except (NotRun, ConfigError) as e:
-            detail["gpqa198_sensitivity"] = {"status": NOT_RUN, "reason": str(e)}
+        detail["gpqa_en_primary"] = {
+            "n": detail["rows"]["gpqa_en"]["n"], "excluded": ctx.gpqa_en_excluded(),
+            "rule": "every GPQA Diamond EN item (Amendment 3); the 197-vs-198 sensitivity (C14) is dropped"}
     detail["protocol_control"] = protocol_control(ctx, B)
     # Secondary 7-row estimate with AIME (B1): estimate and 95 % CI only, no verdict.
     sec = list(ctx.plan["h2_secondary_rows"])

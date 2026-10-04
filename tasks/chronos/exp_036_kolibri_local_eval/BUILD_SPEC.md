@@ -572,11 +572,11 @@ Withheld sets write the full record (with `completion_ids` and `text`) to `$EXP0
 - *Tests:* `test_assets.py`, against fake directories with metadata files.
 
 **`tasks/gpqa.py`**
-- `load_diamond_en(path) -> list[Item]` (198) and `primary_197(items)`, which excludes eval-framework's overlong item by `sha256(row["Question"].strip()) == OVERLONG_SHA256` (constant from the patched vendored file).
+- `load_diamond_en(path) -> list[Item]` (198) and `primary_en(items)`, eval-framework's set: the items its overlong filter keeps, by `sha256(row["Question"]) == OVERLONG_SHA256` (constant from the patched vendored file; a match only after stripping is an error). Amendment 3 (2026-10-04): that question is in `gpqa_extended.csv` only, so the filter excludes no Diamond item and the primary set is all 198. `primary_en` asserts exactly `selection_rules.json` `overlong_excluded` = 0 exclusions, and `build_manifests` records the count in `gpqa_diamond_en.json` (`primary_n`, `overlong_excluded`) and in its `checks`.
 - `load_diamond_de(path)` (198, `is_diamond`) and `load_pilot_main(path, diamond_ids, n=8)`, which takes rows whose Record ID is **not** in the `gpqa_diamond.csv` Record ID set, in a seed-36 order.
 - `render_en(item)` and `render_de(item)` use the vendored `tulu3_cot_prompt`, `tulu3_cot_prompt_de` and the option shuffles: EN `GpqaReader.read`, whose seed is the sha256 of the option texts; DE `shuffle_correct_with_distractors` seeded by question + correct answer.
 - `Item = {id, item_sha256, prompt_text, gold_letter, n_options}`. Text and gold never leave memory except into `$EXP036_PRIVATE`.
-- *Tests:* `test_gpqa.py`, on **synthetic** GPQA-shaped rows we write ourselves: shuffle determinism against the vendored function; the overlong exclusion by hash; DE `is_diamond` filtering; pilot ∩ Diamond Record IDs = ∅.
+- *Tests:* `test_gpqa.py`, on **synthetic** GPQA-shaped rows we write ourselves: shuffle determinism against the vendored function; the overlong filter by hash (a stand-in question in a synthetic `gpqa_extended.csv` only excludes nothing; a Diamond match stops the build); DE `is_diamond` filtering; pilot ∩ Diamond Record IDs = ∅.
 
 **`tasks/mmlu_prox.py`**
 - `parallel_ids(lite_dir) -> dict[category, list[str]]`: ids present in both en and de, per category, each in one seed-36 permutation. n_M (a multiple of 14) takes n_M/14 ids per category as a prefix, so smaller sets are nested and category-balanced.
@@ -609,7 +609,7 @@ Withheld sets write the full record (with `completion_ids` and `text`) to `$EXP0
 - Public sets (MMLU-ProX, AIME EN, IFBench): `{id, item_sha256, prompt_sha256}` plus `category` and `gold` for MMLU-ProX and `gold` for AIME EN. No item text.
 - Withheld sets (GPQA EN/DE, AIME-DE, RGB): `{id, item_sha256, prompt_sha256}` and the RGB document indices only. No per-item gold hash (a hash of a letter or an integer is trivially reversible); text and gold go to `$EXP036_PRIVATE/manifests/`, bound by the sha256 of the whole private file in the plan amendment.
 - Also writes `tasks/manifests/mmlu_prox_category_counts.json` (full test split counts per language) and `tools/withheld_shingles.sha256`: the sorted 12-hex prefixes of sha256 over normalised 8-word shingles (lower-case, whitespace collapsed, punctuation other than digits removed; all-digit shingles left out) of GPQA EN/DE questions and options (Diamond and main), AIME-DE problems, RGB queries and answers and RGB's instruction strings, plus the full sha256 of every withheld option string of ≥ 4 words and of every RGB query, GPQA EN/DE question and AIME-DE problem of 4–8 words (Amendment 1, 2026-10-04; was 3); shingles of the kit's public text (LICENSE-APACHE-2.0, gate texts) are left out (review fix 2026-10-03). The RGB documents and the FineWeb-2 rows are not in the file (≈ 47 MB of hashes); the leak check streams them from `$EXP036_DATA`.
-- Writes `results/manifests_<UTC>.json` with the sha256 of every manifest, public and private.
+- Writes `results/manifests_<UTC>.json` with the sha256 of every manifest, public and private, and the `checks` (Amendment 3: `gpqa_diamond_en_overlong_excluded`, which must be 0; the GPQA EN manifest also carries the per-item `in_primary` flag and `primary_n` / `overlong_excluded`).
 - *Invariant:* the same data in gives byte-identical manifests out.
 - *Tests:* `test_build_manifests.py` on synthetic data: no `text` or `gold` key in withheld manifests; shingle normalisation.
 
