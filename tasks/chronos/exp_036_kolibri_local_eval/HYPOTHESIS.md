@@ -825,3 +825,44 @@ The "Signed off by" line must read `Signed off by: Andrei (typed by Andrei on th
 *Experiment design: Andrei + Claude Opus 5.5 · 2026-10-03*
 
 Pre-registration commit: 725d628a322007761dde013bd807d312dfbad1ea
+
+## Amendment 1 — gate fix (2026-10-04T05:18:45Z)
+
+*Written by the main session on the mini before any scored run, pushed as `amendments/1_gatefix_20261004T051845Z.md`, and appended verbatim by the mbp session (one writer). It changes no hypothesis, threshold, margin, arm, task, n or verdict rule.*
+
+**Why.** RUNBOOK step 3 failed on the mbp, as recorded in `aborted/20261004T044821Z-tests/NOTE.md` (commit 71bf9d7). There were two independent causes.
+
+1. **TF32 on the M5 GPU.** mlx 0.31.2 turns TF32 on by default. The `MLX_ENABLE_TF32` variable is read once per process, at the first fp32 GPU kernel that asks for it (`enable_tf32()` in `mlx/utils.h`, a function-local static). On the M5 Max, fp32 `matmul` with M ≥ 2, sorted `gather_mm` and multi-query SDPA then truncate their operands to 10 mantissa bits. The relative L2 error against float64 is about 7.7e-4 instead of about 3e-7. The build host (M4 Pro) has no such kernels, so the suite passed there.
+   - With TF32 on, prefill runs in TF32 and decode in exact fp32, and the gate's fp32 checks measure the GPU instead of the port: the tiny gate failed K8 on five checks.
+   - With `MLX_ENABLE_TF32=0` all 41 failing tests pass (measured on the mbp).
+2. **Leak check.** Six 3-word GPQA options match ordinary English in the kit's own code and documents: 30 places in 22 files, one of them inside the list of generic phrases.
+
+**Change.**
+1. **Exact fp32 in every process.**
+   - `tools/precision.py` sets `MLX_ENABLE_TF32=0` unless it is already set, and refuses any other value. It then probes an fp32 GPU matmul and refuses if the relative L2 error exceeds 1e-5.
+   - It is called as the first statement of `main()` in `gate/run_gate.py`, `runner/run.py`, `bench/run_bench.py`, `tools/peer_check.py`, `tools/preflight.py` and `tools/dry_run.py`.
+   - `tests/conftest.py` sets the variable before any test and checks it at session start.
+   - `tools/version_record.py` records it as `fp32_precision`.
+   - **Why off everywhere.** This matches the vendor's arithmetic: vLLM on CUDA computes the router and the head as exact bf16 products with fp32 accumulation, and PyTorch leaves TF32 off for matmul. bf16 and quantised matmuls are not affected by the variable. Tests, gate, peer check, bench and scored runs now share one setting, so the gate checks what the runs execute, and every arm's speed (H1 and the descriptive cells) is measured under the same setting.
+2. **Leak check.** Withheld options and short withheld questions are now hashed from 4 words up: `MIN_OPTION_WORDS` in `tools/shingles.py` goes from 3 to 4. A phrase of 1 to 3 words, without its question, reveals nothing withheld, and the RGB raw outputs stay withheld in any case.
+   - The wording in `tasks/selection_rules.json` and the `tasks/build_manifests.py` docstring still says "≥ 3 words". It is left unchanged on purpose: every built manifest records the sha256 of `selection_rules.json`, so editing it would unfreeze them.
+   - The bound in force is `tools.shingles.MIN_OPTION_WORDS`. The `tasks` and `manifest_rule` hashes are unchanged.
+3. **Dry run.** `tools/dry_run.py` now puts the experiment root on `sys.path` at import time, so that its `main()` can import the guard when it runs as a script.
+
+**New tree hashes.** The other 13 scopes keep their pre-registered values.
+
+hash_tree: GATE_CODE_SHA256 = 0d280ed0136aa87701d6e598fe4a5b2a232976a772e46b85d1cb5af0523dc9b3
+hash_tree: RUNNER_SHA256 = 3495b7bffa172699207d2ebcbbbf87da94146fe7b5b071f1ea6f172d796f32e4
+hash_tree: BENCH_SHA256 = a69fd1281030c7037c0b21cbc8043a4d9589882564ed5228864991f8cdbfa2e1
+hash_tree: TOOLS_SHA256 = 0eaa8b814ce3c7014b12f6e71a71dd7552fdd1918fe4ee116fc957221319b961
+
+**Verified on the mini.** The M4 Pro has no TF32 kernels, so the hardware effect itself is verified by the mbp's re-run of step 3.
+- 1,201 tests pass in both Python 3.12 and Python 3.14, with every test required.
+- `tools/dry_run.py` passes all 17 stages.
+- The leak check finds 0 findings.
+- `hash_tree --check` matches all 17 scopes with this amendment appended.
+
+**What the mbp does.**
+1. Pull.
+2. Run `"$PY" tools/status.py --sync-amendments`, which appends this file to HYPOTHESIS.md.
+3. Re-run step 3. The tests turn TF32 off themselves through `tests/conftest.py`, so no RUNBOOK command changes.
