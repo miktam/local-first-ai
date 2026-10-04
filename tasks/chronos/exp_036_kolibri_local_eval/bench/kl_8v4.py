@@ -8,21 +8,46 @@ against the text_sha256 that gate/texts/MANIFEST.json records for it.
 
 Per model family (Kolibri, Gemma 4, Qwen3.6, Qwen3.8), per text:
 - the family's own tokenizer (raw `tokenizers`, tokenizer.json of the 8-bit
-  directory; the 4-bit directory must give the same ids) tokenises the text,
-  with no special tokens; the token offsets give each token's first byte;
-- the model teacher-forces [prefix] + ids[:-1], so every text token is
-  predicted. The prefix is the context-start token: the tokenizer's BOS if
-  it has one, else generation_config.json bos_token_id, else <|endoftext|>
-  (Gemma 4 <bos>; Qwen generation_config bos = <|endoftext|>; Kolibri
-  <|endoftext|>). It is identical for the 8-bit and the 4-bit model;
+  directory; the 4-bit directory must give the same ids) tokenises the text
+  alone, with no special tokens; the token offsets give each token's first
+  byte;
+- chat-wrapped (Amendment 5, Andrei 2026-10-04): every model reads the text
+  as the ASSISTANT TURN after one fixed user message, "Write a text.",
+  rendered through its own chat template by runner.chat.render (the scored
+  runs' rendering) with add_generation_prompt=True and thinking off
+  (runner.chat.template_kwargs(family, "none"): Kolibri
+  reasoning_effort="none" with its tokenizer_config template; Gemma 4,
+  Qwen3.6 and Qwen3.8 enable_thinking=False with runner/templates/). The
+  model teacher-forces prompt_ids + ids[:-1]; only the rows that predict the
+  text's tokens are scored (score_from = len(prompt_ids) - 1), so every text
+  token is predicted and no prompt token is. No extra BOS: the template
+  emits any (Gemma 4 <bos>). The 8-bit and 4-bit directories must render
+  the same prompt ids. chat_wrapper() records the prompt, kwargs and
+  template sha256. Why: Gemma 4 IT teacher-forced on raw text after <bos>
+  falls into its chat/thinking-channel format (about 11 nats/token on T1),
+  which made its NLL and KL meaningless (aborted/20261004T143051Z-peercheck);
+- the wrapper/text boundary (review of Amendment 5): because the text is
+  tokenised alone, a text that starts with a newline begins with its own
+  newline token. Kolibri's, Qwen3.6's and Qwen3.8's wrappers end on the
+  token "\\n\\n" (Kolibri 263, Qwen 271), so on T1, T2 ("\\n") and T6
+  ("\\n\\n") they score a split that their tokenizers never produce from the
+  joint string (Kolibri ['\\n\\n', '\\n'] where the joint encoding gives
+  '\\n\\n\\n' 120038; Qwen 1358; T6 '\\n\\n\\n\\n' 120724 / 987). Gemma 4's wrapper
+  ends on the special token <channel|>, so nothing merges there. The scored
+  ids stay as decided; each text records wrapper_boundary (wrapper_boundary())
+  and the per-position stats of its first two scored rows (first_rows), so a
+  sensitivity without those rows can be computed from the record;
+- (context_prefix() and score_from = 0 give the raw-text measurement, which
+  tools/peer_check.py still records for the gate's G3);
 - logits come from chunked forwards through the model's own cache
   (chunk 2048) and are rounded to bf16 and upcast to fp32 for every model
   (like for like, C6); Kolibri's KL is also computed from its fp32 logits;
-- per position KL(p8 || p4) = sum_v p8 (log p8 - log p4) in fp32, plus NLL of
-  the true next token under each model and top-1 agreement;
-- each text is cut into 8 byte-aligned blocks at whitespace; a token belongs
-  to the block holding its first byte; per block the sums of KL, NLL and
-  agreement, the token count and the byte count are written.
+- per scored position KL(p8 || p4) = sum_v p8 (log p8 - log p4) in fp32,
+  plus NLL of the true next token under each model and top-1 agreement;
+- each text is cut into 8 byte-aligned blocks at whitespace (over the text's
+  own UTF-8 bytes; the wrapper adds none); a token belongs to the block
+  holding its first byte; per block the sums of KL, NLL and agreement, the
+  token count and the byte count are written.
 
 Kolibri: K8 is loaded alone, its log-probs (both variants, fp32 .npy) are
 dumped to $EXP036_WORK/kl/<UTC>/, K8 is unloaded, K4 is loaded and compared
@@ -56,6 +81,17 @@ ROW_SLICE = 256  # rows per KL evaluation, bounds the [rows, V] temporaries
 WHITESPACE = b" \t\n\r"
 FAMILIES = ("kolibri", "gemma4", "qwen3_6", "qwen3_8")
 STATS = ("kl", "nll8", "nll4", "agree")
+FIRST_ROWS = 2  # per-position stats of the first scored rows, recorded per text (the wrapper/text boundary)
+
+# Amendment 5 (Andrei, 2026-10-04, "Chat-wrapped"): the fixed user turn every model answers with the gate text,
+# and the effort that turns thinking off through runner.chat.template_kwargs.
+WRAP_USER_MESSAGE = "Write a text."
+WRAP_EFFORT = "none"
+WRAP_AMENDMENT = "Amendment 5"
+WRAP_RULE = ("the gate text is the assistant turn after the single user message 'Write a text.', rendered with "
+             "runner.chat.render (the model's own chat template, add_generation_prompt=True, thinking off); "
+             "input = prompt_ids + text_ids[:-1], text tokenised alone (add_special_tokens=False), no extra BOS; "
+             "only the rows predicting the text's tokens are scored")
 
 
 # ---------------------------------------------------------------------------
@@ -175,7 +211,10 @@ def tokenize(tokenizer_json: Path, text: str) -> tuple[list[int], np.ndarray]:
 
 
 def context_prefix(model_dir: Path) -> dict:
-    """The context-start token, by the rule in the module docstring."""
+    """The raw-text context-start token: the tokenizer's BOS if it has one,
+    else generation_config.json bos_token_id, else <|endoftext|> (Gemma 4
+    <bos>; Qwen generation_config bos = <|endoftext|>; Kolibri <|endoftext|>).
+    Used only by the raw-text measurement (tools/peer_check.py, for G3)."""
     from tokenizers import Tokenizer
 
     d = Path(model_dir)
@@ -198,6 +237,96 @@ def context_prefix(model_dir: Path) -> dict:
     raise common.BenchError(f"no context-start token for {common.redact_path(d)}")
 
 
+def load_chat_tokenizer(model_dir: Path):
+    """The tokenizer the runner renders prompts with: mlx_lm's TokenizerWrapper
+    (what mlx_lm.load returns), unwrapped by runner.chat.render."""
+    from mlx_lm.utils import load_tokenizer
+
+    return load_tokenizer(Path(model_dir))
+
+
+def chat_wrapper(family: str, model_dir: Path, tokenizer=None) -> dict:
+    """The Amendment 5 wrapper of one model directory: {"prompt_ids": [...],
+    "record": {...}}. The prompt is runner.chat.render(family, tokenizer,
+    [{"role": "user", "content": WRAP_USER_MESSAGE}], WRAP_EFFORT), i.e. the
+    scored runs' rendering with the thinking-off kwargs passed explicitly.
+    The record holds everything needed to rebuild it: the user message, the
+    kwargs, the template's source and sha256, the rendered text's sha256,
+    the prompt ids and what the prompt prefilled."""
+    from runner import chat
+
+    d = Path(model_dir)
+    tok = tokenizer if tokenizer is not None else load_chat_tokenizer(d)
+    messages = [{"role": "user", "content": WRAP_USER_MESSAGE}]
+    text, ids, rendered_sha = chat.render(family, tok, messages, WRAP_EFFORT)
+    if not ids:
+        raise common.BenchError(f"{family}: the chat wrapper rendered no tokens")
+    if family == "kolibri":
+        tb = chat.local_template_bytes(d)
+        if tb is None:
+            raise common.BenchError(f"kolibri: no chat template in {common.redact_path(d)}")
+        template = {"template": "the model directory's own (tokenizer_config.json chat_template)",
+                    "template_sha256": common.sha256_bytes(tb)}
+    else:
+        par = chat.template_parity(family, d)
+        template = {"template": f"runner/templates/{chat.TEMPLATE_FILES[family]}",
+                    "template_sha256": chat.template_sha256(family),
+                    "template_equals_model_dir": par.get("equal")}
+    record = {
+        "amendment": WRAP_AMENDMENT,
+        "rule": WRAP_RULE,
+        "messages": messages,
+        "add_generation_prompt": True,
+        "effort": WRAP_EFFORT,
+        "kwargs": chat.template_kwargs(family, WRAP_EFFORT),
+        **template,
+        "rendered_sha256": rendered_sha,
+        "prompt_ids": [int(i) for i in ids],
+        "prompt_tokens": len(ids),
+        "prompt_ids_sha256": common.sha256_ids(ids),
+        "prefill": chat.prompt_prefill(family, text),
+        "text_tokens": "the text tokenised alone, add_special_tokens=False (raw tokenizers, tokenizer.json)",
+    }
+    return {"prompt_ids": [int(i) for i in ids], "record": record, "rendered": text}
+
+
+def wrapper_boundary(tokenizer_json: Path, rendered: str, text: str, prompt_ids: list[int], ids: list[int]) -> dict:
+    """How the scored sequence (prompt_ids + the text tokenised alone) meets
+    the raw tokenizer's joint encoding of the rendered prompt + text. Equal:
+    {"joint_equals_scored": True}. Else the stretch where they differ, by
+    common prefix and suffix: {"joint_equals_scored": False, "scored_ids",
+    "joint_ids", "from_text_token": index of the first differing scored id
+    relative to the text (-1 = the wrapper's last token)}. Amendment 5 keeps
+    the scored ids (the text tokenised alone); this records the difference."""
+    from tokenizers import Tokenizer
+
+    joint = [int(i) for i in
+             Tokenizer.from_file(str(tokenizer_json)).encode(rendered + text, add_special_tokens=False).ids]
+    scored = [int(i) for i in prompt_ids] + [int(i) for i in ids]
+    if joint == scored:
+        return {"joint_equals_scored": True}
+    n = min(len(joint), len(scored))
+    pre = next((k for k in range(n) if joint[k] != scored[k]), n)
+    suf = 0
+    while suf < n - pre and joint[-1 - suf] == scored[-1 - suf]:
+        suf += 1
+    return {"joint_equals_scored": False, "scored_ids": scored[pre:len(scored) - suf],
+            "joint_ids": joint[pre:len(joint) - suf], "from_text_token": pre - len(prompt_ids)}
+
+
+def scored_input(prompt_ids: list[int], ids: list[int]) -> tuple[list[int], int]:
+    """(input_ids, score_from) for teacher-forcing `ids` after `prompt_ids`:
+    input = prompt_ids + ids[:-1]; logit row score_from + j predicts ids[j]
+    (score_from = len(prompt_ids) - 1), so exactly len(ids) rows are scored.
+    The raw-text measurement is prompt_ids = [context-start token]
+    (score_from 0)."""
+    if not prompt_ids:
+        raise common.BenchError("teacher forcing needs at least one context token before the text")
+    if not ids:
+        raise common.BenchError("no text tokens to score")
+    return [int(i) for i in prompt_ids] + [int(i) for i in ids[:-1]], len(prompt_ids) - 1
+
+
 # ---------------------------------------------------------------------------
 # Teacher forcing and KL (MLX)
 # ---------------------------------------------------------------------------
@@ -217,6 +346,22 @@ def forward_chunks(model, input_ids: list[int], chunk: int = CHUNK) -> Iterator[
         logits = out.astype(mx.float32)
         mx.eval(logits)
         yield s, logits, native
+
+
+def scored_chunks(model, input_ids: list[int], score_from: int = 0, chunk: int = CHUNK) -> Iterator[tuple[int, object, str]]:
+    """forward_chunks restricted to the scored rows: (t0, logits fp32 [n, V],
+    native dtype) where row r is the prediction of target t0 + r. Rows before
+    score_from (the wrapper's prompt) are computed, as they must be, and
+    dropped; a chunk that holds only such rows yields nothing."""
+    if not 0 <= score_from < len(input_ids):
+        raise common.BenchError(f"score_from {score_from} outside the {len(input_ids)} input positions")
+    for s, logits, native in forward_chunks(model, input_ids, chunk):
+        n = logits.shape[0]
+        a = max(score_from - s, 0)
+        if a >= n:
+            del logits
+            continue
+        yield s + a - score_from, (logits[a:] if a else logits), native
 
 
 def logprobs(logits_f32, round_bf16: bool):
@@ -262,12 +407,21 @@ def _finish_acc(acc: dict) -> dict:
     return {k: np.concatenate(v) if v else np.zeros(0, np.float32) for k, v in acc.items()}
 
 
-def compare_loaded(m8, m4, input_ids: list[int], targets: list[int], chunk: int = CHUNK, with_fp32: bool = False) -> tuple[dict, dict]:
-    """Both models resident: per-position stats for one text."""
+def _check_targets(input_ids: list[int], targets: list[int], score_from: int) -> None:
+    if len(input_ids) - score_from != len(targets):
+        raise common.BenchError(f"{len(input_ids)} inputs from row {score_from} do not score {len(targets)} targets")
+
+
+def compare_loaded(m8, m4, input_ids: list[int], targets: list[int], chunk: int = CHUNK, with_fp32: bool = False,
+                   score_from: int = 0) -> tuple[dict, dict]:
+    """Both models resident: per-position stats for one text (the rows from
+    score_from on; targets[j] is the token row score_from + j predicts)."""
+    _check_targets(input_ids, targets, score_from)
     keys = STATS + (("kl_fp32",) if with_fp32 else ())
     acc = _new_acc(keys)
     native = {}
-    for (s, l8, n8), (s4, l4, n4) in zip(forward_chunks(m8, input_ids, chunk), forward_chunks(m4, input_ids, chunk)):
+    for (s, l8, n8), (s4, l4, n4) in zip(scored_chunks(m8, input_ids, score_from, chunk),
+                                         scored_chunks(m4, input_ids, score_from, chunk)):
         if l8.shape != l4.shape:
             raise common.BenchError(f"logit shapes differ: {l8.shape} vs {l4.shape}")
         native = {"8bit": n8, "4bit": n4}
@@ -283,19 +437,21 @@ def compare_loaded(m8, m4, input_ids: list[int], targets: list[int], chunk: int 
     return _finish_acc(acc), native
 
 
-def dump_logprobs(m8, input_ids: list[int], out_dir: Path, text_id: str, chunk: int = CHUNK) -> tuple[dict, str]:
+def dump_logprobs(m8, input_ids: list[int], out_dir: Path, text_id: str, chunk: int = CHUNK,
+                  score_from: int = 0) -> tuple[dict, str]:
     """Write the 8-bit model's fp32 log-probs of bf16-rounded logits and of
-    fp32 logits, [T, V] each, as .npy; return {variant: path} and the native
-    logits dtype."""
+    fp32 logits for the scored rows, [T, V] each (T = the text's tokens), as
+    .npy; return {variant: path} and the native logits dtype."""
     out_dir.mkdir(parents=True, exist_ok=True)
     files = {"bf16": out_dir / f"K8_{text_id}.lp_bf16logits.npy", "fp32": out_dir / f"K8_{text_id}.lp_fp32logits.npy"}
     mm = {}
     native = ""
-    for s, logits, native in forward_chunks(m8, input_ids, chunk):
+    n_rows = len(input_ids) - score_from
+    for s, logits, native in scored_chunks(m8, input_ids, score_from, chunk):
         n, v = logits.shape
         if not mm:
             for variant, f in files.items():
-                mm[variant] = np.lib.format.open_memmap(f, mode="w+", dtype=np.float32, shape=(len(input_ids), v))
+                mm[variant] = np.lib.format.open_memmap(f, mode="w+", dtype=np.float32, shape=(n_rows, v))
         for r0 in range(0, n, ROW_SLICE):
             a = logits[r0 : r0 + ROW_SLICE]
             for variant, rnd in (("bf16", True), ("fp32", False)):
@@ -308,17 +464,20 @@ def dump_logprobs(m8, input_ids: list[int], out_dir: Path, text_id: str, chunk: 
     return files, native
 
 
-def compare_dump(m4, input_ids: list[int], targets: list[int], files: dict, chunk: int = CHUNK) -> tuple[dict, str]:
-    """4-bit model against a dump written by dump_logprobs."""
+def compare_dump(m4, input_ids: list[int], targets: list[int], files: dict, chunk: int = CHUNK,
+                 score_from: int = 0) -> tuple[dict, str]:
+    """4-bit model against a dump written by dump_logprobs (same input_ids
+    and score_from)."""
     import mlx.core as mx
 
+    _check_targets(input_ids, targets, score_from)
     lp8 = {variant: np.load(f, mmap_mode="r") for variant, f in files.items()}
     acc = _new_acc(STATS + ("kl_fp32",))
     native = ""
-    for s, l4, native in forward_chunks(m4, input_ids, chunk):
+    for s, l4, native in scored_chunks(m4, input_ids, score_from, chunk):
         n, v = l4.shape
-        if lp8["bf16"].shape != (len(input_ids), v):
-            raise common.BenchError(f"dump shape {lp8['bf16'].shape} does not match ({len(input_ids)}, {v})")
+        if lp8["bf16"].shape != (len(targets), v):
+            raise common.BenchError(f"dump shape {lp8['bf16'].shape} does not match ({len(targets)}, {v})")
         for r0 in range(0, n, ROW_SLICE):
             a4 = l4[r0 : r0 + ROW_SLICE]
             rows = slice(s + r0, s + r0 + a4.shape[0])
@@ -348,12 +507,14 @@ def block_sums(per_pos: dict, blocks: np.ndarray, bounds: list[int]) -> list[dic
 
 
 def _prepare_family(family: str, dirs: tuple[Path, Path], texts: dict, bounds: dict) -> dict:
-    """Tokenise every text for one family; check the 4-bit tokenizer agrees."""
+    """Tokenise every text for one family and wrap it (Amendment 5); check
+    that the 4-bit tokenizer and template give the same ids."""
     d8, d4 = dirs
-    prefix = context_prefix(d8)
-    if context_prefix(d4)["id"] != prefix["id"]:
-        raise common.BenchError(f"{family}: the 8-bit and 4-bit context-start tokens differ")
-    prep = {"prefix": prefix, "texts": {}, "tokenizer_json_sha256": common.sha256_file(d8 / "tokenizer.json")}
+    wrap = chat_wrapper(family, d8)
+    if chat_wrapper(family, d4)["prompt_ids"] != wrap["prompt_ids"]:
+        raise common.BenchError(f"{family}: the 8-bit and 4-bit chat wrappers render different prompt ids")
+    prep = {"wrapper": {**wrap["record"], "prompt_ids_4bit_identical": True}, "texts": {},
+            "tokenizer_json_sha256": common.sha256_file(d8 / "tokenizer.json")}
     same4 = True
     for t, rec in texts.items():
         ids, fb = tokenize(d8 / "tokenizer.json", rec["text"])
@@ -361,10 +522,14 @@ def _prepare_family(family: str, dirs: tuple[Path, Path], texts: dict, bounds: d
             same4 = False
         if not ids or fb[0] != 0:
             raise common.BenchError(f"{family} {t}: tokenisation does not start at byte 0")
+        inputs, score_from = scored_input(wrap["prompt_ids"], ids)
         prep["texts"][t] = {
             "ids": ids,
-            "inputs": [prefix["id"]] + ids[:-1],
+            "inputs": inputs,
+            "score_from": score_from,
             "blocks": token_blocks(fb, bounds[t]),
+            "first_bytes": [int(b) for b in fb[:FIRST_ROWS + 1]],
+            "boundary": wrapper_boundary(d8 / "tokenizer.json", wrap["rendered"], rec["text"], wrap["prompt_ids"], ids),
         }
     if not same4:
         raise common.BenchError(f"{family}: the 4-bit tokenizer gives different ids")
@@ -429,7 +594,7 @@ def run_cell(
             "arms": [a8, a4],
             "model_dirs": {a8: common.redact_path(d8), a4: common.redact_path(d4)},
             "fingerprints": {a8: common.model_fingerprint(a8, d8), a4: common.model_fingerprint(a4, d4)},
-            "prefix": prep["prefix"],
+            "wrapper": prep["wrapper"],
             "tokenizer_json_sha256": prep["tokenizer_json_sha256"],
             "tokenizer_4bit_ids_identical": prep["tokenizer_4bit_ids_identical"],
             "texts": {},
@@ -444,7 +609,7 @@ def run_cell(
             m8, _, _ = loader(a8)
             files = {}
             for t, tp in prep["texts"].items():
-                files[t], n8 = dump_logprobs(m8, tp["inputs"], ddir, t, chunk)
+                files[t], n8 = dump_logprobs(m8, tp["inputs"], ddir, t, chunk, score_from=tp["score_from"])
                 native[t] = {"8bit": n8}
             del m8
             genutil.release()
@@ -455,7 +620,7 @@ def run_cell(
             }
             m4, _, _ = loader(a4)
             for t, tp in prep["texts"].items():
-                per_pos[t], n4 = compare_dump(m4, tp["inputs"], tp["ids"], files[t], chunk)
+                per_pos[t], n4 = compare_dump(m4, tp["inputs"], tp["ids"], files[t], chunk, score_from=tp["score_from"])
                 native[t]["4bit"] = n4
             del m4
         else:
@@ -463,7 +628,8 @@ def run_cell(
             m8, _, _ = loader(a8)
             m4, _, _ = loader(a4)
             for t, tp in prep["texts"].items():
-                per_pos[t], native[t] = compare_loaded(m8, m4, tp["inputs"], tp["ids"], chunk)
+                per_pos[t], native[t] = compare_loaded(m8, m4, tp["inputs"], tp["ids"], chunk,
+                                                       score_from=tp["score_from"])
             del m8, m4
         genutil.release()
 
@@ -472,10 +638,17 @@ def run_cell(
             blocks = block_sums(per_pos[t], tp["blocks"], bounds[t])
             rec = {
                 "tokens": len(tp["ids"]),
+                "score_from": tp["score_from"],
                 "input_ids_sha256": common.sha256_ids(tp["inputs"]),
                 "target_ids_sha256": common.sha256_ids(tp["ids"]),
                 "logits_dtype_native": native[t],
                 "blocks": blocks,
+                "wrapper_boundary": tp["boundary"],
+                "first_rows": {
+                    "rows": min(FIRST_ROWS, len(tp["ids"])),
+                    "token_first_bytes": tp["first_bytes"],
+                    **{k: [float(x) for x in v[:FIRST_ROWS]] for k, v in sorted(per_pos[t].items())},
+                },
             }
             if family == "kolibri" and t in PUBLIC_TEXTS:
                 committed = _committed_ids(pub, t)
@@ -502,7 +675,12 @@ def run_cell(
             "n_blocks": N_BLOCKS,
             "block_rule": "boundaries at whitespace near k/8 of the UTF-8 bytes (byte_blocks); a token belongs to the block holding its first byte",
             "tokenizer": "raw tokenizers, tokenizer.json of the 8-bit directory, add_special_tokens=False",
-            "prefix_rule": "tokenizer_config bos_token, else generation_config bos_token_id, else <|endoftext|>; input = [prefix] + ids[:-1], every text token predicted",
+            "wrapper_rule": WRAP_RULE + " (" + WRAP_AMENDMENT + "; per family: families.<f>.wrapper)",
+            "wrapper_user_message": WRAP_USER_MESSAGE,
+            "wrapper_effort": WRAP_EFFORT,
+            "wrapper_boundary": "families.<f>.texts.<T>.wrapper_boundary: the scored ids against the joint encoding "
+                                "of rendered prompt + text; families.<f>.texts.<T>.first_rows: the stats of the first "
+                                f"{FIRST_ROWS} scored rows and the first bytes of tokens 0..{FIRST_ROWS}",
             "teacher_forcing_chunk": chunk,
             "logits": "bf16-rounded then upcast to fp32 for every model (C6); kl_fp32 for Kolibri from its fp32 logits",
             "kl": "sum_v p8 * (log p8 - log p4) per position, fp32; block sums in float64",

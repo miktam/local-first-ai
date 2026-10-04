@@ -253,3 +253,132 @@ The pre-registered lines that the HYPOTHESIS amendment text needs to supersede:
 Hash scopes changed: `runner`, `tasks`, `manifest_rule`, `analysis`, `tools`. The other 12 match.
 
 Mini verification, after the review fixes (which touched only `RUNBOOK.md` and this log, neither in a hash scope): 1,225 tests pass (Python 3.12 and 3.14, every test required; 1,206 before, plus 19; on the mbp, 1,217 passed and 8 `build-host only:` skips); dry run 17/17 (3.2 min), with the plan stage FIXED at P0 with n_M 28, and the manifests stage showing `mmlu_prox_lite_en/de` 588 and `"checks": {"gpqa_diamond_en_overlong_excluded": 0, "mmlu_prox_full_gold_inconsistent_excluded": {"de": ["3787"], "en": ["3787"]}}`; leak check `--all --no-gpqa-source` 0 findings (11 host-name warnings); `hash_tree --check` 12 match and 5 MISMATCH until the amendment is appended, 17/17 on a copy with the five `hash_tree:` lines appended.
+
+
+## Amendment 5 — chat-wrapped peer fidelity and H8; a greedy-flip failure is B=1 (2026-10-04)
+
+RUNBOOK step 9 on the mbp failed G8, G4 and Q36-8; Q36-4, Q38-8 and Q38-4 passed (`aborted/20261004T143051Z-peercheck/NOTE.md`, commit 381b1bd). There were two separate causes.
+
+1. **Gemma 4.** The mbp measured NLL of 10.21 / 10.66 nats/token at 8 / 4 bits, KL(8‖4) of 4.57 and a G8 floor_kl of 0.276. Reproduced on the mini with `mlx-community/gemma-4-26B-A4B-it-OptiQ-4bit`: the instruction-tuned model, teacher-forced on raw text after `<bos>`, falls into its chat/thinking-channel format. Greedy decoding from "`<bos>`The capital of France is" emits "thought\n<channel|>…", and NLL is about 11 nats/token with top-1 0.12 on T1. Scored as the assistant turn after a user message, with thinking off, it behaves as a normal language model. None of the NOTE's suspects is the cause: the cached forward equals an uncached one exactly past the 1,024-token sliding window (T1, T4); bf16 rounding changes nothing; raw `tokenizers`, HF and joint encoding give the same ids.
+2. **Q36-8** failed only the greedy flip (1/30 > `FLIP_MAX` 0.02). HYPOTHESIS counts the flip as part of the batched-path check, but `_verdict()` returned `fail` because the flip failure went under `problems`.
+
+Andrei's decisions (2026-10-04): (1) "Chat-wrapped": every model scores each gate text as the assistant turn after the single user message "Write a text.", rendered with its own chat template, `add_generation_prompt=True` and thinking off. The text is tokenised alone and only its tokens are scored. This applies to the peer-check NLL / KL rule and to H8. G3 and every Kolibri gate check stay on raw text. Thresholds are unchanged. (2) "Keep as registered": `FLIP_MAX` 0.02 and `FLIP_ITEMS` 30 stay; only the misclassification is fixed.
+
+What changed (nothing committed; HYPOTHESIS.md untouched):
+- `bench/kl_8v4.py` (BENCH):
+  - `chat_wrapper(family, dir)` renders the user message through `runner.chat.render(..., "none")`, the scored runs' own rendering, with the thinking-off kwargs passed explicitly. Kolibri uses `reasoning_effort="none"` with its tokenizer_config template (41 tokens). Gemma 4, Qwen3.6 and Qwen3.8 use `enable_thinking=False` with `runner/templates/` (17 / 16 / 16 tokens).
+  - The input is `prompt_ids + ids[:-1]`, and `scored_chunks` keeps rows from `score_from = len(prompt) - 1` on. The 8-bit and 4-bit folders must render identical prompt ids, or the run stops.
+  - Each family records its wrapper: messages, kwargs, template and its sha256, rendered sha256, prompt ids and prefill. This replaces `prefix`.
+  - Blocks, bytes and the keys `analysis/verdicts.py` reads are unchanged. The K8 dump now has one row per text token.
+  - After the review (below), each text also records `wrapper_boundary` and `first_rows`.
+- `tools/peer_check.py` (TOOLS):
+  - The NLL(8) / KL(8‖4) rule reads the chat-wrapped stats: `families.<f>.fidelity`, `arms.<a>.nll_chat` and `families.<f>.wrapper`.
+  - The raw-text NLL and bpb are still computed and stay in `arms.<a>.nll`, where G3 reads them. `fidelity_raw_text` is recorded with `used_for_verdict: false`.
+  - A parity or flip failure goes under `batched_path_problems` and gives `B=1`. Anything else, including a check that could not run, is still `fail`.
+- `runner/plan_fix.py` (RUNNER): the plan records `peer_b1`, and the amendment gets the line "Peers at B = 1 …". The existing B rule already sets every Tier A and Tier B cell of such an arm to B = 1.
+- `tools/dry_run.py` (TOOLS): the peers and bench stages fail if the wrapper, `nll` or `nll_chat` is missing.
+- `RUNBOOK.md` step 9 and `BUILD_SPEC.md` (`kl_8v4.py`, `peer_check.py`): short Amendment 5 notes.
+- Tests: 17 new across `tests/test_bench_kl.py` and `tests/test_tools_peer_check.py` (16 from the implementation, 1 from the review). `tests/test_integration_contracts.py` is updated for `wrapper_ids`.
+
+The batched-path parity (the open point): it teacher-forced the raw T1–T4 token stream, with no BOS and no template, for both the noise floor (positions 520–1,100) and the B = 8 / B = 1 prompts. It therefore had the same Gemma degeneration, so the same wrapper now applies:
+- The base is the wrapper followed by the stream.
+- Prompt i is the wrapper followed by `stream[50i : 50i + n_i − len(wrapper)]`, which keeps the registered lengths 37–1,100.
+- Every floor position falls inside the text.
+
+The greedy flip already rendered its MMLU items through `runner.chat` with thinking off, so it is unchanged. Measured on the Gemma stand-in, re-run after the review:
+
+| | raw (old) | chat-wrapped | Q36-8 on the mbp |
+|---|---|---|---|
+| floor_kl | 0.2305 | 0.0114 | 0.009 |
+| KL bound | 0.6914 | 0.0343 | |
+| parity mean KL | 0.1778 | 0.0115 | |
+| ok | yes | yes | |
+
+Downstream handling of `B=1`:
+- `guard.require_peers` lets the arm run.
+- `guard.excluded_arms` does not drop it.
+- `pilot --without` refuses it.
+- `plan_fix.build_context` reads it into `peer_b1`, so every cell of the arm gets B = 1 and the amendment names it.
+- The pilot itself still runs such an arm at the memory-rule B (see "Needs Andrei").
+
+### Review of the amendment (2 findings, both verified and applied)
+
+1. **The wrapper/text boundary differs by family.** The implementer report and the test docstring said that encoding the prompt and text together gives the same ids "for every family". That holds for texts that start with a letter, not for the real T1, T2 and T6.
+   - T1 and T2 start with "\n" and T6 with "\n\n". The Kolibri, Qwen3.6 and Qwen3.8 wrappers end on the token "\n\n" (Kolibri 263, Qwen 271). The scored sequence therefore has a separate newline token where the joint encoding has one merged token: Kolibri [263, 10] vs [120038] on T1 and T2, [263, 263] vs [120724] on T6; Qwen [271, 198] vs [1358] and [271, 271] vs [987]. All other ids are the same.
+   - Gemma 4's wrapper ends on the special token `<channel|>`, so its joint and separate encodings are identical on all six texts. T3–T5 are identical for every family.
+   - Verified with the real tokenizers on the mini. T5 and T6 were rebuilt from the pinned parquet and match MANIFEST.json.
+   - Size, measured on a proxy (Qwen3-1.7B at 8 and 4 bits, affine g64, with the Qwen wrapper, through `compare_loaded`):
+     - The row after the split newline has KL 1.59 / 1.59 / 2.26 nats on T1 / T2 / T6, against 0.09 / 0.12 / 0.005 for the same row on T3 / T4 / T5.
+     - The excess is 0.48–0.53 % of each affected text's KL sum.
+     - The first two text rows hold 0.70 % of the pooled KL chat-wrapped, against 1.58 % in the old raw measurement.
+     - The first scored row predicts from the wrapper alone, so its KL is the same on every text of a family.
+   - The scored ids stay as decided ("tokenised alone").
+   - Applied:
+     - The test docstring is corrected.
+     - The new `test_wrapper_text_boundary_on_the_real_gate_texts` pins the split ids above, the merged joint ids, identity everywhere else, and Gemma's `<channel|>`.
+     - `kl_8v4.py` documents the boundary.
+     - Each text's H8 record now carries `wrapper_boundary` (`kl_8v4.wrapper_boundary()`: the differing stretch, or `joint_equals_scored: true`) and `first_rows`. `first_rows` holds the per-position kl, nll8, nll4 and agree of the first two scored rows (plus kl_fp32 for Kolibri) and the first bytes of tokens 0–2. A descriptive H8 sensitivity without those rows can therefore be computed from the record without a re-run. No analysis code changed; whether to publish that sensitivity is Andrei's call.
+2. **No test covered the step from the peers record into the plan.** The downstream test set `peer_b1` by hand.
+   - `test_a_b1_record_downstream_runs_every_cell_at_b1_and_is_never_a_drop` now calls `plan_fix.build_context` on a scratch experiment directory that holds the `run()` record. It asserts:
+     - `peer_b1` is `["G8", "Q36-8"]`, `excluded_arms` is empty, and the record path is right;
+     - every Tier A and Tier B cell of both arms gets B = 1, while K8 keeps its memory-rule B;
+     - a newer record that fails G8 moves G8 from `peer_b1` to `excluded_arms`.
+   - A mutation of the reader that ignores `verdict` makes the test fail.
+   - This is test-only, and no tree hash changes from it.
+
+### Real-Gemma smoke (re-run after the review)
+
+`gemma-4-26B-A4B-it-OptiQ-4bit` (snapshot `dbfd2a77…`, the only Gemma build on the mini) stood in for both 8 and 4 bits. Its chat template has the same sha256 as `runner/templates/gemma4.jinja` (`36e3a42e…`). Wrapper: 17 tokens, prefill `empty_channel`.
+
+| | T1 | T3 | T4 |
+|---|---|---|---|
+| Chat-wrapped NLL/token, full text | 4.013 | 2.107 | 2.238 |
+| Top-1, full text | 0.396 | 0.633 | 0.723 |
+| Chat-wrapped NLL/token, first 1,000 text tokens | 4.064 | 2.029 | 1.898 |
+| Raw NLL/token (`<bos>` + text) | 10.76 | 7.61 | 10.37 |
+
+- KL(stand-in‖itself) is 0 on every row, nll8 equals nll4 bit for bit, and agreement is 1.0.
+- Through `pc.text_stats`, the fidelity rule gives NLL 2.706 / 2.706 and KL 0.0.
+- `wrapper_boundary` is `joint_equals_scored: true` on T1, T3 and T4.
+- The diagnosis probe's 4.10 / 2.03 / 1.84 is near the first-1,000-token row (and the first-1,024: 4.09 / 2.05 / 1.94), not the full text. The probe's exact scope is not recorded, so it most likely scored a prefix of about that length. T4's full-text figure is higher because its tokens after position 1,024 average 2.56.
+
+### Verification on the mini
+
+| Run | Result |
+|---|---|
+| Full suite, `EXP036_REQUIRE_ALL=1`, venv312 | **1,242 passed** (4:06; 1,225 before the amendment) |
+| The same, venv314 | **1,242 passed** (4:17) |
+| `tools/dry_run.py` | **ok, 17 of 17 stages, 3.6 min**. Peers stage: wrapper tokens Gemma 4 17, Qwen3.6 16, Qwen3.8 16; batched path ok for G8 and Q36-8. Bench stage: the H8 record carries the wrapper, `wrapper_boundary` and `first_rows`. Leak stage clean |
+| `tools/leak_check.py --all --no-gpqa-source` with `EXP036_DATA` | **0 findings**, 11 host-name warnings |
+| `tools/hash_tree.py --check HYPOTHESIS.md` | 14 match, 3 MISMATCH (`runner`, `bench`, `tools`) until the amendment is appended; 17 of 17 on a copy with the three lines below |
+
+```
+hash_tree: RUNNER_SHA256 = 1fc95a1accb7e9b8062360916724e07cf577a6c3f422aed602dcb8929e0b7b70
+hash_tree: BENCH_SHA256 = 7f024661e956d7b7d5bc9384cae4201e63cb9b6f17527bc70efdbf12e166ba73
+hash_tree: TOOLS_SHA256 = 2858d1e690c20a4457e57272048d215d865cb236c3a269934d27e8c4d7359b2c
+```
+
+`tasks/selection_rules.json`, the gate, analysis and thresholds are untouched, so the IFBench manifests need no rebuild. `ensure_exact_fp32()` is still the first call of every entry point.
+
+### HYPOTHESIS passages the amendment text needs to supersede
+
+- **C3** (assumptions table, "Peers run on mlx-lm's own modules"):
+  - Registered text: "NLL(8-bit) ≤ NLL(4-bit) + 0.02 nats/token on the gate text, KL(8‖4) < 0.2".
+  - Amended: the rule is measured on the gate texts, each scored as the assistant turn after "Write a text." in the model's own chat template with thinking off, the text tokenised alone and only its tokens scored. The thresholds are unchanged.
+  - Its "batched-path parity" is teacher-forced on that wrapper followed by the T1–T4 token stream.
+- **"Peers are verified, not gated."**
+  - "(G3 uses its NLL)" means the raw-text NLL, which the peer check still records.
+  - "B = 8 vs B = 1 teacher-forced under the G5 noise-floor rule" now runs on the wrapper plus the T1–T4 stream. Every prompt starts with the wrapper, and the registered lengths 37–1,100 are kept.
+  - Confirm that the greedy flip is part of "the batched-path check", so that a flip-only failure is `B=1` and every Tier A and Tier B cell of the arm runs at B = 1. This is a reading of the registered sentence, not a change to it.
+- **H8 "Measurement"**:
+  - Registered text: "Every model teacher-forces the same bytes (the decoded text of T1–T6, ≈ 43 kB) with its own tokenizer."
+  - Amended: each text is the assistant turn after the same fixed user message, rendered by the model's own chat template with thinking off (Kolibri `reasoning_effort` none; Gemma 4, Qwen3.6 and Qwen3.8 `enable_thinking` false). Only the text's tokens are scored. Bytes, blocks and normalisation are unchanged.
+  - Add the boundary sentence: for Kolibri, Qwen3.6 and Qwen3.8, the first text token of T1, T2 and T6 follows the template's trailing "\n\n" as a separate token, where their tokenizers would merge the two. Gemma 4 is unaffected. On a proxy this adds about 0.5 % to each affected text's KL sum, in block 0. Each text's record carries `wrapper_boundary` and `first_rows`.
+- **G3 row** ("from the peer check"): not superseded. Add a clarifying note that this is the peer check's raw-text bpb (`arms.<a>.nll`), so G3 stays raw-text on both sides.
+- **Budget, "Peer check" row** ("NLL and KL on T1–T6"): unchanged at 0.4 / 0.6 h. The peer check now makes two passes per family (raw for G3, chat-wrapped for the rule); the Gemma passes above took minutes.
+
+### Needs Andrei
+
+1. **Pilot B for a `B=1` arm.** The pilot runs every arm at the memory-rule B, including an arm the peer check marked `B=1`. The plan then projects and queues it at B = 1, which is how the kit reads "re-projected by the plan rule". Running that arm's pilot cells at B = 1 as well would be a change to `runner/run.py`.
+2. **The optional H8 sensitivity** without the first two text rows (review finding 1). It is computable from `first_rows`, but it is not pre-registered and is not in `analysis/`. Publishing it would need a line in the amendment.
+3. **H1 and H8 consequences.** The step-9 failures of G4 and G8 came from the raw-text measurement. The mbp re-runs step 9 after this amendment is pushed, and the new record decides.

@@ -34,7 +34,11 @@ Arms the records exclude (runner/guard.py excluded_arms; review fix
 H8 and D1 NOT RUN), a peer arm whose peer check says "fail" (dropped by this
 amendment; H3 and H6 use the remaining MoE peer, H4 is NOT RUN without
 Qwen3.6). The plan names them under "excluded_arms", the remaining MoE peers
-under "peers" and the hypotheses made NOT RUN under "not_run".
+under "peers" and the hypotheses made NOT RUN under "not_run". A peer arm
+whose peer check says "B=1" (its batched-path check failed: the parity or the
+greedy flip rate; Amendment 5) is not excluded: every cell of it, Tier A and
+Tier B, gets B = 1 and is projected at B = 1; the plan lists such arms under
+"peer_b1" and the amendment names them.
 
 The CLI (`plan_fix.py --pilot results/pilot_summary_<UTC>.json [...]`)
 reads the files, calls fix(), and writes results/plan_fixed_<UTC>.json and
@@ -536,6 +540,7 @@ def fix(
     L = int(ctx.get("L_bytes") or 0)
     wb = ctx.get("weight_bytes", {})
     peer_b1 = set(ctx.get("peer_b1", []))
+    plan["peer_b1"] = sorted(peer_b1)
     B_cache: dict[tuple, int] = {}
 
     def B_for(arm: str, task: str) -> int:
@@ -769,6 +774,9 @@ def amendment_md(plan: dict, k: int, now: str, plan_file: tuple[str, str] | None
     ex = plan.get("excluded_arms") or {}
     if ex:
         L.append("- Excluded arms (no cell queued): " + "; ".join(f"{a} — {r}" for a, r in sorted(ex.items())))
+    if plan.get("peer_b1"):
+        L.append("- Peers at B = 1 (peer-check verdict \"B=1\": the batched-path check failed; every cell of the arm "
+                 "runs at B = 1): " + ", ".join(plan["peer_b1"]))
     L.append(f"- MoE peers for H3, H6 and the H2 protocol control: {', '.join(plan.get('peers') or []) or 'none'}")
     if plan.get("not_run"):
         L.append("- NOT RUN by this amendment (p = p_rev = 1, m unchanged): "

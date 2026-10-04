@@ -3,6 +3,11 @@
 Weight-free: build-time tokenizer/template parity on the mini's peer folders
 (skipped where they are absent), the committed parity record being current,
 the static per-arm checks, and the decision arithmetic on synthetic numbers.
+Amendment 5: the batched path's prompts start with the chat wrapper; run()
+classifies a batched-path-check failure (parity or greedy flip) as B=1 and
+anything else as fail, judges NLL/KL on the chat-wrapped texts, and still
+records the raw-text NLL where the gate's G3 reads it; the record then works
+downstream (G3, the runner's guard, the pilot's --without, the plan's B).
 """
 
 from __future__ import annotations
@@ -158,6 +163,18 @@ def test_verdicts_and_exit_code():
     assert pc._verdict({"problems": ["x"]}) == "fail"
     assert pc._verdict({"problems": [], "batched_path": {"ok": False}}) == "B=1"
     assert pc._verdict({"problems": []}) == "ok"
+    # Amendment 5: the greedy flip is part of the batched-path check, so a flip-only failure is B=1 ...
+    flip = {"n": 30, "flips": 1, "rate": 1 / 30, "ok": False}
+    assert pc._verdict({"problems": [], "batched_path": {"ok": True}, "greedy_flip": flip,
+                        "batched_path_problems": ["greedy flip rate 0.033 > 0.02"]}) == "B=1"
+    assert pc._verdict({"problems": [], "greedy_flip": flip}) == "B=1"
+    assert pc._verdict({"problems": [], "batched_path": {"ok": False}, "greedy_flip": flip}) == "B=1"
+    assert pc._verdict({"problems": [], "batched_path": {"ok": True}, "greedy_flip": dict(flip, ok=True),
+                        "batched_path_problems": []}) == "ok"
+    # ... while an NLL / KL failure, or a check that could not run, is still fail, flip or not.
+    assert pc._verdict({"problems": ["NLL(8) / KL(8‖4) rule failed"], "greedy_flip": flip,
+                        "batched_path_problems": ["greedy flip rate 0.033 > 0.02"]}) == "fail"
+    assert pc._verdict({"problems": ["greedy flip rate could not run"], "batched_path": {"ok": True}}) == "fail"
     assert pc.exit_code({"arms": {"G8": {"verdict": "ok"}, "G4": {"verdict": "B=1"}}}) == 2
     assert pc.exit_code({"arms": {"G8": {"verdict": "fail"}}}) == 1
     assert pc.exit_code({"arms": {"G8": {"verdict": "ok"}}}) == 0
@@ -168,3 +185,184 @@ def test_upstream_pins_come_from_assets_json():
     assert pins["google/gemma-4-26B-A4B-it"][0].startswith("20da991a")
     for fam in pc.FAMILIES.values():
         assert fam["upstream_repo"] in pins
+
+
+# --------------------------------------------------------------------------
+# Amendment 5: the chat-wrapped batched path and the run() classification
+# --------------------------------------------------------------------------
+
+
+def test_batched_prompts_start_with_the_wrapper_and_keep_the_registered_lengths():
+    w = [900 + i for i in range(17)]
+    stream = list(range(2000))
+    base, prompts = pc.batched_prompts(w, stream)
+    assert base == w + stream
+    assert [len(p) for p in prompts] == list(pc.BATCH_LENGTHS)          # 37 ... 1,100, as registered
+    for i, (p, n) in enumerate(zip(prompts, pc.BATCH_LENGTHS)):
+        assert p[:17] == w and p[17:] == stream[i * 50:i * 50 + n - 17]
+    lo, _ = pc.FLOOR_RANGE
+    assert lo >= len(w)                                                  # the floor positions are text positions
+    with pytest.raises(ValueError, match="shortest prompt"):
+        pc.batched_prompts(list(range(37)), stream)
+    with pytest.raises(ValueError, match="base tokens"):
+        pc.batched_prompts(w, stream[:1000])
+    need = max(i * 50 + n for i, n in enumerate(pc.BATCH_LENGTHS)) - len(w)
+    pc.batched_prompts(w, stream[:need])                                 # exactly enough
+    with pytest.raises(ValueError, match="base tokens"):
+        pc.batched_prompts(w, stream[:need - 1])
+
+
+def _stats(nll8, nll4, kl, tokens=100, nbytes=400):
+    return {t: {"tokens": tokens, "bytes": nbytes, "nll8": nll8 * tokens, "nll4": nll4 * tokens, "kl": kl * tokens,
+                "top1_agree": 0.5} for t in ("T1", "T2")}
+
+
+RAW = _stats(10.2, 10.7, 4.6)       # Gemma-like raw text: the KL rule fails there
+CHAT = _stats(2.0, 2.01, 0.05)      # chat-wrapped: a normal LM, the rule passes
+WRAP = {"prompt_ids": [2, 105, 2364], "record": {"amendment": "Amendment 5", "kwargs": {"enable_thinking": False},
+                                                 "prompt_ids": [2, 105, 2364], "template_sha256": "e" * 64}}
+
+
+@pytest.fixture
+def fake_run(monkeypatch, tmp_path):
+    """run() with every weight-touching step stubbed: per-arm static checks pass, loads succeed, text_stats
+    returns RAW for the raw text and CHAT for the chat-wrapped one, and the batched path / greedy flip
+    return what the test sets."""
+    from bench import kl_8v4 as K
+    from tools import params as P
+
+    state = {"bp_ok": True, "flip_ok": True, "chat": CHAT, "wrappers": {}, "calls": []}
+    monkeypatch.setattr(pc, "static_check", lambda arm, root=None, parity=None: {
+        "arm": arm, "family": pc.family_of(arm), "present": True, "problems": [],
+        "params_config": {"total": 1000, "num_experts": None, "top_k": None, "tied_embeddings": False}})
+    monkeypatch.setattr(pc, "_load", lambda d: f"model:{Path(d).name}")
+    monkeypatch.setattr(P, "loaded_params", lambda *a, **k: {"total": 1000})
+    monkeypatch.setattr(K, "gate_text_paths", lambda *a, **k: {})
+    monkeypatch.setattr(K, "load_texts", lambda paths: {t: {"text": "x", "bytes": 400, "sha256": "0" * 64}
+                                                        for t in ("T1", "T2")})
+
+    def chat_wrapper(fam, d, tokenizer=None):
+        state["wrappers"][Path(d).name] = fam
+        return json.loads(json.dumps(WRAP))
+
+    def text_stats(m8, m4, d8, texts, prompt_ids=None):
+        state["calls"].append((m8, m4, prompt_ids))
+        return RAW if prompt_ids is None else state["chat"]
+
+    monkeypatch.setattr(K, "chat_wrapper", chat_wrapper)
+    monkeypatch.setattr(pc, "text_stats", text_stats)
+    monkeypatch.setattr(pc, "batched_path", lambda m, d, arm: {"ok": state["bp_ok"], "parity": {}, "wrapper": WRAP})
+    monkeypatch.setattr(pc, "greedy_flip", lambda m, d, arm: (
+        {"n": 30, "flips": 0, "rate": 0.0, "ok": True} if state["flip_ok"]
+        else {"n": 30, "flips": 1, "rate": 1 / 30, "ok": False}))
+    state["root"] = tmp_path / "models"
+    return state
+
+
+def test_run_judges_nll_kl_on_the_chat_wrapped_texts_and_keeps_raw_nll_for_g3(fake_run, tmp_path):
+    from gate.checks import g3_oracle
+
+    rec = pc.run(["G8", "G4", "Q36-8", "Q36-4"], root=fake_run["root"])
+    # both runs: raw first (for G3), then the chat wrapper; 8-bit and 4-bit together
+    assert [c[2] for c in fake_run["calls"]] == [None, WRAP["prompt_ids"]] * 2
+    for fam, a8, a4 in (("gemma4", "G8", "G4"), ("qwen3_6", "Q36-8", "Q36-4")):
+        f = rec["families"][fam]
+        assert f["fidelity"]["kl_ok"] and f["fidelity"]["nll_ok"] and f["fidelity"]["texts"].startswith("chat")
+        assert f["fidelity_raw_text"]["kl_ok"] is False and f["fidelity_raw_text"]["used_for_verdict"] is False
+        assert f["wrapper"]["prompt_ids"] == WRAP["prompt_ids"] and f["wrapper"]["prompt_ids_4bit_identical"]
+        assert f["wrapper"]["kwargs"] == {"enable_thinking": False} and len(f["wrapper"]["template_sha256"]) == 64
+        for a, key in ((a8, "nll8"), (a4, "nll4")):
+            assert rec["arms"][a]["nll"] == pc.nll_summary(RAW, key)          # raw text, where G3 reads it
+            assert rec["arms"][a]["nll_chat"] == pc.nll_summary(CHAT, key)
+            assert rec["arms"][a]["verdict"] == "ok" and rec["arms"][a]["problems"] == []
+    # the gate's G3 reads the raw-text pooled bpb of G8 and Q36-8
+    res = tmp_path / "results"
+    res.mkdir()
+    (res / "peers_20261004T160000Z.json").write_text(json.dumps(rec))
+    got = g3_oracle.peer_bpb(res)
+    raw_bpb = pc.nll_summary(RAW, "nll8")["mean_bpb"]
+    assert got["peers"] == {"G8": raw_bpb, "Q36-8": raw_bpb}
+    assert raw_bpb != pc.nll_summary(CHAT, "nll8")["mean_bpb"]
+
+
+@pytest.mark.parametrize("bp_ok, flip_ok", [(True, False), (False, True), (False, False)])
+def test_run_classifies_a_batched_path_check_failure_as_b1(fake_run, bp_ok, flip_ok):
+    fake_run["bp_ok"], fake_run["flip_ok"] = bp_ok, flip_ok
+    rec = pc.run(["G8", "G4", "Q36-8", "Q36-4"], root=fake_run["root"])
+    for a8, a4 in (("G8", "G4"), ("Q36-8", "Q36-4")):
+        assert rec["arms"][a8]["verdict"] == "B=1" and rec["arms"][a8]["problems"] == []
+        assert len(rec["arms"][a8]["batched_path_problems"]) == (not bp_ok) + (not flip_ok)
+        assert rec["arms"][a4]["verdict"] == "ok"
+    assert pc.exit_code(rec) == 2
+
+
+def test_run_still_fails_an_nll_kl_failure_whatever_the_flip(fake_run):
+    fake_run["flip_ok"] = False
+    fake_run["chat"] = _stats(2.0, 2.5, 0.4)           # chat-wrapped KL 0.4 > 0.2: a real fidelity failure
+    rec = pc.run(["Q36-8", "Q36-4"], root=fake_run["root"])
+    assert rec["arms"]["Q36-8"]["verdict"] == "fail" and rec["arms"]["Q36-4"]["verdict"] == "fail"
+    assert rec["arms"]["Q36-8"]["problems"] == ["NLL(8) / KL(8‖4) rule failed"]
+    assert pc.exit_code(rec) == 1
+
+
+def test_a_b1_record_downstream_runs_every_cell_at_b1_and_is_never_a_drop(fake_run, tmp_path, monkeypatch):
+    """The record run() writes for a flip-only failure: the guard lets the arm run, excluded_arms does not drop
+    it, the pilot's --without refuses it, and the plan's own reader of the record (plan_fix.build_context, the
+    only production path from results/peers_*.json into the plan) carries it into peer_b1, so fix() gives every
+    cell of it (Tier A and B) B = 1 and names it in the amendment. A newer record that says "fail" moves the arm
+    from peer_b1 to excluded_arms."""
+    import importlib
+    import shutil
+
+    guard = importlib.import_module("runner.guard")
+    plan_fix = importlib.import_module("runner.plan_fix")
+    from runner import memory
+
+    fake_run["flip_ok"] = False
+    rec = pc.run(["G8", "G4", "Q36-8", "Q36-4"], root=fake_run["root"])
+    # A scratch experiment directory for build_context: the plan rules, a scorers/ tree, and the record in results/.
+    exp = tmp_path / "exp"
+    (exp / "runner").mkdir(parents=True)
+    shutil.copy(pc.common.EXP_DIR / "runner" / "plan_rules.json", exp / "runner" / "plan_rules.json")
+    (exp / "scorers").mkdir()
+    (exp / "scorers" / "x.py").write_text("X = 1\n")
+    res = exp / "results"
+    res.mkdir()
+    (res / "peers_20261004T160000Z.json").write_text(json.dumps(rec))
+    monkeypatch.setenv("EXP036_MODELS", str(tmp_path / "no_models"))       # no arm weights: weight_bytes {}
+    monkeypatch.setattr(memory, "effective_limit", lambda *a, **k: (115_448_725_504, {"chosen": "test"}))
+    assert guard.require_peers("Q36-8", res)["verdict"] == "B=1"
+    assert guard.excluded_arms(res) == {}
+    built = plan_fix.build_context(exp, [])
+    assert built["peer_b1"] == ["G8", "Q36-8"] and built["excluded_arms"] == {}
+    assert built["peers_record"]["path"] == "results/peers_20261004T160000Z.json"
+    run_mod = importlib.import_module("runner.run")
+
+    class _Ctx:
+        results = res
+
+    with pytest.raises(guard.GuardError, match="do not exclude Q36-8"):
+        run_mod.pilot_without("Q36-8", _Ctx())
+
+    from test_runner_plan_fix import RULES, synthetic
+
+    pilot, steps, s1, ctx = synthetic(0)
+    ctx.update({k: built[k] for k in ("peer_b1", "excluded_arms", "peers_record")})   # what the record decides
+    plan, md, _ = plan_fix.fix(pilot, steps, s1, RULES, [], context=ctx)
+    assert plan["status"] == "FIXED" and plan["peer_b1"] == ["G8", "Q36-8"] and plan["excluded_arms"] == {}
+    for arm in ("G8", "Q36-8"):
+        cells = [q for q in plan["queue"] if q["arm"] == arm]
+        assert {q["tier"] for q in cells} == {"A", "B"} and all(q["B"] == 1 for q in cells), arm
+    assert any(q["arm"] == "K8" and q["B"] > 1 for q in plan["queue"])      # other arms keep the memory-rule B
+    assert md.split("Peers at B = 1")[1].splitlines()[0].endswith(": G8, Q36-8")
+    base, _, _ = plan_fix.fix(*synthetic(0)[:3], RULES, [], context=synthetic(0)[3])
+    assert plan["peers"] == base["peers"] == ["G8", "Q36-8"]                 # still the MoE peers for H3 / H6
+    assert base["peer_b1"] == [] and "Peers at B = 1" not in plan_fix.amendment_md(base, 1, "x", None)
+    assert all(q["B"] > 1 for q in base["queue"] if q["arm"] in ("G8", "Q36-8"))   # without the record: batched
+    # A newer record where G8 fails anything else: the reader takes the newest record; G8 is dropped, not B = 1.
+    rec2 = json.loads(json.dumps(rec))
+    rec2["arms"]["G8"]["verdict"] = "fail"
+    (res / "peers_20261004T170000Z.json").write_text(json.dumps(rec2))
+    built2 = plan_fix.build_context(exp, [])
+    assert built2["peer_b1"] == ["Q36-8"] and list(built2["excluded_arms"]) == ["G8"]
+    assert built2["peers_record"]["path"] == "results/peers_20261004T170000Z.json"

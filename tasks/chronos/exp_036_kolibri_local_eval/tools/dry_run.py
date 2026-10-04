@@ -30,7 +30,8 @@ Stages (RUNBOOK order; each must pass):
                 gate/build_gate_text.py --work-only
   convert       port/convert.py for K8 and K4, exactly as RUNBOOK step 8
   peers         tools/peer_check.py --checks load,nll,kl,batch on the stand-ins (the batched path through the
-                gate's G5 functions), then a dry-run peers record that marks every stand-in ok
+                gate's G5 functions; NLL/KL and the batched path on the Amendment 5 chat wrapper, the raw-text
+                NLL still recorded for G3), then a dry-run peers record that marks every stand-in ok
   gate          gate/run_gate.py --tiny on $EXP036_MODELS; its PASS record is re-labelled as a real-mode record
                 (dry_run_promoted_from) so the runner's guards accept it, bound to the same shas
   tier2         the Tier-2 amendment as an amendments/ file, status --sync-amendments, commit, push
@@ -593,6 +594,10 @@ def stage_bench() -> dict:
                                        batch_sizes=(1, 2), cool=cool)
     out["fit"] = fit.run_cell(res, sizes=(512, 1024), reps=1, gen_tokens=8)
     out["kl"] = kl_8v4.run_cell(res)
+    kl = json.loads(Path(out["kl"]).read_text(encoding="utf-8"))
+    unwrapped = [f for f, rec in kl["families"].items() if not (rec.get("wrapper") or {}).get("prompt_ids")]
+    if unwrapped:  # Amendment 5: every family scores the texts as the assistant turn of its chat wrapper
+        raise StageError(f"kl_8v4: no chat wrapper recorded for {unwrapped}")
     st = World(Path(os.environ["DRY_RUN_ROOT"])).load_state()
     out["tokenizer"] = tokenizer_ratio.run_cell(res, n=60, verify_parquet_sha=bool(st.get("real_fineweb")))
     out["c1"] = batch_flip.run_cell(res, B=4, max_tokens=16)
@@ -732,16 +737,26 @@ def orchestrate(args) -> int:
             bp = rec["arms"][arm].get("batched_path") or {}
             if "error" in bp or not bp.get("parity", {}).get("admitted_mid_run"):
                 bad.append((arm, bp.get("error")))
+            elif not (bp.get("wrapper") or {}).get("prompt_ids"):
+                bad.append((arm, "batched path without the Amendment 5 chat wrapper"))
         for fam in ("gemma4", "qwen3_6", "qwen3_8"):
             f = rec["families"].get(fam, {})
             if "nll_error" in f or "fidelity" not in f:
                 bad.append((fam, f.get("nll_error")))
+            elif not (f.get("wrapper") or {}).get("prompt_ids") or "fidelity_raw_text" not in f:
+                bad.append((fam, "no chat wrapper or raw-text fidelity recorded (Amendment 5)"))
+        for arm in ("G8", "G4", "Q36-8", "Q36-4", "Q38-8", "Q38-4"):
+            a = rec["arms"][arm]
+            if "mean_bpb" not in (a.get("nll") or {}) or "mean_bpb" not in (a.get("nll_chat") or {}):
+                bad.append((arm, "raw-text nll (G3) or chat-wrapped nll_chat missing"))
         if bad:
             raise StageError(f"peer_check weight checks did not run: {bad}")
         name = in_copy("peers-record").stdout.strip().splitlines()[-1]
         r.commit("chronos/exp_036: peer check (dry run)")
         return {"peer_check_exit": p.returncode, "batched_path_ok": {a: rec["arms"][a]["batched_path"]["ok"]
                                                                      for a in ("G8", "Q36-8")},
+                "wrapper_prompt_tokens": {f: rec["families"][f]["wrapper"]["prompt_tokens"]
+                                          for f in ("gemma4", "qwen3_6", "qwen3_8")},
                 "record": name}
 
     def gate():

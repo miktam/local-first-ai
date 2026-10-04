@@ -256,7 +256,8 @@ caffeinate -i "$PY" tools/peer_check.py --arms G8,G4,Q36-8,Q36-4,Q38-8,Q38-4
 ```
 Check:
 - Every arm says `ok`: strict text-only load; parameter count within 2 %; NLL(8) ≤ NLL(4) + 0.02; KL(8‖4) < 0.2; template and tokenizer parity recorded; EOS ids recorded.
-- G8 and Q36-8: batched-path parity `ok` and greedy flip rate ≤ 2 %. A peer that fails only the batched path is marked `B=1` (the plan rule re-projects it); that is not a drop.
+  - Amendment 5: the NLL(8) / KL(8‖4) rule is judged on the chat-wrapped texts (each gate text as the assistant turn after "Write a text.", thinking off): `families.<f>.fidelity`, `arms.<a>.nll_chat`, with the wrapper in `families.<f>.wrapper`. The raw-text NLL that G3 reads stays in `arms.<a>.nll`; `families.<f>.fidelity_raw_text` is descriptive only.
+- G8 and Q36-8: batched-path parity `ok` and greedy flip rate ≤ 2 %. Both are the batched-path check: a peer that fails only that check (its parity, its flip rate, or both; listed under `batched_path_problems`) is marked `B=1`, and the plan runs every cell of it at B = 1; that is not a drop.
 - A peer that fails anything else (verdict `fail`) is dropped by amendment before any scored run (HYPOTHESIS, Phase 0, "Peers are verified, not gated"). Stop and tell Andrei; the main session pushes `amendments/<k>_peerdrop_<UTC>.md`. The run then goes on: from step 12 the pilot runs with `--without <arm>` (the runner accepts it only for an arm the newest peers record marks `fail`), and `runner/plan_fix.py` queues no cell of that arm and records the drop in the plan amendment: H3 and H6 use the remaining MoE peer, and H4 is NOT RUN if Qwen3.6 is the one dropped. What a failed G4, Q36-4 or Q38-x does to H1 or H8 is not pre-registered; Andrei decides it by amendment before step 13.
 
 Outputs: `results/peers_<UTC>.json` (also read by the gate's G3).

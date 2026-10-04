@@ -3,7 +3,8 @@
 Each test pins one place where two areas meet, so a later edit on one side cannot silently break the other:
 
 - tools/peer_check.py's batched path calls the gate's G5 functions with their real signatures
-  (floor_and_decode, parity_bound, batch_parity) and returns the bound and the mid-run admission count;
+  (floor_and_decode, parity_bound, batch_parity) and returns the bound and the mid-run admission count, on the
+  Amendment 5 chat wrapper followed by the text stream;
 - the plan's frozen category counts (runner/plan_fix.py "category_counts") feed the H2 post-stratification
   in analysis/verdicts.py;
 - the pilot is defined consistently in runner/plan_rules.json (cells and n), tasks/selection_rules.json
@@ -36,7 +37,9 @@ def test_peer_batched_path_runs_through_the_gate_g5_functions(tiny_vendor_dir):
     harness = import_sibling("port_harness")
     model = harness.load_port(tiny_vendor_dir, float32=True)
     base = tc.random_ids(1800, seed=7)
-    res = pc.batched_path(model, tiny_vendor_dir, "G8", base_ids=base)
+    wrapper = tc.random_ids(17, seed=11)
+    res = pc.batched_path(model, tiny_vendor_dir, "G8", base_ids=base, wrapper_ids=wrapper)
+    assert res["wrapper"]["prompt_ids"] == [int(i) for i in wrapper] and "Amendment 5" in res["text"]
     par = res["parity"]
     assert par["B"] == 8 and par["n_sequences"] == len(pc.BATCH_LENGTHS) > 8
     assert par["admitted_mid_run"] > 0 and par["max_live"] <= 8
@@ -55,7 +58,7 @@ def test_peer_batched_path_refuses_a_short_base(tiny_vendor_dir):
     from tools import peer_check as pc
 
     with pytest.raises(ValueError, match="base tokens"):
-        pc.batched_path(object(), tiny_vendor_dir, "G8", base_ids=list(range(100)))
+        pc.batched_path(object(), tiny_vendor_dir, "G8", base_ids=list(range(100)), wrapper_ids=[1, 2, 3])
 
 
 # ------------------------------------------------------------------------------------ plan x verdicts

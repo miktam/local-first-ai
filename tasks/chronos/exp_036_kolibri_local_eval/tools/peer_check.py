@@ -30,13 +30,28 @@ Two modes.
    (mlx_lm load_model, strict=True) whose logical parameter count equals the
    config arithmetic within 2 %; NLL and bits per byte on T1–T6. Per family
    with both bit-widths loaded together: NLL(8) ≤ NLL(4) + 0.02 nats/token and
-   mean KL(8‖4) < 0.2. For G8 and Q36-8: batched-path parity (B = 8 vs B = 1,
-   teacher-forced, mixed lengths 37–1,100 with mid-run admission, under the
-   G5 noise-floor rule) through the gate's G5 functions, and the greedy
-   answer-flip rate on 30 MMLU-ProX full EN items with thinking off (≤ 2 %).
-   Writes results/peers_<UTC>.json with t_start / t_end. Per arm: `ok`,
-   `B=1` (only the batched path failed: the plan rule re-projects it at B = 1)
-   or `fail` (dropped by amendment before any scored run).
+   mean KL(8‖4) < 0.2. For G8 and Q36-8, the batched-path check: batched-path
+   parity (B = 8 vs B = 1, teacher-forced, mixed lengths 37–1,100 with mid-run
+   admission, under the G5 noise-floor rule) through the gate's G5 functions,
+   and the greedy answer-flip rate on 30 MMLU-ProX full EN items with thinking
+   off (≤ 2 %). Writes results/peers_<UTC>.json with t_start / t_end. Per arm:
+   `ok`; `B=1` (only the batched-path check failed, its parity or its greedy
+   flip rate: the plan rule runs every cell of the arm at B = 1); or `fail`
+   (anything else failed, or a check could not run: dropped by amendment
+   before any scored run).
+
+Texts (Amendment 5, Andrei 2026-10-04, "Chat-wrapped"). The NLL(8) / KL(8‖4)
+rule reads each gate text as the assistant turn after the fixed user message
+"Write a text.", rendered through the model's own chat template with thinking
+off (bench/kl_8v4.chat_wrapper, which renders with runner.chat.render); only
+the text's tokens are scored. Its numbers are `families.<f>.fidelity` and
+`arms.<a>.nll_chat`, and `families.<f>.wrapper` records the wrapper. The
+raw-text NLL and bits per byte (the text after the context-start token) are
+still computed and stay where the gate's G3 reads them, `arms.<a>.nll`;
+`families.<f>.fidelity_raw_text` is descriptive. The batched-path parity
+teacher-forces the same wrapper followed by the T1–T4 token stream, and every
+one of its prompts starts with the wrapper (`batched_path.wrapper`). The
+greedy flip renders its MMLU items through runner.chat already.
 
 The teacher-forcing and KL arithmetic are bench/kl_8v4.py's (the H8 code),
 used lazily, so the peer check and H8 compute NLL and KL the same way.
@@ -418,17 +433,21 @@ def _release():
         pass
 
 
-def text_stats(m8, m4, d8: Path, texts: dict) -> dict:
-    """Per text: tokens, bytes, NLL sums of each model, KL sum (m4 may be None)."""
+def text_stats(m8, m4, d8: Path, texts: dict, prompt_ids: list | None = None) -> dict:
+    """Per text: tokens, bytes, NLL sums of each model, KL sum (m4 may be None).
+
+    prompt_ids None: the raw text after the context-start token (the G3
+    numbers). Otherwise the text is teacher-forced after prompt_ids (the
+    Amendment 5 chat wrapper) and only its own tokens are scored."""
     from bench import kl_8v4 as K   # sibling area; lazy
 
-    prefix = K.context_prefix(d8)["id"]
+    pre = [K.context_prefix(d8)["id"]] if prompt_ids is None else [int(i) for i in prompt_ids]
     out = {}
     for t, rec in sorted(texts.items()):
         ids, _ = K.tokenize(d8 / "tokenizer.json", rec["text"])
-        inputs = [prefix] + ids[:-1]
+        inputs, score_from = K.scored_input(pre, ids)
         if m4 is not None:
-            stats, _ = K.compare_loaded(m8, m4, inputs, ids)
+            stats, _ = K.compare_loaded(m8, m4, inputs, ids, score_from=score_from)
             out[t] = {"tokens": len(ids), "bytes": rec["bytes"], "nll8": float(stats["nll8"].sum()),
                       "nll4": float(stats["nll4"].sum()), "kl": float(stats["kl"].sum()),
                       "top1_agree": float(stats["agree"].mean())}
@@ -437,9 +456,9 @@ def text_stats(m8, m4, d8: Path, texts: dict) -> dict:
             import numpy as np
 
             nll = 0.0
-            for s, logits, _ in K.forward_chunks(m8, inputs):
+            for t0, logits, _ in K.scored_chunks(m8, inputs, score_from):
                 lp = K.logprobs(logits, True)
-                tg = mx.array(np.asarray(ids[s:s + lp.shape[0]], dtype=np.int32))[:, None]
+                tg = mx.array(np.asarray(ids[t0:t0 + lp.shape[0]], dtype=np.int32))[:, None]
                 v = -mx.take_along_axis(lp, tg, axis=-1)
                 mx.eval(v)
                 nll += float(np.array(v).sum())
@@ -481,15 +500,45 @@ def flip_rate(a: list, b: list) -> dict:
     return {"n": n, "flips": flips, "rate": flips / n if n else None, "ok": (flips / n <= FLIP_MAX) if n else False}
 
 
-def batched_path(model, d: Path, arm: str, base_ids: list | None = None) -> dict:
+def batched_prompts(wrapper_ids: list, stream: list) -> tuple[list, list]:
+    """(base, prompts) of the batched path (Amendment 5): base = the chat
+    wrapper followed by the text token stream (the noise floor and
+    decode-vs-prefill run on its positions FLOOR_RANGE, all inside the text);
+    prompt i = the wrapper followed by stream[50 i : 50 i + n_i - len(wrapper)],
+    so every prompt starts with the wrapper and has exactly the registered
+    length n_i = BATCH_LENGTHS[i]."""
+    w = [int(i) for i in wrapper_ids]
+    stream = [int(i) for i in stream]
+    if len(w) >= min(BATCH_LENGTHS):
+        raise ValueError(f"batched path: the {len(w)}-token wrapper does not fit the shortest prompt "
+                         f"({min(BATCH_LENGTHS)} tokens)")
+    lo, hi = FLOOR_RANGE
+    if len(w) > lo:
+        raise ValueError(f"batched path: the {len(w)}-token wrapper reaches the noise-floor positions from {lo}")
+    need = max(max(i * 50 + n - len(w) for i, n in enumerate(BATCH_LENGTHS)), hi + 1 - len(w))
+    if len(stream) < need:
+        raise ValueError(f"batched path: {len(stream)} base tokens, need {need}")
+    prompts = [w + stream[i * 50:i * 50 + n - len(w)] for i, n in enumerate(BATCH_LENGTHS)]
+    return w + stream, prompts
+
+
+def batched_path(model, d: Path, arm: str, base_ids: list | None = None, wrapper_ids: list | None = None) -> dict:
     """B = 8 vs B = 1 teacher-forced, under the G5 noise-floor rule; through
     gate/checks/g5_generation.py (the same code as gate G5): floor_and_decode
     gives floor_KL and floor_dis (prefill 2048 vs 64), parity_bound the G5
     bound, batch_parity the batched-vs-single comparison with mid-run
-    admission. `base_ids` replaces the token stream of T1-T4 (tests)."""
+    admission. The token stream is T1-T4 after the Amendment 5 chat wrapper
+    (batched_prompts). `base_ids` replaces the T1-T4 stream and `wrapper_ids`
+    the rendered wrapper (tests)."""
     from gate.checks import g5_generation as g5   # sibling area; lazy
     from runner import chat
 
+    wrapper_rec = None
+    if wrapper_ids is None:
+        from bench import kl_8v4 as K
+
+        wrap = K.chat_wrapper(family_of(arm), d)
+        wrapper_ids, wrapper_rec = wrap["prompt_ids"], wrap["record"]
     if base_ids is None:
         from bench import kl_8v4 as K
 
@@ -497,12 +546,8 @@ def batched_path(model, d: Path, arm: str, base_ids: list | None = None) -> dict
         base_ids = []
         for t in ("T1", "T2", "T3", "T4"):
             base_ids.extend(K.tokenize(d / "tokenizer.json", texts[t]["text"])[0])
-    base = [int(i) for i in base_ids]
-    need = max(i * 50 + n for i, n in enumerate(BATCH_LENGTHS))
+    base, prompts = batched_prompts(wrapper_ids, base_ids)
     lo, hi = FLOOR_RANGE
-    if len(base) < max(need, hi + 1):
-        raise ValueError(f"batched path: {len(base)} base tokens, need {max(need, hi + 1)}")
-    prompts = [base[i * 50:i * 50 + n] for i, n in enumerate(BATCH_LENGTHS)]
     th = json.loads((common.EXP_DIR / "gate" / "thresholds.json").read_text())["G5"]
     eos = tuple(chat.eos_ids(d))
     floor = g5.floor_and_decode(model, {"base": base}, {"base": (lo, hi)},
@@ -513,7 +558,10 @@ def batched_path(model, d: Path, arm: str, base_ids: list | None = None) -> dict
           and par["admitted_mid_run"] > 0 and par["max_live"] <= int(th["batch_B"]))
     return {"noise_floor": floor, "parity": par, "kl_bound": bound["kl_max"], "dis_bound": bound["dis_max"],
             "ok": bool(ok), "lengths": list(BATCH_LENGTHS), "max_tokens": list(BATCH_MAX_TOKENS),
-            "floor_range": [lo, hi], "eos_ids": list(eos)}
+            "floor_range": [lo, hi], "eos_ids": list(eos),
+            "wrapper": wrapper_rec if wrapper_rec is not None else {
+                "prompt_ids": [int(i) for i in wrapper_ids], "note": "wrapper ids passed by the caller"},
+            "text": "Amendment 5: chat wrapper + T1-T4 token stream; every prompt starts with the wrapper"}
 
 
 def greedy_flip(model, d: Path, arm: str) -> dict:
@@ -545,9 +593,15 @@ def greedy_flip(model, d: Path, arm: str) -> dict:
 
 
 def _verdict(arm_rec: dict) -> str:
+    """`fail` if anything outside the batched-path check failed or a check
+    could not run (`problems`); else `B=1` if the batched-path check failed,
+    i.e. its parity or its greedy flip rate (HYPOTHESIS "Peers are verified,
+    not gated": "a peer that fails the batched-path check runs at B = 1; a
+    peer that fails anything else is dropped"); else `ok`."""
     if arm_rec["problems"]:
         return "fail"
-    if arm_rec.get("batched_path", {}).get("ok") is False:
+    if (arm_rec.get("batched_path_problems") or arm_rec.get("batched_path", {}).get("ok") is False
+            or arm_rec.get("greedy_flip", {}).get("ok") is False):
         return "B=1"
     return "ok"
 
@@ -596,16 +650,33 @@ def run(arms, checks=ALL_CHECKS, root: Path | None = None) -> dict:
                 rec["arms"][a]["problems"].append("strict text-only load failed")
         try:
             if texts is not None and ("nll" in checks or "kl" in checks):
+                from bench import kl_8v4 as K   # sibling area; lazy
+
                 d_ref = root / ARM_DIRS[a8 or a4]
                 m_main = models.get(a8) or models.get(a4)
                 m_other = models.get(a4) if (a8 in models and a4 in models and "kl" in checks) else None
                 if m_main is not None:
-                    st = text_stats(m_main, m_other, d_ref, texts)
                     main_arm = a8 if a8 in models else a4
-                    rec["arms"][main_arm]["nll"] = nll_summary(st, "nll8")
+                    # Raw text after the context-start token: what the gate's G3 reads (arms.<a>.nll).
+                    raw = text_stats(m_main, m_other, d_ref, texts)
+                    rec["arms"][main_arm]["nll"] = nll_summary(raw, "nll8")
+                    # Amendment 5: the same texts as the assistant turn of the fixed chat wrapper.
+                    wrap = K.chat_wrapper(fam, d_ref)
+                    frec["wrapper"] = {**wrap["record"], "rendered_from": ARM_DIRS[a8 or a4]}
+                    if a8 in models and a4 in models:
+                        same = K.chat_wrapper(fam, root / ARM_DIRS[a4])["prompt_ids"] == wrap["prompt_ids"]
+                        frec["wrapper"]["prompt_ids_4bit_identical"] = same
+                        if not same:
+                            raise ValueError("the 8-bit and 4-bit chat wrappers render different prompt ids")
+                    st = text_stats(m_main, m_other, d_ref, texts, prompt_ids=wrap["prompt_ids"])
+                    rec["arms"][main_arm]["nll_chat"] = nll_summary(st, "nll8")
                     if m_other is not None:
-                        rec["arms"][a4]["nll"] = nll_summary(st, "nll4")
-                        frec["fidelity"] = fidelity_rule(st)
+                        rec["arms"][a4]["nll"] = nll_summary(raw, "nll4")
+                        rec["arms"][a4]["nll_chat"] = nll_summary(st, "nll4")
+                        frec["fidelity_raw_text"] = {**fidelity_rule(raw), "used_for_verdict": False,
+                                                     "note": "raw text after the context-start token; "
+                                                             "descriptive since Amendment 5"}
+                        frec["fidelity"] = {**fidelity_rule(st), "texts": "chat-wrapped (Amendment 5)"}
                         if not (frec["fidelity"]["nll_ok"] and frec["fidelity"]["kl_ok"]):
                             for a in (a8, a4):
                                 rec["arms"][a]["problems"].append("NLL(8) / KL(8‖4) rule failed")
@@ -618,9 +689,15 @@ def run(arms, checks=ALL_CHECKS, root: Path | None = None) -> dict:
             _release()
         if a8 in models and a8 in BATCHED_PATH_ARMS:
             d8 = root / ARM_DIRS[a8]
+            # The batched-path check (its parity and its greedy flip rate): a failure here is B = 1, not a drop;
+            # a check that could not run is a problem like any other.
+            bpp = rec["arms"][a8].setdefault("batched_path_problems", [])
             if "batch" in checks:
                 try:
-                    rec["arms"][a8]["batched_path"] = batched_path(models[a8], d8, a8)
+                    bp = batched_path(models[a8], d8, a8)
+                    rec["arms"][a8]["batched_path"] = bp
+                    if not bp["ok"]:
+                        bpp.append("batched-path parity outside the G5 noise-floor bound")
                 except Exception as e:
                     rec["arms"][a8]["batched_path"] = {"ok": None, "error": f"{type(e).__name__}: {e}"[:400]}
                     rec["arms"][a8]["problems"].append("batched-path parity could not run")
@@ -629,7 +706,7 @@ def run(arms, checks=ALL_CHECKS, root: Path | None = None) -> dict:
                     fr = greedy_flip(models[a8], d8, a8)
                     rec["arms"][a8]["greedy_flip"] = fr
                     if not fr["ok"]:
-                        rec["arms"][a8]["problems"].append(f"greedy flip rate {fr['rate']:.3f} > 0.02")
+                        bpp.append(f"greedy flip rate {fr['rate']:.3f} > {FLIP_MAX}")
                 except Exception as e:
                     rec["arms"][a8]["greedy_flip"] = {"error": f"{type(e).__name__}: {e}"[:400]}
                     rec["arms"][a8]["problems"].append("greedy flip rate could not run")
@@ -692,7 +769,7 @@ def main(argv=None) -> int:
     out_dir = Path(args.out_dir or common.EXP_DIR / "results")
     path = common.write_new_json(out_dir / f"peers_{common.utc_stamp()}.json", rec)
     for arm, a in rec["arms"].items():
-        print(f"{arm:6s} {a['verdict']:4s} " + ("; ".join(a["problems"]) if a["problems"] else ""))
+        print(f"{arm:6s} {a['verdict']:4s} " + "; ".join(a["problems"] + a.get("batched_path_problems", [])))
     print(f"[peer_check] wrote {redact_path(path)}")
     return exit_code(rec)
 
