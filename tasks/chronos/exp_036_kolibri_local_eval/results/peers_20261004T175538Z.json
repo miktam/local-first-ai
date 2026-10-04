@@ -1,0 +1,1770 @@
+{
+  "arms": {
+    "G4": {
+      "arm": "G4",
+      "build_parity": {
+        "byte_equal_to_upstream": {
+          "chat_template.jinja": true,
+          "config.json": false,
+          "generation_config.json": true,
+          "tokenizer.json": true,
+          "tokenizer_config.json": false
+        },
+        "template_render_mismatches": 0,
+        "token_id_mismatches": 0
+      },
+      "config": {
+        "base": {
+          "bits": 4,
+          "group_size": 64,
+          "mode": "affine"
+        },
+        "expected": {
+          "bits": 4,
+          "group_size": 64,
+          "mode": "affine"
+        },
+        "n_overrides": 30,
+        "ok": true,
+        "overrides": {
+          "router.proj": [
+            [
+              8,
+              64
+            ]
+          ]
+        }
+      },
+      "dir": "$EXP036_MODELS/gemma-4-26b-a4b-it-4bit",
+      "eos": {
+        "config": [
+          1,
+          106,
+          50
+        ],
+        "generation_config": [
+          1,
+          106,
+          50
+        ]
+      },
+      "family": "gemma4",
+      "files": {
+        "chat_template.jinja": "36e3a42e5cf14cd0020e72d92e1fdd9970f59b82170e421f0cbe1bb42bead3f0",
+        "config.json": "419e13a27ec359654c1ce7dd06d1a87149fd07d0c8af9f770494185e62e1b2ba",
+        "generation_config.json": "d4226bbe3117d2d253ba4609720ba82c6c4ce4627a9a6ae05387c78983ac03de",
+        "tokenizer.json": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+        "tokenizer_config.json": "080d9e1aff284e2f6043889cd05367966f7c7b80e025fbc0b06745e218158656"
+      },
+      "nll": {
+        "mean_bpb": 3.7272924614251433,
+        "mean_nll_per_token": 10.664258945661738,
+        "per_text": {
+          "T1": {
+            "bpb": 4.312760783708869,
+            "bytes": 6087,
+            "nll_per_token": 11.567923553719009,
+            "tokens": 1573
+          },
+          "T2": {
+            "bpb": 3.7794496419664623,
+            "bytes": 6561,
+            "nll_per_token": 10.89223651378327,
+            "tokens": 1578
+          },
+          "T3": {
+            "bpb": 2.4351517379547998,
+            "bytes": 8061,
+            "nll_per_token": 7.168762657237882,
+            "tokens": 1898
+          },
+          "T4": {
+            "bpb": 3.3783425860032965,
+            "bytes": 8427,
+            "nll_per_token": 10.088655499105316,
+            "tokens": 1956
+          },
+          "T5": {
+            "bpb": 4.560199722529763,
+            "bytes": 7255,
+            "nll_per_token": 13.134166040234822,
+            "tokens": 1746
+          },
+          "T6": {
+            "bpb": 4.213573262436513,
+            "bytes": 7008,
+            "nll_per_token": 11.609614293817357,
+            "tokens": 1763
+          }
+        },
+        "per_text_bpb": {
+          "T1": 4.312760783708869,
+          "T2": 3.7794496419664623,
+          "T3": 2.4351517379547998,
+          "T4": 3.3783425860032965,
+          "T5": 4.560199722529763,
+          "T6": 4.213573262436513
+        }
+      },
+      "nll_chat": {
+        "mean_bpb": 1.0171254363537174,
+        "mean_nll_per_token": 2.910125552462788,
+        "per_text": {
+          "T1": {
+            "bpb": 1.5034162989735491,
+            "bytes": 6087,
+            "nll_per_token": 4.0325456681102985,
+            "tokens": 1573
+          },
+          "T2": {
+            "bpb": 1.1098847596435586,
+            "bytes": 6561,
+            "nll_per_token": 3.198647541389417,
+            "tokens": 1578
+          },
+          "T3": {
+            "bpb": 0.7273758605042144,
+            "bytes": 8061,
+            "nll_per_token": 2.141297737338646,
+            "tokens": 1898
+          },
+          "T4": {
+            "bpb": 0.7375667986483022,
+            "bytes": 8427,
+            "nll_per_token": 2.2025763076751024,
+            "tokens": 1956
+          },
+          "T5": {
+            "bpb": 1.153883577677147,
+            "bytes": 7255,
+            "nll_per_token": 3.3233848126073884,
+            "tokens": 1746
+          },
+          "T6": {
+            "bpb": 1.0357734464412363,
+            "bytes": 7008,
+            "nll_per_token": 2.853855732416336,
+            "tokens": 1763
+          }
+        },
+        "per_text_bpb": {
+          "T1": 1.5034162989735491,
+          "T2": 1.1098847596435586,
+          "T3": 0.7273758605042144,
+          "T4": 0.7375667986483022,
+          "T5": 1.153883577677147,
+          "T6": 1.0357734464412363
+        }
+      },
+      "params_config": {
+        "active": 3822530590,
+        "active_excl_input_embedding": 3822530590,
+        "input_embedding_params": 738197504,
+        "method": "config arithmetic: mlx_lm module tree built from config.json (lazy, no weights)",
+        "model_type": "gemma4",
+        "num_experts": 128,
+        "published_total": 25200000000.0,
+        "rel_diff_vs_published": 0.0013151503968253967,
+        "routed_expert_params": 22837985280,
+        "tied_embeddings": true,
+        "top_k": 8,
+        "total": 25233141790
+      },
+      "present": true,
+      "problems": [
+        "NLL(8) / KL(8‖4) rule failed"
+      ],
+      "same_files_as_build_parity": {
+        "chat_template.jinja": true,
+        "tokenizer.json": true,
+        "tokenizer_config.json": true
+      },
+      "strict_load": {
+        "ok": true,
+        "params_loaded": {
+          "active": 3822530590,
+          "active_excl_input_embedding": 3822530590,
+          "input_embedding_params": 738197504,
+          "num_experts": 128,
+          "rel_diff_vs_config": 0.0,
+          "routed_expert_params": 22837985280,
+          "tied_embeddings": true,
+          "top_k": 8,
+          "total": 25233141790
+        }
+      },
+      "template_equals_committed": true,
+      "verdict": "fail"
+    },
+    "G8": {
+      "arm": "G8",
+      "batched_path": {
+        "dis_bound": 0.18272289156626506,
+        "eos_ids": [
+          1,
+          106,
+          50
+        ],
+        "floor_range": [
+          520,
+          1100
+        ],
+        "kl_bound": 0.04117731171618225,
+        "lengths": [
+          37,
+          300,
+          700,
+          1100,
+          64,
+          520,
+          900,
+          150,
+          37,
+          700,
+          300,
+          1100
+        ],
+        "max_tokens": [
+          48,
+          8,
+          32,
+          16,
+          40,
+          24,
+          56,
+          12,
+          20,
+          36,
+          28,
+          44
+        ],
+        "noise_floor": {
+          "decode_dis": 0.04819277108433735,
+          "decode_kl": 0.011528417909861706,
+          "floor_dis": 0.060240963855421686,
+          "floor_kl": 0.013725770572060748,
+          "per_text": {
+            "base": {
+              "decode_dis": 0.04819277108433735,
+              "decode_kl": 0.011528417909861706,
+              "floor_dis": 0.060240963855421686,
+              "floor_kl": 0.013725770572060748,
+              "positions": [
+                520,
+                1100
+              ]
+            }
+          },
+          "prefill_steps": [
+            2048,
+            64
+          ]
+        },
+        "ok": true,
+        "parity": {
+          "B": 8,
+          "admitted_mid_run": 4,
+          "max_live": 8,
+          "max_tokens": [
+            48,
+            8,
+            32,
+            16,
+            40,
+            24,
+            56,
+            12,
+            20,
+            36,
+            28,
+            44
+          ],
+          "mean_kl": 0.008326609130974601,
+          "n_positions": 364,
+          "n_sequences": 12,
+          "path": "runner.generate (item 27 construction) + runner.sampler.fp32_logits",
+          "prompt_lengths": [
+            37,
+            300,
+            700,
+            1100,
+            64,
+            520,
+            900,
+            150,
+            37,
+            700,
+            300,
+            1100
+          ],
+          "steps": 72,
+          "top1_dis": 0.057692307692307696
+        },
+        "text": "Amendment 5: chat wrapper + T1-T4 token stream; every prompt starts with the wrapper",
+        "wrapper": {
+          "add_generation_prompt": true,
+          "amendment": "Amendment 5",
+          "effort": "none",
+          "kwargs": {
+            "enable_thinking": false
+          },
+          "messages": [
+            {
+              "content": "Write a text.",
+              "role": "user"
+            }
+          ],
+          "prefill": "empty_channel",
+          "prompt_ids": [
+            2,
+            105,
+            2364,
+            107,
+            6974,
+            496,
+            1816,
+            236761,
+            106,
+            107,
+            105,
+            4368,
+            107,
+            100,
+            45518,
+            107,
+            101
+          ],
+          "prompt_ids_sha256": "2db9860b1a917ebaf07edbc4095e35724ea322974cb0532a46e0df91690a7ed2",
+          "prompt_tokens": 17,
+          "rendered_sha256": "f68c16dc6a70eea774ad82209853640c3c0d45dbaa5a7c1f593e3eb9139640e3",
+          "rule": "the gate text is the assistant turn after the single user message 'Write a text.', rendered with runner.chat.render (the model's own chat template, add_generation_prompt=True, thinking off); input = prompt_ids + text_ids[:-1], text tokenised alone (add_special_tokens=False), no extra BOS; only the rows predicting the text's tokens are scored",
+          "template": "runner/templates/gemma4.jinja",
+          "template_equals_model_dir": true,
+          "template_sha256": "36e3a42e5cf14cd0020e72d92e1fdd9970f59b82170e421f0cbe1bb42bead3f0",
+          "text_tokens": "the text tokenised alone, add_special_tokens=False (raw tokenizers, tokenizer.json)"
+        }
+      },
+      "batched_path_problems": [
+        "greedy flip rate 0.033 > 0.02"
+      ],
+      "build_parity": {
+        "byte_equal_to_upstream": {
+          "chat_template.jinja": true,
+          "config.json": false,
+          "generation_config.json": true,
+          "tokenizer.json": true,
+          "tokenizer_config.json": false
+        },
+        "template_render_mismatches": 0,
+        "token_id_mismatches": 0
+      },
+      "config": {
+        "base": {
+          "bits": 8,
+          "group_size": 64,
+          "mode": "affine"
+        },
+        "expected": {
+          "bits": 8,
+          "group_size": 64,
+          "mode": "affine"
+        },
+        "n_overrides": 30,
+        "ok": true,
+        "overrides": {
+          "router.proj": [
+            [
+              8,
+              64
+            ]
+          ]
+        }
+      },
+      "dir": "$EXP036_MODELS/gemma-4-26b-a4b-it-8bit",
+      "eos": {
+        "config": [
+          1,
+          106,
+          50
+        ],
+        "generation_config": [
+          1,
+          106,
+          50
+        ]
+      },
+      "family": "gemma4",
+      "files": {
+        "chat_template.jinja": "36e3a42e5cf14cd0020e72d92e1fdd9970f59b82170e421f0cbe1bb42bead3f0",
+        "config.json": "ea476b39447dca4e9361f8f449c2941c2cacd7c80f072b940695407cc54306ad",
+        "generation_config.json": "d4226bbe3117d2d253ba4609720ba82c6c4ce4627a9a6ae05387c78983ac03de",
+        "tokenizer.json": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+        "tokenizer_config.json": "080d9e1aff284e2f6043889cd05367966f7c7b80e025fbc0b06745e218158656"
+      },
+      "greedy_flip": {
+        "flips": 1,
+        "items": [
+          "3123",
+          "4982",
+          "1412",
+          "10533",
+          "3385",
+          "11415",
+          "3844",
+          "8561",
+          "5748",
+          "4479",
+          "7239",
+          "3014",
+          "6182",
+          "5717",
+          "10469",
+          "8373",
+          "1911",
+          "9001",
+          "7353",
+          "9129",
+          "2824",
+          "5286",
+          "3115",
+          "5480",
+          "1502",
+          "755",
+          "2700",
+          "922",
+          "8575",
+          "4887"
+        ],
+        "max_tokens": 4096,
+        "n": 30,
+        "ok": false,
+        "rate": 0.03333333333333333,
+        "truncated_B1": 0,
+        "truncated_B8": 0
+      },
+      "nll": {
+        "mean_bpb": 3.568812420065494,
+        "mean_nll_per_token": 10.210827341818051,
+        "per_text": {
+          "T1": {
+            "bpb": 4.158161978938069,
+            "bytes": 6087,
+            "nll_per_token": 11.153250158931977,
+            "tokens": 1573
+          },
+          "T2": {
+            "bpb": 3.4554811091189954,
+            "bytes": 6561,
+            "nll_per_token": 9.958570975918885,
+            "tokens": 1578
+          },
+          "T3": {
+            "bpb": 2.5134903591580913,
+            "bytes": 8061,
+            "nll_per_token": 7.399381133100632,
+            "tokens": 1898
+          },
+          "T4": {
+            "bpb": 3.384986583362618,
+            "bytes": 8427,
+            "nll_per_token": 10.108496293456033,
+            "tokens": 1956
+          },
+          "T5": {
+            "bpb": 3.9501035738755768,
+            "bytes": 7255,
+            "nll_per_token": 11.376983327963918,
+            "tokens": 1746
+          },
+          "T6": {
+            "bpb": 4.203227389277847,
+            "bytes": 7008,
+            "nll_per_token": 11.58110841782473,
+            "tokens": 1763
+          }
+        },
+        "per_text_bpb": {
+          "T1": 4.158161978938069,
+          "T2": 3.4554811091189954,
+          "T3": 2.5134903591580913,
+          "T4": 3.384986583362618,
+          "T5": 3.9501035738755768,
+          "T6": 4.203227389277847
+        }
+      },
+      "nll_chat": {
+        "mean_bpb": 1.0268975882990115,
+        "mean_nll_per_token": 2.938084925085006,
+        "per_text": {
+          "T1": {
+            "bpb": 1.5299754698378794,
+            "bytes": 6087,
+            "nll_per_token": 4.103784133125397,
+            "tokens": 1573
+          },
+          "T2": {
+            "bpb": 1.110643421382233,
+            "bytes": 6561,
+            "nll_per_token": 3.2008339769486693,
+            "tokens": 1578
+          },
+          "T3": {
+            "bpb": 0.7320000376820808,
+            "bytes": 8061,
+            "nll_per_token": 2.1549106995850895,
+            "tokens": 1898
+          },
+          "T4": {
+            "bpb": 0.763620496999766,
+            "bytes": 8427,
+            "nll_per_token": 2.280379780962423,
+            "tokens": 1956
+          },
+          "T5": {
+            "bpb": 1.1589920610164421,
+            "bytes": 7255,
+            "nll_per_token": 3.3380981305483965,
+            "tokens": 1746
+          },
+          "T6": {
+            "bpb": 1.0305745758205243,
+            "bytes": 7008,
+            "nll_per_token": 2.83953133862734,
+            "tokens": 1763
+          }
+        },
+        "per_text_bpb": {
+          "T1": 1.5299754698378794,
+          "T2": 1.110643421382233,
+          "T3": 0.7320000376820808,
+          "T4": 0.763620496999766,
+          "T5": 1.1589920610164421,
+          "T6": 1.0305745758205243
+        }
+      },
+      "params_config": {
+        "active": 3822530590,
+        "active_excl_input_embedding": 3822530590,
+        "input_embedding_params": 738197504,
+        "method": "config arithmetic: mlx_lm module tree built from config.json (lazy, no weights)",
+        "model_type": "gemma4",
+        "num_experts": 128,
+        "published_total": 25200000000.0,
+        "rel_diff_vs_published": 0.0013151503968253967,
+        "routed_expert_params": 22837985280,
+        "tied_embeddings": true,
+        "top_k": 8,
+        "total": 25233141790
+      },
+      "present": true,
+      "problems": [
+        "NLL(8) / KL(8‖4) rule failed"
+      ],
+      "same_files_as_build_parity": {
+        "chat_template.jinja": true,
+        "tokenizer.json": true,
+        "tokenizer_config.json": true
+      },
+      "strict_load": {
+        "ok": true,
+        "params_loaded": {
+          "active": 3822530590,
+          "active_excl_input_embedding": 3822530590,
+          "input_embedding_params": 738197504,
+          "num_experts": 128,
+          "rel_diff_vs_config": 0.0,
+          "routed_expert_params": 22837985280,
+          "tied_embeddings": true,
+          "top_k": 8,
+          "total": 25233141790
+        }
+      },
+      "template_equals_committed": true,
+      "verdict": "fail"
+    },
+    "Q36-4": {
+      "arm": "Q36-4",
+      "build_parity": {
+        "byte_equal_to_upstream": {
+          "chat_template.jinja": true,
+          "config.json": false,
+          "generation_config.json": true,
+          "tokenizer.json": false,
+          "tokenizer_config.json": false
+        },
+        "template_render_mismatches": 0,
+        "token_id_mismatches": 0
+      },
+      "config": {
+        "base": {
+          "bits": 4,
+          "group_size": 64,
+          "mode": "affine"
+        },
+        "expected": {
+          "bits": 4,
+          "group_size": 64,
+          "mode": "affine"
+        },
+        "n_overrides": 80,
+        "ok": true,
+        "overrides": {
+          "mlp.gate": [
+            [
+              8,
+              64
+            ]
+          ],
+          "mlp.shared_expert_gate": [
+            [
+              8,
+              64
+            ]
+          ]
+        }
+      },
+      "dir": "$EXP036_MODELS/Qwen3.6-35B-A3B-4bit",
+      "eos": {
+        "config": [
+          248046,
+          248044
+        ],
+        "generation_config": [
+          248046,
+          248044
+        ]
+      },
+      "family": "qwen3_6",
+      "files": {
+        "chat_template.jinja": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+        "config.json": "a822a9e48b0aafbe3144ec37d4fb067e178ed96615ce6e4420b3149893cc5767",
+        "generation_config.json": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e",
+        "tokenizer.json": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+        "tokenizer_config.json": "e98f1901ac6f0adff67b1d540bfa0c36ac1a0cf59eb72ed78146ef89aafa1182"
+      },
+      "nll": {
+        "mean_bpb": 0.7516031605267711,
+        "mean_nll_per_token": 2.1763063791179373,
+        "per_text": {
+          "T1": {
+            "bpb": 1.2040366541782255,
+            "bytes": 6087,
+            "nll_per_token": 3.26062622853819,
+            "tokens": 1558
+          },
+          "T2": {
+            "bpb": 0.9039560910547348,
+            "bytes": 6561,
+            "nll_per_token": 2.6301702205294304,
+            "tokens": 1563
+          },
+          "T3": {
+            "bpb": 0.5329686006665308,
+            "bytes": 8061,
+            "nll_per_token": 1.5890824064501068,
+            "tokens": 1874
+          },
+          "T4": {
+            "bpb": 0.13757630369930723,
+            "bytes": 8427,
+            "nll_per_token": 0.4211761026762317,
+            "tokens": 1908
+          },
+          "T5": {
+            "bpb": 1.0773644939839773,
+            "bytes": 7255,
+            "nll_per_token": 3.126273532169648,
+            "tokens": 1733
+          },
+          "T6": {
+            "bpb": 0.868593568950862,
+            "bytes": 7008,
+            "nll_per_token": 2.406878944131489,
+            "tokens": 1753
+          }
+        },
+        "per_text_bpb": {
+          "T1": 1.2040366541782255,
+          "T2": 0.9039560910547348,
+          "T3": 0.5329686006665308,
+          "T4": 0.13757630369930723,
+          "T5": 1.0773644939839773,
+          "T6": 0.868593568950862
+        }
+      },
+      "nll_chat": {
+        "mean_bpb": 0.6682119565559863,
+        "mean_nll_per_token": 1.9348427734609999,
+        "per_text": {
+          "T1": {
+            "bpb": 1.0754580714549407,
+            "bytes": 6087,
+            "nll_per_token": 2.9124252848202823,
+            "tokens": 1558
+          },
+          "T2": {
+            "bpb": 0.8224153077601302,
+            "bytes": 6561,
+            "nll_per_token": 2.392917391434741,
+            "tokens": 1563
+          },
+          "T3": {
+            "bpb": 0.48026241882685755,
+            "bytes": 8061,
+            "nll_per_token": 1.4319353134171557,
+            "tokens": 1874
+          },
+          "T4": {
+            "bpb": 0.07945596086145891,
+            "bytes": 8427,
+            "nll_per_token": 0.2432464823532904,
+            "tokens": 1908
+          },
+          "T5": {
+            "bpb": 0.9724444489750647,
+            "bytes": 7255,
+            "nll_per_token": 2.821818761721004,
+            "tokens": 1733
+          },
+          "T6": {
+            "bpb": 0.7793229694286391,
+            "bytes": 7008,
+            "nll_per_token": 2.1595094792855107,
+            "tokens": 1753
+          }
+        },
+        "per_text_bpb": {
+          "T1": 1.0754580714549407,
+          "T2": 0.8224153077601302,
+          "T3": 0.48026241882685755,
+          "T4": 0.07945596086145891,
+          "T5": 0.9724444489750647,
+          "T6": 0.7793229694286391
+        }
+      },
+      "params_config": {
+        "active": 3454988928,
+        "active_excl_input_embedding": 2946429568,
+        "input_embedding_params": 508559360,
+        "method": "config arithmetic: mlx_lm module tree built from config.json (lazy, no weights)",
+        "model_type": "qwen3_5_moe",
+        "num_experts": 256,
+        "published_total": 34700000000.0,
+        "rel_diff_vs_published": 0.001135138674351585,
+        "routed_expert_params": 32212254720,
+        "tied_embeddings": false,
+        "top_k": 8,
+        "total": 34660610688
+      },
+      "present": true,
+      "problems": [],
+      "same_files_as_build_parity": {
+        "chat_template.jinja": true,
+        "tokenizer.json": true,
+        "tokenizer_config.json": true
+      },
+      "strict_load": {
+        "ok": true,
+        "params_loaded": {
+          "active": 3454988928,
+          "active_excl_input_embedding": 2946429568,
+          "input_embedding_params": 508559360,
+          "num_experts": 256,
+          "rel_diff_vs_config": 0.0,
+          "routed_expert_params": 32212254720,
+          "tied_embeddings": false,
+          "top_k": 8,
+          "total": 34660610688
+        }
+      },
+      "template_equals_committed": true,
+      "verdict": "ok"
+    },
+    "Q36-8": {
+      "arm": "Q36-8",
+      "batched_path": {
+        "dis_bound": 0.12592426850258176,
+        "eos_ids": [
+          248046,
+          248044
+        ],
+        "floor_range": [
+          520,
+          1100
+        ],
+        "kl_bound": 0.028833980268716423,
+        "lengths": [
+          37,
+          300,
+          700,
+          1100,
+          64,
+          520,
+          900,
+          150,
+          37,
+          700,
+          300,
+          1100
+        ],
+        "max_tokens": [
+          48,
+          8,
+          32,
+          16,
+          40,
+          24,
+          56,
+          12,
+          20,
+          36,
+          28,
+          44
+        ],
+        "noise_floor": {
+          "decode_dis": 0.043029259896729774,
+          "decode_kl": 0.01293950986623205,
+          "floor_dis": 0.04130808950086059,
+          "floor_kl": 0.009611326756238808,
+          "per_text": {
+            "base": {
+              "decode_dis": 0.043029259896729774,
+              "decode_kl": 0.01293950986623205,
+              "floor_dis": 0.04130808950086059,
+              "floor_kl": 0.009611326756238808,
+              "positions": [
+                520,
+                1100
+              ]
+            }
+          },
+          "prefill_steps": [
+            2048,
+            64
+          ]
+        },
+        "ok": false,
+        "parity": {
+          "B": 8,
+          "admitted_mid_run": 4,
+          "max_live": 8,
+          "max_tokens": [
+            48,
+            8,
+            32,
+            16,
+            40,
+            24,
+            56,
+            12,
+            20,
+            36,
+            28,
+            44
+          ],
+          "mean_kl": 0.05885978528843092,
+          "n_positions": 319,
+          "n_sequences": 12,
+          "path": "runner.generate (item 27 construction) + runner.sampler.fp32_logits",
+          "prompt_lengths": [
+            37,
+            300,
+            700,
+            1100,
+            64,
+            520,
+            900,
+            150,
+            37,
+            700,
+            300,
+            1100
+          ],
+          "steps": 64,
+          "top1_dis": 0.109717868338558
+        },
+        "text": "Amendment 5: chat wrapper + T1-T4 token stream; every prompt starts with the wrapper",
+        "wrapper": {
+          "add_generation_prompt": true,
+          "amendment": "Amendment 5",
+          "effort": "none",
+          "kwargs": {
+            "enable_thinking": false
+          },
+          "messages": [
+            {
+              "content": "Write a text.",
+              "role": "user"
+            }
+          ],
+          "prefill": "empty_think",
+          "prompt_ids": [
+            248045,
+            846,
+            198,
+            7734,
+            264,
+            1414,
+            13,
+            248046,
+            198,
+            248045,
+            74455,
+            198,
+            248068,
+            271,
+            248069,
+            271
+          ],
+          "prompt_ids_sha256": "e38d304ac8cdd0eb25c9396b3b8f11e6c8b053fc9beca44fcc886a04b4dcdcfb",
+          "prompt_tokens": 16,
+          "rendered_sha256": "3863175ecb0ce0fa2e37385cc924682994f56ce56536a0c6de0a3fcdb40c2ca4",
+          "rule": "the gate text is the assistant turn after the single user message 'Write a text.', rendered with runner.chat.render (the model's own chat template, add_generation_prompt=True, thinking off); input = prompt_ids + text_ids[:-1], text tokenised alone (add_special_tokens=False), no extra BOS; only the rows predicting the text's tokens are scored",
+          "template": "runner/templates/qwen3_6.jinja",
+          "template_equals_model_dir": true,
+          "template_sha256": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+          "text_tokens": "the text tokenised alone, add_special_tokens=False (raw tokenizers, tokenizer.json)"
+        }
+      },
+      "batched_path_problems": [
+        "batched-path parity outside the G5 noise-floor bound",
+        "greedy flip rate 0.033 > 0.02"
+      ],
+      "build_parity": {
+        "byte_equal_to_upstream": {
+          "chat_template.jinja": true,
+          "config.json": false,
+          "generation_config.json": true,
+          "tokenizer.json": false,
+          "tokenizer_config.json": false
+        },
+        "template_render_mismatches": 0,
+        "token_id_mismatches": 0
+      },
+      "config": {
+        "base": {
+          "bits": 8,
+          "group_size": 64,
+          "mode": "affine"
+        },
+        "expected": {
+          "bits": 8,
+          "group_size": 64,
+          "mode": "affine"
+        },
+        "n_overrides": 80,
+        "ok": true,
+        "overrides": {
+          "mlp.gate": [
+            [
+              8,
+              64
+            ]
+          ],
+          "mlp.shared_expert_gate": [
+            [
+              8,
+              64
+            ]
+          ]
+        }
+      },
+      "dir": "$EXP036_MODELS/Qwen3.6-35B-A3B-8bit",
+      "eos": {
+        "config": [
+          248046,
+          248044
+        ],
+        "generation_config": [
+          248046,
+          248044
+        ]
+      },
+      "family": "qwen3_6",
+      "files": {
+        "chat_template.jinja": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+        "config.json": "5da49c3a84c5a4a751b720b62b9f8703bdb8a0796b5fc55df3278f8b9d6ce296",
+        "generation_config.json": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e",
+        "tokenizer.json": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+        "tokenizer_config.json": "e98f1901ac6f0adff67b1d540bfa0c36ac1a0cf59eb72ed78146ef89aafa1182"
+      },
+      "greedy_flip": {
+        "flips": 1,
+        "items": [
+          "3123",
+          "4982",
+          "1412",
+          "10533",
+          "3385",
+          "11415",
+          "3844",
+          "8561",
+          "5748",
+          "4479",
+          "7239",
+          "3014",
+          "6182",
+          "5717",
+          "10469",
+          "8373",
+          "1911",
+          "9001",
+          "7353",
+          "9129",
+          "2824",
+          "5286",
+          "3115",
+          "5480",
+          "1502",
+          "755",
+          "2700",
+          "922",
+          "8575",
+          "4887"
+        ],
+        "max_tokens": 4096,
+        "n": 30,
+        "ok": false,
+        "rate": 0.03333333333333333,
+        "truncated_B1": 0,
+        "truncated_B8": 0
+      },
+      "nll": {
+        "mean_bpb": 0.7053979070863484,
+        "mean_nll_per_token": 2.042516643932848,
+        "per_text": {
+          "T1": {
+            "bpb": 1.1290518269133585,
+            "bytes": 6087,
+            "nll_per_token": 3.057561401837291,
+            "tokens": 1558
+          },
+          "T2": {
+            "bpb": 0.868500250507315,
+            "bytes": 6561,
+            "nll_per_token": 2.527007138965531,
+            "tokens": 1563
+          },
+          "T3": {
+            "bpb": 0.49609079859664357,
+            "bytes": 8061,
+            "nll_per_token": 1.4791287123966115,
+            "tokens": 1874
+          },
+          "T4": {
+            "bpb": 0.08647095584005961,
+            "bytes": 8427,
+            "nll_per_token": 0.26472218831380206,
+            "tokens": 1908
+          },
+          "T5": {
+            "bpb": 1.0332434792083411,
+            "bytes": 7255,
+            "nll_per_token": 2.9982441034333527,
+            "tokens": 1733
+          },
+          "T6": {
+            "bpb": 0.8303274888173642,
+            "bytes": 7008,
+            "nll_per_token": 2.3008433645001425,
+            "tokens": 1753
+          }
+        },
+        "per_text_bpb": {
+          "T1": 1.1290518269133585,
+          "T2": 0.868500250507315,
+          "T3": 0.49609079859664357,
+          "T4": 0.08647095584005961,
+          "T5": 1.0332434792083411,
+          "T6": 0.8303274888173642
+        }
+      },
+      "nll_chat": {
+        "mean_bpb": 0.6501339684960521,
+        "mean_nll_per_token": 1.8824970106932137,
+        "per_text": {
+          "T1": {
+            "bpb": 1.0519940661705425,
+            "bytes": 6087,
+            "nll_per_token": 2.8488829077743905,
+            "tokens": 1558
+          },
+          "T2": {
+            "bpb": 0.8081059016051699,
+            "bytes": 6561,
+            "nll_per_token": 2.3512824333713214,
+            "tokens": 1563
+          },
+          "T3": {
+            "bpb": 0.46290705124799186,
+            "bytes": 8061,
+            "nll_per_token": 1.3801890956426761,
+            "tokens": 1874
+          },
+          "T4": {
+            "bpb": 0.051511245691128034,
+            "bytes": 8427,
+            "nll_per_token": 0.15769653000421743,
+            "tokens": 1908
+          },
+          "T5": {
+            "bpb": 0.9620802827841507,
+            "bytes": 7255,
+            "nll_per_token": 2.7917442431837856,
+            "tokens": 1733
+          },
+          "T6": {
+            "bpb": 0.7654426281963955,
+            "bytes": 7008,
+            "nll_per_token": 2.1210469552196236,
+            "tokens": 1753
+          }
+        },
+        "per_text_bpb": {
+          "T1": 1.0519940661705425,
+          "T2": 0.8081059016051699,
+          "T3": 0.46290705124799186,
+          "T4": 0.051511245691128034,
+          "T5": 0.9620802827841507,
+          "T6": 0.7654426281963955
+        }
+      },
+      "params_config": {
+        "active": 3454988928,
+        "active_excl_input_embedding": 2946429568,
+        "input_embedding_params": 508559360,
+        "method": "config arithmetic: mlx_lm module tree built from config.json (lazy, no weights)",
+        "model_type": "qwen3_5_moe",
+        "num_experts": 256,
+        "published_total": 34700000000.0,
+        "rel_diff_vs_published": 0.001135138674351585,
+        "routed_expert_params": 32212254720,
+        "tied_embeddings": false,
+        "top_k": 8,
+        "total": 34660610688
+      },
+      "present": true,
+      "problems": [],
+      "same_files_as_build_parity": {
+        "chat_template.jinja": true,
+        "tokenizer.json": true,
+        "tokenizer_config.json": true
+      },
+      "strict_load": {
+        "ok": true,
+        "params_loaded": {
+          "active": 3454988928,
+          "active_excl_input_embedding": 2946429568,
+          "input_embedding_params": 508559360,
+          "num_experts": 256,
+          "rel_diff_vs_config": 0.0,
+          "routed_expert_params": 32212254720,
+          "tied_embeddings": false,
+          "top_k": 8,
+          "total": 34660610688
+        }
+      },
+      "template_equals_committed": true,
+      "verdict": "B=1"
+    },
+    "Q38-4": {
+      "arm": "Q38-4",
+      "build_parity": {
+        "byte_equal_to_upstream": {
+          "chat_template.jinja": true,
+          "config.json": false,
+          "generation_config.json": true,
+          "tokenizer.json": false,
+          "tokenizer_config.json": false
+        },
+        "template_render_mismatches": 0,
+        "token_id_mismatches": 0
+      },
+      "config": {
+        "base": {
+          "bits": 4,
+          "group_size": 64,
+          "mode": "affine"
+        },
+        "expected": {
+          "bits": 4,
+          "group_size": 64,
+          "mode": "affine"
+        },
+        "n_overrides": 0,
+        "ok": true,
+        "overrides": {}
+      },
+      "dir": "$EXP036_MODELS/Qwen3.8-27B-4bit",
+      "eos": {
+        "config": [
+          248046,
+          248044
+        ],
+        "generation_config": [
+          248046,
+          248044
+        ]
+      },
+      "family": "qwen3_8",
+      "files": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "config.json": "14b65a0ee06517060a6bbd979bb1a8ff54e7b304b1a1f01d54344b88b8285e85",
+        "generation_config.json": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "792fa3f0cb88b111e54ef3134c873531008c4df471d108da17903426e308aa7b"
+      },
+      "nll": {
+        "mean_bpb": 0.6728537378603503,
+        "mean_nll_per_token": 1.9482832947276716,
+        "per_text": {
+          "T1": {
+            "bpb": 0.9774995816449603,
+            "bytes": 6087,
+            "nll_per_token": 2.647145967887516,
+            "tokens": 1558
+          },
+          "T2": {
+            "bpb": 0.7922375669029863,
+            "bytes": 6561,
+            "nll_per_token": 2.305111583043426,
+            "tokens": 1563
+          },
+          "T3": {
+            "bpb": 0.4686059793097662,
+            "bytes": 8061,
+            "nll_per_token": 1.3971808401981056,
+            "tokens": 1874
+          },
+          "T4": {
+            "bpb": 0.12428965692300789,
+            "bytes": 8427,
+            "nll_per_token": 0.3805003616045106,
+            "tokens": 1908
+          },
+          "T5": {
+            "bpb": 1.025024580844128,
+            "bytes": 7255,
+            "nll_per_token": 2.9743946777625503,
+            "tokens": 1733
+          },
+          "T6": {
+            "bpb": 0.8264688452265431,
+            "bytes": 7008,
+            "nll_per_token": 2.2901510357244725,
+            "tokens": 1753
+          }
+        },
+        "per_text_bpb": {
+          "T1": 0.9774995816449603,
+          "T2": 0.7922375669029863,
+          "T3": 0.4686059793097662,
+          "T4": 0.12428965692300789,
+          "T5": 1.025024580844128,
+          "T6": 0.8264688452265431
+        }
+      },
+      "nll_chat": {
+        "mean_bpb": 0.6383114819875423,
+        "mean_nll_per_token": 1.848264380820459,
+        "per_text": {
+          "T1": {
+            "bpb": 0.8963015089265357,
+            "bytes": 6087,
+            "nll_per_token": 2.427255182425385,
+            "tokens": 1558
+          },
+          "T2": {
+            "bpb": 0.7461459673446216,
+            "bytes": 6561,
+            "nll_per_token": 2.1710024667106524,
+            "tokens": 1563
+          },
+          "T3": {
+            "bpb": 0.4450991845776211,
+            "bytes": 8061,
+            "nll_per_token": 1.3270937208177696,
+            "tokens": 1874
+          },
+          "T4": {
+            "bpb": 0.10516708854824817,
+            "bytes": 8427,
+            "nll_per_token": 0.32195852987421386,
+            "tokens": 1908
+          },
+          "T5": {
+            "bpb": 0.9732635618286019,
+            "bytes": 7255,
+            "nll_per_token": 2.8241956460978073,
+            "tokens": 1733
+          },
+          "T6": {
+            "bpb": 0.8298536397047186,
+            "bytes": 7008,
+            "nll_per_token": 2.299530325246007,
+            "tokens": 1753
+          }
+        },
+        "per_text_bpb": {
+          "T1": 0.8963015089265357,
+          "T2": 0.7461459673446216,
+          "T3": 0.4450991845776211,
+          "T4": 0.10516708854824817,
+          "T5": 0.9732635618286019,
+          "T6": 0.8298536397047186
+        }
+      },
+      "params_config": {
+        "active": 26895998464,
+        "active_excl_input_embedding": 25624600064,
+        "input_embedding_params": 1271398400,
+        "method": "config arithmetic: mlx_lm module tree built from config.json (lazy, no weights)",
+        "model_type": "qwen3_5",
+        "num_experts": null,
+        "published_total": 27000000000.0,
+        "rel_diff_vs_published": 0.0038519087407407407,
+        "routed_expert_params": 0,
+        "tied_embeddings": false,
+        "top_k": null,
+        "total": 26895998464
+      },
+      "present": true,
+      "problems": [],
+      "same_files_as_build_parity": {
+        "chat_template.jinja": true,
+        "tokenizer.json": true,
+        "tokenizer_config.json": true
+      },
+      "strict_load": {
+        "ok": true,
+        "params_loaded": {
+          "active": 26895998464,
+          "active_excl_input_embedding": 25624600064,
+          "input_embedding_params": 1271398400,
+          "num_experts": null,
+          "rel_diff_vs_config": 0.0,
+          "routed_expert_params": 0,
+          "tied_embeddings": false,
+          "top_k": null,
+          "total": 26895998464
+        }
+      },
+      "template_equals_committed": true,
+      "verdict": "ok"
+    },
+    "Q38-8": {
+      "arm": "Q38-8",
+      "build_parity": {
+        "byte_equal_to_upstream": {
+          "chat_template.jinja": true,
+          "config.json": false,
+          "generation_config.json": true,
+          "tokenizer.json": false,
+          "tokenizer_config.json": false
+        },
+        "template_render_mismatches": 0,
+        "token_id_mismatches": 0
+      },
+      "config": {
+        "base": {
+          "bits": 8,
+          "group_size": 64,
+          "mode": "affine"
+        },
+        "expected": {
+          "bits": 8,
+          "group_size": 64,
+          "mode": "affine"
+        },
+        "n_overrides": 0,
+        "ok": true,
+        "overrides": {}
+      },
+      "dir": "$EXP036_MODELS/Qwen3.8-27B-8bit",
+      "eos": {
+        "config": [
+          248046,
+          248044
+        ],
+        "generation_config": [
+          248046,
+          248044
+        ]
+      },
+      "family": "qwen3_8",
+      "files": {
+        "chat_template.jinja": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "config.json": "8f80874ac3ad8fa386d3f6dc0ea85377f703376e009a03dee0360e08e289a25d",
+        "generation_config.json": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e",
+        "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+        "tokenizer_config.json": "792fa3f0cb88b111e54ef3134c873531008c4df471d108da17903426e308aa7b"
+      },
+      "nll": {
+        "mean_bpb": 0.6668590447355727,
+        "mean_nll_per_token": 1.9309253463135587,
+        "per_text": {
+          "T1": {
+            "bpb": 0.9764386961384642,
+            "bytes": 6087,
+            "nll_per_token": 2.644273006258023,
+            "tokens": 1558
+          },
+          "T2": {
+            "bpb": 0.784202044233283,
+            "bytes": 6561,
+            "nll_per_token": 2.2817312522492803,
+            "tokens": 1563
+          },
+          "T3": {
+            "bpb": 0.4652735393511124,
+            "bytes": 8061,
+            "nll_per_token": 1.3872449420941169,
+            "tokens": 1874
+          },
+          "T4": {
+            "bpb": 0.09043855098242617,
+            "bytes": 8427,
+            "nll_per_token": 0.27686858427099714,
+            "tokens": 1908
+          },
+          "T5": {
+            "bpb": 1.0199943579315696,
+            "bytes": 7255,
+            "nll_per_token": 2.959798083165032,
+            "tokens": 1733
+          },
+          "T6": {
+            "bpb": 0.8475355294289325,
+            "bytes": 7008,
+            "nll_per_token": 2.348526967163434,
+            "tokens": 1753
+          }
+        },
+        "per_text_bpb": {
+          "T1": 0.9764386961384642,
+          "T2": 0.784202044233283,
+          "T3": 0.4652735393511124,
+          "T4": 0.09043855098242617,
+          "T5": 1.0199943579315696,
+          "T6": 0.8475355294289325
+        }
+      },
+      "nll_chat": {
+        "mean_bpb": 0.6171952728205433,
+        "mean_nll_per_token": 1.7871212894572985,
+        "per_text": {
+          "T1": {
+            "bpb": 0.882779992529897,
+            "bytes": 6087,
+            "nll_per_token": 2.3906378495065788,
+            "tokens": 1558
+          },
+          "T2": {
+            "bpb": 0.7310871867762623,
+            "bytes": 6561,
+            "nll_per_token": 2.1271871126239605,
+            "tokens": 1563
+          },
+          "T3": {
+            "bpb": 0.4352137223372576,
+            "bytes": 8061,
+            "nll_per_token": 1.2976195377117796,
+            "tokens": 1874
+          },
+          "T4": {
+            "bpb": 0.07404291176415144,
+            "bytes": 8427,
+            "nll_per_token": 0.2266749735898192,
+            "tokens": 1908
+          },
+          "T5": {
+            "bpb": 0.9554724228819914,
+            "bytes": 7255,
+            "nll_per_token": 2.7725696948932486,
+            "tokens": 1733
+          },
+          "T6": {
+            "bpb": 0.7921436839275449,
+            "bytes": 7008,
+            "nll_per_token": 2.195035770152952,
+            "tokens": 1753
+          }
+        },
+        "per_text_bpb": {
+          "T1": 0.882779992529897,
+          "T2": 0.7310871867762623,
+          "T3": 0.4352137223372576,
+          "T4": 0.07404291176415144,
+          "T5": 0.9554724228819914,
+          "T6": 0.7921436839275449
+        }
+      },
+      "params_config": {
+        "active": 26895998464,
+        "active_excl_input_embedding": 25624600064,
+        "input_embedding_params": 1271398400,
+        "method": "config arithmetic: mlx_lm module tree built from config.json (lazy, no weights)",
+        "model_type": "qwen3_5",
+        "num_experts": null,
+        "published_total": 27000000000.0,
+        "rel_diff_vs_published": 0.0038519087407407407,
+        "routed_expert_params": 0,
+        "tied_embeddings": false,
+        "top_k": null,
+        "total": 26895998464
+      },
+      "present": true,
+      "problems": [],
+      "same_files_as_build_parity": {
+        "chat_template.jinja": true,
+        "tokenizer.json": true,
+        "tokenizer_config.json": true
+      },
+      "strict_load": {
+        "ok": true,
+        "params_loaded": {
+          "active": 26895998464,
+          "active_excl_input_embedding": 25624600064,
+          "input_embedding_params": 1271398400,
+          "num_experts": null,
+          "rel_diff_vs_config": 0.0,
+          "routed_expert_params": 0,
+          "tied_embeddings": false,
+          "top_k": null,
+          "total": 26895998464
+        }
+      },
+      "template_equals_committed": true,
+      "verdict": "ok"
+    }
+  },
+  "checks": [
+    "files",
+    "config",
+    "params",
+    "load",
+    "nll",
+    "kl",
+    "batch",
+    "flip"
+  ],
+  "families": {
+    "gemma4": {
+      "fidelity": {
+        "kl_8v4_per_token": 0.32291294073954224,
+        "kl_ok": false,
+        "nll4_per_token": 2.910125552462788,
+        "nll8_per_token": 2.938084925085006,
+        "nll_ok": false,
+        "texts": "chat-wrapped (Amendment 5)"
+      },
+      "fidelity_raw_text": {
+        "kl_8v4_per_token": 4.574776414185847,
+        "kl_ok": false,
+        "nll4_per_token": 10.664258945661738,
+        "nll8_per_token": 10.210827341818051,
+        "nll_ok": true,
+        "note": "raw text after the context-start token; descriptive since Amendment 5",
+        "used_for_verdict": false
+      },
+      "wrapper": {
+        "add_generation_prompt": true,
+        "amendment": "Amendment 5",
+        "effort": "none",
+        "kwargs": {
+          "enable_thinking": false
+        },
+        "messages": [
+          {
+            "content": "Write a text.",
+            "role": "user"
+          }
+        ],
+        "prefill": "empty_channel",
+        "prompt_ids": [
+          2,
+          105,
+          2364,
+          107,
+          6974,
+          496,
+          1816,
+          236761,
+          106,
+          107,
+          105,
+          4368,
+          107,
+          100,
+          45518,
+          107,
+          101
+        ],
+        "prompt_ids_4bit_identical": true,
+        "prompt_ids_sha256": "2db9860b1a917ebaf07edbc4095e35724ea322974cb0532a46e0df91690a7ed2",
+        "prompt_tokens": 17,
+        "rendered_from": "gemma-4-26b-a4b-it-8bit",
+        "rendered_sha256": "f68c16dc6a70eea774ad82209853640c3c0d45dbaa5a7c1f593e3eb9139640e3",
+        "rule": "the gate text is the assistant turn after the single user message 'Write a text.', rendered with runner.chat.render (the model's own chat template, add_generation_prompt=True, thinking off); input = prompt_ids + text_ids[:-1], text tokenised alone (add_special_tokens=False), no extra BOS; only the rows predicting the text's tokens are scored",
+        "template": "runner/templates/gemma4.jinja",
+        "template_equals_model_dir": true,
+        "template_sha256": "36e3a42e5cf14cd0020e72d92e1fdd9970f59b82170e421f0cbe1bb42bead3f0",
+        "text_tokens": "the text tokenised alone, add_special_tokens=False (raw tokenizers, tokenizer.json)"
+      }
+    },
+    "qwen3_6": {
+      "fidelity": {
+        "kl_8v4_per_token": 0.0953406373304058,
+        "kl_ok": true,
+        "nll4_per_token": 1.9348427734609999,
+        "nll8_per_token": 1.8824970106932137,
+        "nll_ok": true,
+        "texts": "chat-wrapped (Amendment 5)"
+      },
+      "fidelity_raw_text": {
+        "kl_8v4_per_token": 0.1774935904567218,
+        "kl_ok": true,
+        "nll4_per_token": 2.1763063791179373,
+        "nll8_per_token": 2.042516643932848,
+        "nll_ok": true,
+        "note": "raw text after the context-start token; descriptive since Amendment 5",
+        "used_for_verdict": false
+      },
+      "wrapper": {
+        "add_generation_prompt": true,
+        "amendment": "Amendment 5",
+        "effort": "none",
+        "kwargs": {
+          "enable_thinking": false
+        },
+        "messages": [
+          {
+            "content": "Write a text.",
+            "role": "user"
+          }
+        ],
+        "prefill": "empty_think",
+        "prompt_ids": [
+          248045,
+          846,
+          198,
+          7734,
+          264,
+          1414,
+          13,
+          248046,
+          198,
+          248045,
+          74455,
+          198,
+          248068,
+          271,
+          248069,
+          271
+        ],
+        "prompt_ids_4bit_identical": true,
+        "prompt_ids_sha256": "e38d304ac8cdd0eb25c9396b3b8f11e6c8b053fc9beca44fcc886a04b4dcdcfb",
+        "prompt_tokens": 16,
+        "rendered_from": "Qwen3.6-35B-A3B-8bit",
+        "rendered_sha256": "3863175ecb0ce0fa2e37385cc924682994f56ce56536a0c6de0a3fcdb40c2ca4",
+        "rule": "the gate text is the assistant turn after the single user message 'Write a text.', rendered with runner.chat.render (the model's own chat template, add_generation_prompt=True, thinking off); input = prompt_ids + text_ids[:-1], text tokenised alone (add_special_tokens=False), no extra BOS; only the rows predicting the text's tokens are scored",
+        "template": "runner/templates/qwen3_6.jinja",
+        "template_equals_model_dir": true,
+        "template_sha256": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+        "text_tokens": "the text tokenised alone, add_special_tokens=False (raw tokenizers, tokenizer.json)"
+      }
+    },
+    "qwen3_8": {
+      "fidelity": {
+        "kl_8v4_per_token": 0.06929818341656063,
+        "kl_ok": true,
+        "nll4_per_token": 1.848264380820459,
+        "nll8_per_token": 1.7871212894572985,
+        "nll_ok": true,
+        "texts": "chat-wrapped (Amendment 5)"
+      },
+      "fidelity_raw_text": {
+        "kl_8v4_per_token": 0.10047752357605551,
+        "kl_ok": true,
+        "nll4_per_token": 1.9482832947276716,
+        "nll8_per_token": 1.9309253463135587,
+        "nll_ok": true,
+        "note": "raw text after the context-start token; descriptive since Amendment 5",
+        "used_for_verdict": false
+      },
+      "wrapper": {
+        "add_generation_prompt": true,
+        "amendment": "Amendment 5",
+        "effort": "none",
+        "kwargs": {
+          "enable_thinking": false
+        },
+        "messages": [
+          {
+            "content": "Write a text.",
+            "role": "user"
+          }
+        ],
+        "prefill": "empty_think",
+        "prompt_ids": [
+          248045,
+          846,
+          198,
+          7734,
+          264,
+          1414,
+          13,
+          248046,
+          198,
+          248045,
+          74455,
+          198,
+          248068,
+          271,
+          248069,
+          271
+        ],
+        "prompt_ids_4bit_identical": true,
+        "prompt_ids_sha256": "e38d304ac8cdd0eb25c9396b3b8f11e6c8b053fc9beca44fcc886a04b4dcdcfb",
+        "prompt_tokens": 16,
+        "rendered_from": "Qwen3.8-27B-8bit",
+        "rendered_sha256": "3863175ecb0ce0fa2e37385cc924682994f56ce56536a0c6de0a3fcdb40c2ca4",
+        "rule": "the gate text is the assistant turn after the single user message 'Write a text.', rendered with runner.chat.render (the model's own chat template, add_generation_prompt=True, thinking off); input = prompt_ids + text_ids[:-1], text tokenised alone (add_special_tokens=False), no extra BOS; only the rows predicting the text's tokens are scored",
+        "template": "runner/templates/qwen3_8.jinja",
+        "template_equals_model_dir": true,
+        "template_sha256": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+        "text_tokens": "the text tokenised alone, add_special_tokens=False (raw tokenizers, tokenizer.json)"
+      }
+    }
+  },
+  "host": "mbp (M5 Max, 128 GB)",
+  "schema": "exp036 peer check v1",
+  "t_end": "2026-10-04T17:55:38Z",
+  "t_start": "2026-10-04T17:42:58Z",
+  "texts": {
+    "T1": {
+      "bytes": 6087,
+      "sha256": "9fc601081bf27602b7f1b451f070034798c0c8542f09fc21a8303270bec0c3e0"
+    },
+    "T2": {
+      "bytes": 6561,
+      "sha256": "1da002ced80d4ae23099f6830ce22543973ef6c0c01aa58875c990f63ad7fefe"
+    },
+    "T3": {
+      "bytes": 8061,
+      "sha256": "3d154c6400554b57fb561363f76ac899298d668cb8308f737c17303829b73534"
+    },
+    "T4": {
+      "bytes": 8427,
+      "sha256": "56b562527fee93ccafc3d5e2e94766f09effc325bdf170146209402c036bca48"
+    },
+    "T5": {
+      "bytes": 7255,
+      "sha256": "f10012eb89e01cf7fb02a4db8ed18c9f486895ed94bda15b0557558f31508c14"
+    },
+    "T6": {
+      "bytes": 7008,
+      "sha256": "a2c2b4704ee2480e9104cb64f6849a6460e3420b3e3aefbb3413fee9e5b189ad"
+    }
+  }
+}
