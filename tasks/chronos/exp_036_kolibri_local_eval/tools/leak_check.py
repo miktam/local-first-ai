@@ -127,7 +127,7 @@ WITHHELD_FIELDS = {
 }
 JSON_SUFFIXES = (".json", ".jsonl")
 MIN_SHINGLE_HITS = 2        # one isolated 8-word overlap is a warning
-MIN_OPTION_WORDS_RAW = 5    # 3–4-word option matches in raw / pilot outputs are warnings
+MIN_OPTION_WORDS_RAW = 5    # 4-word option matches in raw / pilot outputs are warnings (options start at 4 words, Amendment 1)
 
 
 @dataclass

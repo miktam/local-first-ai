@@ -649,6 +649,8 @@ def exit_code(rec: dict) -> int:
 
 
 def main(argv=None) -> int:
+    from tools.precision import ensure_exact_fp32
+    ensure_exact_fp32()  # MLX_ENABLE_TF32=0 before any GPU work (tools/precision.py; Amendment 1)
     ap = argparse.ArgumentParser(description="exp_036 peer check (BUILD_SPEC §5.9)")
     ap.add_argument("--parity", action="store_true", help="build-time tokenizer/template parity")
     ap.add_argument("--mlx-root", default=None, help="parity: folder holding the mlx-community peer folders")

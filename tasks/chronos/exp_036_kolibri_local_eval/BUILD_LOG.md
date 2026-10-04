@@ -192,3 +192,12 @@ New or extended tests: `test_tools_dry_run.py` (new), and review-fix tests in `t
 7. **Peer-check fails of G4, Q36-4, Q38-x** (fix 4): what they do to H1 (which needs G4) and H8 (every peer family at 8 and 4 bits) is not pre-registered; `plan_fix` records the exclusion and makes nothing else NOT RUN.
 8. **The mini's `venv312`** (fix 8): create it before the pre-registration push (`EXP036_MODELS=~/models/exp036-mini EXP036_VENV=~/models/exp036-mini/venv312 bash env/setup.sh`, a PyPI download) and run BUILD_SPEC §6 in it. Only the session scratchpad venv was used for this review, as before.
 9. **The env file's name** (fix 16): the RUNBOOK blocks no longer trip the secret-path hook; renaming the file and its local override to a name without `.env` would remove the class of problem, and would change how the hook treats it.
+
+## Amendment 1 — mbp step 3 fixes (2026-10-04)
+
+The mbp's first run of RUNBOOK step 3 failed (`aborted/20261004T044821Z-tests/NOTE.md`): 41 fp32-parity tests from TF32 on the M5 GPU, and one leak-check finding from 3-word GPQA options matching the kit's own text. Fixed as `amendments/1_gatefix_20261004T051845Z.md` describes: `tools/precision.py` (exact fp32 in every process), the guard as the first statement of six entry points, `tests/conftest.py` and `tools/version_record.py`; `tools/shingles.py` `MIN_OPTION_WORDS` 3 → 4; `tools/dry_run.py` sys.path at import. New tests: `tests/test_tools_precision.py` (10); two leak tests updated to the 4-word rule.
+
+The fp32 headroom claim in `tests/INTEGRATION_LOG.md` ("≥ 50x") held only on the M4 Pro; on the M5 it holds with TF32 off. A first attempt also edited the prose in `tasks/selection_rules.json` and the `tasks/build_manifests.py` docstring; the dry run caught that every built manifest records the selection rules' sha256 (the frozen `ifbench.json` no longer matched), so both edits were undone and the amendment records the stale "≥ 3 words" wording instead.
+
+Mini verification: 1,201 tests pass (Python 3.12 and 3.14, every test required); dry run 17/17; leak check 0 findings; `hash_tree --check` 17/17 with the amendment appended (checked on a copy; HYPOTHESIS.md itself is the mbp's to write).
+

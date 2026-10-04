@@ -62,6 +62,8 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 EXP_DIR = Path(__file__).resolve().parents[1]
+if str(EXP_DIR) not in sys.path:  # so main() can import tools.precision when run as a script
+    sys.path.insert(0, str(EXP_DIR))
 REL_EXP = "tasks/chronos/exp_036_kolibri_local_eval"
 REL_PADDING = "tasks/chronos/exp_007_hardware_comparison/fixtures/padding"
 IDENTITY = ("Miktam", "hello@localfirstai.eu")
@@ -863,6 +865,8 @@ def orchestrate(args) -> int:
 
 
 def main(argv=None) -> int:
+    from tools.precision import ensure_exact_fp32
+    ensure_exact_fp32()  # MLX_ENABLE_TF32=0 before any GPU work (tools/precision.py; Amendment 1)
     ap = argparse.ArgumentParser(description="exp_036 dry run on tiny checkpoints (RUNBOOK step 3b)")
     ap.add_argument("--tok", help="Kolibri tokenizer dir (default $EXP036_TOK, $EXP036_MODELS/Kolibri-1-BF16, "
                                   "~/models/exp036-mini/kolibri/Kolibri-1-BF16)")

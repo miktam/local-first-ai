@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import platform
 import sys
 from pathlib import Path
@@ -97,6 +98,15 @@ def _metal() -> dict:
             "L_bytes": max(rec, mb * 2**20), "device_name": di.get("device_name")}
 
 
+def _fp32_precision() -> dict:
+    from tools import precision
+
+    try:
+        return precision.ensure_exact_fp32()
+    except precision.PrecisionError as e:
+        return {precision.ENV: os.environ.get(precision.ENV), "error": str(e)}
+
+
 def record(venv_python: str | None = None, assets_result: dict | None = None,
            with_params: bool = True, with_assets: bool = True) -> dict:
     common.set_offline_env()
@@ -122,6 +132,9 @@ def record(venv_python: str | None = None, assets_result: dict | None = None,
         "trees": {"all_match": trees["ok"], "scopes": trees["scopes"]},
         "converted": _converted(),
         "metal": _metal(),
+        # Exact fp32 on the GPU (tools/precision.py; Amendment 1): the environment value
+        # and the probe's relative L2 error in this process.
+        "fp32_precision": _fp32_precision(),
     }
     if with_assets:
         res = assets_result or assetcheck.check_all(deep=False)

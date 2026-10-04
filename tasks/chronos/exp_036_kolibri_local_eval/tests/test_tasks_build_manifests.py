@@ -107,7 +107,9 @@ def test_results_record_and_shingles(built):
     listed = tool_shingles.read_shingle_file(built["sh"])
     assert listed.prefixes and listed.options and built["summary"]["shingles"]["prefixes"] == len(listed.prefixes)
     assert listed.matches(syn.gpqa_row(1)["Question"])  # withheld GPQA question text is covered
-    assert listed.matches("so it is " + syn.gpqa_row(4)["Correct Answer"] + " then")  # a 3-word option
+    assert listed.matches("so it is " + syn.gpqa_row(4)["Incorrect Answer 1"] + " then")  # a 5-word option
+    # 1-3-word options are not hashed (Amendment 1, 2026-10-04): too generic to be evidence of a leak.
+    assert not listed.matches("so it is " + syn.gpqa_row(4)["Correct Answer"] + " then")  # a 3-word option
     assert listed.matches("Synthetic RGB query 3 about the gadget fair? extra words here")
     assert listed.matches("Synthetische Frage 2 zur Kalibrierung eines Bauteils unter hoher Last?")  # German GPQA
     assert listed.matches("Synthetische Aufgabe 1: berechne die Summe von 1 und 1 genau.")  # AIME-DE

@@ -461,6 +461,8 @@ def _print_summary(record: dict) -> None:
 
 
 def main(argv=None) -> int:
+    from tools.precision import ensure_exact_fp32
+    ensure_exact_fp32()  # MLX_ENABLE_TF32=0 before any GPU work (tools/precision.py; Amendment 1)
     ap = argparse.ArgumentParser(description="exp_036 preflight (BUILD_SPEC §5.9)")
     g = ap.add_mutually_exclusive_group()
     g.add_argument("--quick", action="store_true", help="(default)")

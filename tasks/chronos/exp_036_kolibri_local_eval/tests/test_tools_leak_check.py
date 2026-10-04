@@ -76,7 +76,8 @@ def test_normalisation_and_shingles():
     assert a and a == b
     assert all(len(h) == 12 for h in a)
     assert shingles.option_hash("None of the above") is None          # generic phrase
-    assert shingles.option_hash("two words") is None                   # < 3 words
+    assert shingles.option_hash("two words") is None                   # < 4 words
+    assert shingles.option_hash("three plain words") is None           # < 4 words (Amendment 1, 2026-10-04)
     assert len(shingles.option_hash(OPTIONS[0])) == 64
 
 
@@ -271,7 +272,9 @@ def test_rgb_source_is_read_on_the_fly(tmp_path, monkeypatch):
     s, warns = shingles.collect_from_sources(tmp_path / "data", tmp_path / "private")
     assert s and any("RGB" in x for x in s.sources)
     assert s.matches(shingles.normalise_words("well: which synthetic team won the imaginary lagoon cup in"))
-    assert s.matches(shingles.normalise_words("it was the purple zorblaxes, clearly"))
+    # A 3-word RGB answer is not hashed (Amendment 1, 2026-10-04: options start at 4 words).
+    # RGB raw outputs are withheld anyway; a bare short answer reveals nothing of the dataset.
+    assert not s.matches(shingles.normalise_words("it was the purple zorblaxes, clearly"))
 
 
 def test_the_tools_area_is_clean():

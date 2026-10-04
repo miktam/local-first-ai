@@ -6,16 +6,20 @@ here so that writer and reader share one normalisation). It holds no text:
 
     # comment lines (format, counts)
     <12 hex>     sha256 prefix of one normalised 8-word shingle
-    <64 hex>     full sha256 of one normalised withheld option string (>= 3 words)
+    <64 hex>     full sha256 of one normalised withheld option string (>= 4 words)
 
 Normalisation: Unicode NFKC, lower-case, every character that is neither a
 letter, a digit nor whitespace removed, whitespace collapsed; words are the
 whitespace-separated tokens. A shingle is 8 consecutive words joined by one
-space. An option of 3–8 words is found by hashing every 3–8-word window of
+space. An option of 4–8 words is found by hashing every 4–8-word window of
 the scanned text (an 8-word option is a full-hash finding, not one shingle
 warning; review fix 2026-10-03); a longer option is covered by its shingles.
 Short withheld questions (RGB queries, GPQA EN/DE questions, AIME-DE problems
-of 3–8 words) are hashed as options too, so quoting one alone is a finding.
+of 4–8 words) are hashed as options too, so quoting one alone is a finding.
+Strings of 1–3 words are not hashed (Amendment 1, 2026-10-04): on the mbp, six
+3-word GPQA options matched ordinary English in the kit's own code and docs
+(30 places, one inside GENERIC_OPTIONS itself). A phrase that short, without
+its question, reveals nothing withheld, and it would block ordinary commits.
 
 `collect_from_sources()` builds the same sets on the fly from the withheld
 sources when the file does not exist yet (before RUNBOOK step 7):
@@ -51,11 +55,11 @@ from typing import Iterable
 
 SHINGLE_WORDS = 8
 PREFIX_HEX = 12
-MIN_OPTION_WORDS = 3
-MAX_OPTION_WINDOW = SHINGLE_WORDS        # 3–8-word windows (review fix 2026-10-03; was 3–7)
+MIN_OPTION_WORDS = 4                     # Amendment 1 (2026-10-04); was 3
+MAX_OPTION_WINDOW = SHINGLE_WORDS        # 4–8-word windows (review fix 2026-10-03 made it 3–8; was 3–7)
 FORMAT_LINE = (
     "# exp036 withheld shingles v1: 12-hex sha256 prefixes of normalised 8-word shingles; "
-    "64-hex sha256 of normalised option strings of >= 3 words"
+    "64-hex sha256 of normalised option strings of >= 4 words"
 )
 
 # Normalised phrases that are never treated as withheld options.

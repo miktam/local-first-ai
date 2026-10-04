@@ -123,6 +123,8 @@ def run(cells: list[str], results_dir: Path, run_fns: Optional[dict] = None) -> 
 
 
 def main(argv: Optional[list[str]] = None) -> int:
+    from tools.precision import ensure_exact_fp32
+    ensure_exact_fp32()  # MLX_ENABLE_TF32=0 before any GPU work (tools/precision.py; Amendment 1)
     ap = argparse.ArgumentParser(description="exp_036 bench cells (BUILD_SPEC §5.7)")
     ap.add_argument("--cells", required=True, help=f"comma list from: {','.join(CELL_ORDER)}")
     ap.add_argument("--results-dir", type=Path, default=None)

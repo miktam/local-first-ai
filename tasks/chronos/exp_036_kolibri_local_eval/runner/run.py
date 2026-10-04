@@ -966,6 +966,8 @@ def cmd_status(args, ctx: Ctx) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    from tools.precision import ensure_exact_fp32
+    ensure_exact_fp32()  # MLX_ENABLE_TF32=0 before any GPU work (tools/precision.py; Amendment 1)
     ap = argparse.ArgumentParser(description="exp_036 runner (BUILD_SPEC §5.4)")
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("pilot")

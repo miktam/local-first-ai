@@ -26,6 +26,11 @@ import pytest
 # Do not leave __pycache__ in port/ and reference/ (or here) after a test run.
 sys.dont_write_bytecode = True
 
+# Exact fp32 on the GPU (tools/precision.py; Amendment 1): mlx reads
+# MLX_ENABLE_TF32 once, at the first GPU matmul, so it is set here before any
+# test module is imported. pytest_sessionstart below checks that it took.
+os.environ.setdefault("MLX_ENABLE_TF32", "0")
+
 TESTS_DIR = Path(__file__).resolve().parent
 EXP_DIR = TESTS_DIR.parent
 
@@ -112,6 +117,12 @@ def pytest_runtest_makereport(item, call):
 def pytest_make_collect_report(collector):
     outcome = yield
     _no_skips(outcome.get_result())
+
+
+def pytest_sessionstart(session):
+    """Refuse to run the suite with TF32 active (tools/precision.py; Amendment 1)."""
+    from tools.precision import ensure_exact_fp32
+    ensure_exact_fp32()
 
 
 @pytest.fixture(scope="session")

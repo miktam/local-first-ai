@@ -862,6 +862,8 @@ def build_context(args) -> GateContext:
 
 
 def main(argv=None) -> int:
+    from tools.precision import ensure_exact_fp32
+    ensure_exact_fp32()  # MLX_ENABLE_TF32=0 before any GPU work (tools/precision.py; Amendment 1)
     argv = list(sys.argv[1:] if argv is None else argv)
     ap = argparse.ArgumentParser(description="exp_036 Phase 0 gate")
     ap.add_argument("--all", action="store_true", help="every check, arms K8 and K4")
