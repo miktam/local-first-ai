@@ -1,0 +1,845 @@
+{
+  "assets": {
+    "code": [
+      {
+        "complete": true,
+        "head": "1c40f0c10d9b5c5c2f10a175a28007ebb64f7f4d",
+        "kind": "code",
+        "path": "$EXP036_DATA/IFBench-src",
+        "pinned_commit": "1c40f0c10d9b5c5c2f10a175a28007ebb64f7f4d",
+        "present": true,
+        "problems": [],
+        "repo": "https://github.com/allenai/IFBench",
+        "revision_ok": true
+      },
+      {
+        "complete": true,
+        "head": "65ec39e40e7dc9abb50e9bf1b4f32be3f6f16615",
+        "kind": "code",
+        "path": "$EXP036_DATA/RGB-src",
+        "pinned_commit": "65ec39e40e7dc9abb50e9bf1b4f32be3f6f16615",
+        "present": true,
+        "problems": [],
+        "repo": "https://github.com/chen700564/RGB",
+        "revision_ok": true,
+        "sha256_ok": {
+          "config/instruction.yaml": true,
+          "data/en.json": true,
+          "data/en_fact.json": true,
+          "data/en_int.json": true,
+          "evalue.py": true
+        }
+      }
+    ],
+    "complete": true,
+    "datasets": [
+      {
+        "bytes_on_disk": 16488,
+        "complete": true,
+        "data_files": 1,
+        "deep": {
+          "files_hashed": 3,
+          "mismatches": [],
+          "sha256": {},
+          "t_end": "2026-10-04T06:29:35Z",
+          "t_start": "2026-10-04T06:29:35Z"
+        },
+        "files": 3,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "kind": "dataset",
+        "path": "$EXP036_DATA/aime26",
+        "pinned_revision": "79037aebdb6580008fb960d17cb21fd3099083e3",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "79037aebdb6580008fb960d17cb21fd3099083e3"
+        ],
+        "repo": "math-ai/aime26",
+        "revision_ok": true
+      },
+      {
+        "bytes_on_disk": 87299,
+        "complete": true,
+        "data_files": 4,
+        "deep": {
+          "files_hashed": 6,
+          "mismatches": [],
+          "sha256": {
+            "deu/test-00000-of-00001.parquet": "abf98042a498a36431fee35d2b10435d0a6e371b420784c56fb9fd416f28c43e",
+            "fra/test-00000-of-00001.parquet": "58e34c5cf1912fe55b8f2181070376dcd87dc07cba44bc89768f2f438ee91f64",
+            "ita/test-00000-of-00001.parquet": "ed3b85e6a76661fb497f8d5e8ba4becd7e499778e8a4ed179fe00103980a4f9d",
+            "spa/test-00000-of-00001.parquet": "e866b670717815912a2b567b37ba91dfb36476b9fe9774aff6541effff7b3635"
+          },
+          "t_end": "2026-10-04T06:29:35Z",
+          "t_start": "2026-10-04T06:29:35Z"
+        },
+        "files": 6,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "kind": "dataset",
+        "path": "$EXP036_DATA/aime26-multilingual",
+        "pinned_revision": "3c8bc18f6c185ed2d66803dbd394839a3917fd82",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "3c8bc18f6c185ed2d66803dbd394839a3917fd82"
+        ],
+        "repo": "ellamind/aime26-multilingual",
+        "revision_ok": true
+      },
+      {
+        "bytes_on_disk": 99777,
+        "complete": true,
+        "data_files": 1,
+        "deep": {
+          "files_hashed": 3,
+          "mismatches": [],
+          "sha256": {
+            "data/train-00000-of-00001.parquet": "80037e4d99c39a55c1e2e7d5a863d8d9edeb5ebe136ba8c1e849f8c015027c6a"
+          },
+          "t_end": "2026-10-04T06:29:35Z",
+          "t_start": "2026-10-04T06:29:35Z"
+        },
+        "files": 3,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "kind": "dataset",
+        "path": "$EXP036_DATA/IFBench_test",
+        "pinned_revision": "2e8a48de45ff3bf41242f927254ca81b59ca3ae2",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "2e8a48de45ff3bf41242f927254ca81b59ca3ae2"
+        ],
+        "repo": "allenai/IFBench_test",
+        "revision_ok": true
+      },
+      {
+        "bytes_on_disk": 11552384,
+        "complete": true,
+        "data_files": 58,
+        "deep": {
+          "files_hashed": 60,
+          "mismatches": [],
+          "sha256": {
+            "af/test-00000-of-00001.parquet": "d526cbc23d083c29d51e9e3084fdde4ea802b4621b5ab243070ca24eff249e43",
+            "af/validation-00000-of-00001.parquet": "81fe631966d2359f6c3ae7635d3f6d38858f6a2aaa59b3547a286d0e21d15853",
+            "ar/test-00000-of-00001.parquet": "31b10e06eb60696af91ea8c02c7470aa25e5c49c4fad64ffad71bd79043f7001",
+            "ar/validation-00000-of-00001.parquet": "8919730f9a96696f59175d9745f594a7d19309488f7216b375913dab36c4fead",
+            "bn/test-00000-of-00001.parquet": "112281dee3dcb9d5987de1e7e982dd8f500a3126854393f2f031abca0770f3d0",
+            "bn/validation-00000-of-00001.parquet": "e718a3a2410ac479483c6b56fdf7b3cd2b35bcbdcb94528c177ed11468230f9a",
+            "cs/test-00000-of-00001.parquet": "020e31f1446cf15e497e2e0176ef9da9315a2a8cd9fd7d2876d14b012b9c34fb",
+            "cs/validation-00000-of-00001.parquet": "45b4a8d02388a2d83eec1ef0913a75295c250d0847086700e9560955b3179ee2",
+            "de/test-00000-of-00001.parquet": "465d1c679adc773348eb2ee129121ae0a4996eee528ba4aed01fc747a219edb9",
+            "de/validation-00000-of-00001.parquet": "089119948a2db9b72c6493b22eba93d0321e427c61cb43b435c751c4aef68eab",
+            "en/test-00000-of-00001.parquet": "e94717f3fd5f2d785dd0d3e38835274fcdd87402a3472bcb3172cc7e8f776c47",
+            "en/validation-00000-of-00001.parquet": "3fc1f51574905c5080c2d800e6d4cc363c0fb5a190dcb7e1ec4407295d0647bb",
+            "es/test-00000-of-00001.parquet": "b1f225cd3d81b69f85172de6b1079292e1b2753656c5b62ea5a091695a00d932",
+            "es/validation-00000-of-00001.parquet": "d76e9fd4c5ca9f2883d319b923b36ff9416d2c415895dafbda91c028a13a7a75",
+            "fr/test-00000-of-00001.parquet": "794158ec1b2731c77ce18375c00c3647b4b0ed0a99545592ce31b7a159b344ce",
+            "fr/validation-00000-of-00001.parquet": "04b929f1b5369b3aad106378f74393f6792f22de5252ec75a5e57d3b2a9c9afe",
+            "hi/test-00000-of-00001.parquet": "9af3cfa2aa0b500a2871831be70d65bd7dc98918816ccda455bd331d03e925ba",
+            "hi/validation-00000-of-00001.parquet": "c34f4d4dd025737b9b3e84702d3132ab51f1d5dca70a705b4a6fd6a117c70f7d",
+            "hu/test-00000-of-00001.parquet": "0d298ac0dadc4e829db977a131dabd59aa7e3cce8f87c9a0c9832e45b1d39008",
+            "hu/validation-00000-of-00001.parquet": "ca46d0ce2d78749a25d50e7d6e7b2314325f1b1d937714bc2e10082af1dc47ed",
+            "id/test-00000-of-00001.parquet": "4700647c31c8306b7bd323b66fdfc1ded303c5132c07dba4df265ae1f4a18c74",
+            "id/validation-00000-of-00001.parquet": "5003db8ccfeb203b7ed4b5914f1622af706ae882f196ff73d9ff13c87aed5304",
+            "it/test-00000-of-00001.parquet": "424a5616fe8a543999cdebaaf8af39f686e5a57afa2760ccec9bde9a85620f28",
+            "it/validation-00000-of-00001.parquet": "6abc996abc63cfab20d33d8b62e6c4a4ee6ac609b126f12f2e896df4ab84a916",
+            "ja/test-00000-of-00001.parquet": "7e3a1d0a5646701a74019f382a5fdad91891d1e5662a2416449dd883517b8f57",
+            "ja/validation-00000-of-00001.parquet": "9a37023226e680ae52b6577111b14f34983a3227c83cadb4ae6a8b2c6849c5a7",
+            "ko/test-00000-of-00001.parquet": "44a5a53de3277cdbeef30d1cfef9e1ebc0be48e19c942555d3e13c0d6e6d776c",
+            "ko/validation-00000-of-00001.parquet": "21871aa15358a8b8880ddea5710361fc242dc6337bfdc2619e70ece61747beed",
+            "mr/test-00000-of-00001.parquet": "192c44d8df21366cd8f2febbc09cc8436b075764f5a58ea9cee26714815b2ffa",
+            "mr/validation-00000-of-00001.parquet": "f6e2f5391a63e2d95bc894852bedbc19c5ff6a0368563133115c8f22970eb7ee",
+            "ne/test-00000-of-00001.parquet": "3245d10451828a41ca853b6e52468b67827617a80ceac22edfb6408579d27d11",
+            "ne/validation-00000-of-00001.parquet": "5934fd04b92356f259460fdd5e43ebf31319d4fe90a20e303152a9c2f7f37916",
+            "pt/test-00000-of-00001.parquet": "1459d04de5e269ea590bc79b4a5127e5144ab28c460a92a3920412f55bf2fb95",
+            "pt/validation-00000-of-00001.parquet": "34572cce8bf205ba0c2516dd345e6ec74c9ebf815cf5e2140ae35a05bd3e3268",
+            "ru/test-00000-of-00001.parquet": "c1e75b3b97db1ed5c0b67f447d1a17bbdbba8c72bdbe6f70437127cc08d5f48a",
+            "ru/validation-00000-of-00001.parquet": "6dc2ec9345a2e9a8453cb90ff5128f829edcf1f75cf6df05f91f5f96c44dc9f4",
+            "sr/test-00000-of-00001.parquet": "8a53a4859afcda73098c8b5c92f5480e017d2b068d9edcfe43c469177604eb8e",
+            "sr/validation-00000-of-00001.parquet": "7df8876681e3bb98b50e2b59c7e7931c7d2bf76368e703c11e28eef092335d4d",
+            "sw/test-00000-of-00001.parquet": "0b5a3ccef0460d537dd2a2b60d1e4e6c9bf186ab84cf1760f7ff7c4dcd77cfdb",
+            "sw/validation-00000-of-00001.parquet": "807be216920991edb25b35c14a2a337fd8c10b4c11086077afffb3a575bb1e22",
+            "te/test-00000-of-00001.parquet": "d35eb6429e85f2381b7eb578bfefc3dad1a4b79f1ec2c7c6231b24bb5a22b352",
+            "te/validation-00000-of-00001.parquet": "d01f0451e7013e9122d8c42925dc3e4da388362ead5e3ac28733aa6fd05c142d",
+            "th/test-00000-of-00001.parquet": "e0b45ce52b80dc82b87b4850540d1c2ea46fcb4cd9bae4cdc77fd8ba84917721",
+            "th/validation-00000-of-00001.parquet": "9af12597c9167d639e04160c0732828a50a7fa5d5e235d64286a0d76422b6635",
+            "uk/test-00000-of-00001.parquet": "bbf4768dc95651925c93b60df6378ffcc6e1f5eb37bc88b79eb75ff971259469",
+            "uk/validation-00000-of-00001.parquet": "f6d2401aab5c7ed51db87ce4245463ce6756c3fa44afbd64d615aaeca2e33c10",
+            "ur/test-00000-of-00001.parquet": "714d60431ef24b259973a96d650867946aba92970051dd5a3f1cc5220bfd6722",
+            "ur/validation-00000-of-00001.parquet": "0f662e9fbb7e50b99a8d9924498af01fc9515dca2872cf78b3bcc3ab6e2c28ae",
+            "vi/test-00000-of-00001.parquet": "b17bbfe305c59ee69ea0811126ed4bba034ac9a2114b86442e71064719d99155",
+            "vi/validation-00000-of-00001.parquet": "0d7a0c3cc031da07bea1df49b0d9fde0ff436754f69144f8933f2b853bd65ab4",
+            "wo/test-00000-of-00001.parquet": "f0af345b34ff1c5801b8d1939d1ace905a2a9bbda73502ade266d20c9a94fb6a",
+            "wo/validation-00000-of-00001.parquet": "75bae3d6eeae5649d2698ee24adfd06459dde8ef4639792180d168f007c058ee",
+            "yo/test-00000-of-00001.parquet": "1d1eb6f16587470c6c3eab4a9bce1ea168c6a496bffb796743aa6df35f84be0a",
+            "yo/validation-00000-of-00001.parquet": "7ae49df71322e74429f7da60a2cd37e5c6a8edace9c8020426d81c28479f8600",
+            "zh/test-00000-of-00001.parquet": "38984cbb6a8051fa8134b10049fc8f38e5f915b049ec4a9937baaaa4a40d08d8",
+            "zh/validation-00000-of-00001.parquet": "676352d9a1e2a4c85de8fecd6be2c7575c395d98fa0aaf737c4b15d3c6501125",
+            "zu/test-00000-of-00001.parquet": "978c1103ba505fe1fe78d2e394189f24c4f6c5791716bdf86ce1f7d6559d917d",
+            "zu/validation-00000-of-00001.parquet": "8e19f76ce1f589a13ec4a9404d9fe522db5179882ec586da80278471073005a5"
+          },
+          "t_end": "2026-10-04T06:29:35Z",
+          "t_start": "2026-10-04T06:29:35Z"
+        },
+        "files": 60,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "kind": "dataset",
+        "path": "$EXP036_DATA/MMLU-ProX-Lite",
+        "pinned_revision": "e82aafb9460529687d3c7e51b401d8dd1dd309dd",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "e82aafb9460529687d3c7e51b401d8dd1dd309dd"
+        ],
+        "repo": "li-lab/MMLU-ProX-Lite",
+        "revision_ok": true
+      },
+      {
+        "bytes_on_disk": 178260098,
+        "complete": true,
+        "data_files": 58,
+        "deep": {
+          "files_hashed": 60,
+          "mismatches": [],
+          "sha256": {
+            "af/test-00000-of-00001.parquet": "7594157669242cfb0e38d9d0e5cb6bb88cf599b22e0e9657e5228f2789fa2321",
+            "af/validation-00000-of-00001.parquet": "6a8eb36451e0a3bdd08e8360c8126cd392f2f9975ee20211f6ffdd09f80bbb97",
+            "ar/test-00000-of-00001.parquet": "a103ec2065e58aef1ea1f88c99f9d8eababe442c6804af01cc04b2b8e1ae83ad",
+            "ar/validation-00000-of-00001.parquet": "e27efc037c1ae5588856d1473e502e47d97dd431161a206aa865a5d8778d31ba",
+            "bn/test-00000-of-00001.parquet": "f243f051eece488d88bd65c080e17a1b410978e601723b806f81f95418fb197d",
+            "bn/validation-00000-of-00001.parquet": "95459e21adc1f2c87430af2f71ad5af18f2de74859fce73ae6bc71335bf63b9a",
+            "cs/test-00000-of-00001.parquet": "302fe7027a6acbff5698b3594688039ae2a8ff1280439724382588778ded66eb",
+            "cs/validation-00000-of-00001.parquet": "ed57e07d1878b44eef830c3568021b45928db1dba7ff89e0f067b9e332abf9c5",
+            "de/test-00000-of-00001.parquet": "c641ae0cef6e885fe8b6a8364c58def1f0866b779d7a77ea6b0746c8756eba18",
+            "de/validation-00000-of-00001.parquet": "6d36a12bba886a0e234af626978056f22e71ae7f04e59d882973cc8d7dc385ae",
+            "en/test-00000-of-00001.parquet": "0b0e1451ca45d44385d936c953336a3a9e68a53af498c699b02c4f960ae24b7f",
+            "en/validation-00000-of-00001.parquet": "2db70f771e66a321b8c6dd816b461d2dcc06044a4dff0d95bfc3ffd97fe3ef54",
+            "es/test-00000-of-00001.parquet": "81841f53bdfb69e6baba9c01d6d4035447e37fe44b2c68b284924587711edaf0",
+            "es/validation-00000-of-00001.parquet": "27b41446c83be65a3bf76851e8a2384c133f0b9ab1295cf435c2dd57882e4d3c",
+            "fr/test-00000-of-00001.parquet": "1c41b831d27fa57eab9456774065d760f169dc07b50aec929dbfc01360962636",
+            "fr/validation-00000-of-00001.parquet": "1414899a28715eecc1901a7568e11cb281a2846ba1ab6f3d6dd1b218d29807f5",
+            "hi/test-00000-of-00001.parquet": "cf3c849fd995037bfacd2f39dcbb3cb93d7fb9e56040068623f175cbf87292b9",
+            "hi/validation-00000-of-00001.parquet": "cb5894ee481786e102eef29590fdac1bd5684ce42c904dd09294742a20703d84",
+            "hu/test-00000-of-00001.parquet": "8980f9dfe5c6c4bdd39b5e75c2df6b583c0aec36f898d07a591707d48f7be080",
+            "hu/validation-00000-of-00001.parquet": "423ca5c4bbcac1ac957996008e1680dce0d9f1668b223297cb8b7fb82bf73107",
+            "id/test-00000-of-00001.parquet": "a466f60701871a43d9af5fdff32095d1288ed133670f12d0a427a25992d04af2",
+            "id/validation-00000-of-00001.parquet": "4df25a8a7ff6a3d423d05cc93142ad12f88b4fb54bfc468252be70998c91a935",
+            "it/test-00000-of-00001.parquet": "9266d0793870628cff0929da0cb9b0dc60529303f0e8104caff29044c4376468",
+            "it/validation-00000-of-00001.parquet": "57a5616348ef6a249db57f5544092d4bf64151aedb17382e1b094ebba5df0908",
+            "ja/test-00000-of-00001.parquet": "442a074c184a2cde8d534d48e40a1c518b2237107e84c24322fa9da59daab35c",
+            "ja/validation-00000-of-00001.parquet": "80c0df898b8edbe536dca28475df25d0d64872efc2f1c3ef7a2b14fe013e460c",
+            "ko/test-00000-of-00001.parquet": "ba8576b9924fe7a84eec3ceb268a6ccd5b97243f63ce348207e8f74a15b2deb0",
+            "ko/validation-00000-of-00001.parquet": "76b4a17260ad835246fdf4951fbad650f940fd125fdec892e74c05d512e32f66",
+            "mr/test-00000-of-00001.parquet": "cc88b123481df47fbeed05cbba648db34b897d4d37e9851e793f471d6ee7714d",
+            "mr/validation-00000-of-00001.parquet": "c539d5d75fc08a9d350abbb1e7f497555ca73b736b0c81c23b06fd7f2bb616eb",
+            "ne/test-00000-of-00001.parquet": "87b9f931c9c7e7e954017d705600bce30c559752f1381b071fcadac9ea479e76",
+            "ne/validation-00000-of-00001.parquet": "54a2ae8f4425568790cbd666897d6fa7b3a375abec7f9cb9a55a19f7bfe8e1e1",
+            "pt/test-00000-of-00001.parquet": "7990e62c9808fa94ee794d516f5932e060886d1893e7c1e31155a30f19a70b6b",
+            "pt/validation-00000-of-00001.parquet": "cdda094a624725b75601354ad863912e703972fecf6e5cc81c280d1e4718dc81",
+            "ru/test-00000-of-00001.parquet": "00fbd67cab968df4f7f136235d6c9f8c33fb4044933aa2f5c15b0423a1eb7dbf",
+            "ru/validation-00000-of-00001.parquet": "22102323dcb75063ff2f23085a5ab444cabe888305e7f70ae613135f989f15cc",
+            "sr/test-00000-of-00001.parquet": "ba87d44e9cf523d6e85d3fd293cd226814343e816834432ab16f556ba03a46e9",
+            "sr/validation-00000-of-00001.parquet": "1d67e10778cfcb9f00a8699e05b386659a51249dca65ab71f18b47ad492526e0",
+            "sw/test-00000-of-00001.parquet": "6fccb1c34ca390d37b759c479b9b6b51eab6a3dfd6ac7a2cf2b1a58129124cd9",
+            "sw/validation-00000-of-00001.parquet": "feefc35a76703bc212e4f53a6f41366f874bec0fed758a19eb3ceccebbda0f06",
+            "te/test-00000-of-00001.parquet": "14817ebce488a2b541f106bc1be9216492f706ccc163bcf06cbfe86bfe0b38c8",
+            "te/validation-00000-of-00001.parquet": "c6588bc84443344c05a2a229098015f728bb8f5e14779ad2f8314688d4729ca3",
+            "th/test-00000-of-00001.parquet": "660da5b011693c82247e48021cc4dcf62b4afbd36b861e1454883817001d96c6",
+            "th/validation-00000-of-00001.parquet": "ec3d509f74b02f252c3d7938059e8329eb1a9eaee5ada27fde8604a28f36b318",
+            "uk/test-00000-of-00001.parquet": "c74e89228824128cd8d9ccea54f75a3ebcdb167b2b154ab45fdde79cb0ed9881",
+            "uk/validation-00000-of-00001.parquet": "3b877f41272dda495e639a8abc0e372491be11d0660e7bf7b57e83a8f40bfcca",
+            "ur/test-00000-of-00001.parquet": "0d3c70d24c9bde8913e790e09ea751110e20a37bdf4ce955c72687a30af106e1",
+            "ur/validation-00000-of-00001.parquet": "b027cc053e519b8338a59a1836a762be49f6048e036bae746c241eb40ae672b4",
+            "vi/test-00000-of-00001.parquet": "93044d3c5e880859de0ac87b8ab126a66c857f5e5bde0354bb82dcde6ba60b5b",
+            "vi/validation-00000-of-00001.parquet": "0cf9cc8fd98e48cde5be50afc55bd333547f41e4d599bbd2d1531fd6f266d1b3",
+            "wo/test-00000-of-00001.parquet": "586213da79933c2458200560774fd56d56d8f1c52863d560fa7c4a9cf393de9f",
+            "wo/validation-00000-of-00001.parquet": "6e635a2a5f9fb490172ee1075cef379db94ad7754327d76c08011623cce41864",
+            "yo/test-00000-of-00001.parquet": "c78be4be0a514ca717d74a564462d2416f9ac47819f91eb862ccfae0db4a2ca6",
+            "yo/validation-00000-of-00001.parquet": "8416f8bfce8f04cab26a694516c7cb5a82f1d21ef7b52a960696d5bdeb32e24a",
+            "zh/test-00000-of-00001.parquet": "61c6e41acc62d6a8ba02b560754cfae751da56cfb220bb438d2d3bd7cbdc11ab",
+            "zh/validation-00000-of-00001.parquet": "22c3d98cc2be5fe01ee6a100670036b6eb8d6d1c4263704e42b9f3a591cfe7be",
+            "zu/test-00000-of-00001.parquet": "755eb8b83c357f095235dc2bda03be8d37cebb0e6b1d9feb3c803c88c32334aa",
+            "zu/validation-00000-of-00001.parquet": "5dc132ff670784e68ff5656a49be2ce6870ac347c5db75514b6578474efc91eb"
+          },
+          "t_end": "2026-10-04T06:29:35Z",
+          "t_start": "2026-10-04T06:29:35Z"
+        },
+        "files": 60,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "kind": "dataset",
+        "path": "$EXP036_DATA/MMLU-ProX",
+        "pinned_revision": "8e6106a6c6ce1c5027e66cc338143cf997b2aa09",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "8e6106a6c6ce1c5027e66cc338143cf997b2aa09"
+        ],
+        "repo": "li-lab/MMLU-ProX",
+        "revision_ok": true
+      },
+      {
+        "bytes_on_disk": 8713057,
+        "complete": true,
+        "data_files": 6,
+        "deep": {
+          "files_hashed": 8,
+          "mismatches": [],
+          "sha256": {},
+          "t_end": "2026-10-04T06:29:35Z",
+          "t_start": "2026-10-04T06:29:35Z"
+        },
+        "files": 8,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "kind": "dataset",
+        "path": "$EXP036_DATA/gpqa",
+        "pinned_revision": "83022cefff930aea54f654c0b282e74b9eeda5c6",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "83022cefff930aea54f654c0b282e74b9eeda5c6"
+        ],
+        "repo": "Idavidrein/gpqa",
+        "revision_ok": true
+      },
+      {
+        "bytes_on_disk": 2225857,
+        "complete": true,
+        "data_files": 9,
+        "deep": {
+          "files_hashed": 11,
+          "mismatches": [],
+          "sha256": {
+            "ces/train-00000-of-00001.parquet": "d46ba679268e16624ca054c5607c9567b72cd39038ec3c2a88726ab2d41e6765",
+            "dan/train-00000-of-00001.parquet": "e39e925d1f2a1559470c2d5a6e41f979b965b65e5577e797722de0c42d9220b3",
+            "deu/train-00000-of-00001.parquet": "57af6d21b693585db9321d57532cf0d06b28956d7803f46032cf8e846b5e68fd",
+            "fin/train-00000-of-00001.parquet": "3e9798e2768a2ece6ff226eabbd62ce1e0f5775a8dc8f8316e273005222ffec3",
+            "fra/train-00000-of-00001.parquet": "23a23e9c8876c16cf6d81e5d02b715e6afc6c74a4e0bc1e52698e8d65ed5b14c",
+            "ita/train-00000-of-00001.parquet": "d7b501c4a56f817567deaccfc8f72c875af71d2d6dd156db5e05498ab993b337",
+            "nld/train-00000-of-00001.parquet": "98bf48f016eef2953caefb2371bd36e44686a79ab336f5790a67d09ac5f2540f",
+            "pol/train-00000-of-00001.parquet": "eaafc91b219a083984f936f7ec53fd6bd765853e096ef101b1c01fb007f640fc",
+            "spa/train-00000-of-00001.parquet": "2f7a9dee6fb71283253bae1129e51ddee46312f97482e45e9c4eaa655b8a07b5"
+          },
+          "t_end": "2026-10-04T06:29:35Z",
+          "t_start": "2026-10-04T06:29:35Z"
+        },
+        "files": 11,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "kind": "dataset",
+        "path": "$EXP036_DATA/gpqa-multilingual",
+        "pinned_revision": "bc70ca1791afa241a98c972e126c2decaf0a367d",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "bc70ca1791afa241a98c972e126c2decaf0a367d"
+        ],
+        "repo": "ellamind/gpqa-multilingual",
+        "revision_ok": true
+      },
+      {
+        "bytes_manifest": 104264728,
+        "bytes_on_disk": 104264728,
+        "complete": true,
+        "data_files": 1,
+        "deep": {
+          "files_hashed": 1,
+          "mismatches": [],
+          "sha256": {
+            "data/deu_Latn/test/000_00000.parquet": "f370564f527a10cf125f267d8f10175d6a6366390480620e90a469bbf80a2a46"
+          },
+          "t_end": "2026-10-04T06:29:35Z",
+          "t_start": "2026-10-04T06:29:35Z"
+        },
+        "files": 1,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "kind": "dataset",
+        "path": "$EXP036_DATA/fineweb-2",
+        "pinned_revision": "af9c13333eb981300149d5ca60a8e9d659b276b9",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "af9c13333eb981300149d5ca60a8e9d659b276b9"
+        ],
+        "repo": "HuggingFaceFW/fineweb-2",
+        "revision_ok": true,
+        "sha256_ok": {
+          "data/deu_Latn/test/000_00000.parquet": true
+        },
+        "size_ok": true
+      }
+    ],
+    "environments": [
+      {
+        "name": "ifbench-venv",
+        "path": "$EXP036_MODELS/ifbench-venv",
+        "present": true,
+        "required_on_run_host": false
+      },
+      {
+        "name": "nltk_data",
+        "path": "$EXP036_MODELS/nltk_data",
+        "present": true,
+        "required_on_run_host": false
+      }
+    ],
+    "models": [
+      {
+        "bytes_manifest": 156228414296,
+        "bytes_on_disk": 156228414296,
+        "complete": true,
+        "data_files": 37,
+        "deep": {
+          "files_hashed": 40,
+          "mismatches": [],
+          "sha256": {
+            "model-00001-of-00032.safetensors": "e626660074fd9ed3e3644f1d62f23be6adad9437e876f5f9b18260d8382d260b",
+            "model-00002-of-00032.safetensors": "77259681f2b864d0c0634225d5b31cc15befa1405d062dd2089b41efeb5e6a8b",
+            "model-00003-of-00032.safetensors": "ba03f0cbe6e48bed0140e5c52fc540cc44f4854887550db5ff6fac91a866142a",
+            "model-00004-of-00032.safetensors": "68cc07ab7a3614104ab0ee8ce186737638eac3e8f32eb8d2c56742a0437d1680",
+            "model-00005-of-00032.safetensors": "80ab29ca3d0d917cd83da0205d05b976d8e06100e2ca95ed66175e316550e3ae",
+            "model-00006-of-00032.safetensors": "24e268797a3e13be638f9edf1f55c872346cf506786322afc6582e4cfa8c4373",
+            "model-00007-of-00032.safetensors": "f3c8fcdf3bbc5b3af5c12bf8395d091b14c29957afa061f48c4c2685b5b8c8db",
+            "model-00008-of-00032.safetensors": "648bbb1d3637a96df3f75cb6865846322a4af13bf38fd7817c3e40077d651cc7",
+            "model-00009-of-00032.safetensors": "481958b40e88a712ea468da50b8f501bf2fe329330881fc3b1b1c3be1ec90689",
+            "model-00010-of-00032.safetensors": "55d415d65584784fc523a26c9b328e56aec0ddea9fe42a9b48988bc800e67ae1",
+            "model-00011-of-00032.safetensors": "1d36e5b599317d08d0232bb5e3bdb79f53bd6008294888a66b54d202c5263fea",
+            "model-00012-of-00032.safetensors": "02be77ce110c6afc379c6ef23fad928205cddf26ddea8155aa274bed1cfd0efe",
+            "model-00013-of-00032.safetensors": "94c607a19b8254ad78648d91d8808b2ffee5733e27739683225175e050c465c3",
+            "model-00014-of-00032.safetensors": "021de7d92c76f23e31cfaf7f0053e1ce9359efeb93fd90728e658cceb9fe2b2a",
+            "model-00015-of-00032.safetensors": "1383a4d989beac327c464bd3dd0a8008a199fca3d8c93d2e05dacc76d1f49163",
+            "model-00016-of-00032.safetensors": "caf525ce7d499e4fbb7e3c6388346a1e8d602baa35f1946387aabb0143b7b696",
+            "model-00017-of-00032.safetensors": "23af12d4220b2ebd42fcc030c5f98651adb73e96f0819e7dfbfed9454f98c2bd",
+            "model-00018-of-00032.safetensors": "84e7b32097760e1fbe4380d424ab2c723d101af2283f3aea956a7f8dd30625da",
+            "model-00019-of-00032.safetensors": "a95e33a7082c63f590d5f1893425f17bb87adf8814039dbf76adbfd64fd0e639",
+            "model-00020-of-00032.safetensors": "55e35b6f1d394cd024d3f4819c63a66bbd5c135168823b02fdce2c736e79e330",
+            "model-00021-of-00032.safetensors": "e2c07bd50fdec4fabdac18cf7a24db21561bccc33c73dd038a409db2e9632c8f",
+            "model-00022-of-00032.safetensors": "41e87862dc6209d187842822e7f075763b9eb0dcc439b5be71d82e8162fb8765",
+            "model-00023-of-00032.safetensors": "e0d663b7503a40dff70cf78b7497a06688efbf07d584f9cbb3b82cc70267c422",
+            "model-00024-of-00032.safetensors": "8fae68d67883f561d205a9dde47af5815e35b472ff43452e9599cd26eeec2060",
+            "model-00025-of-00032.safetensors": "0b46e002887b466bc2c9ae63709afaa1a2ad088498da76dd0919b70e5a6126b8",
+            "model-00026-of-00032.safetensors": "b25cdfb7c0a656ac63b506310ff9db4e1383a76a9455722eb0938de0f697e998",
+            "model-00027-of-00032.safetensors": "765f2b2e020262d9c17a8a9a20ffd711f14ea3014b222f26d3ec1aaa11959aa2",
+            "model-00028-of-00032.safetensors": "c811b837b63d0cb79116f76a856dca1de6e3915db5df65ca62388c4484903a0d",
+            "model-00029-of-00032.safetensors": "42c9771487382501d2aa2a5942fbb15062bf18bdbade5aed7b8b4ca180d7e1ff",
+            "model-00030-of-00032.safetensors": "d6b1e31e529b6472a2da690e879ed9ae70719030b4932e560b1a952aae3748e5",
+            "model-00031-of-00032.safetensors": "9a7c95968efd33a0bc6c15210a8df021f342ebd4bf3dd442975422a006238418",
+            "model-00032-of-00032.safetensors": "8aa64fa468f49b55e5fd80da2d6830a01635a1ef53fd5ae0e573a1a6c657d2b3"
+          },
+          "t_end": "2026-10-04T06:29:22Z",
+          "t_start": "2026-10-04T06:29:11Z"
+        },
+        "files": 40,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "index_shards": 32,
+        "kind": "model",
+        "lfs": {
+          "deep_mismatches": [],
+          "etag_mismatch": [],
+          "missing": [],
+          "shards_expected": 32,
+          "size_mismatch": [],
+          "source": "tools/kolibri_lfs_oids.json"
+        },
+        "path": "$EXP036_MODELS/Kolibri-1-BF16",
+        "pinned_revision": "7a8f290e7858825c3cf5e4c447ba68345de9f1d3",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "7a8f290e7858825c3cf5e4c447ba68345de9f1d3"
+        ],
+        "repo": "Aleph-Alpha/Kolibri-1-BF16",
+        "revision_ok": true,
+        "size_ok": true
+      },
+      {
+        "bytes_manifest": 28000000000,
+        "bytes_on_disk": 27986024228,
+        "complete": true,
+        "data_files": 13,
+        "deep": {
+          "files_hashed": 15,
+          "mismatches": [],
+          "sha256": {
+            "model-00001-of-00006.safetensors": "fdf66cb7cec3616751e2162a7581bd9390fd7ab35eb4fbecb749e3b2dcd319f6",
+            "model-00002-of-00006.safetensors": "54ec0f76c9514f2576f908a86923af092dd81d0b8eae44fa2d4919e5a131d4e2",
+            "model-00003-of-00006.safetensors": "8fbffdbdf0a768892a84c8ee5c827f66e131ad40568ba4c202bae9626d627aa9",
+            "model-00004-of-00006.safetensors": "b89800b466a26de4bb4eca33d5970fd6d14255fe6d22feddaf3d1b8d82431df8",
+            "model-00005-of-00006.safetensors": "790699d63d35744aafb4b3dd3da5f33cc0daf759e5800d23e99838a142916082",
+            "model-00006-of-00006.safetensors": "08709a250e4c174b302adab292532f29ab1de6e0ab52567969208be31c5facc8",
+            "tokenizer.json": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f"
+          },
+          "t_end": "2026-10-04T06:29:24Z",
+          "t_start": "2026-10-04T06:29:22Z"
+        },
+        "files": 15,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "index_shards": 6,
+        "kind": "model",
+        "path": "$EXP036_MODELS/gemma-4-26b-a4b-it-8bit",
+        "pinned_revision": "33c6d23798a0af159529890f79329206dbfbd73c",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "33c6d23798a0af159529890f79329206dbfbd73c"
+        ],
+        "repo": "mlx-community/gemma-4-26b-a4b-it-8bit",
+        "revision_ok": true,
+        "size_ok": true
+      },
+      {
+        "bytes_manifest": 37700000000,
+        "bytes_on_disk": 37748367994,
+        "complete": true,
+        "data_files": 19,
+        "deep": {
+          "files_hashed": 21,
+          "mismatches": [],
+          "sha256": {
+            "model-00001-of-00008.safetensors": "ae1ced7360792820cfc12f2e0c8e1ca4d95c712c122e08ebb474b197dee3edaf",
+            "model-00002-of-00008.safetensors": "b8fdc3700f7339dc29d0e8504d15bc61e9beda7dc69eea037084cfa4067f1b26",
+            "model-00003-of-00008.safetensors": "8a7851d9152dd39369026ab0ac7c369e4e62ce67ea1e3836862ff0c651176675",
+            "model-00004-of-00008.safetensors": "3ad6623bb7ff4ddf39ee3854d473d66543ea8fdffc48f03ae4a1dc866da34b36",
+            "model-00005-of-00008.safetensors": "ec9d987a3c499146e6e8edd92afb3943dfd35c908a3de0685346c1ea6901e383",
+            "model-00006-of-00008.safetensors": "9a843214e1e72bfbae1d2c61283e25ee5930b5ccdbe15dccc7d72fba3a5812c4",
+            "model-00007-of-00008.safetensors": "0a1ed4b82de64955eefb212b2eda57acfa1c2330a4258448e5c7f0f8aaf3649a",
+            "model-00008-of-00008.safetensors": "41a1d955de1a9a97de3abebc40b5519b02d542adf266fefbd33b24dc674aef39",
+            "tokenizer.json": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4"
+          },
+          "t_end": "2026-10-04T06:29:27Z",
+          "t_start": "2026-10-04T06:29:24Z"
+        },
+        "files": 21,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "index_shards": 8,
+        "kind": "model",
+        "path": "$EXP036_MODELS/Qwen3.6-35B-A3B-8bit",
+        "pinned_revision": "e06a74e6236a60c8367e1a3214e83d8b61b637b0",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "e06a74e6236a60c8367e1a3214e83d8b61b637b0"
+        ],
+        "repo": "mlx-community/Qwen3.6-35B-A3B-8bit",
+        "revision_ok": true,
+        "size_ok": true
+      },
+      {
+        "bytes_manifest": 29500000000,
+        "bytes_on_disk": 29531521322,
+        "complete": true,
+        "data_files": 17,
+        "deep": {
+          "files_hashed": 19,
+          "mismatches": [],
+          "sha256": {
+            "model-00001-of-00006.safetensors": "c7921fe72af5c961c3c4230ea25068ed6d1e502d5ecb2b4a53b7c9c213effa0c",
+            "model-00002-of-00006.safetensors": "e9d93d15495354045da281f102649b99793e5b6ed0e05852c58f46e6616b54a0",
+            "model-00003-of-00006.safetensors": "7015f40310c86a18230e28644832b624532333d5dfbf7584e6c62341dbd8975e",
+            "model-00004-of-00006.safetensors": "7dc8ae53ed51d153e6b59499cdf004bf6ef15aab6757c7604ed4834774abc2c2",
+            "model-00005-of-00006.safetensors": "8817c22c01aebdcde54eac315e9766f705eb512ba7ba84ac47501c663f930ac5",
+            "model-00006-of-00006.safetensors": "fce51843fc07e1c67c5ec6d19edb46e4fa8d2b51a1cb6c8316b0a7cc069c0eb4",
+            "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523"
+          },
+          "t_end": "2026-10-04T06:29:29Z",
+          "t_start": "2026-10-04T06:29:27Z"
+        },
+        "files": 19,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "index_shards": 6,
+        "kind": "model",
+        "path": "$EXP036_MODELS/Qwen3.8-27B-8bit",
+        "pinned_revision": "815b83c0df8ffd1d1b5244cf75fd6ef14fca9ef9",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "815b83c0df8ffd1d1b5244cf75fd6ef14fca9ef9"
+        ],
+        "repo": "mlx-community/Qwen3.8-27B-8bit",
+        "revision_ok": true,
+        "size_ok": true
+      },
+      {
+        "bytes_manifest": 15400000000,
+        "bytes_on_disk": 15373588575,
+        "complete": true,
+        "data_files": 10,
+        "deep": {
+          "files_hashed": 12,
+          "mismatches": [],
+          "sha256": {
+            "model-00001-of-00003.safetensors": "683f420ee09550b8027bf0335c4202e196b37eb520b60a4bcbe8690b9e388c07",
+            "model-00002-of-00003.safetensors": "feab2873c2976fb7ed666f8462549564a29409364388e0c8f6b015729d165e15",
+            "model-00003-of-00003.safetensors": "bc607486deb1de5bc7e459932fda5c776a4f816b368feaa661bab8cfbb47e567",
+            "tokenizer.json": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f"
+          },
+          "t_end": "2026-10-04T06:29:31Z",
+          "t_start": "2026-10-04T06:29:29Z"
+        },
+        "files": 12,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "index_shards": 3,
+        "kind": "model",
+        "path": "$EXP036_MODELS/gemma-4-26b-a4b-it-4bit",
+        "pinned_revision": "0d77464eeb233a2da68ebf9d7dc4edaac7db956d",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "0d77464eeb233a2da68ebf9d7dc4edaac7db956d"
+        ],
+        "repo": "mlx-community/gemma-4-26b-a4b-it-4bit",
+        "revision_ok": true,
+        "size_ok": true
+      },
+      {
+        "bytes_manifest": 20400000000,
+        "bytes_on_disk": 20429169263,
+        "complete": true,
+        "data_files": 15,
+        "deep": {
+          "files_hashed": 17,
+          "mismatches": [],
+          "sha256": {
+            "model-00001-of-00004.safetensors": "09f3e6ecb0b7af6e6a38bc8169a134c821b0924c2679b2bb8f4426ad38d032b8",
+            "model-00002-of-00004.safetensors": "31dcdb1c49eebdb1505bd14e3cb33f9cf900bd2546b638f2464694ae763a033f",
+            "model-00003-of-00004.safetensors": "3e66de06a1f03dade16a612a368cfce4a4c9caa4efd7d28185454384082cec03",
+            "model-00004-of-00004.safetensors": "a5d0cf03519c26f8b506df6b0ba60526e5c08c8cea22d0c21ce92950e58a5422",
+            "tokenizer.json": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4"
+          },
+          "t_end": "2026-10-04T06:29:33Z",
+          "t_start": "2026-10-04T06:29:31Z"
+        },
+        "files": 17,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "index_shards": 4,
+        "kind": "model",
+        "path": "$EXP036_MODELS/Qwen3.6-35B-A3B-4bit",
+        "pinned_revision": "38740b847e4cb78f352aba30aa41c76e08e6eb46",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "38740b847e4cb78f352aba30aa41c76e08e6eb46"
+        ],
+        "repo": "mlx-community/Qwen3.6-35B-A3B-4bit",
+        "revision_ok": true,
+        "size_ok": true
+      },
+      {
+        "bytes_manifest": 16100000000,
+        "bytes_on_disk": 16081490933,
+        "complete": true,
+        "data_files": 13,
+        "deep": {
+          "files_hashed": 15,
+          "mismatches": [],
+          "sha256": {
+            "model-00001-of-00003.safetensors": "6cc1508e96fb5d0865dfd5753a79f4ec60651bf3e2a82844a7e8ae9c60528c0d",
+            "model-00002-of-00003.safetensors": "83f2a20ca8058f486a3634a27faf99587f4cd3c156a83dee34fb99e6ac178670",
+            "model-00003-of-00003.safetensors": "31b8c91ef899f79efaaa69e3d2c096f6e2ebeb2ff20e29222abbd9ebc79e560a",
+            "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523"
+          },
+          "t_end": "2026-10-04T06:29:35Z",
+          "t_start": "2026-10-04T06:29:33Z"
+        },
+        "files": 15,
+        "files_without_metadata": 0,
+        "incomplete_files": 0,
+        "index_shards": 3,
+        "kind": "model",
+        "path": "$EXP036_MODELS/Qwen3.8-27B-4bit",
+        "pinned_revision": "10c35caafbb80f7dc6a7a432cdd11af10a6d4818",
+        "present": true,
+        "problems": [],
+        "recorded_revisions": [
+          "10c35caafbb80f7dc6a7a432cdd11af10a6d4818"
+        ],
+        "repo": "mlx-community/Qwen3.8-27B-4bit",
+        "revision_ok": true,
+        "size_ok": true
+      }
+    ],
+    "problems": []
+  },
+  "disk": {
+    "conversions_present": {
+      "K4": false,
+      "K8": false
+    },
+    "free_bytes": 2847603245056,
+    "missing_download_bytes": 58896264,
+    "ok": true,
+    "required_bytes": 260058896264,
+    "rule": "≥ 260 GB free beyond the downloads before conversion, ≥ 120 GB after it",
+    "volume_of": "$EXP036_MODELS"
+  },
+  "exp007_fixtures": {
+    "pad_120k.txt": {
+      "bytes": 720268,
+      "path": "$LFA/tasks/chronos/exp_007_hardware_comparison/fixtures/padding/pad_120k.txt",
+      "present": true,
+      "sha256": "de77c7b8e0db9a6aaf5f564dc8bfa9b75e08cba6c83da0fc32e5c24a69c909c4"
+    },
+    "pad_15k.txt": {
+      "bytes": 90032,
+      "path": "$LFA/tasks/chronos/exp_007_hardware_comparison/fixtures/padding/pad_15k.txt",
+      "present": true,
+      "sha256": "6fba3a6f8f7b932af9167d081cb689340a4d652e6992fbf70dfe8a95e0d4e51a"
+    },
+    "pad_4k.txt": {
+      "bytes": 24008,
+      "path": "$LFA/tasks/chronos/exp_007_hardware_comparison/fixtures/padding/pad_4k.txt",
+      "present": true,
+      "sha256": "8d3c5d8a3bcfb633f492e2c673f5898fb42a9ae0f1f9caae1317c1dc3d53c0aa"
+    }
+  },
+  "git": {
+    "dirty": true,
+    "head": "27ee4cf71d2d1d978ef6db4266df8ffc6d030593",
+    "head_equals_upstream": true,
+    "identity": {
+      "email": "hello@localfirstai.eu",
+      "name": "Miktam"
+    },
+    "identity_ok": true,
+    "n_dirty_paths": 2,
+    "upstream": "27ee4cf71d2d1d978ef6db4266df8ffc6d030593",
+    "upstream_ref": "origin/main"
+  },
+  "host_label": "mbp (M5 Max, 128 GB)",
+  "machine": {
+    "chip": "Apple M5 Max",
+    "gpu_cores": 40,
+    "hw_model": "Mac17,7",
+    "macos": {
+      "build": "26A428",
+      "product_version": "27.0"
+    },
+    "memory_bytes": 137438953472
+  },
+  "memory_rule": {
+    "L_bytes": 115448725504,
+    "L_gib": 107.52,
+    "L_prime_bytes": 120259084288,
+    "advice": null,
+    "c1_B": 8,
+    "cells": [
+      {
+        "B": 8,
+        "B_at_112GiB": 8,
+        "cap": 32768,
+        "task": "gpqa"
+      },
+      {
+        "B": 8,
+        "B_at_112GiB": 8,
+        "cap": 32768,
+        "task": "mmlu"
+      },
+      {
+        "B": 16,
+        "B_at_112GiB": 16,
+        "cap": 16384,
+        "task": "ifbench"
+      },
+      {
+        "B": 16,
+        "B_at_112GiB": 16,
+        "cap": 16384,
+        "task": "rgb"
+      },
+      {
+        "B": 4,
+        "B_at_112GiB": 4,
+        "cap": 65536,
+        "task": "aime"
+      }
+    ],
+    "k8_fits": true,
+    "source": "runner.memory",
+    "source_error": null,
+    "weight_bytes": 83100000000,
+    "weight_source": "predicted (BUILD_SPEC item 20; not converted yet)"
+  },
+  "metal": {
+    "L_bytes": 115448725504,
+    "L_gib": 107.52,
+    "L_source": "max_recommended_working_set_size",
+    "iogpu_wired_limit_mb": 0,
+    "max_recommended_working_set_size": 115448725504
+  },
+  "mode": "deep",
+  "mx_device_info": {
+    "architecture": "applegpu_g17s",
+    "device_name": "Apple M5 Max",
+    "max_buffer_length": 86586540032,
+    "max_recommended_working_set_size": 115448725504,
+    "memory_size": 137438953472,
+    "resource_limit": 499000
+  },
+  "next_step": "RUNBOOK step 6: sign-off (Andrei types it)",
+  "phase_plan": "S1 (machine time, nominal / pessimistic h): preflight --deep 0.1/0.3 · convert K8+K4 0.5/1.5 · peer check 0.4/0.6 · gate 1.8/3.0 · bench (D1, H1, speed, C1) 0.8/1.1 · H5 0.1 · H8 0.3/0.5 · pilot 1.3/1.9 · plan-fix 0.1 — total 5.4/9.1 h; then S2 and S3 (≤ 16 h each)",
+  "power": {
+    "low_power_mode": null,
+    "powermode": "2",
+    "powermode_label": "high power",
+    "source": "AC",
+    "thermal_label": "nominal",
+    "thermal_state": 0
+  },
+  "problems": [],
+  "role": "run host",
+  "schema": "exp036 preflight v1",
+  "swap": {
+    "free_mb": 0.0,
+    "total_mb": 0.0,
+    "used_mb": 0.0
+  },
+  "t_end": "2026-10-04T06:29:35Z",
+  "t_start": "2026-10-04T06:29:10Z",
+  "utc": "2026-10-04T06:29:10Z",
+  "versions": {
+    "core_expected": {
+      "mlx": "0.31.2",
+      "mlx-lm": "0.31.3",
+      "mlx-metal": "0.31.2",
+      "numpy": "2.5.3",
+      "safetensors": "0.8.0",
+      "tokenizers": "0.23.2",
+      "transformers": "5.18.0"
+    },
+    "core_found": {
+      "mlx": "0.31.2",
+      "mlx-lm": "0.31.3",
+      "mlx-metal": "0.31.2",
+      "numpy": "2.5.3",
+      "safetensors": "0.8.0",
+      "tokenizers": "0.23.2",
+      "transformers": "5.18.0"
+    },
+    "core_mismatch": {},
+    "extras": [],
+    "freeze_sha256": "ce0d605a7344ac412899cbd0a7f62650fb0798e62376d833109ce73ad606c4a9",
+    "n_packages": 38,
+    "other_mismatch": {},
+    "python": "3.12.13",
+    "python_executable": "$EXP036_MODELS/venv/bin/python",
+    "python_expected": "3.12",
+    "python_ok": true
+  },
+  "warnings": [
+    "working tree has 2 changed paths in the experiment dir"
+  ]
+}
