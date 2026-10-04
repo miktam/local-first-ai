@@ -1,6 +1,6 @@
 # Experiment 036 — Kolibri on a MacBook: does it fit, how fast, and does its scorecard hold on public rows?
 
-*Pre-registered: 2026-10-03T22:33:25Z · Status: pre-registered, awaiting Andrei's sign-off; no scored run*
+*Pre-registered: 2026-10-03T22:33:25Z · Status: signed off; Session 1 in progress; no scored run*
 
 **Builds on:**
 - exp_007: the padding fixtures, loaded here by their real file names.
@@ -810,13 +810,13 @@ The build's review found nine situations the rules above did not settle. The mai
 
 *Typed by Andrei on the mbp before the first scored run; committed and pushed from the mbp. Claude never fills any field of this block. A choice that differs from the pre-registered default is recorded in the same commit as **Amendment 0**, which also gives the new `analysis/` tree sha256: `analysis/margins.json` for the H2 margin, the convert flags for the head policy.*
 
-- Signed off by:
-- Date and time (UTC, read from the clock):
-- H2 margin (−4 pp as pre-registered, −3 pp or −5 pp):
-- Kolibri `embed_tokens` / `lm_head` policy, applied to K8 and K4 (quantised at the arm's bits with fp32 logits as pre-registered, or vendor-faithful unquantised; the latter likely makes H1 REFUTED by itself):
-- K8 Metal limit (sysctl value run by hand, "not needed" if preflight printed no line, or declined):
-- Optional cloud FP8 anchor (no, unless explicitly asked):
-- Commit:
+- Signed off by: Andrei (typed by Andrei on the mbp, 2026-10-04T08:12:41Z)
+- Date and time (UTC, read from the clock): 2026-10-04T08:12:41Z
+- H2 margin (−4 pp as pre-registered, −3 pp or −5 pp): −4 pp
+- Kolibri `embed_tokens` / `lm_head` policy, applied to K8 and K4 (quantised at the arm's bits with fp32 logits as pre-registered, or vendor-faithful unquantised; the latter likely makes H1 REFUTED by itself): quantised at the arm's bits with fp32 logits
+- K8 Metal limit (sysctl value run by hand, "not needed" if preflight printed no line, or declined): not needed
+- Optional cloud FP8 anchor (no, unless explicitly asked): no
+- Commit: 9e6dd9d
 
 The "Signed off by" line must read `Signed off by: Andrei (typed by Andrei on the mbp, <UTC>)`; the runner checks this form.
 
@@ -892,3 +892,10 @@ hash_tree: TOOLS_SHA256 = 68a29f18b2fee5baf2b36bfdcb722b9876a660b5653a20b0dac555
 4. Run `"$PY" tools/leak_check.py --all --no-gpqa-source`; expect 0 findings.
 5. Run `"$PY" tools/hash_tree.py --check HYPOTHESIS.md`; expect 17 matches.
 6. Continue at step 4a.
+
+## sign-off — run record (2026-10-04T08:19:28Z)
+
+- Phase: sign-off
+- UTC: 2026-10-04T08:19:28Z (from the clock)
+- Commit: 9e6dd9d9f35895b87c54cd8410c707d0abf6a9ad (uncommitted changes: yes)
+- Result files: none
