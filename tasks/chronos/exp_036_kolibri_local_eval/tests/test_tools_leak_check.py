@@ -468,3 +468,22 @@ def test_the_checker_itself_is_not_exempt_and_fixtures_keep_the_token_rules(exp)
     assert "hf_token" in _kinds(lc.check([p], ctx=ctx))
     f = _write(exp, "tests/fixtures/leak/planted_token.md", HF_TOKEN + "\n")
     assert "hf_token" in _kinds(lc.check([f], ctx=ctx))
+
+
+def test_fallback_mirrors_step_7(tmp_path):
+    """Amendment 2 (2026-10-04): before the shingle file exists, the fallback reads only the GPQA EN
+    files step 7 hashes and subtracts the kit's public text, as write_shingle_file does."""
+    gpqa = tmp_path / "data" / "gpqa"
+    gpqa.mkdir(parents=True)
+    cols = "Record ID,Question,Correct Answer,Incorrect Answer 1,Incorrect Answer 2,Incorrect Answer 3\n"
+    (gpqa / "gpqa_main.csv").write_text(cols + "rec1,Which lagoon enzyme glows at dawn?,"
+                                        "Frobnicated zorblax quantum lattice,Shared public phrase here today,x y,z w\n")
+    (gpqa / "gpqa_extended.csv").write_text(cols + "rec9,Unused question?,Extended only option phrase now,a b,c d,e f\n")
+    exp = tmp_path / "kit"
+    exp.mkdir()
+    (exp / "LICENSE-APACHE-2.0").write_text("Licence text with a shared public phrase here today in it.\n")
+    s, _ = shingles.collect_from_sources(tmp_path / "data", None, exp_dir=exp)
+    assert s.matches(shingles.normalise_words("so frobnicated zorblax quantum lattice then"))   # main: withheld
+    assert not s.matches(shingles.normalise_words("so extended only option phrase now"))       # extended: not read
+    assert not s.matches(shingles.normalise_words("a shared public phrase here today"))        # public: subtracted
+    assert any("public text" in x for x in s.sources)

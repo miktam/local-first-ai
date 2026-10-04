@@ -201,3 +201,7 @@ The fp32 headroom claim in `tests/INTEGRATION_LOG.md` ("≥ 50x") held only on t
 
 Mini verification: 1,201 tests pass (Python 3.12 and 3.14, every test required); dry run 17/17; leak check 0 findings; `hash_tree --check` 17/17 with the amendment appended (checked on a copy; HYPOTHESIS.md itself is the mbp's to write).
 
+## Amendment 2 — leak-check fallback mirrors step 7 (2026-10-04)
+
+After Amendment 1 the mbp's `leak_check --all` found one 4-word option from `gpqa_extended.csv` (unused by the kit) at 9 kit lines (`aborted/20261004T053036Z-leakcheck/NOTE.md`). The pre-step-7 fallback read every GPQA EN file and subtracted no public text; step 7 reads Diamond and main and subtracts the licence and gate texts. `tools/shingles.py collect_from_sources()` now does the same through shared helpers; `write_shingle_file` output unchanged. New test `test_fallback_mirrors_step_7`. Mini: 1,202 tests pass (py3.12 and 3.14), dry run 17/17, leak check 0 findings, hash check 17/17 with the amendment.
+

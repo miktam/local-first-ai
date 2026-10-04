@@ -166,17 +166,7 @@ def write_shingle_file(path, texts: Iterable[str], options: Iterable[str], note:
             s.add_option(o)
             s.add_text(o)
             n_opts += 1
-    pub = ShingleSet()
-    for t in public_texts:
-        if t:
-            pub.add_text(t)
-            words = normalise_words(t)
-            for n in range(MIN_OPTION_WORDS, MAX_OPTION_WINDOW + 1):
-                for i in range(len(words) - n + 1):
-                    pub.options.add(_h(" ".join(words[i:i + n])))
-    removed = (len(s.prefixes & pub.prefixes), len(s.options & pub.options))
-    s.prefixes -= pub.prefixes
-    s.options -= pub.options
+    removed = subtract_public(s, public_texts)
     lines = sorted(s.prefixes) + sorted(s.options)
     header = [FORMAT_LINE, f"# {len(s.prefixes)} shingle prefixes, {len(s.options)} option hashes"
               + (f"; removed as also public: {removed[0]} shingles, {removed[1]} options" if any(removed) else "")]
@@ -301,15 +291,57 @@ def _data_files(root: Path) -> list[Path]:
     )
 
 
-def collect_from_sources(data_dir, private_dir=None) -> tuple[ShingleSet, list[str]]:
+def public_set(public_texts: Iterable[str]) -> ShingleSet:
+    """Shingle prefixes and every 4-8-word window hash of public text."""
+    pub = ShingleSet()
+    for t in public_texts:
+        if t:
+            pub.add_text(t)
+            words = normalise_words(t)
+            for n in range(MIN_OPTION_WORDS, MAX_OPTION_WINDOW + 1):
+                for i in range(len(words) - n + 1):
+                    pub.options.add(_h(" ".join(words[i:i + n])))
+    return pub
+
+
+def subtract_public(s: ShingleSet, public_texts: Iterable[str]) -> tuple[int, int]:
+    """Remove from s what also occurs in public text; returns (shingles, options) removed."""
+    pub = public_set(public_texts)
+    removed = (len(s.prefixes & pub.prefixes), len(s.options & pub.options))
+    s.prefixes -= pub.prefixes
+    s.options -= pub.options
+    return removed
+
+
+def public_file_texts(exp_dir) -> list[str]:
+    """The kit's own public text (PUBLIC_FILES, PUBLIC_GLOBS), as step 7 passes it to write_shingle_file."""
+    root = Path(exp_dir)
+    files = [root / f for f in PUBLIC_FILES] + [p for g in PUBLIC_GLOBS for p in sorted(root.glob(g))]
+    return [f.read_text(encoding="utf-8", errors="replace") for f in files if f.is_file()]
+
+
+# The GPQA EN files the kit uses; step 7 (tasks/build_manifests.py) hashes exactly these.
+GPQA_EN_FILES = ("gpqa_diamond.csv", "gpqa_main.csv")
+
+
+def collect_from_sources(data_dir, private_dir=None, exp_dir=None) -> tuple[ShingleSet, list[str]]:
     """Shingles and option hashes from the withheld sources found locally.
-    Returns (set, warnings); set.sources names what was read."""
+    Returns (set, warnings); set.sources names what was read.
+
+    Mirrors step 7 (Amendment 2, 2026-10-04): GPQA EN only from GPQA_EN_FILES, and the
+    kit's public text (licence, gate texts) subtracted, so the check gives the same
+    answer before and after tools/withheld_shingles.sha256 exists."""
     data_dir = Path(data_dir)
     s = ShingleSet()
     warnings: list[str] = []
 
     for name in ("gpqa", "gpqa-multilingual"):
         files = _data_files(data_dir / name)
+        if name == "gpqa":
+            used = [f for f in files if f.name in GPQA_EN_FILES]
+            if files and not used:
+                warnings.append(f"gpqa: none of {GPQA_EN_FILES} found; reading every data file")
+            files = used or files
         if name == "gpqa-multilingual":
             german = [f for f in files if _GERMAN_PATH.search(f.relative_to(data_dir / name).as_posix())]
             files = german or files
@@ -365,6 +397,10 @@ def collect_from_sources(data_dir, private_dir=None) -> tuple[ShingleSet, list[s
         n = sum(_add_rows(s, _rows_from_file(f, warnings)) for f in files)
         if n:
             s.sources.append(f"$EXP036_PRIVATE/manifests ({len(files)} files, {n} rows)")
+    if s:
+        removed = subtract_public(s, public_file_texts(exp_dir or Path(__file__).resolve().parents[1]))
+        if any(removed):
+            s.sources.append(f"minus the kit's public text ({removed[0]} shingles, {removed[1]} options)")
     return s, warnings
 
 
