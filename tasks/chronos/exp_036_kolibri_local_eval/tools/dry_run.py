@@ -23,7 +23,10 @@ Stages (RUNBOOK order; each must pass):
   preflight     tools/preflight.py --quick --not-run-host --out ...      (the mini's mode)
   signoff       a placeholder sign-off line (this temporary copy only), status --record-block, commit, push
   manifests     tasks/build_manifests.build_all on the synthetic data (counts not enforced: the sets are small;
-                the GPQA over-long filter must exclude 0 Diamond items, as on the real data, Amendment 3);
+                the GPQA over-long filter must exclude 0 Diamond items, as on the real data, Amendment 3; the
+                synthetic MMLU-ProX-Lite has the real unbalanced composition, 588 items listed in the Webster seat
+                order, and the synthetic full split carries a row 3787 whose answer letter disagrees with
+                answer_index, which the full pool must leave out and list, as on the real data, Amendment 4);
                 gate/build_gate_text.py --work-only
   convert       port/convert.py for K8 and K4, exactly as RUNBOOK step 8
   peers         tools/peer_check.py --checks load,nll,kl,batch on the stand-ins (the batched path through the
@@ -43,9 +46,9 @@ Stages (RUNBOOK order; each must pass):
   leak          tools/leak_check.py --all in the copy (with the withheld shingles), and over this kit's working
                 tree with --no-gpqa-source
 
-The runner's frozen plan_rules.json is scaled down in the copy only (cell sizes, caps, the B4 estimate), so the
-whole queue runs in minutes; every line of code that runs is the kit's own. The last stdout line is JSON
-({"ok": ..., "stages": [...]}); exit 0 when every stage passed, 1 otherwise.
+The runner's frozen plan_rules.json is scaled down in the copy only (cell sizes, caps, the B4 estimate, and n_M to
+28 / 16, DRY_NM_LARGE / DRY_NM_SMALL), so the whole queue runs in minutes; every line of code that runs is the kit's
+own. The last stdout line is JSON ({"ok": ..., "stages": [...]}); exit 0 when every stage passed, 1 otherwise.
 """
 
 from __future__ import annotations
@@ -78,6 +81,10 @@ PEER_FAMILIES = {
     "qwen3_8": ("Qwen3.8-27B-8bit", {"Q38-8": "Qwen3.8-27B-8bit", "Q38-4": "Qwen3.8-27B-4bit"}),
 }
 PEER_FILES = ("tokenizer.json", "tokenizer_config.json", "chat_template.jinja", "generation_config.json")
+# The dry run's small n_M: the Webster allocation over the real Lite composition (Amendment 4) gives every one of the
+# 14 categories an item from n = 16 on (at 14, computer science and history have none), and the post-stratified
+# MMLU rows need every category. Until Amendment 4 this was 14 (one item per category).
+DRY_NM_LARGE, DRY_NM_SMALL = 28, 16
 KOLIBRI_FILES = ("tokenizer.json", "tokenizer_config.json", "generation_config.json")
 SIGNOFF_LINE = ("- Signed off by: Andrei (DRY RUN placeholder written by tools/dry_run.py into a temporary copy; "
                 "not a sign-off)")
@@ -318,8 +325,8 @@ def scale_plan_rules(rules: dict) -> dict:
             if c["arm"] != "bench":
                 c["n"] = n_of(c["n"])
     for p, d in r["plan_defs"].items():
-        d["nM"] = 28 if p in ("P0", "P1") else 14
-    r["nM_ladder"] = [28, 28, 14, 14, 14, 14, 14, 14]
+        d["nM"] = DRY_NM_LARGE if p in ("P0", "P1") else DRY_NM_SMALL
+    r["nM_ladder"] = [DRY_NM_LARGE] * 2 + [DRY_NM_SMALL] * 6
     r["caps"] = {k: 24 for k in r["caps"]}
     r["cap_raise"]["ceilings"] = {k: 32 for k in r["cap_raise"]["ceilings"]}
     r["ladder_estimate_h"] = {"B4": 1000.0}
@@ -408,7 +415,8 @@ def build_data(w: World, data: Path | None) -> dict:
     w.data.mkdir(parents=True, exist_ok=True)
     syn.write_gpqa_en(w.data, n_diamond=6, n_main_extra=10)
     syn.write_gpqa_de(w.data, n_diamond=6, n_other=10)
-    syn.write_mmlu(w.data, lite_per_cat=3, full_extra_per_cat=11)
+    # Amendment 4: the real Lite composition (588, unbalanced) and the planted gold-mismatch row of the full split
+    syn.write_mmlu(w.data, lite_counts=syn.MMLU_LITE_COUNTS, full_extra_per_cat=11, gold_mismatch=True)
     syn.write_aime(w.data, n=5)
     syn.write_rgb(w.data, n_en=12, n_fact=6, n_int=20)
     reword_synthetic(w.data)
@@ -516,7 +524,9 @@ def write_synthetic_gate_texts(w: World) -> None:
 def stage_manifests() -> dict:
     """tasks/build_manifests.build_all on the synthetic data. Counts are not enforced: the synthetic sets are
     small. The GPQA over-long assertion runs as on the real data (Amendment 3: eval-framework's filter excludes 0
-    Diamond items; the question's text never enters the kit, and no synthetic Diamond row matches its hash).
+    Diamond items; the question's text never enters the kit, and no synthetic Diamond row matches its hash). So
+    does the MMLU-ProX gold assertion (Amendment 4: the full pool leaves out exactly the registered id 3787, planted
+    in the synthetic full split), and the Lite manifests list the real composition in the Webster seat order.
     Revisions are checked (the synthetic snapshots carry the pinned revision metadata)."""
     sys.path.insert(0, str(EXP_DIR))
     from runner.guard import require_identity

@@ -87,6 +87,9 @@ def post_stratified_mean(scores_by_category: Mapping[str, Sequence[float]],
     category's share of the full test split. Every sampled category needs a
     weight; a weighted category with no items is an error (the n_M ladder keeps
     every category present), so a silent re-weighting can never happen.
+    Categories may hold different numbers of items: each category's own mean
+    is weighted (Amendment 4: the Lite allocation is proportional, not 42 per
+    category; every category has at least 5 items at n_M = 154).
     """
     keys = sorted(scores_by_category)
     empty = [k for k in keys if len(scores_by_category[k]) == 0]

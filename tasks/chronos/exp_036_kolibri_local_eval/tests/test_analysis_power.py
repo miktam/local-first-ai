@@ -56,6 +56,26 @@ def test_design_effect():
     assert P.mmlu_deff() == pytest.approx(1.11, abs=0.005)
 
 
+def test_design_effect_of_the_amendment4_allocation_is_below_the_registered_one():
+    """Amendment 4: MMLU-ProX-Lite is allocated proportionally to its own counts (Webster), not 42 per category. The
+    post-stratification design effect at every ladder n_M is then about 1.003, below the registered 1.114 the power
+    tables use, so those tables are conservative for H2 (and they stay as registered)."""
+    from tasks import mmlu_prox
+
+    lite = P.lite_category_counts()
+    assert lite is not None and sum(lite.values()) == 588
+    registered = P.mmlu_deff()
+    assert P.mmlu_deff(sample=dict.fromkeys(lite, 42)) == pytest.approx(registered)  # the balanced case
+    for n_M in P.NM_LADDER:
+        d = P.mmlu_deff(sample=mmlu_prox.allocation(lite, n_M))
+        assert 1.0 <= d < 1.01 < registered, n_M
+        assert P.se_h2(n_M, a={"deff": d}) < P.se_h2(n_M)  # the registered SE is the larger one
+    with pytest.raises(ValueError, match="positive count"):
+        P.mmlu_deff(sample=dict(lite, history=0))
+    assert P.power_at_plan(196)["mmlu_deff"] == {"registered_balanced": pytest.approx(registered),
+                                                 "amendment4_proportional": pytest.approx(P.mmlu_deff(sample=lite))}
+
+
 @pytest.mark.parametrize("n_M", sorted(H3_TABLE))
 def test_h3_table(n_M):
     (v8, v3), (t8, t3) = H3_TABLE[n_M]
@@ -127,6 +147,7 @@ def test_power_at_plan_shape():
     r4 = P.power_at_plan(154, h2_rows=4)
     assert r4["H2_D0"]["a8"] == pytest.approx(0.52, abs=TOL)
     assert "GPQA EN n = 197 as registered" in r["assumptions"]
+    assert "design effect 1.114 as registered" in r["assumptions"] and "conservative" in r["assumptions"]
 
 
 def test_h2_power_gpqa_en_197_vs_198_under_0001():

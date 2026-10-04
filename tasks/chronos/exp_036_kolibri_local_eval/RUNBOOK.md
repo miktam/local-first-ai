@@ -137,10 +137,13 @@ The dry run is valid at any step, including a rerun during a gate fix cycle: its
 **3c. Optional: the loaders on the real data.** *Claude may run; seconds.* The GPQA-DE, MMLU-ProX(-Lite) and AIME26 loaders were built without those datasets on the mini (their file layouts are inferred and fail loudly when wrong). This builds every manifest set from the real data into `$EXP036_WORK` only, with the counts enforced; nothing is written into the repository (no shingle file, no results record).
 ```bash
 cd ~/REPOS/local-first-ai/tasks/chronos/exp_036_kolibri_local_eval && source env/exp036.env && \
+CHK="$EXP036_WORK/manifest_check_$(date -u +%Y%m%dT%H%M%SZ)" && \
 SETS=$("$PY" tasks/build_manifests.py --list | cut -f1 | paste -sd, -) && \
-"$PY" tasks/build_manifests.py --sets "$SETS" --out "$EXP036_WORK/manifest_check/public" --private "$EXP036_WORK/manifest_check/private"
+"$PY" tasks/build_manifests.py --sets "$SETS" --out "$CHK/public" --private "$CHK/private"
 ```
-Check: the last line is JSON with `"ok": true`, `"checks": {"gpqa_diamond_en_overlong_excluded": 0}` (Amendment 3: eval-framework's over-long filter excludes no Diamond item, so all 198 are primary) and the counts GPQA-D EN 198, GPQA-D DE 198, MMLU-ProX-Lite EN/DE 588 each, AIME EN/DE 30, IFBench 300, RGB closed-book 400, Negative 300, Fact-Check 100. A failure goes to the main session before step 6.
+Each run writes into a new dated folder. Built manifests are frozen (the builder refuses to replace a file whose content differs), and every manifest records the sha256 of `tasks/selection_rules.json`, so a folder built under an earlier amendment (for example `$EXP036_WORK/manifest_check/` from Amendment 3) would stop the run at its first set with `FileExistsError … manifests are frozen once built`. That error is not a kit failure; leave old folders as they are or move them aside.
+
+Check: the last line is JSON with `"ok": true`, `"checks": {"gpqa_diamond_en_overlong_excluded": 0, "mmlu_prox_full_gold_inconsistent_excluded": {"de": ["3787"], "en": ["3787"]}}` (Amendment 3: eval-framework's over-long filter excludes no Diamond item, so all 198 are primary; Amendment 4: the full MMLU-ProX pool leaves out item 3787, whose answer letter disagrees with its answer_index) and the counts GPQA-D EN 198, GPQA-D DE 198, MMLU-ProX-Lite EN/DE 588 each (Amendment 4: the real, unequal category counts, checked against `selection_rules.json`), AIME EN/DE 30, IFBench 300, RGB closed-book 400, Negative 300, Fact-Check 100. A failure goes to the main session before step 6.
 
 ### 4. Preflight
 **4a. Quick.** *Claude may run; < 1 min.*
@@ -212,7 +215,8 @@ cd ~/REPOS/local-first-ai/tasks/chronos/exp_036_kolibri_local_eval && source env
 Check:
 - Both exit 0.
 - `tasks/manifests/` holds hash-only manifests for GPQA EN/DE, RGB and AIME-DE (no `text`, no `gold`), and manifests with category and gold for MMLU-ProX and AIME EN; `mmlu_prox_category_counts.json` is present.
-- `gpqa_diamond_en.json` records `"n": 198`, `"primary_n": 198` and `"overlong_excluded": 0` (Amendment 3), and the stdout JSON shows `"checks": {"gpqa_diamond_en_overlong_excluded": 0}`. The build stops by itself on any other count.
+- `gpqa_diamond_en.json` records `"n": 198`, `"primary_n": 198` and `"overlong_excluded": 0` (Amendment 3), and the stdout JSON shows `"checks": {"gpqa_diamond_en_overlong_excluded": 0, "mmlu_prox_full_gold_inconsistent_excluded": {"de": ["3787"], "en": ["3787"]}}`. The build stops by itself on any other count.
+- Amendment 4: `mmlu_prox_lite_en.json` and `mmlu_prox_lite_de.json` list the same 588 ids in the same order (the Webster seat order, so the n_M set is the first n_M entries), and their `nM_allocation` gives the items per category at every ladder n_M (at 154: biology 9, business 10, chemistry 15, computer science 5, economics 11, engineering 13, health 9, history 5, law 13, math 18, other 12, philosophy 7, physics 17, psychology 10). The four full-pool manifests (`mmlu_prox_full_pilot_en/de`, `mmlu_prox_c1_en`, `mmlu_prox_peercheck_en`) record `"gold_inconsistent_excluded": {"de": ["3787"], "en": ["3787"]}`, and `mmlu_prox_category_counts.json` still counts 3787 (11,759 per language).
 - `$EXP036_PRIVATE/manifests/` holds the text and gold of the withheld sets. The RGB document indices are recorded.
 - `tools/withheld_shingles.sha256` exists.
 - T5, T6 and T9 are in `$EXP036_WORK/gate_texts/`; their indices and sha256 match `gate/texts/MANIFEST.json` if the main session filled them, otherwise they are written to `results/gate_texts_<UTC>.json`. No web text is in the repo.

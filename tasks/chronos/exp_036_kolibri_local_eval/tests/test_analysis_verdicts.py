@@ -22,8 +22,8 @@ import pytest
 
 from analysis import stats
 from analysis import verdicts as V
-from test_analysis_world import (GPQA_EN_EXCLUDED, World, all_confirmed_world, fit_records, kl_blob,
-                                 speed_blocks, tokenizer_docs, vend)
+from test_analysis_world import (CATS, GPQA_EN_EXCLUDED, World, all_confirmed_world, fit_records, kl_blob,
+                                 mmlu_alloc, speed_blocks, tokenizer_docs, vend)
 
 NOW = datetime(2026, 10, 10, 12, 0, 0, tzinfo=timezone.utc)
 FAMILY = list(V.FAMILY)
@@ -513,9 +513,37 @@ def test_h2_mmlu_rows_are_post_stratified():
     ctx = w.ctx()
     pt = V.row_point(ctx, "K8", "mmlu_en")
     counts = np.array(list(w.plan["post_strat_counts"]["en"].values()), dtype=float)
-    per = [round(r * 42) / 42 for r in rates]
+    n_c = mmlu_alloc(588)                                        # Amendment 4: unequal n per category (19 to 68)
+    per = [round(r * n) / n for r, n in zip(rates, n_c)]
     assert pt == pytest.approx(float(np.sum(counts / counts.sum() * np.array(per))))
-    assert pt != pytest.approx(float(np.mean(per)))              # differs from the unweighted Lite mean
+    assert pt != pytest.approx(float(np.mean(per)))              # differs from the unweighted category mean
+    plain = sum(round(r * n) for r, n in zip(rates, n_c)) / sum(n_c)
+    assert pt != pytest.approx(plain)                             # and from the plain Lite item mean
+
+
+def test_h2_mmlu_post_stratified_mean_with_unequal_n_by_hand():
+    """Amendment 4: at n_M = 154 the categories hold 5 to 18 items. Our MMLU row is sum_c w_c * (k_c / n_c) with w_c
+    the full-split share, whatever n_c is; computed here by hand in exact fractions and compared with row_point."""
+    from fractions import Fraction
+
+    w = World(154)
+    n_c = mmlu_alloc(154)
+    assert sum(n_c) == 154 and sorted(set(n_c)) == [5, 7, 9, 10, 11, 12, 13, 15, 17, 18]
+    k_c = [n // 2 + (c % 3) for c, n in enumerate(n_c)]           # correct items per category (made up)
+    w.set("K8", "mmlu_en", [k / n for k, n in zip(k_c, n_c)])
+    w.set("K8", "mmlu_de", [k / n for k, n in zip(k_c, n_c)])
+    ctx = w.ctx()
+    cell = ctx.cell("K8", "mmlu_en")
+    assert len(cell) == 154
+    by_cat = {c: [i for i in cell if cell[i].category == c] for c in CATS}
+    assert [len(by_cat[c]) for c in CATS] == n_c
+    assert [sum(cell[i].score for i in by_cat[c]) for c in CATS] == k_c
+    for lang in ("en", "de"):
+        weights = w.plan["post_strat_counts"][lang]
+        total = sum(weights.values())
+        by_hand = sum(Fraction(weights[c], total) * Fraction(k, n) for c, k, n in zip(CATS, k_c, n_c))
+        assert V.row_point(ctx, "K8", f"mmlu_{lang}") == pytest.approx(float(by_hand), abs=1e-12)
+        assert float(by_hand) != pytest.approx(sum(k_c) / 154)     # not the plain item mean
 
 
 def test_h2_two_pass_b10():
@@ -870,7 +898,7 @@ def test_truncation_sensitivity_not_computable_is_not_headline_eligible(arm, tas
 def test_h2_excluding_truncated_with_an_emptied_category_does_not_crash():
     w = all_confirmed_world(n_M=154)
     w.plan["n_M"] = 154
-    w.trunc[("K8", "mmlu_en")] = set(range(11))       # every item of category 0
+    w.trunc[("K8", "mmlu_en")] = set(range(mmlu_alloc(154)[0]))   # every item of category 0 (13 at n_M 154)
     v = w.compute(now=NOW, exploratory=False)
     row = v["verdicts"]["H2_detail"]["detail"]["rows"]["mmlu_en"]
     assert row["D_excluding_truncated"] is None and "cat00" in row["D_excluding_truncated_reason"]

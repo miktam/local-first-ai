@@ -23,7 +23,11 @@ applies, in order:
   7. the ordered queue and its split point;
   8. the row sets (H2: 5 rows, 4 under P10; the AIME secondary iff B1; H7
      adds GPQA iff B8, GPQA-D DE only where K8 runs it, i.e. not under P10);
-  9. power at the fixed n (analysis/power.py).
+  9. power at the fixed n (analysis/power.py; the registered assumptions, so
+     the H2 figures are conservative under Amendment 4's proportional MMLU
+     allocation), and the MMLU-ProX-Lite items per category at n_M (the first
+     n_M entries of the Lite manifest, listed in the Webster seat order;
+     Amendment 4: not n_M/14 each).
 
 Arms the records exclude (runner/guard.py excluded_arms; review fix
 2026-10-03) have no cell in any queue: K4 after a final gate K4 FAIL (H1, H7,
@@ -481,8 +485,9 @@ def fix(
 ) -> tuple[dict, str, int]:
     """(plan_fixed, amendment_md, k). context keys: now_utc (ISO), L_bytes,
     L_sources, weight_bytes {arm: bytes}, peer_b1 [arms], step_models_extra,
-    prefill_tps_extra, manifests, category_counts, gate_record, peers_record,
-    scorers_tree_sha256, inputs."""
+    prefill_tps_extra, manifests, category_counts, mmlu_lite_categories (the
+    categories of tasks/manifests/mmlu_prox_lite_en.json in listing order),
+    gate_record, peers_record, scorers_tree_sha256, inputs."""
     ctx = dict(context or {})
     now = ctx.get("now_utc") or utc_iso()
     k = next_amendment_k(existing_amendments)
@@ -692,10 +697,24 @@ def fix(
         "projection_notes": dict(sorted(proj.notes.items())),
         "step_models": proj.fit_info,
         "prefill_tps": {a: _r(v, 2) for a, v in sorted(proj.prefill.items())},
-        # 9. power
+        # 9. power, and the items per category at n_M (Amendment 4)
         "power": _power(int(d["nM"]), len(h2)),
+        "mmlu_allocation": mmlu_allocation(ctx.get("mmlu_lite_categories"), int(d["nM"])),
     })
     return _finish(plan, rules, k, now)
+
+
+def mmlu_allocation(categories: list | None, n_M: int) -> dict | None:
+    """{category: items} among the first n_M entries of the MMLU-ProX-Lite listing (Amendment 4: the Webster seat
+    order, so this is the per-category n of the run), or None without the manifest."""
+    if not categories:
+        return None
+    if len(categories) < n_M:
+        return {"error": f"the Lite manifest lists {len(categories)} items, fewer than n_M = {n_M}"}
+    out: dict[str, int] = {}
+    for c in categories[:n_M]:
+        out[str(c)] = out.get(str(c), 0) + 1
+    return dict(sorted(out.items()))
 
 
 def plan_file_name(now: str) -> str:
@@ -761,6 +780,10 @@ def amendment_md(plan: dict, k: int, now: str, plan_file: tuple[str, str] | None
     L.append(f"- H2 rows ({r['H2_arm']}): {', '.join(r['H2'])}"
              + (f"; AIME secondary: {', '.join(r['H2_secondary_aime'])}" if r["H2_secondary_aime"] else ""))
     L.append(f"- H7 rows: {', '.join(r['H7']) or r['H7_status']}")
+    alloc = plan.get("mmlu_allocation")
+    if isinstance(alloc, dict) and alloc:
+        L.append("- MMLU-ProX-Lite items per category at n_M (Amendment 4, the first n_M of the Webster listing): "
+                 + ("; ".join(f"{c} {v}" for c, v in alloc.items()) if "error" not in alloc else alloc["error"]))
     for name, key in (("Gate record", "gate_record"), ("Peer-check record", "peers_record")):
         v = plan.get(key)
         if isinstance(v, dict):
@@ -782,7 +805,9 @@ def amendment_md(plan: dict, k: int, now: str, plan_file: tuple[str, str] | None
     if "H2_D0" in pw:
         L.append(f"Power at n_M = {plan['n_M']} (α/8 / α/3): H2 at D = 0 {pw['H2_D0']['a8']:.2f} / {pw['H2_D0']['a3']:.2f}; "
                  f"H3 at the vendor gap {pw['H3_vendor_gap']['a8']:.2f} / {pw['H3_vendor_gap']['a3']:.2f}; "
-                 f"H7 at 0 {pw['H7_0']['a8']:.2f} / {pw['H7_0']['a3']:.2f}.")
+                 f"H7 at 0 {pw['H7_0']['a8']:.2f} / {pw['H7_0']['a3']:.2f}. Registered assumptions (H2: MMLU design "
+                 f"effect 1.11 of a category-balanced sample; Amendment 4's proportional allocation brings it near "
+                 f"1.0, so the H2 figures are conservative).")
     L.append("")
     return "\n".join(L) + "\n"
 
@@ -941,6 +966,9 @@ def build_context(exp_dir: Path, pilot_paths: list[Path]) -> dict:
     cc = exp_dir / "tasks" / "manifests" / "mmlu_prox_category_counts.json"
     if cc.is_file():
         ctx["category_counts"] = json.loads(cc.read_text(encoding="utf-8"))
+    lite = exp_dir / "tasks" / "manifests" / "mmlu_prox_lite_en.json"
+    if lite.is_file():  # Amendment 4: the plan records the per-category n at n_M
+        ctx["mmlu_lite_categories"] = [e.get("category") for e in json.loads(lite.read_text(encoding="utf-8"))["items"]]
     for key, pat in (("gate_record", "gate/gate_*.json"), ("peers_record", "peers_*.json")):
         fs = sorted(results.glob(pat))
         if fs:

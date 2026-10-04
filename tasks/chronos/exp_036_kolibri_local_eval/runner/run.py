@@ -128,8 +128,9 @@ class Ctx:
 def items_for_cell(task: str, n: int | None) -> list[dict]:
     """The cell's items in manifest order (tasks/build_manifests.py:items_for
     re-renders them from local data and checks every item and prompt sha256
-    against the manifest). MMLU-ProX-Lite manifests list ids interleaved by
-    category rank, so the first n_M are the category-balanced n_M set."""
+    against the manifest). MMLU-ProX-Lite manifests list ids in the Webster
+    seat order (Amendment 4: per-category n proportional to Lite's own
+    category counts, nested), so the first n_M are the n_M set."""
     try:
         from tasks import build_manifests
     except ModuleNotFoundError as e:

@@ -160,6 +160,19 @@ def test_post_stratified_mean():
         stats.post_stratified_mean({"a": [1]}, {"a": 1, "b": 1})        # b absent from the sample
 
 
+def test_post_stratified_mean_with_unequal_n_per_category():
+    """Amendment 4: categories hold different numbers of items (proportional, not 42 each). Each category's own mean
+    is weighted: by hand, 0.5 * 1/3 + 0.3 * 4/5 + 0.2 * 1/2 = 1/6 + 6/25 + 1/10 = 76/150, not the item mean 6/10."""
+    scores = {"a": [1, 0, 0], "b": [1, 1, 1, 1, 0], "c": [0, 1]}
+    w = {"a": 50, "b": 30, "c": 20}
+    assert stats.post_stratified_mean(scores, w) == pytest.approx(76 / 150, abs=1e-15)
+    assert stats.post_stratified_mean(scores, w) != pytest.approx(6 / 10)
+    # the stratified bootstrap weights strata, not items: constant strata give the weighted mean in every replicate
+    const = {"a": [1.0, 1.0, 1.0], "b": [0.0] * 5, "c": [1.0, 1.0]}
+    draws = stats.boot_strata(const, 200, stats.rng("test|unequal"), weights=w)
+    assert np.allclose(draws, 0.5 * 1 + 0.3 * 0 + 0.2 * 1)
+
+
 def test_two_pass_row_var():
     x1 = [1, 0, 1, 1]
     x2 = [1, 1, 0, 1]

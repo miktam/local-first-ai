@@ -25,6 +25,19 @@ CATS = [f"cat{c:02d}" for c in range(14)]
 # Unbalanced full-split counts (the MMLU-Pro shares) for post-stratification.
 COUNTS = [1351, 1299, 1132, 1101, 969, 924, 844, 818, 798, 789, 717, 499, 410, 381]
 POST_STRAT = {"en": dict(zip(CATS, COUNTS)), "de": dict(zip(CATS, reversed(COUNTS)))}
+# Amendment 4 (2026-10-04): the Lite sample is not 42 per category. The world allocates n_M by the kit's own Webster
+# rule (tasks/mmlu_prox.py) over the real MMLU-ProX-Lite counts, carried onto the invented category names in the
+# registered subject order; the post-stratification weights above stay as they were, so in this world a category's
+# share of the sample and its weight differ, which is what the post-stratification has to undo.
+LITE_COUNTS = dict(zip(CATS, (48, 65, 40, 56, 36, 48, 25, 20, 46, 42, 40, 19, 68, 35)))
+
+
+def mmlu_alloc(n_M):
+    """Items per category (in CATS order) at n_M: the Webster allocation of Amendment 4."""
+    from tasks.mmlu_prox import allocation
+
+    a = allocation(LITE_COUNTS, n_M)
+    return [a[c] for c in CATS]
 GIB = 2 ** 30
 
 N_TASK = {"gpqa_en": 198, "gpqa_de": 198, "ifbench": 300, "rgb_cb": 400, "rgb_forced": 400,
@@ -43,8 +56,8 @@ def vend(row, arm):
 
 def item_ids(task, n_M=588):
     if task.startswith("mmlu_"):
-        per = n_M // 14
-        return [(f"mm_{c:02d}_{j:03d}", CATS[c]) for c in range(14) for j in range(per)]
+        alloc = mmlu_alloc(n_M)
+        return [(f"mm_{c:02d}_{j:03d}", CATS[c]) for c in range(14) for j in range(alloc[c])]
     if task == "rgb_fact":       # the en_fact questions: the same ids as in the closed-book set
         return [(f"rgb_{300 + j:03d}", None) for j in range(N_TASK[task])]
     prefix = {"gpqa_en": "gq_en", "gpqa_de": "gq_de", "ifbench": "if", "rgb_cb": "rgb",
@@ -74,7 +87,8 @@ class World:
     """A full synthetic run: scores, bench records and a plan.
 
     rates[(arm, task)] = accuracy (MMLU: the same rate in every category unless a
-    per-category list is given). trunc[(arm, task)] = item indices truncated
+    per-category list is given; each category's n is its Webster allocation at n_M,
+    so a rate lands to within half an item per category). trunc[(arm, task)] = item indices truncated
     (scored 0; the rest of the pattern is unchanged).
     """
 
@@ -113,11 +127,12 @@ class World:
             salt = f"{arm}|{task}|{effort}|{pass_}"
             tr = self.trunc.get((arm, task), set())
             if task.startswith("mmlu_"):
-                per = self.n_M // 14
                 v = np.zeros(len(ids))
-                for c in range(14):
+                start = 0
+                for c, nc in enumerate(mmlu_alloc(self.n_M)):
                     rc = rate[c] if isinstance(rate, (list, tuple)) else rate
-                    v[c * per:(c + 1) * per] = pattern(per, round(rc * per), f"{salt}|{c}")
+                    v[start:start + nc] = pattern(nc, round(rc * nc), f"{salt}|{c}")
+                    start += nc
             else:
                 v = pattern(len(ids), round(rate * len(ids)), salt)
             cats = self.categories_rgb.get((arm, task))
@@ -339,9 +354,11 @@ def test_world_rates_land_exactly():
     w = all_confirmed_world()
     ctx = w.ctx()
     assert len(ctx.cell("K8", "gpqa_en")) == 198
-    # MMLU rows: every category at the same rate, so the post-stratified mean equals the rate.
+    # MMLU rows: every category at the same rate, so the post-stratified mean equals the rate to within half an item
+    # of the smallest category (Amendment 4: unequal n per category, 19 to 68 at n_M = 588; was 1/42 at 42 each).
     pt = V.row_point(ctx, "K8", "mmlu_en")
-    assert abs(pt - vend("mmlu_en", "K8")) < 1.0 / 42
+    assert abs(pt - vend("mmlu_en", "K8")) <= 1.0 / (2 * min(mmlu_alloc(588)))
+    assert mmlu_alloc(588) == list(LITE_COUNTS.values()) and sum(mmlu_alloc(154)) == 154
     # K4 is a copy of K8 on the H7 rows.
     c4, c8 = ctx.cell("K4", "ifbench"), ctx.cell("K8", "ifbench")
     assert all(c4[i].score == c8[i].score for i in c8)

@@ -383,7 +383,9 @@ def test_plan_defs_match_the_hypothesis_ladder_table():
         assert d["k8_gpqa_de"] == (p != "P10"), p
     assert [RULES["plan_defs"][p]["nM"] for p in ("P0", "P2", "P3", "P4", "P5", "P6", "P7", "P9")] == [
         588] + RULES["nM_ladder"][1:]
-    assert all(n % 14 == 0 for n in RULES["nM_ladder"])
+    # Amendment 4 (2026-10-04): n_M need not be a multiple of 14 any more (the Lite allocation is proportional, not
+    # n_M/14 per category); the registered ladder values are unchanged and stay within Lite's 588.
+    assert RULES["nM_ladder"] == sorted(RULES["nM_ladder"], reverse=True) and RULES["nM_ladder"][0] == 588
 
 
 def test_tier_a_queue_matches_the_hypothesis_list():
@@ -508,6 +510,13 @@ def test_cli_end_to_end_on_a_temporary_experiment_dir(tmp_path, monkeypatch, cap
     (res / "manifests_20261004T085000Z.json").write_text(json.dumps(
         {"manifests": {"tasks/manifests/mmlu_prox_lite_en.json": "c" * 64},
          "private": {"manifests/gpqa_diamond_en.jsonl": "d" * 64}}))
+    # Amendment 4: the plan reads the Lite listing (categories in the Webster seat order) for the per-category n
+    from tasks import mmlu_prox
+
+    lite_counts = json.loads((EXP_DIR / "tasks" / "selection_rules.json").read_text())["mmlu_prox"]["lite_category_counts"]
+    (exp / "tasks" / "manifests").mkdir(parents=True)
+    (exp / "tasks" / "manifests" / "mmlu_prox_lite_en.json").write_text(json.dumps(
+        {"items": [{"id": str(i), "category": c} for i, c in enumerate(mmlu_prox.webster_order(lite_counts))]}))
 
     rc = plan_fix.main(["--pilot", "results/pilot_summary_20261004T150000Z.json", "--exp-dir", str(exp)])
     out = capsys.readouterr().out
@@ -523,6 +532,7 @@ def test_cli_end_to_end_on_a_temporary_experiment_dir(tmp_path, monkeypatch, cap
                                  "$EXP036_PRIVATE/manifests/gpqa_diamond_en.jsonl": "d" * 64}
     assert plan["gate_record"]["path"] == "results/gate/gate_20261004T120000Z.json"
     assert plan["status"] == "FIXED" and plan["plan"] == "P0"
+    assert plan["mmlu_allocation"] == dict(sorted(lite_counts.items()))  # P0: n_M = 588, all of Lite
     from runner.guard import PLAN_FILE_RE
 
     m = PLAN_FILE_RE.search(am[0].read_text())
@@ -609,3 +619,41 @@ def test_plan_fix_output_with_a_dropped_peer_feeds_the_verdicts():
     assert v["verdicts"]["H3_detail"]["verdict"] != V.NOT_RUN and v["verdicts"]["H3_detail"]["detail"]["peers"] == ["G8"]
     assert v["verdicts"]["H6_detail"]["verdict"] != V.NOT_RUN
     assert v["verdicts"]["H4_detail"]["verdict"] == V.NOT_RUN
+
+
+# ------------------------------------------------- Amendment 4 (2026-10-04)
+
+
+def _lite_listing():
+    from tasks import mmlu_prox
+
+    counts = json.loads((EXP_DIR / "tasks" / "selection_rules.json").read_text())["mmlu_prox"]["lite_category_counts"]
+    return counts, mmlu_prox.webster_order(counts)
+
+
+@pytest.mark.parametrize("s,want_plan,n_M", [(0, "P0", 588), (1, "P8", 196), (2, "P10", 154)])
+def test_plan_records_the_mmlu_allocation_at_n_M(s, want_plan, n_M):
+    """The plan states the per-category n of the MMLU-ProX-Lite rows: the first n_M entries of the Lite listing
+    (the Webster seat order), not n_M/14 each; the amendment prints it and says the power figures are conservative."""
+    from tasks import mmlu_prox
+
+    counts, listing = _lite_listing()
+    pilot, steps, s1, ctx = synthetic(s)
+    ctx["mmlu_lite_categories"] = listing
+    plan, md, _ = plan_fix.fix(pilot, steps, s1, RULES, [], context=ctx)
+    assert plan["plan"] == want_plan and plan["n_M"] == n_M
+    assert plan["mmlu_allocation"] == dict(sorted(mmlu_prox.allocation(counts, n_M).items()))
+    assert sum(plan["mmlu_allocation"].values()) == n_M and len(set(plan["mmlu_allocation"].values())) > 1
+    line = next(l for l in md.splitlines() if l.startswith("- MMLU-ProX-Lite items per category at n_M"))
+    assert "history " + str(plan["mmlu_allocation"]["history"]) in line
+    assert "conservative" in md and "design effect 1.11" in md
+    assert "1.114" in plan["power"]["assumptions"] and plan["power"]["mmlu_deff"]["amendment4_proportional"] < 1.01
+
+
+def test_plan_without_the_lite_manifest_records_no_allocation():
+    plan, md, _ = run_fix(0)
+    assert plan["mmlu_allocation"] is None and "items per category" not in md
+    pilot, steps, s1, ctx = synthetic(0)
+    ctx["mmlu_lite_categories"] = _lite_listing()[1][:100]  # a listing shorter than n_M is named, not truncated
+    plan, md, _ = plan_fix.fix(pilot, steps, s1, RULES, [], context=ctx)
+    assert "fewer than n_M = 588" in plan["mmlu_allocation"]["error"] and "fewer than n_M = 588" in md

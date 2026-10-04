@@ -14,6 +14,10 @@ from tasks.common import sha256_hex
 
 EXP = Path(__file__).resolve().parent.parent
 TEXT_KEYS = {"text", "messages", "question", "prompt", "problem", "query", "answer", "options", "content"}
+# Amendment 4: the full pool leaves out the full split's gold-mismatch row (planted in the synthetic world, as on the
+# real data) and every build records it; together with Amendment 3's over-long count these are the build's checks.
+GOLD = {"en": [str(syn.MMLU_GOLD_MISMATCH_ID)], "de": [str(syn.MMLU_GOLD_MISMATCH_ID)]}
+CHECKS = {"gpqa_diamond_en_overlong_excluded": 0, "mmlu_prox_full_gold_inconsistent_excluded": GOLD}
 
 
 @pytest.fixture(scope="module")
@@ -58,8 +62,25 @@ def test_public_sets_carry_gold_and_category(built):
     docs = _docs(built["out"])
     lite = docs["mmlu_prox_lite_en"]["items"]
     assert all({"category", "gold", "cat_rank", "n_options"} <= set(e) for e in lite)
-    # interleaved by rank: the first 14 entries are rank 0 of every category, so n_M is a prefix
-    assert [e["cat_rank"] for e in lite[:14]] == [0] * 14 and len({e["category"] for e in lite[:14]}) == 14
+    # Amendment 4: all of Lite (the real composition here), listed in the Webster seat order, so the n_M set is a
+    # prefix; each category's items come in cat_rank order 0, 1, 2, ... (a prefix of its seed-36 order)
+    assert len(lite) == 588 and [e["category"] for e in lite] == bm.mmlu_prox.webster_order(syn.MMLU_LITE_COUNTS)
+    for c in syn.MMLU_CATS:
+        assert [e["cat_rank"] for e in lite if e["category"] == c] == list(range(syn.MMLU_LITE_COUNTS[c]))
+    alloc = docs["mmlu_prox_lite_en"]["nM_allocation"]
+    assert set(alloc) == {str(n) for n in bm.rules()["mmlu_prox"]["nM_ladder"]}
+    for n, per in alloc.items():
+        assert per == bm.mmlu_prox.allocation(syn.MMLU_LITE_COUNTS, int(n))
+        assert sum(per.values()) == int(n) and set(per) == set(syn.MMLU_CATS) and min(per.values()) >= 5
+    # EN and DE list the same ids, in the same order, with the same categories (parallel)
+    lite_de = docs["mmlu_prox_lite_de"]
+    assert [(e["id"], e["category"]) for e in lite_de["items"]] == [(e["id"], e["category"]) for e in lite]
+    assert lite_de["nM_allocation"] == alloc
+    # the full-pool sets list the left-out gold-mismatch ids and never hold them
+    for name in bm.MMLU_FULL_SETS:
+        assert docs[name]["gold_inconsistent_excluded"] == GOLD
+        assert str(syn.MMLU_GOLD_MISMATCH_ID) not in {e["id"] for e in docs[name]["items"]}
+    assert all("gold_inconsistent_excluded" not in d for n, d in docs.items() if n not in bm.MMLU_FULL_SETS)
     assert all(isinstance(e["gold"], int) for e in docs["aime_en"]["items"])
     assert all(set(e) == set(bm.BASE_FIELDS) for e in docs["ifbench"]["items"])
     assert {e["id"] for e in docs["gpqa_diamond_en"]["items"]} >= {"recSYN0000"}
@@ -67,13 +88,16 @@ def test_public_sets_carry_gold_and_category(built):
     assert all(e["in_primary"] is True for e in docs["gpqa_diamond_en"]["items"])
     g = docs["gpqa_diamond_en"]
     assert g["primary_n"] == g["n"] == 6 and g["overlong_excluded"] == 0
-    assert built["summary"]["checks"] == {"gpqa_diamond_en_overlong_excluded": 0}
+    assert built["summary"]["checks"] == CHECKS
     assert all("overlong_excluded" not in d for n, d in docs.items() if n != "gpqa_diamond_en")
     assert all(len(e["doc_indices"]) >= 1 for e in docs["rgb_negative"]["items"])
     assert docs["rgb_negative"]["doc_source"] == "negative" and docs["rgb_fact"]["doc_source"] == "positive_wrong"
     counts = docs["mmlu_prox_category_counts"]
-    assert set(counts) == {"en", "de", "_meta"} and counts["_meta"]["totals"]["en"] == 14 * 14
-    assert set(counts["en"]) == set(syn.MMLU_CATS) and set(counts["en"].values()) == {14}
+    # every full-split row counts (Lite's 588, 11 more per category, and the gold-mismatch row: Amendment 4)
+    assert set(counts) == {"en", "de", "_meta"} and counts["_meta"]["totals"]["en"] == 588 + 14 * 11 + 1
+    assert counts["en"] == {c: syn.MMLU_LITE_COUNTS[c] + 11 + (c == syn.MMLU_GOLD_MISMATCH_CATEGORY)
+                            for c in syn.MMLU_CATS} == counts["de"]
+    assert counts["_meta"]["gold_inconsistent_counted"] == GOLD
 
 
 def test_private_manifests_hold_text_and_gold(built):
@@ -109,7 +133,7 @@ def test_results_record_and_shingles(built):
     rec = json.loads(rec_path.read_text(encoding="utf-8"))
     assert rec["manifests"] == built["summary"]["manifests"] and rec["private"] == built["summary"]["private"]
     assert rec["selection_rules_sha256"] == bm.rules_sha256()
-    assert rec["checks"] == {"gpqa_diamond_en_overlong_excluded": 0}
+    assert rec["checks"] == CHECKS
     tool_shingles = pytest.importorskip("tools.shingles", reason="tools/shingles.py (tools area) not present")
     listed = tool_shingles.read_shingle_file(built["sh"])
     assert listed.prefixes and listed.options and built["summary"]["shingles"]["prefixes"] == len(listed.prefixes)
@@ -131,6 +155,68 @@ def test_counts_enforced_by_default(built, tmp_path):
     with pytest.raises(RuntimeError, match="expected a primary set of 198 items, got 6"):
         bm.build_all(tmp_path / "m", tmp_path / "p", built["root"], ["gpqa_diamond_en"], None, None,
                      enforce_counts=True, check_revisions=False)
+    # Amendment 4: the synthetic Lite has the registered composition, so the enforced Lite builds pass (588)...
+    s = bm.build_all(tmp_path / "m", tmp_path / "p", built["root"], ["mmlu_prox_lite_en", "mmlu_prox_lite_de"], None,
+                     None, enforce_counts=True, check_revisions=False)
+    assert s["counts"] == {"mmlu_prox_lite_en": 588, "mmlu_prox_lite_de": 588}
+    # ... and the 42 x 14 the pre-registration assumed is refused when counts are enforced
+    bal = tmp_path / "balanced"
+    syn.write_mmlu(bal, lite_per_cat=42, full_extra_per_cat=11)
+    with pytest.raises(RuntimeError, match="differ from the registered lite_category_counts"):
+        bm.build_all(tmp_path / "m2", tmp_path / "p2", bal, ["mmlu_prox_lite_en"], None, None,
+                     enforce_counts=True, check_revisions=False)
+
+
+def _rewrite_jsonl(p: Path, fn) -> None:
+    rows = [json.loads(l) for l in p.read_text(encoding="utf-8").splitlines()]
+    p.write_text("".join(json.dumps(fn(r)) + "\n" for r in rows), encoding="utf-8")
+
+
+def test_unexpected_full_gold_mismatch_stops_the_build(built, tmp_path):
+    """Amendment 4: the full pool leaves out gold-mismatch rows, and every build (counts enforced or not, as items_for
+    on the run host) requires their ids to equal the registered ["3787"] per language: a second one stops it."""
+    import shutil
+
+    root = tmp_path / "data"
+    shutil.copytree(built["root"], root)
+    victim = str(bm.mmlu_prox.full_pool_ids(root / "MMLU-ProX", root / "MMLU-ProX-Lite")[0])
+    for lang in ("en", "de"):
+        _rewrite_jsonl(root / "MMLU-ProX" / lang / "test-00000-of-00001.jsonl",
+                       lambda r: dict(r, answer="ABCDEFGHIJ"[(r["answer_index"] + 1) % 10]) if str(r["question_id"]) == victim else r)
+    for name in bm.MMLU_FULL_SETS:
+        with pytest.raises(RuntimeError, match="expected .*3787.*Amendment 4"):
+            bm.build_all(tmp_path / "m", tmp_path / "p", root, [name], None, None, enforce_counts=False, check_revisions=False)
+    with pytest.raises(ValueError, match="Amendment 4"):
+        bm.items_for("mmlu_prox_c1_en", root, built["out"], check_revisions=False)
+    # the Lite sets do not read the full split: they still build, unchanged
+    s = bm.build_all(tmp_path / "m", tmp_path / "p", root, ["mmlu_prox_lite_en"], None, None,
+                     enforce_counts=False, check_revisions=False)
+    assert (tmp_path / "m" / "mmlu_prox_lite_en.json").read_bytes() == (built["out"] / "mmlu_prox_lite_en.json").read_bytes()
+    assert s["counts"] == {"mmlu_prox_lite_en": 588}
+
+
+def test_missing_registered_full_gold_mismatch_stops_the_build(built, tmp_path):
+    """The registered id must be found: a full split without the gold-mismatch row is a data change too."""
+    root = tmp_path / "data"
+    syn.write_all(root)
+    syn.write_mmlu(root, gold_mismatch=False)
+    with pytest.raises(RuntimeError, match="expected .*3787"):
+        bm.build_all(tmp_path / "m", tmp_path / "p", root, ["mmlu_prox_full_pilot_en"], None, None,
+                     enforce_counts=False, check_revisions=False)
+
+
+def test_lite_gold_mismatch_stops_the_build(built, tmp_path):
+    """Lite stays strict (Amendment 4): a Lite row whose answer letter disagrees with answer_index stops the build."""
+    import shutil
+
+    root = tmp_path / "data"
+    shutil.copytree(built["root"], root)
+    victim = bm.mmlu_prox.parallel_ids(root / "MMLU-ProX-Lite")["law"][0]
+    _rewrite_jsonl(root / "MMLU-ProX-Lite" / "de" / "test-00000-of-00001.jsonl",
+                   lambda r: dict(r, answer="ABCDEFGHIJ"[(r["answer_index"] + 1) % 10]) if str(r["question_id"]) == victim else r)
+    for name in ("mmlu_prox_lite_en", "mmlu_prox_lite_de"):
+        with pytest.raises(RuntimeError, match=f"MMLU-ProX {victim}: answer .* disagrees with answer_index"):
+            bm.build_all(tmp_path / "m", tmp_path / "p", root, [name], None, None, enforce_counts=False, check_revisions=False)
 
 
 def _plant_overlong(monkeypatch, sha):
@@ -148,7 +234,7 @@ def test_overlong_question_outside_diamond_excludes_nothing(built, tmp_path, mon
     _plant_overlong(monkeypatch, syn.OVERLONG_SHA256)
     s = bm.build_all(tmp_path / "m", tmp_path / "p", built["root"], ["gpqa_diamond_en", "gpqa_pilot_en"], None, None,
                      enforce_counts=False, check_revisions=False)
-    assert s["checks"] == {"gpqa_diamond_en_overlong_excluded": 0}
+    assert s["checks"] == {"gpqa_diamond_en_overlong_excluded": 0}  # no MMLU-ProX full set built: no gold check
     assert (tmp_path / "m" / "gpqa_diamond_en.json").read_bytes() == (built["out"] / "gpqa_diamond_en.json").read_bytes()
     assert (tmp_path / "m" / "gpqa_pilot_en.json").read_bytes() == (built["out"] / "gpqa_pilot_en.json").read_bytes()
 
@@ -165,7 +251,8 @@ def test_overlong_question_inside_diamond_stops_the_build(built, tmp_path, monke
 
 
 def test_items_for_round_trip_and_mismatch(built, tmp_path):
-    for name in ("gpqa_diamond_en", "mmlu_prox_lite_de", "rgb_negative", "rgb_fact", "aime_de", "ifbench_pilot"):
+    for name in ("gpqa_diamond_en", "mmlu_prox_lite_de", "mmlu_prox_c1_en", "rgb_negative", "rgb_fact", "aime_de",
+                 "ifbench_pilot"):
         items = bm.items_for(name, built["root"], built["out"], check_revisions=False)
         doc = json.loads((built["out"] / f"{name}.json").read_text(encoding="utf-8"))
         assert [it.id for it in items] == [e["id"] for e in doc["items"]]
@@ -196,8 +283,14 @@ def test_selection_rules_consistent():
     r = bm.rules()
     assert r["selection_seed"] == 36 and r["rgb_seed"] == 2333
     assert r["mmlu_prox"]["nM_ladder"] == [588, 504, 406, 350, 294, 252, 196, 154]  # BUILD_SPEC §7.2
-    assert all(n % 14 == 0 for n in r["mmlu_prox"]["nM_ladder"])
-    assert r["mmlu_prox"]["per_category_lite"] * 14 == 588
+    # Amendment 4: the ladder values are unchanged, but n_M need not be a multiple of 14 any more; the registered Lite
+    # counts (not 42 per category) total 588, name every subject, and give every category an item at every n_M.
+    m = r["mmlu_prox"]
+    assert "per_category_lite" not in m and sum(m["lite_category_counts"].values()) == 588
+    assert list(m["lite_category_counts"]) == bm.mmlu_prox.subjects()
+    assert all(min(bm.mmlu_prox.allocation(m["lite_category_counts"], n).values()) >= 1 for n in m["nM_ladder"])
+    assert m["gold_inconsistent_expected"] == {"en": ["3787"], "de": ["3787"]}
+    assert bm.set_def("mmlu_prox_lite_en").expected_n == bm.set_def("mmlu_prox_lite_de").expected_n == 588
     names = {sd.name for sd in bm.set_defs()}
     for arm, cells in r["pilot"].items():
         if arm == "rule":

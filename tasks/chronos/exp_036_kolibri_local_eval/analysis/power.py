@@ -14,7 +14,13 @@ Formulas (normal approximations, as in the design arithmetic of 2026-10-03):
   log-ratios, by numerical integration over the chi-square distribution.
 - H2: SE(D-bar) = sqrt(sum_r var_r) / k, with var_r = p(1-p)/n + p(1-p)/(N_v n)
   for GPQA EN/DE and IFBench, and deff * p(1-p)/n_M for the two MMLU rows,
-  deff = sum_c (14 w_c)^2 / 14 = 1.114 from the MMLU-Pro 12,032 category shares.
+  deff = sum_c (14 w_c)^2 / 14 = 1.114 from the MMLU-Pro 12,032 category shares:
+  the design effect of post-stratifying a category-balanced sample, as registered.
+  Amendment 4 (2026-10-04): MMLU-ProX-Lite is not 42 per category, so the n_M
+  sample is allocated proportionally to Lite's own counts (a Webster allocation,
+  tasks/mmlu_prox.py), which are close to the full split's shares; the design
+  effect is then about 1.003 (mmlu_deff(sample=...)). The registered tables, and
+  every power figure here, keep 1.114, so they are conservative for H2.
 - H3: SE = sd(d) / sqrt(2 n_M); H4: sd / sqrt(300); H6: sd / sqrt(400);
   H7: SE = sqrt(2 * 0.42^2 / n_M + 0.45^2 / 300 + 0.35^2 / 400) / 4;
   H5: SE = 0.5 % of the true ratio (CI about +/- 1 %).
@@ -63,15 +69,33 @@ def power_less(true: float, threshold: float, se: float, a: float) -> float:
     return _phi((threshold - z * se - true) / se)
 
 
-def mmlu_deff(counts: dict | None = None) -> float:
-    """Design effect of post-stratifying a category-balanced sample: sum (K w_c)^2 / K."""
+def mmlu_deff(counts: dict | None = None, sample: dict | None = None) -> float:
+    """Design effect of post-stratifying a sample to the full split's category shares w_c: sum_c w_c^2 / s_c, with
+    s_c the sample's share of category c. Without `sample`, a category-balanced sample (s_c = 1/K):
+    sum (K w_c)^2 / K, the 1.114 the registered power tables use. With `sample` = per-category counts (Amendment 4:
+    the proportional MMLU-ProX-Lite allocation), about 1.003."""
     if counts is None:
         vv = json.loads((ANALYSIS_DIR / "vendor_values.json").read_text(encoding="utf-8"))
         counts = vv["mmlu_pro_category_counts"]["counts"]
-    c = np.array(list(counts.values()), dtype=np.float64)
+    keys = list(counts)
+    c = np.array([counts[k] for k in keys], dtype=np.float64)
     w = c / c.sum()
     K = len(c)
-    return float(np.sum((K * w) ** 2) / K)
+    if sample is None:
+        return float(np.sum((K * w) ** 2) / K)
+    if set(sample) != set(keys) or any(sample[k] <= 0 for k in keys):
+        raise ValueError("mmlu_deff: the sample needs a positive count in every weighted category")
+    s = np.array([sample[k] for k in keys], dtype=np.float64)
+    return float(np.sum(w ** 2 / (s / s.sum())))
+
+
+def lite_category_counts() -> dict | None:
+    """The registered MMLU-ProX-Lite counts per category (tasks/selection_rules.json, Amendment 4), or None."""
+    try:
+        rules = json.loads((ANALYSIS_DIR.parent / "tasks" / "selection_rules.json").read_text(encoding="utf-8"))
+        return dict(rules["mmlu_prox"]["lite_category_counts"])
+    except (OSError, KeyError, ValueError):
+        return None
 
 
 DEFAULTS = {
@@ -236,8 +260,22 @@ def power_at_plan(n_M: int, h2_rows: int = 5) -> dict:
         "H6_-15": {"a8": power("H6", None, "a8", {"true": -0.15}), "a3": power("H6", None, "a3", {"true": -0.15})},
         "assumptions": ("HYPOTHESIS power tables (SDs and true effects as pre-registered); H2 GPQA EN n = 197 as "
                         "registered, although Amendment 3 runs all 198 items (no H2 power here moves by more "
-                        "than 0.001)"),
+                        "than 0.001); H2 MMLU design effect 1.114 as registered (post-stratifying a category-balanced "
+                        "sample), although Amendment 4 allocates MMLU-ProX-Lite proportionally to its own category "
+                        "counts, which brings it near 1.0, so the H2 powers here are conservative"),
+        "mmlu_deff": _deff_record(),
     }
+
+
+def _deff_record() -> dict:
+    """The registered MMLU design effect and the one of the Amendment 4 proportional allocation (descriptive)."""
+    lite = lite_category_counts()
+    rec = {"registered_balanced": mmlu_deff()}
+    try:
+        rec["amendment4_proportional"] = mmlu_deff(sample=lite) if lite else None
+    except ValueError:
+        rec["amendment4_proportional"] = None
+    return rec
 
 
 # --------------------------------------------------------------------------

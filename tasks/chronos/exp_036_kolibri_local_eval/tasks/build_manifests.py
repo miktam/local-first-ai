@@ -10,7 +10,13 @@ Writes:
   `in_primary` flag. No manifest holds item text, and no withheld manifest holds gold (a hash of a letter or an
   integer would be trivially reversible). The GPQA EN manifest also records `primary_n` and `overlong_excluded`,
   the number of Diamond rows eval-framework's over-long filter removed: 0 by Amendment 3, asserted at every build.
-- tasks/manifests/mmlu_prox_category_counts.json: full test split counts per language and category (H2 weights).
+  The MMLU-ProX-Lite manifests list all of Lite in the Webster seat order (Amendment 4: the n_M set is the first
+  n_M entries) and record `nM_allocation`, the items per category at every ladder n_M. The four full-pool MMLU-ProX
+  manifests (pilot EN/DE, C1, peer check) record `gold_inconsistent_excluded`, the ids per language whose answer
+  letter disagrees with answer_index and which the pool leaves out (Amendment 4: ["3787"] in each, asserted at
+  every build).
+- tasks/manifests/mmlu_prox_category_counts.json: full test split counts per language and category (H2 weights;
+  every row, a gold-inconsistent one included).
 - $EXP036_PRIVATE/manifests/<name>.jsonl (withheld sets only): the same items with messages and gold (for RGB
   `gold` is the answer as RGB stores it and `gold_fake` the counterfactual answer); scorers/score_all.py reads
   gold from here for the withheld sets and from tasks/manifests/ for the public ones.
@@ -18,8 +24,8 @@ Writes:
   for writer and leak check) over the sources BUILD_SPEC §5.5 names: GPQA EN/DE questions and options
   (options also as full option hashes), AIME-DE problems, RGB queries and answers, plus RGB's instruction.yaml
   strings.
-- results/manifests_<UTC>.json: sha256 of every file above and the `checks` (the GPQA EN over-long count) (all
-  sets only; needs the git identity).
+- results/manifests_<UTC>.json: sha256 of every file above and the `checks` (the GPQA EN over-long count; the
+  MMLU-ProX full-split gold-inconsistent ids) (all sets only; needs the git identity).
 
 The same data in gives byte-identical manifests out: no timestamp is written into a manifest, every JSON file
 has sorted keys, and every order is a frozen rule. An existing output with different content is never
@@ -135,6 +141,10 @@ class Context:
         seed = rules()["selection_seed"]
         return self.cached("mmlu_pool", lambda: mmlu_prox.full_pool_ids(self.path("mmlu_full"), self.path("mmlu_lite"), seed))
 
+    def mmlu_gold_mismatch(self) -> dict[str, list[str]]:
+        """{lang: ids of the full test split whose answer letter disagrees with answer_index} (Amendment 4)."""
+        return self.cached("mmlu_gold_mismatch", lambda: mmlu_prox.gold_mismatch_ids(self.path("mmlu_full")))
+
     def rgb_instruction(self) -> dict:
         return self.cached("rgb_instr", lambda: rgb.load_instruction(self.path("rgb")))
 
@@ -173,15 +183,24 @@ def _gpqa_pilot(lang: str):
 
 
 def _mmlu_lite(lang: str):
+    """Every Lite item, listed in the Webster seat order (Amendment 4, selection_rules.json mmlu_prox.nM_rule), so
+    the runner's n_M set is a prefix. With counts enforced, the parallel ids per category must equal the registered
+    lite_category_counts; on every build, each category must have an item at every ladder n_M the data allows."""
     def build(ctx: Context, enforce: bool) -> list[Item]:
+        m = rules()["mmlu_prox"]
         per_cat = ctx.mmlu_parallel()
-        k = min(len(v) for v in per_cat.values())
-        if enforce:
-            want = rules()["mmlu_prox"]["per_category_lite"]
-            bad = {c: len(v) for c, v in per_cat.items() if len(v) != want}
-            if bad:
-                raise ValueError(f"MMLU-ProX-Lite: categories without {want} parallel ids: {bad}")
-        ids = mmlu_prox.select_ids(per_cat, k * len(per_cat))
+        counts = {c: len(v) for c, v in per_cat.items()}
+        if enforce and counts != m["lite_category_counts"]:
+            bad = {c: (n, m["lite_category_counts"].get(c)) for c, n in counts.items() if n != m["lite_category_counts"].get(c)}
+            raise ValueError(f"MMLU-ProX-Lite: parallel ids per category differ from the registered "
+                             f"lite_category_counts (Amendment 4), (found, registered): {bad}")
+        total = sum(counts.values())
+        for n in m["nM_ladder"]:
+            if n <= total:
+                empty = [c for c, k in mmlu_prox.allocation(counts, n).items() if k == 0]
+                if empty:
+                    raise ValueError(f"MMLU-ProX-Lite: n_M={n} leaves categories without an item: {empty}")
+        ids = mmlu_prox.select_ids(per_cat, total)
         rank = {i: r for ids_c in per_cat.values() for r, i in enumerate(ids_c)}
         items = mmlu_prox.load_lite(lang, ids, ctx.path("mmlu_lite"))
         for it in items:
@@ -191,9 +210,17 @@ def _mmlu_lite(lang: str):
 
 
 def _mmlu_full_slice(lang: str, part: str):
+    """A slice of the full pool. Amendment 4: rows whose answer letter disagrees with answer_index are not in the
+    pool, and on every build (counts enforced or not, as items_for on the run host) their ids must equal the
+    registered gold_inconsistent_expected, so a change in the data cannot slip through."""
     def build(ctx: Context, enforce: bool) -> list[Item]:
-        lo, hi = rules()["mmlu_prox"]["full_layout"][part]
-        items = mmlu_prox.load_items(ctx.path("mmlu_full"), lang, ctx.mmlu_pool()[lo:hi])
+        m = rules()["mmlu_prox"]
+        found, want = ctx.mmlu_gold_mismatch(), m["gold_inconsistent_expected"]
+        if found != want:
+            raise ValueError(f"MMLU-ProX full: rows whose answer letter disagrees with answer_index {found}, "
+                             f"expected {want} (Amendment 4)")
+        lo, hi = m["full_layout"][part]
+        items = mmlu_prox.load_full(lang, ctx.mmlu_pool()[lo:hi], ctx.path("mmlu_full"))
         for it in items:
             it.public.update(category=it.category, gold=it.gold, n_options=it.n_options)
         return items
@@ -259,7 +286,7 @@ class SetDef:
 def set_defs() -> list[SetDef]:
     r = rules()
     g, m, rg = r["gpqa"], r["mmlu_prox"], r["rgb"]
-    lite_n = m["per_category_lite"] * 14
+    lite_n = sum(m["lite_category_counts"].values())  # 588 (Amendment 4: not 42 x 14)
     return [
         SetDef("gpqa_diamond_en", "gpqa_en", True, ("gpqa",), _gpqa_diamond_en, g["diamond_en"]["n"], g["diamond_en"]["primary_rule"]),
         SetDef("gpqa_diamond_de", "gpqa_de", True, ("gpqa_de",), _gpqa_diamond_de, g["diamond_de"]["n"], "deu config, is_diamond rows, file order"),
@@ -329,7 +356,23 @@ def jsonl_bytes(records: list[dict]) -> bytes:
     return b"".join(canonical_json(r) + b"\n" for r in records)
 
 
-def manifest_doc(sd: SetDef, items: list[Item], sources: list[dict]) -> dict:
+MMLU_LITE_SETS = ("mmlu_prox_lite_en", "mmlu_prox_lite_de")
+MMLU_FULL_SETS = ("mmlu_prox_full_pilot_en", "mmlu_prox_full_pilot_de", "mmlu_prox_c1_en", "mmlu_prox_peercheck_en")
+
+
+def nm_allocation(items: list[Item], ladder: list[int]) -> dict[str, dict[str, int]]:
+    """{str(n_M): {category: items}} of the first n_M listed items, for every ladder n_M the listing holds."""
+    out = {}
+    for n in ladder:
+        if n <= len(items):
+            cats: dict[str, int] = {}
+            for it in items[:n]:
+                cats[it.category] = cats.get(it.category, 0) + 1
+            out[str(n)] = cats
+    return out
+
+
+def manifest_doc(sd: SetDef, items: list[Item], sources: list[dict], extra: dict | None = None) -> dict:
     id_sources = sorted({it.public.get("id_source") for it in items if it.public.get("id_source")})
     doc = {
         "schema": SCHEMA,
@@ -350,6 +393,9 @@ def manifest_doc(sd: SetDef, items: list[Item], sources: list[dict]) -> dict:
         doc["overlong_excluded"] = len(flags) - doc["primary_n"]
     if sd.name in ("rgb_negative", "rgb_fact"):
         doc["doc_source"] = "negative" if sd.name == "rgb_negative" else "positive_wrong"
+    if sd.name in MMLU_LITE_SETS:  # Amendment 4: the per-category n at every ladder n_M (a prefix of this listing)
+        doc["nM_allocation"] = nm_allocation(items, rules()["mmlu_prox"]["nM_ladder"])
+    doc.update(extra or {})
     return doc
 
 
@@ -444,7 +490,11 @@ def build_all(out_dir: Path = MANIFESTS_DIR, private: Path | None = None, data: 
             for k in sd.sources:
                 if k not in source_cache:
                     source_cache[k] = ctx.source_record(k)
-            doc = manifest_doc(sd, items, [source_cache[k] for k in sd.sources])
+            extra = {}
+            if sd.name in MMLU_FULL_SETS:  # Amendment 4: the ids the full pool leaves out, per language
+                extra["gold_inconsistent_excluded"] = ctx.mmlu_gold_mismatch()
+                summary["checks"]["mmlu_prox_full_gold_inconsistent_excluded"] = ctx.mmlu_gold_mismatch()
+            doc = manifest_doc(sd, items, [source_cache[k] for k in sd.sources], extra)
             if "overlong_excluded" in doc:
                 summary["checks"][f"{sd.name}_overlong_excluded"] = doc["overlong_excluded"]
             pub_path = out_dir / f"{sd.name}.json"
@@ -467,7 +517,8 @@ def build_all(out_dir: Path = MANIFESTS_DIR, private: Path | None = None, data: 
         doc = dict(counts)
         doc["_meta"] = {"schema": "exp036 MMLU-ProX category counts v1", "split": "test",
                         "source": ctx.source_record("mmlu_full"), "rule": rules()["mmlu_prox"]["category_counts"],
-                        "totals": {lang: sum(c.values()) for lang, c in counts.items()}}
+                        "totals": {lang: sum(c.values()) for lang, c in counts.items()},
+                        "gold_inconsistent_counted": ctx.mmlu_gold_mismatch()}
         p = out_dir / "mmlu_prox_category_counts.json"
         summary["status"][p.name] = _write_once(p, json_bytes(doc))
         summary["manifests"][f"tasks/manifests/{p.name}"] = sha256_hex(p.read_bytes())
@@ -541,8 +592,8 @@ def items_for(name: str, data: Path | None = None, manifests_dir: Path = MANIFES
 
 def runner_items(name: str, data: Path | None = None, manifests_dir: Path = MANIFESTS_DIR,
                  n: int | None = None) -> list[dict]:
-    """items_for() as runner/generate.py item dicts; `n` keeps a prefix (n_M for the MMLU-ProX-Lite sets,
-    whose manifest order makes every n_M set a prefix)."""
+    """items_for() as runner/generate.py item dicts; `n` keeps a prefix (n_M for the MMLU-ProX-Lite sets, listed
+    in the Webster seat order, so every n_M set is a prefix; Amendment 4)."""
     items = items_for(name, data, manifests_dir)
     return [it.to_dict() for it in (items if n is None else items[:n])]
 

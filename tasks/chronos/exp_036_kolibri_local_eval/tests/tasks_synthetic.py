@@ -16,6 +16,16 @@ MMLU_CATS = [
     "engineering", "physics", "psychology", "chemistry", "biology", "law", "philosophy",
     "computer science", "other", "economics", "business", "history", "math", "health",
 ]
+# The real MMLU-ProX-Lite composition at e82aafb9 (Amendment 4, 2026-10-04): parallel ids per category, EN = DE,
+# 588 in all, in the registered subject order. Counts only; every synthetic row's text is made up.
+MMLU_LITE_COUNTS = {"engineering": 48, "physics": 65, "psychology": 40, "chemistry": 56, "biology": 36, "law": 48,
+                    "philosophy": 25, "computer science": 20, "other": 46, "economics": 42, "business": 40,
+                    "history": 19, "math": 68, "health": 35}
+# The full split's one row whose answer letter disagrees with answer_index (question_id 3787 at 8e6106a6, in EN and
+# DE: answer 'C', answer_index 1; none in Lite). Only the id and those two fields mirror the real row; its text is
+# made up like every other synthetic row, and its category here is arbitrary.
+MMLU_GOLD_MISMATCH_ID = 3787
+MMLU_GOLD_MISMATCH_CATEGORY = "other"
 RGB_SYSTEM = "STUB SYSTEM PROMPT FOR TESTS."
 RGB_INSTRUCTION = "STUB-DOCS:\n{DOCS}\n\nSTUB-QUERY: {QUERY}"
 
@@ -102,22 +112,41 @@ def mmlu_row(qid: int, cat: str, lang: str, n_opt: int = 10, style: str = "colum
     return row
 
 
-def write_mmlu(root: Path, lite_per_cat: int = 3, full_extra_per_cat: int = 11) -> tuple[Path, Path]:
+def mmlu_gold_mismatch_row(lang: str, qid: int = MMLU_GOLD_MISMATCH_ID, cat: str = MMLU_GOLD_MISMATCH_CATEGORY,
+                           style: str = "list") -> dict:
+    """A synthetic row whose answer letter ('C') disagrees with its answer_index (1), as the real full-split row."""
+    return dict(mmlu_row(qid, cat, lang, style=style), answer="C", answer_index=1)
+
+
+def write_mmlu(root: Path, lite_per_cat: int | None = None, full_extra_per_cat: int = 11,
+               lite_counts: dict[str, int] | None = None, gold_mismatch: bool = True) -> tuple[Path, Path]:
+    """Synthetic MMLU-ProX-Lite and MMLU-ProX (test + validation splits, EN and DE).
+
+    Lite holds `lite_per_cat` rows in every category, or else `lite_counts` per category (default
+    MMLU_LITE_COUNTS, the real unbalanced composition, Amendment 4). The full split holds every Lite row plus
+    `full_extra_per_cat` rows per category, and, with `gold_mismatch`, the planted row MMLU_GOLD_MISMATCH_ID whose
+    answer letter disagrees with answer_index in EN and DE (the full pool must leave it out and list it)."""
     lite, full = root / "MMLU-ProX-Lite", root / "MMLU-ProX"
+    if lite_per_cat is not None:
+        lite_counts = dict.fromkeys(MMLU_CATS, lite_per_cat)
+    elif lite_counts is None:
+        lite_counts = MMLU_LITE_COUNTS
     lite_rows, full_rows = [], []
     qid = 1000
     for c, cat in enumerate(MMLU_CATS):
-        for _ in range(lite_per_cat):
+        for _ in range(lite_counts.get(cat, 0)):
             lite_rows.append((qid, cat, 10 if qid % 3 else 7))
             qid += 1
         for _ in range(full_extra_per_cat):
             full_rows.append((qid, cat, 10))
             qid += 1
+    assert qid <= MMLU_GOLD_MISMATCH_ID or not gold_mismatch, "synthetic ids would reach the planted id"
     for lang in ("en", "de"):
         _jsonl(lite / lang / "test-00000-of-00001.jsonl", [mmlu_row(q, c, lang, n) for q, c, n in lite_rows])
         _jsonl(lite / lang / "validation-00000-of-00001.jsonl", [mmlu_row(1, "law", lang)])
         _jsonl(full / lang / "test-00000-of-00001.jsonl",
-               [mmlu_row(q, c, lang, n, style="list") for q, c, n in lite_rows + full_rows])
+               [mmlu_row(q, c, lang, n, style="list") for q, c, n in lite_rows + full_rows]
+               + ([mmlu_gold_mismatch_row(lang)] if gold_mismatch else []))
     # an id only in EN Lite (not parallel) must be ignored by parallel_ids
     with (lite / "en" / "test-00000-of-00001.jsonl").open("a", encoding="utf-8") as f:
         f.write(json.dumps(mmlu_row(9999, "law", "en")) + "\n")

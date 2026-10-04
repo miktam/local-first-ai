@@ -259,7 +259,15 @@ def test_dry_run_scales_only_sizes_and_caps(tmp_path):
     assert set(s["caps"]) == set(rules["caps"]) and max(s["caps"].values()) < min(rules["caps"].values())
     assert {k: {kk: vv for kk, vv in v.items() if kk != "nM"} for k, v in s["plan_defs"].items()} == \
            {k: {kk: vv for kk, vv in v.items() if kk != "nM"} for k, v in rules["plan_defs"].items()}
-    assert all(d["nM"] % 14 == 0 for d in s["plan_defs"].values())
+    # Amendment 4: n_M need not be a multiple of 14; the post-stratified MMLU rows need every category, so each scaled
+    # n_M must give every category an item under the Webster allocation over the registered Lite counts (16 is the
+    # smallest such n; at 14, two categories would have none).
+    from tasks import mmlu_prox
+
+    lite = json.loads((EXP / "tasks" / "selection_rules.json").read_text(encoding="utf-8"))["mmlu_prox"]["lite_category_counts"]
+    for n in {d["nM"] for d in s["plan_defs"].values()} | set(s["nM_ladder"]):
+        assert min(mmlu_prox.allocation(lite, n).values()) >= 1, n
+    assert min(mmlu_prox.allocation(lite, dry_run.DRY_NM_SMALL - 1).values()) == 0  # the smallest that works
 
 
 def test_dry_run_rewords_text_but_not_layout(tmp_path):
