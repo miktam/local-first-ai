@@ -1,0 +1,95 @@
+{
+ "gold_inconsistent_excluded": {
+  "de": [
+   "3787"
+  ],
+  "en": [
+   "3787"
+  ]
+ },
+ "items": [
+  {
+   "category": "chemistry",
+   "gold": "H",
+   "id": "4095",
+   "item_sha256": "78a0b16f808846f7f2ee780d1cd4069ced07b6e6cf59198b52f94c8f9e4d73e1",
+   "n_options": 10,
+   "prompt_sha256": "91cc2cc7e1846495924468badc546aeafc1cb2798a6a39dfc0ade6bc785024db"
+  },
+  {
+   "category": "philosophy",
+   "gold": "H",
+   "id": "10603",
+   "item_sha256": "e2a0a7561dccecdaaee0d10e0075eca3821660d34230b32ead2c4dcff32aac48",
+   "n_options": 10,
+   "prompt_sha256": "79f13afd839f203f46a185d8d0e116fbb4d43547e54eccfeb6126c6b948d1f48"
+  },
+  {
+   "category": "other",
+   "gold": "D",
+   "id": "5602",
+   "item_sha256": "504359a886baa2bac0ed975c863799be9fa7ce8c95c938705e94017716fc2b1d",
+   "n_options": 10,
+   "prompt_sha256": "5b712a0d2988a29e3e040683c0a3d2415d80ff963723820993a6124083de252d"
+  },
+  {
+   "category": "engineering",
+   "gold": "A",
+   "id": "11211",
+   "item_sha256": "1e54e77284c4bfcfe4db339c3a961c660c951ccb5fff8198d2e365c30c29f020",
+   "n_options": 10,
+   "prompt_sha256": "52d90dc8899a8374ea3461563a51295cae3bfcb73be0ad5eacbe9a4fc591ec45"
+  },
+  {
+   "category": "psychology",
+   "gold": "J",
+   "id": "2132",
+   "item_sha256": "a57aaa816d5ed1bf86e4590c8403de871a44ef6c2cd95c19664f8988a1cd3239",
+   "n_options": 10,
+   "prompt_sha256": "405e33c6c6b80979be83f5458d7d1e3bab4e8ca95f34223c186d71fb3554c8e9"
+  },
+  {
+   "category": "physics",
+   "gold": "A",
+   "id": "9662",
+   "item_sha256": "bfa99f5f8f873ee7be0ae57aff783469f82a7a2f342cccbe8393abe4ee864bcf",
+   "n_options": 10,
+   "prompt_sha256": "49173bac332b0ec5889a88565153c1410afd76344146fd4b8d0e6fb41c93c935"
+  },
+  {
+   "category": "chemistry",
+   "gold": "A",
+   "id": "4235",
+   "item_sha256": "0f6d66aa3784bfefccd02e52697d0deee3dfb80012191a23baed4b0776705715",
+   "n_options": 10,
+   "prompt_sha256": "83486a3711d67516255a95e5828c8094a78795147b8b6360c22725c2644fe2c5"
+  },
+  {
+   "category": "other",
+   "gold": "A",
+   "id": "5056",
+   "item_sha256": "73801612cbf07db9432444006b2f7f645ea8fbd8c6a50c2e4a4a75aba97ad27a",
+   "n_options": 10,
+   "prompt_sha256": "161a473116a770e07091a06c236c48c66081a186edc6e2ecadc51e6cc0e9e5b5"
+  }
+ ],
+ "n": 8,
+ "name": "mmlu_prox_full_pilot_de",
+ "rule": "ids of the full test split present in en and de, not in Lite (ids of either language), whose normalised EN question is not a Lite EN question, and whose answer letter agrees with answer_index in en and de (Amendment 4)",
+ "schema": "exp036 item manifest v1",
+ "selection_rules_sha256": "7fc43f2d6fc5cd51a02f82d63cb59300d16e86d3d778142950b82625435ec0b1",
+ "sources": [
+  {
+   "repo": "li-lab/MMLU-ProX",
+   "revision": "8e6106a6c6ce1c5027e66cc338143cf997b2aa09",
+   "revision_found": "8e6106a6c6ce1c5027e66cc338143cf997b2aa09"
+  },
+  {
+   "repo": "li-lab/MMLU-ProX-Lite",
+   "revision": "e82aafb9460529687d3c7e51b401d8dd1dd309dd",
+   "revision_found": "e82aafb9460529687d3c7e51b401d8dd1dd309dd"
+  }
+ ],
+ "task": "mmlu_de",
+ "withheld": false
+}
