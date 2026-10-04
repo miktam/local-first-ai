@@ -157,3 +157,23 @@ def test_verify_private_follows_latest_hashes_and_moves(tmp_path):
     f.write_text("a\n")                                       # the mirror holds an older version
     res = status.verify_private(exp, priv)
     assert not res["ok"] and res["sha256_mismatch"] == ["$EXP036_PRIVATE/raw/S2/K8/gpqa_en_high.jsonl"]
+
+
+def test_an_amendment_with_an_unfilled_placeholder_is_never_appended(exp, tmp_path):
+    """Review 2026-10-04 (Amendment 6): a drafted amendment that still holds {{ANDREI_DECISION}} is refused by both
+    entry points, and nothing at all is appended, not even an earlier complete amendment of the same sync."""
+    hyp = exp / "HYPOTHESIS.md"
+    before = hyp.read_text()
+    _amend(exp, "1_ok.md", 1, "complete")
+    d = exp / "amendments"
+    (d / "2_draft.md").write_text("## Amendment 2 — draft (2026-10-04T20:00:00Z)\n\n**Andrei's decision.** "
+                                  "{{ANDREI_DECISION}}\n")
+    with pytest.raises(ValueError, match=r"\{\{ANDREI_DECISION\}\} is not filled in"):
+        status.sync_amendments(hyp, exp)
+    assert hyp.read_text() == before
+    with pytest.raises(ValueError, match="not filled in"):
+        status.append_amendment(d / "2_draft.md", hyp, exp)
+    assert hyp.read_text() == before
+    (d / "2_draft.md").write_text("## Amendment 2 — draft (2026-10-04T20:00:00Z)\n\n**Andrei's decision.** "
+                                  "\"his words\"\n")
+    assert [h.split(" — ")[0] for h in status.sync_amendments(hyp, exp)] == ["## Amendment 1", "## Amendment 2"]

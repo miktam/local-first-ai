@@ -67,7 +67,8 @@ plan (plan_fixed_<UTC>.json), keys read by normalise_plan(); defaults in bracket
     in_primary false ids of tasks/manifests/gpqa_diamond_en.json; else none]:
     Amendment 3 makes the GPQA EN primary set every Diamond item, so it must be
     empty (any id is a ConfigError), h8_texts [T1..T6], h8_peers [gemma4,
-    qwen3_6, qwen3_8].
+    qwen3_6, qwen3_8]; H8 also drops a family with an arm in excluded_arms
+    [{}] (a peer-check drop) or speed_only_arms [{}] (Amendment 6).
 
 CLI: python analysis/verdicts.py [--results DIR] [--plan FILE] [--no-exploratory]
 writes results/verdicts_<UTC>.json and results/verdicts_<UTC>.md and never
@@ -1388,12 +1389,16 @@ def h8(ctx: Context, B: int) -> dict:
     kl = _require_bench(ctx, "kl", "H8")
     texts = list(ctx.plan["h8_texts"])
     # A peer family leaves the median when either of its builds was dropped by the peer
-    # check (plan "excluded_arms"); H8 is NOT RUN if no peer family remains (HYPOTHESIS H8,
-    # resolution added 2026-10-04 before the pre-registration push).
-    excluded = set((ctx.plan.get("excluded_arms") or {}).keys())
-    peers = [f for f in ctx.plan["h8_peers"] if not (set(H8_FAMILY_ARMS.get(f, ())) & excluded)]
+    # check (plan "excluded_arms"; edge case 7, resolution added 2026-10-04 before the
+    # pre-registration push) or is speed-only (plan "speed_only_arms": the family's fidelity
+    # rule failed and the pinned bf16 reference put it on that build; Amendment 6). Its KL
+    # stays in the bench record, descriptive. H8 is NOT RUN if no peer family remains.
+    out_arms = set((ctx.plan.get("excluded_arms") or {}).keys()) | set((ctx.plan.get("speed_only_arms") or {}).keys())
+    peers = [f for f in ctx.plan["h8_peers"] if not (set(H8_FAMILY_ARMS.get(f, ())) & out_arms)]
+    left = {f: ", ".join(sorted(set(arms) & out_arms)) or "not in the plan's h8_peers"
+            for f, arms in H8_FAMILY_ARMS.items() if f not in peers}
     if not peers:
-        raise NotRun("H8: every peer family was dropped by the peer check")
+        raise NotRun("H8: every peer family left H8's median (a build dropped or speed-only by the peer check)")
     models = ["kolibri"] + peers
     num, den_b, den_t = _h8_arrays(kl_models(kl), models, texts)
     M = len(models)
@@ -1419,6 +1424,7 @@ def h8(ctx: Context, B: int) -> dict:
     s_tok = _ratio(stats.boot_blocks_stratified(num, den_t, w_tok, B, stats.rng("H8|per_token")))
     detail = {
         "models": models, "texts": texts,
+        "families_left": left,
         "kl_per_byte": {mdl: float(v) for mdl, v in zip(models, point_models)},
         "per_text_ratio": per_text, "texts_at_or_below_threshold": n_ok,
         "per_text_condition": res["confirm_condition"],

@@ -377,6 +377,22 @@ def test_h8_drops_a_peer_family_excluded_by_the_peer_check():
     assert d["verdict"] == V.CONFIRMED
 
 
+def test_h8_drops_a_family_with_a_speed_only_build_and_h1_keeps_g4():
+    """Amendment 6: plan "speed_only_arms" takes the family out of H8's median even when the plan does not list
+    h8_peers itself; H1 (K4 vs G4 speed blocks) is unaffected."""
+    w = all_confirmed_world()
+    base = w.compute(now=NOW, exploratory=False)
+    w.plan["speed_only_arms"] = {"G4": "peer check speed-only (peers_x.json)"}
+    v = w.compute(now=NOW, exploratory=False)
+    d = v["verdicts"]["H8_detail"]["detail"]
+    assert d["models"] == ["kolibri", "qwen3_6", "qwen3_8"] and d["families_left"] == {"gemma4": "G4"}
+    assert base["verdicts"]["H8_detail"]["detail"]["families_left"] == {}
+    assert v["verdicts"]["H1_detail"] == base["verdicts"]["H1_detail"] and v["verdicts"]["H1"] == V.CONFIRMED
+    w.plan["speed_only_arms"] = {"G8": "x", "Q36-4": "x"}
+    w.plan["excluded_arms"] = {"Q38-8": "x"}
+    assert w.compute(now=NOW, exploratory=False)["verdicts"]["H8"] == V.NOT_RUN
+
+
 def test_h8_not_run_when_every_peer_family_is_excluded():
     w = all_confirmed_world()
     w.plan["excluded_arms"] = {"G4": "x", "Q36-8": "x", "Q38-4": "x"}

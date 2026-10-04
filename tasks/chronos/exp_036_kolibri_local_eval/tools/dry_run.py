@@ -31,7 +31,9 @@ Stages (RUNBOOK order; each must pass):
   convert       port/convert.py for K8 and K4, exactly as RUNBOOK step 8
   peers         tools/peer_check.py --checks load,nll,kl,batch on the stand-ins (the batched path through the
                 gate's G5 functions; NLL/KL and the batched path on the Amendment 5 chat wrapper, the raw-text
-                NLL still recorded for G3), then a dry-run peers record that marks every stand-in ok
+                NLL still recorded for G3), then a dry-run peers record that marks every stand-in ok except the
+                arms the pinned Amendment 6 fidelity reference classes speed-only (G4), which it marks speed-only
+                as the real run expects, so the plan, the bench and the verdicts run with a speed-only arm
   gate          gate/run_gate.py --tiny on $EXP036_MODELS; its PASS record is re-labelled as a real-mode record
                 (dry_run_promoted_from) so the runner's guards accept it, bound to the same shas
   tier2         the Tier-2 amendment as an amendments/ file, status --sync-amendments, commit, push
@@ -539,18 +541,30 @@ def stage_manifests() -> dict:
 
 
 def stage_peers_record() -> str:
-    """results/peers_<UTC>.json for the runner's guard: every stand-in ok. The stand-ins are Kolibri-architecture
-    weights under the peers' tokenizers, so tools/peer_check.py's static checks (config arithmetic, parity
-    record) cannot pass on them by construction; its weight checks ran in the peers stage."""
+    """results/peers_<UTC>.json for the runner's guard: every stand-in ok, except an arm the pinned Amendment 6
+    fidelity reference (tools/fidelity_reference.json) classes speed-only, which is marked speed-only as the real
+    run expects (G4). The stand-ins are Kolibri-architecture weights under the peers' tokenizers, so
+    tools/peer_check.py's static checks (config arithmetic, parity record) cannot pass on them by construction;
+    its weight checks ran in the peers stage."""
     sys.path.insert(0, str(EXP_DIR))
     from runner.guard import require_identity
+    from tools import peer_check as pc
 
     require_identity()
+    cls = pc.reference_classes()
     now = datetime.now(timezone.utc)
-    rec = {"schema": "exp036 peer check v1", "dry_run": "tools/dry_run.py: tiny stand-ins, marked ok",
+
+    def entry(a: str) -> dict:
+        if cls.get(a) == pc.SPEED_ONLY:
+            return {"verdict": pc.SPEED_ONLY, "problems": [], "dry_run": True,
+                    "speed_only_problems": [f"{pc.FAMILY_RULE_PROBLEM}; the pinned Amendment 6 reference classes "
+                                            f"{a} speed-only (dry run)"]}
+        return {"verdict": "ok", "problems": [], "dry_run": True}
+
+    rec = {"schema": "exp036 peer check v1",
+           "dry_run": "tools/dry_run.py: tiny stand-ins, marked ok except the pinned reference's speed-only arms",
            "t_start": now.isoformat().replace("+00:00", "Z"), "t_end": now.isoformat().replace("+00:00", "Z"),
-           "arms": {a: {"verdict": "ok", "problems": [], "dry_run": True}
-                    for _f, (_s, arms) in PEER_FAMILIES.items() for a in arms}}
+           "arms": {a: entry(a) for _f, (_s, arms) in PEER_FAMILIES.items() for a in arms}}
     p = EXP_DIR / "results" / f"peers_{utc_stamp(now)}.json"
     with open(p, "x", encoding="utf-8") as f:
         f.write(json.dumps(rec, indent=2, sort_keys=True) + "\n")
@@ -805,6 +819,14 @@ def orchestrate(args) -> int:
         s = newest(w.exp / "results", "pilot_summary_*.json")
         p = r.py("runner/plan_fix.py", "--pilot", s.relative_to(w.exp))
         out = json.loads(p.stdout.strip().splitlines()[-1])
+        # Amendment 6: the speed-only arms of the peers record have no task cell and their families leave H8.
+        pf = json.loads(newest(w.exp / "results", "plan_fixed_*.json").read_text())
+        so = sorted(pf.get("speed_only_arms") or {})
+        quality = sorted({q["arm"] for q in pf.get("queue", []) if q["arm"] in so})
+        left = sorted(pf.get("h8_families_left") or {})
+        if quality or (so and not left):
+            raise StageError(f"speed-only arms {so}: task cells {quality}, H8 families left {left}")
+        out.update(speed_only_arms=so, h8_peers=pf.get("h8_peers"), h8_families_left=left)
         am = newest(w.exp / "results", "AMENDMENT_*.md")
         r.py("tools/status.py", "--sync-amendments")
         with open(w.exp / "HYPOTHESIS.md", "a", encoding="utf-8") as f:
@@ -853,6 +875,13 @@ def orchestrate(args) -> int:
         for h in ("H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "D1"):
             x = v["verdicts"].get(h)
             out[h] = x.get("verdict", x.get("state")) if isinstance(x, dict) else x
+        h8 = (v["verdicts"].get("H8_detail") or {}).get("detail") or {}
+        if h8.get("models"):   # Amendment 6: a family with a speed-only build is not in H8's median
+            out["H8_models"] = h8["models"]
+            pf = json.loads(newest(w.exp / "results", "plan_fixed_*.json").read_text())
+            gone = set(pf.get("h8_families_left") or {}) & set(h8["models"])
+            if gone:
+                raise StageError(f"H8 used families the plan took out of its median: {sorted(gone)}")
         r.py("tools/status.py", "--record-block", "verdicts")
         r.commit("chronos/exp_036: verdicts (dry run)")
         return out

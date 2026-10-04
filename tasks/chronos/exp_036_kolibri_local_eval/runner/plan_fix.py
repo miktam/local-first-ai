@@ -40,6 +40,18 @@ greedy flip rate; Amendment 5) is not excluded: every cell of it, Tier A and
 Tier B, gets B = 1 and is projected at B = 1; the plan lists such arms under
 "peer_b1" and the amendment names them.
 
+A peer arm whose peer check says "speed-only" (Amendment 6, runner/guard.py
+speed_only_arms: its family's fidelity rule failed and the pinned bf16
+reference put the failure on this build) has no quality cell (Tier A or Tier
+B task cell; a MoE peer among them is handled as a dropped one for H3, H4, H6
+and the H2 protocol control) but is not excluded: the B4 ladder (a bench cell)
+keeps it, as do H1 and the speed cells, which bench/ runs outside the plan.
+The plan lists such arms under "speed_only_arms". Every family with a build
+excluded or speed-only leaves H8's peer median (edge case 7): the plan records
+the remaining families as "h8_peers" and why the others left in
+"h8_families_left", and puts H8 under "not_run" when none remains;
+analysis/verdicts.py applies the same rule.
+
 The CLI (`plan_fix.py --pilot results/pilot_summary_<UTC>.json [...]`)
 reads the files, calls fix(), and writes results/plan_fixed_<UTC>.json and
 results/AMENDMENT_<k>_<UTC>.md. It never opens an existing file for writing
@@ -367,6 +379,9 @@ class Projector:
 # HYPOTHESIS Tier B "B4 | context ladder for K4, K8, G4": the arms the bench ladder cell loads.
 LADDER_ARMS = ("K4", "K8", "G4")
 MOE_PEERS = ("G8", "Q36-8")
+# H8's peer families (HYPOTHESIS H8: Gemma 4, Qwen3.6, Qwen3.8), in ARMS order; edge case 7 removes a family when a
+# build of it is excluded, Amendment 6 when a build of it is speed-only.
+H8_PEER_FAMILIES = tuple(dict.fromkeys(s["family"] for a, s in ARMS.items() if a not in KOLIBRI_ARMS))
 
 
 def tier_a_cells(rules: dict, plan: str, k8_runs: bool = True, excluded: Iterable[str] = ()) -> list[dict]:
@@ -390,14 +405,18 @@ def tier_a_cells(rules: dict, plan: str, k8_runs: bool = True, excluded: Iterabl
     return _substitute_k8(out, k8_runs)
 
 
-def tier_b_cells(rules: dict, item: str, plan: str, k8_runs: bool = True, excluded: Iterable[str] = ()) -> list[dict]:
+def tier_b_cells(rules: dict, item: str, plan: str, k8_runs: bool = True, excluded: Iterable[str] = (),
+                 speed_only: Iterable[str] = ()) -> list[dict]:
+    """excluded: arms with no cell at all (the B4 ladder needs K4, K8 and G4); speed_only (Amendment 6): arms
+    with no task cell, which the B4 ladder (a speed and memory bench cell) keeps."""
     d = rules["plan_defs"][plan]
     excluded = set(excluded)
+    no_task_cells = excluded | set(speed_only)
     out = []
     for c in rules["tier_b_cells"][item]:
         if c.get("group") == "k8_gpqa_de" and not d["k8_gpqa_de"]:
             continue
-        if c["arm"] in excluded or (c["arm"] == "bench" and excluded & set(LADDER_ARMS)):
+        if c["arm"] in no_task_cells or (c["arm"] == "bench" and excluded & set(LADDER_ARMS)):
             continue
         cell = {k: v for k, v in c.items() if k != "group"}
         if cell["arm"] != "bench":
@@ -488,7 +507,8 @@ def fix(
     context: dict | None = None,
 ) -> tuple[dict, str, int]:
     """(plan_fixed, amendment_md, k). context keys: now_utc (ISO), L_bytes,
-    L_sources, weight_bytes {arm: bytes}, peer_b1 [arms], step_models_extra,
+    L_sources, weight_bytes {arm: bytes}, peer_b1 [arms], excluded_arms
+    {arm: reason}, speed_only_arms {arm: reason}, step_models_extra,
     prefill_tps_extra, manifests, category_counts, mmlu_lite_categories (the
     categories of tasks/manifests/mmlu_prox_lite_en.json in listing order),
     gate_record, peers_record, scorers_tree_sha256, inputs."""
@@ -566,22 +586,43 @@ def fix(
 
     # Arms the records exclude (gate K4 FAIL; peer-check fail): no cell of theirs is queued (review fix 2026-10-03).
     excluded = {a: str(r) for a, r in sorted((ctx.get("excluded_arms") or {}).items())}
+    # Speed-only arms (peer-check "speed-only", Amendment 6): no task cell, but not excluded (the B4 ladder keeps
+    # them; H1 and the speed cells run in bench/, outside the plan).
+    speed_only = {a: str(r) for a, r in sorted((ctx.get("speed_only_arms") or {}).items()) if a not in excluded}
+    no_quality = set(excluded) | set(speed_only)
     not_run: dict[str, str] = {}
     if "K4" in excluded:
         for h in ("H1", "H7", "H8", "D1"):
             not_run[h] = f"K4 excluded: {excluded['K4']} (HYPOTHESIS Phase 0, exit 4)"
-    peers = [a for a in MOE_PEERS if a not in excluded]
-    for a in sorted(set(excluded) & set(MOE_PEERS)):
-        why = f"{a} dropped: {excluded[a]} (HYPOTHESIS \"Peers are verified, not gated\")"
+    peers = [a for a in MOE_PEERS if a not in no_quality]
+    for a in sorted(no_quality & set(MOE_PEERS)):
+        why = (f"{a} dropped: {excluded[a]} (HYPOTHESIS \"Peers are verified, not gated\")" if a in excluded
+               else f"{a} speed-only: {speed_only[a]} (Amendment 6: no quality cell)")
         if a == "Q36-8":
             not_run["H4"] = why
         if not peers:
             not_run.setdefault("H3", why)
             not_run.setdefault("H6", why)
-    # What a peer-check fail of G4, Q36-4 or Q38-x (or of G8 / Q36-8) does to H1 and H8 is not pre-registered: the
-    # plan lists the exclusion and makes nothing else NOT RUN; that decision is Andrei's, by amendment.
+    # H8's peer median: a family leaves it when either build is excluded or speed-only (edge case 7; Amendment 6);
+    # H8 is NOT RUN if no family remains. analysis/verdicts.py applies the same rule.
+    h8_peers, h8_left = [], {}
+    for fam in H8_PEER_FAMILIES:
+        hit = [a for a in ARMS if ARMS[a]["family"] == fam and a in no_quality]
+        if hit:
+            h8_left[fam] = "; ".join(f"{a} excluded: {excluded[a]}" if a in excluded
+                                     else f"{a} speed-only: {speed_only[a]}" for a in hit)
+        else:
+            h8_peers.append(fam)
+    if not h8_peers:
+        not_run.setdefault("H8", "every peer family left H8's peer median (edge case 7; Amendment 6): "
+                           + "; ".join(f"{f} ({r})" for f, r in sorted(h8_left.items())))
+    # What a peer-check fail of G4 does to H1 is left to an amendment (RUNBOOK step 9): the plan lists the
+    # exclusion and makes nothing else NOT RUN. A speed-only G4 keeps H1 (Amendment 6).
     plan["excluded_arms"] = excluded
+    plan["speed_only_arms"] = speed_only
     plan["peers"] = peers
+    plan["h8_peers"] = h8_peers
+    plan["h8_families_left"] = h8_left
     plan["not_run"] = dict(sorted(not_run.items()))
     if not k8_runs and "K4" in excluded:
         plan.update({"status": "STOP", "plan": None, "queue": [],
@@ -607,7 +648,7 @@ def fix(
 
     # 5. ladder
     cap_s = float(B["session_cap_h"])
-    plan_cells = {p: resolve(tier_a_cells(rules, p, k8_runs, excluded)) for p in rules["plans"]}
+    plan_cells = {p: resolve(tier_a_cells(rules, p, k8_runs, no_quality)) for p in rules["plans"]}
     plan_hours = {p: hours_of(cs) for p, cs in plan_cells.items()}
     choice = choose_plan(plan_hours, rules["plans"], B_main, cap_s)
     plan["ladder"] = [{**t, "total_h": _r(t["total_h"]), "S2_h": _r(t["S2_h"]), "S3_h": _r(t["S3_h"])}
@@ -629,7 +670,7 @@ def fix(
     tb_log = []
     added = []
     for item in rules["tier_b_order"]:
-        cells = resolve(tier_b_cells(rules, item, P, k8_runs, excluded))
+        cells = resolve(tier_b_cells(rules, item, P, k8_runs, excluded, speed_only))
         # K8 replaced by K4: drop Tier-B cells already queued (e.g. B8 duplicates).
         have = {(c["arm"], c["task"], c["effort"], c["pass"]) for c in queue}
         cells = [c for c in cells if (c["arm"], c["task"], c["effort"], c["pass"]) not in have]
@@ -774,10 +815,20 @@ def amendment_md(plan: dict, k: int, now: str, plan_file: tuple[str, str] | None
     ex = plan.get("excluded_arms") or {}
     if ex:
         L.append("- Excluded arms (no cell queued): " + "; ".join(f"{a} — {r}" for a, r in sorted(ex.items())))
+    so = plan.get("speed_only_arms") or {}
+    if so:
+        L.append("- Speed-only arms (peer-check verdict \"speed-only\", Amendment 6: no quality cell and not in H8's peer "
+                 "median; H1, the speed cells and the B4 ladder keep them): "
+                 + "; ".join(f"{a} — {r}" for a, r in sorted(so.items())))
     if plan.get("peer_b1"):
         L.append("- Peers at B = 1 (peer-check verdict \"B=1\": the batched-path check failed; every cell of the arm "
                  "runs at B = 1): " + ", ".join(plan["peer_b1"]))
     L.append(f"- MoE peers for H3, H6 and the H2 protocol control: {', '.join(plan.get('peers') or []) or 'none'}")
+    if "h8_peers" in plan:
+        left = plan.get("h8_families_left") or {}
+        L.append(f"- H8 peer families: {', '.join(plan['h8_peers']) or 'none'}"
+                 + ("; left H8's peer median (edge case 7, Amendment 6): "
+                    + "; ".join(f"{f} ({r})" for f, r in sorted(left.items())) if left else ""))
     if plan.get("not_run"):
         L.append("- NOT RUN by this amendment (p = p_rev = 1, m unchanged): "
                  + "; ".join(f"{h}: {r}" for h, r in sorted(plan["not_run"].items())))
@@ -988,9 +1039,10 @@ def build_context(exp_dir: Path, pilot_paths: list[Path]) -> dict:
                                         and str(e.get("verdict", e.get("status", ""))).upper() == "B=1")
     sm, pf = _q38_from_speed_desc(results)
     ctx["step_models_extra"], ctx["prefill_tps_extra"] = sm, pf
-    from runner.guard import excluded_arms
+    from runner.guard import excluded_arms, speed_only_arms
 
     ctx["excluded_arms"] = excluded_arms(results)
+    ctx["speed_only_arms"] = speed_only_arms(results)
     return ctx
 
 
@@ -1046,7 +1098,9 @@ def main(argv: list[str] | None = None) -> int:
     summaries = [json.loads(p.read_text(encoding="utf-8")) for p in paths]
     rules = load_rules(exp_dir / "runner" / "plan_rules.json")
     ctx = build_context(exp_dir, paths)
-    problems = check_pilot_inputs(summaries, rules, ctx.get("excluded_arms") or {})
+    # A speed-only arm (Amendment 6) has no pilot cell either.
+    problems = check_pilot_inputs(summaries, rules, {**(ctx.get("excluded_arms") or {}),
+                                                     **(ctx.get("speed_only_arms") or {})})
     if problems:
         print("REFUSED: " + "; ".join(problems), file=sys.stderr)
         return 1

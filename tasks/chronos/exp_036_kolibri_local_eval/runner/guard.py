@@ -23,6 +23,9 @@ SIGNOFF_RE = re.compile(r"^- Signed off by: Andrei \(.+\)$", re.M)
 AMEND_RE = re.compile(r"^## Amendment (\d+) [—–-] (.+?) \((.+?)\)\s*$", re.M)
 PLAN_FILE_RE = re.compile(r"plan_fixed: `(results/plan_fixed_[0-9TZ]+\.json)`, sha256 `([0-9a-f]{64})`")
 SCORERS_RE = re.compile(r"Scorers tree sha256: `([0-9a-f]{64})`")
+# The peer-check verdict of an arm that runs only H1, the speed cells and the B4 ladder (Amendment 6;
+# tools/peer_check.py SPEED_ONLY).
+SPEED_ONLY = "speed-only"
 
 
 class GuardError(SystemExit):
@@ -154,8 +157,13 @@ def require_peers(arm: str, results: Path | None = None) -> dict | None:
     entry = arms.get(arm) if isinstance(arms, dict) else None
     if not isinstance(entry, dict):
         refuse(f"{p.name} has no entry for {arm}")
-    # tools/peer_check.py writes verdict "ok" | "B=1" | "fail" per arm; "B=1"
-    # (only the batched path failed) runs at B = 1 by the plan rule.
+    # tools/peer_check.py writes verdict "ok" | "B=1" | "speed-only" | "fail" per arm; "B=1"
+    # (only the batched path failed) runs at B = 1 by the plan rule. Every caller of this guard runs quality
+    # cells (pilot, session, cell); a "speed-only" arm (Amendment 6) runs none: only H1, the speed cells and the
+    # B4 ladder, which bench/ runs without this guard.
+    if str(entry.get("verdict", "")).lower() == SPEED_ONLY:
+        refuse(f"{arm} is speed-only by the peer check ({p.name}; Amendment 6): it runs no quality cell, "
+               f"only H1, the speed cells and the B4 ladder")
     if "verdict" in entry:
         ok = str(entry["verdict"]).lower() in ("ok", "b=1")
     else:
@@ -173,7 +181,7 @@ def excluded_arms(results: Path | None = None) -> dict[str, str]:
     - K4, when the latest real gate record says K8 PASS and K4 FAIL: the run continues without K4 once the fix
       cycles are used up, and H1, H7, H8 and D1 are NOT RUN (HYPOTHESIS Phase 0 "Verdict and refusal", exit 4);
     - every arm whose newest peer-check verdict is "fail": dropped by amendment before any scored run (HYPOTHESIS
-      "Peers are verified, not gated"); "B=1" is not a drop.
+      "Peers are verified, not gated"); "B=1" is not a drop, and "speed-only" is speed_only_arms()'s.
 
     Read by `runner/run.py pilot --without` (which refuses any other exclusion) and by runner/plan_fix.py."""
     results = Path(results or EXP_DIR / "results")
@@ -187,6 +195,23 @@ def excluded_arms(results: Path | None = None) -> dict[str, str]:
         v = rec.get("verdict") if isinstance(rec.get("verdict"), dict) else {}
         if rec.get("mode") == "real" and v.get("K8") == "PASS" and v.get("K4") == "FAIL":
             out["K4"] = f"gate K4 FAIL ({gates[-1].name})"
+    out.update(_peer_verdict_arms(results, "fail"))
+    return out
+
+
+def speed_only_arms(results: Path | None = None) -> dict[str, str]:
+    """{arm: reason} for every arm whose newest peer-check verdict is "speed-only" (Amendment 6): its family's
+    NLL(8) / KL(8‖4) rule failed and the pinned bf16 reference put the failure on this build (tools/peer_check.py).
+    Such an arm runs no quality cell (no pilot, Tier-A or Tier-B task cell) and its family leaves H8's peer median,
+    but it is not excluded: H1, the descriptive speed cells and the B4 ladder keep it (bench/ does not read the peer
+    record). Read by `runner/run.py pilot --without` and by
+    runner/plan_fix.py, which records the arms under "speed_only_arms"."""
+    return _peer_verdict_arms(Path(results or EXP_DIR / "results"), SPEED_ONLY)
+
+
+def _peer_verdict_arms(results: Path, verdict: str) -> dict[str, str]:
+    """{arm: reason} for the arms whose verdict in the newest results/peers_<UTC>.json is `verdict`."""
+    out: dict[str, str] = {}
     p = newest(results, "peers_*.json")
     if p is not None:
         try:
@@ -195,8 +220,8 @@ def excluded_arms(results: Path | None = None) -> dict[str, str]:
             rec = {}
         arms = rec.get("arms", rec) if isinstance(rec, dict) else {}
         for a, e in sorted(arms.items()) if isinstance(arms, dict) else []:
-            if isinstance(e, dict) and str(e.get("verdict", "")).lower() == "fail":
-                out[a] = f"peer check fail ({p.name})"
+            if isinstance(e, dict) and str(e.get("verdict", "")).lower() == verdict:
+                out[a] = f"peer check {verdict} ({p.name})"
     return out
 
 

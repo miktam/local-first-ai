@@ -10,11 +10,13 @@
     status.py --sync-amendments
         appends, verbatim and in number order, every amendments/*.md whose
         first line ("## Amendment k — <type> (<UTC>)") is not yet in
-        HYPOTHESIS.md; a no-op when there is none
+        HYPOTHESIS.md; a no-op when there is none; refused, with nothing
+        appended, if one of them still holds a {{PLACEHOLDER}}
     status.py --set-status TEXT            rewrites only the Status line
     status.py --append-amendment FILE      appends one amendment file verbatim (e.g. plan_fix's
         results/AMENDMENT_<k>_<UTC>.md, RUNBOOK step 13); refused if its heading is malformed or
-        already in HYPOTHESIS.md (review fix 2026-10-03: no `cat … >>` in a RUNBOOK block)
+        already in HYPOTHESIS.md (review fix 2026-10-03: no `cat … >>` in a RUNBOOK block), or if it
+        still holds a {{PLACEHOLDER}}
     status.py --tier2                      "Tier-2 analysis amendment at HEAD: yes|no" (in HYPOTHESIS.md
         or as a committed amendments/ file); exit 0 yes, 1 no (RUNBOOK steps 14, 16, 17)
     status.py --verify-private [--private DIR]
@@ -44,6 +46,9 @@ from tools import common
 
 STATUS_RE = re.compile(r"^(\*Pre-registered: .*? · Status: )(.*)(\*)\s*$")
 AMEND_HEAD_RE = re.compile(r"^## Amendment (\d+) — .+\(.+\)\s*$")
+# An amendment still holding a {{PLACEHOLDER}} (e.g. {{ANDREI_DECISION}}, a draft awaiting Andrei's own words) is
+# never appended: HYPOTHESIS.md is append-only, so an unfilled draft could not be taken back.
+PLACEHOLDER_RE = re.compile(r"\{\{[A-Z][A-Z0-9_]*\}\}")
 
 # Default result files per phase (globs relative to the experiment dir; newest match).
 PHASE_FILES = {
@@ -169,7 +174,8 @@ def record_block(phase: str, hypothesis=None, files=None, status: str | None = N
 
 def sync_amendments(hypothesis=None, exp_dir=None) -> list[str]:
     """Append missing amendments/*.md verbatim in number order; returns the
-    headings appended (empty list = no-op)."""
+    headings appended (empty list = no-op). Raises ValueError, appending
+    nothing, if a missing one still holds a {{PLACEHOLDER}}."""
     exp = Path(exp_dir or common.EXP_DIR)
     hyp = Path(hypothesis or exp / "HYPOTHESIS.md")
     adir = exp / "amendments"
@@ -184,6 +190,7 @@ def sync_amendments(hypothesis=None, exp_dir=None) -> list[str]:
         if not m:
             raise ValueError(f"{f.name}: first line is not '## Amendment k — <type> (<UTC>)'")
         if first not in present:
+            _refuse_placeholder(f.name, text)
             todo.append((int(m.group(1)), f.name, first, text))
     appended = []
     for _, _, first, text in sorted(todo):
@@ -194,7 +201,8 @@ def sync_amendments(hypothesis=None, exp_dir=None) -> list[str]:
 
 def append_amendment(path, hypothesis=None, exp_dir=None) -> str:
     """Append one amendment file verbatim; returns its heading. Refuses a file whose first line is not
-    "## Amendment k — <type> (<UTC>)" or whose heading HYPOTHESIS.md already holds."""
+    "## Amendment k — <type> (<UTC>)", whose heading HYPOTHESIS.md already holds, or that still holds a
+    {{PLACEHOLDER}}."""
     exp = Path(exp_dir or common.EXP_DIR)
     hyp = Path(hypothesis or exp / "HYPOTHESIS.md")
     text = Path(path).read_text(encoding="utf-8")
@@ -203,8 +211,16 @@ def append_amendment(path, hypothesis=None, exp_dir=None) -> str:
         raise ValueError(f"{Path(path).name}: first line is not '## Amendment k — <type> (<UTC>)'")
     if first in set(hyp.read_text(encoding="utf-8").splitlines()):
         raise ValueError(f"{hyp.name} already holds {first!r}")
+    _refuse_placeholder(Path(path).name, text)
     _append(hyp, text)
     return first
+
+
+def _refuse_placeholder(name: str, text: str) -> None:
+    m = PLACEHOLDER_RE.search(text)
+    if m:
+        raise ValueError(f"{name}: {m.group(0)} is not filled in; nothing appended (the main session fills it "
+                         f"and pushes again)")
 
 
 def _resolve_private(redacted: str, private: Path) -> Path | None:

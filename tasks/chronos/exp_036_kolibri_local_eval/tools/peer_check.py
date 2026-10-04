@@ -36,9 +36,29 @@ Two modes.
    and the greedy answer-flip rate on 30 MMLU-ProX full EN items with thinking
    off (≤ 2 %). Writes results/peers_<UTC>.json with t_start / t_end. Per arm:
    `ok`; `B=1` (only the batched-path check failed, its parity or its greedy
-   flip rate: the plan rule runs every cell of the arm at B = 1); or `fail`
+   flip rate: the plan rule runs every cell of the arm at B = 1);
+   `speed-only` (Amendment 6, below: no quality cell and not in H8's peer
+   median; H1, the speed cells and the B4 ladder keep the arm); or `fail`
    (anything else failed, or a check could not run: dropped by amendment
    before any scored run).
+
+Attribution by a bf16 reference (Amendment 6). The family rule compares a
+family's two builds with each other, so when it fails it cannot say which
+build is unfaithful. When it fails and tools/fidelity_reference.json (in the
+TOOLS tree) pins a committed record of the family's builds against an
+unquantised reference, each arm is judged on its own: the record must have the
+pinned sha256 and rows for every arm of the family on exactly the pinned
+texts, and each row must agree with this run's chat-wrapped NLL of that arm
+(token count exact, NLL within REFERENCE_NLL_TOL); then an arm whose
+token-weighted KL(reference ‖ arm) is < KL_MAX passes fidelity (its verdict
+follows its other checks, e.g. the batched path gives `B=1`), and an arm with
+KL ≥ KL_MAX is `speed-only`. The attribution is recorded in
+`families.<f>.fidelity_attribution` and `arms.<a>.fidelity_reference`; the
+pin and record hashes in `fidelity_reference`. Without a pin for the family,
+or with a pin that cannot be read or does not match the run, the registered
+consequence stands (both arms `fail`), and
+`families.<f>.fidelity_attribution` says why ({"used": false, "reason"} or
+the mismatches).
 
 Texts (Amendment 5, Andrei 2026-10-04, "Chat-wrapped"). The NLL(8) / KL(8‖4)
 rule reads each gate text as the assistant turn after the fixed user message
@@ -56,8 +76,8 @@ greedy flip renders its MMLU items through runner.chat already.
 The teacher-forcing and KL arithmetic are bench/kl_8v4.py's (the H8 code),
 used lazily, so the peer check and H8 compute NLL and KL the same way.
 
-Exit codes: 0 every arm ok; 2 some arm only B=1; 1 a failure or a check that
-could not run on the run host.
+Exit codes: 0 every arm ok; 2 some arm only B=1 or speed-only; 1 a failure or
+a check that could not run on the run host.
 """
 
 from __future__ import annotations
@@ -65,6 +85,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 import sys
 from pathlib import Path
 
@@ -111,6 +132,16 @@ FLIP_MAX_TOKENS = 4096
 BATCH_LENGTHS = (37, 300, 700, 1100, 64, 520, 900, 150, 37, 700, 300, 1100)
 BATCH_MAX_TOKENS = (48, 8, 32, 16, 40, 24, 56, 12, 20, 36, 28, 44)
 FLOOR_RANGE = (520, 1100)
+
+# Amendment 6: attribution of a failed family rule by a pinned bf16 reference record.
+FAMILY_RULE_PROBLEM = "NLL(8) / KL(8‖4) rule failed"
+SPEED_ONLY = "speed-only"
+FIDELITY_REFERENCE_FILE = common.TOOLS_DIR / "fidelity_reference.json"
+FIDELITY_REFERENCE_SCHEMA = "exp036 fidelity reference v1"
+REFERENCE_NLL_TOL = NLL_MARGIN      # the record's arm NLL vs this run's, nats/token (the registered NLL margin)
+REFERENCE_FIELDS = {"arm": "model", "text": "text", "tokens": "n_tokens", "kl": "kl_bf16_model",
+                    "nll_arm": "nll_model", "nll_ref": "nll_bf16"}
+_TEXT_ID = re.compile(r"^(T\d+)(?:[_.]|$)")
 
 # Our own EN/DE strings for token-id parity (no third-party text).
 FIXED_STRINGS = (
@@ -500,6 +531,179 @@ def flip_rate(a: list, b: list) -> dict:
     return {"n": n, "flips": flips, "rate": flips / n if n else None, "ok": (flips / n <= FLIP_MAX) if n else False}
 
 
+# --------------------------------------------------------------------------
+# Amendment 6: a failed family rule attributed to a build by a bf16 reference
+# --------------------------------------------------------------------------
+
+class ReferenceError(ValueError):
+    """A pinned fidelity reference that cannot be used (malformed pin, missing record, other sha256, rows)."""
+
+
+def _rel(p: Path, exp_dir: Path) -> str:
+    try:
+        return Path(p).resolve().relative_to(Path(exp_dir).resolve()).as_posix()
+    except ValueError:
+        return redact_path(p)
+
+
+def load_fidelity_reference(path=None, exp_dir=None) -> dict:
+    """The pinned reference records, checked; {} when there is no pin file (the registered behaviour).
+
+    Returns {"pin": {"path", "sha256"}, "families": {family: {"record", "record_sha256", "texts",
+    "reference_model", "measurement", "arms": {arm: {"tokens", "kl_ref_per_token", "nll_arm_per_token",
+    "nll_ref_per_token", "per_text": {T: {"tokens", "kl", "nll_arm", "nll_ref"}}}}}}}: per arm, the per-text
+    means of the record and their token-weighted means over the pinned texts. Raises ReferenceError when the
+    pin is malformed, names an unknown family, or its record is missing, has another sha256, or lacks a row of
+    some arm of the family on some pinned text (or has one twice, or one outside the pinned texts)."""
+    exp_dir = Path(exp_dir or common.EXP_DIR)
+    path = Path(path) if path is not None else FIDELITY_REFERENCE_FILE
+    if not path.is_file():
+        return {}
+    try:
+        pin = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        raise ReferenceError(f"{path.name}: not JSON ({e})") from None
+    if pin.get("schema") != FIDELITY_REFERENCE_SCHEMA:
+        raise ReferenceError(f"{path.name}: schema {pin.get('schema')!r}, expected {FIDELITY_REFERENCE_SCHEMA!r}")
+    out = {"pin": {"path": _rel(path, exp_dir), "sha256": common.sha256_file(path)}, "families": {}}
+    for fam, spec in sorted((pin.get("families") or {}).items()):
+        if fam not in FAMILIES:
+            raise ReferenceError(f"{path.name}: unknown family {fam!r}")
+        try:
+            rp = exp_dir / spec["record"]
+            want_sha, texts = spec["record_sha256"], [str(t) for t in spec["texts"]]
+        except (KeyError, TypeError) as e:
+            raise ReferenceError(f"{path.name}: {fam}: missing {e}") from None
+        if not rp.is_file():
+            raise ReferenceError(f"{fam}: reference record {spec['record']} is missing")
+        sha = common.sha256_file(rp)
+        if sha != want_sha:
+            raise ReferenceError(f"{fam}: reference record {spec['record']} has sha256 {sha[:12]}…, "
+                                 f"the pin says {str(want_sha)[:12]}…")
+        f = {**REFERENCE_FIELDS, **(spec.get("fields") or {})}
+        try:
+            body = json.loads(rp.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as e:
+            raise ReferenceError(f"{fam}: {spec['record']} is not JSON ({e})") from None
+        rows = body.get(spec.get("rows", "reference_kl")) if isinstance(body, dict) else None
+        if not isinstance(rows, list):
+            raise ReferenceError(f"{fam}: {spec['record']} has no list {spec.get('rows', 'reference_kl')!r}")
+        arms = {}
+        for arm in FAMILIES[fam]["arms"]:
+            per: dict = {}
+            for r in rows:
+                if not isinstance(r, dict) or r.get(f["arm"]) != arm:
+                    continue
+                m = _TEXT_ID.match(str(r.get(f["text"], "")))
+                if not m or m.group(1) not in texts or m.group(1) in per:
+                    raise ReferenceError(f"{fam}: {arm} row for text {r.get(f['text'])!r} is not one of the pinned "
+                                         f"texts {texts}, or it repeats")
+                try:
+                    per[m.group(1)] = {"tokens": int(r[f["tokens"]]), "kl": float(r[f["kl"]]),
+                                       "nll_arm": float(r[f["nll_arm"]]), "nll_ref": float(r[f["nll_ref"]])}
+                except (KeyError, TypeError, ValueError) as e:
+                    raise ReferenceError(f"{fam}: {arm} {m.group(1)}: bad row ({type(e).__name__}: {e})") from None
+            if sorted(per) != sorted(texts):
+                raise ReferenceError(f"{fam}: {arm} has rows for {sorted(per)}, the pin names {sorted(texts)}")
+            n = sum(v["tokens"] for v in per.values())
+            if n <= 0:
+                raise ReferenceError(f"{fam}: {arm} rows hold no tokens")
+            arms[arm] = {"tokens": n,
+                         "kl_ref_per_token": sum(v["kl"] * v["tokens"] for v in per.values()) / n,
+                         "nll_arm_per_token": sum(v["nll_arm"] * v["tokens"] for v in per.values()) / n,
+                         "nll_ref_per_token": sum(v["nll_ref"] * v["tokens"] for v in per.values()) / n,
+                         "per_text": dict(sorted(per.items()))}
+        out["families"][fam] = {"record": spec["record"], "record_sha256": sha, "texts": texts,
+                                "record_commit": spec.get("record_commit"),
+                                "reference_model": spec.get("reference_model"),
+                                "measurement": spec.get("measurement"), "arms": arms}
+    return out
+
+
+def reference_classes(reference: dict | None = None) -> dict:
+    """{arm: "pass" | "speed-only"} by the pinned references' KL alone (no agreement with a run is checked):
+    what the reference says of each build it covers. tools/dry_run.py writes its peers record from it."""
+    ref = load_fidelity_reference() if reference is None else reference
+    return {arm: ("pass" if a["kl_ref_per_token"] < KL_MAX else SPEED_ONLY)
+            for f in (ref.get("families") or {}).values() for arm, a in sorted(f["arms"].items())}
+
+
+def attribute_fidelity(ref_family: dict, nll_chat: dict) -> dict:
+    """Judge each arm of a family whose rule failed by its pinned reference (a pure function).
+
+    nll_chat: {arm: this run's arms.<a>.nll_chat (nll_summary of the chat-wrapped texts)}. The reference is
+    usable only if every pinned text of every arm agrees with the run: the same token count and an NLL per
+    token within REFERENCE_NLL_TOL. Then per arm: "pass" if KL(reference ‖ arm) < KL_MAX, else "speed-only".
+    Returns {"usable", "problems", "threshold", "nll_tolerance", "arms": {arm: {"kl_ref_per_token",
+    "nll_arm_per_token", "nll_ref_per_token", "tokens", "fidelity", "agreement": {T: {...}}}}}."""
+    problems, arms = [], {}
+    for arm, a in sorted(ref_family["arms"].items()):
+        run_texts = ((nll_chat or {}).get(arm) or {}).get("per_text") or {}
+        agree = {}
+        for t, r in a["per_text"].items():
+            got = run_texts.get(t)
+            if got is None:
+                problems.append(f"{arm} {t}: no chat-wrapped NLL in this run")
+                continue
+            diff = float(got["nll_per_token"]) - r["nll_arm"]
+            agree[t] = {"tokens_run": int(got["tokens"]), "tokens_reference": r["tokens"],
+                        "nll_run": float(got["nll_per_token"]), "nll_reference": r["nll_arm"], "nll_diff": diff}
+            if int(got["tokens"]) != r["tokens"]:
+                problems.append(f"{arm} {t}: {got['tokens']} chat-wrapped tokens in this run, {r['tokens']} in the "
+                                f"reference record")
+            elif abs(diff) > REFERENCE_NLL_TOL:
+                problems.append(f"{arm} {t}: NLL {float(got['nll_per_token']):.4f} in this run vs {r['nll_arm']:.4f} "
+                                f"in the reference record (> {REFERENCE_NLL_TOL})")
+        kl = a["kl_ref_per_token"]
+        arms[arm] = {"kl_ref_per_token": kl, "nll_arm_per_token": a["nll_arm_per_token"],
+                     "nll_ref_per_token": a["nll_ref_per_token"], "tokens": a["tokens"],
+                     "fidelity": "pass" if kl < KL_MAX else SPEED_ONLY, "agreement": agree}
+    return {"usable": not problems, "problems": problems, "threshold": KL_MAX, "nll_tolerance": REFERENCE_NLL_TOL,
+            "arms": arms}
+
+
+def apply_family_rule_failure(rec: dict, family: str, fam_arms, reference: dict) -> None:
+    """The consequence of a failed NLL(8) / KL(8‖4) rule for the family's arms (both bit widths).
+
+    Registered: every arm gets the problem (verdict `fail`). Amendment 6: if `reference` pins this family and its
+    record matches the run (attribute_fidelity), an arm whose KL(reference ‖ arm) < KL_MAX gets no problem (its
+    verdict follows its other checks) and an arm at or above KL_MAX gets `speed_only_problems` (verdict
+    `speed-only`). No pin for the family, a pin that cannot be read, or one that does not match the run leaves the
+    registered consequence, and families.<f>.fidelity_attribution says why."""
+    frec = rec["families"].setdefault(family, {})
+    ref_fam = (reference.get("families") or {}).get(family)
+    if ref_fam is None:
+        frec["fidelity_attribution"] = {
+            "used": False, "amendment": "Amendment 6",
+            "reason": (f"the fidelity reference is unusable: {reference['error']}" if reference.get("error")
+                       else "no Amendment 6 fidelity reference is pinned for this family: the registered rule "
+                            "applies")}
+        for a in fam_arms:
+            rec["arms"][a]["problems"].append(FAMILY_RULE_PROBLEM)
+        return
+    att = attribute_fidelity(ref_fam, {a: rec["arms"][a].get("nll_chat") for a in fam_arms})
+    frec["fidelity_attribution"] = {
+        "used": att["usable"], "amendment": "Amendment 6",
+        "reference": {k: ref_fam.get(k) for k in ("record", "record_sha256", "record_commit", "texts",
+                                                   "reference_model", "measurement")}
+        | {"pin": (reference.get("pin") or {}).get("path"), "pin_sha256": (reference.get("pin") or {}).get("sha256")},
+        **{k: att[k] for k in ("threshold", "nll_tolerance", "problems", "arms")},
+    }
+    if not att["usable"]:
+        for a in fam_arms:
+            rec["arms"][a]["problems"] += [FAMILY_RULE_PROBLEM, "the Amendment 6 fidelity reference does not match "
+                                                                "this run (families.<f>.fidelity_attribution)"]
+        return
+    for a in fam_arms:
+        x = att["arms"][a]
+        rec["arms"][a]["fidelity_reference"] = {"kl_ref_per_token": x["kl_ref_per_token"], "threshold": KL_MAX,
+                                                "fidelity": x["fidelity"], "record": ref_fam["record"]}
+        if x["fidelity"] == SPEED_ONLY:
+            rec["arms"][a].setdefault("speed_only_problems", []).append(
+                f"{FAMILY_RULE_PROBLEM}; KL(bf16‖{a}) {x['kl_ref_per_token']:.4f} ≥ {KL_MAX} on the Amendment 6 "
+                f"reference")
+
+
 def batched_prompts(wrapper_ids: list, stream: list) -> tuple[list, list]:
     """(base, prompts) of the batched path (Amendment 5): base = the chat
     wrapper followed by the text token stream (the noise floor and
@@ -594,23 +798,49 @@ def greedy_flip(model, d: Path, arm: str) -> dict:
 
 def _verdict(arm_rec: dict) -> str:
     """`fail` if anything outside the batched-path check failed or a check
-    could not run (`problems`); else `B=1` if the batched-path check failed,
+    could not run (`problems`); else `speed-only` if the Amendment 6
+    reference attributed its family's failed fidelity rule to this build
+    (`speed_only_problems`); else `B=1` if the batched-path check failed,
     i.e. its parity or its greedy flip rate (HYPOTHESIS "Peers are verified,
     not gated": "a peer that fails the batched-path check runs at B = 1; a
     peer that fails anything else is dropped"); else `ok`."""
     if arm_rec["problems"]:
         return "fail"
+    if arm_rec.get("speed_only_problems"):
+        return SPEED_ONLY
     if (arm_rec.get("batched_path_problems") or arm_rec.get("batched_path", {}).get("ok") is False
             or arm_rec.get("greedy_flip", {}).get("ok") is False):
         return "B=1"
     return "ok"
 
 
-def run(arms, checks=ALL_CHECKS, root: Path | None = None) -> dict:
+def _reference_for_run(reference: dict | None) -> tuple[dict, dict]:
+    """(reference, its summary for the record). None loads the pinned file; any error reading it (a
+    ReferenceError, an unreadable file) is kept as {"error": ...}, which leaves the registered consequence
+    wherever a family rule fails: a broken pin never stops the peer check and never passes an arm."""
+    if reference is None:
+        try:
+            reference = load_fidelity_reference()
+        except Exception as e:  # noqa: BLE001 - recorded; the registered rule applies
+            reference = {"error": f"{type(e).__name__}: {e}"[:400]}
+    if reference.get("error"):
+        return reference, {"status": "unusable", "error": reference["error"]}
+    if not reference:
+        return reference, {"status": "absent", "note": "no pin file: the registered rule applies to every family"}
+    return reference, {"status": "pinned", "pin": reference["pin"]["path"], "pin_sha256": reference["pin"]["sha256"],
+                       "families": {f: {"record": v["record"], "record_sha256": v["record_sha256"]}
+                                    for f, v in reference["families"].items()},
+                       "note": "Amendment 6: read only for a family whose NLL(8) / KL(8‖4) rule fails"}
+
+
+def run(arms, checks=ALL_CHECKS, root: Path | None = None, reference: dict | None = None) -> dict:
+    """reference: the Amendment 6 fidelity reference (load_fidelity_reference()); None loads the pinned
+    tools/fidelity_reference.json, {} means none (the registered rule)."""
     t_start = common.utc_iso()
     root = Path(root or peer_root())
     rec = {"schema": SCHEMA, "host": HOST_LABEL, "t_start": t_start, "arms": {}, "families": {},
            "checks": list(checks)}
+    reference, rec["fidelity_reference"] = _reference_for_run(reference)
     texts = None
     if "nll" in checks:
         try:
@@ -678,8 +908,8 @@ def run(arms, checks=ALL_CHECKS, root: Path | None = None) -> dict:
                                                              "descriptive since Amendment 5"}
                         frec["fidelity"] = {**fidelity_rule(st), "texts": "chat-wrapped (Amendment 5)"}
                         if not (frec["fidelity"]["nll_ok"] and frec["fidelity"]["kl_ok"]):
-                            for a in (a8, a4):
-                                rec["arms"][a]["problems"].append("NLL(8) / KL(8‖4) rule failed")
+                            # Registered: both arms fail; Amendment 6: a pinned bf16 reference may attribute it.
+                            apply_family_rule_failure(rec, fam, (a8, a4), reference)
         except Exception as e:
             frec["nll_error"] = f"{type(e).__name__}: {e}"[:400]
             for a in fam_arms:
@@ -722,7 +952,17 @@ def exit_code(rec: dict) -> int:
     verdicts = [a["verdict"] for a in rec["arms"].values()]
     if any(v == "fail" for v in verdicts):
         return 1
-    return 2 if any(v == "B=1" for v in verdicts) else 0
+    return 2 if any(v in ("B=1", SPEED_ONLY) for v in verdicts) else 0
+
+
+def arm_line(arm: str, a: dict) -> str:
+    """The console line of one arm: verdict, then every problem and the Amendment 6 attribution."""
+    notes = list(a["problems"]) + list(a.get("speed_only_problems", [])) + list(a.get("batched_path_problems", []))
+    fr = a.get("fidelity_reference") or {}
+    if fr.get("fidelity") == "pass":
+        notes.append(f"{FAMILY_RULE_PROBLEM} for the family; by the Amendment 6 reference KL(bf16‖{arm}) "
+                     f"{fr['kl_ref_per_token']:.4f} < {fr['threshold']}: fidelity passes")
+    return f"{arm:6s} {a['verdict']:10s} " + "; ".join(notes)
 
 
 def main(argv=None) -> int:
@@ -769,7 +1009,7 @@ def main(argv=None) -> int:
     out_dir = Path(args.out_dir or common.EXP_DIR / "results")
     path = common.write_new_json(out_dir / f"peers_{common.utc_stamp()}.json", rec)
     for arm, a in rec["arms"].items():
-        print(f"{arm:6s} {a['verdict']:4s} " + "; ".join(a["problems"] + a.get("batched_path_problems", [])))
+        print(arm_line(arm, a).rstrip())
     print(f"[peer_check] wrote {redact_path(path)}")
     return exit_code(rec)
 

@@ -382,3 +382,42 @@ hash_tree: TOOLS_SHA256 = 2858d1e690c20a4457e57272048d215d865cb236c3a269934d27e8
 1. **Pilot B for a `B=1` arm.** The pilot runs every arm at the memory-rule B, including an arm the peer check marked `B=1`. The plan then projects and queues it at B = 1, which is how the kit reads "re-projected by the plan rule". Running that arm's pilot cells at B = 1 as well would be a change to `runner/run.py`.
 2. **The optional H8 sensitivity** without the first two text rows (review finding 1). It is computable from `first_rows`, but it is not pre-registered and is not in `analysis/`. Publishing it would need a line in the amendment.
 3. **H1 and H8 consequences.** The step-9 failures of G4 and G8 came from the raw-text measurement. The mbp re-runs step 9 after this amendment is pushed, and the new record decides.
+
+## Amendment 6 — a failed family fidelity rule attributed per build; G4 speed-only (2026-10-04)
+
+The step-9 re-run after Amendment 5 failed G8 and G4 on the family rule (chat-wrapped NLL(8) 2.938 > NLL(4) 2.910 + 0.02; KL(8‖4) 0.323), with G8's greedy flip 1/30 on top (`results/peers_20261004T175538Z.json`, 3461c8c). The Gemma diagnostic on the mbp (6d70e09; records e6e8d34, 70fedbf) put the loss on G4: kernels exact at 4 and 8 bits, G4 the standard 4-bit quantisation of G8's weights (327 tensors at d84/e4 = 1.003), unquantised tensors bit-identical, and against bf16 @ `e13fae2a` on T1–T4: KL(bf16‖G8) 0.0167, KL(bf16‖G4) 0.3778.
+
+Decision: **pending Andrei's confirmation.** The kit implements option 2 of the three put to him (1 keep G8, drop G4; 2 keep G8, drop G4 from quality, keep G4 as H1's speed reference; 3 drop both): G8 stays (B = 1 by its own flip); G4 leaves every quality use and H8's peer median but stays H1's speed reference. The relayed mbp message still held the three options as a placeholder, so nothing in the kit names his choice: the amendment's decision line is `{{ANDREI_DECISION}}`, and `tools/status.py` refuses to append it until the main session fills it in.
+
+What changed (nothing committed; HYPOTHESIS.md untouched; the amendment is `amendments/6_peerfidelity_20261004T200930Z.md`):
+- `tools/fidelity_reference.json` (new, TOOLS): pins `diagnostics/gemma_quant_check_20261004T192910Z_D.json` by sha256 `9334e973…`, its rows' field names, texts T1–T4, the bf16 source and the producer. `diagnostics/` stays outside every scope.
+- `tools/peer_check.py` (TOOLS):
+  - `load_fidelity_reference()` checks the pin, the record's sha256 and its rows (every arm of the family, exactly the pinned texts, no repeats); `{}` without a pin.
+  - `attribute_fidelity()` (pure) requires each row to agree with this run's chat-wrapped NLL of that arm (tokens exact, NLL within `REFERENCE_NLL_TOL` = `NLL_MARGIN` = 0.02), then judges each arm by its token-weighted KL(bf16‖arm): < `KL_MAX` passes, ≥ `KL_MAX` is `speed-only`.
+  - `apply_family_rule_failure()` replaces the two-line registered consequence: without a pin for the family, or with an unusable or non-matching one, both arms get the registered problem, and `families.<f>.fidelity_attribution` says why (`used: false` with a reason, or the mismatches); otherwise a passing arm gets no problem and a speed-only arm gets `speed_only_problems`.
+  - `_verdict()`: `fail` > `speed-only` > `B=1` > `ok`; `exit_code()` gives 2 for `speed-only`; `arm_line()` prints the attribution. `run(…, reference=None)` loads the pin; any error reading it is recorded and leaves the registered rule.
+  - `reference_classes()` for the dry run.
+- `runner/guard.py` (RUNNER): `require_peers` refuses a `speed-only` arm with its own message; `speed_only_arms()`; `excluded_arms()` shares `_peer_verdict_arms()` (same output as before).
+- `runner/run.py` (RUNNER): `pilot --without` also accepts a `speed-only` arm.
+- `runner/plan_fix.py` (RUNNER): `speed_only_arms` from the record; no Tier-A or Tier-B task cell for them (`tier_b_cells(…, speed_only=…)` keeps the B4 ladder); a MoE peer among them counts as dropped for H3, H4, H6; `h8_peers` and `h8_families_left` from every excluded or speed-only build (`H8_PEER_FAMILIES` derived from `ARMS`), and H8 under `not_run` when no family remains; amendment lines "Speed-only arms …" and "H8 peer families …"; `check_pilot_inputs` treats speed-only arms as having no pilot cell.
+- `tools/status.py` (TOOLS): `--sync-amendments` and `--append-amendment` refuse, appending nothing, an amendment that still holds an upper-case double-brace placeholder.
+- `analysis/verdicts.py` (ANALYSIS): H8 drops a family with an arm in the plan's `excluded_arms` or `speed_only_arms` and records `families_left`. H1 is untouched.
+- `tools/dry_run.py` (TOOLS): the dry-run peers record marks the pin's speed-only arms (G4) `speed-only`; the plan stage checks they have no task cell and that their family left H8; the verdicts stage checks H8's models.
+- `bench/` unchanged (it reads no peer record; H1 and the ladder keep G4; `kl_8v4.py` still measures Gemma's KL, now descriptive).
+- `RUNBOOK.md` steps 9 and 12 and the one-writer rule, `BUILD_SPEC.md` (`guard`, `plan_fix`, `run.py pilot`, `peer_check.py`, `status.py`): Amendment 6 notes.
+- Tests: `tests/test_tools_peer_check_reference.py` (new) plus one each in `test_runner_guard.py`, `test_analysis_verdicts.py` and `test_tools_status.py`, and three in `test_runner_plan_fix.py`. Ten mutations of the new logic (speed-only as a problem, Tier A ignoring speed-only, analysis ignoring it, no agreement check, the ladder dropped, the 0.2 edge, H8 families ignoring it, no reason without a pin, no plan NOT RUN for H8, no placeholder refusal) each fail a test.
+
+Re-attributing the committed step-9 record with the pin gives G8 `B=1` (fidelity passes at 0.0167; its flip), G4 `speed-only` (0.3778), Q36-8 `B=1`, Q36-4, Q38-8 and Q38-4 `ok`, exit 2; the record's NLL rows agree with that run to about 1e-7.
+
+Review fixes (2026-10-04, before the push):
+1. **Decision not on record.** The decision text came from the workflow's task text, not from Andrei; the relayed mbp message still held the options as a placeholder. The pin's `amendment` field, `guard.speed_only_arms` and the `peer_check` docstring now name Amendment 6 only; the amendment's decision line is `{{ANDREI_DECISION}}`, and `status.py` refuses to append it unfilled. Filling it changes no tree hash (`amendments/` is in no scope). If Andrei picks option 1 or 3, the code changes (see the hand-back).
+2. **Opening sentence.** It said no verdict rule of H1–H8 changes; H8's peer set does (edge case 7 extended to a `speed-only` build). Reworded.
+3. **No-pin reason.** `apply_family_rule_failure` wrote no reason for a family without a pin; it now writes `fidelity_attribution = {used: false, amendment, reason}`. A failed Qwen family on the step-9 re-run will say why no reference was used.
+4. **H8 NOT RUN in the plan.** With every peer family gone, `plan_fix` wrote `h8_peers: []` but no `not_run` entry; it now adds H8 (a K4-exclusion reason is kept). Analysis already made H8 NOT RUN.
+5. **RUNBOOK step 9** said `--without` is accepted only for a `fail` arm; now "`fail` or `speed-only`".
+
+Pin sha256 after fix 1: `64e4e5c7fec06d6d98349bde81875d1d23e4e31596203d1fef11e66d0017f29e`. Tests: 1,274 pass in Python 3.12 (4:07) and 3.14 (4:18), every test required. Dry run 17 of 17 (3.6 min; G4 `speed-only`, `h8_peers` qwen3_6, qwen3_8; H8 models kolibri, qwen3_6, qwen3_8). Leak check: 310 file versions, 0 findings, 11 warnings (all pre-existing). `hash_tree --check`: 14 match, 3 MISMATCH (runner, analysis, tools) now; 17 of 17 on a copy with the amendment appended (decision line filled with test text).
+
+hash_tree: RUNNER_SHA256 = d3d228a6395c976232d730363e70f166bfe0607766b5ae48f4cbddc33790690f
+hash_tree: ANALYSIS_SHA256 = 83cedd792b8d77b3749be8e76abeb9db70cd92da0e33272e88f5abd92ded78a2
+hash_tree: TOOLS_SHA256 = 690de58ba70e6346cdca38eae8446f9fcf226f7e1c0b308b9bd6d0942ad64dc9

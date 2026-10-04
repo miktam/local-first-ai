@@ -858,16 +858,17 @@ def parse_pilot_cells(spec: str, rules: dict) -> set[tuple[str, str]]:
 
 
 def pilot_without(spec: str, ctx: Ctx) -> dict[str, str]:
-    """--without ARM[,ARM]: arms the records exclude (a gate K4 FAIL; a peer-check "fail"). Anything else is
+    """--without ARM[,ARM]: arms the records exclude (a gate K4 FAIL; a peer-check "fail") or keep out of every
+    quality cell (a peer-check "speed-only", Amendment 6: such an arm has no pilot cell to run). Anything else is
     refused, so the pilot never drops an arm on the operator's word alone (review fix 2026-10-03)."""
-    ex = guard.excluded_arms(ctx.results)
+    ex = {**guard.excluded_arms(ctx.results), **guard.speed_only_arms(ctx.results)}
     out = {}
     for a in (y.strip() for y in spec.split(",")):
         if not a:
             continue
         if a not in ex:
             guard.refuse(f"--without {a}: the records do not exclude {a} (only a gate K4 FAIL with K8 PASS, or a "
-                         f"peer-check verdict 'fail', does)")
+                         f"peer-check verdict 'fail' or 'speed-only', does)")
         out[a] = ex[a]
     return out
 
@@ -973,7 +974,7 @@ def main(argv: list[str] | None = None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("pilot")
     p.add_argument("--cells", help="ARM:TASK[:EFFORT],… (re-pilot only these cells)")
-    p.add_argument("--without", help="ARM,… arms the records exclude (gate K4 FAIL; peer-check fail)")
+    p.add_argument("--without", help="ARM,… arms the records exclude (gate K4 FAIL; peer-check fail or speed-only)")
     ap_abort = sub.add_parser("abort-pilot")
     ap_abort.add_argument("--stamp", required=True, help="the <UTC> of the interrupted results/pilot/<UTC>/")
     s = sub.add_parser("session")

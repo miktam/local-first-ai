@@ -1,0 +1,34 @@
+{
+  "schema": "exp036 fidelity reference v1",
+  "amendment": "Amendment 6 (peer fidelity attribution)",
+  "rule": "tools/peer_check.py reads this pin only for a family whose NLL(8) / KL(8‖4) rule failed. The record must have the pinned sha256 and rows for every arm of the family on exactly the pinned texts, and each row must agree with this run's chat-wrapped NLL of that arm on that text (token count exact, NLL within REFERENCE_NLL_TOL = NLL_MARGIN = 0.02 nats/token); otherwise it is not used and the registered failure stands. Each arm's token-weighted KL(reference ‖ arm) over the texts then decides: < KL_MAX (0.2, registered) passes fidelity and the arm's verdict follows its other checks; ≥ KL_MAX gives the verdict speed-only (no quality cell, not in H8's peer median; H1, the speed cells and the B4 ladder keep the arm).",
+  "families": {
+    "gemma4": {
+      "record": "diagnostics/gemma_quant_check_20261004T192910Z_D.json",
+      "record_sha256": "9334e973e1db8ddf5cceaf76524c2dc3a865257657e3e325560662c1691143ab",
+      "record_commit": "70fedbf00e1cd02462aa900c4219a7f22da56763",
+      "rows": "reference_kl",
+      "fields": {
+        "arm": "model",
+        "text": "text",
+        "tokens": "n_tokens",
+        "kl": "kl_bf16_model",
+        "nll_arm": "nll_model",
+        "nll_ref": "nll_bf16"
+      },
+      "texts": ["T1", "T2", "T3", "T4"],
+      "reference_model": {
+        "repo": "mlx-community/gemma-4-26b-a4b-it-bf16",
+        "revision": "e13fae2a81ec07e3092a3ebb70c80970b640dc3c",
+        "note": "12 LFS shards, sha256-verified on the mbp before the run (commit 70fedbf)"
+      },
+      "producer": {
+        "script": "diagnostics/gemma_quant_check.py",
+        "script_sha256": "9393765dbad457e288e2085fc5c439596088947e00b893da3c7748f714e548e9",
+        "commit": "6d70e0935fae2d7795f6c5a2290e303987262739",
+        "host": "mbp (M5 Max, MLX 0.31.2)"
+      },
+      "measurement": "Amendment 5 chat wrapper (bench/kl_8v4.chat_wrapper, \"Write a text.\", thinking off) on gate texts T1-T4; bf16 and each arm teacher-forced on the same ids; per position KL(bf16 ‖ arm) from fp32 log-probs; the record holds the per-text means and token counts"
+    }
+  }
+}

@@ -187,6 +187,23 @@ def test_require_peers(tmp_path):
     assert guard.require_peers("K8", tmp_path) is None
 
 
+def test_speed_only_arms_run_no_quality_cell_and_are_not_excluded(tmp_path):
+    """Amendment 6: a "speed-only" arm is refused by require_peers (every caller runs quality cells), listed by
+    speed_only_arms, and not by excluded_arms (H1, the speed cells and the B4 ladder keep it). The newest record
+    decides."""
+    (tmp_path / "peers_20261004T100000Z.json").write_text(json.dumps(
+        {"arms": {"G8": {"verdict": "B=1"}, "G4": {"verdict": "speed-only"}, "Q36-4": {"verdict": "fail"}}}))
+    with pytest.raises(SystemExit) as e:
+        guard.require_peers("G4", tmp_path)
+    assert "speed-only" in str(e.value) and "no quality cell" in str(e.value)
+    assert guard.require_peers("G8", tmp_path)["verdict"] == "B=1"
+    assert guard.speed_only_arms(tmp_path) == {"G4": "peer check speed-only (peers_20261004T100000Z.json)"}
+    assert guard.excluded_arms(tmp_path) == {"Q36-4": "peer check fail (peers_20261004T100000Z.json)"}
+    (tmp_path / "peers_20261004T110000Z.json").write_text(json.dumps({"arms": {"G4": {"verdict": "ok"}}}))
+    assert guard.speed_only_arms(tmp_path) == {} and guard.require_peers("G4", tmp_path)["verdict"] == "ok"
+    assert guard.speed_only_arms(tmp_path / "empty") == {}
+
+
 # ----------------------------------------------------------------- plan
 
 

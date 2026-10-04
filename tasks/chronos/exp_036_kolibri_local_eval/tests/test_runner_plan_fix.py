@@ -573,6 +573,58 @@ def test_a_dropped_peer_has_no_cell_and_h4_is_not_run_without_qwen():
     assert "MoE peers for H3, H6 and the H2 protocol control: G8" in md
 
 
+def test_a_speed_only_moe_peer_has_no_task_cell_but_is_not_excluded():
+    """Amendment 6, generic: a speed-only arm loses every Tier-A and Tier-B task cell (here G8, a MoE peer, so it
+    is handled as a dropped one for H3, H6 and the protocol control), its family leaves H8's peer median, and
+    nothing else changes: K4 is untouched, H1 and H8 are not NOT RUN, the B4 ladder is not dropped for it."""
+    pilot, steps, s1, ctx = synthetic(0, edit=lambda p: _without(p, {"G8"}))
+    steps.pop("G8")
+    ctx["speed_only_arms"] = {"G8": "peer check speed-only (peers_20261004T110000Z.json)"}
+    plan, md, _ = plan_fix.fix(pilot, steps, s1, RULES, [], context=ctx)
+    assert plan["status"] == "FIXED" and plan["excluded_arms"] == {}
+    assert plan["speed_only_arms"] == ctx["speed_only_arms"]
+    assert all(q["arm"] != "G8" for q in plan["queue"])
+    assert plan["peers"] == ["Q36-8"] and plan["not_run"] == {}
+    assert plan["h8_peers"] == ["qwen3_6", "qwen3_8"] and "G8 speed-only" in plan["h8_families_left"]["gemma4"]
+    assert "Speed-only arms (peer-check verdict \"speed-only\"" in md and "G8 — peer check speed-only" in md
+    assert "MoE peers for H3, H6 and the H2 protocol control: Q36-8" in md
+
+
+def test_the_b4_ladder_keeps_a_speed_only_g4_and_drops_an_excluded_one():
+    ladder = plan_fix.tier_b_cells(RULES, "B4", "P0", True)
+    assert [c["arm"] for c in ladder] == ["bench"] and "G4" in plan_fix.LADDER_ARMS
+    assert plan_fix.tier_b_cells(RULES, "B4", "P0", True, excluded=(), speed_only=("G4",)) == ladder
+    assert plan_fix.tier_b_cells(RULES, "B4", "P0", True, excluded=("G4",)) == []
+    # Task cells of a speed-only arm go, in Tier A and Tier B alike.
+    assert all(c["arm"] != "G8" for c in plan_fix.tier_b_cells(RULES, "B2", "P0", True, speed_only=("G8",)))
+    assert any(c["arm"] == "G8" for c in plan_fix.tier_b_cells(RULES, "B2", "P0", True))
+    assert plan_fix.H8_PEER_FAMILIES == ("gemma4", "qwen3_6", "qwen3_8")
+
+
+def test_h8_families_follow_every_exclusion_and_are_named_in_the_amendment():
+    plan, md, _ = run_fix(0)
+    assert plan["h8_peers"] == ["gemma4", "qwen3_6", "qwen3_8"] and plan["h8_families_left"] == {}
+    assert plan["speed_only_arms"] == {} and "- H8 peer families: gemma4, qwen3_6, qwen3_8\n" in md
+    pilot, steps, s1, ctx = synthetic(0)
+    ctx["excluded_arms"] = {"Q38-4": "peer check fail (peers_x.json)"}
+    ctx["speed_only_arms"] = {"G4": "peer check speed-only (peers_x.json)", "Q38-4": "ignored: excluded wins"}
+    plan, md, _ = plan_fix.fix(pilot, steps, s1, RULES, [], context=ctx)
+    assert plan["h8_peers"] == ["qwen3_6"] and plan["speed_only_arms"] == {"G4": "peer check speed-only (peers_x.json)"}
+    assert plan["h8_families_left"] == {"gemma4": "G4 speed-only: peer check speed-only (peers_x.json)",
+                                        "qwen3_8": "Q38-4 excluded: peer check fail (peers_x.json)"}
+    assert plan["not_run"] == {}
+    # Every family leaves: H8 is NOT RUN in the plan and its amendment, not only at analysis (review 2026-10-04).
+    ctx["speed_only_arms"] = {"G4": "peer check speed-only (peers_x.json)", "Q36-4": "peer check speed-only (peers_x.json)"}
+    plan, md, _ = plan_fix.fix(pilot, steps, s1, RULES, [], context=ctx)
+    assert plan["h8_peers"] == [] and set(plan["h8_families_left"]) == {"gemma4", "qwen3_6", "qwen3_8"}
+    assert set(plan["not_run"]) == {"H8"} and plan["not_run"]["H8"].startswith("every peer family left H8's peer median")
+    assert "- H8 peer families: none;" in md and "NOT RUN by this amendment" in md and "H8: every peer family" in md
+    # K4 excluded already makes H8 NOT RUN; its reason is kept.
+    ctx["excluded_arms"]["K4"] = "gate K4 FAIL (gate_x.json)"
+    plan, _, _ = plan_fix.fix(pilot, steps, s1, RULES, [], context=ctx)
+    assert plan["not_run"]["H8"].startswith("K4 excluded")
+
+
 def test_h7_rows_of_b8_under_p10_leave_out_gpqa_de():
     rules = json.loads(json.dumps(RULES))
     rules["plans"] = ["P10"]                       # force P10; nominal lengths leave room for Tier B
