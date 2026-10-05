@@ -1,0 +1,212 @@
+{
+ "files_sha256": {
+  "kprobe2.py": "88c1ce6bb2fa1b819c5790e5476f9a1cab37cd4b8410fa1ad0206d51c8c61d43",
+  "kprobe2_m4pro.json": "86bf6d7af34f81c019bc99a500a5278aad3da2cc86ed8afe4772eca57aee7a58"
+ },
+ "header": {
+  "argv": [],
+  "device": {
+   "architecture": "applegpu_g17s",
+   "memory_bytes": 137438953472,
+   "name": "Apple M5 Max"
+  },
+  "experiment": "exp_036",
+  "frozen_rules": {
+   "file": "diagnostics/gate1/FROZEN_RULES.md",
+   "sha256": "bd1253a0c83540b3072a5901dbe28db292ace1fea21d5acf770e049392f2afb8"
+  },
+  "gate_record": {
+   "file": "results/gate/gate_20261005T050112Z.json",
+   "sha256": "e3e01b5cf9114afe4d39de7395a74d47fcb0565ca7d93343d29788d69bf00f0b"
+  },
+  "git": {
+   "dirty": false,
+   "head": "85ba8a8e14fe163bcd940f3098ae0c8e9bc2829a"
+  },
+  "host": "mbp (M5 Max, 128 GB)",
+  "mlx": "0.31.2",
+  "mlx_lm": "0.31.3",
+  "mode": "real",
+  "peak_rss_bytes": 7476281344,
+  "precision": {
+   "MLX_ENABLE_TF32": "0",
+   "probe_rel_l2": 2.8845241586328215e-07
+  },
+  "scripts_sha256": {
+   "diaglib.py": "2897597edb33ce96a1ff29746460007e5fc16229e7bcc83940867926c2b7be08",
+   "kprobe2.py": "88c1ce6bb2fa1b819c5790e5476f9a1cab37cd4b8410fa1ad0206d51c8c61d43",
+   "run_stages.sh": "0abde0cc6b2d7fda08c23c560eaa8540cdb5db2a2273ceedb720f0a24098ce17",
+   "stage0_kernels.py": "b0f29d88ab502270322b6a7a482799058080f6f118900da63d95a46313580b62",
+   "stage1_g5.py": "2d075ecb313dbfa777e490471b4891ce6b0ad15aefd45199816f9c95d4b60c6e",
+   "stage2_g2.py": "82598d3c6e112f07def8e14f3b7ac11ef1d222d730c23dfac34c47297335a9e5",
+   "stage3_g4.py": "1101e20566735f37ba2862151878f9cecef5d728f7d51cd2b2fcab7875fa03bd",
+   "stage4_g3.py": "fbb47569dbbde39a508cb03c3cff51aa999245d860939647a34580d4e8434b6c",
+   "stage5_report.py": "43b8835d1d0bcbe855cf469e3ec6a4321a8c02171afa3eece02d861aba3ad7c4"
+  },
+  "stage": "stage0_kernels",
+  "t_end": "2026-10-05T11:48:06Z",
+  "t_start": "2026-10-05T11:48:02Z",
+  "utc": "20261005T114802Z",
+  "wall_s": 3.90922212600708,
+  "what": "gate-1 diagnostic (not a gate run, no gate record, not a fix cycle)"
+ },
+ "kprobe2": {
+  "MLX_ENABLE_TF32": "0",
+  "arch": "applegpu_g17s",
+  "baseline": {
+   "chip_specific_defects": [],
+   "file": "diagnostics/gate1/kprobe2_m4pro.json",
+   "verdict": "no chip-specific B=8 precision loss"
+  },
+  "device": "Apple M5 Max",
+  "flagged": [
+   "router_fp32_M8",
+   "router_fp32_M16",
+   "router_fp32_M48",
+   "sdpa_bf16_valid300_buffer1100",
+   "sdpa_bf16_valid700_buffer1100"
+  ],
+  "mlx": "0.31.2",
+  "probes": {
+   "k_proj": {
+    "bitwise": true,
+    "frac_gt_1ulp": 0.0,
+    "max_abs_B8_minus_B1": 0.0,
+    "max_ulp": 0.0,
+    "ratio": 1.0,
+    "rel_B1": 0.001663266325463927,
+    "rel_B8": 0.001663266325463927
+   },
+   "lm_head_fp32in": {
+    "bitwise": true,
+    "frac_gt_1ulp": 0.0,
+    "max_abs_B8_minus_B1": 0.0,
+    "max_ulp": 0.0,
+    "ratio": 1.0,
+    "rel_B1": 9.074511723919702e-08,
+    "rel_B8": 9.074511723919702e-08
+   },
+   "o_proj": {
+    "bitwise": true,
+    "frac_gt_1ulp": 0.0,
+    "max_abs_B8_minus_B1": 0.0,
+    "max_ulp": 0.0,
+    "ratio": 1.0,
+    "rel_B1": 0.0016632472638428452,
+    "rel_B8": 0.0016632472638428452
+   },
+   "q_proj": {
+    "bitwise": true,
+    "frac_gt_1ulp": 0.0,
+    "max_abs_B8_minus_B1": 0.0,
+    "max_ulp": 0.0,
+    "ratio": 1.0,
+    "rel_B1": 0.001674755986082166,
+    "rel_B8": 0.001674755986082166
+   },
+   "router_fp32_M16": {
+    "bitwise": false,
+    "frac_gt_1ulp": 0.0,
+    "max_abs_B8_minus_B1": 7.152557373046875e-07,
+    "max_ulp": 0.0,
+    "ratio": 1.327746239190736,
+    "rel_B1": 8.462777966965498e-08,
+    "rel_B8": 1.1236421618744663e-07
+   },
+   "router_fp32_M48": {
+    "bitwise": false,
+    "frac_gt_1ulp": 0.0,
+    "max_abs_B8_minus_B1": 8.344650268554688e-07,
+    "max_ulp": 0.0,
+    "ratio": 1.6266303949525416,
+    "rel_B1": 8.288109457902711e-08,
+    "rel_B8": 1.3481690760918182e-07
+   },
+   "router_fp32_M8": {
+    "bitwise": false,
+    "frac_gt_1ulp": 0.0,
+    "max_abs_B8_minus_B1": 5.960464477539062e-07,
+    "max_ulp": 0.0,
+    "ratio": 1.3868157348124281,
+    "rel_B1": 8.311708142911943e-08,
+    "rel_B8": 1.1526807635758868e-07
+   },
+   "sdpa_bf16_valid1100_buffer1164": {
+    "bitwise": false,
+    "ratio": 0.9999691772388221,
+    "rel_B1": 0.0023482698035039917,
+    "rel_B8": 0.002348197423344657
+   },
+   "sdpa_bf16_valid300_buffer1100": {
+    "bitwise": false,
+    "ratio": 1.4169118044067774,
+    "rel_B1": 0.001654996913113439,
+    "rel_B8": 0.0023449846624472095
+   },
+   "sdpa_bf16_valid300_buffer513": {
+    "bitwise": false,
+    "ratio": 1.0000000026868596,
+    "rel_B1": 0.0016573752458402438,
+    "rel_B8": 0.0016573752502933785
+   },
+   "sdpa_bf16_valid37_buffer1100": {
+    "bitwise": false,
+    "ratio": 1.000000000341716,
+    "rel_B1": 0.0016582759676269383,
+    "rel_B8": 0.0016582759681935978
+   },
+   "sdpa_bf16_valid513_buffer513": {
+    "bitwise": true,
+    "ratio": 1.0,
+    "rel_B1": 0.0016611432203460456,
+    "rel_B8": 0.0016611432203460456
+   },
+   "sdpa_bf16_valid700_buffer1100": {
+    "bitwise": false,
+    "ratio": 1.4163101364333042,
+    "rel_B1": 0.001657751536787638,
+    "rel_B8": 0.0023478903052402194
+   },
+   "shared_down": {
+    "bitwise": true,
+    "frac_gt_1ulp": 0.0,
+    "max_abs_B8_minus_B1": 0.0,
+    "max_ulp": 0.0,
+    "ratio": 1.0,
+    "rel_B1": 0.0016614516041038405,
+    "rel_B8": 0.0016614516041038405
+   },
+   "shared_gate": {
+    "bitwise": true,
+    "frac_gt_1ulp": 0.0,
+    "max_abs_B8_minus_B1": 0.0,
+    "max_ulp": 0.0,
+    "ratio": 1.0,
+    "rel_B1": 0.0016625603422105294,
+    "rel_B8": 0.0016625603422105294
+   },
+   "switchglu_q8_B11x6": {
+    "bitwise": true,
+    "frac_gt_1ulp": 0.0,
+    "max_abs_B8_minus_B1": 0.0,
+    "max_ulp": 0.0,
+    "ratio": 1.0,
+    "rel_B1": 0.004401354572286494,
+    "rel_B8": 0.004401354572286494
+   },
+   "switchglu_q8_B8x6": {
+    "bitwise": true,
+    "frac_gt_1ulp": 0.0,
+    "max_abs_B8_minus_B1": 0.0,
+    "max_ulp": 0.0,
+    "ratio": 1.0,
+    "rel_B1": 0.0044653199449425,
+    "rel_B8": 0.0044653199449425
+   }
+  }
+ },
+ "rule_inputs": {
+  "kprobe_defects": [],
+  "kprobe_verdict": "no chip-specific B=8 precision loss"
+ }
+}
