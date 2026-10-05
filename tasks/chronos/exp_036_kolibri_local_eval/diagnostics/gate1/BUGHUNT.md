@@ -275,6 +275,6 @@ Some numbers in §1–§3 were printed by their scripts and never written to a f
 
 **What is still open.**
 - The cause cannot be separated between MLX's kernel selection on the M5, the Metal compiler or driver on macOS 27.0, and the hardware. No M5 on macOS 26 and no M4 on macOS 27 was available.
-- The upstream report is a separate outward step, on Andrei's go.
+- Andrei reported it upstream on 2026-10-05 as [ml-explore/mlx#4632](https://github.com/ml-explore/mlx/issues/4632).
 
 **For exp_037.** Every sorted expert call on the M5 must stay at ≤ 32,768 rows, or be a multiple of 64. Prefilling one prompt at a time, in chunks of 2,048 tokens, keeps Kolibri at ≤ 12,288 rows. A runner guard can enforce the bound.
