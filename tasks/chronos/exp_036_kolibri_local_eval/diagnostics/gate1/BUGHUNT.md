@@ -229,3 +229,52 @@ Some numbers in §1–§3 were printed by their scripts and never written to a f
 2. **The vLLM-angle RoPE.** Adopt it, or not, on that forced series. Under free routing its effect is mixed.
 3. **Batching on the M5.** Prefill one prompt at a time, or run at B = 1, with arms B and D run once to separate padding from size. Report the `SwitchGLU` / `gather_qmm` result upstream with a seeded single-op reproduction that records the OS, on Andrei's go.
 4. **G3.** Decide it explicitly: run the anchor, or declare the blind spot.
+
+### 6.9 After the close: the op-level reproduction (2026-10-05, 18:12–18:21Z)
+
+*This ran after exp_036 closed and after the post was published. It is investigation only and decides nothing.*
+- **The scripts.** `confirm/mlx_repro.py` and `confirm/mlx_repro_min.py` call `mx.gather_qmm` alone, the op behind mlx-lm's `SwitchGLU` projections, with seeded numpy weights and inputs. `mlx_repro.py` compares against float64; `mlx_repro_min.py` compares `sorted_indices=True` against `False` on identical inputs.
+- **The machines.** Both ran on the M4 Pro (macOS 26, MLX 0.31.2) and the M5 Max (macOS 27.0, MLX 0.31.2, mlx-lm 0.31.3).
+
+| File | sha256 (prefix) |
+|---|---|
+| `confirm/mlx_repro.py` | `9c98cbc4c6f971e0` |
+| `confirm/mlx_repro_min.py` | `7004dcf44754c598` |
+| `confirm/out/mlx_repro_m4pro_20261005T181217Z.json` | `d7eaad6006fad10f` |
+| `confirm/out/mlx_repro_m5max_20261005T181726Z.json` | `8ed8255bf7ee09ab` |
+| `confirm/out/mlx_repro_min_m4pro_20261005T181944Z.json` | `5d32fb7d7e808482` |
+| `confirm/out/mlx_repro_min_m5max_20261005T182038Z.json` | `c28514666118b34b` |
+
+**The M4 Pro** is correct at every size tested, up to 105,504 rows. Sorted against unsorted agrees to bf16 output rounding (0.0025), and every call repeats bitwise.
+
+**On the M5 Max:**
+- **The sorted path is wrong; the unsorted path is right.** On the first wave's data (52,752 rows), `sorted_indices=True` gives a relative error of 0.466 against float64; `sorted_indices=False` on the same data gives 0.0017.
+- **float32 is unaffected** (8e-7).
+- **4 bits is affected**, less strongly (0.043).
+- **Size is the trigger, not padding.** 8 × 1,099 rows of uniform routing with no padding give 0.870.
+- **The condition.** Every wrong case has **more than 32,768 rows and a row count that is not a multiple of 64**. Every correct case breaks at least one of the two.
+
+  | Rows | Result |
+  |---|---|
+  | ≤ 32,768 | correct |
+  | 32,769, 32,770, 32,776 | wrong: 32 bad rows from row 0 |
+  | 32,832 (513 × 64) | correct |
+  | 33,000 / 34,000 | wrong: 256 / 1,248 bad rows |
+  | 40,000, 49,152, 65,536 (multiples of 64) | correct |
+  | 52,752, 79,128, 105,504 (`mlx_repro.py`) | wrong |
+
+  The second projection shape (2,560 × 512), 4 bits, float16 and a non-Kolibri shape (E = 128, 768 × 2,048) all go wrong at 32,769 rows.
+- **Repeatability is mixed.** The minimal sweep repeated bitwise. The 52,752-row first-wave call did not: two identical calls differed. The same call with the pad rows' inputs scaled ×1000 came out close to correct (0.0022).
+- **The sort itself is correct** (`mx.argsort`).
+
+**What this explains.**
+- **Kolibri's first wave** is 8 × 1,099 × 6 = 52,752 (token, expert) rows. It is over the limit and not a multiple of 64, so it is wrong.
+- **Gemma 4's first wave** is 8 × 1,099 × 8 = 70,336 = 1,099 × 64 rows, which is why G8 passed batched parity on the same mbp (6.4).
+- **Single-sequence prefill** in chunks of 2,048 tokens is 12,288 rows, safe.
+- **Prefilling each prompt alone** (arm C) stays under 32,768.
+
+**What is still open.**
+- The cause cannot be separated between MLX's kernel selection on the M5, the Metal compiler or driver on macOS 27.0, and the hardware. No M5 on macOS 26 and no M4 on macOS 27 was available.
+- The upstream report is a separate outward step, on Andrei's go.
+
+**For exp_037.** Every sorted expert call on the M5 must stay at ≤ 32,768 rows, or be a multiple of 64. Prefilling one prompt at a time, in chunks of 2,048 tokens, keeps Kolibri at ≤ 12,288 rows. A runner guard can enforce the bound.
