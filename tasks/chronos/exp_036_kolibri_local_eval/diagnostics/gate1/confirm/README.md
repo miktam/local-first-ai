@@ -45,3 +45,30 @@ git commit -m "chronos/exp_036: gate-1 confirmation runs (forced routing, RoPE, 
 ```
 
 Push with Andrei's go.
+
+## Follow-up: the seeded single-op reproduction (`mlx_repro.py`)
+
+This ran after exp_036 closed. It is investigation only and decides nothing.
+
+`mlx_repro.py` calls the single op behind mlx-lm's `SwitchGLU` projections, `mx.gather_qmm`.
+- **Inputs.** Weights and inputs come from a seeded numpy generator, so they are bitwise identical on every machine.
+- **Reference.** A float64 computation from the dequantised weights.
+- **Recorded.** The OS, the MLX and mlx-lm versions, and the GPU architecture.
+- **Tests A–H** separate the sorted path, dependence on pad content, padding against size, a hot expert, total size, float32 and the sort itself (see the docstring).
+
+The M4 Pro baseline is `out/mlx_repro_m4pro_*.json`:
+- every bf16 case is at 0.0017–0.0023, which is bf16 output rounding;
+- float32 is at 1e-6;
+- valid rows do not depend on pad content;
+- repeat runs are bitwise identical.
+
+On the mbp it takes about a minute, and no model is loaded. Run it from the kit with the usual environment loaded (it sets `$PY`):
+
+```bash
+cd ~/REPOS/local-first-ai && git pull --ff-only && cd tasks/chronos/exp_036_kolibri_local_eval
+U=$(date -u +%Y%m%dT%H%M%SZ); "$PY" diagnostics/gate1/confirm/mlx_repro.py --bits4 --out diagnostics/gate1/confirm/out/mlx_repro_m5max_$U.json
+git add diagnostics/gate1/confirm/out/mlx_repro_m5max_$U.json && "$PY" tools/leak_check.py --range @{u}..HEAD --staged
+git commit -m "chronos/exp_036: mlx_repro on the M5 Max" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+```
+
+Push with Andrei's go. The `flags` list in the printed summary says whether the M5 reproduces the defect at the level of the op.
