@@ -1,0 +1,150 @@
+{
+ "device": "Apple M4 Pro",
+ "arch": "applegpu_g16s",
+ "mlx": "0.31.2",
+ "MLX_ENABLE_TF32": "0",
+ "probes": {
+  "router_fp32_M8": {
+   "bitwise": false,
+   "rel_B8": 1.1526807635758868e-07,
+   "rel_B1": 8.311708142911943e-08,
+   "ratio": 1.3868157348124281,
+   "max_abs_B8_minus_B1": 5.960464477539062e-07,
+   "frac_gt_1ulp": 0.0,
+   "max_ulp": 0.0
+  },
+  "router_fp32_M16": {
+   "bitwise": false,
+   "rel_B8": 1.1236421618744663e-07,
+   "rel_B1": 8.462777966965498e-08,
+   "ratio": 1.327746239190736,
+   "max_abs_B8_minus_B1": 7.152557373046875e-07,
+   "frac_gt_1ulp": 0.0,
+   "max_ulp": 0.0
+  },
+  "router_fp32_M48": {
+   "bitwise": false,
+   "rel_B8": 1.3481690760918182e-07,
+   "rel_B1": 8.288109457902711e-08,
+   "ratio": 1.6266303949525416,
+   "max_abs_B8_minus_B1": 8.344650268554688e-07,
+   "frac_gt_1ulp": 0.0,
+   "max_ulp": 0.0
+  },
+  "q_proj": {
+   "bitwise": true,
+   "rel_B8": 0.001674755986082166,
+   "rel_B1": 0.001674755986082166,
+   "ratio": 1.0,
+   "max_abs_B8_minus_B1": 0.0,
+   "frac_gt_1ulp": 0.0,
+   "max_ulp": 0.0
+  },
+  "k_proj": {
+   "bitwise": true,
+   "rel_B8": 0.001663266325463927,
+   "rel_B1": 0.001663266325463927,
+   "ratio": 1.0,
+   "max_abs_B8_minus_B1": 0.0,
+   "frac_gt_1ulp": 0.0,
+   "max_ulp": 0.0
+  },
+  "o_proj": {
+   "bitwise": true,
+   "rel_B8": 0.0016632472638428452,
+   "rel_B1": 0.0016632472638428452,
+   "ratio": 1.0,
+   "max_abs_B8_minus_B1": 0.0,
+   "frac_gt_1ulp": 0.0,
+   "max_ulp": 0.0
+  },
+  "shared_gate": {
+   "bitwise": true,
+   "rel_B8": 0.0016625603422105294,
+   "rel_B1": 0.0016625603422105294,
+   "ratio": 1.0,
+   "max_abs_B8_minus_B1": 0.0,
+   "frac_gt_1ulp": 0.0,
+   "max_ulp": 0.0
+  },
+  "shared_down": {
+   "bitwise": true,
+   "rel_B8": 0.0016614516041038405,
+   "rel_B1": 0.0016614516041038405,
+   "ratio": 1.0,
+   "max_abs_B8_minus_B1": 0.0,
+   "frac_gt_1ulp": 0.0,
+   "max_ulp": 0.0
+  },
+  "lm_head_fp32in": {
+   "bitwise": true,
+   "rel_B8": 9.074511723919702e-08,
+   "rel_B1": 9.074511723919702e-08,
+   "ratio": 1.0,
+   "max_abs_B8_minus_B1": 0.0,
+   "frac_gt_1ulp": 0.0,
+   "max_ulp": 0.0
+  },
+  "switchglu_q8_B8x6": {
+   "bitwise": true,
+   "rel_B8": 0.0043500016044440695,
+   "rel_B1": 0.0043500016044440695,
+   "ratio": 1.0,
+   "max_abs_B8_minus_B1": 0.0,
+   "frac_gt_1ulp": 0.0,
+   "max_ulp": 0.0
+  },
+  "switchglu_q8_B11x6": {
+   "bitwise": true,
+   "rel_B8": 0.004435093773739828,
+   "rel_B1": 0.004435093773739828,
+   "ratio": 1.0,
+   "max_abs_B8_minus_B1": 0.0,
+   "frac_gt_1ulp": 0.0,
+   "max_ulp": 0.0
+  },
+  "sdpa_bf16_valid37_buffer1100": {
+   "bitwise": false,
+   "rel_B1": 0.0016582759676269383,
+   "rel_B8": 0.0016582759681935978,
+   "ratio": 1.000000000341716
+  },
+  "sdpa_bf16_valid300_buffer1100": {
+   "bitwise": false,
+   "rel_B1": 0.001654996913113439,
+   "rel_B8": 0.0023449846624472095,
+   "ratio": 1.4169118044067774
+  },
+  "sdpa_bf16_valid700_buffer1100": {
+   "bitwise": false,
+   "rel_B1": 0.001657751536787638,
+   "rel_B8": 0.0023478903052402194,
+   "ratio": 1.4163101364333042
+  },
+  "sdpa_bf16_valid300_buffer513": {
+   "bitwise": false,
+   "rel_B1": 0.0016573752458402438,
+   "rel_B8": 0.0016573752502933785,
+   "ratio": 1.0000000026868596
+  },
+  "sdpa_bf16_valid513_buffer513": {
+   "bitwise": true,
+   "rel_B1": 0.0016611432203460456,
+   "rel_B8": 0.0016611432203460456,
+   "ratio": 1.0
+  },
+  "sdpa_bf16_valid1100_buffer1164": {
+   "bitwise": false,
+   "rel_B1": 0.0023482698035039917,
+   "rel_B8": 0.002348197423344657,
+   "ratio": 0.9999691772388221
+  }
+ },
+ "flagged": [
+  "router_fp32_M8",
+  "router_fp32_M16",
+  "router_fp32_M48",
+  "sdpa_bf16_valid300_buffer1100",
+  "sdpa_bf16_valid700_buffer1100"
+ ]
+}
