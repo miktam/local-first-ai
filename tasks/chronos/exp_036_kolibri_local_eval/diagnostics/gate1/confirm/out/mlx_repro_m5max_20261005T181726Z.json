@@ -1,0 +1,309 @@
+{
+ "what": "mlx_repro: seeded single-op gather_qmm reproduction (exp_036 gate-1 follow-up; decides nothing)",
+ "env": {
+  "mlx": "0.31.2",
+  "mlx_lm": "0.31.3",
+  "device": "Apple M5 Max",
+  "arch": "applegpu_g17s",
+  "macos": "27.0",
+  "python": "3.12.13",
+  "MLX_ENABLE_TF32": "0",
+  "seed": 37
+ },
+ "shapes": {
+  "H": 2560,
+  "I": 512,
+  "E": 384,
+  "K": 6,
+  "group_size": 64,
+  "L": 1099,
+  "lens": [
+   36,
+   299,
+   699,
+   1099,
+   63,
+   519,
+   899,
+   149
+  ],
+  "pad_experts": [
+   3,
+   17,
+   42,
+   101,
+   200,
+   333
+  ]
+ },
+ "tests": {
+  "A_first_wave_sorted": {
+   "rows": 52752,
+   "rel_valid": 0.4660699335935559,
+   "max_abs_valid": 5.26721682583684,
+   "rel_by_seq": [
+    0.4529042155251905,
+    0.47564463170630594,
+    0.46987051235123795,
+    0.46375989225383696,
+    0.4858419362642466,
+    0.4713323390071328,
+    0.4631030071053749,
+    0.4389943116541
+   ],
+   "rel_valid_rows_on_pad_experts": 0.6920942877444641,
+   "rel_valid_rows_on_other_experts": 0.46133615800990047
+  },
+  "A2_first_wave_unsorted_flag": {
+   "rows": 52752,
+   "rel_valid": 0.0016623572391303197,
+   "max_abs_valid": 0.015609774585755076,
+   "rel_by_seq": [
+    0.0016668967268647183,
+    0.00166082393323469,
+    0.0016630673366564571,
+    0.0016618791020426703,
+    0.0016650894777047146,
+    0.0016609212200508342,
+    0.0016633576014544597,
+    0.0016622971025057464
+   ],
+   "rel_valid_rows_on_pad_experts": 0.0016638731714996849,
+   "rel_valid_rows_on_other_experts": 0.0016623318040360055
+  },
+  "A3_repeat_bitwise_equal_to_A": false,
+  "B_each_sequence_alone": [
+   {
+    "n_tokens": 36,
+    "rows": 216,
+    "rel": 0.0016668967268647183
+   },
+   {
+    "n_tokens": 299,
+    "rows": 1794,
+    "rel": 0.0023336338244604672
+   },
+   {
+    "n_tokens": 699,
+    "rows": 4194,
+    "rel": 0.0023378541128436627
+   },
+   {
+    "n_tokens": 1099,
+    "rows": 6594,
+    "rel": 0.0023345377618822806
+   },
+   {
+    "n_tokens": 63,
+    "rows": 378,
+    "rel": 0.0016650894777047146
+   },
+   {
+    "n_tokens": 519,
+    "rows": 3114,
+    "rel": 0.002337636350779163
+   },
+   {
+    "n_tokens": 899,
+    "rows": 5394,
+    "rel": 0.002338053730294108
+   },
+   {
+    "n_tokens": 149,
+    "rows": 894,
+    "rel": 0.0016622971025057464
+   }
+  ],
+  "C_pad_scaled_x1000": {
+   "valid_rows_bitwise_unchanged": false,
+   "rel_valid": 0.0022076371981951696
+  },
+  "D_no_padding_52752_rows": {
+   "rows": 52752,
+   "rel": 0.8699592494881034,
+   "max_rows_per_expert": 171
+  },
+  "E_hot_expert_sweep": [
+   {
+    "hot_rows": 22,
+    "total_rows": 8400,
+    "rel_all": 0.002337288151117552,
+    "rel_hot_expert": 0.00235160957282213,
+    "rel_other_experts": 0.0023372504601172897
+   },
+   {
+    "hot_rows": 278,
+    "total_rows": 8656,
+    "rel_all": 0.002337294097004747,
+    "rel_hot_expert": 0.002338606664043819,
+    "rel_other_experts": 0.0023372504601172897
+   },
+   {
+    "hot_rows": 1046,
+    "total_rows": 9424,
+    "rel_all": 0.00233712842814725,
+    "rel_hot_expert": 0.0023361509287638926,
+    "rel_other_experts": 0.0023372504601172897
+   },
+   {
+    "hot_rows": 2070,
+    "total_rows": 10448,
+    "rel_all": 0.0023374103855016808,
+    "rel_hot_expert": 0.0023380581747193306,
+    "rel_other_experts": 0.0023372504601172897
+   },
+   {
+    "hot_rows": 4118,
+    "total_rows": 12496,
+    "rel_all": 0.0023380811975791307,
+    "rel_hot_expert": 0.0023397722664421734,
+    "rel_other_experts": 0.0023372504601172897
+   },
+   {
+    "hot_rows": 6166,
+    "total_rows": 14544,
+    "rel_all": 0.002336695488016349,
+    "rel_hot_expert": 0.002335942592637149,
+    "rel_other_experts": 0.0023372504601172897
+   },
+   {
+    "hot_rows": 8214,
+    "total_rows": 16592,
+    "rel_all": 0.002337130853212411,
+    "rel_hot_expert": 0.0023370087888283835,
+    "rel_other_experts": 0.0023372504601172897
+   },
+   {
+    "hot_rows": 12310,
+    "total_rows": 20688,
+    "rel_all": 0.002337533062896593,
+    "rel_hot_expert": 0.0023377254532831503,
+    "rel_other_experts": 0.0023372504601172897
+   },
+   {
+    "hot_rows": 16406,
+    "total_rows": 24784,
+    "rel_all": 0.0023376554669611604,
+    "rel_hot_expert": 0.002337862306450921,
+    "rel_other_experts": 0.0023372504601172897
+   },
+   {
+    "hot_rows": 24598,
+    "total_rows": 32976,
+    "rel_all": 0.1155570454167156,
+    "rel_hot_expert": 0.11390780558296483,
+    "rel_other_experts": 0.12026994253658613
+   },
+   {
+    "hot_rows": 30196,
+    "total_rows": 38574,
+    "rel_all": 0.3885165971188349,
+    "rel_hot_expert": 0.43676288847989553,
+    "rel_other_experts": 0.08537670266311397
+   }
+  ],
+  "F_uniform_size_sweep": [
+   {
+    "tokens": 64,
+    "rows": 384,
+    "rel": 0.0016607941398967653,
+    "max_rows_per_expert": 5
+   },
+   {
+    "tokens": 256,
+    "rows": 1536,
+    "rel": 0.0023362740527216445,
+    "max_rows_per_expert": 11
+   },
+   {
+    "tokens": 1100,
+    "rows": 6600,
+    "rel": 0.0023347867322692705,
+    "max_rows_per_expert": 31
+   },
+   {
+    "tokens": 2200,
+    "rows": 13200,
+    "rel": 0.0023376120042628134,
+    "max_rows_per_expert": 50
+   },
+   {
+    "tokens": 4400,
+    "rows": 26400,
+    "rel": 0.0023366593953615105,
+    "max_rows_per_expert": 91
+   },
+   {
+    "tokens": 8792,
+    "rows": 52752,
+    "rel": 0.8705592015604635,
+    "max_rows_per_expert": 173
+   },
+   {
+    "tokens": 13188,
+    "rows": 79128,
+    "rel": 0.6434896269034127,
+    "max_rows_per_expert": 245
+   },
+   {
+    "tokens": 17584,
+    "rows": 105504,
+    "rel": 0.7546081340779464,
+    "max_rows_per_expert": 330
+   }
+  ],
+  "G_first_wave_fp32": {
+   "rel_valid": 8.378091491601387e-07,
+   "max_abs_valid": 1.4894903870299459e-05,
+   "rel_by_seq": [
+    8.401621924194082e-07,
+    8.39471238871462e-07,
+    8.378062905411902e-07,
+    8.370537604846257e-07,
+    8.306881253679447e-07,
+    8.376705398825862e-07,
+    8.382196256747095e-07,
+    8.404884506759981e-07
+   ],
+   "rel_valid_rows_on_pad_experts": 8.33679464382701e-07,
+   "rel_valid_rows_on_other_experts": 8.37878233490754e-07
+  },
+  "H_mx_argsort": {
+   "keys_sorted": true,
+   "is_permutation": true,
+   "keys_equal_numpy_sorted": true
+  },
+  "A4_first_wave_sorted_4bit": {
+   "rel_valid": 0.04251878790446339,
+   "max_abs_valid": 0.5103812011948321,
+   "rel_by_seq": [
+    0.04130675476602092,
+    0.043403702041019905,
+    0.042822679718055055,
+    0.042319660835191404,
+    0.044248320273532045,
+    0.042985138621834715,
+    0.042249707321280285,
+    0.04022642319194767
+   ],
+   "rel_valid_rows_on_pad_experts": 0.06331449878688365,
+   "rel_valid_rows_on_other_experts": 0.04208274414888359
+  },
+  "B4_each_sequence_alone_4bit": [
+   0.007105580019712668,
+   0.0022143943935918424,
+   0.00221762275006502,
+   0.0022171704768232407,
+   0.007129126428505663,
+   0.0022175876645349002,
+   0.0022151630041968738,
+   0.007227104225722238
+  ]
+ },
+ "seconds": 15.6,
+ "flags": [
+  "A: batched first wave is >10x worse than the same rows alone",
+  "C: valid rows depend on pad rows' content",
+  "A3: not deterministic"
+ ]
+}
