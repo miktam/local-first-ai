@@ -1207,3 +1207,113 @@ Q38-4  ok
 - Result files (sha256):
   - `results/gate/gate_20261005T050112Z.json` `e3e01b5cf9114afe4d39de7395a74d47fcb0565ca7d93343d29788d69bf00f0b`
 - Gate verdict: K4 PASS, K8 FAIL
+
+## Amendment 7 — publication criteria (2026-10-05T06:40:12Z)
+
+*Written by the main session on the mini and appended verbatim by the mbp session (one writer). Andrei's decision was recorded before any scored result exists, and while the gate stands at K8 FAIL in fix cycle 1 of 2. It concerns only whether the K8 MLX build may be published on Hugging Face. It changes no hypothesis, threshold, margin, rule, arm, task, n or code, so no tree hash changes. None of the listed types fits, hence the new type; no tool looks it up by type.*
+
+**Andrei's decision (2026-10-05), as he gave it:**
+
+> the K8 MLX build is published to Hugging Face only if all of these hold, set before any result: (1) K8 passes every blocking gate check within the 2 fix cycles; (2) G4 backstop vs bf16: mean KL <= 0.1 and decisive top-1 >= 0.99; (3) K8 not clearly below the vendor scorecard beyond H2's -4 pp margin; (4) pilot shows no unexplained truncation or parse-failure pattern, and G5 batch parity is resolved or documented; (5) loads and generates sensible EN/DE on a clean venv with the published kolibri1.py (consider an mlx-lm upstream PR); (6) Apache-2.0 + NOTICE, marked unofficial, no vendor tech report.
+
+**Reading of the criteria.** These are the main session's readings; Andrei may correct them by a later amendment, before the results they concern exist.
+1. **Gate.** The latest gate record says K8 PASS, at most two fix cycles after the original run. A K8 that passes only after a third failure, or never, is not published.
+2. **G4 backstop.** The comparison is against the gate's reference: the fp32 numpy reference run on the BF16 checkpoint. The original values apply: mean KL(ref‖K8) ≤ 0.10 nats/token, and top-1 agreement ≥ 99 % at positions where the reference leads by ≥ 2 nats.
+   - They apply over all 12,288 positions and over T9, as in the gate's G4 definition.
+   - They apply even if a later amendment relaxes the gate's own G4 threshold.
+3. **Scorecard.** This criterion fails if H2 is REFUTED, meaning the mean shortfall against the vendor's public rows is beyond the −4 pp margin. INCONCLUSIVE or CONFIRMED does not block publication.
+4. **Pilot and G5.**
+   - The pilot record and the plan amendment explain every truncation or parse-failure cluster: a cap raise, a BLOCKED cell with its extractor amendment, or a documented model behaviour.
+   - G5 batch parity either passes in a gate run, or its cause is diagnosed, documented in the experiment record, and stated on the model card.
+5. **Clean-venv check.** In a fresh environment with only the published files and the pinned mlx / mlx-lm versions, the published build loads through `model_file: kolibri1.py`, the byte-identical port file.
+   - It must generate sensible English and German answers on the gate's behaviour prompts, both with effort none and with effort high.
+   - The check is recorded as a result file.
+   - An upstream mlx-lm pull request is considered, and is a separate outward step.
+6. **Licence and labelling.**
+   - The repository carries the Apache-2.0 licence and a NOTICE naming Aleph Alpha's weights and the aleph-alpha-inference code the port derives from.
+   - It is marked unofficial: not produced or endorsed by Aleph Alpha.
+   - It does not include or quote the vendor's technical report; a link to it is fine.
+
+**What this does not change.** Meeting all six criteria makes publication permitted, not automatic. The Hugging Face upload stays an outward step that needs Andrei's go at that time, as the pre-registration's decisions list already says. If the criteria are not met, the exp_036 results are still published in full on GitHub and localfirstai.eu; only the converted weights are withheld.
+
+## Amendment 8 — process record (2026-10-05T08:49:59Z)
+
+*Written by the main session on the mini and pushed as `amendments/8_process_20261005T084959Z.md`. The mbp session appends it verbatim (one writer). It was written after gate run `20261005T050112Z` (K4 PASS, K8 FAIL) and before any diagnostic stage has run. It records Andrei's decisions on how the gate failure is handled.*
+
+*It changes no hypothesis, check, threshold, margin, verdict rule, arm, task, n or code, so no tree hash changes. It is not a fix cycle under the readings applied here: per re-run, or per typed amendment that changes what the gate measures or how it judges (see D1). Read literally, without that qualifier, "each typed amendment counts" would count it too. None of the listed types fits, hence the new type; no tool looks it up by type.*
+
+**Andrei's decisions (2026-10-05, in the mini session).**
+- **Timing.** The questions were put at 08:19:25Z. His answers were recorded at 08:35:13Z, and he wrote the withdrawal in D4 at 08:37:33Z. The gate had ended at 05:57:03Z. Every choice below was made after the gate failure was known, and before any diagnostic ran.
+- **Labels.** Option labels are quoted exactly as he chose them.
+- **Numbering.** The D-numbers are the diagnosis's (revision 2, §5).
+
+- **D2, the diagnostic route.** Asked "Run the diagnostic route on the MacBook Pro before spending another gate run?", he chose **"Yes, run them (Recommended)"**. The other option was "Stop, publish the failure".
+  - The mbp runs stages 0–4 of `diagnostics/gate1/`, about 2.5–3 h of machine time.
+  - It never invokes `gate/run_gate.py`. It writes no gate record and uses no fix cycle and no S1 hours.
+  - The rules that map its outcomes to actions were committed before it runs.
+  - The precedent is Amendment 6's diagnostic (`diagnostics/gemma_quant_check.py`), which concerned a peer. This decision extends the route to the gate.
+- **D4, the FP8 vendor anchor: approved, then withdrawn.** He was asked to "Approve the optional FP8 vendor anchor: one cloud GPU hour (rented by you, e.g. 1× H200 or 2× H100) running Aleph Alpha's own vLLM + plugin on the official FP8 weights, returning per-token log-probs on the public gate texts".
+  - He chose **"Yes, approve (Recommended)"**. The other option was "No cloud run".
+  - At 08:37:33Z he wrote: **"No need to rent anything"**.
+  - The main session read this as withdrawing the approval. It stopped the build that assumed the anchor before any part of the anchor reached the kit, and rebuilt the suite without it.
+  - So there is no external anchor, and the pre-registered optional cloud GPU hour ("only on Andrei's explicit ask") is not run. G3 is decided locally, by the no-anchor branch of the frozen rules.
+- **D1, the cycle reading.** Asked "How are fix cycles counted?", he chose **"(ii) Strict (Recommended)"**. The other option was "(i) Per re-run".
+  - **The question's text for (ii), verbatim:** "(ii) Each typed amendment counts as a cycle (HYPOTHESIS: a threshold amendment "counts as a fix cycle"; the pre-registration outranks the RUNBOOK) — the next re-run is then the last. Either way, Amendments 1–2 (fixes before the first gate run) are not counted."
+  - **The option's own description:** "The pre-registration's own wording; the next gate re-run is the final one, so it only happens once the diagnostics have settled every failing check."
+  - **What counts, as applied (the session's reading, not part of the option).** Each typed amendment that changes what the gate measures or how it judges counts as one fix cycle: a threshold change (any number of keys inside one), a gate fix, or a verdict-rule change. Each verdict-rule change is its own amendment. Without the qualifier, Amendments 3–8 would each count and no cycle would remain.
+  - **Reading (iii)** (one cycle per threshold changed) was not offered. It is the conservative reading the diagnosis notes the l.797 precedent chose. Under it, the gate could not pass.
+- **D3, G5 if the batched path shows no defect.** Asked "If the diagnostics find no defect in the batched path (batched output different but not worse), what happens to G5's failure?", he chose **"Run Kolibri at B = 1 (Recommended)"**. The other option was "Failure stands".
+  - **When it applies.** Only if stage 1 shows none of the five frozen defect signs and reproduces the gate's G5 value exactly, on the same run its other parts examine (outcome G5-N). If a defect sign appears, D3 does not apply. If stage 1 does not reproduce the gate's draw, G5's failure stands.
+  - **The consequence.** K8 and K4 run at B = 1. This is the consequence the peers' registered batched-path rule gives.
+  - **How it is made.** It is a verdict-rule change, made later by its own amendment. That amendment is a fix cycle under D1, and is disclosed as a rule change made after the result.
+- **D6, Amendments 1–2.** This was not a separate question and not offered as a choice. It was the session's premise in the D1 question, which stated: "Either way, Amendments 1–2 (fixes before the first gate run) are not counted." Andrei answered that question as above.
+  - It is recorded as the premise of the question he answered. It is neither a choice he made nor a fact.
+  - Amendments 1–2 are typed "gate fix", but they fixed step-3 test failures before any real gate ran, and the RUNBOOK counts fix cycles from the step-10 FAIL.
+  - Counted under (ii), they would use both fix cycles and leave none.
+- **D7, Amendment 7's timing.** This was not put to Andrei as a question, so no option label exists. The main session records the disclosure below, as the diagnosis recommended. It changes nothing in Amendment 7's criteria.
+
+D5 (copying K4 to the mini as a G5 discriminator) was not decided. Stopping and publishing the gate failure (D8) remains available at every point.
+
+**Fix cycles used: 0 of 2.**
+- Amendments 1–2 are not counted (D6).
+- Amendments 3–6 precede the first gate run and change no gate code, threshold or reference.
+- Amendment 7 and this amendment change nothing the gate measures or how it judges.
+- **Why the next gate re-run is the last.** G3 fails on any re-run unless a threshold change is typed. G5 fails unless a gate fix or a verdict-rule change is made. These are two amendments of different types, so under D1 every passable package uses both cycles, and any failure on that re-run is the exp_036 result.
+- The full accounting is in `diagnostics/gate1/FROZEN_RULES.md` §8.
+
+**Disclosure: Amendment 7 was written after the gate result.**
+- **Timing.** The gate ran 05:01:12–05:57:03Z, and its record was committed at 05:59:13Z (5c6a6e8). Amendment 7 is dated 06:40:12Z and was committed at 06:40:38Z (a666f3e).
+- **"Before any result."** The commit title says "(Andrei, before any result)", and Andrei's quoted decision says "set before any result". Both should read "before any scored result; after the gate result". Amendment 7's own text says the gate stood at K8 FAIL.
+- **Criterion 4.** Its clause "G5 batch parity is resolved or documented" was written with G5's failure (mean KL 0.307 against 0.151) known. It permits publication with a diagnosed and documented G5 cause that is not fixed.
+- **Criterion 2.** It was also written after the result. It keeps G4's original bounds for the upload whatever the gate's own G4 threshold becomes, so it is stricter, not easier.
+
+**Corrections to the gate note.** `aborted/20261005T050112Z-gate/NOTE.md` is not edited.
+- **G4.** The note's G4 row lists the 8,192–16,384 bucket's mean KL (0.108) against the 0.1 limit. Bucket values are descriptive: `gate/checks/g4_e2e.py` blocks only on the T1-8 and T9 aggregates (mean KL 0.041 and 0.083, both passing). The only blocking G4 element that failed is T9 `top1_decisive` 0.98889: 66 of 5,943 decisive positions missed, where at most 59 pass.
+- **G3.** The note says "raw text after the context-start token". The Kolibri side has no start token: the recorded rule scores NLL(ids[t+1] | ids[:t+1]) for t = 0 … T−2.
+
+**The frozen rules.** `diagnostics/gate1/FROZEN_RULES.md` is committed in the same push as this amendment, before any diagnostic stage runs. That commit's message gives the file's sha256 and the sha256 of each stage script.
+- **What it fixes.** For each failing check (G2, G3, G4, G5) it fixes:
+  - the measurement, by stage script and output key;
+  - the defect signs;
+  - the permitted consequence: failure stands, a gate fix by the main session, a threshold change typed by Andrei, or a verdict-rule change on Andrei's go (G5-B1 under D3, A3, or the M5-kernel B = 1 workaround);
+  - the cycle cost of each outcome;
+  - the disclosure block for the post.
+- **Every check has a branch in which its failure stands.**
+- **What it changes from the diagnosis's §3–§4.** The full list is at the head of the frozen rules.
+  - **Anchor.** It removes every anchor branch (D4 withdrawn).
+  - **Completion rules** for missing, invalid or non-reproducing measurements:
+    - a missing or invalid input keeps the failure standing;
+    - a threshold-only option survives a non-reproduction only if it clears the recorded value by more than the spread (the diagnosis's rule);
+    - G5-N, which has no threshold, requires stage 1 to reproduce the gate's G5 value exactly on the run it examines;
+    - G3 requires the Q36-8 pass to reproduce the peers record within 1e-4 bpb.
+  - **Numbers for five terms** the diagnosis left without one: the boundary step, the McNemar test, the excess sign, the 128-byte window attribution and the Q36-8 tolerance.
+  - **Five readings:**
+    - G4-D1's buckets include T1-8;
+    - G4-D2 judges chunk 64 against the reference by the bug test's bounds (1e-3, 0.999) rather than the diagnosis's literal "KL > 1e-6 at any position", which **loosens** that bound;
+    - a C1' value that would not change the recorded verdict is G4-2;
+    - G3-D1 must hold on each of its four texts;
+    - G5-D1's 2/364 means more than 2 positions.
+  - **Types (stricter).** A3 and the M5-kernel workaround "K8 and K4 at B = 1" are verdict-rule changes, each its own amendment on Andrei's go, not gate fixes.
+  - **The fp32 alignment** of the bug and chunk-64 tests (`diaglib.fp32_on_dequantised_weights`). It was chosen after a tiny-build smoke measurement.
+  - **Labels.** The diagnosis's "D5" for stop-and-publish is relabelled D8, its §5 number.
+- **What can change it.** Any later change to a rule is itself disclosed. A diagnostic value never replaces a gate value.
