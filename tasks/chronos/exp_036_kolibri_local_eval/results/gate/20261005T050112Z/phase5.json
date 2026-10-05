@@ -1,0 +1,93 @@
+{
+  "checks": {
+    "g5_greedy": {
+      "applicable": true,
+      "measured": {
+        "decisive_top1": 1.0,
+        "in_top5": 1.0,
+        "n_decisive": 941,
+        "n_positions": 1598,
+        "per_prompt": {
+          "G5_de_high_1": {
+            "decisive_top1": 1.0,
+            "finished": "length",
+            "in_top5": 1.0,
+            "n": 256,
+            "n_decisive": 182
+          },
+          "G5_de_high_2": {
+            "decisive_top1": 1.0,
+            "finished": "length",
+            "in_top5": 1.0,
+            "n": 256,
+            "n_decisive": 144
+          },
+          "G5_de_none_1": {
+            "decisive_top1": 1.0,
+            "finished": "eos",
+            "in_top5": 1.0,
+            "n": 108,
+            "n_decisive": 53
+          },
+          "G5_de_none_2": {
+            "decisive_top1": 1.0,
+            "finished": "eos",
+            "in_top5": 1.0,
+            "n": 118,
+            "n_decisive": 68
+          },
+          "G5_en_high_1": {
+            "decisive_top1": 1.0,
+            "finished": "length",
+            "in_top5": 1.0,
+            "n": 256,
+            "n_decisive": 149
+          },
+          "G5_en_high_2": {
+            "decisive_top1": 1.0,
+            "finished": "length",
+            "in_top5": 1.0,
+            "n": 256,
+            "n_decisive": 176
+          },
+          "G5_en_none_1": {
+            "decisive_top1": 1.0,
+            "finished": "eos",
+            "in_top5": 1.0,
+            "n": 199,
+            "n_decisive": 88
+          },
+          "G5_en_none_2": {
+            "decisive_top1": 1.0,
+            "finished": "eos",
+            "in_top5": 1.0,
+            "n": 149,
+            "n_decisive": 81
+          }
+        }
+      },
+      "note": null,
+      "pass": true,
+      "threshold": {
+        "greedy_decisive_lead_nats": 2.0,
+        "greedy_decisive_top1_min": 0.995,
+        "greedy_ref_top5_min": 0.99,
+        "greedy_tokens": 256
+      }
+    }
+  },
+  "data": {
+    "reference_passes": [
+      {
+        "bytes": 156213402552,
+        "what": "fp32 reference on the 8 G5 prompts + continuations"
+      }
+    ]
+  },
+  "peak_rss_bytes": 8723316736,
+  "phase": 5,
+  "t_end": "2026-10-05T05:54:27Z",
+  "t_start": "2026-10-05T05:51:09Z",
+  "title": "reference pass on the G5 continuations",
+  "wall_s": 197.67775416374207
+}

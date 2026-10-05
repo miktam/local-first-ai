@@ -1,6 +1,6 @@
 # Experiment 036 — Kolibri on a MacBook: does it fit, how fast, and does its scorecard hold on public rows?
 
-*Pre-registered: 2026-10-03T22:33:25Z · Status: signed off; Session 1 in progress; no scored run*
+*Pre-registered: 2026-10-03T22:33:25Z · Status: gate K4 PASS, K8 FAIL; Session 1 in progress; no scored run*
 
 **Builds on:**
 - exp_007: the padding fixtures, loaded here by their real file names.
@@ -1198,3 +1198,12 @@ Q36-4  ok
 Q38-8  ok
 Q38-4  ok
 ```
+
+## gate — run record (2026-10-05T05:59:10Z)
+
+- Phase: gate
+- UTC: 2026-10-05T05:59:10Z (from the clock)
+- Commit: df5bf4c4ea57d5ff20f0bd74df76f64fd006d41d (uncommitted changes: yes)
+- Result files (sha256):
+  - `results/gate/gate_20261005T050112Z.json` `e3e01b5cf9114afe4d39de7395a74d47fcb0565ca7d93343d29788d69bf00f0b`
+- Gate verdict: K4 PASS, K8 FAIL

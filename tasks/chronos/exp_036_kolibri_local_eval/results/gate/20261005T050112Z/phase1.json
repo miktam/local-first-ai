@@ -1,0 +1,312 @@
+{
+  "checks": {
+    "g0_census": {
+      "applicable": true,
+      "measured": {
+        "dtypes": [
+          "BF16"
+        ],
+        "expected": {
+          "full_attention_layers": [4, 9, 14, 19, 24, 29, 34, 39, 44, 49],
+          "param_count": 78103074560,
+          "tensor_count": 58353
+        },
+        "full_attention_layers": [4, 9, 14, 19, 24, 29, 34, 39, 44, 49],
+        "n_shards": 32,
+        "params": 78103074560,
+        "shard_sha": {
+          "against": "download etag and tools/kolibri_lfs_oids.json",
+          "mismatches": [],
+          "n_committed_oids": 32,
+          "n_reused": 0,
+          "source": "computed",
+          "status": "checked"
+        },
+        "tensors": 58353
+      },
+      "note": null,
+      "pass": true,
+      "threshold": {
+        "full_attention_layers": [4, 9, 14, 19, 24, 29, 34, 39, 44, 49],
+        "param_count": 78103074560,
+        "tensor_count": 58353
+      }
+    },
+    "g0_converted_config_K4": {
+      "applicable": true,
+      "measured": {
+        "expected_policy": {
+          "embed_tokens": "4bit",
+          "lm_head": "4bit"
+        },
+        "n_problems": 0,
+        "n_quantised_tensors": 502,
+        "observed_policy": {
+          "embed_tokens": "4bit",
+          "lm_head": "4bit"
+        },
+        "policy_name": "quantised_head",
+        "problems": [],
+        "quantization": {
+          "bits": 4,
+          "group_size": 64,
+          "mode": "affine"
+        },
+        "record_policy": {
+          "attention": "arm_bits",
+          "embed_tokens": "arm_bits",
+          "expert_bias": "fp32",
+          "lm_head": "arm_bits",
+          "norms": "bf16",
+          "routed_experts": "arm_bits",
+          "router_weight": "fp32",
+          "shared_experts": "arm_bits"
+        },
+        "router_weight_dtypes": [
+          "F32"
+        ]
+      },
+      "pass": true,
+      "threshold": {
+        "policy": "quantised_head"
+      }
+    },
+    "g0_converted_config_K8": {
+      "applicable": true,
+      "measured": {
+        "expected_policy": {
+          "embed_tokens": "8bit",
+          "lm_head": "8bit"
+        },
+        "n_problems": 0,
+        "n_quantised_tensors": 502,
+        "observed_policy": {
+          "embed_tokens": "8bit",
+          "lm_head": "8bit"
+        },
+        "policy_name": "quantised_head",
+        "problems": [],
+        "quantization": {
+          "bits": 8,
+          "group_size": 64,
+          "mode": "affine"
+        },
+        "record_policy": {
+          "attention": "arm_bits",
+          "embed_tokens": "arm_bits",
+          "expert_bias": "fp32",
+          "lm_head": "arm_bits",
+          "norms": "bf16",
+          "routed_experts": "arm_bits",
+          "router_weight": "fp32",
+          "shared_experts": "arm_bits"
+        },
+        "router_weight_dtypes": [
+          "F32"
+        ]
+      },
+      "pass": true,
+      "threshold": {
+        "policy": "quantised_head"
+      }
+    },
+    "g0_strict_load_K4": {
+      "applicable": true,
+      "measured": {
+        "checkpoint_tensors": 1907,
+        "load_error": null,
+        "missing_params": [],
+        "n_missing_params": 0,
+        "n_unused_ckpt_tensors": 0,
+        "numel_checkpoint": 12245538560,
+        "numel_equal": true,
+        "numel_params": 12245538560,
+        "quantized": true,
+        "shape_mismatch": [],
+        "unused_ckpt_tensors": []
+      },
+      "pass": true,
+      "threshold": "every tensor consumed once, no parameter absent"
+    },
+    "g0_strict_load_K8": {
+      "applicable": true,
+      "measured": {
+        "checkpoint_tensors": 1907,
+        "load_error": null,
+        "missing_params": [],
+        "n_missing_params": 0,
+        "n_unused_ckpt_tensors": 0,
+        "numel_checkpoint": 22002210560,
+        "numel_equal": true,
+        "numel_params": 22002210560,
+        "quantized": true,
+        "shape_mismatch": [],
+        "unused_ckpt_tensors": []
+      },
+      "pass": true,
+      "threshold": "every tensor consumed once, no parameter absent"
+    },
+    "g0_strict_load_source": {
+      "applicable": true,
+      "measured": {
+        "checkpoint_tensors": 58353,
+        "load_error": null,
+        "missing_params": [],
+        "n_missing_params": 0,
+        "n_unused_ckpt_tensors": 0,
+        "numel_checkpoint": 78103074560,
+        "numel_equal": true,
+        "numel_params": 78103074560,
+        "quantized": false,
+        "shape_mismatch": [],
+        "unused_ckpt_tensors": []
+      },
+      "pass": true,
+      "threshold": "every tensor consumed once, no parameter absent"
+    },
+    "g0_template_parity": {
+      "applicable": true,
+      "measured": {
+        "cases_sha256": "c652f92bb69ba7e421b57f6efca4046d53e66f1f5a5639ed20c6d85650e73a69",
+        "mismatches": [],
+        "n": 120,
+        "n_conversations": 12,
+        "n_settings": 10,
+        "runner_chat": {
+          "mismatches": [],
+          "n": 48,
+          "present": true
+        },
+        "vendor_jinja_sha256": "51b9ae6f83e7a30d428fccc75da306653801be73d4ed936e838667d5de7a6617"
+      },
+      "pass": true,
+      "threshold": {
+        "mismatches": 0,
+        "n": 120
+      }
+    },
+    "g0_tokenizer_parity": {
+      "applicable": true,
+      "measured": {
+        "examples": [],
+        "fix_mistral_regex": null,
+        "gate_texts": {
+          "T1": {
+            "decode_equals_text": true,
+            "harness_equals_raw": true
+          },
+          "T2": {
+            "decode_equals_text": true,
+            "harness_equals_raw": true
+          },
+          "T3": {
+            "decode_equals_text": true,
+            "harness_equals_raw": true
+          },
+          "T4": {
+            "decode_equals_text": true,
+            "harness_equals_raw": true
+          },
+          "T7": {
+            "decode_equals_text": true,
+            "harness_equals_raw": true
+          },
+          "T8": {
+            "decode_equals_text": true,
+            "harness_equals_raw": true
+          }
+        },
+        "groups": {
+          "digits": {
+            "mismatches": 0,
+            "n": 600,
+            "sha256": "cbd30db570e2b90af24a77d75ebce5862d62ca99eb46107396eba97e095ef8f1"
+          },
+          "identifiers": {
+            "mismatches": 0,
+            "n": 13079,
+            "sha256": "140b63f34a4d9ba9efdfc8d4789a67b0f7fd0b787b12960bf7da45340bbfce95"
+          },
+          "mmlu": {
+            "mismatches": 0,
+            "n": 27273,
+            "sha256": "00076074435d1428d5daca8bb301c16e20acc0ca1d56a103e22636940c517b3d"
+          },
+          "sources": {
+            "mismatches": 0,
+            "n": 187,
+            "sha256": "f97666dd98bfe0ebe4206016738cd041d9a4d87fc9dc339b2c4478bfffd6746a"
+          }
+        },
+        "mismatches": 0,
+        "mmlu_files": [
+          "$EXP036_DATA/MMLU-ProX-Lite/de/test-00000-of-00001.parquet",
+          "$EXP036_DATA/MMLU-ProX-Lite/en/test-00000-of-00001.parquet",
+          "$EXP036_DATA/MMLU-ProX/de/test-00000-of-00001.parquet",
+          "$EXP036_DATA/MMLU-ProX/en/test-00000-of-00001.parquet"
+        ],
+        "n_lines": 41145,
+        "roundtrip_fail": 0,
+        "tokenizer_json_sha256": "5d4798f2a8c9d598d6dc005614216989d4b6aeffaf9f6f5e136f0ec5fc4a4c13"
+      },
+      "pass": true,
+      "threshold": {
+        "lines_min": 2000,
+        "mismatches_max": 0
+      }
+    },
+    "g1": {
+      "applicable": true,
+      "measured": {
+        "errors": 0,
+        "excluded": [
+          "test_gate_drivers_tiny.py"
+        ],
+        "failures": 0,
+        "junit_sha256": "a2f09311ccaf6125167148423e635b1ea9f875519d576ad1417ebdf26ee798d6",
+        "require_all": "run-host",
+        "returncode": 0,
+        "selection": [
+          "tests/ (all)"
+        ],
+        "skipped": 8,
+        "skipped_build_host_only": 8,
+        "summary": "1238 passed, 8 skipped in 192.72s (0:03:12)",
+        "t_end": "2026-10-05T05:04:41Z",
+        "t_start": "2026-10-05T05:01:28Z",
+        "tests": 1246,
+        "wall_s": 193.0643858909607
+      },
+      "pass": true,
+      "threshold": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "skipped_except_build_host_only": 0,
+        "source": "tests/INTEGRATION_LOG.md bounds (a), (b1), (b2) and cache entries"
+      }
+    },
+    "same_port_sha": {
+      "applicable": true,
+      "measured": {
+        "K4": "cd6153b8b00b81f7058e786f33672a07b46c494be0203ad75b04372179dc5584",
+        "K8": "cd6153b8b00b81f7058e786f33672a07b46c494be0203ad75b04372179dc5584",
+        "port": "cd6153b8b00b81f7058e786f33672a07b46c494be0203ad75b04372179dc5584"
+      },
+      "pass": true,
+      "threshold": "K8 and K4 converted with the current port/kolibri1.py"
+    }
+  },
+  "data": {
+    "head_policy": {
+      "policy": "quantised_head",
+      "source": "sign-off: quantised at the arm's bits with fp32 logits"
+    }
+  },
+  "peak_rss_bytes": 787906560,
+  "phase": 1,
+  "t_end": "2026-10-05T05:04:41Z",
+  "t_start": "2026-10-05T05:01:12Z",
+  "title": "G0 static, G1",
+  "wall_s": 209.3038420677185
+}
