@@ -1087,3 +1087,114 @@ hash_tree: TOOLS_SHA256 = 2858d1e690c20a4457e57272048d215d865cb236c3a269934d27e8
 1. Pull, run `"$PY" tools/status.py --sync-amendments`, and commit.
 2. Re-run step 3 (1,242 tests, of which 8 are build-host-only skips) and `"$PY" tools/hash_tree.py --check HYPOTHESIS.md` (17 matches).
 3. Re-run step 9, the peer check. Expect Gemma's chat-wrapped NLL to be about 2–4 nats/token, and G8 and Q36-8 to read `B=1` if their single flips recur. Any other `fail` stops the run for a decision.
+
+## Amendment 6 — peer fidelity attribution (2026-10-04T20:09:30Z)
+
+*Written by the main session on the mini before any scored run, pushed as `amendments/6_peerfidelity_20261004T200930Z.md`, and appended verbatim by the mbp session (one writer). It settles what the Gemma 4 family's step-9 fidelity failure does to G8 and G4, so it is Andrei's decision. No threshold, margin, task or n changes, and m stays 8. H8's peer set changes as set out below: edge case 7, which removes a family from H8's peer median when a build of it is dropped, is extended to a `speed-only` build. None of the listed types fits, hence the new type; no tool looks it up by type.*
+
+**Andrei's decision.** 2026-10-04, in the mini session. Asked "What happens to G4?" after the diagnostic, he chose **"Speed reference only (Recommended)"**: G4 is excluded from every quality use, Gemma leaves H8's peer median (which makes H8 harder for Kolibri, i.e. conservative), and G4 stays as H1's speed reference. Gemma's 4-bit loss is reported as a descriptive finding. G8 stays, at B = 1 because of its own greedy flip, as registered.
+
+He was offered three options: 1, keep G8 and drop G4; 2, keep G8, drop G4 from every quality use and keep G4 as H1's speed reference; 3, drop both. This amendment implements option 2:
+- G8 stays a peer.
+- G4 leaves every quality use: no Tier-A or Tier-B quality cell, no pilot cell, and no place in H8's peer median.
+- G4 stays as H1's speed reference.
+- Gemma 4's 4-bit loss is reported descriptively.
+
+**Why.** The step-9 re-run after Amendment 5 (`results/peers_20261004T175538Z.json`, commit 3461c8c; `aborted/20261004T175538Z-peercheck/NOTE.md`) failed G8 and G4 on the family rule, measured chat-wrapped:
+- NLL(8) 2.938 > NLL(4) 2.910 + 0.02.
+- KL(8‖4) 0.323 ≥ 0.2.
+
+G8 also flipped 1 of 30 greedy answers. Q36-8 read `B=1`; Q36-4, Q38-8 and Q38-4 read `ok`.
+
+The rule compares a family's two builds with each other, so it cannot say which build is at fault. The diagnostic `diagnostics/gemma_quant_check.py` (commit 6d70e09) ran on the mbp. Its records are `diagnostics/gemma_quant_check_20261004T181520Z_AC.json` (commit e6e8d34) and `diagnostics/gemma_quant_check_20261004T192910Z_D.json` (commit 70fedbf).
+- **A. Kernels.** At Gemma 4's shapes, `quantized_matmul` and sorted `gather_qmm` were compared with dequantise + fp32 at 4 and 8 bits. The worst relative errors were 9.1e-7 / 9.8e-7 (qmm, 4 / 8 bits) and 1.6e-6 / 1.7e-6 (gather_qmm, 4 / 8 bits). Both kernels are exact on the M5 Max.
+- **B. Weights.** For every one of the 327 quantised tensors, d84 / e4 = 1.003 (min = max), and none is outside [0.7, 1.4]. The routers are identical. G4 is the standard 4-bit affine g64 quantisation of G8's own weights.
+- **C. Unquantised tensors.** All 716 are bit-identical.
+- **D. Against bf16.** The reference was `mlx-community/gemma-4-26b-a4b-it-bf16` @ `e13fae2a81ec07e3092a3ebb70c80970b640dc3c` (12 shards, sha256-verified). The texts were T1–T4, chat-wrapped as in Amendment 5, 7,005 tokens, token-weighted.
+
+| build | KL(bf16‖build) | NLL | bf16 NLL |
+|---|---|---|---|
+| G8 | 0.0167 | 2.863 | 2.876 |
+| G4 | 0.3778 | 2.821 | 2.876 |
+
+G8 is faithful to bf16. G4 is a correct build of a model that loses much at 4-bit affine g64, so the family's failure is G4's:
+- G4's NLL falls below bf16's on these texts, which is why NLL(8) > NLL(4).
+- KL(8‖4) 0.32 is mostly G4's distance from bf16.
+
+**What changes.**
+1. **The peer check attributes a failed family rule by a pinned bf16 reference** (`tools/peer_check.py`). This happens only when the family's NLL(8) / KL(8‖4) rule fails and `tools/fidelity_reference.json` pins a reference record for that family.
+   - **The pin.** `tools/fidelity_reference.json` is in the TOOLS tree, with sha256 `64e4e5c7fec06d6d98349bde81875d1d23e4e31596203d1fef11e66d0017f29e`. It pins the Gemma 4 record `diagnostics/gemma_quant_check_20261004T192910Z_D.json` by its sha256 `9334e973e1db8ddf5cceaf76524c2dc3a865257657e3e325560662c1691143ab` (commit 70fedbf), with its texts T1–T4, its bf16 source and its producer. `diagnostics/` stays outside every hash scope; the pin's hash binds the record.
+   - **The record must describe this run.** The peer check refuses the record if its sha256 differs, or if any arm of the family lacks a row on a pinned text (or has one twice, or one on another text). Each row must also agree with this run's chat-wrapped NLL of that arm on that text: the same token count, and NLL within 0.02 nats/token, the registered NLL margin reused. On the step-9 record the rows agree to about 1e-7.
+   - **Each build is judged on its own.** The measure is its token-weighted KL(bf16‖arm) over the pinned texts, against the registered KL bound 0.2.
+     - **Below 0.2,** the build passes fidelity, and its verdict follows its other checks. For G8, its own greedy flip gives `B=1` under Amendment 5.
+     - **At or above 0.2,** the build gets the new verdict `speed-only` (G4).
+   - **What is recorded.** The attribution goes into `families.<f>.fidelity_attribution`, the per-build result into `arms.<a>.fidelity_reference`, and the pin and record hashes into `fidelity_reference`. The console line names each build's KL.
+   - **The exit code is 2,** as for `B=1`.
+   - **When the registered rule applies unchanged.** Without a pin for the family, or with a pin that cannot be read or does not match the run, both builds `fail` as registered. `families.<f>.fidelity_attribution` then says why: `used: false` with the reason (no pin for the family, or the pin is unusable), or the rows that do not match. The code is data-driven and names no arm.
+2. **A `speed-only` build runs no quality cell, but it is not a drop.**
+   - `runner/guard.py require_peers` refuses it, and every caller of that guard runs quality cells. `speed_only_arms()` lists it, and `excluded_arms()` does not.
+   - `runner/run.py pilot --without` accepts it. G4 is not a pilot arm, so the pilot needs no flag.
+   - `runner/plan_fix.py` queues no Tier-A or Tier-B task cell of it, and records `speed_only_arms`. A MoE peer among such arms would count as dropped for H3, H4, H6 and the H2 protocol control. The B4 ladder keeps the build. G4 has no task cell, so the queue is the same as with G4 `ok`.
+   - H1, the H1 prefill ratio, the B4 ladder (E6) and E7's speed ratio keep G4. `bench/` reads no peer record, and `bench/` is unchanged.
+3. **H8's peer median** drops every family with an excluded or `speed-only` build. This is edge case 7's rule, now applied to `speed-only` too.
+   - The plan records `h8_peers` and `h8_families_left`, and its amendment prints both. If no peer family remains, the plan puts H8 under `not_run`, as edge case 7 says.
+   - `analysis/verdicts.py` applies the same rule from the plan's `excluded_arms` and `speed_only_arms`, and records `families_left` in H8's detail.
+   - `bench/kl_8v4.py` still measures Gemma 4's KL(8‖4) on T1–T6. That value is descriptive, published with the D numbers above.
+4. **An unfilled amendment is never appended** (`tools/status.py`). `--sync-amendments` and `--append-amendment` refuse, appending nothing, an amendment file that still holds an upper-case placeholder in double braces. HYPOTHESIS.md is append-only, so a draft whose decision line is not yet filled in could not be taken back.
+
+**Effect on the hypotheses.**
+- **H1** runs as registered: K4 vs G4, 10 blocks. Decode speed does not depend on G4's quantisation loss, and A shows the kernels exact at 4 bits.
+- **H8** compares Kolibri with the median of Qwen3.6 and Qwen3.8, that is, their mean.
+- **H2, H3, H4 and H6** are unchanged. G8 stays a peer, at B = 1 if its flip recurs.
+- **Plain answer Q5.** "The peers'" now means Qwen3.6's and Qwen3.8's. The post says why Gemma 4 left H8: its 4-bit build is 0.378 nats/token from bf16 on T1–T4, and its 8-bit build 0.017.
+
+**Superseded wording in HYPOTHESIS.md.**
+- **Edge case 7,** "If G4 is dropped, H1 is NOT RUN": G4 is not dropped. As `speed-only` it stays in H1. The case's second sentence applies: the Gemma 4 family leaves H8's peer median.
+- **Arms table, G4 row,** "H1, H8, E6 only": now H1 and E6 (and E7's speed ratio). Its KL(8‖4) on the H8 texts is descriptive.
+- **H8,** "≤ 1.5 × the median of Gemma 4's, Qwen3.6's and Qwen3.8's": now the median of Qwen3.6's and Qwen3.8's.
+- **H7 Descriptive,** "K4 vs G4 on speed (H1), fit and logit fidelity (H8)": G4's logit fidelity is the D numbers and its descriptive KL(8‖4).
+- **"Peers are verified, not gated"** and **C3**: a failed NLL / KL rule may be attributed per build by a pinned bf16 reference, as above. A build at or above 0.2 is `speed-only`; a build below 0.2 keeps its other verdict.
+
+**Disclosure.** The decision was taken after the step-9 numbers and the diagnostic were seen.
+- **The peers' chat-wrapped per-token KL(8‖4) values were known:** Gemma 4 0.323, Qwen3.6 0.095, Qwen3.8 0.069.
+- **No Kolibri fidelity value had been measured.**
+- **H8 becomes stricter for Kolibri, not easier.** Dropping Gemma 4 lowers the per-token peer median from 0.095 to 0.082 (the mean of Qwen3.6 and Qwen3.8). The per-byte values H8 uses are not measured yet; Gemma 4's per-token value is 3.4 × the next.
+- **The reference is narrower than the family rule.** It covers T1–T4, not T5–T6, and it uses fp32 log-probs; the rule uses bf16-rounded logits on T1–T6.
+- **The 0.2 threshold** is the registered KL bound, reused.
+
+**New tree hashes.** Every other scope keeps its earlier value; BENCH is unchanged.
+
+hash_tree: RUNNER_SHA256 = d3d228a6395c976232d730363e70f166bfe0607766b5ae48f4cbddc33790690f
+hash_tree: ANALYSIS_SHA256 = 83cedd792b8d77b3749be8e76abeb9db70cd92da0e33272e88f5abd92ded78a2
+hash_tree: TOOLS_SHA256 = 690de58ba70e6346cdca38eae8446f9fcf226f7e1c0b308b9bd6d0942ad64dc9
+
+**Verified on the mini.**
+- **Tests.** 1,274 pass in Python 3.12 and 3.14 with every test required (1,242 before). The new tests cover:
+  - the pin's checks: sha256, rows, texts and schema, and a malformed record, which the run survives;
+  - per-build attribution, the 0.2 edge, and a record that does not describe the run;
+  - `run()` with and without a reference, a passing family rule that never reads the reference, and an unreadable pin; the record says why whenever the registered rule stands;
+  - downstream: the guard, `pilot --without`, `plan_fix.build_context` and `fix()`, the B4 ladder, H8 without Gemma 4, H8 NOT RUN in the plan when every peer family leaves, and H1 with G4;
+  - an amendment holding an unfilled placeholder, refused by both `status.py` entry points with nothing appended;
+  - the committed pin against the D record;
+  - the committed step-9 record re-attributed.
+- **Dry run.** `tools/dry_run.py` passes all 17 stages. Its peers record marks G4 `speed-only`, as the pin says. The plan has `speed_only_arms` G4 and `h8_peers` qwen3_6, qwen3_8. The verdicts' H8 models are kolibri, qwen3_6 and qwen3_8.
+- **Leak check.** The dry run's leak stage is clean, in the copy and in this kit's working tree.
+- **Hashes.** `hash_tree --check` gives 14 matches and 3 MISMATCH (`runner`, `analysis`, `tools`) until this amendment is appended, and 17 of 17 on a copy with it appended.
+
+**What the mbp does.**
+1. Pull, run `"$PY" tools/status.py --sync-amendments`, and commit.
+2. Re-run step 3 (1,274 tests, of which 8 are build-host-only skips) and `"$PY" tools/hash_tree.py --check HYPOTHESIS.md` (17 matches).
+3. Re-run step 9 as written. Expect exit code 2 and the table below. G8 reads `ok` if its flip does not recur, and Q36-8 likewise. Any `fail` stops the run for a decision.
+4. Commit the record and go on to step 10. Steps 10–13 run as written:
+   - step 11 runs H1 with G4, and runs the KL cell for all four families, Gemma 4 descriptive;
+   - step 12 needs no `--without`;
+   - step 13 records G4 under `speed_only_arms` and Gemma 4 under `h8_families_left`.
+
+```text
+G8     B=1        greedy flip rate 0.033 > 0.02; NLL(8) / KL(8‖4) rule failed for the family; by the Amendment 6 reference KL(bf16‖G8) 0.0167 < 0.2: fidelity passes
+G4     speed-only NLL(8) / KL(8‖4) rule failed; KL(bf16‖G4) 0.3778 ≥ 0.2 on the Amendment 6 reference
+Q36-8  B=1        batched-path parity outside the G5 noise-floor bound; greedy flip rate 0.033 > 0.02
+Q36-4  ok
+Q38-8  ok
+Q38-4  ok
+```
