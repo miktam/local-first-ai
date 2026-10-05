@@ -1,6 +1,6 @@
 # Experiment 036 — Kolibri on a MacBook: does it fit, how fast, and does its scorecard hold on public rows?
 
-*Pre-registered: 2026-10-03T22:33:25Z · Status: gate K4 PASS, K8 FAIL; Session 1 in progress; no scored run*
+*Pre-registered: 2026-10-03T22:33:25Z · Status: Gate failed — K8 (G2, G3, G4, G5); stopped and published as the result 2026-10-05; no scored run; H1–H8 and D1 not run*
 
 **Builds on:**
 - exp_007: the padding fixtures, loaded here by their real file names.
@@ -1317,3 +1317,114 @@ D5 (copying K4 to the mini as a G5 discriminator) was not decided. Stopping and 
   - **The fp32 alignment** of the bug and chunk-64 tests (`diaglib.fp32_on_dequantised_weights`). It was chosen after a tiny-build smoke measurement.
   - **Labels.** The diagnosis's "D5" for stop-and-publish is relabelled D8, its §5 number.
 - **What can change it.** Any later change to a rule is itself disclosed. A diagnostic value never replaces a gate value.
+
+## Gate failure — the exp_036 result (2026-10-05T17:07:30Z)
+
+*Written by the main session on the mini. It follows "Gate failure or STOP" under Publication angle. RUNBOOK step 10 item 5 hands that block to the main session after a third failure; here the stop comes after the first, by Andrei's D8 decision below.*
+- *The hand-back.* The mbp session's last commit is 2530ad4 (14:59:33Z), the confirmation outputs. Its last report, relayed by Andrei, ended "Stopping here, per your instructions." The mini's checkout was at origin, 2530ad4, with a clean tree. Andrei's go for the push of this block confirms the hand-back on RUNBOOK step 19's terms. From this block on, the main session is the only writer of this file (l.24).
+- *This block changes no hypothesis, check, threshold, rule or code, and no tree hash. With it, the Status line (l.3) is rewritten in place, the one edit in place the header allows (l.20; Publication angle, Order item 1).*
+
+**Result.** Phase 0 gate run `20261005T050112Z` is final: **K8 FAIL, K4 PASS, exit 1 ("K8 FAIL: stop")**.
+- It ran on the M5 Max from 05:01:12Z to 05:57:03Z. Its record is `results/gate/gate_20261005T050112Z.json`, sha256 `e3e01b5cf9114afe4d39de7395a74d47fcb0565ca7d93343d29788d69bf00f0b`.
+- This file says that a gate failure is published as such (l.55), and Amendment 8 keeps stop-and-publish (D8) open at every point. The gate failure is therefore the result of exp_036.
+
+**The failing blocking checks.** K8 failed 5 of its 27 blocking checks. K4 passed all 11 of its own.
+- No threshold was relaxed, and no gate code was changed after the run.
+- No fix cycle was used (0 of 2).
+
+| Check | Where | Threshold as registered | Observed |
+|---|---|---|---|
+| `g2_bf16_natural_selection` | layer 20 (T4, position 19, located by stage 2) | every top-6 disagreement has a reference 6th–7th biased gap < 6 σ_l; disagreement fraction ≤ max(0.2 %, 2 × emu) | one of 8,448 disagreeing (token, layer) pairs at 6.08 σ_l; fraction 1.375 % against 2.47 % (passed) |
+| `g3_bpb_per_text` | the fp32 reference, T1 | each of T1–T6 ≤ 1.2 bits per byte | T1 1.311; T2–T6 below 1.2 |
+| `g3_bpb_vs_peers` | the fp32 reference against the best peer | pooled mean ≤ 1.25 × the best peer | 0.9143 / 0.7054 (Q36-8) = 1.296 |
+| `g4_K8_backstop` | T9 | top-1 agreement ≥ 99 % where the reference leads by ≥ 2 nats, and mean KL ≤ 0.10 | 0.98889: 66 of 5,943 missed, where at most 59 pass. Mean KL 0.041 (T1–8) and 0.083 (T9), both passed |
+| `g5_batch_parity_K8` | B = 8, end to end | mean KL ≤ 3 × floor_KL = 0.1513; top-1 disagreement ≤ 0.1989 | 0.3074, 2.03 × the bound; disagreement 0.143 (passed) |
+
+In the gate's own order, the first failing check is `g2_bf16_natural_selection`, and the gate commit 5c6a6e8 names it. Both README status rows name the four groups (G2, G3, G4, G5) that hold all five.
+
+**Stage 5, which wrote no gate record.**
+- **What it did.** It applied `diagnostics/gate1/FROZEN_RULES.md` to the mbp's stages 0–4 (c0f4f31).
+- **Outcomes.** All four checks came out at their defect branch:
+  - G2-D, on signs D1 and D3;
+  - G3-D, on D2 and D3;
+  - G4-D, on D1, D2, D5 and D6;
+  - G5-D, on D2.
+- **Reproduction and packages.** Every gate value was reproduced exactly, and no amendment package fits. Its conclusion (`package.next_gate_run`) reads "not useful; the route is stop and publish (D8), on Andrei's go". The report is `diagnostics/gate1/out/stage5_report_20261005T130616Z.json`.
+- **G3 alone makes any re-run fail.** It is deterministic on the reused reference dumps. G3-D allows no G3 amendment and no anchor route (D4 was withdrawn).
+
+**Andrei's decision (D8).**
+- **The question.** It was put at 14:27:57Z, after stage 5 (13:06:16Z) and the mini's bug hunt (`diagnostics/gate1/BUGHUNT.md` §1–5). Verbatim: "Under the frozen rules the K8 gate cannot pass: the bug hunt found no port defect, but the G4 bounds are unattainable for any correct implementation of Kolibri (routing chaos), G3 has no route without the anchor, and G5 points at an M5-only batched-prefill path. How do you want to proceed?"
+- **His choice.** At 14:42:57Z he chose **"Confirm, publish, then exp_037 (Recommended)"**, the label as shown to him (`confirm/README.md` quotes it without the suffix). Its description reads: "1 h of confirmation runs on the MacBook Pro (forced routing; G5 batched-prefill arms), then exp_036 is written up and published as an informative gate failure; then a new pre-registration (exp_037) with a gate designed from these findings, reusing the hypotheses and kit."
+- **The other options** were "Confirm and publish only" and "Publish now". All three ended in publishing the gate failure.
+- **Source of the times.** The question and answer times come from the main session's record of the exchange. No committed file held them before this block.
+- **Disclosure.** The question stated the bug hunt's reading ("found no port defect", "unattainable for any correct implementation", "M5-only") before any of it had been tested on Kolibri's real weights. BUGHUNT §6 records which parts held.
+  - "Found no port defect" describes the hunt, not the port: G2-D1 and G2-D3 remain unexplained (BUGHUNT §4), and G4-D5 and G4-D6 were not examined (§6.6).
+  - "Unattainable for any correct implementation" is shown on the real weights only for the port against itself (§6.2).
+  - "M5-only" cannot be separated from the M5 machine's macOS version.
+
+**Confirmation runs (investigation only).**
+- **Timing.** They started on the M5 Max at 14:51:22Z (`U = 20261005T145122Z`), after the decision; no file records when they ended. Their predictions were committed first (03f5f71, 14:46:52Z), and their outputs are in 2530ad4 (14:59:33Z).
+- **Status.** They wrote no gate record, used no fix cycle and decide nothing. The details are in BUGHUNT §6.
+- **Forced routing** (real K8, dequantised, fp32, T9 positions 15,000–15,300). The port's chunk-64 run against its chunk-2048 run gives mean KL 3.1e-9 with the expert choices forced, against 0.0523 with free routing. The divergence comes from which experts are selected. Forcing has its own floor: the run forced onto its own ids exceeds 1e-6 at 4 of 301 positions (max 1.7e-5).
+- **The vLLM-angle RoPE.** Its prediction in `diagnostics/gate1/confirm/README.md`, a forced series, was not tested. In the free-routing bug test its effect is mixed (T9 0.0153 → 0.0029, T1–8 0.0020 → 0.0028), and the frozen bounds still fail.
+- **The kernel probe**, with random weights.
+  - On the M5 Max under macOS 27.0, mlx-lm's sorted 8-bit `SwitchGLU` at the first wave's prefill shape gives wrong output. Its relative error against MLX's own fp32 `SwitchGLU` at B = 1 is 0.46–0.49, against 0.0044–0.0055 for the same rows computed alone in bf16. The probe ran once per chip.
+  - It does not do so on the M4 Pro under macOS 26, the mini's version, which no file records; the M5 Max's 27.0 (26A428) is in `results/version_record_20261004T063157Z.json`.
+  - The files cannot tell MLX's kernel selection, the OS and the hardware apart.
+- **G5 A/B.**
+  - Arm A reproduces 0.3073773544462904 bitwise.
+  - Arm C prefills each first-wave prompt alone, which under mlx-lm 0.31.3 also changes the decode schedule. It lowers the first wave's KL from 0.469 to 0.0355, though one first-wave prompt rose (0.166 → 0.497).
+  - At t0, the first-wave excess comes from processing the first-wave prompts as one B = 8 right-padded batch. Beyond t0 that is the likely reading, since arm C also changes the decode schedule and arms B and D were not run.
+
+**Consequences.**
+- **No later phase ran.** There was no pilot, bench, plan amendment or scored run.
+- **The hypotheses.** Each of H1–H8 and D1 was not run, because the Phase 0 gate failed for K8 and the run stopped at RUNBOOK step 10. We make no claim about any of them. E1–E12 and C1 were not run either.
+  - H5's build-time CONFIRMED stays a disclosed prediction check, not a result.
+- **No numbers from the builds.** No speed, memory or quality number of the K8 or K4 builds is reported (l.273, l.645).
+- **What K4's PASS covers.** Only G0, the shared port sha256, G2q at 4 bits and the behaviour check. It does not validate the 4-bit build, and K4's descriptive G4 and G5 values are not cited.
+- **Amendment 7.** Criteria 1 and 2 fail: K8 FAIL, and T9 decisive top-1 0.98889 < 0.99. Criteria 3–6 were never reached. So there is no Hugging Face upload of the converted K8, and none of K4.
+- **What stays public.** The port (`port/kolibri1.py`, sha256 `cd6153b8b00b81f7058e786f33672a07b46c494be0203ad75b04372179dc5584`, the gated file), the reference and the kit stay public in this repository, as decided before the pre-registration push.
+
+**Reconciliations.**
+- **"Fix cycle 1 of 2".** Both the gate note (`aborted/20261005T050112Z-gate/NOTE.md`, sha256 `b7bdabe1…`, not edited) and Amendment 7's header use this wording. It names the cycle that was open. Amendment 8 records 0 of 2 used, and none was spent.
+- **G2.** The note calls the G2 failure a single outlier. That reading is superseded: stage 5 fired G2-D1 and G2-D3, and they remain unexplained (BUGHUNT §4).
+- **Padding.** The Phase 0 table and the G5 check's docstring say the batch is "left-padded". Under mlx-lm 0.31.3, the first-wave prefill is right-padded with id 0, and the decode cache is then rolled to left padding. No outcome changes.
+
+**Disclosures.** These are FROZEN_RULES §9's items, as they apply to a stop with no relaxation.
+1. **Thresholds.** The registered thresholds and observed values are in the table above. Nothing was relaxed.
+2. **Reproduction.** Every diagnostic stage reproduced its gate values exactly (spread 0).
+3. **Decisions made after the failure:**
+   - Amendment 8's D2, D1 (ii) and D3. The gate ended at 05:57:03Z, and the answers came at 08:35:13Z, before any diagnostic ran;
+   - not his choices: D6 (not counting Amendments 1–2) was the premise of the D1 question, and the qualifier "that changes what the gate measures or how it judges" was the session's reading. Reading (iii), one cycle per threshold, was not offered;
+   - D4, the vendor anchor, approved and then withdrawn;
+   - the D8 decision above.
+4. **Constants set with the gate values known.** They are listed in FROZEN_RULES §9 item 4, and the `-D` outcomes fired on them. BUGHUNT §1 argues, from tiny checkpoints and Gemma 4, that a correct fp32 implementation cannot meet the G4-D1 and G4-D2 constants with free routing. On Kolibri's real weights, §6.2 shows only that the port's divergence from itself comes from expert selection, and §6.3 that two port variants fail the G4-D1 bounds. The gate's own G4 threshold is also missed by a bf16 emulation of the reference on the same 8-bit weights: 68 of the same 5,943 positions, against the port's 66.
+5. **Amendment 7's timing (D7).** As disclosed in Amendment 8.
+6. **The upload.** None.
+7. **G3 without an anchor.** Parts (a), (c) and (d) apply; (b) does not, since there was no B1.
+   - G3-D: the renormalised top-k mutant is separable on T5 only at p01 0.087 < 0.24, and bits per byte from token 64 differ by −5.4 % on T3 and −6.4 % on T4.
+   - The FP8 vendor anchor was approved and then withdrawn. H2, the only downstream check, never ran.
+   - A uniform misreading shared by the port and the reference is not excluded. +9.2 % NLL would take T1 to exactly 1.2 (ratio 1.187), about 0.15 nats per token on T3, which is under a third of the subtlest registered mutant.
+8. **Verdict-rule changes.** None was reached.
+9. **Records beyond the per-layer table.** Listed below with their sha256.
+10. **The diagnostic route.** It was not a fix cycle (D2).
+11. **Withdrawn rules.** Revision 1's outcome-shaped rules are not used. Both diagnosis revisions are published in `diagnostics/gate1/mini/diagnosis/`.
+12. **The mini nulls and the bug hunt's scripts and records.** They are in `diagnostics/gate1/mini/`, with `MANIFEST.json` listing every file, including those withheld for size or content. The two env files, never opened, have a null sha256, and the 23 `__pycache__` files are given as a count.
+
+**Records (sha256).**
+
+| Record | sha256 |
+|---|---|
+| `diagnostics/gate1/out/stage0_kernels_20261005T114802Z.json` | `718f114febb7de52d2bce3050b6c13f10c290667822eef62cb96f467c575dd30` |
+| `diagnostics/gate1/out/stage1_g5_20261005T114806Z.json` | `cc32cda761b7b536a4f9b8a0e002c41a735fca1630662b3eb1ca77c04716e29f` |
+| `diagnostics/gate1/out/stage2_g2_20261005T115423Z.json` | `b637d07bb8ac900782038463e3d02366ac2658d029ef5b27842868b8164845a8` |
+| `diagnostics/gate1/out/stage3_g4_20261005T124342Z.json` | `75a5763568661fd302564e367d158e358a6a181e36a4bdd1c0bd5933495f3c18` |
+| `diagnostics/gate1/out/stage4_g3_20261005T124345Z.json` | `44c803bb9318cc864d246ce24bca5fb72ed3a15fc5426cbd0fa43d0a12a35d4f` |
+| `diagnostics/gate1/out/stage5_report_20261005T130616Z.json` | `01da3fbf320e7cade9d30d6720dd868558c9a13657b624c78061d5e883aeaada` |
+| `diagnostics/gate1/confirm/out/rope_chaos_20261005T145122Z.json` | `c06186d40802a580b1a497c1216de5f97456e0e51babf888266f9eb94347a45b` |
+| `diagnostics/gate1/confirm/out/kprobe3_m5_20261005T145122Z.json` | `1f434ca47b226dc4af5f078364cbd11a5da45f1195c7e183dd14d68d48126211` |
+| `diagnostics/gate1/confirm/out/g5_ab_20261005T145122Z.json` | `01f2092c79aee738d9040632e03bb607ed0bfd8d94b237bc4042a2cdde0cfcff` |
+| `diagnostics/gate1/BUGHUNT.md` | `d3ea24fdbec3a46e8daf820140f08fb3a82d0c5ebddc88e530d83057df7f3763` |
+| `diagnostics/gate1/mini/MANIFEST.json` | `92e050f3071c1d0ccfcdfc0db30dc8c1d0318a8cfa09b7eb98f495025456a1e3` |
+
+**What follows.** exp_037 is pre-registered separately. It reuses these hypotheses and the kit, with a gate designed from BUGHUNT §6.8. It cites nothing from exp_036 as evidence about Kolibri's quality.

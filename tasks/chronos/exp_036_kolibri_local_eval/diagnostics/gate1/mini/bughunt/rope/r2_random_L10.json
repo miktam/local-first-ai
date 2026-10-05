@@ -1,0 +1,151 @@
+{
+ "seq": "random",
+ "n_layers": 10,
+ "ckpt": "$SCRATCH/bughunt_rope/ckpt_h128_w513_L10",
+ "range": [
+  15000,
+  15300
+ ],
+ "pairs": {
+  "port[mlx_rope] prefill2048_vs_prefill64": {
+   "mean_kl": 4.4813971602865504e-13,
+   "max_kl": 8.22732980944238e-13,
+   "argmax_pos": 15251,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "port[mlx_rope] prefill2048_vs_decode": {
+   "mean_kl": 6.711823710165612e-13,
+   "max_kl": 1.3539223601475913e-12,
+   "argmax_pos": 15143,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "port[mlx_rope] prefill64_vs_decode": {
+   "mean_kl": 5.254087132444479e-13,
+   "max_kl": 1.0182243191037097e-12,
+   "argmax_pos": 15201,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "ref_fp32_vs_port[mlx_rope].prefill2048": {
+   "mean_kl": 5.313026362276167e-10,
+   "max_kl": 4.102678876319393e-09,
+   "argmax_pos": 15207,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "ref_fp32_vs_port[mlx_rope].prefill64": {
+   "mean_kl": 5.311405704622852e-10,
+   "max_kl": 4.11076534107441e-09,
+   "argmax_pos": 15207,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "ref_fp32_vs_port[mlx_rope].decode": {
+   "mean_kl": 5.310152068205776e-10,
+   "max_kl": 4.096341559239374e-09,
+   "argmax_pos": 15207,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "ref_exact_rope_vs_port[mlx_rope].prefill2048": {
+   "mean_kl": 2.117664743210848e-09,
+   "max_kl": 4.641554137479899e-09,
+   "argmax_pos": 15242,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "ref_exact_rope_vs_port[mlx_rope].prefill64": {
+   "mean_kl": 2.118130509298397e-09,
+   "max_kl": 4.670245621971201e-09,
+   "argmax_pos": 15242,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "ref_exact_rope_vs_port[mlx_rope].decode": {
+   "mean_kl": 2.1178699288427542e-09,
+   "max_kl": 4.676535518739431e-09,
+   "argmax_pos": 15242,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "port[exact_rope] prefill2048_vs_prefill64": {
+   "mean_kl": 4.400784469620757e-13,
+   "max_kl": 8.024943971742269e-13,
+   "argmax_pos": 15152,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "port[exact_rope] prefill2048_vs_decode": {
+   "mean_kl": 6.709277645222338e-13,
+   "max_kl": 1.2388700678371022e-12,
+   "argmax_pos": 15177,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "port[exact_rope] prefill64_vs_decode": {
+   "mean_kl": 5.304992820860075e-13,
+   "max_kl": 8.39411958308149e-13,
+   "argmax_pos": 15247,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "ref_fp32_vs_port[exact_rope].prefill2048": {
+   "mean_kl": 2.0312495308518883e-09,
+   "max_kl": 5.165156790142076e-09,
+   "argmax_pos": 15242,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "ref_fp32_vs_port[exact_rope].prefill64": {
+   "mean_kl": 2.031122513158182e-09,
+   "max_kl": 5.1670173338138495e-09,
+   "argmax_pos": 15242,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "ref_fp32_vs_port[exact_rope].decode": {
+   "mean_kl": 2.030561088514894e-09,
+   "max_kl": 5.1524748578105326e-09,
+   "argmax_pos": 15242,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "ref_exact_rope_vs_port[exact_rope].prefill2048": {
+   "mean_kl": 9.868964818246012e-11,
+   "max_kl": 4.61171587878722e-10,
+   "argmax_pos": 15127,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "ref_exact_rope_vs_port[exact_rope].prefill64": {
+   "mean_kl": 9.87646084418751e-11,
+   "max_kl": 4.627941971946065e-10,
+   "argmax_pos": 15127,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "ref_exact_rope_vs_port[exact_rope].decode": {
+   "mean_kl": 9.834982846155665e-11,
+   "max_kl": 4.591229073069219e-10,
+   "argmax_pos": 15127,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "ref_fp32_vs_ref_exact_rope": {
+   "mean_kl": 2.134912356472117e-09,
+   "max_kl": 5.242090468314005e-09,
+   "argmax_pos": 15242,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  },
+  "port[mlx_rope].decode_vs_port[exact_rope].decode": {
+   "mean_kl": 2.0107307441671905e-09,
+   "max_kl": 4.5918590405723856e-09,
+   "argmax_pos": 15161,
+   "top1_changes": 0,
+   "top1_changes_lead_ge_2": 0
+  }
+ }
+}

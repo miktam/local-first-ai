@@ -1,0 +1,76 @@
+{'MLX_ENABLE_TF32': '0', 'probe_rel_l2': 2.8845241586328215e-07}
+port 5s
+ref 14s
+{
+"routing_p2048_vs_p64": {
+"n_flipped_layer_positions": 0,
+"per_layer": [
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0
+],
+"first_flip_pos_per_layer": [
+null,
+null,
+null,
+null,
+null,
+null,
+null,
+null,
+null,
+null
+],
+"first_flip_any_layer": null,
+"flipped_positions_lt_1101": 0,
+"flipped_positions_ge_14000": 0
+},
+"routing_ref_vs_p2048": {
+"n_flipped_layer_positions": 0,
+"per_layer": [
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0
+],
+"first_flip_pos_per_layer": [
+null,
+null,
+null,
+null,
+null,
+null,
+null,
+null,
+null,
+null
+],
+"first_flip_any_layer": null,
+"flipped_positions_lt_1101": 0,
+"flipped_positions_ge_14000": 0
+}
+}
+early  p2048_vs_p64                             mean 8.434e-12 max 3.684e-11 @571 n>1e-6 0 top1ch 0 (lead>=2 0)
+early  ref_vs_p2048                             mean 9.505e-12 max 6.016e-11 @973 n>1e-6 0 top1ch 0 (lead>=2 0)
+early  ref_vs_p64                               mean 1.053e-11 max 7.095e-11 @612 n>1e-6 0 top1ch 0 (lead>=2 0)
+early  p2048_vs_p64_forced_to_p2048_routing     mean 8.434e-12 max 3.684e-11 @571 n>1e-6 0 top1ch 0 (lead>=2 0)
+early  ref_vs_p2048_forced_to_ref_routing       mean 9.505e-12 max 6.016e-11 @973 n>1e-6 0 top1ch 0 (lead>=2 0)
+T9     p2048_vs_p64                             mean 6.328e-12 max 2.958e-11 @15177 n>1e-6 0 top1ch 0 (lead>=2 0)
+T9     ref_vs_p2048                             mean 1.469e-11 max 5.607e-11 @15290 n>1e-6 0 top1ch 0 (lead>=2 0)
+T9     ref_vs_p64                               mean 1.392e-11 max 5.328e-11 @15038 n>1e-6 0 top1ch 0 (lead>=2 0)
+T9     p2048_vs_p64_forced_to_p2048_routing     mean 6.217e-12 max 2.402e-11 @15119 n>1e-6 0 top1ch 0 (lead>=2 0)
+T9     ref_vs_p2048_forced_to_ref_routing       mean 1.469e-11 max 6.008e-11 @15284 n>1e-6 0 top1ch 0 (lead>=2 0)
+T9     p2048_vs_decode                          mean 8.290e-12 max 3.527e-11 @15177 n>1e-6 0 top1ch 0 (lead>=2 0)

@@ -1,0 +1,148 @@
+{
+ "what": "Position-free summary of gemma_chaos_16384.json, the output of gemma_chaos.py (Gemma-4 26B-A4B, mlx-community OptiQ 4-bit, fp32 activations, MLX_ENABLE_TF32=0, Apple M4 Pro). Written when this folder was staged. The original is not published because it lists document-start positions derived from the real T9 token ids.",
+ "derived_from": {
+  "source": "$SCRATCH/bughunt_reference/gemma_chaos_16384.json",
+  "source_sha256": "71d6d3afe73c1ca410fd8405f3421a5a1329ef16eaae53b498d85a710d472c24",
+  "identical_copy": "$SCRATCH/bughunt_verify/gemma_chaos_16384.json"
+ },
+ "kept": "model, T, the five position buckets, doc_windows and non_doc_ge2048 (without their n), and the per-document-start-window maximum KL of each arm as a list sorted in descending order",
+ "dropped": "doc_starts; the position keys of per_doc_start_window_max_kl_AB and per_doc_start_window_max_kl_AC; the n of doc_windows and non_doc_ge2048. Every other value is copied unchanged.",
+ "arms": {
+  "A": "prefill step 2048",
+  "B (A_vs_B_prefill64)": "prefill step 64 (stage 3's chunk-64 test, same code)",
+  "C (A_vs_C_perturbed)": "prefill step 2048 with one fp32 weight of layer 0's input norm changed by 2^-22 relative (gemma_chaos.py: 'a pure rounding-size perturbation, no code path change')"
+ },
+ "windows": "doc_windows = positions within 32 tokens of a document start (a Kolibri '\\n\\n' id mapped to Gemma tokens); non_doc_ge2048 = every other position >= 2048",
+ "model": "dbfd2a779b038b267bb20ff95dad717f42e4de16",
+ "T": 16384,
+ "0-2048": {
+  "A_vs_B_prefill64": {
+   "mean_kl": 0.0013995130355874976,
+   "max_kl": 1.3173257112503052,
+   "top1_changes": 17,
+   "decisive_top1_changes": 0,
+   "n": 2048
+  },
+  "A_vs_C_perturbed": {
+   "mean_kl": 9.85405219853944e-06,
+   "max_kl": 0.007012844551354647,
+   "top1_changes": 1,
+   "decisive_top1_changes": 0,
+   "n": 2048
+  }
+ },
+ "520-1100": {
+  "A_vs_B_prefill64": {
+   "mean_kl": 0.0034269392066352132,
+   "max_kl": 1.3173257112503052,
+   "top1_changes": 12,
+   "decisive_top1_changes": 0,
+   "n": 581
+  },
+  "A_vs_C_perturbed": {
+   "mean_kl": 1.3823185264134608e-05,
+   "max_kl": 0.0058721136301755905,
+   "top1_changes": 1,
+   "decisive_top1_changes": 0,
+   "n": 581
+  }
+ },
+ "2048-8192": {
+  "A_vs_B_prefill64": {
+   "mean_kl": 0.0033786089693816144,
+   "max_kl": 2.062161445617676,
+   "top1_changes": 45,
+   "decisive_top1_changes": 2,
+   "n": 6144
+  },
+  "A_vs_C_perturbed": {
+   "mean_kl": 0.003167868561469507,
+   "max_kl": 1.6918399333953857,
+   "top1_changes": 38,
+   "decisive_top1_changes": 2,
+   "n": 6144
+  }
+ },
+ "8192-16384": {
+  "A_vs_B_prefill64": {
+   "mean_kl": 0.009538588879057454,
+   "max_kl": 6.5910444259643555,
+   "top1_changes": 108,
+   "decisive_top1_changes": 4,
+   "n": 8192
+  },
+  "A_vs_C_perturbed": {
+   "mean_kl": 0.0006355598324638269,
+   "max_kl": 1.2511314153671265,
+   "top1_changes": 20,
+   "decisive_top1_changes": 1,
+   "n": 8192
+  }
+ },
+ "15000-15300": {
+  "A_vs_B_prefill64": {
+   "mean_kl": 0.011614375199269953,
+   "max_kl": 0.7808924913406372,
+   "top1_changes": 5,
+   "decisive_top1_changes": 0,
+   "n": 301
+  },
+  "A_vs_C_perturbed": {
+   "mean_kl": 1.8139807917858933e-05,
+   "max_kl": 0.003518834710121155,
+   "top1_changes": 0,
+   "decisive_top1_changes": 0,
+   "n": 301
+  }
+ },
+ "doc_windows": {
+  "A_vs_B_prefill64": {
+   "mean_kl": 0.02880961040209032,
+   "max_kl": 2.486008405685425,
+   "top1_changes": 19,
+   "decisive_top1_changes": 2
+  },
+  "A_vs_C_perturbed": {
+   "mean_kl": 0.00042049142388116394,
+   "max_kl": 0.21079260110855103,
+   "top1_changes": 0,
+   "decisive_top1_changes": 0
+  }
+ },
+ "non_doc_ge2048": {
+  "A_vs_B_prefill64": {
+   "mean_kl": 0.006065690257332697,
+   "max_kl": 6.5910444259643555,
+   "top1_changes": 134,
+   "decisive_top1_changes": 4
+  },
+  "A_vs_C_perturbed": {
+   "mean_kl": 0.0017702651938074515,
+   "max_kl": 1.6918399333953857,
+   "top1_changes": 58,
+   "decisive_top1_changes": 3
+  }
+ },
+ "doc_start_window_max_kl_AB_sorted_desc": [
+  2.486008405685425,
+  1.0934473276138306,
+  0.5378371477127075,
+  0.28541088104248047,
+  0.13631848990917206,
+  0.0013816854916512966,
+  0.0009214133024215698,
+  0.0006844086456112564,
+  0.0005867958534508944
+ ],
+ "doc_start_window_max_kl_AC_sorted_desc": [
+  0.21079260110855103,
+  0.001563285244628787,
+  0.0011226115748286247,
+  0.0010700561106204987,
+  0.0006918899016454816,
+  0.0005765488604083657,
+  1.8062681192532182e-05,
+  6.93625770509243e-06,
+  1.703193447610829e-06
+ ]
+}

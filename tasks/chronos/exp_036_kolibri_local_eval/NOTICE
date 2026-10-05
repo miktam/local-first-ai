@@ -53,6 +53,13 @@ modified for MLX/numpy by Miktam for Chronos exp_036 on 2026-10-03.
       numpy re-expression of the vendor's test_routing_semantics from
       tests/test_kolibri1.py.
 
+  diagnostics/gate1/mini/bughunt/verify/kit_rope/port/kolibri1.py
+      A diagnostic copy of port/kolibri1.py, published with the gate-1 bug
+      hunt (2026-10-05). It differs from port/kolibri1.py only by a RoPE
+      class that uses vLLM's angle computation. It was used for the
+      vLLM-angle RoPE measurements in diagnostics/gate1/BUGHUNT.md and is
+      not the gated port.
+
 Modifications: the code was rewritten from PyTorch/vLLM to MLX (port) and
 numpy (reference, mutants, tests). aleph-alpha-inference ships no NOTICE file
 of its own.

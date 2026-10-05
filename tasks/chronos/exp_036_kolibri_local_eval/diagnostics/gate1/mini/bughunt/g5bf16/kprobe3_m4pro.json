@@ -1,0 +1,1067 @@
+{
+ "device": "Apple M4 Pro",
+ "arch": "applegpu_g16s",
+ "mlx": "0.31.2",
+ "MLX_ENABLE_TF32": "0",
+ "lens": [
+  36,
+  299,
+  699,
+  1099,
+  63,
+  519,
+  899,
+  149
+ ],
+ "probes": {
+  "qmm8_q_proj": {
+   "rows": [
+    {
+     "row": 0,
+     "n": 36,
+     "bitwise": true,
+     "rel_B8": 0.002344064065053303,
+     "rel_B1": 0.002344064065053303,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 1,
+     "n": 299,
+     "bitwise": true,
+     "rel_B8": 0.0023375090756818785,
+     "rel_B1": 0.0023375090756818785,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 2,
+     "n": 699,
+     "bitwise": true,
+     "rel_B8": 0.002336364811506556,
+     "rel_B1": 0.002336364811506556,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 3,
+     "n": 1099,
+     "bitwise": true,
+     "rel_B8": 0.0023357876645375545,
+     "rel_B1": 0.0023357876645375545,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 4,
+     "n": 63,
+     "bitwise": true,
+     "rel_B8": 0.002333101220037093,
+     "rel_B1": 0.002333101220037093,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 5,
+     "n": 519,
+     "bitwise": true,
+     "rel_B8": 0.002337259986106405,
+     "rel_B1": 0.002337259986106405,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 6,
+     "n": 899,
+     "bitwise": true,
+     "rel_B8": 0.002337565896573384,
+     "rel_B1": 0.002337565896573384,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 7,
+     "n": 149,
+     "bitwise": true,
+     "rel_B8": 0.0023366563763504477,
+     "rel_B1": 0.0023366563763504477,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    }
+   ],
+   "any_not_bitwise": false,
+   "max_ratio": 1.0,
+   "identical": {
+    "rows_bitwise_equal": true,
+    "row0_equals_B1": true,
+    "max_abs_row_spread": 0.0
+   }
+  },
+  "qmm8_k_proj": {
+   "rows": [
+    {
+     "row": 0,
+     "n": 36,
+     "bitwise": false,
+     "rel_B8": 0.0023468073907807196,
+     "rel_B1": 0.004593794520818914,
+     "ratio": 0.5108646849886453,
+     "max_abs_B8_B1": 0.03125
+    },
+    {
+     "row": 1,
+     "n": 299,
+     "bitwise": false,
+     "rel_B8": 0.002338421651414142,
+     "rel_B1": 0.002949701281481286,
+     "ratio": 0.7927655814150203,
+     "max_abs_B8_B1": 0.03125
+    },
+    {
+     "row": 2,
+     "n": 699,
+     "bitwise": true,
+     "rel_B8": 0.002334779435990449,
+     "rel_B1": 0.002334779435990449,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 3,
+     "n": 1099,
+     "bitwise": true,
+     "rel_B8": 0.0023361326582107644,
+     "rel_B1": 0.0023361326582107644,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 4,
+     "n": 63,
+     "bitwise": false,
+     "rel_B8": 0.002349278739473339,
+     "rel_B1": 0.004652016700486094,
+     "ratio": 0.5050022153247775,
+     "max_abs_B8_B1": 0.03125
+    },
+    {
+     "row": 5,
+     "n": 519,
+     "bitwise": true,
+     "rel_B8": 0.002331857947665896,
+     "rel_B1": 0.002331857947665896,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 6,
+     "n": 899,
+     "bitwise": true,
+     "rel_B8": 0.0023362000313773682,
+     "rel_B1": 0.0023362000313773682,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 7,
+     "n": 149,
+     "bitwise": false,
+     "rel_B8": 0.002337725194961408,
+     "rel_B1": 0.0037565354302223457,
+     "ratio": 0.6223088370613451,
+     "max_abs_B8_B1": 0.03125
+    }
+   ],
+   "any_not_bitwise": true,
+   "max_ratio": 1.0,
+   "identical": {
+    "rows_bitwise_equal": true,
+    "row0_equals_B1": true,
+    "max_abs_row_spread": 0.0
+   }
+  },
+  "qmm8_o_proj": {
+   "rows": [
+    {
+     "row": 0,
+     "n": 36,
+     "bitwise": false,
+     "rel_B8": 0.002330229934077928,
+     "rel_B1": 0.00329064347415549,
+     "ratio": 0.7081380746286887,
+     "max_abs_B8_B1": 0.03125
+    },
+    {
+     "row": 1,
+     "n": 299,
+     "bitwise": true,
+     "rel_B8": 0.002331957388898099,
+     "rel_B1": 0.002331957388898099,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 2,
+     "n": 699,
+     "bitwise": true,
+     "rel_B8": 0.0023316518183906535,
+     "rel_B1": 0.0023316518183906535,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 3,
+     "n": 1099,
+     "bitwise": true,
+     "rel_B8": 0.0023324469194593656,
+     "rel_B1": 0.0023324469194593656,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 4,
+     "n": 63,
+     "bitwise": false,
+     "rel_B8": 0.00233506560277185,
+     "rel_B1": 0.0032919008983437414,
+     "ratio": 0.7093365428912805,
+     "max_abs_B8_B1": 0.03125
+    },
+    {
+     "row": 5,
+     "n": 519,
+     "bitwise": true,
+     "rel_B8": 0.0023295889268626054,
+     "rel_B1": 0.0023295889268626054,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 6,
+     "n": 899,
+     "bitwise": true,
+     "rel_B8": 0.00233192822743378,
+     "rel_B1": 0.00233192822743378,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 7,
+     "n": 149,
+     "bitwise": true,
+     "rel_B8": 0.0023345088663271197,
+     "rel_B1": 0.0023345088663271197,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    }
+   ],
+   "any_not_bitwise": true,
+   "max_ratio": 1.0,
+   "identical": {
+    "rows_bitwise_equal": true,
+    "row0_equals_B1": true,
+    "max_abs_row_spread": 0.0
+   }
+  },
+  "qmm8_shared_gate": {
+   "rows": [
+    {
+     "row": 0,
+     "n": 36,
+     "bitwise": false,
+     "rel_B8": 0.002335981115636635,
+     "rel_B1": 0.004649881834187578,
+     "ratio": 0.5023742965814043,
+     "max_abs_B8_B1": 0.03125
+    },
+    {
+     "row": 1,
+     "n": 299,
+     "bitwise": false,
+     "rel_B8": 0.0023351393371539232,
+     "rel_B1": 0.002945783245043747,
+     "ratio": 0.7927057569774604,
+     "max_abs_B8_B1": 0.03125
+    },
+    {
+     "row": 2,
+     "n": 699,
+     "bitwise": true,
+     "rel_B8": 0.0023371410675415904,
+     "rel_B1": 0.0023371410675415904,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 3,
+     "n": 1099,
+     "bitwise": true,
+     "rel_B8": 0.0023405355953410967,
+     "rel_B1": 0.0023405355953410967,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 4,
+     "n": 63,
+     "bitwise": false,
+     "rel_B8": 0.0023203983392317577,
+     "rel_B1": 0.004645880963430442,
+     "ratio": 0.49945281799007046,
+     "max_abs_B8_B1": 0.03125
+    },
+    {
+     "row": 5,
+     "n": 519,
+     "bitwise": true,
+     "rel_B8": 0.0023358072209978,
+     "rel_B1": 0.0023358072209978,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 6,
+     "n": 899,
+     "bitwise": true,
+     "rel_B8": 0.002337833572122525,
+     "rel_B1": 0.002337833572122525,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 7,
+     "n": 149,
+     "bitwise": false,
+     "rel_B8": 0.002336284745197374,
+     "rel_B1": 0.0037823799502590062,
+     "ratio": 0.6176758485189707,
+     "max_abs_B8_B1": 0.03125
+    }
+   ],
+   "any_not_bitwise": true,
+   "max_ratio": 1.0,
+   "identical": {
+    "rows_bitwise_equal": true,
+    "row0_equals_B1": true,
+    "max_abs_row_spread": 0.0
+   }
+  },
+  "qmm8_shared_down": {
+   "rows": [
+    {
+     "row": 0,
+     "n": 36,
+     "bitwise": false,
+     "rel_B8": 0.0023330636838681494,
+     "rel_B1": 0.0029466214219221036,
+     "ratio": 0.7917758509833523,
+     "max_abs_B8_B1": 0.0078125
+    },
+    {
+     "row": 1,
+     "n": 299,
+     "bitwise": true,
+     "rel_B8": 0.002331121986143401,
+     "rel_B1": 0.002331121986143401,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 2,
+     "n": 699,
+     "bitwise": true,
+     "rel_B8": 0.0023356166074393102,
+     "rel_B1": 0.0023356166074393102,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 3,
+     "n": 1099,
+     "bitwise": true,
+     "rel_B8": 0.002334758153359493,
+     "rel_B1": 0.002334758153359493,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 4,
+     "n": 63,
+     "bitwise": false,
+     "rel_B8": 0.00232998218718339,
+     "rel_B1": 0.002944485208734711,
+     "ratio": 0.791303749895425,
+     "max_abs_B8_B1": 0.0078125
+    },
+    {
+     "row": 5,
+     "n": 519,
+     "bitwise": true,
+     "rel_B8": 0.002336578150927189,
+     "rel_B1": 0.002336578150927189,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 6,
+     "n": 899,
+     "bitwise": true,
+     "rel_B8": 0.0023347207727288898,
+     "rel_B1": 0.0023347207727288898,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 7,
+     "n": 149,
+     "bitwise": true,
+     "rel_B8": 0.0023375746696973785,
+     "rel_B1": 0.0023375746696973785,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    }
+   ],
+   "any_not_bitwise": true,
+   "max_ratio": 1.0,
+   "identical": {
+    "rows_bitwise_equal": true,
+    "row0_equals_B1": true,
+    "max_abs_row_spread": 0.0
+   }
+  },
+  "router_fp32": {
+   "rows": [
+    {
+     "row": 0,
+     "n": 36,
+     "bitwise": false,
+     "rel_B8": 4.4960386114229347e-07,
+     "rel_B1": 1.3272819163470376e-07,
+     "ratio": 3.3874028991497074,
+     "max_abs_B8_B1": 4.0531158447265625e-06
+    },
+    {
+     "row": 1,
+     "n": 299,
+     "bitwise": false,
+     "rel_B8": 4.5372935426094566e-07,
+     "rel_B1": 2.9010440565128546e-07,
+     "ratio": 1.5640209022069884,
+     "max_abs_B8_B1": 5.0067901611328125e-06
+    },
+    {
+     "row": 2,
+     "n": 699,
+     "bitwise": false,
+     "rel_B8": 4.495992942241992e-07,
+     "rel_B1": 2.896214662862572e-07,
+     "ratio": 1.5523686831273151,
+     "max_abs_B8_B1": 6.67572021484375e-06
+    },
+    {
+     "row": 3,
+     "n": 1099,
+     "bitwise": false,
+     "rel_B8": 4.4966019252233073e-07,
+     "rel_B1": 2.8884819587638736e-07,
+     "ratio": 1.5567353334440175,
+     "max_abs_B8_B1": 6.198883056640625e-06
+    },
+    {
+     "row": 4,
+     "n": 63,
+     "bitwise": false,
+     "rel_B8": 4.463201641883779e-07,
+     "rel_B1": 1.3512534712685785e-07,
+     "ratio": 3.3030084560623947,
+     "max_abs_B8_B1": 4.5299530029296875e-06
+    },
+    {
+     "row": 5,
+     "n": 519,
+     "bitwise": false,
+     "rel_B8": 4.5089040851658637e-07,
+     "rel_B1": 2.908631192147895e-07,
+     "ratio": 1.5501807507730943,
+     "max_abs_B8_B1": 6.4373016357421875e-06
+    },
+    {
+     "row": 6,
+     "n": 899,
+     "bitwise": false,
+     "rel_B8": 4.50762152197763e-07,
+     "rel_B1": 2.8909445381869616e-07,
+     "ratio": 1.5592210305094811,
+     "max_abs_B8_B1": 5.7220458984375e-06
+    },
+    {
+     "row": 7,
+     "n": 149,
+     "bitwise": false,
+     "rel_B8": 4.48592467306507e-07,
+     "rel_B1": 2.9217284345040415e-07,
+     "ratio": 1.5353667439070353,
+     "max_abs_B8_B1": 4.5299530029296875e-06
+    }
+   ],
+   "any_not_bitwise": true,
+   "max_ratio": 3.3874028991497074,
+   "identical": {
+    "rows_bitwise_equal": true,
+    "row0_equals_B1": false,
+    "max_abs_row_spread": 0.0
+   }
+  },
+  "switchglu_q8_sorted": {
+   "rows": [
+    {
+     "row": 0,
+     "n": 36,
+     "bitwise": false,
+     "rel_B8": 0.0054267055804633575,
+     "rel_B1": 0.004384457437763408,
+     "ratio": 1.2377142799296097,
+     "max_abs_B8_B1": 0.00390625
+    },
+    {
+     "row": 1,
+     "n": 299,
+     "bitwise": true,
+     "rel_B8": 0.005433109991961794,
+     "rel_B1": 0.005433109991961794,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 2,
+     "n": 699,
+     "bitwise": true,
+     "rel_B8": 0.005426047570249117,
+     "rel_B1": 0.005426047570249117,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 3,
+     "n": 1099,
+     "bitwise": true,
+     "rel_B8": 0.005429089999926504,
+     "rel_B1": 0.005429089999926504,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 4,
+     "n": 63,
+     "bitwise": false,
+     "rel_B8": 0.005440407088521091,
+     "rel_B1": 0.00443065290165715,
+     "ratio": 1.2279018937561714,
+     "max_abs_B8_B1": 0.00390625
+    },
+    {
+     "row": 5,
+     "n": 519,
+     "bitwise": true,
+     "rel_B8": 0.005447504648556503,
+     "rel_B1": 0.005447504648556503,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 6,
+     "n": 899,
+     "bitwise": true,
+     "rel_B8": 0.0054271281697200035,
+     "rel_B1": 0.0054271281697200035,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 7,
+     "n": 149,
+     "bitwise": false,
+     "rel_B8": 0.005411475605399199,
+     "rel_B1": 0.004382626097959576,
+     "ratio": 1.2347563959240389,
+     "max_abs_B8_B1": 0.00390625
+    }
+   ],
+   "any_not_bitwise": true,
+   "max_ratio": 1.2377142799296097,
+   "identical": {
+    "rows_bitwise_equal": true,
+    "row0_equals_B1": true,
+    "max_abs_row_spread": 0.0
+   }
+  },
+  "sdpa_prefill_bf16_winNone": {
+   "rows": [
+    {
+     "row": 0,
+     "n": 36,
+     "bitwise": true,
+     "rel_B8": 0.0015964308739429675,
+     "rel_B1": 0.0015964308739429675,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 1,
+     "n": 299,
+     "bitwise": true,
+     "rel_B8": 0.0016495493308549664,
+     "rel_B1": 0.0016495493308549664,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 2,
+     "n": 699,
+     "bitwise": true,
+     "rel_B8": 0.0016526861777707625,
+     "rel_B1": 0.0016526861777707625,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 3,
+     "n": 1099,
+     "bitwise": true,
+     "rel_B8": 0.0016552211538688876,
+     "rel_B1": 0.0016552211538688876,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 4,
+     "n": 63,
+     "bitwise": true,
+     "rel_B8": 0.0016216941210757945,
+     "rel_B1": 0.0016216941210757945,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 5,
+     "n": 519,
+     "bitwise": true,
+     "rel_B8": 0.0016499247029306975,
+     "rel_B1": 0.0016499247029306975,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 6,
+     "n": 899,
+     "bitwise": true,
+     "rel_B8": 0.0016546148691037978,
+     "rel_B1": 0.0016546148691037978,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 7,
+     "n": 149,
+     "bitwise": true,
+     "rel_B8": 0.0016399484406099472,
+     "rel_B1": 0.0016399484406099472,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    }
+   ],
+   "any_not_bitwise": false,
+   "max_ratio": 1.0
+  },
+  "sdpa_prefill_bf16_win513": {
+   "rows": [
+    {
+     "row": 0,
+     "n": 36,
+     "bitwise": true,
+     "rel_B8": 0.0016147165470417036,
+     "rel_B1": 0.0016147165470417036,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 1,
+     "n": 299,
+     "bitwise": true,
+     "rel_B8": 0.0016495074313366456,
+     "rel_B1": 0.0016495074313366456,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 2,
+     "n": 699,
+     "bitwise": true,
+     "rel_B8": 0.001653472746917976,
+     "rel_B1": 0.001653472746917976,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 3,
+     "n": 1099,
+     "bitwise": true,
+     "rel_B8": 0.001655051951586476,
+     "rel_B1": 0.001655051951586476,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 4,
+     "n": 63,
+     "bitwise": true,
+     "rel_B8": 0.0016253538141101378,
+     "rel_B1": 0.0016253538141101378,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 5,
+     "n": 519,
+     "bitwise": true,
+     "rel_B8": 0.001650732784497691,
+     "rel_B1": 0.001650732784497691,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 6,
+     "n": 899,
+     "bitwise": true,
+     "rel_B8": 0.001655215250663028,
+     "rel_B1": 0.001655215250663028,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    },
+    {
+     "row": 7,
+     "n": 149,
+     "bitwise": true,
+     "rel_B8": 0.0016409284024262141,
+     "rel_B1": 0.0016409284024262141,
+     "ratio": 1.0,
+     "max_abs_B8_B1": 0.0
+    }
+   ],
+   "any_not_bitwise": false,
+   "max_ratio": 1.0
+  },
+  "rope_bf16_array_offset_L1099": {
+   "rows_bitwise_vs_int_offset": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "any_not_bitwise": false,
+   "max_ratio": 1.0
+  },
+  "rope_bf16_array_offset_L1": {
+   "rows_bitwise_vs_int_offset": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "any_not_bitwise": false,
+   "max_ratio": 1.0
+  },
+  "neighbour_qmm8_q_proj": {
+   "rows": [
+    {
+     "row": 0,
+     "n": 36,
+     "bitwise": true,
+     "rel_small_pads": 0.002333358300213144,
+     "rel_big_pads": 0.002333358300213144,
+     "ratio": 1.0
+    },
+    {
+     "row": 1,
+     "n": 299,
+     "bitwise": true,
+     "rel_small_pads": 0.002336259662727172,
+     "rel_big_pads": 0.002336259662727172,
+     "ratio": 1.0
+    },
+    {
+     "row": 2,
+     "n": 699,
+     "bitwise": true,
+     "rel_small_pads": 0.0023347894599603652,
+     "rel_big_pads": 0.0023347894599603652,
+     "ratio": 1.0
+    },
+    {
+     "row": 3,
+     "n": 1099,
+     "bitwise": true,
+     "rel_small_pads": 0.002336509915024654,
+     "rel_big_pads": 0.002336509915024654,
+     "ratio": 1.0
+    },
+    {
+     "row": 4,
+     "n": 63,
+     "bitwise": true,
+     "rel_small_pads": 0.0023309113329522575,
+     "rel_big_pads": 0.0023309113329522575,
+     "ratio": 1.0
+    },
+    {
+     "row": 5,
+     "n": 519,
+     "bitwise": true,
+     "rel_small_pads": 0.0023351685441770575,
+     "rel_big_pads": 0.0023351685441770575,
+     "ratio": 1.0
+    },
+    {
+     "row": 6,
+     "n": 899,
+     "bitwise": true,
+     "rel_small_pads": 0.002335471573364569,
+     "rel_big_pads": 0.002335471573364569,
+     "ratio": 1.0
+    },
+    {
+     "row": 7,
+     "n": 149,
+     "bitwise": true,
+     "rel_small_pads": 0.00233718432677372,
+     "rel_big_pads": 0.00233718432677372,
+     "ratio": 1.0
+    }
+   ],
+   "any_not_bitwise": false,
+   "max_ratio": 1.0
+  },
+  "neighbour_bf16mm_q_proj": {
+   "rows": [
+    {
+     "row": 0,
+     "n": 36,
+     "bitwise": true,
+     "rel_small_pads": 0.001665836270412422,
+     "rel_big_pads": 0.001665836270412422,
+     "ratio": 1.0
+    },
+    {
+     "row": 1,
+     "n": 299,
+     "bitwise": true,
+     "rel_small_pads": 0.0016614415971874887,
+     "rel_big_pads": 0.0016614415971874887,
+     "ratio": 1.0
+    },
+    {
+     "row": 2,
+     "n": 699,
+     "bitwise": true,
+     "rel_small_pads": 0.0016617555069934798,
+     "rel_big_pads": 0.0016617555069934798,
+     "ratio": 1.0
+    },
+    {
+     "row": 3,
+     "n": 1099,
+     "bitwise": true,
+     "rel_small_pads": 0.001662388941062883,
+     "rel_big_pads": 0.001662388941062883,
+     "ratio": 1.0
+    },
+    {
+     "row": 4,
+     "n": 63,
+     "bitwise": true,
+     "rel_small_pads": 0.0016588197022471955,
+     "rel_big_pads": 0.0016588197022471955,
+     "ratio": 1.0
+    },
+    {
+     "row": 5,
+     "n": 519,
+     "bitwise": true,
+     "rel_small_pads": 0.0016609902484914247,
+     "rel_big_pads": 0.0016609902484914247,
+     "ratio": 1.0
+    },
+    {
+     "row": 6,
+     "n": 899,
+     "bitwise": true,
+     "rel_small_pads": 0.0016610773591915794,
+     "rel_big_pads": 0.0016610773591915794,
+     "ratio": 1.0
+    },
+    {
+     "row": 7,
+     "n": 149,
+     "bitwise": true,
+     "rel_small_pads": 0.0016609766347925783,
+     "rel_big_pads": 0.0016609766347925783,
+     "ratio": 1.0
+    }
+   ],
+   "any_not_bitwise": false,
+   "max_ratio": 1.0
+  },
+  "neighbour_switchglu_q8_sorted": {
+   "rows": [
+    {
+     "row": 0,
+     "n": 36,
+     "bitwise": true,
+     "rel_small_pads": 0.005422837697115807,
+     "rel_big_pads": 0.005422837697115807,
+     "ratio": 1.0
+    },
+    {
+     "row": 1,
+     "n": 299,
+     "bitwise": true,
+     "rel_small_pads": 0.005446383350754911,
+     "rel_big_pads": 0.005446383350754911,
+     "ratio": 1.0
+    },
+    {
+     "row": 2,
+     "n": 699,
+     "bitwise": true,
+     "rel_small_pads": 0.005418297448827058,
+     "rel_big_pads": 0.005418297448827058,
+     "ratio": 1.0
+    },
+    {
+     "row": 3,
+     "n": 1099,
+     "bitwise": true,
+     "rel_small_pads": 0.005427770975192095,
+     "rel_big_pads": 0.005427770975192095,
+     "ratio": 1.0
+    },
+    {
+     "row": 4,
+     "n": 63,
+     "bitwise": true,
+     "rel_small_pads": 0.005436814306445409,
+     "rel_big_pads": 0.005436814306445409,
+     "ratio": 1.0
+    },
+    {
+     "row": 5,
+     "n": 519,
+     "bitwise": true,
+     "rel_small_pads": 0.005413631117251828,
+     "rel_big_pads": 0.005413631117251828,
+     "ratio": 1.0
+    },
+    {
+     "row": 6,
+     "n": 899,
+     "bitwise": true,
+     "rel_small_pads": 0.005424995529979075,
+     "rel_big_pads": 0.005424995529979075,
+     "ratio": 1.0
+    },
+    {
+     "row": 7,
+     "n": 149,
+     "bitwise": true,
+     "rel_small_pads": 0.0054265312427736745,
+     "rel_big_pads": 0.0054265312427736745,
+     "ratio": 1.0
+    }
+   ],
+   "any_not_bitwise": false,
+   "max_ratio": 1.0
+  },
+  "neighbour_sdpa_prefill_win513": {
+   "rows": [
+    {
+     "row": 0,
+     "n": 36,
+     "bitwise": true,
+     "rel_small_pads": 0.0015936605096383263,
+     "rel_big_pads": 0.0015936605096383263,
+     "ratio": 1.0
+    },
+    {
+     "row": 1,
+     "n": 299,
+     "bitwise": true,
+     "rel_small_pads": 0.0016469223330112448,
+     "rel_big_pads": 0.0016469223330112448,
+     "ratio": 1.0
+    },
+    {
+     "row": 2,
+     "n": 699,
+     "bitwise": true,
+     "rel_small_pads": 0.0016540996302344601,
+     "rel_big_pads": 0.0016540996302344601,
+     "ratio": 1.0
+    },
+    {
+     "row": 3,
+     "n": 1099,
+     "bitwise": true,
+     "rel_small_pads": 0.0016536104331107194,
+     "rel_big_pads": 0.0016536104331107194,
+     "ratio": 1.0
+    },
+    {
+     "row": 4,
+     "n": 63,
+     "bitwise": true,
+     "rel_small_pads": 0.001619107922053233,
+     "rel_big_pads": 0.001619107922053233,
+     "ratio": 1.0
+    },
+    {
+     "row": 5,
+     "n": 519,
+     "bitwise": true,
+     "rel_small_pads": 0.0016523400917851563,
+     "rel_big_pads": 0.0016523400917851563,
+     "ratio": 1.0
+    },
+    {
+     "row": 6,
+     "n": 899,
+     "bitwise": true,
+     "rel_small_pads": 0.001653847141237416,
+     "rel_big_pads": 0.001653847141237416,
+     "ratio": 1.0
+    },
+    {
+     "row": 7,
+     "n": 149,
+     "bitwise": true,
+     "rel_small_pads": 0.0016386977367688288,
+     "rel_big_pads": 0.0016386977367688288,
+     "ratio": 1.0
+    }
+   ],
+   "any_not_bitwise": false,
+   "max_ratio": 1.0
+  }
+ },
+ "flagged": [
+  "router_fp32",
+  "switchglu_q8_sorted"
+ ]
+}

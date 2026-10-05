@@ -1,0 +1,25 @@
+  next: RUNBOOK step 2: set git identity and install the pre-push hook
+----------------------------- Captured stderr call -----------------------------
+[preflight] refusing to write: git identity
+=========================== short test summary info ============================
+FAILED tests/test_bench_common.py::test_padding_fixtures_exist_by_real_name[pad_4k.txt]
+FAILED tests/test_bench_common.py::test_padding_fixtures_exist_by_real_name[pad_15k.txt]
+FAILED tests/test_bench_common.py::test_padding_fixtures_exist_by_real_name[pad_120k.txt]
+FAILED tests/test_bench_common.py::test_pad_4k_and_pad_15k_are_prefixes_of_pad_120k
+FAILED tests/test_bench_common.py::test_fixture_ids_hard_fails_when_too_short
+FAILED tests/test_bench_fit_ladder.py::test_d1_cell_at_preregistered_context_sizes
+FAILED tests/test_bench_fit_ladder.py::test_d1_three_reps_each_and_prefixes_are_exact
+FAILED tests/test_bench_fit_ladder.py::test_ladder_requires_tier2_and_fixtures_and_restricts_120k
+FAILED tests/test_bench_speed.py::test_h1_cell_on_tiny_models_at_preregistered_sizes
+FAILED tests/test_bench_speed.py::test_desc_cell_on_tiny_models - bench.commo...
+FAILED tests/test_bench_speed.py::test_fixture_arithmetic_with_the_real_tokenizers
+FAILED tests/test_bench_speed.py::test_no_text_of_the_fixture_in_the_record
+FAILED tests/test_tools_env.py::test_env_file_defaults[bash] - AssertionError...
+FAILED tests/test_tools_env.py::test_env_file_defaults[zsh] - AssertionError:...
+FAILED tests/test_tools_preflight.py::test_clean_run_host_record - AssertionE...
+FAILED tests/test_tools_preflight.py::test_advice_text_when_the_limit_is_low[False]
+FAILED tests/test_tools_preflight.py::test_advice_text_when_the_limit_is_low[True]
+FAILED tests/test_tools_preflight.py::test_versions_core_mismatch_is_a_problem_other_is_recorded
+FAILED tests/test_tools_preflight.py::test_exp007_fixtures_are_found_by_real_name
+FAILED tests/test_tools_preflight.py::test_real_not_run_host_preflight_records_no_identifiers
+20 failed, 1219 passed, 35 skipped in 202.52s (0:03:22)

@@ -2047,5 +2047,30 @@ H1: an unrestricted `tail` NOPASSWD sudoers grant permits root-level file read b
 
 **Pre-registered: 2026-10-03T22:33:25Z.** Aleph Alpha's Kolibri-1 (78.1B total / 3.46B active, English–German MoE, Apache-2.0 weights, released 2026-10-03), run through our own MLX port and gated by a separately written numpy reference, against Gemma 4 26B-A4B, Qwen3.6 35B-A3B and Qwen3.8 27B on one host (MacBook Pro, M5 Max, 128 GB) and one runtime (MLX). Full design, fixed hashes, the blocking port gate and eight confirmatory hypotheses (H1–H8, Holm) are in `exp_036_kolibri_local_eval/HYPOTHESIS.md`. Unlike exp_035, the full pre-registration, the kit and the runbook are public before any scored run. Andrei signs off before the first scored run. H5 (German tokenizer) is deterministic and was computed during the build; the disclosure is in HYPOTHESIS.
 
-*Status: pre-registered, awaiting sign-off; no scored run. Evidence will be under `exp_036_kolibri_local_eval/results/`.*
+### Result — gate failed 2026-10-05; stopped and published as the result
+
+**Phase 0 gate: K8 FAIL, K4 PASS.** Andrei signed off on 2026-10-04.
+
+**The failure.** K8 failed five blocking checks, in four groups:
+- G2: bf16 natural selection, at layer 20;
+- G3: two checks of the reference's bits per byte, per text and against the peers;
+- G4: the end-to-end backstop, on T9's decisive top-1;
+- G5: batch parity.
+
+No threshold was relaxed, and no fix cycle was used.
+
+**Diagnostics and the decision.** The frozen diagnostic rules left every failure standing, and stage 5 found that no amendment package fits. Andrei then chose to stop and publish (D8), with confirmation runs first; those runs came after his choice and decide nothing.
+
+**What this leaves.** H1–H8 and D1 were not run. No claim is made about Kolibri's speed, fit, scorecard or quality, and no converted build is uploaded.
+
+**What the diagnostics found.** These are investigation only, with no verdict:
+- **Expert selection.** When the port runs its own prefill in two chunk sizes, it diverges from itself at long context. On the real weights the divergence disappears when the expert choices are forced; that rounding flips near-tied choices is still inferred from tiny models and Gemma 4.
+- **RoPE angles.** MLX and vLLM compute RoPE angles slightly differently. The difference is systematic and is not a fix.
+- **Batch parity on the M5.** G5's batched excess sits in the batched first-wave prefill. A random-weight probe shows mlx-lm's sorted 8-bit SwitchGLU giving wrong output at that shape on the M5 Max under macOS 27.0, but not on the M4 Pro under an older macOS; chip and OS are not separable.
+- **G3.** It cannot be settled without an external anchor.
+
+The disclosures are in HYPOTHESIS.
+
+*Evidence: `exp_036_kolibri_local_eval/HYPOTHESIS.md` ("Gate failure — the exp_036 result"), `results/gate/`, `aborted/20261005T050112Z-gate/`, `diagnostics/gate1/` (`FROZEN_RULES.md`, `BUGHUNT.md` §6, `out/`, `confirm/out/`, `mini/`).*
+*Status: Gate failed — K8 (G2, G3, G4, G5); stopped and published 2026-10-05. A follow-up, exp_037, will be pre-registered separately.*
 

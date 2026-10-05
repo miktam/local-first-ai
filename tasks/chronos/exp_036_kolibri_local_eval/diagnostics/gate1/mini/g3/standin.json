@@ -1,0 +1,282 @@
+{
+ "what": "exp_036 G3 diagnostic, descriptive",
+ "k_dir": "$HOME/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B/snapshots/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+ "q_dir": "$HOME/.cache/huggingface/hub/models--Qwen--Qwen3-4B/snapshots/1cfa9a7208912126459214e8b04321603b3df60c",
+ "texts": {
+  "T1": {
+   "bytes": 6087,
+   "kolibri": {
+    "bpb_noprefix_gate_rule": 1.4258302867295063,
+    "bpb_eot_all_tokens": 1.422248735248432,
+    "bpb_eot_tokens1plus": 1.4204143666592317,
+    "bpb_chat_A5": 1.5427848095525483,
+    "frac_tokens_nll_lt_0.05_noprefix": 0.0698125404007757,
+    "top_first16_share_noprefix": 0.01631329708911761
+   },
+   "q36_8": {
+    "bpb_eot_all_tokens": 1.4004722270117744,
+    "bpb_noprefix_tokens1plus": 1.3955446867409438,
+    "frac_tokens_nll_lt_0.05": 0.0962532299741602
+   },
+   "gap": {
+    "gap_bits": 161.6814734412801,
+    "windows_128B": 48,
+    "top10pct_windows_share_of_gap": 0.627331298186969,
+    "windows_kolibri_better": 22,
+    "window_ratio_k_over_q_p10_p50_p90": [
+     0.962858327475426,
+     1.0050995138957504,
+     1.1443834580934098
+    ],
+    "gap_share_digit_bytes": 0.1996370373696064,
+    "digit_byte_share": 0.028749794644323968,
+    "gap_share_q_recall_windows": 0.0,
+    "q_recall_window_byte_share": 0.0
+   }
+  },
+  "T2": {
+   "bytes": 6561,
+   "kolibri": {
+    "bpb_noprefix_gate_rule": 1.1430259074193305,
+    "bpb_eot_all_tokens": 1.1540748242282401,
+    "bpb_eot_tokens1plus": 1.1523321197854213,
+    "bpb_chat_A5": 1.2425932466367196,
+    "frac_tokens_nll_lt_0.05_noprefix": 0.14487179487179488,
+    "top_first16_share_noprefix": 0.01637365582836417
+   },
+   "q36_8": {
+    "bpb_eot_all_tokens": 1.0760081697487882,
+    "bpb_noprefix_tokens1plus": 1.0637387295651133,
+    "frac_tokens_nll_lt_0.05": 0.16527866752082
+   },
+   "gap": {
+    "gap_bits": 447.3131451751815,
+    "windows_128B": 52,
+    "top10pct_windows_share_of_gap": 0.3390098173559593,
+    "windows_kolibri_better": 13,
+    "window_ratio_k_over_q_p10_p50_p90": [
+     0.9730135845319843,
+     1.06318064228981,
+     1.1793948053266525
+    ],
+    "gap_share_digit_bytes": -0.07193070910125685,
+    "digit_byte_share": 0.01585124218869075,
+    "gap_share_q_recall_windows": 0.0,
+    "q_recall_window_byte_share": 0.0
+   }
+  },
+  "T3": {
+   "bytes": 8061,
+   "kolibri": {
+    "bpb_noprefix_gate_rule": 0.9934255612962298,
+    "bpb_eot_all_tokens": 0.9884904655583969,
+    "bpb_eot_tokens1plus": 0.9867650069489299,
+    "bpb_chat_A5": 1.0459492205377354,
+    "frac_tokens_nll_lt_0.05_noprefix": 0.278497988377291,
+    "top_first16_share_noprefix": 0.010984930701777243
+   },
+   "q36_8": {
+    "bpb_eot_all_tokens": 0.9109179809167675,
+    "bpb_noprefix_tokens1plus": 0.8734646268192301,
+    "frac_tokens_nll_lt_0.05": 0.3185880250223414
+   },
+   "gap": {
+    "gap_bits": 684.9887549048326,
+    "windows_128B": 63,
+    "top10pct_windows_share_of_gap": 0.32399015631883304,
+    "windows_kolibri_better": 17,
+    "window_ratio_k_over_q_p10_p50_p90": [
+     0.9332327419927926,
+     1.1156555096251917,
+     1.2652001688511858
+    ],
+    "gap_share_digit_bytes": 0.0,
+    "digit_byte_share": 0.0,
+    "gap_share_q_recall_windows": 0.0,
+    "q_recall_window_byte_share": 0.0
+   }
+  },
+  "T4": {
+   "bytes": 8427,
+   "kolibri": {
+    "bpb_noprefix_gate_rule": 0.8020887221833949,
+    "bpb_eot_all_tokens": 0.7974551677092415,
+    "bpb_eot_tokens1plus": 0.7958062175064552,
+    "bpb_chat_A5": 0.8314319016802659,
+    "frac_tokens_nll_lt_0.05_noprefix": 0.39475873544093176,
+    "top_first16_share_noprefix": 0.010647882821955584
+   },
+   "q36_8": {
+    "bpb_eot_all_tokens": 0.7541369152556907,
+    "bpb_noprefix_tokens1plus": 0.7196591025737044,
+    "frac_tokens_nll_lt_0.05": 0.4332640332640333
+   },
+   "gap": {
+    "gap_bits": 423.47701568242064,
+    "windows_128B": 66,
+    "top10pct_windows_share_of_gap": 0.4328770523097631,
+    "windows_kolibri_better": 18,
+    "window_ratio_k_over_q_p10_p50_p90": [
+     0.8833690635558571,
+     1.0813356545563497,
+     1.3126007623168574
+    ],
+    "gap_share_digit_bytes": -0.0193138121658431,
+    "digit_byte_share": 0.008425299632134805,
+    "gap_share_q_recall_windows": 0.0,
+    "q_recall_window_byte_share": 0.0,
+    "per_article": {
+     "1": {
+      "k_bpb": 0.9790736005592631,
+      "q_bpb": 0.9342826306615754
+     },
+     "2": {
+      "k_bpb": 0.631976951901836,
+      "q_bpb": 0.6286768759155436
+     },
+     "3": {
+      "k_bpb": 0.6424220288829434,
+      "q_bpb": 0.5239420648980506
+     },
+     "4": {
+      "k_bpb": 0.7858743579198763,
+      "q_bpb": 0.6878899391088972
+     },
+     "5": {
+      "k_bpb": 0.7924389172474318,
+      "q_bpb": 0.7479418812681897
+     },
+     "6": {
+      "k_bpb": 0.7893287065562543,
+      "q_bpb": 0.8440313013318402
+     },
+     "7": {
+      "k_bpb": 0.796317289679882,
+      "q_bpb": 0.788569210229007
+     },
+     "8": {
+      "k_bpb": 0.7762933360813506,
+      "q_bpb": 0.7063878324996535
+     },
+     "9": {
+      "k_bpb": 0.9248450145991738,
+      "q_bpb": 0.827726001497613
+     },
+     "10": {
+      "k_bpb": 0.8829276445625241,
+      "q_bpb": 0.7913438984176143
+     },
+     "11": {
+      "k_bpb": 0.8050887077552024,
+      "q_bpb": 0.7601043785663715
+     },
+     "12": {
+      "k_bpb": 0.7182583451386638,
+      "q_bpb": 0.6424547582895217
+     },
+     "12a": {
+      "k_bpb": 0.8012635313847212,
+      "q_bpb": 0.7048284878342173
+     }
+    }
+   }
+  },
+  "T5": {
+   "bytes": 8061,
+   "kolibri": {
+    "bpb_noprefix_gate_rule": 0.9934255612962298,
+    "bpb_eot_all_tokens": 0.9884904655583969,
+    "bpb_eot_tokens1plus": 0.9867650069489299,
+    "bpb_chat_A5": 1.0459492205377354,
+    "frac_tokens_nll_lt_0.05_noprefix": 0.278497988377291,
+    "top_first16_share_noprefix": 0.010984930701777243
+   },
+   "q36_8": {
+    "bpb_eot_all_tokens": 0.9109179809167675,
+    "bpb_noprefix_tokens1plus": 0.8734646268192301,
+    "frac_tokens_nll_lt_0.05": 0.3185880250223414
+   },
+   "gap": {
+    "gap_bits": 684.9887549048326,
+    "windows_128B": 63,
+    "top10pct_windows_share_of_gap": 0.32399015631883304,
+    "windows_kolibri_better": 17,
+    "window_ratio_k_over_q_p10_p50_p90": [
+     0.9332327419927926,
+     1.1156555096251917,
+     1.2652001688511858
+    ],
+    "gap_share_digit_bytes": 0.0,
+    "digit_byte_share": 0.0,
+    "gap_share_q_recall_windows": 0.0,
+    "q_recall_window_byte_share": 0.0
+   }
+  },
+  "T6": {
+   "bytes": 6561,
+   "kolibri": {
+    "bpb_noprefix_gate_rule": 1.1430259074193305,
+    "bpb_eot_all_tokens": 1.1540748242282401,
+    "bpb_eot_tokens1plus": 1.1523321197854213,
+    "bpb_chat_A5": 1.2425932466367196,
+    "frac_tokens_nll_lt_0.05_noprefix": 0.14487179487179488,
+    "top_first16_share_noprefix": 0.01637365582836417
+   },
+   "q36_8": {
+    "bpb_eot_all_tokens": 1.0760081697487882,
+    "bpb_noprefix_tokens1plus": 1.0637387295651133,
+    "frac_tokens_nll_lt_0.05": 0.16527866752082
+   },
+   "gap": {
+    "gap_bits": 447.3131451751815,
+    "windows_128B": 52,
+    "top10pct_windows_share_of_gap": 0.3390098173559593,
+    "windows_kolibri_better": 13,
+    "window_ratio_k_over_q_p10_p50_p90": [
+     0.9730135845319843,
+     1.06318064228981,
+     1.1793948053266525
+    ],
+    "gap_share_digit_bytes": -0.07193070910125685,
+    "digit_byte_share": 0.01585124218869075,
+    "gap_share_q_recall_windows": 0.0,
+    "q_recall_window_byte_share": 0.0
+   }
+  }
+ },
+ "kolibri_pooled_bpb": {
+  "noprefix": 1.0616043700429834,
+  "eot": 1.061693767516761,
+  "chat": 1.1327188099794865
+ },
+ "t4_recall_probe": {
+  "1": {
+   "k_match_frac": 0.0,
+   "k_prefix_exact_tokens": 0,
+   "k_greedy_text": "The first step in the process of creating a new artwork is to decide on the subject. The subject is the central idea or theme that the artist wants to express. It can be anything from a simple object to a complex idea. Once the",
+   "q_match_frac": 0.0,
+   "q_prefix_exact_tokens": 0
+  },
+  "3": {
+   "k_match_frac": 0.0625,
+   "k_prefix_exact_tokens": 3,
+   "k_greedy_text": "(1) Jeder hat das Recht auf freie Meinungs\u00e4u\u00dferung, Ausbildung, Bildung, Beruf und Wissenschaft.\n(2) Jeder hat das Recht auf freie Meinungs\u00e4u\u00dferung,",
+   "q_match_frac": 0.0625,
+   "q_prefix_exact_tokens": 3
+  },
+  "5": {
+   "k_match_frac": 0.0625,
+   "k_prefix_exact_tokens": 3,
+   "k_greedy_text": "(1) Die Freiheit des Ausdrucks, der Meinung und der Presse ist unverletzlich.\n(2) Die Freiheit des Ausdrucks, der Meinung und der Presse ist unver",
+   "q_match_frac": 0.1875,
+   "q_prefix_exact_tokens": 9
+  },
+  "12a": {
+   "k_match_frac": 0.0625,
+   "k_prefix_exact_tokens": 3,
+   "k_greedy_text": "(1) Das Recht auf die Freiheit der Berufsaus\u00fcbung ist in der Verfassung nicht gedeckt. Es ist in der Verfassung nicht gedeckt, dass der Staat die",
+   "q_match_frac": 0.0625,
+   "q_prefix_exact_tokens": 3
+  }
+ }
+}

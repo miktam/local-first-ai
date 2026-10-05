@@ -1,0 +1,142 @@
+{
+ "device": "Apple M4 Pro",
+ "arch": "applegpu_g16s",
+ "mlx": "0.31.2",
+ "MLX_ENABLE_TF32": "0",
+ "router_fp32_gemm": {
+  "1": {
+   "rel_batched_vs_f64": 7.7951497590468e-08,
+   "rel_rowwise_vs_f64": 7.7951497590468e-08,
+   "bitwise_batched_eq_rowwise": true,
+   "max_abs_batched_minus_rowwise": 0.0
+  },
+  "2": {
+   "rel_batched_vs_f64": 1.1412779682039485e-07,
+   "rel_rowwise_vs_f64": 8.326321628156112e-08,
+   "bitwise_batched_eq_rowwise": false,
+   "max_abs_batched_minus_rowwise": 5.960464477539062e-07
+  },
+  "4": {
+   "rel_batched_vs_f64": 1.1333568399083254e-07,
+   "rel_rowwise_vs_f64": 8.279930045804327e-08,
+   "bitwise_batched_eq_rowwise": false,
+   "max_abs_batched_minus_rowwise": 4.76837158203125e-07
+  },
+  "8": {
+   "rel_batched_vs_f64": 1.1400120937573092e-07,
+   "rel_rowwise_vs_f64": 8.526943854398335e-08,
+   "bitwise_batched_eq_rowwise": false,
+   "max_abs_batched_minus_rowwise": 7.152557373046875e-07
+  },
+  "16": {
+   "rel_batched_vs_f64": 1.1131666622111437e-07,
+   "rel_rowwise_vs_f64": 8.426973174895313e-08,
+   "bitwise_batched_eq_rowwise": false,
+   "max_abs_batched_minus_rowwise": 5.960464477539062e-07
+  },
+  "64": {
+   "rel_batched_vs_f64": 1.357250263861724e-07,
+   "rel_rowwise_vs_f64": 8.311473040390128e-08,
+   "bitwise_batched_eq_rowwise": false,
+   "max_abs_batched_minus_rowwise": 8.344650268554688e-07
+  },
+  "2048": {
+   "rel_batched_vs_f64": 4.5068239040239396e-07,
+   "rel_rowwise_vs_f64": 8.356877226843762e-08,
+   "bitwise_batched_eq_rowwise": false,
+   "max_abs_batched_minus_rowwise": 6.318092346191406e-06
+  }
+ },
+ "qmm": {
+  "q_proj_mlx.core.bfloat16": {
+   "rel_M8_vs_f64": 0.002335587404879481,
+   "rel_M1_vs_f64": 0.002335587404879481,
+   "bitwise_M8_eq_M1": true
+  },
+  "q_proj_mlx.core.float32": {
+   "rel_M8_vs_f64": 0.0016492726762121052,
+   "rel_M1_vs_f64": 0.0016492726762121052,
+   "bitwise_M8_eq_M1": true
+  },
+  "k_proj_mlx.core.bfloat16": {
+   "rel_M8_vs_f64": 0.0023312701343515397,
+   "rel_M1_vs_f64": 0.0023312701343515397,
+   "bitwise_M8_eq_M1": true
+  },
+  "k_proj_mlx.core.float32": {
+   "rel_M8_vs_f64": 0.001650496617353581,
+   "rel_M1_vs_f64": 0.001650496617353581,
+   "bitwise_M8_eq_M1": true
+  },
+  "o_proj_mlx.core.bfloat16": {
+   "rel_M8_vs_f64": 0.0023339967385274055,
+   "rel_M1_vs_f64": 0.0023339967385274055,
+   "bitwise_M8_eq_M1": true
+  },
+  "o_proj_mlx.core.float32": {
+   "rel_M8_vs_f64": 0.0016374663298940881,
+   "rel_M1_vs_f64": 0.0016374663298940881,
+   "bitwise_M8_eq_M1": true
+  },
+  "shared_down_mlx.core.bfloat16": {
+   "rel_M8_vs_f64": 0.0023175215545840184,
+   "rel_M1_vs_f64": 0.0023175215545840184,
+   "bitwise_M8_eq_M1": true
+  },
+  "shared_down_mlx.core.float32": {
+   "rel_M8_vs_f64": 0.001636364449145027,
+   "rel_M1_vs_f64": 0.001636364449145027,
+   "bitwise_M8_eq_M1": true
+  },
+  "lm_head_fp32in_mlx.core.float32": {
+   "rel_M8_vs_f64": 0.0016445552378631227,
+   "rel_M1_vs_f64": 0.0016445552378631227,
+   "bitwise_M8_eq_M1": true
+  }
+ },
+ "switchglu_q8_bf16_B8_vs_B1_bitwise": true,
+ "switchglu_q8_bf16_B8_vs_B1_maxabs": 0.0,
+ "sdpa_decode": {
+  "mlx.core.bfloat16_valid40_total1164": {
+   "bitwise_alone_eq_padded": false,
+   "rel_alone_vs_f64": 0.001679692404206644,
+   "rel_padded_vs_f64": 0.0016796924042066228
+  },
+  "mlx.core.bfloat16_valid40_total513": {
+   "bitwise_alone_eq_padded": false,
+   "rel_alone_vs_f64": 0.001696277578905484,
+   "rel_padded_vs_f64": 0.0016962775782675232
+  },
+  "mlx.core.bfloat16_valid600_total1164": {
+   "bitwise_alone_eq_padded": false,
+   "rel_alone_vs_f64": 0.0016488813997872635,
+   "rel_padded_vs_f64": 0.0023490738526818953
+  },
+  "mlx.core.bfloat16_valid513_total513": {
+   "bitwise_alone_eq_padded": true,
+   "rel_alone_vs_f64": 0.0016683166217711198,
+   "rel_padded_vs_f64": 0.0016683166217711198
+  },
+  "mlx.core.float32_valid40_total1164": {
+   "bitwise_alone_eq_padded": false,
+   "rel_alone_vs_f64": 1.2542073825580906e-07,
+   "rel_padded_vs_f64": 1.2733619929107872e-07
+  },
+  "mlx.core.float32_valid40_total513": {
+   "bitwise_alone_eq_padded": false,
+   "rel_alone_vs_f64": 1.4028689920298244e-07,
+   "rel_padded_vs_f64": 1.3525292820510586e-07
+  },
+  "mlx.core.float32_valid600_total1164": {
+   "bitwise_alone_eq_padded": false,
+   "rel_alone_vs_f64": 1.7733485535445906e-07,
+   "rel_padded_vs_f64": 1.7005093895222597e-07
+  },
+  "mlx.core.float32_valid513_total513": {
+   "bitwise_alone_eq_padded": true,
+   "rel_alone_vs_f64": 1.743859342608903e-07,
+   "rel_padded_vs_f64": 1.743859342608903e-07
+  }
+ },
+ "rope_bf16_array_vs_scalar_bitwise": true
+}
