@@ -1,0 +1,645 @@
+{
+ "checks": {
+  "G2": {
+   "M_emu": 6.100457191467285,
+   "alternatives": [],
+   "check": "g2_bf16_natural_selection",
+   "consequence": "failure stands; inspect. A gate fix in the port's mask or cache only if a tiny G1 boundary test at that position class fails before the fix",
+   "emu_n_beyond_6sigma": 1,
+   "outcome": "G2-D",
+   "reproduction": {
+    "port_max_gap_over_sigma": 6.077697277069092,
+    "record": 6.077697277069092,
+    "reproduces_gate": true,
+    "spread": 0.0
+   },
+   "signs": [
+    {
+     "fired": true,
+     "inputs": {
+      "flip_r_t": 3.1915628093257364,
+      "flip_sigma_t_emu": 0.0011070334314651417,
+      "flip_sigma_t_port": 0.003533166728544398,
+      "r_p50_layer20": 1.1079043503417736,
+      "r_p99_layer20": 2.373479830924051
+     },
+     "missing": null,
+     "rule": "flip_r_t > r_p99_layer20",
+     "sign": "G2-D1"
+    },
+    {
+     "fired": false,
+     "inputs": {
+      "flip_e_attn_max_pct_16_20": 76.81477864583334,
+      "flip_position": 19,
+      "flip_position_class": "other",
+      "flip_text": "T4"
+     },
+     "missing": null,
+     "rule": "flip_position in 0-1, 511-515, 2047-2049, or flip_e_attn_max_pct_16_20 >= 99",
+     "sign": "G2-D2"
+    },
+    {
+     "fired": true,
+     "inputs": {
+      "flip_emu_flips_same": false,
+      "flip_gap": 0.007056891918182373,
+      "flip_gap_over_sigma_t_emu": 6.374596934116692
+     },
+     "missing": null,
+     "rule": "flip_emu_flips_same is false and flip_gap_over_sigma_t_emu > 6",
+     "sign": "G2-D3"
+    },
+    {
+     "fired": false,
+     "inputs": {
+      "firing": [],
+      "tails": {
+       "att29": {
+        "near_top10": [],
+        "port_max_over_emu_max": 2.2437828412589043,
+        "port_max_position": 3,
+        "port_max_text": "T7"
+       },
+       "att8": {
+        "near_top10": [],
+        "port_max_over_emu_max": 1.7173367457316022,
+        "port_max_position": 1482,
+        "port_max_text": "T5"
+       },
+       "moe13": {
+        "near_top10": [],
+        "port_max_over_emu_max": 1.1300340116778893,
+        "port_max_position": 160,
+        "port_max_text": "T3"
+       },
+       "moe30": {
+        "near_top10": [],
+        "port_max_over_emu_max": 1.5163959529132083,
+        "port_max_position": 11950,
+        "port_max_text": "T9"
+       }
+      }
+     },
+     "missing": null,
+     "rule": "attention 8/29 or MoE 13/30: port_max_over_emu_max > 3 and the port's max within +-2 tokens of a stage-3 top10_kl_positions entry in the same text",
+     "sign": "G2-D4"
+    },
+    {
+     "fired": false,
+     "inputs": {
+      "emu": {
+       "0-2048": 0.014814453125,
+       "2048-8192": 0.012522786458333334,
+       "8192-16384": 0.01186279296875
+      },
+      "firing": [],
+      "port": {
+       "0-2048": 0.01634765625,
+       "2048-8192": 0.013968098958333333,
+       "8192-16384": 0.01326171875
+      }
+     },
+     "missing": null,
+     "rule": "any T9 bucket: t9_disagree_frac_port > 2 x t9_disagree_frac_emu",
+     "sign": "G2-D5"
+    }
+   ],
+   "type": null,
+   "who": "main session (inspection)"
+  },
+  "G3": {
+   "alternatives": [],
+   "check": "g3_bpb_per_text + g3_bpb_vs_peers",
+   "consequence": "failure stands: misreading signs; no G3 amendment and no anchor route (D4 withdrawn)",
+   "invalid": [],
+   "outcome": "G3-D",
+   "reproduction": {
+    "ref_bpb_reproduces_gate": true,
+    "spread": 0.0
+   },
+   "signs": [
+    {
+     "fired": false,
+     "inputs": {
+      "T1": {
+       "frac_kolibri_better": 0.10416666666666667,
+       "holds": false,
+       "p10": 1.0021385179818616
+      },
+      "T2": {
+       "frac_kolibri_better": 0.0,
+       "holds": false,
+       "p10": 1.0711135407874213
+      },
+      "T5": {
+       "frac_kolibri_better": 0.07017543859649122,
+       "holds": false,
+       "p10": 1.0300259752493448
+      },
+      "T6": {
+       "frac_kolibri_better": 0.01818181818181818,
+       "holds": true,
+       "p10": 1.1193691551378455
+      }
+     },
+     "missing": null,
+     "rule": "for each of T1, T2, T5 and T6: window_ratio p10 >= 1.1 and frac_kolibri_better < 0.10",
+     "sign": "G3-D1"
+    },
+    {
+     "fired": true,
+     "inputs": {
+      "firing": [
+       "renorm_topk.T5"
+      ],
+      "mutant_dnll_p01": {
+       "one_plus_w_norm": {
+        "T1": 5.756537684587147,
+        "T5": 6.424936596514726
+       },
+       "qknorm_after_rope": {
+        "T1": 0.663143454828032,
+        "T5": 0.7141962529433863
+       },
+       "renorm_topk": {
+        "T1": 0.34740997591674444,
+        "T5": 0.08656973086977035
+       },
+       "rope_on_full": {
+        "T1": 1.5729786181598033,
+        "T5": 1.0877814981448974
+       },
+       "rope_traditional": {
+        "T1": 2.7451386622291825,
+        "T5": 2.0232479747600864
+       },
+       "sigmoid_bias_select": {
+        "T1": 2.417753247545139,
+        "T5": 2.227573736813495
+       },
+       "swap_sandwich_norms": {
+        "T1": 7.656459156224908,
+        "T5": 7.883495564741456
+       }
+      }
+     },
+     "missing": null,
+     "rule": "any registered mutant with mutant_dnll_p01 < 0.24 on T1 or T5",
+     "sign": "G3-D2"
+    },
+    {
+     "fired": true,
+     "inputs": {
+      "ref_bpb_from64_rel_diff": {
+       "T1": -0.027301307290981278,
+       "T2": -0.048814378147893384,
+       "T3": -0.05379946118193712,
+       "T4": -0.06397113861844793,
+       "T5": -0.002604079657192791,
+       "T6": -0.040440810443489725
+      }
+     },
+     "missing": null,
+     "rule": "|ref_bpb_from64_rel_diff| > 0.05 on any of T1-T6",
+     "sign": "G3-D3"
+    }
+   ],
+   "type": null,
+   "validity": {
+    "d1_k8_minus_ref_bpb": {
+     "T1": -0.0003441953542404619,
+     "T2": -0.004074002066382754,
+     "T3": -0.004200445718619605,
+     "T4": -0.0005949869707349009,
+     "T5": 0.0037380122002836913,
+     "T6": -0.0006028874022852015
+    },
+    "peer_bpb_max_abs_diff": 8.837879628131873e-08,
+    "peer_bpb_reproduces_record": true,
+    "ref_bpb_reproduces_gate": true
+   },
+   "who": null
+  },
+  "G4": {
+   "E_T9": 0.9885579673565539,
+   "alternatives": [],
+   "check": "g4_K8_backstop",
+   "consequence": "failure stands; a code question. A gate fix in port/kolibri1.py's long-context path (NoPE layers, cache growth, chunk edges) only if a tiny G1 test at the boundary reproduces it",
+   "emu_T9_decisive_miss": 68,
+   "emu_T9_n_decisive": 5943,
+   "emu_decisive_set_equals_gate": true,
+   "outcome": "G4-D",
+   "reproduction": {
+    "bf16_T9_decisive_miss": 66,
+    "bf16_T9_top1_decisive": 0.98889449772842,
+    "record": 0.98889449772842,
+    "spread": 0.0
+   },
+   "signs": [
+    {
+     "fired": true,
+     "inputs": {
+      "bug_boundary_window_max": 0.14123861010350913,
+      "bug_mean_kl": {
+       "T1-8": 0.001972060576230565,
+       "T9": 0.015296241946364385
+      },
+      "bug_top1_decisive": {
+       "0-2048": 1.0,
+       "2048-8192": 0.9988253719655442,
+       "8192-16384": 0.9960531036957302,
+       "T1-8": 0.9997841105354058
+      }
+     },
+     "missing": null,
+     "rule": "bug test: bug_mean_kl > 1e-3 (T1-8 or T9), bug_top1_decisive < 0.999 in any of the four sets, or bug_boundary_window_max > 1e-3",
+     "sign": "G4-D1"
+    },
+    {
+     "fired": true,
+     "inputs": {
+      "chunk64_max_kl": 12.452577569380335,
+      "chunk64_n_decisive_top1_changes": 0,
+      "chunk64_vs_ref_mean_kl": 0.04881445573577522,
+      "chunk64_vs_ref_top1_decisive": 0.9787234042553191
+     },
+     "missing": null,
+     "rule": "chunk64_max_kl > 1e-6 or chunk64_n_decisive_top1_changes >= 1; chunk64_vs_ref_mean_kl > 1e-3 or chunk64_vs_ref_top1_decisive < 0.999",
+     "sign": "G4-D2"
+    },
+    {
+     "fired": false,
+     "inputs": {
+      "firing": [],
+      "sets": {
+       "0-2048": {
+        "emu_miss": 6,
+        "n01": 3,
+        "n10": 0,
+        "p_one_sided": 1.0,
+        "port_miss": 3
+       },
+       "2048-8192": {
+        "emu_miss": 14,
+        "n01": 7,
+        "n10": 12,
+        "p_one_sided": 0.1796417236328125,
+        "port_miss": 19
+       },
+       "8192-16384": {
+        "emu_miss": 48,
+        "n01": 20,
+        "n10": 16,
+        "p_one_sided": 0.7974838769296184,
+        "port_miss": 44
+       },
+       "T9": {
+        "emu_miss": 68,
+        "n01": 30,
+        "n10": 28,
+        "p_one_sided": 0.6529979529619342,
+        "port_miss": 66
+       }
+      }
+     },
+     "missing": null,
+     "rule": "T9 or any bucket: p_one_sided < 0.05 and port_miss > 1.25 x emu_miss",
+     "sign": "G4-D3"
+    },
+    {
+     "fired": false,
+     "inputs": {
+      "ci99_hi": 0.0026794584808416994,
+      "ci99_lo": -0.02000543194408276,
+      "mean": -0.008784089684944261
+     },
+     "missing": null,
+     "rule": "paired_dnll_T9 [ci99_lo, ci99_hi] excludes 0 and |mean| > 0.02",
+     "sign": "G4-D4"
+    },
+    {
+     "fired": true,
+     "inputs": {
+      "n_kl_port_gt5_emu_lt1": 20
+     },
+     "missing": null,
+     "rule": "n_kl_port_gt5_emu_lt1 >= 3",
+     "sign": "G4-D5"
+    },
+    {
+     "fired": true,
+     "inputs": {
+      "firing": [
+       "T6.kl_port"
+      ],
+      "values": {
+       "T5.kl_emu": 0.03452830148385899,
+       "T5.kl_port": 0.03891194553244531,
+       "T5.miss_emu": 0.014388489208633094,
+       "T5.miss_port": 0.009592326139088728,
+       "T6.kl_emu": 0.0246774614401834,
+       "T6.kl_port": 0.06121610472292705,
+       "T6.miss_emu": 0.006761740840914679,
+       "T6.miss_port": 0.010142611261372017
+      }
+     },
+     "missing": null,
+     "rule": "T5 or T6, KL or miss rate: port excess > 0 and > 2 x max(emu excess, 0)",
+     "sign": "G4-D6"
+    }
+   ],
+   "type": null,
+   "who": "main session (inspection)"
+  },
+  "G5": {
+   "alternatives": [],
+   "check": "g5_batch_parity_K8",
+   "consequence": "failure stands: not localised by this suite; a gate fix only if a head_dim-128 tiny parity test reproduces the class in bf16 and fp32 (port make_cache / masks under BatchKVCache / BatchRotatingKVCache, runner batch construction, or mlx_lm BatchGenerator)",
+   "localised": false,
+   "localisers": {
+    "B_mean_kl_first_wave": 0.469195027369302,
+    "B_mean_kl_mid_run": 0.009026019994487464,
+    "B_mean_kl_prompt_ge_513": 0.19081907099419151,
+    "B_mean_kl_t0": 0.08996047724857964,
+    "B_mean_kl_t1_2": 0.4871820994276442,
+    "B_mean_kl_t3plus": 0.30217518568659535,
+    "B_share_kl_top5": 0.35692549098011245,
+    "L1_first_divergence_step": 24,
+    "L1_max_pre_divergence_kl": 0.048285832970346755,
+    "L1_rows_bitwise_equal": false,
+    "L2_max_kl": 6.5441461895978225e-15,
+    "L3_max_abs_dlogprob_seq0_seq8": 5.696908473968506,
+    "L3_max_abs_dlogprob_seq3_seq11": 12.095329284667969,
+    "kprobe_defects": [],
+    "readings": {
+     "L2_cache_classes_differ_alone": false,
+     "concentration_top5_ge_50pct": false
+    }
+   },
+   "outcome": "G5-D",
+   "reproduction": {
+    "B_instrumented_run_equals_gate_run": true,
+    "B_mean_kl": 0.3073773544462904,
+    "B_mean_kl_equals_record": true,
+    "record": 0.3073773544462904,
+    "reproduces_gate_draw": true,
+    "spread": 0.0
+   },
+   "signs": [
+    {
+     "fired": false,
+     "inputs": {
+      "C_mean_kl": 1.5155134518048469e-05,
+      "C_n_positions": 364,
+      "C_top1_dis": 0.0
+     },
+     "missing": null,
+     "rule": "C_mean_kl > 1e-4, or C_top1_dis x C_n_positions > 2",
+     "sign": "G5-D1"
+    },
+    {
+     "fired": true,
+     "inputs": {
+      "R_mean_kl_ref_batched": 0.29853129926950817,
+      "R_mean_kl_ref_single": 0.06858181094009524
+     },
+     "missing": null,
+     "rule": "R_mean_kl_ref_batched > 2 x R_mean_kl_ref_single",
+     "sign": "G5-D2"
+    },
+    {
+     "fired": false,
+     "inputs": {
+      "R_n_decisive": 198,
+      "R_top1_decisive_batched": 0.9797979797979798,
+      "R_top1_decisive_single": 0.98989898989899
+     },
+     "missing": null,
+     "rule": "R_top1_decisive_batched < 0.995 while R_top1_decisive_single >= 0.995",
+     "sign": "G5-D3"
+    },
+    {
+     "fired": false,
+     "inputs": {
+      "R_n_batched_wrong_single_right": 3,
+      "R_n_single_wrong_batched_right": 1
+     },
+     "missing": null,
+     "rule": "R_n_batched_wrong_single_right - R_n_single_wrong_batched_right >= 3",
+     "sign": "G5-D4"
+    },
+    {
+     "fired": false,
+     "inputs": {
+      "kprobe_verdict": "no chip-specific B=8 precision loss"
+     },
+     "missing": null,
+     "rule": "kprobe_verdict == 'DEFECT'",
+     "sign": "G5-D5"
+    }
+   ],
+   "type": null,
+   "who": "main session (localisation test)"
+  }
+ },
+ "gate_reevaluation": {
+  "applied": {},
+  "g2_rebuild_reproduces_record": {
+   "g2_bf16_forced_branch": true,
+   "g2_bf16_natural_selection": true,
+   "g2_embedding": true,
+   "g2_fp32_forced_branch": true,
+   "g2_fp32_natural_selection": true,
+   "g2_head": true,
+   "g2_real_weight_mutants": true,
+   "g2_router_margin": true,
+   "g2_t9_buckets": true,
+   "g2q_K4": true,
+   "g2q_K8": true
+  },
+  "record": "gate_20261005T050112Z.json",
+  "record_sha256": "e3e01b5cf9114afe4d39de7395a74d47fcb0565ca7d93343d29788d69bf00f0b",
+  "some_package_fits_the_cycle_budget": false,
+  "verdict_with_permitted_changes": {
+   "K4": {
+    "failing": [],
+    "missing": [],
+    "verdict": "PASS"
+   },
+   "K8": {
+    "failing": [
+     "g2_bf16_natural_selection",
+     "g3_bpb_per_text",
+     "g3_bpb_vs_peers",
+     "g4_K8_backstop",
+     "g5_batch_parity_K8"
+    ],
+    "missing": [],
+    "verdict": "FAIL"
+   },
+   "note": "offline re-evaluation of recorded values; not a gate record. A FAIL stays a FAIL; G5-B1 is never a pass"
+  }
+ },
+ "header": {
+  "experiment": "exp_036",
+  "for_the_record": true,
+  "frozen_rules": {
+   "file": "diagnostics/gate1/FROZEN_RULES.md",
+   "sha256": "bd1253a0c83540b3072a5901dbe28db292ace1fea21d5acf770e049392f2afb8"
+  },
+  "gate_record": {
+   "file": "gate_20261005T050112Z.json",
+   "sha256": "e3e01b5cf9114afe4d39de7395a74d47fcb0565ca7d93343d29788d69bf00f0b"
+  },
+  "git": {
+   "dirty": false,
+   "head": "c0f4f3192fbe8a6fae39ed7ff28f5f0f2a92ee89"
+  },
+  "inputs": {
+   "stage0_kernels": {
+    "file": "stage0_kernels_20261005T114802Z.json",
+    "mode": "real",
+    "sha256": "718f114febb7de52d2bce3050b6c13f10c290667822eef62cb96f467c575dd30",
+    "utc": "20261005T114802Z"
+   },
+   "stage1_g5": {
+    "file": "stage1_g5_20261005T114806Z.json",
+    "mode": "real",
+    "sha256": "cc32cda761b7b536a4f9b8a0e002c41a735fca1630662b3eb1ca77c04716e29f",
+    "utc": "20261005T114806Z"
+   },
+   "stage2_g2": {
+    "file": "stage2_g2_20261005T115423Z.json",
+    "mode": "real",
+    "sha256": "b637d07bb8ac900782038463e3d02366ac2658d029ef5b27842868b8164845a8",
+    "utc": "20261005T115423Z"
+   },
+   "stage3_g4": {
+    "file": "stage3_g4_20261005T124342Z.json",
+    "mode": "real",
+    "sha256": "75a5763568661fd302564e367d158e358a6a181e36a4bdd1c0bd5933495f3c18",
+    "utc": "20261005T124342Z"
+   },
+   "stage4_g3": {
+    "file": "stage4_g3_20261005T124345Z.json",
+    "mode": "real",
+    "sha256": "44c803bb9318cc864d246ce24bca5fb72ed3a15fc5426cbd0fa43d0a12a35d4f",
+    "utc": "20261005T124345Z"
+   }
+  },
+  "integrity": {
+   "all_stage_headers_match": true,
+   "dirty_tree_allowed_smoke": false,
+   "frozen_rules_sha256": "bd1253a0c83540b3072a5901dbe28db292ace1fea21d5acf770e049392f2afb8",
+   "gate_record_sha256": "e3e01b5cf9114afe4d39de7395a74d47fcb0565ca7d93343d29788d69bf00f0b",
+   "git_dirty": false,
+   "scripts_sha256": {
+    "diaglib.py": "2897597edb33ce96a1ff29746460007e5fc16229e7bcc83940867926c2b7be08",
+    "kprobe2.py": "88c1ce6bb2fa1b819c5790e5476f9a1cab37cd4b8410fa1ad0206d51c8c61d43",
+    "run_stages.sh": "0abde0cc6b2d7fda08c23c560eaa8540cdb5db2a2273ceedb720f0a24098ce17",
+    "stage0_kernels.py": "b0f29d88ab502270322b6a7a482799058080f6f118900da63d95a46313580b62",
+    "stage1_g5.py": "2d075ecb313dbfa777e490471b4891ce6b0ad15aefd45199816f9c95d4b60c6e",
+    "stage2_g2.py": "82598d3c6e112f07def8e14f3b7ac11ef1d222d730c23dfac34c47297335a9e5",
+    "stage3_g4.py": "1101e20566735f37ba2862151878f9cecef5d728f7d51cd2b2fcab7875fa03bd",
+    "stage4_g3.py": "fbb47569dbbde39a508cb03c3cff51aa999245d860939647a34580d4e8434b6c",
+    "stage5_report.py": "43b8835d1d0bcbe855cf469e3ec6a4321a8c02171afa3eece02d861aba3ad7c4"
+   }
+  },
+  "mode": "real",
+  "script_sha256": "43b8835d1d0bcbe855cf469e3ec6a4321a8c02171afa3eece02d861aba3ad7c4",
+  "smoke": false,
+  "stage": "stage5_report",
+  "utc": "20261005T130616Z",
+  "what": "the frozen mapping applied to the stage outputs; not a gate record, not a verdict"
+ },
+ "package": {
+  "any_fits": false,
+  "checks_standing": [
+   "G5",
+   "G2",
+   "G4",
+   "G3"
+  ],
+  "next_gate_run": "not useful; the route is stop and publish (D8), on Andrei's go",
+  "packages": [],
+  "per_check": {
+   "G2": {
+    "alternatives": [],
+    "outcome": "G2-D",
+    "type": null,
+    "who": "main session (inspection)"
+   },
+   "G3": {
+    "alternatives": [],
+    "outcome": "G3-D",
+    "type": null,
+    "who": null
+   },
+   "G4": {
+    "alternatives": [],
+    "outcome": "G4-D",
+    "type": null,
+    "who": "main session (inspection)"
+   },
+   "G5": {
+    "alternatives": [],
+    "outcome": "G5-D",
+    "type": null,
+    "who": "main session (localisation test)"
+   }
+  },
+  "row": "any check at 'failure stands' with no localised, test-backed fix"
+ },
+ "table": [
+  {
+   "check": "g5_batch_parity_K8",
+   "consequence": "failure stands: not localised by this suite; a gate fix only if a head_dim-128 tiny parity test reproduces the class in bf16 and fp32 (port make_cache / masks under BatchKVCache / BatchRotatingKVCache, runner batch construction, or mlx_lm BatchGenerator)",
+   "outcome": "G5-D",
+   "signs_fired": [
+    "G5-D2"
+   ],
+   "signs_missing": [],
+   "type": null,
+   "who": "main session (localisation test)"
+  },
+  {
+   "check": "g2_bf16_natural_selection",
+   "consequence": "failure stands; inspect. A gate fix in the port's mask or cache only if a tiny G1 boundary test at that position class fails before the fix",
+   "outcome": "G2-D",
+   "signs_fired": [
+    "G2-D1",
+    "G2-D3"
+   ],
+   "signs_missing": [],
+   "type": null,
+   "who": "main session (inspection)"
+  },
+  {
+   "check": "g4_K8_backstop",
+   "consequence": "failure stands; a code question. A gate fix in port/kolibri1.py's long-context path (NoPE layers, cache growth, chunk edges) only if a tiny G1 test at the boundary reproduces it",
+   "outcome": "G4-D",
+   "signs_fired": [
+    "G4-D1",
+    "G4-D2",
+    "G4-D5",
+    "G4-D6"
+   ],
+   "signs_missing": [],
+   "type": null,
+   "who": "main session (inspection)"
+  },
+  {
+   "check": "g3_bpb_per_text + g3_bpb_vs_peers",
+   "consequence": "failure stands: misreading signs; no G3 amendment and no anchor route (D4 withdrawn)",
+   "outcome": "G3-D",
+   "signs_fired": [
+    "G3-D2",
+    "G3-D3"
+   ],
+   "signs_missing": [],
+   "type": null,
+   "who": null
+  }
+ ]
+}
