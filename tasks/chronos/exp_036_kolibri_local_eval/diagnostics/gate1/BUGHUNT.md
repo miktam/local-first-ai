@@ -277,4 +277,15 @@ Some numbers in §1–§3 were printed by their scripts and never written to a f
 - The cause cannot be separated between MLX's kernel selection on the M5, the Metal compiler or driver on macOS 27.0, and the hardware. No M5 on macOS 26 and no M4 on macOS 27 was available.
 - Andrei reported it upstream on 2026-10-05 as [ml-explore/mlx#4632](https://github.com/ml-explore/mlx/issues/4632).
 
+**Resolved, 2026-10-06: fixed upstream before our run.** MLX 0.32.3 was released on 2026-09-29, six days before the gate run. Its notes list "Fix sorted gather_qmm NAX row overflow above 32K" ([ml-explore/mlx#3922](https://github.com/ml-explore/mlx/pull/3922)). NAX is the kernel path MLX uses on the M5's neural accelerators, which is why the M4 Pro never showed the bug.
+
+On the same M5 Max under macOS 27.0, both scripts were re-run with MLX 0.32.3, in a throwaway environment outside the kit:
+- `confirm/out/mlx_repro_m5max_mlx0323_20261006.json` (sha256 `da9923cbaebdd76d…`): every test is clean. The first wave gives 0.0023, the no-padding case 0.0023, and the sweep up to 105,504 rows stays at 0.0023. No flags.
+- `confirm/out/mlx_repro_min_m5max_mlx0323_20261006.json` (sha256 `81cc4f8ea91dd590…`): every row count, including 32,769, 33,000 and 34,000, matches the unsorted path at bf16 level. No bad rows, and every call repeats bitwise.
+
+What follows from this:
+- **The cause.** The cause is in MLX 0.31.2, the version exp_036 pinned, and is neither macOS 27 nor the hardware.
+- **Duplicate report.** #4632 duplicates the fix; Andrei closed it.
+- **The kit's pin.** exp_036 pinned an April release without checking the release notes. The lesson for exp_037 is to check the latest release and its notes before pinning the runtime.
+
 **For exp_037.** Every sorted expert call on the M5 must stay at ≤ 32,768 rows, or be a multiple of 64. Prefilling one prompt at a time, in chunks of 2,048 tokens, keeps Kolibri at ≤ 12,288 rows. A runner guard can enforce the bound.
