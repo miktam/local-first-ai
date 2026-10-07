@@ -1,0 +1,489 @@
+{
+  "again_after": [],
+  "caveats": [
+    "combined is CPU + GPU + ANE only, the 'SoC subsystems' whose power the powermetrics man page says it estimates; it is not the whole SoC and not wall power.",
+    "It is a lower bound of the machine's energy, and a loose one that may be about half of it. For scale only, from a different machine: on the mini (Apple M4 Pro; macmon spot reading, 2026-10-06, MLX GPU load) CPU + GPU power read 28.6 W against a system total of 64.6 W, about 44 %. No factor converts it to the whole SoC or to wall energy here.",
+    "The powermetrics man page: average power values 'are estimated and may be inaccurate' and 'should not be used for any comparison between devices'; this record compares nothing across machines.",
+    "The logger adds a small background load (one root sampler at 1 Hz) to every logged step alike; it is not measured or corrected for.",
+    "Descriptive only: no hypothesis, verdict, gate rule, threshold or plan rule reads this record."
+  ],
+  "command": "/usr/bin/powermetrics --samplers cpu_power,gpu_power,ane_power -i 1000 -f plist",
+  "descriptive": "Descriptive only: no hypothesis, verdict, gate rule, threshold or plan rule reads this record.",
+  "interval_ms_declared": 1000,
+  "label": "CPU + GPU + ANE power (powermetrics combined_power, an estimate); not the whole SoC, not wall power",
+  "method": {
+    "combined": "processor.combined_power (mW): CPU + GPU + ANE, not the whole SoC (memory controllers and fabric, SLC, media and display engines, I/O and DRAM are not in it) and not wall power; cpu + gpu + ane when the key is absent (counted as combined_from_components)",
+    "components": "processor.<c>_power (mW), else processor.<c>_energy (mJ) / elapsed (counted as from_energy); the GPU's also from the gpu dict",
+    "coverage": "union of the sample intervals inside the window / window length",
+    "double_count": "per raw file, excess_s = sum of elapsed - span (first start to last end); about 0 for a clean stream; above 2 % of the span + 2 s (poweravg summaries or duplicates) no record is written",
+    "energy_wh": "sum over samples of power x overlap(sample interval, window), in Wh",
+    "gaps_over_5s": "uncovered stretches inside the window longer than 5 s, window edges included",
+    "long_samples": "documents whose elapsed is over 3 x the file's median (a poweravg summary or a sleep): counted; --check fails on them, a record keeps them",
+    "mean_w": "energy / sampled time inside the window; nothing is extrapolated over gaps",
+    "overlap_s": "sampled_s - covered_s, time counted by more than one sample: a few ms per sample from whole-second timestamps (each sample's energy is still counted once); a raw log whose documents overlap is refused (double_count)",
+    "peak_w": "largest per-sample power among the samples that overlap the window",
+    "sample_interval": "[timestamp - elapsed_ns, timestamp]; elapsed_ns an integer or a real; the timestamp is taken as the end of the sample's interval (plist dates have whole-second resolution)",
+    "sampled_s": "sum of the samples' overlaps with the window; sampled_s <= duration_s is expected",
+    "windows": "t_start / t_end of the run records under results/ (gate and its phases, peer check, preflight --deep, clone-and-refresh, bench cells and their cool-down idle, pilot and its arms, S2/S3/S3b session start/stop pairs), --window, and the whole log; a discovered window that does not overlap the log is left out"
+  },
+  "not_measured": [
+    "the rest of the SoC: the memory controllers and fabric, the system-level cache (SLC), the media and display engines, and I/O",
+    "DRAM (the unified memory itself), which bandwidth-bound decode loads heavily",
+    "wall (AC) power and the power adapter's conversion losses",
+    "battery charging",
+    "the display",
+    "the SSD",
+    "fans and the rest of the board (I/O controllers, USB, Wi-Fi)"
+  ],
+  "raw_files": [
+    {
+      "bytes": 492075781,
+      "combined_from_components": 0,
+      "covered_s": 8608.32,
+      "dir": "$EXP036_WORK/exp037/power",
+      "documents": 8599,
+      "elapsed_sum_s": 8826.163,
+      "excess_s": 0.143,
+      "first_sample_utc": "2026-10-07T11:03:48Z",
+      "from_energy": 0,
+      "interval_ms": {
+        "declared": 1000,
+        "max": 2106.661,
+        "median": 1021.646,
+        "min": 1019.469
+      },
+      "last_sample_utc": "2026-10-07T13:30:55Z",
+      "long_samples": {
+        "max_ms": null,
+        "n": 0
+      },
+      "model_family": "Mac17",
+      "name": "power_20261007T110348Z.plist",
+      "overlap_s": 217.842,
+      "samplers_seen": [
+        "ane_power",
+        "cpu_power",
+        "gpu_power"
+      ],
+      "samples": 8599,
+      "sha256": "c01a7f167a25ac4437308f69635f4c0f790b8c651c54a643ac3d51457c5525b0",
+      "skipped": {
+        "no_power": 0,
+        "no_time": 0,
+        "not_delta": 0
+      },
+      "span_s": 8826.02,
+      "text_bytes_skipped": 0,
+      "truncated_tail": false,
+      "unreadable": 0
+    }
+  ],
+  "raw_policy": "the raw log is never committed or copied into the repository (it carries boot and host fields); only these derived numbers and its sha256 and size",
+  "samplers_declared": [
+    "cpu_power",
+    "gpu_power",
+    "ane_power"
+  ],
+  "schema": "exp037 power v1",
+  "tool_sha256": "349657c8d32395e53b8cd1578263b87dd309193f3127155aaf4ea91bed66b3c4",
+  "utc": "2026-10-07T13:52:04Z",
+  "windows": [
+    {
+      "coverage": 0.9753,
+      "covered_s": 8608.32,
+      "duration_s": 8826.02,
+      "energy_wh": {
+        "ane": 0.003976,
+        "combined": 29.512499,
+        "cpu": 18.285032,
+        "gpu": 11.223491
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "log",
+      "mean_w": {
+        "ane": 0.002,
+        "combined": 12.038,
+        "cpu": 7.458,
+        "gpu": 4.578
+      },
+      "n_samples": 8599,
+      "name": "log",
+      "overlap_s": 217.842,
+      "peak_w": {
+        "ane": 1.337,
+        "combined": 93.939,
+        "cpu": 42.654,
+        "gpu": 92.164
+      },
+      "sampled_s": 8826.163,
+      "source": null,
+      "t_end": "2026-10-07T13:30:55Z",
+      "t_start": "2026-10-07T11:03:48Z"
+    },
+    {
+      "coverage": 0.9792,
+      "covered_s": 6535.014,
+      "duration_s": 6674.0,
+      "energy_wh": {
+        "ane": 0.00313,
+        "combined": 29.402014,
+        "cpu": 18.186826,
+        "gpu": 11.212058
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate",
+      "mean_w": {
+        "ane": 0.002,
+        "combined": 15.859,
+        "cpu": 9.81,
+        "gpu": 6.048
+      },
+      "n_samples": 6530,
+      "name": "gate 20261007T110355Z",
+      "overlap_s": 139.211,
+      "peak_w": {
+        "ane": 0.773,
+        "combined": 93.939,
+        "cpu": 42.654,
+        "gpu": 92.164
+      },
+      "sampled_s": 6674.225,
+      "source": "results/gate/gate_20261007T110355Z.json",
+      "t_end": "2026-10-07T12:55:09Z",
+      "t_start": "2026-10-07T11:03:55Z"
+    },
+    {
+      "coverage": 0.9808,
+      "covered_s": 100.042,
+      "duration_s": 102.0,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 0.513223,
+        "cpu": 0.399942,
+        "gpu": 0.113281
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 18.096,
+        "cpu": 14.102,
+        "gpu": 3.994
+      },
+      "n_samples": 101,
+      "name": "gate 20261007T110355Z phase 0",
+      "overlap_s": 2.058,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 31.632,
+        "cpu": 26.668,
+        "gpu": 17.919
+      },
+      "sampled_s": 102.1,
+      "source": "results/gate/gate_20261007T110355Z.json",
+      "t_end": "2026-10-07T11:05:37Z",
+      "t_start": "2026-10-07T11:03:55Z"
+    },
+    {
+      "coverage": 0.9805,
+      "covered_s": 393.165,
+      "duration_s": 401.0,
+      "energy_wh": {
+        "ane": 0.000518,
+        "combined": 1.457703,
+        "cpu": 1.164977,
+        "gpu": 0.292208
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.005,
+        "combined": 13.078,
+        "cpu": 10.452,
+        "gpu": 2.622
+      },
+      "n_samples": 393,
+      "name": "gate 20261007T110355Z phase 1",
+      "overlap_s": 8.107,
+      "peak_w": {
+        "ane": 0.773,
+        "combined": 70.815,
+        "cpu": 42.654,
+        "gpu": 67.887
+      },
+      "sampled_s": 401.272,
+      "source": "results/gate/gate_20261007T110355Z.json",
+      "t_end": "2026-10-07T11:12:18Z",
+      "t_start": "2026-10-07T11:05:37Z"
+    },
+    {
+      "coverage": 0.979,
+      "covered_s": 868.403,
+      "duration_s": 887.0,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 2.448845,
+        "cpu": 2.439547,
+        "gpu": 0.009299
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 9.944,
+        "cpu": 9.906,
+        "gpu": 0.038
+      },
+      "n_samples": 869,
+      "name": "gate 20261007T110355Z phase 2a",
+      "overlap_s": 18.146,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 24.606,
+        "cpu": 24.512,
+        "gpu": 0.412
+      },
+      "sampled_s": 886.549,
+      "source": "results/gate/gate_20261007T110355Z.json",
+      "t_end": "2026-10-07T11:27:05Z",
+      "t_start": "2026-10-07T11:12:18Z"
+    },
+    {
+      "coverage": 0.9699,
+      "covered_s": 63.043,
+      "duration_s": 65.0,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 0.329382,
+        "cpu": 0.193248,
+        "gpu": 0.136134
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 18.39,
+        "cpu": 10.79,
+        "gpu": 7.601
+      },
+      "n_samples": 64,
+      "name": "gate 20261007T110355Z phase 2b",
+      "overlap_s": 1.435,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 82.229,
+        "cpu": 19.303,
+        "gpu": 76.102
+      },
+      "sampled_s": 64.479,
+      "source": "results/gate/gate_20261007T110355Z.json",
+      "t_end": "2026-10-07T11:28:10Z",
+      "t_start": "2026-10-07T11:27:05Z"
+    },
+    {
+      "coverage": 0.9796,
+      "covered_s": 1316.6,
+      "duration_s": 1344.0,
+      "energy_wh": {
+        "ane": 0.001531,
+        "combined": 4.638647,
+        "cpu": 4.609961,
+        "gpu": 0.027155
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.004,
+        "combined": 12.423,
+        "cpu": 12.346,
+        "gpu": 0.073
+      },
+      "n_samples": 1317,
+      "name": "gate 20261007T110355Z phase 2c",
+      "overlap_s": 27.586,
+      "peak_w": {
+        "ane": 0.772,
+        "combined": 28.402,
+        "cpu": 28.165,
+        "gpu": 1.296
+      },
+      "sampled_s": 1344.186,
+      "source": "results/gate/gate_20261007T110355Z.json",
+      "t_end": "2026-10-07T11:50:34Z",
+      "t_start": "2026-10-07T11:28:10Z"
+    },
+    {
+      "coverage": 0.9797,
+      "covered_s": 898.409,
+      "duration_s": 917.0,
+      "energy_wh": {
+        "ane": 0.000222,
+        "combined": 4.076718,
+        "cpu": 2.329446,
+        "gpu": 1.74705
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.001,
+        "combined": 16.004,
+        "cpu": 9.145,
+        "gpu": 6.859
+      },
+      "n_samples": 899,
+      "name": "gate 20261007T110355Z phase 3",
+      "overlap_s": 18.602,
+      "peak_w": {
+        "ane": 0.773,
+        "combined": 67.719,
+        "cpu": 24.364,
+        "gpu": 64.29
+      },
+      "sampled_s": 917.011,
+      "source": "results/gate/gate_20261007T110355Z.json",
+      "t_end": "2026-10-07T12:05:52Z",
+      "t_start": "2026-10-07T11:50:35Z"
+    },
+    {
+      "coverage": 0.9781,
+      "covered_s": 1704.807,
+      "duration_s": 1743.0,
+      "energy_wh": {
+        "ane": 0.000859,
+        "combined": 10.983748,
+        "cpu": 3.21257,
+        "gpu": 7.770319
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.002,
+        "combined": 22.689,
+        "cpu": 6.636,
+        "gpu": 16.051
+      },
+      "n_samples": 1702,
+      "name": "gate 20261007T110355Z phase 4",
+      "overlap_s": 37.951,
+      "peak_w": {
+        "ane": 0.618,
+        "combined": 93.939,
+        "cpu": 21.214,
+        "gpu": 92.164
+      },
+      "sampled_s": 1742.758,
+      "source": "results/gate/gate_20261007T110355Z.json",
+      "t_end": "2026-10-07T12:34:56Z",
+      "t_start": "2026-10-07T12:05:53Z"
+    },
+    {
+      "coverage": 0.9821,
+      "covered_s": 215.088,
+      "duration_s": 219.0,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 1.466722,
+        "cpu": 0.38184,
+        "gpu": 1.084882
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 24.034,
+        "cpu": 6.257,
+        "gpu": 17.777
+      },
+      "n_samples": 216,
+      "name": "gate 20261007T110355Z phase 5",
+      "overlap_s": 4.605,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 71.994,
+        "cpu": 13.585,
+        "gpu": 66.872
+      },
+      "sampled_s": 219.693,
+      "source": "results/gate/gate_20261007T110355Z.json",
+      "t_end": "2026-10-07T12:38:35Z",
+      "t_start": "2026-10-07T12:34:56Z"
+    },
+    {
+      "coverage": 0.9793,
+      "covered_s": 972.455,
+      "duration_s": 993.0,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 3.477222,
+        "cpu": 3.448502,
+        "gpu": 0.028719
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 12.605,
+        "cpu": 12.501,
+        "gpu": 0.104
+      },
+      "n_samples": 973,
+      "name": "gate 20261007T110355Z phase 6",
+      "overlap_s": 20.66,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 23.878,
+        "cpu": 23.769,
+        "gpu": 0.213
+      },
+      "sampled_s": 993.114,
+      "source": "results/gate/gate_20261007T110355Z.json",
+      "t_end": "2026-10-07T12:55:09Z",
+      "t_start": "2026-10-07T12:38:36Z"
+    }
+  ],
+  "windows_left_out_no_overlap": 3
+}

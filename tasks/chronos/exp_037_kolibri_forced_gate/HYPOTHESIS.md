@@ -1,6 +1,6 @@
 # Experiment 037 — Kolibri through a forced gate: does it fit, how fast, and does its scorecard hold on public rows?
 
-*Pre-registered: 2026-10-07T04:14:29Z · Status: peer check recorded; Session 1 in progress; no scored run*
+*Pre-registered: 2026-10-07T04:14:29Z · Status: gate K4 PASS, K8 FAIL; Session 1 in progress; no scored run*
 
 **Builds on:**
 - **exp_036** (`../exp_036_kolibri_local_eval/`, tree at `222c845`): the question, hypotheses, arms, task sets, plan rules and kit, re-registered here. exp_036's Phase 0 gate failed for K8 (G2, G3, G4 and G5; record `e3e01b5c…`) and it was published as a gate failure with no scored run. On 2026-10-05 Andrei chose to re-register the hypotheses with a gate built from that run's bug hunt (decision D8, below). Nothing from exp_036 is cited as evidence about Kolibri's quality.
@@ -1488,3 +1488,12 @@ Pre-registration commit: 5dfcfecf6070b3649f0d9f48cbd4ad7e0a5a3af4
 - Commit: 44b73940ce2163d3d262949f67568c5532e01cb4 (uncommitted changes: yes)
 - Result files (sha256):
   - `results/peers_20261007T060615Z.json` `a071bc76e5a6d86d011a35c99f866ede3655c8939268d6327278a402cefe6fa7`
+
+## gate — run record (2026-10-07T13:52:06Z)
+
+- Phase: gate
+- UTC: 2026-10-07T13:52:06Z (from the clock)
+- Commit: 8dea1dc934e9c8cf1796e2e59a2b1f16213100ca (uncommitted changes: yes)
+- Result files (sha256):
+  - `results/gate/gate_20261007T110355Z.json` `cb21c2dfa461c0cd17b68f47e9577cca248062bf3a7c6becbbfbd90dc9bdd809`
+- Gate verdict: K4 PASS, K8 FAIL
