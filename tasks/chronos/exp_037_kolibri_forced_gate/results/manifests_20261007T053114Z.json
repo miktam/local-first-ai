@@ -1,0 +1,83 @@
+{
+ "build_manifests_sha256": "1045bd28311308b7e639782cad26a1be1994139ca295db2f9ccd9c37e936aa9b",
+ "checks": {
+  "gpqa_diamond_en_overlong_excluded": 0,
+  "mmlu_prox_full_gold_inconsistent_excluded": {
+   "de": [
+    "3787"
+   ],
+   "en": [
+    "3787"
+   ]
+  }
+ },
+ "counts": {
+  "aime_de": 30,
+  "aime_en": 30,
+  "aime_pilot_en": 4,
+  "gpqa_diamond_de": 198,
+  "gpqa_diamond_en": 198,
+  "gpqa_pilot_de": 8,
+  "gpqa_pilot_en": 8,
+  "ifbench": 300,
+  "ifbench_pilot": 8,
+  "mmlu_prox_c1_en": 100,
+  "mmlu_prox_full_pilot_de": 8,
+  "mmlu_prox_full_pilot_en": 8,
+  "mmlu_prox_lite_de": 588,
+  "mmlu_prox_lite_en": 588,
+  "mmlu_prox_peercheck_en": 30,
+  "rgb_cb": 400,
+  "rgb_fact": 100,
+  "rgb_forced": 400,
+  "rgb_negative": 300,
+  "rgb_pilot_cb": 16,
+  "rgb_pilot_forced": 8
+ },
+ "manifests": {
+  "tasks/manifests/aime_de.json": "f20beb606947311ac038587a1421ca4c59b5df1e421cafb001225dde6dfdc878",
+  "tasks/manifests/aime_en.json": "3ccea6540302f99e6af84c1c1063159cbce66a35babf3d697b80dcad8de52d23",
+  "tasks/manifests/aime_pilot_en.json": "1fd6a8c1d385580462a4c0984dff5fc83313abdd1b412fce34ee8436e8c96ba8",
+  "tasks/manifests/gpqa_diamond_de.json": "06ae2571e8e72c7839a5b73e3f07bb9a0833904ed8dde1a44dab37024fa591bd",
+  "tasks/manifests/gpqa_diamond_en.json": "a7f6d9b8b6eb2c89e12600ac58d183107fd7054ec31359837fcfc8447fcd77a2",
+  "tasks/manifests/gpqa_pilot_de.json": "0a4437840e1002dc1b39f1f571adc05a93e6196c17202d4c9a09762f8dc3afca",
+  "tasks/manifests/gpqa_pilot_en.json": "9e3418c8f4172549aaa160195470dc0d0074e8c7a9d70b2861484cdc381aeb99",
+  "tasks/manifests/ifbench.json": "49bb4349d62e0e62cd5c2e01d60526ba50563b75b74f6894be0aca15df6a68cf",
+  "tasks/manifests/ifbench_pilot.json": "fb2da6a279c3f15e120f278e51b39995a0e565a9bff20939ad1c888c4964b728",
+  "tasks/manifests/mmlu_prox_c1_en.json": "87beb9851cd0ef5ca261332d565c18727d50ef76b71c533a9ed695f25d67a5e2",
+  "tasks/manifests/mmlu_prox_category_counts.json": "fcc593913c88ece00be54e2974ea685bffe77acc2928e9f28a411f0d1b7d0f68",
+  "tasks/manifests/mmlu_prox_full_pilot_de.json": "0e6ac3eb7444e36b1391857957cae90929714a3d37b0dea0a3d8863b7f24cf81",
+  "tasks/manifests/mmlu_prox_full_pilot_en.json": "46e817adb0388f97c23f91d8d74bebcddc7aa4ba8d545bbc07d00611d7e7a610",
+  "tasks/manifests/mmlu_prox_lite_de.json": "00e810ff1d294135d2d49531da1f0b060a2cbba445bf54fbf0cf1e5564d02a65",
+  "tasks/manifests/mmlu_prox_lite_en.json": "4e41b5c57107d95f53333fba94f2285ad3926188db3d40f8250a7c51fca1d905",
+  "tasks/manifests/mmlu_prox_peercheck_en.json": "a52bfaf51bb15f7f774f1310d4247a0fc2f244cbe6ee9c3d6dd19af88a061eed",
+  "tasks/manifests/rgb_cb.json": "aa42c69c3c48fbc4f1b4c98d4d84abe6113aabb3346b4c0173d72c8c831bd48c",
+  "tasks/manifests/rgb_fact.json": "6cc15eb84531ef91baf0f8d757defa80733dce34ee665e943f5bb172a75e54ff",
+  "tasks/manifests/rgb_forced.json": "b1523cf85e41f0f25e4f1e467d255da4e5211d09da097f829ac99aeac71db620",
+  "tasks/manifests/rgb_negative.json": "368dc1e40977389fe15ad31501a4e6f182acf43df8414583378e2e7a4f2810ed",
+  "tasks/manifests/rgb_pilot_cb.json": "015c1c6d1e5df0e1da6870c079b8ba486b47d4ad6c7fac6b9919c3e612ed5e55",
+  "tasks/manifests/rgb_pilot_forced.json": "adaf77749a60cfbc3177acd9ad0fb095cc7ca26cce2562b0b815abd130a24de3"
+ },
+ "private": {
+  "manifests/aime_de.jsonl": "a2d435e03cab0dc5dd2336c93dca659029342fb2bd65b88cf824dd6df1c7570f",
+  "manifests/gpqa_diamond_de.jsonl": "28a4d9a8319432b2c8ae3fc8a6a97829ac3ee6907df0a8513a69453134ebe7e2",
+  "manifests/gpqa_diamond_en.jsonl": "9918ca959a5afb95ebd6391cf8faeae2a0a1ee6f58d7df5bfa6aa7a454861c2a",
+  "manifests/gpqa_pilot_de.jsonl": "8e9df596f0181b9e8e830f85d678d9447b2b3e9eefa0755ef52550d155505c80",
+  "manifests/gpqa_pilot_en.jsonl": "8fed57e0a22f5c94249567b333c61a4525d1d4b002837c2e40707278ccce05db",
+  "manifests/rgb_cb.jsonl": "a3ec3d5d550ec8a86fc4192e383e212bc0adc598a8eaf4a014e3b10ecd6fc23f",
+  "manifests/rgb_fact.jsonl": "b8b9e446ecb6208613e7d5c56f72438fb76ee006aca4f9d9505fe0a316be8a00",
+  "manifests/rgb_forced.jsonl": "5f2ead6cc262b370ff54aa696211aa719c2bbe135ee056dfab8d014b8dd73032",
+  "manifests/rgb_negative.jsonl": "e3cb6b416382fb451341323c6da594d0b6deb2ed2ed02faa949232ac0e8f62a2",
+  "manifests/rgb_pilot_cb.jsonl": "785c76d6729addbb6631cc6ffffc1b48732568c8dd340492761e4fc34a2ea7f0",
+  "manifests/rgb_pilot_forced.jsonl": "1c25cda8b5b815af95947b3b1b137e1f5b282f30fc620eb662f7e37030587b12"
+ },
+ "selection_rules_sha256": "7fc43f2d6fc5cd51a02f82d63cb59300d16e86d3d778142950b82625435ec0b1",
+ "shingles": {
+  "option_strings": 4605,
+  "options": 1527,
+  "prefixes": 62233,
+  "texts": 3103,
+  "tools/withheld_shingles.sha256": "64fdfd35c985490414fcb55ab0471b1a59790f78ccce1b13197b4c16e02b1018"
+ },
+ "ts": "20261007T053114Z"
+}

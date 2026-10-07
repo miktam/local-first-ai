@@ -1,6 +1,6 @@
 # Experiment 037 — Kolibri through a forced gate: does it fit, how fast, and does its scorecard hold on public rows?
 
-*Pre-registered: 2026-10-07T04:14:29Z · Status: signed off; Session 1 in progress; no scored run*
+*Pre-registered: 2026-10-07T04:14:29Z · Status: item manifests built; Session 1 in progress; no scored run*
 
 **Builds on:**
 - **exp_036** (`../exp_036_kolibri_local_eval/`, tree at `222c845`): the question, hypotheses, arms, task sets, plan rules and kit, re-registered here. exp_036's Phase 0 gate failed for K8 (G2, G3, G4 and G5; record `e3e01b5c…`) and it was published as a gate failure with no scored run. On 2026-10-05 Andrei chose to re-register the hypotheses with a gate built from that run's bug hunt (decision D8, below). Nothing from exp_036 is cited as evidence about Kolibri's quality.
@@ -1455,3 +1455,11 @@ Pre-registration commit: 5dfcfecf6070b3649f0d9f48cbd4ad7e0a5a3af4
 - UTC: 2026-10-07T05:30:56Z (from the clock)
 - Commit: 5fb17d07cf9d11fffb1a293d32f82ed903262850 (uncommitted changes: yes)
 - Result files: none
+
+## manifests — run record (2026-10-07T05:31:30Z)
+
+- Phase: manifests
+- UTC: 2026-10-07T05:31:30Z (from the clock)
+- Commit: b06995a38da6a4fd216879fce6c348050e7d3555 (uncommitted changes: yes)
+- Result files (sha256):
+  - `results/manifests_20261007T053114Z.json` `20b4252f7ef614cbbaf05c282c9864a79062846846d2df672662e519ef9fb1f1`
