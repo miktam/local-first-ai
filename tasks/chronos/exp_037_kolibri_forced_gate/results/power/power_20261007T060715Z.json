@@ -1,0 +1,165 @@
+{
+  "again_after": [],
+  "caveats": [
+    "combined is CPU + GPU + ANE only, the 'SoC subsystems' whose power the powermetrics man page says it estimates; it is not the whole SoC and not wall power.",
+    "It is a lower bound of the machine's energy, and a loose one that may be about half of it. For scale only, from a different machine: on the mini (Apple M4 Pro; macmon spot reading, 2026-10-06, MLX GPU load) CPU + GPU power read 28.6 W against a system total of 64.6 W, about 44 %. No factor converts it to the whole SoC or to wall energy here.",
+    "The powermetrics man page: average power values 'are estimated and may be inaccurate' and 'should not be used for any comparison between devices'; this record compares nothing across machines.",
+    "The logger adds a small background load (one root sampler at 1 Hz) to every logged step alike; it is not measured or corrected for.",
+    "Descriptive only: no hypothesis, verdict, gate rule, threshold or plan rule reads this record."
+  ],
+  "command": "/usr/bin/powermetrics --samplers cpu_power,gpu_power,ane_power -i 1000 -f plist",
+  "descriptive": "Descriptive only: no hypothesis, verdict, gate rule, threshold or plan rule reads this record.",
+  "interval_ms_declared": 1000,
+  "label": "CPU + GPU + ANE power (powermetrics combined_power, an estimate); not the whole SoC, not wall power",
+  "method": {
+    "combined": "processor.combined_power (mW): CPU + GPU + ANE, not the whole SoC (memory controllers and fabric, SLC, media and display engines, I/O and DRAM are not in it) and not wall power; cpu + gpu + ane when the key is absent (counted as combined_from_components)",
+    "components": "processor.<c>_power (mW), else processor.<c>_energy (mJ) / elapsed (counted as from_energy); the GPU's also from the gpu dict",
+    "coverage": "union of the sample intervals inside the window / window length",
+    "double_count": "per raw file, excess_s = sum of elapsed - span (first start to last end); about 0 for a clean stream; above 2 % of the span + 2 s (poweravg summaries or duplicates) no record is written",
+    "energy_wh": "sum over samples of power x overlap(sample interval, window), in Wh",
+    "gaps_over_5s": "uncovered stretches inside the window longer than 5 s, window edges included",
+    "long_samples": "documents whose elapsed is over 3 x the file's median (a poweravg summary or a sleep): counted; --check fails on them, a record keeps them",
+    "mean_w": "energy / sampled time inside the window; nothing is extrapolated over gaps",
+    "overlap_s": "sampled_s - covered_s, time counted by more than one sample: a few ms per sample from whole-second timestamps (each sample's energy is still counted once); a raw log whose documents overlap is refused (double_count)",
+    "peak_w": "largest per-sample power among the samples that overlap the window",
+    "sample_interval": "[timestamp - elapsed_ns, timestamp]; elapsed_ns an integer or a real; the timestamp is taken as the end of the sample's interval (plist dates have whole-second resolution)",
+    "sampled_s": "sum of the samples' overlaps with the window; sampled_s <= duration_s is expected",
+    "windows": "t_start / t_end of the run records under results/ (gate and its phases, peer check, preflight --deep, clone-and-refresh, bench cells and their cool-down idle, pilot and its arms, S2/S3/S3b session start/stop pairs), --window, and the whole log; a discovered window that does not overlap the log is left out"
+  },
+  "not_measured": [
+    "the rest of the SoC: the memory controllers and fabric, the system-level cache (SLC), the media and display engines, and I/O",
+    "DRAM (the unified memory itself), which bandwidth-bound decode loads heavily",
+    "wall (AC) power and the power adapter's conversion losses",
+    "battery charging",
+    "the display",
+    "the SSD",
+    "fans and the rest of the board (I/O controllers, USB, Wi-Fi)"
+  ],
+  "raw_files": [
+    {
+      "bytes": 41253312,
+      "combined_from_components": 0,
+      "covered_s": 718.062,
+      "dir": "$EXP036_WORK/exp037/power",
+      "documents": 717,
+      "elapsed_sum_s": 735.299,
+      "excess_s": 0.278,
+      "first_sample_utc": "2026-10-07T05:54:47Z",
+      "from_energy": 0,
+      "interval_ms": {
+        "declared": 1000,
+        "max": 1633.183,
+        "median": 1021.961,
+        "min": 1020.286
+      },
+      "last_sample_utc": "2026-10-07T06:07:03Z",
+      "long_samples": {
+        "max_ms": null,
+        "n": 0
+      },
+      "model_family": "Mac17",
+      "name": "power_20261007T055447Z.plist",
+      "overlap_s": 17.236,
+      "samplers_seen": [
+        "ane_power",
+        "cpu_power",
+        "gpu_power"
+      ],
+      "samples": 717,
+      "sha256": "85ecaf759f2d246b68b4b88e060bf3481092628fd1d5a2dd7933ed9d9b717531",
+      "skipped": {
+        "no_power": 0,
+        "no_time": 0,
+        "not_delta": 0
+      },
+      "span_s": 735.021,
+      "text_bytes_skipped": 0,
+      "truncated_tail": false,
+      "unreadable": 0
+    }
+  ],
+  "raw_policy": "the raw log is never committed or copied into the repository (it carries boot and host fields); only these derived numbers and its sha256 and size",
+  "samplers_declared": [
+    "cpu_power",
+    "gpu_power",
+    "ane_power"
+  ],
+  "schema": "exp037 power v1",
+  "tool_sha256": "349657c8d32395e53b8cd1578263b87dd309193f3127155aaf4ea91bed66b3c4",
+  "utc": "2026-10-07T06:07:15Z",
+  "windows": [
+    {
+      "coverage": 0.9769,
+      "covered_s": 718.062,
+      "duration_s": 735.021,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 4.224984,
+        "cpu": 0.893141,
+        "gpu": 3.331843
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "log",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 20.685,
+        "cpu": 4.373,
+        "gpu": 16.313
+      },
+      "n_samples": 717,
+      "name": "log",
+      "overlap_s": 17.236,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 104.483,
+        "cpu": 17.277,
+        "gpu": 101.892
+      },
+      "sampled_s": 735.299,
+      "source": null,
+      "t_end": "2026-10-07T06:07:03Z",
+      "t_start": "2026-10-07T05:54:47Z"
+    },
+    {
+      "coverage": 0.9774,
+      "covered_s": 648.966,
+      "duration_s": 664.0,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 4.190712,
+        "cpu": 0.863911,
+        "gpu": 3.326801
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "peers",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 22.726,
+        "cpu": 4.685,
+        "gpu": 18.041
+      },
+      "n_samples": 649,
+      "name": "peer check 20261007T060615Z",
+      "overlap_s": 14.87,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 104.483,
+        "cpu": 17.277,
+        "gpu": 101.892
+      },
+      "sampled_s": 663.836,
+      "source": "results/peers_20261007T060615Z.json",
+      "t_end": "2026-10-07T06:06:15Z",
+      "t_start": "2026-10-07T05:55:11Z"
+    }
+  ],
+  "windows_left_out_no_overlap": 2
+}
