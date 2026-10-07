@@ -1,0 +1,274 @@
+{
+ "command": [
+  "$PY",
+  "-m",
+  "pytest",
+  "-q",
+  "-rs",
+  "-p",
+  "no:cacheprovider",
+  "--junitxml=<work>/junit_<k>.xml",
+  "-o",
+  "verbosity_assertions=2",
+  "--basetemp=<basetemp>/g1ctx_<k>",
+  "--ignore=<kit>/tests/test_gate_drivers_tiny.py",
+  "--ignore=<kit>/tests/test_gate_end_to_end_tiny.py",
+  "--ignore=<kit>/tests/test_gate_ftiny.py",
+  "<kit>/tests"
+ ],
+ "complete": true,
+ "earlier_outputs": [],
+ "env": {
+  "MLX_ENABLE_TF32": "0",
+  "architecture": "applegpu_g17s",
+  "hw_model": "Mac17,7",
+  "kern_osversion": "26A428",
+  "macos": "27.0",
+  "mlx": "0.32.3",
+  "mlx-lm": "0.32.0",
+  "mlx-metal": "0.32.3",
+  "numpy": "2.5.3",
+  "pytest": "9.1.1",
+  "python": "3.12.13"
+ },
+ "experiment": "g1ctx",
+ "gate_record_sha256": "cb21c2dfa461c0cd17b68f47e9577cca248062bf3a7c6becbbfbd90dc9bdd809",
+ "gate_run": "20261007T110355Z",
+ "host": "mbp",
+ "kit": {
+  "changed_since_gate_code_commit": [
+   "HYPOTHESIS.md",
+   "diagnostics/g1_resume_20261007/PLAN.md",
+   "diagnostics/g1_resume_20261007/README.md",
+   "diagnostics/g1_resume_20261007/diag_resume.py",
+   "diagnostics/g1_resume_20261007/gate1_junit_failure.txt",
+   "results/gate/20261007T110355Z/phase0.json",
+   "results/gate/20261007T110355Z/phase1.json",
+   "results/gate/20261007T110355Z/phase2a.json",
+   "results/gate/20261007T110355Z/phase2b.json",
+   "results/gate/20261007T110355Z/phase2c.json",
+   "results/gate/20261007T110355Z/phase3.json",
+   "results/gate/20261007T110355Z/phase4.json",
+   "results/gate/20261007T110355Z/phase5.json",
+   "results/gate/20261007T110355Z/phase6.json",
+   "results/gate/20261007T110355Z/run.json",
+   "results/gate/gate_20261007T110355Z.json",
+   "results/gate/gate_20261007T110355Z_layers.csv",
+   "results/gate/gate_20261007T110355Z_mutants.json",
+   "results/power/power_20261007T135204Z.json"
+  ],
+  "choice": {
+   "commit": "d60f3b6ec857b021a540d847a6594ef14a8d554d",
+   "label": "b · diagnostics",
+   "utc": "2026-10-07T14:49:52Z"
+  },
+  "code_hashes": {
+   "gate_code": "1d41328359b9c6af3c58b51894cfd1f38ac028f79c6866cfcf246d293ac8edbf",
+   "port": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182",
+   "reference_tree": "85337ed7efeef6b0463f3560fff6da6496661a2fa7a14de5e50a1bce9e251bbd",
+   "runner_tree": "439590de6a5c7971fc167e8918f9570f142446bd7046e49fac8c38cac8b45d74"
+  },
+  "gate_code_commit": "8dea1dc934e9c8cf1796e2e59a2b1f16213100ca",
+  "hash_tree_check": {
+   "lines": [
+    "match     assets         current 42803f55e14c90c3  registered 42803f55e14c90c3 (pre-registration)",
+    "match     evalfw         current e7ff393392d7e60d  registered e7ff393392d7e60d (pre-registration)",
+    "match     requirements   current 32488f2341102622  registered 32488f2341102622 (pre-registration)",
+    "match     port           current 2c153357862f15b6  registered 2c153357862f15b6 (pre-registration)",
+    "match     convert        current 99dfad12a4dde03d  registered 99dfad12a4dde03d (pre-registration)",
+    "match     reference      current 85337ed7efeef6b0  registered 85337ed7efeef6b0 (pre-registration)",
+    "match     gate           current 1d41328359b9c6af  registered 1d41328359b9c6af (pre-registration)",
+    "match     thresholds     current e27bdc0650a8d072  registered e27bdc0650a8d072 (pre-registration)",
+    "match     gate_rules     current 5e9e1a530496e576  registered 5e9e1a530496e576 (pre-registration)",
+    "match     gate_text      current 1a295dacf20d2855  registered 1a295dacf20d2855 (pre-registration)",
+    "match     runner         current 439590de6a5c7971  registered 439590de6a5c7971 (pre-registration)",
+    "match     tasks          current 306861c155653ddf  registered 306861c155653ddf (pre-registration)",
+    "match     manifest_rule  current 4c3fa6803e74b4a5  registered 4c3fa6803e74b4a5 (pre-registration)",
+    "match     plan_rules     current 2707ea2571cc122b  registered 2707ea2571cc122b (pre-registration)",
+    "match     scorers        current 7d90acdc0b8b7aa4  registered 7d90acdc0b8b7aa4 (pre-registration)",
+    "match     analysis       current 0a40ec19b38c43be  registered 0a40ec19b38c43be (pre-registration)",
+    "match     bench          current 2f923d0b80cb3571  registered 2f923d0b80cb3571 (pre-registration)",
+    "match     tools          current d2e85aa8e3e6c62b  registered d2e85aa8e3e6c62b (pre-registration)",
+    "match     tests          current fee7c32c84fabe4d  registered fee7c32c84fabe4d (pre-registration)",
+    "match     env            current 8d97b3df8207fb8a  registered 8d97b3df8207fb8a (pre-registration)"
+   ],
+   "returncode": 0
+  },
+  "head": "9bdbb5edec6218b1372dafb12e957b4be14779dc",
+  "package": {
+   "clean": true,
+   "commit": "6ba420e2d45769894a698b55a66dd795c275de82",
+   "pushed": true
+  },
+  "uncommitted": [
+   "diagnostics/g1_resume_20261007/out/mbp_cachestate_20261007T171033Z.json",
+   "diagnostics/g1_resume_20261007/out/mbp_isolated_20261007T171043Z.json",
+   "diagnostics/g1_resume_20261007/out/mbp_module_20261007T172211Z.json",
+   "diagnostics/g1_resume_20261007/out/mbp_pair_20261007T172422Z.json"
+  ],
+  "written_against": "1efbadca1c4eaf70f0399950a570069149287e22"
+ },
+ "n": 4,
+ "n_done": 4,
+ "n_registered": 4,
+ "n_valid": 4,
+ "package": "diagnostics/g1_resume_20261007",
+ "package_sha256": {
+  "PLAN.md": "9c774441a0082dc22577a6a1a7696ab2d810d9bd99161976d21f4e175b75f443",
+  "diag_resume.py": "69321c84c1a453960047ffec07deda7d85f11f834a37aacf2535e1c0af1873d9"
+ },
+ "repeat_approved": null,
+ "runs": [
+  {
+   "counts": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 8,
+    "skipped_build_host_only": 8,
+    "tests": 1909
+   },
+   "invalid_reason": null,
+   "junit_sha256": "343bb06c4b4a0fcac226b452cfceab61945150be9ad1be6f6b69225b99036b17",
+   "k": 0,
+   "kind": "equal",
+   "log_sha256": "1571d5c22a0658295f8992ef1da34ecd2c7c49c8bbc87d42b56e07a06fbf8ea9",
+   "other_failures": [],
+   "pair": {
+    "kind": "equal"
+   },
+   "record_dir_candidates": 1,
+   "record_files_found": true,
+   "records_copy": "<work>/g1ctx_20261007T172746Z/records_000",
+   "returncode": 0,
+   "summary_line": "1901 passed, 8 skipped in 374.74s (0:06:14)",
+   "target": {
+    "line": null,
+    "message": null,
+    "outcome": "passed",
+    "teardown_error": false,
+    "text": null,
+    "time_s": 0.373
+   },
+   "valid": true,
+   "wall_s": 375.0
+  },
+  {
+   "counts": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 8,
+    "skipped_build_host_only": 8,
+    "tests": 1909
+   },
+   "invalid_reason": null,
+   "junit_sha256": "42ce8b5283ad073a52452801eb31dead8fd6b8dc732691cddb22de5b50dedaf4",
+   "k": 1,
+   "kind": "equal",
+   "log_sha256": "88fd7e6eab3226a702acf2c558d499a65accd04b8c14f126f7dfb3ef00014237",
+   "other_failures": [],
+   "pair": {
+    "kind": "equal"
+   },
+   "record_dir_candidates": 1,
+   "record_files_found": true,
+   "records_copy": "<work>/g1ctx_20261007T172746Z/records_001",
+   "returncode": 0,
+   "summary_line": "1901 passed, 8 skipped in 376.07s (0:06:16)",
+   "target": {
+    "line": null,
+    "message": null,
+    "outcome": "passed",
+    "teardown_error": false,
+    "text": null,
+    "time_s": 0.379
+   },
+   "valid": true,
+   "wall_s": 376.4
+  },
+  {
+   "counts": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 8,
+    "skipped_build_host_only": 8,
+    "tests": 1909
+   },
+   "invalid_reason": null,
+   "junit_sha256": "17aafbf2f29252ed29da95d37ed681806151a4f3dd3c841a5948687bae9de366",
+   "k": 2,
+   "kind": "equal",
+   "log_sha256": "6d8a69eacc4eac08bf3be15ea9e36a6a40ad1b9fb941f0c9e3113e479afb6edd",
+   "other_failures": [],
+   "pair": {
+    "kind": "equal"
+   },
+   "record_dir_candidates": 1,
+   "record_files_found": true,
+   "records_copy": "<work>/g1ctx_20261007T172746Z/records_002",
+   "returncode": 0,
+   "summary_line": "1901 passed, 8 skipped in 377.11s (0:06:17)",
+   "target": {
+    "line": null,
+    "message": null,
+    "outcome": "passed",
+    "teardown_error": false,
+    "text": null,
+    "time_s": 0.38
+   },
+   "valid": true,
+   "wall_s": 377.4
+  },
+  {
+   "counts": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 8,
+    "skipped_build_host_only": 8,
+    "tests": 1909
+   },
+   "invalid_reason": null,
+   "junit_sha256": "90666e6b997df92294aff567c9ae2aafdbff667382507e3ac54572209868f355",
+   "k": 3,
+   "kind": "equal",
+   "log_sha256": "10d01eb50819f5c3053839470c99b54112f83b1e4fde07d5951700c782a0f317",
+   "other_failures": [],
+   "pair": {
+    "kind": "equal"
+   },
+   "record_dir_candidates": 1,
+   "record_files_found": true,
+   "records_copy": "<work>/g1ctx_20261007T172746Z/records_003",
+   "returncode": 0,
+   "summary_line": "1901 passed, 8 skipped in 434.17s (0:07:14)",
+   "target": {
+    "line": null,
+    "message": null,
+    "outcome": "passed",
+    "teardown_error": false,
+    "text": null,
+    "time_s": 0.377
+   },
+   "valid": true,
+   "wall_s": 434.5
+  }
+ ],
+ "schema": "exp037 g1-resume diagnostics v2",
+ "stub": false,
+ "summary": {
+  "failing_lines": {},
+  "first_reproduction": null,
+  "invalid_reasons": {},
+  "kinds": {
+   "equal": 4
+  },
+  "n_invalid": 0,
+  "n_valid": 4,
+  "other_failing_tests": {},
+  "reproductions": 0
+ },
+ "t_end": "2026-10-07T17:53:50Z",
+ "t_start": "2026-10-07T17:27:46Z",
+ "test": "tests/test_runner_tiny.py::test_resume_after_simulated_crash_gives_identical_records",
+ "utc": "20261007T172746Z",
+ "wall_s": 1563.7
+}
