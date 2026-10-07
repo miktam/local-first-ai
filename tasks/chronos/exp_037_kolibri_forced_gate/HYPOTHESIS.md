@@ -1446,3 +1446,5 @@ The "Signed off by" line must read `Signed off by: Andrei (typed by Andrei on th
 ---
 
 *Experiment design: Andrei + Claude Opus 5.5 · 2026-10-06*
+
+Pre-registration commit: 5dfcfecf6070b3649f0d9f48cbd4ad7e0a5a3af4
