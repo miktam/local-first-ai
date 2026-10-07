@@ -1,0 +1,19 @@
+{
+  "about": "Hand-written synthetic answers (no AIME text): the extracted integer (null if none), whether it equals gold, and the parse status.",
+  "cases": [
+    {"answer": "Adding the parts gives $\\boxed{42}$.", "gold": 42, "extracted": 42, "correct": true, "parse_status": "ok"},
+    {"answer": "Therefore, the final answer is: $\\boxed{042}$. I hope it is correct.", "gold": "42", "extracted": 42, "correct": true, "parse_status": "ok"},
+    {"answer": "First guess \\boxed{7}, corrected to \\boxed{9}.", "gold": 9, "extracted": 9, "correct": true, "parse_status": "ok"},
+    {"answer": "\\boxed{ 17 }", "gold": 17, "extracted": 17, "correct": true, "parse_status": "ok"},
+    {"answer": "\\boxed{42 \\text{ ways}}", "gold": 42, "extracted": 42, "correct": true, "parse_status": "ok"},
+    {"answer": "\\boxed{100}", "gold": 99, "extracted": 100, "correct": false, "parse_status": "ok"},
+    {"answer": "\\boxed{-5}", "gold": 5, "extracted": -5, "correct": false, "parse_status": "ok"},
+    {"answer": "\\boxed{\\frac{1}{2}}", "gold": 1, "extracted": null, "correct": false, "parse_status": "non_integer"},
+    {"answer": "\\boxed{1,000}", "gold": 1000, "extracted": null, "correct": false, "parse_status": "non_integer"},
+    {"answer": "The answer is 42.", "gold": 42, "extracted": null, "correct": false, "parse_status": "no_match"},
+    {"answer": "Final: \\fbox{12}", "gold": 12, "extracted": null, "correct": false, "parse_status": "no_match"},
+    {"answer": "Unbalanced \\boxed{42", "gold": 42, "extracted": null, "correct": false, "parse_status": "no_match"},
+    {"answer": "\\boxed{}", "gold": 0, "extracted": null, "correct": false, "parse_status": "no_match"},
+    {"answer": "   ", "gold": 3, "extracted": null, "correct": false, "parse_status": "empty_answer"}
+  ]
+}

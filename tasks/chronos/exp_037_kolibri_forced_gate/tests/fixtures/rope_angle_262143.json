@@ -1,0 +1,162 @@
+{
+ "schema": "exp037 rope angle v1",
+ "what": "Per-octave maxima of the per-vector relative L2 between port/kolibri1.py VllmRoPE (mx.fast.rope with freqs = 1 / inv_freq) and reference/kolibri_ref.py rope_neox, written by tests/test_port_rope_vllm.py (DESIGN \u00a73.3 G1 item 1).",
+ "definition": {
+  "head_dim": 128,
+  "theta": 10000.0,
+  "heads": 4,
+  "seed": 37,
+  "dtype": "float32",
+  "dense_positions": [
+   0,
+   20479
+  ],
+  "dense_chunk": 2048,
+  "sparse_step": 97,
+  "last_position": 262143,
+  "bound_rel_l2": 1e-06
+ },
+ "runtime": {
+  "mlx": "0.32.3",
+  "numpy": "2.5.3",
+  "gpu_architecture": "applegpu_g16s",
+  "device": "Device(gpu, 0)"
+ },
+ "n_positions": 22972,
+ "max_rel_l2": 1.0557778918436273e-07,
+ "octaves": [
+  {
+   "lo": 0,
+   "hi": 1,
+   "n_positions": 1,
+   "max_rel_l2": 0.0,
+   "argmax_position": 0
+  },
+  {
+   "lo": 1,
+   "hi": 2,
+   "n_positions": 1,
+   "max_rel_l2": 5.761339350628436e-08,
+   "argmax_position": 1
+  },
+  {
+   "lo": 2,
+   "hi": 4,
+   "n_positions": 2,
+   "max_rel_l2": 7.991237477818158e-08,
+   "argmax_position": 2
+  },
+  {
+   "lo": 4,
+   "hi": 8,
+   "n_positions": 4,
+   "max_rel_l2": 8.585285590902948e-08,
+   "argmax_position": 5
+  },
+  {
+   "lo": 8,
+   "hi": 16,
+   "n_positions": 8,
+   "max_rel_l2": 8.006880102480999e-08,
+   "argmax_position": 12
+  },
+  {
+   "lo": 16,
+   "hi": 32,
+   "n_positions": 16,
+   "max_rel_l2": 9.355282398575951e-08,
+   "argmax_position": 31
+  },
+  {
+   "lo": 32,
+   "hi": 64,
+   "n_positions": 32,
+   "max_rel_l2": 8.292307136530807e-08,
+   "argmax_position": 39
+  },
+  {
+   "lo": 64,
+   "hi": 128,
+   "n_positions": 64,
+   "max_rel_l2": 8.545576196091708e-08,
+   "argmax_position": 66
+  },
+  {
+   "lo": 128,
+   "hi": 256,
+   "n_positions": 128,
+   "max_rel_l2": 8.767351960584494e-08,
+   "argmax_position": 172
+  },
+  {
+   "lo": 256,
+   "hi": 512,
+   "n_positions": 256,
+   "max_rel_l2": 1.009648855191099e-07,
+   "argmax_position": 384
+  },
+  {
+   "lo": 512,
+   "hi": 1024,
+   "n_positions": 512,
+   "max_rel_l2": 9.102462339366958e-08,
+   "argmax_position": 765
+  },
+  {
+   "lo": 1024,
+   "hi": 2048,
+   "n_positions": 1024,
+   "max_rel_l2": 9.510153581833705e-08,
+   "argmax_position": 1666
+  },
+  {
+   "lo": 2048,
+   "hi": 4096,
+   "n_positions": 2048,
+   "max_rel_l2": 9.969686946014773e-08,
+   "argmax_position": 3476
+  },
+  {
+   "lo": 4096,
+   "hi": 8192,
+   "n_positions": 4096,
+   "max_rel_l2": 1.0557778918436273e-07,
+   "argmax_position": 6364
+  },
+  {
+   "lo": 8192,
+   "hi": 16384,
+   "n_positions": 8192,
+   "max_rel_l2": 1.0250697167598597e-07,
+   "argmax_position": 14440
+  },
+  {
+   "lo": 16384,
+   "hi": 32768,
+   "n_positions": 4222,
+   "max_rel_l2": 9.32699034588386e-08,
+   "argmax_position": 17681
+  },
+  {
+   "lo": 32768,
+   "hi": 65536,
+   "n_positions": 338,
+   "max_rel_l2": 9.047851123666443e-08,
+   "argmax_position": 63147
+  },
+  {
+   "lo": 65536,
+   "hi": 131072,
+   "n_positions": 676,
+   "max_rel_l2": 8.934134631943533e-08,
+   "argmax_position": 78667
+  },
+  {
+   "lo": 131072,
+   "hi": 262144,
+   "n_positions": 1352,
+   "max_rel_l2": 9.54898056636797e-08,
+   "argmax_position": 173048
+  }
+ ]
+}

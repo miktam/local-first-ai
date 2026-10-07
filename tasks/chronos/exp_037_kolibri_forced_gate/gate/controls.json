@@ -1,0 +1,51 @@
+{
+  "version": "exp037-controls-1",
+  "source": "DESIGN §4.2 (required controls per check, and probes; frozen with GATE_RULES_SHA256); decision (b), 2026-10-06: G5BP/27 replaces G5BP/22 as G5-BP-lean's required control, and 22 is a probe (§4.1)",
+  "caught": "the bound leg fires on the mutant's series, judged with the unmutated run's bounds and calibrators",
+  "margin_factor": 10,
+  "margin_units": {
+    "mean": "the mutant's mean >= margin_factor x the bound",
+    "ratio": "the mutant's ratio >= margin_factor x the factor",
+    "count": ">= margin_factor qualifying (token, layer) pairs or positions",
+    "max": "the maximum >= margin_factor x the threshold"
+  },
+  "registered": {
+    "check": "g2_real_weight_mutants",
+    "mutants": [1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15],
+    "layers": [0, 3, 4, 49],
+    "caught_iff": "each fails some G2 fp32 check (branch error, selection or embedding) on >= 1 of the layers (H36 l.237; exp_036 g2_layers.py l.208-214)",
+    "if_not_caught": "FAIL"
+  },
+  "required": [
+    {"id": "G4F32/1", "check": "g4_f32_K8", "arm": "K8", "precision": "fp32", "mutant": 1, "mutant_name": "sigmoid_bias_select",
+     "leg": "F6", "where": ["T1-8", "T9"], "leg_type": "count",
+     "if_not_caught": "INCOMPLETE", "incomplete_checks": ["g4_f32_K8"]},
+    {"id": "G4F32/6", "check": "g4_f32_K8", "arm": "K8", "precision": "fp32", "mutant": 6, "mutant_name": "renorm_topk",
+     "leg": "F2", "where": ["T1-8", "T9"], "leg_type": "mean",
+     "if_not_caught": "INCOMPLETE", "incomplete_checks": ["g4_f32_K8"]},
+    {"id": "G4F32/19", "check": "g4_f32_K8", "arm": "K8", "precision": "fp32", "mutant": 19, "mutant_name": "rope_restart_per_chunk",
+     "leg": "F2", "where": ["T9", "T9_buckets"], "leg_type": "mean",
+     "if_not_caught": "INCOMPLETE", "incomplete_checks": ["g4_f32_K8"]},
+    {"id": "G4F16/6", "check": "g4_f16_K8", "arm": "K8", "precision": "bf16", "mutant": 6, "mutant_name": "renorm_topk",
+     "leg": "kappa", "where": ["T1-8", "T9"], "leg_type": "ratio",
+     "if_not_caught": "INCOMPLETE", "incomplete_checks": ["g4_f16_K8"]},
+    {"id": "G5D32/20", "check": "g5_d32_K8", "arm": "K8", "precision": "fp32", "mutant": 20, "mutant_name": "decode_window_256",
+     "leg": "decode", "where": ["any range"], "leg_type": {"top1": "count", "mean": "mean", "max": "max"},
+     "if_not_caught": "INCOMPLETE", "incomplete_checks": ["g5_d32_K8"]},
+    {"id": "G5R1/26", "check": "g5_r1_K8", "arm": "K8", "precision": "bf16", "mutant": 26, "mutant_name": "batch_decode_pos_frozen",
+     "leg": "R-parity", "where": ["K8"], "leg_type": "mean",
+     "if_not_caught": "INCOMPLETE", "incomplete_checks": ["g5_r1_K8", "g5_r1_K4"]},
+    {"id": "G5BP/27", "check": "g5_bp_K8_B8", "arm": "K8", "precision": "bf16", "B": 8, "mutant": 27,
+     "mutant_name": "batch_decode_pad_keys_visible",
+     "leg": "d", "where": ["first_wave", "mid_run"], "leg_type": "ratio",
+     "if_not_caught": "allowed_B = {1} for both arms (power not shown); no INCOMPLETE", "incomplete_checks": []}
+  ],
+  "probes": [
+    {"id": "G5BP/22", "check": "g5_bp_K8_B8", "arm": "K8", "precision": "bf16", "B": 8, "mutant": 22,
+     "mutant_name": "batched_rope_positions_in_padded_frame",
+     "leg": "d", "where": ["first_wave", "mid_run"], "leg_type": "ratio", "modes": ["tiny"],
+     "reported": "(d)'s ratio per subset at K8 B = 8, and whether (d) fires; no margin",
+     "enters": "no verdict, no INCOMPLETE and no allowed_B"}
+  ],
+  "negative_controls": []
+}

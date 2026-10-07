@@ -1,0 +1,2396 @@
+{
+  "counts": {
+    "e36_tracked_not_copied": 325,
+    "new": 95,
+    "to_modify": 89,
+    "unchanged": 181
+  },
+  "files": {
+    ".gitignore": {
+      "copy_sha256": "21b66acbd0f7e99f2d6b08b9a4ed882a94d5eacb01ad15357e421e50ef3f9059",
+      "note": "later: '*.plist' added at the pre-freeze housekeeping (raw powermetrics logs are never committed); later results/raw/**/*.steps.jsonl and aborted/*/S*-*.steps.jsonl (decision E, pre-freeze sweep 2026-10-06)",
+      "owner": "W0",
+      "source_sha256": "714dcb131415eb820b1c9d5770f679ff09222ab0e062643aab76114e4ba5cdeb",
+      "status": "to modify",
+      "w0_change": "env/exp036.local.env -> env/*.local.env (exp_037 spec §2.3)"
+    },
+    "ASSETS.md": {
+      "copy_sha256": "3621c72bf2198d892ccc1a0fea27dc6915751921d2e7bf59ddfc1c285081070d",
+      "owner": "W0",
+      "source_sha256": "3621c72bf2198d892ccc1a0fea27dc6915751921d2e7bf59ddfc1c285081070d",
+      "status": "unchanged"
+    },
+    "BUILD_LOG.md": {
+      "copy_sha256": "7449f5c24a8d9fe557479b85605a31b91590674184a0c0c1f6ba1117d0b2ce27",
+      "note": "written by W12 (not a copy of exp_036's file of the same name); Stage 6 by W15-fix; Stage 7, the housekeeping section and the open items by the main session",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "BUILD_SPEC.md": {
+      "copy_sha256": "6c7fc75a90021b9c455da4f8859c435b0d8b5845a15c64b1662c037e9e856b7c",
+      "note": "the delta over exp_036's BUILD_SPEC.md, written by W12 (not a copy); edited since by W15-fix and the pre-freeze housekeeping",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "HYPOTHESIS.md": {
+      "copy_sha256": "88129f8cecf880810cbf9823d02e4907a74a39b235d5fdab31b4ad93068d685c",
+      "note": "the pre-registration, written by W12 (not a copy of exp_036's file of the same name); edited since by W15-fix, PowerLog and the main session (decision rows); the freeze fills its hash table, stamp and sign-off, so this sha256 is pre-freeze",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "LICENSE-APACHE-2.0": {
+      "copy_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "owner": "W0",
+      "source_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "status": "unchanged"
+    },
+    "NOTICE": {
+      "copy_sha256": "2766b65548a6bafb366945fc93f827ea9aaa791ddb7218b191626ad31b49f2af",
+      "owner": "W12",
+      "source_sha256": "2766b65548a6bafb366945fc93f827ea9aaa791ddb7218b191626ad31b49f2af",
+      "status": "to modify"
+    },
+    "README.md": {
+      "copy_sha256": "c670bf916851684904a65b491b7a0dbf47bbe94e966e644b5a2588e1b4e3f242",
+      "note": "written by W12 (not a copy of exp_036's file of the same name); edited since by the pre-freeze housekeeping",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "RUNBOOK.md": {
+      "copy_sha256": "aef37f399b870412b9d2f1555af66c7b3d48eb2133fb7521c081d3d57945420c",
+      "note": "written by W12 (not a copy of exp_036's file of the same name); edited since by W15-fix (step 10) and PowerLog (the power-log steps)",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "aborted/.gitkeep": {
+      "copy_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "note": "empty directory",
+      "owner": "W0",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "amendments/.gitkeep": {
+      "copy_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "note": "empty directory",
+      "owner": "W0",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "analysis/__init__.py": {
+      "copy_sha256": "10a2cb8c3718ecff9da0e3a3e20b7cbae2ef82b4a700c8f4bc9d74dabc830d43",
+      "owner": "W0",
+      "source_sha256": "10a2cb8c3718ecff9da0e3a3e20b7cbae2ef82b4a700c8f4bc9d74dabc830d43",
+      "status": "unchanged"
+    },
+    "analysis/exploratory.py": {
+      "copy_sha256": "7ae9ce263f792929881b9005228f174a7cad6d1b77a2e261b534e0aca6e60cbb",
+      "owner": "W9",
+      "source_sha256": "7ae9ce263f792929881b9005228f174a7cad6d1b77a2e261b534e0aca6e60cbb",
+      "status": "to modify"
+    },
+    "analysis/margins.json": {
+      "copy_sha256": "3a5f9d70e308ae9fd0ad22e260270022adb8ebd3b116c701b26507e0f0984518",
+      "owner": "W9",
+      "source_sha256": "3a5f9d70e308ae9fd0ad22e260270022adb8ebd3b116c701b26507e0f0984518",
+      "status": "to modify"
+    },
+    "analysis/power.py": {
+      "copy_sha256": "074f7c9fb59bd508217dc122ee295f77672ef99ece4f0f3f4874f448c4cd09dc",
+      "owner": "W9",
+      "source_sha256": "074f7c9fb59bd508217dc122ee295f77672ef99ece4f0f3f4874f448c4cd09dc",
+      "status": "to modify"
+    },
+    "analysis/stats.py": {
+      "copy_sha256": "8ff0a27acc06dbb10405dccdae7f953b362e8ff41cadcda329e3231fd956a665",
+      "owner": "W9",
+      "source_sha256": "8ff0a27acc06dbb10405dccdae7f953b362e8ff41cadcda329e3231fd956a665",
+      "status": "to modify"
+    },
+    "analysis/tables.py": {
+      "copy_sha256": "eaddcf1dd542f2f2168c0fdc25f4f88bbc63b672439dc96bc7ff73fea103e9cb",
+      "owner": "W9",
+      "source_sha256": "eaddcf1dd542f2f2168c0fdc25f4f88bbc63b672439dc96bc7ff73fea103e9cb",
+      "status": "to modify"
+    },
+    "analysis/vendor_values.json": {
+      "copy_sha256": "800fc2dda2a1a8249299c47bb082263c445707addb14a19a606ffe1d9153ab7a",
+      "owner": "W0",
+      "source_sha256": "800fc2dda2a1a8249299c47bb082263c445707addb14a19a606ffe1d9153ab7a",
+      "status": "unchanged"
+    },
+    "analysis/verdicts.py": {
+      "copy_sha256": "230dc1ac31415a99490e36a883327d76e2a71c54a16916baf91799f93158b756",
+      "owner": "W9",
+      "source_sha256": "230dc1ac31415a99490e36a883327d76e2a71c54a16916baf91799f93158b756",
+      "status": "to modify"
+    },
+    "assets.json": {
+      "copy_sha256": "42803f55e14c90c3bf7b229010b7aad76ba2135d51e4b0e83bd526fda47ff5a3",
+      "owner": "W0",
+      "source_sha256": "42803f55e14c90c3bf7b229010b7aad76ba2135d51e4b0e83bd526fda47ff5a3",
+      "status": "unchanged"
+    },
+    "bench/__init__.py": {
+      "copy_sha256": "086311a9f701da966d92e728d2f220fc1c78625c0f1f511753d4aaaa4b8a4b5c",
+      "owner": "W0",
+      "source_sha256": "086311a9f701da966d92e728d2f220fc1c78625c0f1f511753d4aaaa4b8a4b5c",
+      "status": "unchanged"
+    },
+    "bench/batch_flip.py": {
+      "copy_sha256": "ae7d83a9123e0084fc92bd5d885a1248b28fd512cd1a90d72de98174b850ad8d",
+      "owner": "W8b",
+      "source_sha256": "ae7d83a9123e0084fc92bd5d885a1248b28fd512cd1a90d72de98174b850ad8d",
+      "status": "to modify"
+    },
+    "bench/common.py": {
+      "copy_sha256": "f69f1a736389159b6837558da3dc2b130a8393974703907ebfece237ce92af90",
+      "owner": "W8b",
+      "source_sha256": "f69f1a736389159b6837558da3dc2b130a8393974703907ebfece237ce92af90",
+      "status": "to modify"
+    },
+    "bench/fit.py": {
+      "copy_sha256": "254d9bc5e2d4ddc5b39315a342febc16a77dae8e3c6e1ab2a26419c416ee150b",
+      "owner": "W0",
+      "source_sha256": "254d9bc5e2d4ddc5b39315a342febc16a77dae8e3c6e1ab2a26419c416ee150b",
+      "status": "unchanged"
+    },
+    "bench/genutil.py": {
+      "copy_sha256": "52462cb1a5914bce447d0366a6eac4071fe6116f184636e49507bfc55632e932",
+      "owner": "W8b",
+      "source_sha256": "52462cb1a5914bce447d0366a6eac4071fe6116f184636e49507bfc55632e932",
+      "status": "to modify"
+    },
+    "bench/kl_8v4.py": {
+      "copy_sha256": "22ef6cdcf84fcbf0c59e456e53596556e51342af432e93832f6cadc7f05d8bc6",
+      "owner": "W8b",
+      "source_sha256": "22ef6cdcf84fcbf0c59e456e53596556e51342af432e93832f6cadc7f05d8bc6",
+      "status": "to modify"
+    },
+    "bench/ladder.py": {
+      "copy_sha256": "aa3aa847884118a446b81ef0f90238d2e6c21da1db6b39b4f9f513dafd6b9b1e",
+      "owner": "W0",
+      "source_sha256": "aa3aa847884118a446b81ef0f90238d2e6c21da1db6b39b4f9f513dafd6b9b1e",
+      "status": "unchanged"
+    },
+    "bench/run_bench.py": {
+      "copy_sha256": "c7289a9c0fb871785ba712d513a6e44b1ec4000123c53743fbfc083565d48728",
+      "owner": "W8b",
+      "source_sha256": "c7289a9c0fb871785ba712d513a6e44b1ec4000123c53743fbfc083565d48728",
+      "status": "to modify"
+    },
+    "bench/speed.py": {
+      "copy_sha256": "e269be5f677bef0a8bf4a248ff1840656ee6d164185452797a8b4c5b9032ee19",
+      "owner": "W8b",
+      "source_sha256": "e269be5f677bef0a8bf4a248ff1840656ee6d164185452797a8b4c5b9032ee19",
+      "status": "to modify"
+    },
+    "bench/tokenizer_ratio.py": {
+      "copy_sha256": "98ef82ffe2691fc8eae387830965e6fffd83aac3c111f6b85dad046f4ab5df8b",
+      "owner": "W0",
+      "source_sha256": "98ef82ffe2691fc8eae387830965e6fffd83aac3c111f6b85dad046f4ab5df8b",
+      "status": "unchanged"
+    },
+    "diagnostics/gemma_quant_check.py": {
+      "copy_sha256": "9393765dbad457e288e2085fc5c439596088947e00b893da3c7748f714e548e9",
+      "note": "copied byte for byte from exp_036 by FixC (decision (c)), after W0, which copied no diagnostics/ file",
+      "owner": "FixC",
+      "source_sha256": "9393765dbad457e288e2085fc5c439596088947e00b893da3c7748f714e548e9",
+      "status": "unchanged"
+    },
+    "diagnostics/tiny_stress/README.md": {
+      "copy_sha256": "07f235b98bba93bd6ab8264f67c59da839544dede8c472664ce2e6ac8fef908f",
+      "note": "the stress records' README; the bf16 record and two corrected sentences added by W15-fix",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/sharpened_seed29/20261006T124326Z/phase0.json": {
+      "copy_sha256": "a0489e5ca94adeaae912953784e1e8ab7a1c438ef82bd15dae696818beca3d73",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/sharpened_seed29/20261006T124326Z/phase1.json": {
+      "copy_sha256": "f9a6ca6ea0ff667e93870377a1b688667c90fea9faea6c8ea79d8df79f9d6eaf",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/sharpened_seed29/20261006T124326Z/phase2a.json": {
+      "copy_sha256": "2dfb324c630bbd92c146bed9991eab7843f8580200795a9fd2fee7511ecf04fa",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/sharpened_seed29/20261006T124326Z/phase2b.json": {
+      "copy_sha256": "9afb771efc43cc2a01c2670ef4b9c8a45ca5925c7ddcfa068a24aad2078864a6",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/sharpened_seed29/20261006T124326Z/phase2c.json": {
+      "copy_sha256": "4a30289670904f5b580ac5c63d604c105998c326772998a90a405e960fc1adf7",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/sharpened_seed29/20261006T124326Z/phase3.json": {
+      "copy_sha256": "54d2e2eedffea40f9ee055048f199a059f48604032b4eefb574a6f3afe976077",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/sharpened_seed29/20261006T124326Z/phase4.json": {
+      "copy_sha256": "5567e82b1779c141b61e754ba8c53df75625751dc87dccc78dfd761c1b79340b",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/sharpened_seed29/20261006T124326Z/phase5.json": {
+      "copy_sha256": "7fa3e7bbd088d9f4772b04b0a2d98e71bccdeb64176b6df2e40d22df080fd47f",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/sharpened_seed29/20261006T124326Z/phase6.json": {
+      "copy_sha256": "c34c3cc7804fbcd3f93d1078d4a43a1bea453d2e6b1bed14f014d1475fe34d42",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/sharpened_seed29/gate_20261006T124326Z.json": {
+      "copy_sha256": "e53158e91e76821ee7460633342655ed15b92d2745eb179339cf3577a6e50548",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/sharpened_seed29/gate_20261006T124326Z_layers.csv": {
+      "copy_sha256": "05859c0301cb4349701a8cdcd59c0e13fae0859d9a5ed4484581ea8a0982f041",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/sharpened_seed29/gate_20261006T124326Z_mutants.json": {
+      "copy_sha256": "a1bd9a7c2b1f4566e39f21cd4e476de8bf46e9cac21b61dac890fb2f3c5dfef5",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29/20261006T124326Z/phase0.json": {
+      "copy_sha256": "58687c2aa81ba699fef84759c1aee384bd6005ca5c08a71c0119b78268bd0d49",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29/20261006T124326Z/phase1.json": {
+      "copy_sha256": "6e16f9b4d88b789deaa2b8f63633804ad4c8511d136f8a4b9e45a6e974631f2e",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29/20261006T124326Z/phase2a.json": {
+      "copy_sha256": "99726405f81155e904b6ec59e4242e5deca4cee7d67c3a97269566e2cf31234f",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29/20261006T124326Z/phase2b.json": {
+      "copy_sha256": "d2b9a0896bedbac50f72abe3909a994926cf29a96d25f1489ac173fa6eeedbb5",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29/20261006T124326Z/phase2c.json": {
+      "copy_sha256": "4733f5a320aabc21e14cd7b4950ac2d4cc232e267c617f49d17cea3f2d2f5980",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29/20261006T124326Z/phase3.json": {
+      "copy_sha256": "6c1f96ff7402cfec87b16d7f27558aeb43a0132b60c53814b6e889454e91e664",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29/20261006T124326Z/phase4.json": {
+      "copy_sha256": "66c300b4003582165bf25eb8c71463404722fae5105672bf0e6309866ea160f0",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29/20261006T124326Z/phase5.json": {
+      "copy_sha256": "3ac59bcf70a977bc734bb91aeb043ebb95a6076ba3fc6ea3097fdca63bcee3e7",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29/20261006T124326Z/phase6.json": {
+      "copy_sha256": "8d457dd5cd35e572f90d8dd53eb51092f19dadd51a6cbf76f5930d7ae027b879",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29/gate_20261006T124326Z.json": {
+      "copy_sha256": "9547697b15ec127bffb0787eca5e54836e827197fc92378eda3b85d61546201c",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29/gate_20261006T124326Z_layers.csv": {
+      "copy_sha256": "f066ce6fe9b213582e71c200b9a07c59d206dd24e57b522ced0276da377cde7a",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29/gate_20261006T124326Z_mutants.json": {
+      "copy_sha256": "f2136240b391d6344761e692272e0f5d94f5b700235d5ee217089b2425edb648",
+      "note": "tiny stress record: whole gate --tiny, quantised_head (W14 item 3)",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29_bf16/20261006T151049Z/phase0.json": {
+      "copy_sha256": "e1af04bff1ecb4d7567aacaf16dc64250484076d9f6b979eb557ad2cb44f0828",
+      "note": "tiny stress record: whole gate --tiny in bf16 on the unsharpened seed-29 build (W15-05)",
+      "owner": "W15-fix",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29_bf16/20261006T151049Z/phase1.json": {
+      "copy_sha256": "fe0c8121258d9a068b789ac539cb5fb6a6922edf8596d3270fe4f7739b2d13da",
+      "note": "tiny stress record: whole gate --tiny in bf16 on the unsharpened seed-29 build (W15-05)",
+      "owner": "W15-fix",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29_bf16/20261006T151049Z/phase2a.json": {
+      "copy_sha256": "bfa3244c08ff31e317338f9b586dbbc101359a9380c11dbbe397ad33dce064bf",
+      "note": "tiny stress record: whole gate --tiny in bf16 on the unsharpened seed-29 build (W15-05)",
+      "owner": "W15-fix",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29_bf16/20261006T151049Z/phase2b.json": {
+      "copy_sha256": "874e7ae63d56509c42a272aca7175df02bd9bb2c4e7922183a7aaca5f2d37083",
+      "note": "tiny stress record: whole gate --tiny in bf16 on the unsharpened seed-29 build (W15-05)",
+      "owner": "W15-fix",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29_bf16/20261006T151049Z/phase2c.json": {
+      "copy_sha256": "bbed1fea0e2c811b9c7ef6c8028740e577e56c4ceafa801d4826a3932793b9f6",
+      "note": "tiny stress record: whole gate --tiny in bf16 on the unsharpened seed-29 build (W15-05)",
+      "owner": "W15-fix",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29_bf16/20261006T151049Z/phase3.json": {
+      "copy_sha256": "c81f83674254c1d3b995a6d162512541a1e7469dc0c01591dbec6a104ac57323",
+      "note": "tiny stress record: whole gate --tiny in bf16 on the unsharpened seed-29 build (W15-05)",
+      "owner": "W15-fix",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29_bf16/20261006T151049Z/phase4.json": {
+      "copy_sha256": "e56f35a513eb95a2c8b0b020340fc6cec6d5f04675f000b65fb46d008b70dc36",
+      "note": "tiny stress record: whole gate --tiny in bf16 on the unsharpened seed-29 build (W15-05)",
+      "owner": "W15-fix",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29_bf16/20261006T151049Z/phase5.json": {
+      "copy_sha256": "7119c5f7eb354cddff3fcb7ec9110b31310418a50605de62c463ed6961b38222",
+      "note": "tiny stress record: whole gate --tiny in bf16 on the unsharpened seed-29 build (W15-05)",
+      "owner": "W15-fix",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29_bf16/20261006T151049Z/phase6.json": {
+      "copy_sha256": "b505645ccd68bf69154c021ba79e9da5a6f2dfac05f8fab49ed1484684cc5320",
+      "note": "tiny stress record: whole gate --tiny in bf16 on the unsharpened seed-29 build (W15-05)",
+      "owner": "W15-fix",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29_bf16/20261006T151049Z/run.json": {
+      "copy_sha256": "16970211468a8eaff14609e592cb22dd5dccb6741791fcb13a04b5acbb28e01a",
+      "note": "tiny stress record: whole gate --tiny in bf16 on the unsharpened seed-29 build (W15-05)",
+      "owner": "W15-fix",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29_bf16/gate_20261006T151049Z.json": {
+      "copy_sha256": "67ce52f050dd7c1f5beeddf3d3a2255d2a8d64c4cadb8ae4f3d6db4f9978d30b",
+      "note": "tiny stress record: whole gate --tiny in bf16 on the unsharpened seed-29 build (W15-05)",
+      "owner": "W15-fix",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29_bf16/gate_20261006T151049Z_layers.csv": {
+      "copy_sha256": "f066ce6fe9b213582e71c200b9a07c59d206dd24e57b522ced0276da377cde7a",
+      "note": "tiny stress record: whole gate --tiny in bf16 on the unsharpened seed-29 build (W15-05)",
+      "owner": "W15-fix",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/tiny_stress/unsharpened_seed29_bf16/gate_20261006T151049Z_mutants.json": {
+      "copy_sha256": "f2136240b391d6344761e692272e0f5d94f5b700235d5ee217089b2425edb648",
+      "note": "tiny stress record: whole gate --tiny in bf16 on the unsharpened seed-29 build (W15-05)",
+      "owner": "W15-fix",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/vendor_spike/README.md": {
+      "copy_sha256": "0dd9ab16b78fb4b0b201b55fbf75f09853ce500077de623c4efaa956e93e8182",
+      "note": "W13's vendor-code spike (scratch), copied into the kit by W12; its README lists the scratch originals",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/vendor_spike/out/arrays_sha256.txt": {
+      "copy_sha256": "b3907685a6112cd72a0453e7ac6018a8477d94f78420d8543619161c4913b9aa",
+      "note": "W13's vendor-code spike (scratch), copied into the kit by W12; its README lists the scratch originals",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/vendor_spike/out/compare_vllmA.json": {
+      "copy_sha256": "f6700c4681f35f2021b29bf691a9340f496f95ecd7ed390b219e223409aa3946",
+      "note": "W13's vendor-code spike (scratch), copied into the kit by W12; its README lists the scratch originals",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/vendor_spike/out/discrimination.json": {
+      "copy_sha256": "edcb94baebea7c914e4477b22b52a4fd47e492c81308495ee5af5d5a704ead9c",
+      "note": "W13's vendor-code spike (scratch), copied into the kit by W12; its README lists the scratch originals",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/vendor_spike/out/inputs_sha256.txt": {
+      "copy_sha256": "38f5f09a2d36350eb773bcffb0ecade1e418a7ba395fa5b8b940e3d172744c12",
+      "note": "W13's vendor-code spike (scratch), copied into the kit by W12; its README lists the scratch originals",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/vendor_spike/out/localise.json": {
+      "copy_sha256": "e7eb98f3b9160ca940097023fe13d7b219a10ff9eaf2c0211a678c96d29fe6e8",
+      "note": "W13's vendor-code spike (scratch), copied into the kit by W12; its README lists the scratch originals",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/vendor_spike/scripts/build_inputs.py": {
+      "copy_sha256": "6b8c0c9ded8357dac50200dc9295a1250a4cc1dfb4ab5d4b407f6f4bffcc8789",
+      "note": "W13's vendor-code spike (scratch), copied into the kit by W12; its README lists the scratch originals",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/vendor_spike/scripts/compare.py": {
+      "copy_sha256": "224d120925505d5d2757e3b4e5a6fb164617be014bb196196ea864f3ea4d9629",
+      "note": "W13's vendor-code spike (scratch), copied into the kit by W12; its README lists the scratch originals",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/vendor_spike/scripts/discrimination.py": {
+      "copy_sha256": "006b1a6c893e6af96f0f2cc8c4ed59b19cfd80c79427f96485da0677c22f8d17",
+      "note": "W13's vendor-code spike (scratch), copied into the kit by W12; its README lists the scratch originals",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/vendor_spike/scripts/localise.py": {
+      "copy_sha256": "340d4cc23e57e6b024ffbfde6c8bd89281e1e35c7578955e9ce1ad9a5fecb630",
+      "note": "W13's vendor-code spike (scratch), copied into the kit by W12; its README lists the scratch originals",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/vendor_spike/scripts/routeA_install.sh": {
+      "copy_sha256": "5ecbaedbdca07825fd048141efde839b11a1e9c51e0f6195e3bd33ed7e8c000c",
+      "note": "W13's vendor-code spike (scratch), copied into the kit by W12; its README lists the scratch originals",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/vendor_spike/scripts/routeA_watchdog.sh": {
+      "copy_sha256": "69c2194ada2f42268ba49aced082d11074d16f804ac1f0ed5035adbd022f1f49",
+      "note": "W13's vendor-code spike (scratch), copied into the kit by W12; its README lists the scratch originals",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/vendor_spike/scripts/run_reference.py": {
+      "copy_sha256": "5799496eef6184dfcc188412c6a54d499618cb849c1b6e1e8309dd5ea37f9986",
+      "note": "W13's vendor-code spike (scratch), copied into the kit by W12; its README lists the scratch originals",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "diagnostics/vendor_spike/scripts/run_vllm_routeA.py": {
+      "copy_sha256": "7c6c4ef2b3d4934e1569294a59ef4033bfb740ac861161552db88e57d0a9bb28",
+      "note": "W13's vendor-code spike (scratch), copied into the kit by W12; its README lists the scratch originals",
+      "owner": "W12",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "env/exp037.settings.sh": {
+      "copy_sha256": "b75f0363d3d1f8c0afc61af3f4eefee621afdc2779a81524fa474a295631ce97",
+      "note": "exp_037 spec §2.7",
+      "owner": "W0",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "env/requirements-mbp.txt": {
+      "copy_sha256": "32488f23411026229ef831ef9ec475fb922d10fd24d6be062ab08f7d4df533e6",
+      "owner": "W0",
+      "source_sha256": "66ad262cdef58c5a5793f70f145322e255a260de6c56d8df3794ac9281fbe73b",
+      "status": "to modify",
+      "w0_change": "the reviewed scratch requirements-exp037.txt (MLX 0.32.3 / mlx-metal 0.32.3 / mlx-lm 0.32.0, every other pin as exp_036's) with line 2 naming $EXP037_VENV (decision F2)"
+    },
+    "env/setup.sh": {
+      "copy_sha256": "f66e1d658ab11964c38d136554664dcdb6d0df28804b1beed87a492ee72ea595",
+      "owner": "W0",
+      "source_sha256": "149cb0e4c9b71aad374b2db931c7905f2aec4a041cb40ffaf60e1a697bb3a447",
+      "status": "to modify",
+      "w0_change": "venv defaults to $EXP037_VENV, never exp_036's venv; messages say exp_037 (exp_037 spec §2.7)"
+    },
+    "env/versions.json": {
+      "copy_sha256": "dfc34805e0b463df76eac6ef57cd1507c52b4562c9a8f0dccf4992ed5e80114a",
+      "owner": "W0",
+      "source_sha256": "2266e397a5d6056760807581afdf1ca5fab7cfdd5938262e059b0ad800ebe75e",
+      "status": "to modify",
+      "w0_change": "exp_036's structure and note; core and pins mirror the new requirements (decision F2)"
+    },
+    "evidence/.gitkeep": {
+      "copy_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "note": "empty directory",
+      "owner": "W0",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "gate/__init__.py": {
+      "copy_sha256": "a6239cd2dd4c1aa5b183e7c7f0f69ac5998f28b40184ba23ae82a6a2141e4b1b",
+      "owner": "W0",
+      "source_sha256": "a6239cd2dd4c1aa5b183e7c7f0f69ac5998f28b40184ba23ae82a6a2141e4b1b",
+      "status": "unchanged"
+    },
+    "gate/behaviour_prompts.json": {
+      "copy_sha256": "bfc3f06c8f0e5380885be90cbe0c98028c9543e8a2a86e2e3a519d3e82796ad1",
+      "owner": "W0",
+      "source_sha256": "bfc3f06c8f0e5380885be90cbe0c98028c9543e8a2a86e2e3a519d3e82796ad1",
+      "status": "unchanged"
+    },
+    "gate/build_gate_text.py": {
+      "copy_sha256": "800a4f220fd3e35a715981c525cf3d89ce4df1c12e1d81ab54ee5a369318f3c4",
+      "owner": "W0",
+      "source_sha256": "800a4f220fd3e35a715981c525cf3d89ce4df1c12e1d81ab54ee5a369318f3c4",
+      "status": "unchanged"
+    },
+    "gate/calibration.json": {
+      "copy_sha256": "234a9745f7ee67086a0d23002f97053344bf035592c1cdaadd36b72f9036513b",
+      "note": "written by gate/checks/ftiny.py --write; last re-written by W15-fix at 15:10:32Z on the final gate code",
+      "owner": "W5d",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "gate/checks/__init__.py": {
+      "copy_sha256": "aec066ec66cea7bcc58f4a0196f8e457378cab9f3718e4865cecf63240b0160f",
+      "owner": "W0",
+      "source_sha256": "aec066ec66cea7bcc58f4a0196f8e457378cab9f3718e4865cecf63240b0160f",
+      "status": "unchanged"
+    },
+    "gate/checks/ftiny.py": {
+      "copy_sha256": "937cecc4b2a93c5d5734eefaa7fe7de5652f2325874f3642b15edaaee0547416",
+      "owner": "W5d",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "gate/checks/g0_static.py": {
+      "copy_sha256": "2fdf1bc22e0b6e78647ad8578c277939b97c464e406396318a40a1787ae18d71",
+      "owner": "W0",
+      "source_sha256": "2fdf1bc22e0b6e78647ad8578c277939b97c464e406396318a40a1787ae18d71",
+      "status": "unchanged"
+    },
+    "gate/checks/g0k_kernels.py": {
+      "copy_sha256": "0009d3aa05899f23e8ff2a6989df7a4a43785499b2e829dc91bb9af68412c6f0",
+      "owner": "W4",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "gate/checks/g1_synthetic.py": {
+      "copy_sha256": "4dbe49e10c596a7f3bc2f6058cadb6e7a37c716399bde993dfbe3e917512f5e3",
+      "owner": "W7",
+      "source_sha256": "4dbe49e10c596a7f3bc2f6058cadb6e7a37c716399bde993dfbe3e917512f5e3",
+      "status": "to modify"
+    },
+    "gate/checks/g2_layers.py": {
+      "copy_sha256": "fde32324de46cf509132c970c203d0ae937529ed401b60ea4ed28c9793eadd4c",
+      "owner": "W5a",
+      "source_sha256": "fde32324de46cf509132c970c203d0ae937529ed401b60ea4ed28c9793eadd4c",
+      "status": "to modify"
+    },
+    "gate/checks/g3_oracle.py": {
+      "copy_sha256": "6c8a4403ca567230913495db2b8568c312987fa97f06f20c38712e1fd7058c99",
+      "owner": "W5a",
+      "source_sha256": "6c8a4403ca567230913495db2b8568c312987fa97f06f20c38712e1fd7058c99",
+      "status": "to modify"
+    },
+    "gate/checks/g4_e2e.py": {
+      "copy_sha256": "b5b2c984e91e0dfaa53e081889604b5d2a030e926aac67a76b0521fcd030a0e6",
+      "owner": "W5b",
+      "source_sha256": "b5b2c984e91e0dfaa53e081889604b5d2a030e926aac67a76b0521fcd030a0e6",
+      "status": "to modify"
+    },
+    "gate/checks/g4_forced.py": {
+      "copy_sha256": "b8a438de16e41f3585a2888cc474058130a8de04b2f20518ab8038e03dd1e775",
+      "owner": "W5b",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "gate/checks/g5_generation.py": {
+      "copy_sha256": "09aca3ed7bb67a94e49ffe47ab4a4c9bdb0bc438c5591559690b2f028d54fbd1",
+      "owner": "W5c",
+      "source_sha256": "09aca3ed7bb67a94e49ffe47ab4a4c9bdb0bc438c5591559690b2f028d54fbd1",
+      "status": "to modify"
+    },
+    "gate/checks/g5_runner.py": {
+      "copy_sha256": "52905d7eba800ec30242d208a32c52fa453f31532e10b4f844904b647f61bc98",
+      "owner": "W5c",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "gate/checks/ref_drivers.py": {
+      "copy_sha256": "89e132b1e8056d956a436afde088f82448fafe1fd352ffd04cb23ffa8cb517ba",
+      "owner": "W3",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "gate/checks/ref_pass.py": {
+      "copy_sha256": "d178c4388a19007b146260a9c895e82fc570225abf0d1c11064ee7a968bc4993",
+      "owner": "W5a",
+      "source_sha256": "d178c4388a19007b146260a9c895e82fc570225abf0d1c11064ee7a968bc4993",
+      "status": "to modify"
+    },
+    "gate/common.py": {
+      "copy_sha256": "159b1bc4ea04942cc7216eb29cab99be465bec46d802fda04f4f137e21c536bc",
+      "owner": "W0c",
+      "source_sha256": "159b1bc4ea04942cc7216eb29cab99be465bec46d802fda04f4f137e21c536bc",
+      "status": "to modify"
+    },
+    "gate/controls.json": {
+      "copy_sha256": "7cd0342efba12abcecf7d908dc25fd3d3baf7e7a25b6253e6e1e74bfec82c7d3",
+      "note": "mutant 27 and the probes block added by FixB (decision (b))",
+      "owner": "W6",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "gate/harness.py": {
+      "copy_sha256": "fcdf48d4d262f66babadbc7b24e7434217236c8c5f150274959085a0b17893ab",
+      "owner": "W3",
+      "source_sha256": "fcdf48d4d262f66babadbc7b24e7434217236c8c5f150274959085a0b17893ab",
+      "status": "to modify"
+    },
+    "gate/port_mutants.py": {
+      "copy_sha256": "2368ce6c67c59b4e64f363cc82d56ba069c968aefe38a056a2ca5dbba8392dd7",
+      "owner": "W2",
+      "source_sha256": "2368ce6c67c59b4e64f363cc82d56ba069c968aefe38a056a2ca5dbba8392dd7",
+      "status": "to modify"
+    },
+    "gate/preconditions.py": {
+      "copy_sha256": "fcbd2b21d4500a54d19b5ba8649eb9343f5b2ae9c673ddca497b405e9ac13d7d",
+      "note": "P1(d)'s orphan and blind-crash refusals and the 20 scopes added by W15-fix",
+      "owner": "W4",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "gate/rules.py": {
+      "copy_sha256": "fe2c99f07626f07dcc5473cd3f05dc35e8a3fbcb095931c0466df5f6a71fd8a4",
+      "owner": "W6",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "gate/run_gate.py": {
+      "copy_sha256": "c48c3f4e68e3aca69937312e3a0189a012a6b2e1f43a43499792f34744ced853",
+      "owner": "W0c, then W7",
+      "source_sha256": "c48c3f4e68e3aca69937312e3a0189a012a6b2e1f43a43499792f34744ced853",
+      "status": "to modify"
+    },
+    "gate/template_cases.json": {
+      "copy_sha256": "c652f92bb69ba7e421b57f6efca4046d53e66f1f5a5639ed20c6d85650e73a69",
+      "owner": "W0",
+      "source_sha256": "c652f92bb69ba7e421b57f6efca4046d53e66f1f5a5639ed20c6d85650e73a69",
+      "status": "unchanged"
+    },
+    "gate/texts/G5_prompts.json": {
+      "copy_sha256": "578d2ef8401e2f420e46afa10796cc70e4116cd6baa387391b31decc29a8ece6",
+      "owner": "W0",
+      "source_sha256": "578d2ef8401e2f420e46afa10796cc70e4116cd6baa387391b31decc29a8ece6",
+      "status": "unchanged"
+    },
+    "gate/texts/MANIFEST.json": {
+      "copy_sha256": "1a295dacf20d285512dcf6db755623e89053ec704abef2bd151682178d91b9e8",
+      "owner": "W0",
+      "source_sha256": "1a295dacf20d285512dcf6db755623e89053ec704abef2bd151682178d91b9e8",
+      "status": "unchanged"
+    },
+    "gate/texts/T1_exp035_post.ids.json": {
+      "copy_sha256": "a0bdbd8a99f5c22b41de0fbc1b68f0e4dac3192b0e7abb5c03727b549315c0a3",
+      "owner": "W0",
+      "source_sha256": "a0bdbd8a99f5c22b41de0fbc1b68f0e4dac3192b0e7abb5c03727b549315c0a3",
+      "status": "unchanged"
+    },
+    "gate/texts/T1_exp035_post.txt": {
+      "copy_sha256": "9fc601081bf27602b7f1b451f070034798c0c8542f09fc21a8303270bec0c3e0",
+      "owner": "W0",
+      "source_sha256": "9fc601081bf27602b7f1b451f070034798c0c8542f09fc21a8303270bec0c3e0",
+      "status": "unchanged"
+    },
+    "gate/texts/T2_malaga_ai_post.ids.json": {
+      "copy_sha256": "e4181663d254f9fb4df52a4e54ee8a0960313e8d8580b7a1342fc236be2a1578",
+      "owner": "W0",
+      "source_sha256": "e4181663d254f9fb4df52a4e54ee8a0960313e8d8580b7a1342fc236be2a1578",
+      "status": "unchanged"
+    },
+    "gate/texts/T2_malaga_ai_post.txt": {
+      "copy_sha256": "1da002ced80d4ae23099f6830ce22543973ef6c0c01aa58875c990f63ad7fefe",
+      "owner": "W0",
+      "source_sha256": "1da002ced80d4ae23099f6830ce22543973ef6c0c01aa58875c990f63ad7fefe",
+      "status": "unchanged"
+    },
+    "gate/texts/T3_de_prose_claude.ids.json": {
+      "copy_sha256": "628a658eafc9253ede245ff41a1881a6880348fe8359072cdd3eacae68b522bd",
+      "owner": "W0",
+      "source_sha256": "628a658eafc9253ede245ff41a1881a6880348fe8359072cdd3eacae68b522bd",
+      "status": "unchanged"
+    },
+    "gate/texts/T3_de_prose_claude.txt": {
+      "copy_sha256": "3d154c6400554b57fb561363f76ac899298d668cb8308f737c17303829b73534",
+      "owner": "W0",
+      "source_sha256": "3d154c6400554b57fb561363f76ac899298d668cb8308f737c17303829b73534",
+      "status": "unchanged"
+    },
+    "gate/texts/T4_grundgesetz_art1_19.ids.json": {
+      "copy_sha256": "3d17e5ace4b675c6e91373c160ac94abebcdb388b19e5533d2050e5684a61689",
+      "owner": "W0",
+      "source_sha256": "3d17e5ace4b675c6e91373c160ac94abebcdb388b19e5533d2050e5684a61689",
+      "status": "unchanged"
+    },
+    "gate/texts/T4_grundgesetz_art1_19.txt": {
+      "copy_sha256": "56b562527fee93ccafc3d5e2e94766f09effc325bdf170146209402c036bca48",
+      "owner": "W0",
+      "source_sha256": "56b562527fee93ccafc3d5e2e94766f09effc325bdf170146209402c036bca48",
+      "status": "unchanged"
+    },
+    "gate/texts/T7_chat_en_high.json": {
+      "copy_sha256": "87f0779796d54751b0cef0d46e9b4bb42d3c1778e33c1b5edf6ca78757eb47e4",
+      "owner": "W0",
+      "source_sha256": "87f0779796d54751b0cef0d46e9b4bb42d3c1778e33c1b5edf6ca78757eb47e4",
+      "status": "unchanged"
+    },
+    "gate/texts/T8_chat_de_none.json": {
+      "copy_sha256": "c795ad94f26d1e8ca717e3d8c73f6eb42a45c40aad051c169bdf21780b400504",
+      "owner": "W0",
+      "source_sha256": "c795ad94f26d1e8ca717e3d8c73f6eb42a45c40aad051c169bdf21780b400504",
+      "status": "unchanged"
+    },
+    "gate/texts/src/SOURCES.json": {
+      "copy_sha256": "e33edaf9bc9a8b7ec21d58406c811beb78ee249406c33607901c6d434ee6fd55",
+      "owner": "W0",
+      "source_sha256": "e33edaf9bc9a8b7ec21d58406c811beb78ee249406c33607901c6d434ee6fd55",
+      "status": "unchanged"
+    },
+    "gate/texts/src/T1_source.txt": {
+      "copy_sha256": "6d36874168b2236b40c9a6d5792ffe2dbb7250728773c4e3ad170169b6159c44",
+      "owner": "W0",
+      "source_sha256": "6d36874168b2236b40c9a6d5792ffe2dbb7250728773c4e3ad170169b6159c44",
+      "status": "unchanged"
+    },
+    "gate/texts/src/T2_source.txt": {
+      "copy_sha256": "df8329de59a9a965eea715d3cb5e9c8d41b3d9c1f1193cce7a9f8f6c9fc2149c",
+      "owner": "W0",
+      "source_sha256": "df8329de59a9a965eea715d3cb5e9c8d41b3d9c1f1193cce7a9f8f6c9fc2149c",
+      "status": "unchanged"
+    },
+    "gate/texts/src/T3_source.txt": {
+      "copy_sha256": "09ba7155c5bb04b701efcb3a4f07ba760d0c3803fa2bb20a0085af264c675bb7",
+      "owner": "W0",
+      "source_sha256": "09ba7155c5bb04b701efcb3a4f07ba760d0c3803fa2bb20a0085af264c675bb7",
+      "status": "unchanged"
+    },
+    "gate/texts/src/T4_source.txt": {
+      "copy_sha256": "75e0b8ea4c84015afd14a5e2d59fa94600274a2d24f2f5180163730d1769c6a5",
+      "owner": "W0",
+      "source_sha256": "75e0b8ea4c84015afd14a5e2d59fa94600274a2d24f2f5180163730d1769c6a5",
+      "status": "unchanged"
+    },
+    "gate/textset.py": {
+      "copy_sha256": "dc013f8324344aeb9f69cc280484cb7d372858918d9c1e121262d94b73d10196",
+      "owner": "W0c, then W7",
+      "source_sha256": "dc013f8324344aeb9f69cc280484cb7d372858918d9c1e121262d94b73d10196",
+      "status": "to modify"
+    },
+    "gate/thresholds.json": {
+      "copy_sha256": "9ff12f6561924e46fa44aa80566c338d0eaf856c048fb35769fae272f7030852",
+      "owner": "W6",
+      "source_sha256": "9ff12f6561924e46fa44aa80566c338d0eaf856c048fb35769fae272f7030852",
+      "status": "to modify"
+    },
+    "gate/tokenizer_lines.py": {
+      "copy_sha256": "2dd2fd34cd05704823a971edba05455e32f3fa41f262913425c8d1d6ff64fb09",
+      "owner": "W0c, then W7",
+      "source_sha256": "2dd2fd34cd05704823a971edba05455e32f3fa41f262913425c8d1d6ff64fb09",
+      "status": "to modify"
+    },
+    "gate/vendor_template.py": {
+      "copy_sha256": "aa4ee9f66df75afdf6bb80c0ad477b8088f2c7402749cbe6e426f7aea34fc930",
+      "owner": "W0",
+      "source_sha256": "aa4ee9f66df75afdf6bb80c0ad477b8088f2c7402749cbe6e426f7aea34fc930",
+      "status": "unchanged"
+    },
+    "host/mbp_preflight_20261003T161330Z.json": {
+      "copy_sha256": "543d1b79e41756b6811968e9ac1bfc45cdaec6c39d4d9946994e6014f15cc585",
+      "owner": "W0",
+      "source_sha256": "543d1b79e41756b6811968e9ac1bfc45cdaec6c39d4d9946994e6014f15cc585",
+      "status": "unchanged"
+    },
+    "host/mbp_preflight_20261003T170152Z.json": {
+      "copy_sha256": "53caeb64ead47da28f5a9554ab299b3818473180c45aab1c8b00c155772c4d92",
+      "owner": "W0",
+      "source_sha256": "53caeb64ead47da28f5a9554ab299b3818473180c45aab1c8b00c155772c4d92",
+      "status": "unchanged"
+    },
+    "host/mbp_preflight_20261003T191025Z.json": {
+      "copy_sha256": "aaf665da1997a16033cacba7f6e9b9f0343475d75a5d1c9921fd45d1900ca286",
+      "owner": "W0",
+      "source_sha256": "aaf665da1997a16033cacba7f6e9b9f0343475d75a5d1c9921fd45d1900ca286",
+      "status": "unchanged"
+    },
+    "port/README.md": {
+      "copy_sha256": "af8d2f81890068198637b32e2338ffc682d8838f85076f0ce6ba04d8490069e8",
+      "owner": "W1",
+      "source_sha256": "af8d2f81890068198637b32e2338ffc682d8838f85076f0ce6ba04d8490069e8",
+      "status": "to modify"
+    },
+    "port/convert.py": {
+      "copy_sha256": "6c16fc4bd66db3efa4b470ba2707d7eee9907cd83b515de90c79b2d2a44c29a2",
+      "owner": "W0b",
+      "source_sha256": "6c16fc4bd66db3efa4b470ba2707d7eee9907cd83b515de90c79b2d2a44c29a2",
+      "status": "to modify"
+    },
+    "port/convert_streaming.py": {
+      "copy_sha256": "be9a72f1fdb8fe950d6982373354ec25218ad72db4429bc6a9d4b583c5cdfb40",
+      "owner": "W0",
+      "source_sha256": "be9a72f1fdb8fe950d6982373354ec25218ad72db4429bc6a9d4b583c5cdfb40",
+      "status": "unchanged"
+    },
+    "port/kolibri1.py": {
+      "copy_sha256": "cd6153b8b00b81f7058e786f33672a07b46c494be0203ad75b04372179dc5584",
+      "owner": "W1",
+      "source_sha256": "cd6153b8b00b81f7058e786f33672a07b46c494be0203ad75b04372179dc5584",
+      "status": "to modify"
+    },
+    "reference/DERIVATION.md": {
+      "copy_sha256": "ad3ba5f7339fc92af3f80dcde8647cd8777d038f420ab2d95fb55475d9c34e14",
+      "owner": "W0",
+      "source_sha256": "ad3ba5f7339fc92af3f80dcde8647cd8777d038f420ab2d95fb55475d9c34e14",
+      "status": "unchanged"
+    },
+    "reference/README.md": {
+      "copy_sha256": "e89c7538783a8cc75e7831eaaf9866b52dcf1548550faa6e221dfd38f5981fae",
+      "owner": "W0",
+      "source_sha256": "e89c7538783a8cc75e7831eaaf9866b52dcf1548550faa6e221dfd38f5981fae",
+      "status": "unchanged"
+    },
+    "reference/__init__.py": {
+      "copy_sha256": "3370978f3e0d73e39fad1c6a0be725de292e347784d547ec1b73979663b1df1a",
+      "owner": "W0",
+      "source_sha256": "3370978f3e0d73e39fad1c6a0be725de292e347784d547ec1b73979663b1df1a",
+      "status": "unchanged"
+    },
+    "reference/kolibri_ref.py": {
+      "copy_sha256": "f621b094d411568321d51d547c19208f718406a31fa02be68717b14c78e88f6f",
+      "owner": "W0",
+      "source_sha256": "f621b094d411568321d51d547c19208f718406a31fa02be68717b14c78e88f6f",
+      "status": "unchanged"
+    },
+    "reference/mlx_affine_np.py": {
+      "copy_sha256": "c6fe955fe78fc82f05cb3e1b857d67ab2baf8cd0b8ae2014867aa2fb2fdc26bd",
+      "owner": "W0",
+      "source_sha256": "c6fe955fe78fc82f05cb3e1b857d67ab2baf8cd0b8ae2014867aa2fb2fdc26bd",
+      "status": "unchanged"
+    },
+    "reference/mutants.py": {
+      "copy_sha256": "92632f4d56144bcedb78717f274c8aaeeb5597a5f2640e2b7b369924c960b748",
+      "owner": "W0",
+      "source_sha256": "92632f4d56144bcedb78717f274c8aaeeb5597a5f2640e2b7b369924c960b748",
+      "status": "unchanged"
+    },
+    "reference/safetensors_np.py": {
+      "copy_sha256": "c11c63fb22c3131ca5d8ef20902c462425591fc8fd44e3733f86679ace5db2f5",
+      "owner": "W0",
+      "source_sha256": "c11c63fb22c3131ca5d8ef20902c462425591fc8fd44e3733f86679ace5db2f5",
+      "status": "unchanged"
+    },
+    "results/README.md": {
+      "copy_sha256": "99c238c5dd4dd1552cf88adf2cb25c10df3fd43cf2d2f70dac57430654dede91",
+      "note": "the inherited manifests record and its sha256",
+      "owner": "W0",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "results/manifests_20261004T131126Z.json": {
+      "copy_sha256": "feebccff446535d3eb55b1390a3a59c34b6bfc5709a5f4cf43d354c7c9085664",
+      "owner": "W0",
+      "source_sha256": "feebccff446535d3eb55b1390a3a59c34b6bfc5709a5f4cf43d354c7c9085664",
+      "status": "unchanged"
+    },
+    "runner/__init__.py": {
+      "copy_sha256": "ab1ae722e4038eef85ba5586965e9292bda2e1f2e7b7c9909ae091cc98265782",
+      "owner": "W0",
+      "source_sha256": "ab1ae722e4038eef85ba5586965e9292bda2e1f2e7b7c9909ae091cc98265782",
+      "status": "unchanged"
+    },
+    "runner/chat.py": {
+      "copy_sha256": "c54470a27dc629a18a0567800ba11a978a0cc15c07d611242255d06a632548da",
+      "owner": "W0",
+      "source_sha256": "c54470a27dc629a18a0567800ba11a978a0cc15c07d611242255d06a632548da",
+      "status": "unchanged"
+    },
+    "runner/common.py": {
+      "copy_sha256": "49946b5b3b09ef04377371211bf428d61a2a490cae04bb25b0fb0a2136bc84a1",
+      "owner": "W8a",
+      "source_sha256": "49946b5b3b09ef04377371211bf428d61a2a490cae04bb25b0fb0a2136bc84a1",
+      "status": "to modify"
+    },
+    "runner/generate.py": {
+      "copy_sha256": "33cb663cc4ac62458ab4da65639bb9d232ad8ca63ac42d10084a9c2a9e86dd89",
+      "owner": "W8a",
+      "source_sha256": "33cb663cc4ac62458ab4da65639bb9d232ad8ca63ac42d10084a9c2a9e86dd89",
+      "status": "to modify"
+    },
+    "runner/guard.py": {
+      "copy_sha256": "bfa49ff2c4b83e7042a70989d059290d17ce38e575ada343b08cc3da02a2eab9",
+      "owner": "W8a",
+      "source_sha256": "bfa49ff2c4b83e7042a70989d059290d17ce38e575ada343b08cc3da02a2eab9",
+      "status": "to modify"
+    },
+    "runner/jsonl.py": {
+      "copy_sha256": "6bd53bae0e130a462fb4f8962892a0c17da6d58fcbe95bafe38a25b10d40c49d",
+      "owner": "W0",
+      "source_sha256": "6bd53bae0e130a462fb4f8962892a0c17da6d58fcbe95bafe38a25b10d40c49d",
+      "status": "unchanged"
+    },
+    "runner/memory.py": {
+      "copy_sha256": "84297c470dc97c5e13a25dff335f3cdf63e0895f1714f88d36e7b671ecf7db6c",
+      "owner": "W0",
+      "source_sha256": "84297c470dc97c5e13a25dff335f3cdf63e0895f1714f88d36e7b671ecf7db6c",
+      "status": "unchanged"
+    },
+    "runner/plan_fix.py": {
+      "copy_sha256": "e6f639d6329e1c157b3c5230050946c88631ceaaaa8cd59dd4c5a4753e3ee1cf",
+      "owner": "W8a",
+      "source_sha256": "e6f639d6329e1c157b3c5230050946c88631ceaaaa8cd59dd4c5a4753e3ee1cf",
+      "status": "to modify"
+    },
+    "runner/plan_rules.json": {
+      "copy_sha256": "2707ea2571cc122b7388f9c9794e3e1130aefdf13c6f844b7de449485bce878c",
+      "owner": "W0",
+      "source_sha256": "2707ea2571cc122b7388f9c9794e3e1130aefdf13c6f844b7de449485bce878c",
+      "status": "unchanged"
+    },
+    "runner/run.py": {
+      "copy_sha256": "3bd0d1eea450a7bd18e34f2983c4457b91efa25a2d64ce85803871d9c34c5fdd",
+      "owner": "W8a",
+      "source_sha256": "3bd0d1eea450a7bd18e34f2983c4457b91efa25a2d64ce85803871d9c34c5fdd",
+      "status": "to modify"
+    },
+    "runner/sampler.py": {
+      "copy_sha256": "a0a762870d4bfdca681f7b091e340cc4558dc4078505fb949d4c2ed08daf3b81",
+      "owner": "W0",
+      "source_sha256": "a0a762870d4bfdca681f7b091e340cc4558dc4078505fb949d4c2ed08daf3b81",
+      "status": "unchanged"
+    },
+    "runner/seeds.py": {
+      "copy_sha256": "7add701734911b59e619ad8e82e0e84c714226b717b989600e18e117d3cf9184",
+      "owner": "W8a",
+      "source_sha256": "7add701734911b59e619ad8e82e0e84c714226b717b989600e18e117d3cf9184",
+      "status": "to modify"
+    },
+    "runner/simulate.py": {
+      "copy_sha256": "9d7f9f29ca7c37ef13299a90783df048daa295188ea5c84bd128f8c09a1e9eab",
+      "owner": "W0",
+      "source_sha256": "9d7f9f29ca7c37ef13299a90783df048daa295188ea5c84bd128f8c09a1e9eab",
+      "status": "unchanged"
+    },
+    "runner/templates/MANIFEST.json": {
+      "copy_sha256": "e271ed86b641c46ec325c0e6087f3512ae0689a736586334cba510eb82da58f2",
+      "owner": "W0",
+      "source_sha256": "e271ed86b641c46ec325c0e6087f3512ae0689a736586334cba510eb82da58f2",
+      "status": "unchanged"
+    },
+    "runner/templates/SOURCE.md": {
+      "copy_sha256": "bf726e3f26f4116eab9af8ec13817495ea3c5bbc0b8dd8d6de50cd1d39f9b457",
+      "owner": "W0",
+      "source_sha256": "bf726e3f26f4116eab9af8ec13817495ea3c5bbc0b8dd8d6de50cd1d39f9b457",
+      "status": "unchanged"
+    },
+    "runner/templates/gemma4.jinja": {
+      "copy_sha256": "36e3a42e5cf14cd0020e72d92e1fdd9970f59b82170e421f0cbe1bb42bead3f0",
+      "owner": "W0",
+      "source_sha256": "36e3a42e5cf14cd0020e72d92e1fdd9970f59b82170e421f0cbe1bb42bead3f0",
+      "status": "unchanged"
+    },
+    "runner/templates/qwen3_6.jinja": {
+      "copy_sha256": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+      "owner": "W0",
+      "source_sha256": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
+      "status": "unchanged"
+    },
+    "runner/templates/qwen3_8.jinja": {
+      "copy_sha256": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "owner": "W0",
+      "source_sha256": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+      "status": "unchanged"
+    },
+    "scorers/__init__.py": {
+      "copy_sha256": "c049eb2003c6933ccf9741700dbad23702999fbf439c7a2de69aa649532c216b",
+      "owner": "W0",
+      "source_sha256": "c049eb2003c6933ccf9741700dbad23702999fbf439c7a2de69aa649532c216b",
+      "status": "unchanged"
+    },
+    "scorers/abstain_lexicon.json": {
+      "copy_sha256": "041923ef1e527c9b38c4f76854c7db9d5f429fd45ac9b9cd3c5eeb9dfdd69c6c",
+      "owner": "W0",
+      "source_sha256": "041923ef1e527c9b38c4f76854c7db9d5f429fd45ac9b9cd3c5eeb9dfdd69c6c",
+      "status": "unchanged"
+    },
+    "scorers/aime.py": {
+      "copy_sha256": "3daad677ca392c8a9bdf369ce9708c610bb48948839bc39ac6c17c29e51afb29",
+      "owner": "W0",
+      "source_sha256": "3daad677ca392c8a9bdf369ce9708c610bb48948839bc39ac6c17c29e51afb29",
+      "status": "unchanged"
+    },
+    "scorers/golden/aime_golden.json": {
+      "copy_sha256": "b20a25843c57a45717d5a6c54dd32ca7b02a1180eaa3d87935dc33a0e68f75d3",
+      "owner": "W0",
+      "source_sha256": "b20a25843c57a45717d5a6c54dd32ca7b02a1180eaa3d87935dc33a0e68f75d3",
+      "status": "unchanged"
+    },
+    "scorers/golden/lang_tag_golden.json": {
+      "copy_sha256": "e710e57493389cd1bd7904b5163d9736e5ac94fd3efdb7acabc644ebb0ef2205",
+      "owner": "W0",
+      "source_sha256": "e710e57493389cd1bd7904b5163d9736e5ac94fd3efdb7acabc644ebb0ef2205",
+      "status": "unchanged"
+    },
+    "scorers/golden/mc_golden.json": {
+      "copy_sha256": "23759e5e5e5ee950acda3a5f6b7c0a03deaa45a00ebe8df8035ab631b0629d8c",
+      "owner": "W0",
+      "source_sha256": "23759e5e5e5ee950acda3a5f6b7c0a03deaa45a00ebe8df8035ab631b0629d8c",
+      "status": "unchanged"
+    },
+    "scorers/golden/reasoning_text_golden.json": {
+      "copy_sha256": "d77d82547e0d12bd2223541331f923f7c9fbc9bc844c808e557864bd10e70dfb",
+      "owner": "W0",
+      "source_sha256": "d77d82547e0d12bd2223541331f923f7c9fbc9bc844c808e557864bd10e70dfb",
+      "status": "unchanged"
+    },
+    "scorers/golden/rgb_golden.json": {
+      "copy_sha256": "95ac2b80e8151081d58aca24d129042681143c11822f18e320776ca37dde6e12",
+      "owner": "W0",
+      "source_sha256": "95ac2b80e8151081d58aca24d129042681143c11822f18e320776ca37dde6e12",
+      "status": "unchanged"
+    },
+    "scorers/ifbench_adapter.py": {
+      "copy_sha256": "f07bc1da3e4b9869b8ae2370baae60fde944bb76e0a7b1a9be9d88c8b4715f2f",
+      "owner": "W0",
+      "source_sha256": "f07bc1da3e4b9869b8ae2370baae60fde944bb76e0a7b1a9be9d88c8b4715f2f",
+      "status": "unchanged"
+    },
+    "scorers/ifbench_driver.py": {
+      "copy_sha256": "73a28adbb3548b07a07f60f4fd29d9ffb31aac4467990ad34d5076b572323ade",
+      "owner": "W0",
+      "source_sha256": "73a28adbb3548b07a07f60f4fd29d9ffb31aac4467990ad34d5076b572323ade",
+      "status": "unchanged"
+    },
+    "scorers/lang_tag.py": {
+      "copy_sha256": "ac984fa9013121eb8b5c0ad20b86b026366824a06f8182da9e423bce57df89d3",
+      "owner": "W0",
+      "source_sha256": "ac984fa9013121eb8b5c0ad20b86b026366824a06f8182da9e423bce57df89d3",
+      "status": "unchanged"
+    },
+    "scorers/mc.py": {
+      "copy_sha256": "28dbc6834c770105dcd5da571dcbcace7bdb1c7f49403825e66ea4a976bddbf6",
+      "owner": "W0",
+      "source_sha256": "28dbc6834c770105dcd5da571dcbcace7bdb1c7f49403825e66ea4a976bddbf6",
+      "status": "unchanged"
+    },
+    "scorers/reasoning.py": {
+      "copy_sha256": "820defab2247d38aa988fbb44f258c1574e6b74555ed87a04b480c724dd704e5",
+      "owner": "W0",
+      "source_sha256": "820defab2247d38aa988fbb44f258c1574e6b74555ed87a04b480c724dd704e5",
+      "status": "unchanged"
+    },
+    "scorers/rgb.py": {
+      "copy_sha256": "6c2b38edd56e956858f59b41c3772064c73bf4f70abe04cb5fcd94100cbfd781",
+      "owner": "W0",
+      "source_sha256": "6c2b38edd56e956858f59b41c3772064c73bf4f70abe04cb5fcd94100cbfd781",
+      "status": "unchanged"
+    },
+    "scorers/score_all.py": {
+      "copy_sha256": "1cd7aff0fe700e2fd649f150685c447da97d05f90b2f610a2da05373956ad2ab",
+      "note": "recorded unchanged by W0; changed afterwards by FixC (decision (c)); status moved at the pre-freeze housekeeping (W15-09)",
+      "owner": "FixC",
+      "source_sha256": "1cd7aff0fe700e2fd649f150685c447da97d05f90b2f610a2da05373956ad2ab",
+      "status": "to modify"
+    },
+    "tasks/__init__.py": {
+      "copy_sha256": "cec0fa46463fbbcfd604d041fee38a4a1a6471447d4af283005deb8ac45eda9e",
+      "owner": "W0",
+      "source_sha256": "cec0fa46463fbbcfd604d041fee38a4a1a6471447d4af283005deb8ac45eda9e",
+      "status": "unchanged"
+    },
+    "tasks/aime.py": {
+      "copy_sha256": "c951b65458f4d5dea687bc6cab4f1966db3026477077cece10a8a2f6951d5296",
+      "owner": "W0",
+      "source_sha256": "c951b65458f4d5dea687bc6cab4f1966db3026477077cece10a8a2f6951d5296",
+      "status": "unchanged"
+    },
+    "tasks/assets.py": {
+      "copy_sha256": "0532b0dd4e3f218f34d36ec60c96a9b167480baa8354e6876e780225cbe246cd",
+      "owner": "W0",
+      "source_sha256": "0532b0dd4e3f218f34d36ec60c96a9b167480baa8354e6876e780225cbe246cd",
+      "status": "unchanged"
+    },
+    "tasks/build_manifests.py": {
+      "copy_sha256": "1045bd28311308b7e639782cad26a1be1994139ca295db2f9ccd9c37e936aa9b",
+      "owner": "W0",
+      "source_sha256": "1045bd28311308b7e639782cad26a1be1994139ca295db2f9ccd9c37e936aa9b",
+      "status": "unchanged"
+    },
+    "tasks/common.py": {
+      "copy_sha256": "9b5e0e290dc19531eba98b3008a3b8abdbd07adfbbb41c682e13468d37257728",
+      "owner": "W0",
+      "source_sha256": "9b5e0e290dc19531eba98b3008a3b8abdbd07adfbbb41c682e13468d37257728",
+      "status": "unchanged"
+    },
+    "tasks/fineweb2.py": {
+      "copy_sha256": "a1bc30c41bac3f4788ea0bfeeb0e54aa3c26c881d6dead001af26a384ea3aa39",
+      "owner": "W0",
+      "source_sha256": "a1bc30c41bac3f4788ea0bfeeb0e54aa3c26c881d6dead001af26a384ea3aa39",
+      "status": "unchanged"
+    },
+    "tasks/gpqa.py": {
+      "copy_sha256": "7ae3de6e42a51028c1f64271565c97cd3efd62499bdbbee2afa5ee3403358b8f",
+      "owner": "W0",
+      "source_sha256": "7ae3de6e42a51028c1f64271565c97cd3efd62499bdbbee2afa5ee3403358b8f",
+      "status": "unchanged"
+    },
+    "tasks/ifbench.py": {
+      "copy_sha256": "aa7a4bf0ae137158905ddfc4e264601f4f97259a5c656986eb5f21933b2a1981",
+      "owner": "W0",
+      "source_sha256": "aa7a4bf0ae137158905ddfc4e264601f4f97259a5c656986eb5f21933b2a1981",
+      "status": "unchanged"
+    },
+    "tasks/manifests/aime_de.json": {
+      "copy_sha256": "f20beb606947311ac038587a1421ca4c59b5df1e421cafb001225dde6dfdc878",
+      "owner": "W0",
+      "source_sha256": "f20beb606947311ac038587a1421ca4c59b5df1e421cafb001225dde6dfdc878",
+      "status": "unchanged"
+    },
+    "tasks/manifests/aime_en.json": {
+      "copy_sha256": "3ccea6540302f99e6af84c1c1063159cbce66a35babf3d697b80dcad8de52d23",
+      "owner": "W0",
+      "source_sha256": "3ccea6540302f99e6af84c1c1063159cbce66a35babf3d697b80dcad8de52d23",
+      "status": "unchanged"
+    },
+    "tasks/manifests/aime_pilot_en.json": {
+      "copy_sha256": "1fd6a8c1d385580462a4c0984dff5fc83313abdd1b412fce34ee8436e8c96ba8",
+      "owner": "W0",
+      "source_sha256": "1fd6a8c1d385580462a4c0984dff5fc83313abdd1b412fce34ee8436e8c96ba8",
+      "status": "unchanged"
+    },
+    "tasks/manifests/gpqa_diamond_de.json": {
+      "copy_sha256": "06ae2571e8e72c7839a5b73e3f07bb9a0833904ed8dde1a44dab37024fa591bd",
+      "owner": "W0",
+      "source_sha256": "06ae2571e8e72c7839a5b73e3f07bb9a0833904ed8dde1a44dab37024fa591bd",
+      "status": "unchanged"
+    },
+    "tasks/manifests/gpqa_diamond_en.json": {
+      "copy_sha256": "a7f6d9b8b6eb2c89e12600ac58d183107fd7054ec31359837fcfc8447fcd77a2",
+      "owner": "W0",
+      "source_sha256": "a7f6d9b8b6eb2c89e12600ac58d183107fd7054ec31359837fcfc8447fcd77a2",
+      "status": "unchanged"
+    },
+    "tasks/manifests/gpqa_pilot_de.json": {
+      "copy_sha256": "0a4437840e1002dc1b39f1f571adc05a93e6196c17202d4c9a09762f8dc3afca",
+      "owner": "W0",
+      "source_sha256": "0a4437840e1002dc1b39f1f571adc05a93e6196c17202d4c9a09762f8dc3afca",
+      "status": "unchanged"
+    },
+    "tasks/manifests/gpqa_pilot_en.json": {
+      "copy_sha256": "9e3418c8f4172549aaa160195470dc0d0074e8c7a9d70b2861484cdc381aeb99",
+      "owner": "W0",
+      "source_sha256": "9e3418c8f4172549aaa160195470dc0d0074e8c7a9d70b2861484cdc381aeb99",
+      "status": "unchanged"
+    },
+    "tasks/manifests/ifbench.json": {
+      "copy_sha256": "49bb4349d62e0e62cd5c2e01d60526ba50563b75b74f6894be0aca15df6a68cf",
+      "owner": "W0",
+      "source_sha256": "49bb4349d62e0e62cd5c2e01d60526ba50563b75b74f6894be0aca15df6a68cf",
+      "status": "unchanged"
+    },
+    "tasks/manifests/ifbench_pilot.json": {
+      "copy_sha256": "fb2da6a279c3f15e120f278e51b39995a0e565a9bff20939ad1c888c4964b728",
+      "owner": "W0",
+      "source_sha256": "fb2da6a279c3f15e120f278e51b39995a0e565a9bff20939ad1c888c4964b728",
+      "status": "unchanged"
+    },
+    "tasks/manifests/mmlu_prox_c1_en.json": {
+      "copy_sha256": "87beb9851cd0ef5ca261332d565c18727d50ef76b71c533a9ed695f25d67a5e2",
+      "owner": "W0",
+      "source_sha256": "87beb9851cd0ef5ca261332d565c18727d50ef76b71c533a9ed695f25d67a5e2",
+      "status": "unchanged"
+    },
+    "tasks/manifests/mmlu_prox_category_counts.json": {
+      "copy_sha256": "fcc593913c88ece00be54e2974ea685bffe77acc2928e9f28a411f0d1b7d0f68",
+      "owner": "W0",
+      "source_sha256": "fcc593913c88ece00be54e2974ea685bffe77acc2928e9f28a411f0d1b7d0f68",
+      "status": "unchanged"
+    },
+    "tasks/manifests/mmlu_prox_full_pilot_de.json": {
+      "copy_sha256": "0e6ac3eb7444e36b1391857957cae90929714a3d37b0dea0a3d8863b7f24cf81",
+      "owner": "W0",
+      "source_sha256": "0e6ac3eb7444e36b1391857957cae90929714a3d37b0dea0a3d8863b7f24cf81",
+      "status": "unchanged"
+    },
+    "tasks/manifests/mmlu_prox_full_pilot_en.json": {
+      "copy_sha256": "46e817adb0388f97c23f91d8d74bebcddc7aa4ba8d545bbc07d00611d7e7a610",
+      "owner": "W0",
+      "source_sha256": "46e817adb0388f97c23f91d8d74bebcddc7aa4ba8d545bbc07d00611d7e7a610",
+      "status": "unchanged"
+    },
+    "tasks/manifests/mmlu_prox_lite_de.json": {
+      "copy_sha256": "00e810ff1d294135d2d49531da1f0b060a2cbba445bf54fbf0cf1e5564d02a65",
+      "owner": "W0",
+      "source_sha256": "00e810ff1d294135d2d49531da1f0b060a2cbba445bf54fbf0cf1e5564d02a65",
+      "status": "unchanged"
+    },
+    "tasks/manifests/mmlu_prox_lite_en.json": {
+      "copy_sha256": "4e41b5c57107d95f53333fba94f2285ad3926188db3d40f8250a7c51fca1d905",
+      "owner": "W0",
+      "source_sha256": "4e41b5c57107d95f53333fba94f2285ad3926188db3d40f8250a7c51fca1d905",
+      "status": "unchanged"
+    },
+    "tasks/manifests/mmlu_prox_peercheck_en.json": {
+      "copy_sha256": "a52bfaf51bb15f7f774f1310d4247a0fc2f244cbe6ee9c3d6dd19af88a061eed",
+      "owner": "W0",
+      "source_sha256": "a52bfaf51bb15f7f774f1310d4247a0fc2f244cbe6ee9c3d6dd19af88a061eed",
+      "status": "unchanged"
+    },
+    "tasks/manifests/rgb_cb.json": {
+      "copy_sha256": "aa42c69c3c48fbc4f1b4c98d4d84abe6113aabb3346b4c0173d72c8c831bd48c",
+      "owner": "W0",
+      "source_sha256": "aa42c69c3c48fbc4f1b4c98d4d84abe6113aabb3346b4c0173d72c8c831bd48c",
+      "status": "unchanged"
+    },
+    "tasks/manifests/rgb_fact.json": {
+      "copy_sha256": "6cc15eb84531ef91baf0f8d757defa80733dce34ee665e943f5bb172a75e54ff",
+      "owner": "W0",
+      "source_sha256": "6cc15eb84531ef91baf0f8d757defa80733dce34ee665e943f5bb172a75e54ff",
+      "status": "unchanged"
+    },
+    "tasks/manifests/rgb_forced.json": {
+      "copy_sha256": "b1523cf85e41f0f25e4f1e467d255da4e5211d09da097f829ac99aeac71db620",
+      "owner": "W0",
+      "source_sha256": "b1523cf85e41f0f25e4f1e467d255da4e5211d09da097f829ac99aeac71db620",
+      "status": "unchanged"
+    },
+    "tasks/manifests/rgb_negative.json": {
+      "copy_sha256": "368dc1e40977389fe15ad31501a4e6f182acf43df8414583378e2e7a4f2810ed",
+      "owner": "W0",
+      "source_sha256": "368dc1e40977389fe15ad31501a4e6f182acf43df8414583378e2e7a4f2810ed",
+      "status": "unchanged"
+    },
+    "tasks/manifests/rgb_pilot_cb.json": {
+      "copy_sha256": "015c1c6d1e5df0e1da6870c079b8ba486b47d4ad6c7fac6b9919c3e612ed5e55",
+      "owner": "W0",
+      "source_sha256": "015c1c6d1e5df0e1da6870c079b8ba486b47d4ad6c7fac6b9919c3e612ed5e55",
+      "status": "unchanged"
+    },
+    "tasks/manifests/rgb_pilot_forced.json": {
+      "copy_sha256": "adaf77749a60cfbc3177acd9ad0fb095cc7ca26cce2562b0b815abd130a24de3",
+      "owner": "W0",
+      "source_sha256": "adaf77749a60cfbc3177acd9ad0fb095cc7ca26cce2562b0b815abd130a24de3",
+      "status": "unchanged"
+    },
+    "tasks/mmlu_prox.py": {
+      "copy_sha256": "da034bc99d2871965c2aa2f517d89c85b761dbc1e9f6c6de6d5a441d26b61f9a",
+      "owner": "W0",
+      "source_sha256": "da034bc99d2871965c2aa2f517d89c85b761dbc1e9f6c6de6d5a441d26b61f9a",
+      "status": "unchanged"
+    },
+    "tasks/prompts/aime_de.txt": {
+      "copy_sha256": "4ae5acc54849b6ddd434b32d4239de5cfdccd974261f82a3908bd1246211d455",
+      "owner": "W0",
+      "source_sha256": "4ae5acc54849b6ddd434b32d4239de5cfdccd974261f82a3908bd1246211d455",
+      "status": "unchanged"
+    },
+    "tasks/prompts/mmlu_prox_de_note.md": {
+      "copy_sha256": "045a075d3d6c78717198db85da3bc5450533e845295bbcbc8da6ff02fd857f3b",
+      "owner": "W0",
+      "source_sha256": "045a075d3d6c78717198db85da3bc5450533e845295bbcbc8da6ff02fd857f3b",
+      "status": "unchanged"
+    },
+    "tasks/prompts/rgb_forced_en.txt": {
+      "copy_sha256": "4a78b41eede101ca8c7ba57f011e3fe192970b63dc37c627f135e4163d89d841",
+      "owner": "W0",
+      "source_sha256": "4a78b41eede101ca8c7ba57f011e3fe192970b63dc37c627f135e4163d89d841",
+      "status": "unchanged"
+    },
+    "tasks/rgb.py": {
+      "copy_sha256": "579c5867fc9b0a482932bfe246e95bafba27e2266b2c89444866b1d94241436d",
+      "owner": "W0",
+      "source_sha256": "579c5867fc9b0a482932bfe246e95bafba27e2266b2c89444866b1d94241436d",
+      "status": "unchanged"
+    },
+    "tasks/selection_rules.json": {
+      "copy_sha256": "7fc43f2d6fc5cd51a02f82d63cb59300d16e86d3d778142950b82625435ec0b1",
+      "owner": "W0",
+      "source_sha256": "7fc43f2d6fc5cd51a02f82d63cb59300d16e86d3d778142950b82625435ec0b1",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/LICENSE": {
+      "copy_sha256": "ce092128ecb62f6f90eb7ab27952bbc69b364b8715f0f1375148c999a3033b6e",
+      "owner": "W0",
+      "source_sha256": "ce092128ecb62f6f90eb7ab27952bbc69b364b8715f0f1375148c999a3033b6e",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/MANIFEST.json": {
+      "copy_sha256": "e7ff393392d7e60d8e2ba81e76a70c12233da01511d8da2bb7de6ea751bde1bb",
+      "owner": "W0",
+      "source_sha256": "e7ff393392d7e60d8e2ba81e76a70c12233da01511d8da2bb7de6ea751bde1bb",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/SOURCE.md": {
+      "copy_sha256": "c72b595a8dd75d3ad8b9eb4dfde90efee7bed76aa9cf604b905ce9fd0d84013d",
+      "owner": "W0",
+      "source_sha256": "c72b595a8dd75d3ad8b9eb4dfde90efee7bed76aa9cf604b905ce9fd0d84013d",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/shim.py": {
+      "copy_sha256": "0637c7c6b46408934b400f25f737c26909d70adc2158e178dfec09ad4e89d948",
+      "owner": "W0",
+      "source_sha256": "0637c7c6b46408934b400f25f737c26909d70adc2158e178dfec09ad4e89d948",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/src/eval_framework/answer.py": {
+      "copy_sha256": "6754b52c520765dc378656cd7972dc9f82de455879c22a74ce56372a41603b93",
+      "owner": "W0",
+      "source_sha256": "6754b52c520765dc378656cd7972dc9f82de455879c22a74ce56372a41603b93",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/src/eval_framework/benchmarks/cot.py": {
+      "copy_sha256": "f8ecb78137838f86d56b4ca37c6264cd0277e120c9e140426abc0e570fc8a0c2",
+      "owner": "W0",
+      "source_sha256": "f8ecb78137838f86d56b4ca37c6264cd0277e120c9e140426abc0e570fc8a0c2",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/src/eval_framework/benchmarks/gpqa.py": {
+      "copy_sha256": "027d5ea874774089df50cc03f798be52d156e8b33a949dec443ff697803555f1",
+      "owner": "W0",
+      "source_sha256": "027d5ea874774089df50cc03f798be52d156e8b33a949dec443ff697803555f1",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/src/eval_framework/benchmarks/gpqa_ellamind.py": {
+      "copy_sha256": "ef5d92ebdd84b59c13c2acefc109652bc6b0fd0fc9a8ed31d20a1964526efbc2",
+      "owner": "W0",
+      "source_sha256": "ef5d92ebdd84b59c13c2acefc109652bc6b0fd0fc9a8ed31d20a1964526efbc2",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/src/eval_framework/benchmarks/math_reasoning.py": {
+      "copy_sha256": "a04b42718c50c5205f8a414c98e47e9ea6e57fa76df676d24100935de5797360",
+      "owner": "W0",
+      "source_sha256": "a04b42718c50c5205f8a414c98e47e9ea6e57fa76df676d24100935de5797360",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/src/eval_framework/benchmarks/mmlu_pro.py": {
+      "copy_sha256": "53327bfc94ab57a953d57acb29e77b9f5c6ed64f3080c7cf4d1b36546f277053",
+      "owner": "W0",
+      "source_sha256": "53327bfc94ab57a953d57acb29e77b9f5c6ed64f3080c7cf4d1b36546f277053",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/src/eval_framework/choices.py": {
+      "copy_sha256": "9db7aeb8b41f7dad605c8533bac199612ef808ffb7f300f4ae09ff904c6b9475",
+      "owner": "W0",
+      "source_sha256": "9db7aeb8b41f7dad605c8533bac199612ef808ffb7f300f4ae09ff904c6b9475",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/src/eval_framework/eval_kind.py": {
+      "copy_sha256": "cd4409c74a84e10b8d07919f21dc752bbe10b24d18cc72ed6d5d344101816663",
+      "owner": "W0",
+      "source_sha256": "cd4409c74a84e10b8d07919f21dc752bbe10b24d18cc72ed6d5d344101816663",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/src/eval_framework/metrics/completion/minerva_math_utils.py": {
+      "copy_sha256": "e17be5e5d9e2eac9450842a126766492f98143264e6bb65f73685a91943cb5f7",
+      "owner": "W0",
+      "source_sha256": "e17be5e5d9e2eac9450842a126766492f98143264e6bb65f73685a91943cb5f7",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/src/eval_framework/tasks/task_style.py": {
+      "copy_sha256": "bcd3b5f7f2953154965f3e215dfad01a9f95692464adaf40b423ea3285b44f30",
+      "owner": "W0",
+      "source_sha256": "bcd3b5f7f2953154965f3e215dfad01a9f95692464adaf40b423ea3285b44f30",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/src/eval_framework/tasks/utils.py": {
+      "copy_sha256": "c742fc5a0a517c8c876e7c4a955da46d2fd31f9caf89c26093ccc620ac2a648c",
+      "owner": "W0",
+      "source_sha256": "c742fc5a0a517c8c876e7c4a955da46d2fd31f9caf89c26093ccc620ac2a648c",
+      "status": "unchanged"
+    },
+    "tasks/vendored_evalfw/vendor.py": {
+      "copy_sha256": "a1321eca974962adfe511fc61dd16e57cf1e86a88fb53073c8bf05ad8604cd67",
+      "owner": "W0",
+      "source_sha256": "a1321eca974962adfe511fc61dd16e57cf1e86a88fb53073c8bf05ad8604cd67",
+      "status": "unchanged"
+    },
+    "tests/INTEGRATION_LOG.md": {
+      "copy_sha256": "245c27700e4426c7614e9404af4c5a9e0a9423f518b63235224b81d44d363799",
+      "owner": "W0",
+      "source_sha256": "245c27700e4426c7614e9404af4c5a9e0a9423f518b63235224b81d44d363799",
+      "status": "unchanged"
+    },
+    "tests/conftest.py": {
+      "copy_sha256": "7d6bd34487e8fb8262582892fbed808f487726ca1db3b0b14b28f6d176873303",
+      "owner": "W0b",
+      "source_sha256": "7d6bd34487e8fb8262582892fbed808f487726ca1db3b0b14b28f6d176873303",
+      "status": "to modify"
+    },
+    "tests/exp036_helpers.py": {
+      "copy_sha256": "7a8755f2909e644240bc786c528b0837e12d919bb1a5cd9245ee601e331255a7",
+      "owner": "W0",
+      "source_sha256": "7a8755f2909e644240bc786c528b0837e12d919bb1a5cd9245ee601e331255a7",
+      "status": "unchanged"
+    },
+    "tests/fixtures/README.md": {
+      "copy_sha256": "19cba28917769d73bdeabbaa947bfb5e59dabe6a8c3cb947701478f501054398",
+      "owner": "W0",
+      "source_sha256": "19cba28917769d73bdeabbaa947bfb5e59dabe6a8c3cb947701478f501054398",
+      "status": "unchanged"
+    },
+    "tests/fixtures/exp037_tiny_controls.json": {
+      "copy_sha256": "f38b511d6306b8c5b638280dc3809d1529f5df2039319162bb44c44d2fe0a4e8",
+      "note": "the tiny control table",
+      "owner": "W14",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/fixtures/kolibri1_chat_template.tokenizer_config.jinja": {
+      "copy_sha256": "9ba35d4bd6baa26b66aa75d03a922dfee98b16bb1fa37481b195d247267b0f97",
+      "owner": "W0",
+      "source_sha256": "9ba35d4bd6baa26b66aa75d03a922dfee98b16bb1fa37481b195d247267b0f97",
+      "status": "unchanged"
+    },
+    "tests/fixtures/kolibri1_chat_template.vendor.jinja": {
+      "copy_sha256": "51b9ae6f83e7a30d428fccc75da306653801be73d4ed936e838667d5de7a6617",
+      "owner": "W0",
+      "source_sha256": "51b9ae6f83e7a30d428fccc75da306653801be73d4ed936e838667d5de7a6617",
+      "status": "unchanged"
+    },
+    "tests/fixtures/rope_angle_262143.json": {
+      "copy_sha256": "25f08dbea203b1bb4c58f815b68ca51332e94fe102297fb9ff36f94084306625",
+      "note": "the RoPE angle fixture, written once on venv312",
+      "owner": "W1",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/port_harness.py": {
+      "copy_sha256": "a42e4e3261fa8b0cad565bcf1e4aef0116b3c21601bdf5e8a8d1f4057bafd3c8",
+      "owner": "W0b",
+      "source_sha256": "a42e4e3261fa8b0cad565bcf1e4aef0116b3c21601bdf5e8a8d1f4057bafd3c8",
+      "status": "to modify"
+    },
+    "tests/tasks_synthetic.py": {
+      "copy_sha256": "b9b3284fb4d2b78d6ff0adb792891857aa83d8317c62c067f302f2c4cb1384af",
+      "owner": "W0",
+      "source_sha256": "b9b3284fb4d2b78d6ff0adb792891857aa83d8317c62c067f302f2c4cb1384af",
+      "status": "unchanged"
+    },
+    "tests/test_analysis_exploratory.py": {
+      "copy_sha256": "310f2d06ee1e3777915b95c3380aaa4bccee93236f51c3f2eafcc8f68ae9b221",
+      "owner": "W0",
+      "source_sha256": "310f2d06ee1e3777915b95c3380aaa4bccee93236f51c3f2eafcc8f68ae9b221",
+      "status": "unchanged"
+    },
+    "tests/test_analysis_power.py": {
+      "copy_sha256": "2bc5a3880b0ff2ff361bc7da179c9a44e1817c5fffe4f62f3702c587cb92efc0",
+      "owner": "W0",
+      "source_sha256": "2bc5a3880b0ff2ff361bc7da179c9a44e1817c5fffe4f62f3702c587cb92efc0",
+      "status": "unchanged"
+    },
+    "tests/test_analysis_stats.py": {
+      "copy_sha256": "c8cd5021cde3216daa0e3eff37492f610cd4234d0597a3213973f6bebbd59b1a",
+      "owner": "W9",
+      "source_sha256": "c8cd5021cde3216daa0e3eff37492f610cd4234d0597a3213973f6bebbd59b1a",
+      "status": "to modify"
+    },
+    "tests/test_analysis_tripwire.py": {
+      "copy_sha256": "b9e73eaccf7c7a5a30f40bd318d14dd4c8ea2df583815cd0a6d7518d598cadef",
+      "owner": "W9",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_analysis_verdicts.py": {
+      "copy_sha256": "10874482e6f13ab50fce26dbe70b6e8d635694bfb444bdc25a377ae97cca94c5",
+      "owner": "W9",
+      "source_sha256": "10874482e6f13ab50fce26dbe70b6e8d635694bfb444bdc25a377ae97cca94c5",
+      "status": "to modify"
+    },
+    "tests/test_analysis_world.py": {
+      "copy_sha256": "6785012cebd7feacfe6de3807c9cf33a8f331ba2cbbffcc52f2ffc9b3a9c1b65",
+      "owner": "W0",
+      "source_sha256": "6785012cebd7feacfe6de3807c9cf33a8f331ba2cbbffcc52f2ffc9b3a9c1b65",
+      "status": "unchanged"
+    },
+    "tests/test_bench_batch_flip.py": {
+      "copy_sha256": "86f611b7909310bdd30f18b9976b7ea2dc0fb0247230c8dc23e9c120ea902b7e",
+      "owner": "W8b",
+      "source_sha256": "86f611b7909310bdd30f18b9976b7ea2dc0fb0247230c8dc23e9c120ea902b7e",
+      "status": "to modify"
+    },
+    "tests/test_bench_common.py": {
+      "copy_sha256": "3d196914a6070a73741ac1e4ca3597cc1ded9852ed05a877afad5a4b4ff5701c",
+      "owner": "W8b",
+      "source_sha256": "3d196914a6070a73741ac1e4ca3597cc1ded9852ed05a877afad5a4b4ff5701c",
+      "status": "to modify"
+    },
+    "tests/test_bench_fit_ladder.py": {
+      "copy_sha256": "6cc8a2273e966fcef426a353316aa582909a128b7b4edb7a1514818ca843bfbe",
+      "owner": "W8b",
+      "source_sha256": "6cc8a2273e966fcef426a353316aa582909a128b7b4edb7a1514818ca843bfbe",
+      "status": "to modify"
+    },
+    "tests/test_bench_kl.py": {
+      "copy_sha256": "246b228188870075f2af0c451db0696ca3ea5e910dadb49b44119dad75ed9f99",
+      "owner": "W8b",
+      "source_sha256": "246b228188870075f2af0c451db0696ca3ea5e910dadb49b44119dad75ed9f99",
+      "status": "to modify"
+    },
+    "tests/test_bench_run_bench.py": {
+      "copy_sha256": "ae0e475127580ba1ae59b971f656492166b177b25b6226668b909d5336610902",
+      "owner": "W8b",
+      "source_sha256": "ae0e475127580ba1ae59b971f656492166b177b25b6226668b909d5336610902",
+      "status": "to modify"
+    },
+    "tests/test_bench_speed.py": {
+      "copy_sha256": "5cb0d61bd5616e50978a58e4720b87be7655eb6952075b640c01ec1addd22f06",
+      "owner": "W8b",
+      "source_sha256": "5cb0d61bd5616e50978a58e4720b87be7655eb6952075b640c01ec1addd22f06",
+      "status": "to modify"
+    },
+    "tests/test_bench_support.py": {
+      "copy_sha256": "9d1dd3eb5475ec5d6940416b7ae358b6e16064bce75a491f6e6fda0236b6dae6",
+      "owner": "W8b",
+      "source_sha256": "9d1dd3eb5475ec5d6940416b7ae358b6e16064bce75a491f6e6fda0236b6dae6",
+      "status": "to modify"
+    },
+    "tests/test_bench_tokenizer_ratio.py": {
+      "copy_sha256": "ef70d8405beecbe3e8f028db59802127c7ac332929466742cb8dfd6d0e59aaaf",
+      "owner": "W8b",
+      "source_sha256": "ef70d8405beecbe3e8f028db59802127c7ac332929466742cb8dfd6d0e59aaaf",
+      "status": "to modify"
+    },
+    "tests/test_cache_decode.py": {
+      "copy_sha256": "68e460d487b689024d013c33a6d6c8eb16ef70c18862c1464d06dc0a4497bd4a",
+      "owner": "W0",
+      "source_sha256": "68e460d487b689024d013c33a6d6c8eb16ef70c18862c1464d06dc0a4497bd4a",
+      "status": "unchanged"
+    },
+    "tests/test_chat_template.py": {
+      "copy_sha256": "585b734b781510b5e0347bb8884a16c69bb68c77e3733ad3dddaee7302a3ae4a",
+      "owner": "W0",
+      "source_sha256": "585b734b781510b5e0347bb8884a16c69bb68c77e3733ad3dddaee7302a3ae4a",
+      "status": "unchanged"
+    },
+    "tests/test_config_refusals.py": {
+      "copy_sha256": "0b97d7aae5916f4fadfc8073eff58e9e8819562f4b996583fc569894a37524d5",
+      "owner": "W0",
+      "source_sha256": "0b97d7aae5916f4fadfc8073eff58e9e8819562f4b996583fc569894a37524d5",
+      "status": "unchanged"
+    },
+    "tests/test_convert.py": {
+      "copy_sha256": "5f9c9b76fecaa7201020e7a0fde5018f29178d98a9234f98ee30dcf90b976d80",
+      "owner": "W0b",
+      "source_sha256": "5f9c9b76fecaa7201020e7a0fde5018f29178d98a9234f98ee30dcf90b976d80",
+      "status": "to modify"
+    },
+    "tests/test_gate_checks.py": {
+      "copy_sha256": "b1d8ad84b366b4b67b5b62cf04e5f5df4c1ce69466e29424e1fb527a410385e7",
+      "owner": "W6",
+      "source_sha256": "b1d8ad84b366b4b67b5b62cf04e5f5df4c1ce69466e29424e1fb527a410385e7",
+      "status": "to modify"
+    },
+    "tests/test_gate_common_exp037.py": {
+      "copy_sha256": "3715ee916798cd6e35018451acf44fc00fb974810d14ee4a35cca19403990cd9",
+      "owner": "W0c",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_gate_drivers_tiny.py": {
+      "copy_sha256": "23e4da7ada61ac4c67fba7bc3630c717171bf26fc6576d7a28a09c0db13454a7",
+      "owner": "W7",
+      "source_sha256": "23e4da7ada61ac4c67fba7bc3630c717171bf26fc6576d7a28a09c0db13454a7",
+      "status": "to modify"
+    },
+    "tests/test_gate_end_to_end_tiny.py": {
+      "copy_sha256": "f1e9536f303ef641944b76849a77cc2a29c674f70a32ee7756558b3d3141296c",
+      "note": "decision (e)'s acceptance added by Integrate",
+      "owner": "W7",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_gate_forced_harness.py": {
+      "copy_sha256": "6fcfdf774bef3efc12730ea093ee0cf0f644f065e16f960d03f81a36485f05ad",
+      "owner": "W3",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_gate_ftiny.py": {
+      "copy_sha256": "fb06bf7c9ed9d1eafb305717a436bf826d67e25cf0ad7b29308ca7a210e0173a",
+      "note": "heavy; mini only (decision (c), FixC's build-host skips)",
+      "owner": "W5d",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_gate_g0k.py": {
+      "copy_sha256": "5c05d160699eb711ccc7bad23d844fa295b504c5c927a5aabe89964c75f3db1d",
+      "owner": "W4",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_gate_g2_pairwise.py": {
+      "copy_sha256": "80d0ae8f36f9742a3b3f3af91901c5e61f0d855bd821097808c862ebaf2e932a",
+      "owner": "W5a",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_gate_g4_forced.py": {
+      "copy_sha256": "eeaabf1d6532fa05b60dba17f66050f72a1d2d1641cbfb2540f3bb19e092b00f",
+      "owner": "W5b",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_gate_g5_runner.py": {
+      "copy_sha256": "96eed6be07fa2497949b63f9d3ffbfa5a4e04bf6872f8479f3d9fad3134ae992",
+      "owner": "W5c",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_gate_port_mutants.py": {
+      "copy_sha256": "6df9cd9bdc4b2992fd27349a0e14804f4cd50d36550ce4ab53cb44edcaa56a37",
+      "owner": "W2",
+      "source_sha256": "6df9cd9bdc4b2992fd27349a0e14804f4cd50d36550ce4ab53cb44edcaa56a37",
+      "status": "to modify"
+    },
+    "tests/test_gate_port_mutants_exp037.py": {
+      "copy_sha256": "f7837f0a9eb83298c3d0529f0962f1506290a22f05cc69f8a8e63e94bdc553fe",
+      "note": "mutant 27's tests added by FixB",
+      "owner": "W2",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_gate_preconditions.py": {
+      "copy_sha256": "a806c88c858284db2bc575c67eaed133361525c502ae519e0ee4a25aa4fa76ce",
+      "owner": "W4",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_gate_ref_drivers.py": {
+      "copy_sha256": "5e79df6d1dae1e414b39105219ea952714724ee4844e7b1ed61f30665b5a7531",
+      "owner": "W3",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_gate_refusal.py": {
+      "copy_sha256": "ffbdce2379fb22f06a1df640220b7e5bc939003632ecb24dab70e1dcb1e31f63",
+      "owner": "W7",
+      "source_sha256": "ffbdce2379fb22f06a1df640220b7e5bc939003632ecb24dab70e1dcb1e31f63",
+      "status": "to modify"
+    },
+    "tests/test_gate_rules.py": {
+      "copy_sha256": "c1865db76e9de8f39b2b522210c88d490d2fe9284d1ff9fae806cc3e2ac97e0f",
+      "owner": "W6",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_gate_text.py": {
+      "copy_sha256": "b0876b3fe9fa6e148df98fb03cb6f11267b342a13a91cbf6e6c244b5c5f4b929",
+      "owner": "W0",
+      "source_sha256": "b0876b3fe9fa6e148df98fb03cb6f11267b342a13a91cbf6e6c244b5c5f4b929",
+      "status": "unchanged"
+    },
+    "tests/test_gate_thresholds.py": {
+      "copy_sha256": "bf9424727a59613cbe6b93b2c75bd0cea975de6a26b56928b568cd9e0212d9ad",
+      "owner": "W6",
+      "source_sha256": "bf9424727a59613cbe6b93b2c75bd0cea975de6a26b56928b568cd9e0212d9ad",
+      "status": "to modify"
+    },
+    "tests/test_integration_contracts.py": {
+      "copy_sha256": "9dca7da7a52b2782cde2539e4762028440b7da9dc981d506dfdcf067cff2827e",
+      "owner": "W7",
+      "source_sha256": "9dca7da7a52b2782cde2539e4762028440b7da9dc981d506dfdcf067cff2827e",
+      "status": "to modify"
+    },
+    "tests/test_mutation_guards.py": {
+      "copy_sha256": "bec1849caf65b8f1e47716058223d63e471a8d4e7ce44a801f99aab2ab9959d2",
+      "owner": "W0",
+      "source_sha256": "bec1849caf65b8f1e47716058223d63e471a8d4e7ce44a801f99aab2ab9959d2",
+      "status": "unchanged"
+    },
+    "tests/test_notice.py": {
+      "copy_sha256": "f5107d3661da0790f900891617f6337de2ccb5047c36277d525dc0fc2768b738",
+      "owner": "W0",
+      "source_sha256": "f5107d3661da0790f900891617f6337de2ccb5047c36277d525dc0fc2768b738",
+      "status": "unchanged"
+    },
+    "tests/test_port_ref_cache_batching.py": {
+      "copy_sha256": "15aa0b13a53e662f2ef5b229c5cd834c3cd932a0871028d21cd4d2a450439e09",
+      "owner": "W8a",
+      "source_sha256": "15aa0b13a53e662f2ef5b229c5cd834c3cd932a0871028d21cd4d2a450439e09",
+      "status": "to modify"
+    },
+    "tests/test_port_ref_head_dtype.py": {
+      "copy_sha256": "ca7be2368880ffe2f8d79263d793eb7a6a25b5632d66bf7b94c312180c384315",
+      "owner": "W0",
+      "source_sha256": "ca7be2368880ffe2f8d79263d793eb7a6a25b5632d66bf7b94c312180c384315",
+      "status": "unchanged"
+    },
+    "tests/test_port_ref_hooks.py": {
+      "copy_sha256": "a08a07f0f34d138a4ef22c8b5adc374a43a22f6b7a3d0b4027498b01577bad1a",
+      "note": "recorded unchanged by W0; changed afterwards by FixC (decision (c)); status moved at the pre-freeze housekeeping (W15-09)",
+      "owner": "FixC",
+      "source_sha256": "a08a07f0f34d138a4ef22c8b5adc374a43a22f6b7a3d0b4027498b01577bad1a",
+      "status": "to modify"
+    },
+    "tests/test_port_ref_reference_modes.py": {
+      "copy_sha256": "19d516fefdac5bb028426c48d1d32580b21320f056607566f35ed8b1eee0cfbc",
+      "owner": "W0",
+      "source_sha256": "19d516fefdac5bb028426c48d1d32580b21320f056607566f35ed8b1eee0cfbc",
+      "status": "unchanged"
+    },
+    "tests/test_port_ref_reference_mutants.py": {
+      "copy_sha256": "2c9b47e218e9c739f94d01208082e33a54213d968f03b93638abdbd3e78516b8",
+      "owner": "W0",
+      "source_sha256": "2c9b47e218e9c739f94d01208082e33a54213d968f03b93638abdbd3e78516b8",
+      "status": "unchanged"
+    },
+    "tests/test_port_ref_safetensors_np.py": {
+      "copy_sha256": "1d89860af18b96dd2563e0bed8e43ca2e26f4fa9abf5f81b75e652cf7d5d11ee",
+      "owner": "W0",
+      "source_sha256": "1d89860af18b96dd2563e0bed8e43ca2e26f4fa9abf5f81b75e652cf7d5d11ee",
+      "status": "unchanged"
+    },
+    "tests/test_port_rope_vllm.py": {
+      "copy_sha256": "4e6f5787ce186a83202c2b75050271a2cec6db495e91693b2767f2092adfc341",
+      "owner": "W1",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_port_vs_ref.py": {
+      "copy_sha256": "7a3577bd6a1301009e140fb1d4f49009e7ef27fbb689ba65fc2534e9eceb2f80",
+      "owner": "W0",
+      "source_sha256": "7a3577bd6a1301009e140fb1d4f49009e7ef27fbb689ba65fc2534e9eceb2f80",
+      "status": "unchanged"
+    },
+    "tests/test_reference_cli.py": {
+      "copy_sha256": "32c9d601ab9ffe535aedb529befb22d0ae82b4c225c48614cd8cc625e4d16fea",
+      "owner": "W0",
+      "source_sha256": "32c9d601ab9ffe535aedb529befb22d0ae82b4c225c48614cd8cc625e4d16fea",
+      "status": "unchanged"
+    },
+    "tests/test_reference_invariants.py": {
+      "copy_sha256": "ab3778255e53b5bc3e5014d0b39981c6902682c6476089dfe487494c2f9269f9",
+      "owner": "W0",
+      "source_sha256": "ab3778255e53b5bc3e5014d0b39981c6902682c6476089dfe487494c2f9269f9",
+      "status": "unchanged"
+    },
+    "tests/test_routing.py": {
+      "copy_sha256": "fcc8675f5c40d1771abca3fc7938951dd10668f0f359b4c3e8c8d4c036ab0dd9",
+      "owner": "W0",
+      "source_sha256": "fcc8675f5c40d1771abca3fc7938951dd10668f0f359b4c3e8c8d4c036ab0dd9",
+      "status": "unchanged"
+    },
+    "tests/test_runner_allowed_b.py": {
+      "copy_sha256": "b44950757f802d1b3bb6b72abd575f0fd0d4d212b9edd522763415990005469c",
+      "owner": "W8a",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_runner_chat.py": {
+      "copy_sha256": "e745237737ec5bd0504a544e0b54867ea326ace88e5a9c39cc5d3f895ddd3e2f",
+      "owner": "W0",
+      "source_sha256": "e745237737ec5bd0504a544e0b54867ea326ace88e5a9c39cc5d3f895ddd3e2f",
+      "status": "unchanged"
+    },
+    "tests/test_runner_guard.py": {
+      "copy_sha256": "d0cddf4495029c354a5a36ce79f7b8cec6454d6e136f449440bbec4bde21a92c",
+      "owner": "W8a",
+      "source_sha256": "d0cddf4495029c354a5a36ce79f7b8cec6454d6e136f449440bbec4bde21a92c",
+      "status": "to modify"
+    },
+    "tests/test_runner_jsonl.py": {
+      "copy_sha256": "3daab8697e35d0c0a3a29911ea35dde6302a43f1d662c51aa30f47c377f6696d",
+      "note": "recorded unchanged by W0; changed afterwards by FixC (decision (c)); status moved at the pre-freeze housekeeping (W15-09)",
+      "owner": "FixC",
+      "source_sha256": "3daab8697e35d0c0a3a29911ea35dde6302a43f1d662c51aa30f47c377f6696d",
+      "status": "to modify"
+    },
+    "tests/test_runner_memory.py": {
+      "copy_sha256": "f0685f03b603d49b29da1b359eabea0bd1a2c15e3c83b487177a5326f87750a0",
+      "owner": "W0",
+      "source_sha256": "f0685f03b603d49b29da1b359eabea0bd1a2c15e3c83b487177a5326f87750a0",
+      "status": "unchanged"
+    },
+    "tests/test_runner_mlxlm032.py": {
+      "copy_sha256": "ce2f0d6688a3e0e47bf38a72082015b09db1ec91b3e188cc8ecd2b913c066c40",
+      "owner": "W8a",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_runner_plan_fix.py": {
+      "copy_sha256": "f8dc6c05bbf74128c899f62fef3913f27373fe411361d6fdf94c1d87bc3bc23f",
+      "owner": "W8a",
+      "source_sha256": "f8dc6c05bbf74128c899f62fef3913f27373fe411361d6fdf94c1d87bc3bc23f",
+      "status": "to modify"
+    },
+    "tests/test_runner_sampler.py": {
+      "copy_sha256": "54f2ae27f9d5a79d64f6737cfb0d10f5ca9f74a1dac26d001eaf5815181e6ac1",
+      "owner": "W0",
+      "source_sha256": "54f2ae27f9d5a79d64f6737cfb0d10f5ca9f74a1dac26d001eaf5815181e6ac1",
+      "status": "unchanged"
+    },
+    "tests/test_runner_seeds.py": {
+      "copy_sha256": "3e127bf523771827977d801a5569776e3abf364af20ba84b7eef0a9bbc869053",
+      "owner": "W8a",
+      "source_sha256": "3e127bf523771827977d801a5569776e3abf364af20ba84b7eef0a9bbc869053",
+      "status": "to modify"
+    },
+    "tests/test_runner_session.py": {
+      "copy_sha256": "66d8ebc69f07d426f74314ac0002f2b2b1c2cf63aa4313380811c42cdf98fd07",
+      "owner": "W8a",
+      "source_sha256": "66d8ebc69f07d426f74314ac0002f2b2b1c2cf63aa4313380811c42cdf98fd07",
+      "status": "to modify"
+    },
+    "tests/test_runner_simulate.py": {
+      "copy_sha256": "bf1cdbb3ec4baed109eb9c978228250e798e07bc91fd3be426a23093a871c89a",
+      "owner": "W0",
+      "source_sha256": "bf1cdbb3ec4baed109eb9c978228250e798e07bc91fd3be426a23093a871c89a",
+      "status": "unchanged"
+    },
+    "tests/test_runner_tiny.py": {
+      "copy_sha256": "224865336121c23f5cd31b59c5ccc33184e8d16529bcd2993d62ef4382ee33c1",
+      "owner": "W8a",
+      "source_sha256": "224865336121c23f5cd31b59c5ccc33184e8d16529bcd2993d62ef4382ee33c1",
+      "status": "to modify"
+    },
+    "tests/test_scorers_aime.py": {
+      "copy_sha256": "3876ce0df1fac377929600221f81f487843e005dc5a2a2ef23aafacb05eeeafb",
+      "owner": "W0",
+      "source_sha256": "3876ce0df1fac377929600221f81f487843e005dc5a2a2ef23aafacb05eeeafb",
+      "status": "unchanged"
+    },
+    "tests/test_scorers_ifbench.py": {
+      "copy_sha256": "c450923d35dd8276d69933030b0582eff43443c26028b28cbb0ea19f28752e5b",
+      "owner": "W0",
+      "source_sha256": "c450923d35dd8276d69933030b0582eff43443c26028b28cbb0ea19f28752e5b",
+      "status": "unchanged"
+    },
+    "tests/test_scorers_lang_tag.py": {
+      "copy_sha256": "ba6d0ad881adb50e43117188118516685feb4349d271391de40fd373daeb2078",
+      "owner": "W0",
+      "source_sha256": "ba6d0ad881adb50e43117188118516685feb4349d271391de40fd373daeb2078",
+      "status": "unchanged"
+    },
+    "tests/test_scorers_mc.py": {
+      "copy_sha256": "2118fe1a21c3e75d1532b97447698efb60835e847b178dd71fcd94ab49772228",
+      "owner": "W0",
+      "source_sha256": "2118fe1a21c3e75d1532b97447698efb60835e847b178dd71fcd94ab49772228",
+      "status": "unchanged"
+    },
+    "tests/test_scorers_reasoning.py": {
+      "copy_sha256": "4629b456c051fe0dd01926f9fa8ce86926c1a89302b41ef49a59cd9f03d8ae55",
+      "owner": "W0",
+      "source_sha256": "4629b456c051fe0dd01926f9fa8ce86926c1a89302b41ef49a59cd9f03d8ae55",
+      "status": "unchanged"
+    },
+    "tests/test_scorers_rgb.py": {
+      "copy_sha256": "69807ec931e2465784b31f70f761207deec389e40fd05e225ee4a382a5b2d1e1",
+      "owner": "W0",
+      "source_sha256": "69807ec931e2465784b31f70f761207deec389e40fd05e225ee4a382a5b2d1e1",
+      "status": "unchanged"
+    },
+    "tests/test_scorers_score_all.py": {
+      "copy_sha256": "6c1a24409e54cbbfb53d3c2737379de5a79035ba281a554ef793d42f8ff4e180",
+      "note": "recorded unchanged by W0; changed afterwards by FixC, then Integrate (decision (c)); status moved at the pre-freeze housekeeping (W15-09)",
+      "owner": "FixC, then Integrate",
+      "source_sha256": "6c1a24409e54cbbfb53d3c2737379de5a79035ba281a554ef793d42f8ff4e180",
+      "status": "to modify"
+    },
+    "tests/test_tasks_aime.py": {
+      "copy_sha256": "00a1e6bdefeabc884829e05105e145a253c0bc99a0994be47719f1f2d6decb30",
+      "owner": "W0",
+      "source_sha256": "00a1e6bdefeabc884829e05105e145a253c0bc99a0994be47719f1f2d6decb30",
+      "status": "unchanged"
+    },
+    "tests/test_tasks_assets.py": {
+      "copy_sha256": "8c4ef7d738067d3e61f9d286af70088e74daac38d583ab07ce74d45d066e4901",
+      "owner": "W0",
+      "source_sha256": "8c4ef7d738067d3e61f9d286af70088e74daac38d583ab07ce74d45d066e4901",
+      "status": "unchanged"
+    },
+    "tests/test_tasks_build_manifests.py": {
+      "copy_sha256": "2c7563550ad913668e52e8d1696185563d55cd00c180ddc2953925c77437a246",
+      "owner": "W0",
+      "source_sha256": "2c7563550ad913668e52e8d1696185563d55cd00c180ddc2953925c77437a246",
+      "status": "unchanged"
+    },
+    "tests/test_tasks_fineweb2.py": {
+      "copy_sha256": "0e6097ecd93519af830ceb1f9ca3b73e522b7c0f167d86ad36c65aff12a568ab",
+      "owner": "W0",
+      "source_sha256": "0e6097ecd93519af830ceb1f9ca3b73e522b7c0f167d86ad36c65aff12a568ab",
+      "status": "unchanged"
+    },
+    "tests/test_tasks_gpqa.py": {
+      "copy_sha256": "2e6b058487e76f9a2e3354adcd31dcb17420fd12d344c4b8f3f0e1289a74cf31",
+      "owner": "W0",
+      "source_sha256": "2e6b058487e76f9a2e3354adcd31dcb17420fd12d344c4b8f3f0e1289a74cf31",
+      "status": "unchanged"
+    },
+    "tests/test_tasks_ifbench_loader.py": {
+      "copy_sha256": "9fd41910d8f826f4b94b4a8a79bd1869e54130d37a6ecd70da4e3deef3a69fad",
+      "owner": "W0",
+      "source_sha256": "9fd41910d8f826f4b94b4a8a79bd1869e54130d37a6ecd70da4e3deef3a69fad",
+      "status": "unchanged"
+    },
+    "tests/test_tasks_mmlu.py": {
+      "copy_sha256": "29551e66fc72251c51ba17e589c682e0bd44672d57e082d4a7d8666876cdc852",
+      "owner": "W0",
+      "source_sha256": "29551e66fc72251c51ba17e589c682e0bd44672d57e082d4a7d8666876cdc852",
+      "status": "unchanged"
+    },
+    "tests/test_tasks_no_withheld_text.py": {
+      "copy_sha256": "39bfb2e6ca475d581aeb251a8fa9c20bdefffc74962c0f48565339e79bc584c9",
+      "owner": "W0",
+      "source_sha256": "39bfb2e6ca475d581aeb251a8fa9c20bdefffc74962c0f48565339e79bc584c9",
+      "status": "unchanged"
+    },
+    "tests/test_tasks_rgb_prompts.py": {
+      "copy_sha256": "0d6e579c87cfc7e489954e613be14754ee6ad714e4529a3fe7947f58fdae44ef",
+      "owner": "W0",
+      "source_sha256": "0d6e579c87cfc7e489954e613be14754ee6ad714e4529a3fe7947f58fdae44ef",
+      "status": "unchanged"
+    },
+    "tests/test_tasks_vendored_evalfw.py": {
+      "copy_sha256": "dee9741dfe7fff37b4e1f55eff4b9f5ad62401a4b5e629ca52dc78c8b21cc0e0",
+      "owner": "W0",
+      "source_sha256": "dee9741dfe7fff37b4e1f55eff4b9f5ad62401a4b5e629ca52dc78c8b21cc0e0",
+      "status": "unchanged"
+    },
+    "tests/test_tiny_checkpoint.py": {
+      "copy_sha256": "597c8d83ec1003679c326d5d4ec589d6615b7f91928718be82678e860f981412",
+      "owner": "W0b",
+      "source_sha256": "597c8d83ec1003679c326d5d4ec589d6615b7f91928718be82678e860f981412",
+      "status": "to modify"
+    },
+    "tests/test_tiny_real_layout.py": {
+      "copy_sha256": "69c8f39ef26f0213f3ddf45b92d97974db766c16adfe9ba7c727f52a96603f15",
+      "owner": "W0b",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_tools_dry_run.py": {
+      "copy_sha256": "9a8ece5cf61d37ed1265d4be9c08e1e1faf04502e3753d5341c9b46aabc4d660",
+      "owner": "W10",
+      "source_sha256": "9a8ece5cf61d37ed1265d4be9c08e1e1faf04502e3753d5341c9b46aabc4d660",
+      "status": "to modify"
+    },
+    "tests/test_tools_env.py": {
+      "copy_sha256": "1491e3c8747ec32af47130d45ecdfd56d79f663cc1979c09da3f329a77ada1b4",
+      "owner": "W10",
+      "source_sha256": "1491e3c8747ec32af47130d45ecdfd56d79f663cc1979c09da3f329a77ada1b4",
+      "status": "to modify"
+    },
+    "tests/test_tools_hash_tree.py": {
+      "copy_sha256": "83e0eddc24dcf49637909e49c45a1c71a53c27585a5c938115d3c94796634cbc",
+      "owner": "W10",
+      "source_sha256": "83e0eddc24dcf49637909e49c45a1c71a53c27585a5c938115d3c94796634cbc",
+      "status": "to modify"
+    },
+    "tests/test_tools_kv_bytes.py": {
+      "copy_sha256": "ce0505d95d19008cbffc84ec42e5443e9d273bd0236c95780ec6d01900ba39ea",
+      "owner": "W0",
+      "source_sha256": "ce0505d95d19008cbffc84ec42e5443e9d273bd0236c95780ec6d01900ba39ea",
+      "status": "unchanged"
+    },
+    "tests/test_tools_leak_check.py": {
+      "copy_sha256": "7a2e9557dbfbab3d753f3e469cdc7b73004457a3f9e91ba5048e8f5a7c5e76c6",
+      "note": "recorded unchanged by W0; changed afterwards by FixC (decision (c)); status moved at the pre-freeze housekeeping (W15-09)",
+      "owner": "FixC",
+      "source_sha256": "7a2e9557dbfbab3d753f3e469cdc7b73004457a3f9e91ba5048e8f5a7c5e76c6",
+      "status": "to modify"
+    },
+    "tests/test_tools_params.py": {
+      "copy_sha256": "e81be516fb6ce796ebe7724b3dacc8ef2eb3f0c35d72a70192d804a5f369671a",
+      "owner": "W10",
+      "source_sha256": "e81be516fb6ce796ebe7724b3dacc8ef2eb3f0c35d72a70192d804a5f369671a",
+      "status": "to modify"
+    },
+    "tests/test_tools_peer_check.py": {
+      "copy_sha256": "99462815a16c6b81da2df1a8ea4bc3ed348b2ba21b1be8146c04b6b20365f122",
+      "owner": "W10",
+      "source_sha256": "99462815a16c6b81da2df1a8ea4bc3ed348b2ba21b1be8146c04b6b20365f122",
+      "status": "to modify"
+    },
+    "tests/test_tools_peer_check_reference.py": {
+      "copy_sha256": "f150ba4ef3c698ce3ba6894c8d5aa515c0daeabbe2a442dc45ba6dbbddc3b414",
+      "note": "recorded unchanged by W0; changed afterwards by FixC (decision (c)); status moved at the pre-freeze housekeeping (W15-09)",
+      "owner": "FixC",
+      "source_sha256": "f150ba4ef3c698ce3ba6894c8d5aa515c0daeabbe2a442dc45ba6dbbddc3b414",
+      "status": "to modify"
+    },
+    "tests/test_tools_power_log.py": {
+      "copy_sha256": "44f7c61f93d944fc6f75cda860ab630addf70762cac71706542979ebd79db02e",
+      "note": "the descriptive power log's tests (BUILD_LOG Stage 7)",
+      "owner": "PowerLog",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_tools_precision.py": {
+      "copy_sha256": "f90f82cb1d1a85be093d2c04474f61e1202a57fb0c09dc705553e3f915a55e48",
+      "owner": "W0",
+      "source_sha256": "f90f82cb1d1a85be093d2c04474f61e1202a57fb0c09dc705553e3f915a55e48",
+      "status": "unchanged"
+    },
+    "tests/test_tools_preflight.py": {
+      "copy_sha256": "5376e034c89af50601871cbee78982a874ab8449dc20340d4b9ba1bfe0f01216",
+      "owner": "W10",
+      "source_sha256": "5376e034c89af50601871cbee78982a874ab8449dc20340d4b9ba1bfe0f01216",
+      "status": "to modify"
+    },
+    "tests/test_tools_redact.py": {
+      "copy_sha256": "a1185634ca82d07e70d99056ed8e6e53d56e424e75278d2016561a1c172f204a",
+      "owner": "W0",
+      "source_sha256": "a1185634ca82d07e70d99056ed8e6e53d56e424e75278d2016561a1c172f204a",
+      "status": "unchanged"
+    },
+    "tests/test_tools_refresh_builds.py": {
+      "copy_sha256": "12338c0d98225f539de202c39a4afc86c9cd0e39376d40e86e0ef3c93df7cc69",
+      "owner": "W10",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tests/test_tools_status.py": {
+      "copy_sha256": "9988e63c7137d18e356ca97f2a4ff99209c81cca7eeca9c02fc28e797637a8ec",
+      "owner": "W10",
+      "source_sha256": "9988e63c7137d18e356ca97f2a4ff99209c81cca7eeca9c02fc28e797637a8ec",
+      "status": "to modify"
+    },
+    "tests/test_tools_version_record.py": {
+      "copy_sha256": "2ec3735c9ebe475d1a41c8cb2e462e098d053e12be1263705d4ec05ab3f0acf6",
+      "owner": "W10",
+      "source_sha256": "2ec3735c9ebe475d1a41c8cb2e462e098d053e12be1263705d4ec05ab3f0acf6",
+      "status": "to modify"
+    },
+    "tests/tiny_checkpoint.py": {
+      "copy_sha256": "8f339b6f564c62b18241c7a3fe9d92ee15ff7374083f8ddc48950eeaf0fef78c",
+      "owner": "W0",
+      "source_sha256": "8f339b6f564c62b18241c7a3fe9d92ee15ff7374083f8ddc48950eeaf0fef78c",
+      "status": "unchanged"
+    },
+    "tests/tiny_real_layout.py": {
+      "copy_sha256": "b4ce9e5dc72d2b7373368c29f76ce578a805cd3bad4e0f1da971673587d985e3",
+      "owner": "W0b",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tools/__init__.py": {
+      "copy_sha256": "c37fccee25e03da917ac92b76342de0f73f20e706bf296146cd38abe92ed678a",
+      "owner": "W0",
+      "source_sha256": "c37fccee25e03da917ac92b76342de0f73f20e706bf296146cd38abe92ed678a",
+      "status": "unchanged"
+    },
+    "tools/assetcheck.py": {
+      "copy_sha256": "427fe7e69bfffe26619ef7b52a217f8b358b177aba52122316d1ca48079b420b",
+      "owner": "W0",
+      "source_sha256": "427fe7e69bfffe26619ef7b52a217f8b358b177aba52122316d1ca48079b420b",
+      "status": "unchanged"
+    },
+    "tools/common.py": {
+      "copy_sha256": "0ce3025d178e3ed516c0d55cade37f0f213fa3146cf191100477a545c76389df",
+      "owner": "W10",
+      "source_sha256": "0ce3025d178e3ed516c0d55cade37f0f213fa3146cf191100477a545c76389df",
+      "status": "to modify"
+    },
+    "tools/dry_run.py": {
+      "copy_sha256": "23019bea30ff8c888a58e2e0a803edf35a3fa3f1ec96c5899988f995d62b0916",
+      "owner": "W10",
+      "source_sha256": "23019bea30ff8c888a58e2e0a803edf35a3fa3f1ec96c5899988f995d62b0916",
+      "status": "to modify"
+    },
+    "tools/fidelity_reference.json": {
+      "copy_sha256": "64e4e5c7fec06d6d98349bde81875d1d23e4e31596203d1fef11e66d0017f29e",
+      "note": "recorded unchanged by W0; changed afterwards by FixC (decision (c)); status moved at the pre-freeze housekeeping (W15-09)",
+      "owner": "FixC",
+      "source_sha256": "64e4e5c7fec06d6d98349bde81875d1d23e4e31596203d1fef11e66d0017f29e",
+      "status": "to modify"
+    },
+    "tools/hash_tree.py": {
+      "copy_sha256": "827efe6e62760e74ebe26dc63d78fcc6ce870f08bdf143beebf4162f837d2a84",
+      "owner": "W10",
+      "source_sha256": "827efe6e62760e74ebe26dc63d78fcc6ce870f08bdf143beebf4162f837d2a84",
+      "status": "to modify"
+    },
+    "tools/hooks/pre-push": {
+      "copy_sha256": "2638d61418ec6700e5f9c917e9a6c2fd5a7ea12af71f6709d82b229796d480dc",
+      "owner": "W10",
+      "source_sha256": "2638d61418ec6700e5f9c917e9a6c2fd5a7ea12af71f6709d82b229796d480dc",
+      "status": "to modify"
+    },
+    "tools/kolibri_lfs_oids.json": {
+      "copy_sha256": "9abe4f40fce37cf37e906849c353d6b6ad3243587cb418b14de3636c82081ff5",
+      "owner": "W0",
+      "source_sha256": "9abe4f40fce37cf37e906849c353d6b6ad3243587cb418b14de3636c82081ff5",
+      "status": "unchanged"
+    },
+    "tools/kv_bytes.py": {
+      "copy_sha256": "ba4c5dd9a8c59e61db21654ff86ff6461215fb0f3571f75942b87a60df1c27cc",
+      "owner": "W0",
+      "source_sha256": "ba4c5dd9a8c59e61db21654ff86ff6461215fb0f3571f75942b87a60df1c27cc",
+      "status": "unchanged"
+    },
+    "tools/leak_check.py": {
+      "copy_sha256": "67f90456da343417b106930193f49887f55216f445df1b02b40f5e3ff2904c1c",
+      "owner": "W10",
+      "source_sha256": "67f90456da343417b106930193f49887f55216f445df1b02b40f5e3ff2904c1c",
+      "status": "to modify"
+    },
+    "tools/params.py": {
+      "copy_sha256": "5a7ef07564808804c86459ea947801ee8d255610667f07752dcec8190c2278c1",
+      "owner": "W0",
+      "source_sha256": "5a7ef07564808804c86459ea947801ee8d255610667f07752dcec8190c2278c1",
+      "status": "unchanged"
+    },
+    "tools/peer_check.py": {
+      "copy_sha256": "5895d3569723aa2e4a7b0902068cffeea95da82eaf59eaadfe403ebf552e18aa",
+      "owner": "W10",
+      "source_sha256": "5895d3569723aa2e4a7b0902068cffeea95da82eaf59eaadfe403ebf552e18aa",
+      "status": "to modify"
+    },
+    "tools/peer_parity_build.json": {
+      "copy_sha256": "fe2efb937871ad10403788d01fcf23d23cc81cacb3ea4caafe8afb2d1f4a84db",
+      "owner": "W0",
+      "source_sha256": "fe2efb937871ad10403788d01fcf23d23cc81cacb3ea4caafe8afb2d1f4a84db",
+      "status": "unchanged"
+    },
+    "tools/power_log.py": {
+      "copy_sha256": "349657c8d32395e53b8cd1578263b87dd309193f3127155aaf4ea91bed66b3c4",
+      "note": "the descriptive power log (BUILD_LOG Stage 7)",
+      "owner": "PowerLog",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tools/precision.py": {
+      "copy_sha256": "8fe4dcd9d0e5f436b5e817c22576740ef7a0b3b005677d519bc0847002862f29",
+      "owner": "W0",
+      "source_sha256": "8fe4dcd9d0e5f436b5e817c22576740ef7a0b3b005677d519bc0847002862f29",
+      "status": "unchanged"
+    },
+    "tools/preflight.py": {
+      "copy_sha256": "6d34e738b7699363f7aba5bd2479a951343d06036437ca2b68a36fe092c7cfb6",
+      "owner": "W10",
+      "source_sha256": "6d34e738b7699363f7aba5bd2479a951343d06036437ca2b68a36fe092c7cfb6",
+      "status": "to modify"
+    },
+    "tools/redact.py": {
+      "copy_sha256": "744459b211c834aeff6a4b555290b161e979375840be12a9ad7964121d9497a1",
+      "owner": "W0",
+      "source_sha256": "744459b211c834aeff6a4b555290b161e979375840be12a9ad7964121d9497a1",
+      "status": "unchanged"
+    },
+    "tools/refresh_builds.py": {
+      "copy_sha256": "c779adab5c519b5e81d902d0c5861c570507ece4b6b67546b557cbb1bb88151e",
+      "owner": "W10",
+      "source_sha256": null,
+      "status": "new"
+    },
+    "tools/shingles.py": {
+      "copy_sha256": "3a17e5757803bd5a334578a51f9f0705979ec61f387287fa3c0ad4e7d61fde97",
+      "owner": "W0",
+      "source_sha256": "3a17e5757803bd5a334578a51f9f0705979ec61f387287fa3c0ad4e7d61fde97",
+      "status": "unchanged"
+    },
+    "tools/status.py": {
+      "copy_sha256": "a3dcbca24d1c596a14682f158a05f0f67151ea6dc59e66aab050ec793ecd15dd",
+      "owner": "W10",
+      "source_sha256": "a3dcbca24d1c596a14682f158a05f0f67151ea6dc59e66aab050ec793ecd15dd",
+      "status": "to modify"
+    },
+    "tools/version_record.py": {
+      "copy_sha256": "703d0037d01d88e6920a0e90167ead8179b4cad26234578f440889586e1eb890",
+      "owner": "W10",
+      "source_sha256": "703d0037d01d88e6920a0e90167ead8179b4cad26234578f440889586e1eb890",
+      "status": "to modify"
+    },
+    "tools/withheld_shingles.sha256": {
+      "copy_sha256": "64fdfd35c985490414fcb55ab0471b1a59790f78ccce1b13197b4c16e02b1018",
+      "owner": "W0",
+      "source_sha256": "64fdfd35c985490414fcb55ab0471b1a59790f78ccce1b13197b4c16e02b1018",
+      "status": "unchanged"
+    }
+  },
+  "not_copied": {
+    "exp_036_env_file": "never opened, hashed or copied; sourced in place from exp_036's directory",
+    "files": [
+      "BUILD_LOG.md",
+      "BUILD_SPEC.md",
+      "HYPOTHESIS.md",
+      "README.md",
+      "RUNBOOK.md",
+      "evidence/.gitkeep"
+    ],
+    "trees": [
+      "aborted/",
+      "amendments/",
+      "diagnostics/",
+      "results/",
+      "results/ (except manifests_20261004T131126Z.json)",
+      "env/ (except the three env files above)"
+    ]
+  },
+  "referenced_in_place": {
+    "diagnostics/gate1/BUGHUNT.md": {
+      "pinned": "5bbe9979",
+      "sha256": "5bbe997923bd3b26f0ef3b68a7fbc93b4092c14494adb5e0a8e57f75c0e3b7b2",
+      "used_by": "BH (DESIGN path keys)"
+    },
+    "diagnostics/gate1/confirm/mlx_repro.py": {
+      "pinned": "9c98cbc4c6f971e0",
+      "sha256": "9c98cbc4c6f971e0da2d6f111555047dd441059571dc4e76fa6dec6edb94dec6",
+      "used_by": "source lifted into gate/checks/g0k_kernels.py"
+    },
+    "diagnostics/gate1/confirm/mlx_repro_min.py": {
+      "pinned": "7004dcf44754c598",
+      "sha256": "7004dcf44754c59850cf215eee8d93fe0453a97702495973269928b7af5e2d17",
+      "used_by": "source lifted into gate/checks/g0k_kernels.py (boundary sweep)"
+    },
+    "diagnostics/gate1/confirm/out/mlx_repro_m5max_mlx0323_20261006.json": {
+      "pinned": "da9923cbaebdd76d51337b10932e19454e6067e1c582a0f97f170e68d779a6f7",
+      "sha256": "da9923cbaebdd76d51337b10932e19454e6067e1c582a0f97f170e68d779a6f7",
+      "used_by": "evidence behind F2 and G0k's expected outcome"
+    },
+    "diagnostics/gate1/confirm/out/mlx_repro_min_m5max_mlx0323_20261006.json": {
+      "pinned": "81cc4f8ea91dd59019e4a29170aa42d79a011f31cebd56f3d06ce0c4d908f671",
+      "sha256": "81cc4f8ea91dd59019e4a29170aa42d79a011f31cebd56f3d06ce0c4d908f671",
+      "used_by": "evidence behind F2 and G0k's expected outcome"
+    },
+    "diagnostics/gate1/diaglib.py": {
+      "pinned": null,
+      "sha256": "2897597edb33ce96a1ff29746460007e5fc16229e7bcc83940867926c2b7be08",
+      "used_by": "fp32_on_dequantised_weights, l.247-279, lifted verbatim (W5b)"
+    },
+    "diagnostics/gate1/mini/bughunt/verify/build_ck.py": {
+      "pinned": null,
+      "sha256": "b197dd17b1e1e24e0cc85084b9c84035c4062672491937f7190d54adef22462d",
+      "used_by": "tiny real-layout builder, lifted into tests/tiny_real_layout.py (W0b)"
+    },
+    "diagnostics/gate1/mini/bughunt/verify/kit_rope/port/kolibri1.py": {
+      "pinned": null,
+      "sha256": "f5260e41092a04d70a16dc657e6ac0de796bb0b9fdb9d5913fd2fa9e3f154aa2",
+      "used_by": "VllmRoPE source, l.249-266 (W1)"
+    },
+    "results/convert/convert_4bit_20261004T133455Z.json": {
+      "pinned": "e1ec02c764667c7873f49dedd00c353db804409c3592f913444c8599b5d7f8a2",
+      "sha256": "e1ec02c764667c7873f49dedd00c353db804409c3592f913444c8599b5d7f8a2",
+      "used_by": "P4"
+    },
+    "results/convert/convert_8bit_20261004T133423Z.json": {
+      "pinned": "bd84bf3b7c4a3db891c02e41f86f618c1d93301581146fca8e598e04313e0e9d",
+      "sha256": "bd84bf3b7c4a3db891c02e41f86f618c1d93301581146fca8e598e04313e0e9d",
+      "used_by": "P4"
+    },
+    "results/gate/gate_20261005T050112Z.json": {
+      "pinned": "e3e01b5cf9114afe4d39de7395a74d47fcb0565ca7d93343d29788d69bf00f0b",
+      "sha256": "e3e01b5cf9114afe4d39de7395a74d47fcb0565ca7d93343d29788d69bf00f0b",
+      "used_by": "known-values ledger only (never read by code)"
+    },
+    "results/preflight_20261004T063132Z.json": {
+      "pinned": "43ce35db4a0aa1d4dab721624a842d66600356a38ae59b5a43978bad5dbaf6c5",
+      "sha256": "43ce35db4a0aa1d4dab721624a842d66600356a38ae59b5a43978bad5dbaf6c5",
+      "used_by": "provenance of P2's architecture pin"
+    },
+    "results/version_record_20261004T063157Z.json": {
+      "pinned": "27ca857435aca8bd8e7332dbc368e6da5ed107772f8fbb99f6934e154e4293e2",
+      "sha256": "27ca857435aca8bd8e7332dbc368e6da5ed107772f8fbb99f6934e154e4293e2",
+      "used_by": "provenance of P2's OS pins"
+    }
+  },
+  "requirements_scratch": {
+    "file": "requirements-exp037.txt (reviewed scratch file, W0r)",
+    "sha256": "f5aa6fd47c24d63934685f88f918eb91a61c16fbf29ceb23646c842266914c6f"
+  },
+  "schema": "exp037 copy record v1",
+  "source": {
+    "copy_method": "cp -p of each git-tracked file, to the same relpath",
+    "experiment": "tasks/chronos/exp_036_kolibri_local_eval",
+    "git_head": "222c8450f5c1b87663ee0386c61a6eb86c353543",
+    "working_tree_clean": true
+  },
+  "task": "W0",
+  "updates": [
+    {
+      "task": "main session, pre-freeze housekeeping",
+      "utc": "2026-10-06T18:54:52Z",
+      "what": "90 files created after W0's copy added as new (owner task and sha256 at this update; the documents change again at the freeze); diagnostics/gemma_quant_check.py added as unchanged (copied by FixC); 7 entries recorded unchanged by W0 but changed by FixC or Integrate moved to 'to modify'; .gitignore noted ('*.plist'). Every file of the kit except this one is listed; every unchanged entry hashes equal to its copy. counts.e36_tracked_not_copied stays W0's count (it includes diagnostics/gemma_quant_check.py, copied later)."
+    },
+    {
+      "task": "main session, pre-freeze sweep and fixes",
+      "utc": "2026-10-06T23:01:33Z",
+      "what": "Inherited-values sweep (BUILD_LOG 'Pre-freeze: inherited-values sweep and fixes'): runner/plan_fix.py, tests/test_runner_plan_fix.py, tools/status.py, tests/test_tools_status.py, tools/leak_check.py, tests/test_tools_leak_check.py and .gitignore changed (already 'to modify'); RUNBOOK.md, HYPOTHESIS.md, BUILD_SPEC.md, BUILD_LOG.md and results/README.md changed (already 'new'; their copy_sha256 stays the housekeeping value, the documents change again at the freeze). No status moved; every unchanged entry still hashes equal to its copy; every file of the kit except this one is listed."
+    }
+  ],
+  "written_utc": "2026-10-06T04:45:27Z"
+}

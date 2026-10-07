@@ -1,0 +1,80 @@
+{
+  "version": "exp036-template-cases-1",
+  "note": "G0 template parity (HYPOTHESIS Phase 0, BUILD_SPEC 5.3 g0_static.template_parity): 12 conversations x 10 settings, rendered through the runtime path (mlx_lm TokenizerWrapper.apply_chat_template over the tokenizer_config.json template) and through the vendor jinja; the two must be byte-identical. Written by Claude for exp_036; part of the gate code hash.",
+  "settings": {
+    "no_kwarg": {"kwargs": {}},
+    "effort_none": {"kwargs": {"reasoning_effort": "none"}},
+    "effort_minimal": {"kwargs": {"reasoning_effort": "minimal"}},
+    "effort_low": {"kwargs": {"reasoning_effort": "low"}},
+    "effort_medium": {"kwargs": {"reasoning_effort": "medium"}},
+    "effort_high": {"kwargs": {"reasoning_effort": "high"}},
+    "effort_xhigh": {"kwargs": {"reasoning_effort": "xhigh"}},
+    "thinking_off": {"kwargs": {"enable_thinking": false}},
+    "effort_high_over_thinking_off": {"kwargs": {"enable_thinking": false, "reasoning_effort": "high"}},
+    "system_tools": {"kwargs": {}, "tools": true, "system_if_absent": "You are a careful assistant. Use the tools when they help."}
+  },
+  "tools": [
+    {"type": "function", "function": {"name": "get_weather", "description": "Wetter für eine Stadt abrufen",
+      "parameters": {"type": "object", "properties": {"city": {"type": "string", "description": "Stadt, z. B. Köln"}}, "required": ["city"]}}},
+    {"type": "function", "function": {"name": "convert_units", "description": "Convert a quantity between units",
+      "parameters": {"type": "object", "properties": {"value": {"type": "number"}, "from": {"type": "string"}, "to": {"type": "string"}}, "required": ["value", "from", "to"]}}}
+  ],
+  "conversations": {
+    "c01_en_single": [
+      {"role": "user", "content": "What is 2+2?"}
+    ],
+    "c02_de_single": [
+      {"role": "user", "content": "Wie heißt die Hauptstadt von Österreich? Antworte kurz — danke! Grüße aus Köln, Straße 12."}
+    ],
+    "c03_en_system": [
+      {"role": "system", "content": "You are a concise assistant."},
+      {"role": "user", "content": "Summarise the plot of Hamlet in one sentence."}
+    ],
+    "c04_de_system": [
+      {"role": "system", "content": "Du bist ein hilfreicher Assistent. Antworte auf Deutsch."},
+      {"role": "user", "content": "Erkläre in zwei Sätzen, wie ein Kühlschrank funktioniert."}
+    ],
+    "c05_en_think_in_content": [
+      {"role": "user", "content": "Pick a prime between 10 and 20."},
+      {"role": "assistant", "content": "<think>\n11, 13, 17 and 19 qualify.\n</think>\n\n13."},
+      {"role": "user", "content": "And one between 20 and 30?"}
+    ],
+    "c06_de_reasoning_field": [
+      {"role": "user", "content": "Wie viele Beine haben drei Katzen?"},
+      {"role": "assistant", "reasoning": "Eine Katze hat vier Beine, also 3 × 4 = 12.", "content": "Zwölf."},
+      {"role": "user", "content": "Und fünf Vögel?"}
+    ],
+    "c07_en_tool_round_trip": [
+      {"role": "user", "content": "How many metres are 3.5 miles?"},
+      {"role": "assistant", "content": "", "tool_calls": [{"type": "function", "function": {"name": "convert_units", "arguments": {"value": 3.5, "from": "mile", "to": "metre"}}}]},
+      {"role": "tool", "content": "{\"value\": 5632.7}"}
+    ],
+    "c08_de_two_tool_results": [
+      {"role": "user", "content": "Wie ist das Wetter in Köln und in Bonn?"},
+      {"role": "assistant", "content": "Ich sehe nach.", "tool_calls": [
+        {"type": "function", "function": {"name": "get_weather", "arguments": {"city": "Köln"}}},
+        {"type": "function", "function": {"name": "get_weather", "arguments": "{\"city\": \"Bonn\"}"}}]},
+      {"role": "tool", "content": "{\"temp_c\": 14, \"sky\": \"bewölkt\"}"},
+      {"role": "tool", "content": "{\"temp_c\": 15, \"sky\": \"sonnig\"}"}
+    ],
+    "c09_en_three_turns": [
+      {"role": "user", "content": "Name a fruit."},
+      {"role": "assistant", "content": "Apple."},
+      {"role": "user", "content": "Name a vegetable."},
+      {"role": "assistant", "content": "<think>\nSomething common.\n</think>\n\nCarrot."},
+      {"role": "user", "content": "Name a grain."}
+    ],
+    "c10_en_digits_code": [
+      {"role": "user", "content": "Fix this Python: `def add(a, b): return a - b` and compute add(1234567, 89) = ?\n\nAlso: 3.14159 × 2 = 6.28318; 1,000,000 / 8 = 125,000."}
+    ],
+    "c11_de_long": [
+      {"role": "user", "content": "Lies den folgenden Absatz und nenne die zwei wichtigsten Punkte.\n\nWenn die Tage kürzer werden und morgens Nebel über den Feldern liegt, ändert sich für viele Menschen, die mit dem Fahrrad zur Arbeit oder zum Einkaufen fahren, mehr als nur die Kleidung. Nasse Straßen, feuchtes Laub und die früh einsetzende Dunkelheit stellen andere Anforderungen an das Rad als ein trockener Sommer.\n\n  Eingerückte Zeile\tmit Tabulator\n"}
+    ],
+    "c12_en_mid_system": [
+      {"role": "user", "content": "Tell me a fact about owls."},
+      {"role": "assistant", "content": "Owls can turn their heads about 270 degrees."},
+      {"role": "system", "content": "From now on, answer in German."},
+      {"role": "user", "content": "Another fact, please."}
+    ]
+  }
+}

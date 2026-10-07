@@ -1,0 +1,199 @@
+{
+  "build": "tests/tiny_real_layout.py seed 29, q/k norms x 1 (unsharpened; DESIGN \u00a75.1, decision (a)), K8 at 8 bits, group 64",
+  "controls": {
+    "G4F16/6": {
+      "caught": true,
+      "check": "g4_f16_K8",
+      "leg": "kappa",
+      "margin": {
+        "met": true,
+        "required": 90.0,
+        "unbounded": false,
+        "unit": "ratio",
+        "value": 2991.985057459207
+      },
+      "mutant": 6,
+      "mutant_name": "renorm_topk",
+      "tiny_acceptance": {
+        "met": true,
+        "rule": "DESIGN \u00a74.2 margin"
+      }
+    },
+    "G4F32/1": {
+      "caught": true,
+      "check": "g4_f32_K8",
+      "leg": "F6",
+      "margin": {
+        "met": true,
+        "required": 10.0,
+        "unbounded": false,
+        "unit": "count",
+        "value": 64
+      },
+      "mutant": 1,
+      "mutant_name": "sigmoid_bias_select",
+      "tiny_acceptance": {
+        "met": true,
+        "rule": "DESIGN \u00a74.2 margin"
+      }
+    },
+    "G4F32/19": {
+      "caught": true,
+      "check": "g4_f32_K8",
+      "leg": "F2",
+      "margin": {
+        "met": true,
+        "required": 10.0,
+        "unbounded": false,
+        "unit": "mean",
+        "value": 309954.06845279573
+      },
+      "mutant": 19,
+      "mutant_name": "rope_restart_per_chunk",
+      "tiny_acceptance": {
+        "met": true,
+        "rule": "DESIGN \u00a74.2 margin"
+      }
+    },
+    "G4F32/6": {
+      "caught": true,
+      "check": "g4_f32_K8",
+      "leg": "F2",
+      "margin": {
+        "met": true,
+        "required": 10.0,
+        "unbounded": false,
+        "unit": "mean",
+        "value": 400642.1440517896
+      },
+      "mutant": 6,
+      "mutant_name": "renorm_topk",
+      "tiny_acceptance": {
+        "met": true,
+        "rule": "DESIGN \u00a74.2 margin"
+      }
+    },
+    "G5BP/27": {
+      "caught": true,
+      "check": "g5_bp_K8_B8",
+      "fixture_ceiling": {
+        "block": "K8/g5_bp_B8",
+        "entropy_nats": {
+          "log_vocab": 6.931471805599453,
+          "mean": 6.61059105925775
+        },
+        "files": 26,
+        "kind": "single",
+        "pair_kl": {
+          "max": 0.8511262202509201,
+          "mean": 0.6066333241405876,
+          "median": 0.6200828342940877,
+          "p90": 0.6985129814599925
+        },
+        "pairs": 4000,
+        "positions": 220,
+        "ratio": {
+          "first_wave": 22.269266864825457,
+          "mid_run": 19.12420652748287
+        },
+        "seed": 0,
+        "single_denominator": {
+          "first_wave": 0.027240830505236402,
+          "mid_run": 0.03172070555025703
+        },
+        "vocab": 1024,
+        "what": "the (d) ratio of an unrelated-context swap: mean KL(p_i || p_j) over random pairs of generated positions from different sequences, divided by G5BP/27's mean KL(R1 || single)"
+      },
+      "leg": "d",
+      "margin": {
+        "met": false,
+        "required": 30.0,
+        "unbounded": false,
+        "unit": "ratio",
+        "value": 11.932059680463267
+      },
+      "mutant": 27,
+      "mutant_name": "batch_decode_pad_keys_visible",
+      "tiny_acceptance": {
+        "factor": 3.0,
+        "legs": {
+          "first_wave": {
+            "caught": true,
+            "fires": true,
+            "n": 65,
+            "ratio": 11.932059680463267
+          },
+          "mid_run": {
+            "caught": true,
+            "fires": true,
+            "n": 155,
+            "ratio": 6.414110952293383
+          }
+        },
+        "met": true,
+        "rule": "decision (e), 2026-10-06 (DESIGN \u00a74.2, \u00a714.3): (d) caught on both subsets at the gate's own factor (ratio > G5BP anchor_factor) on the unsharpened seed-29 build, with the fixture ceiling recorded beside it; replaces the 10 x factor margin for this control only"
+      }
+    },
+    "G5D32/20": {
+      "caught": true,
+      "check": "g5_d32_K8",
+      "leg": "decode",
+      "margin": {
+        "met": true,
+        "range": "T9",
+        "required": 10.0,
+        "rule": "mean",
+        "unbounded": false,
+        "unit": "mean",
+        "value": 23037434.00768949
+      },
+      "mutant": 20,
+      "mutant_name": "decode_window_256",
+      "tiny_acceptance": {
+        "met": true,
+        "rule": "DESIGN \u00a74.2 margin"
+      }
+    },
+    "G5R1/26": {
+      "caught": true,
+      "check": "g5_r1_K8",
+      "leg": "R-parity",
+      "margin": {
+        "met": true,
+        "required": 10.0,
+        "unbounded": false,
+        "unit": "mean",
+        "value": 1408.0619039215424
+      },
+      "mutant": 26,
+      "mutant_name": "batch_decode_pos_frozen",
+      "tiny_acceptance": {
+        "met": true,
+        "rule": "DESIGN \u00a74.2 margin"
+      }
+    }
+  },
+  "margin_factor": 10,
+  "probes": {
+    "G5BP/22": {
+      "check": "g5_bp_K8_B8",
+      "fires": true,
+      "leg": "d",
+      "margin": null,
+      "measured": true,
+      "mutant": 22,
+      "mutant_name": "batched_rope_positions_in_padded_frame",
+      "note": "probe, no margin (DESIGN \u00a74.2)",
+      "ratio": {
+        "first_wave": 5.700577272288446,
+        "mid_run": 5.746193644646281
+      }
+    }
+  },
+  "record": "gate_20261006T124326Z.json",
+  "registered_g2": {
+    "caught": true,
+    "undetected": []
+  },
+  "schema": "exp037 tiny control table v1"
+}

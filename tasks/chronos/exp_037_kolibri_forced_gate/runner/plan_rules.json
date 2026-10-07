@@ -1,0 +1,750 @@
+{
+  "version": "exp036-plan-2",
+  "budget": {
+    "total_h": 40.0,
+    "main_cap_h": 31.0,
+    "margin": 1.15,
+    "session_cap_h": 16.0,
+    "overrun_ceiling_h": 44.0
+  },
+  "B_choices": [
+    16,
+    8,
+    4,
+    2,
+    1
+  ],
+  "B_max_aime": 8,
+  "memory_overhead_gib": 4.0,
+  "limit_fraction": 0.9,
+  "kv_transient_factor": 2.0,
+  "cache_limit_gib": 4.0,
+  "kv_bytes_per_token": {
+    "kolibri": 20480,
+    "gemma4": 20480,
+    "qwen3_6": 20480,
+    "qwen3_8": 65536
+  },
+  "sysctl_advice_mb": 114688,
+  "caps": {
+    "gpqa": 32768,
+    "mmlu": 32768,
+    "aime": 65536,
+    "ifbench": 16384,
+    "rgb": 16384
+  },
+  "cap_raise": {
+    "trigger_truncations": 1,
+    "trigger_len_fraction": 0.5,
+    "trigger_len_fraction_gpqa": 0.4,
+    "ceilings": {
+      "gpqa": 65536,
+      "mmlu": 65536,
+      "aime": 98304,
+      "ifbench": 32768,
+      "rgb": 32768
+    }
+  },
+  "pilot_gates": {
+    "block_min_failures": 2,
+    "require_diagnosed_mismatch": true
+  },
+  "projection": {
+    "length_scale": "mean_plus_1se",
+    "gpqa_diamond_factor": 1.25,
+    "step_model": "a + b*n_live + c*n_live*padded_len",
+    "fit_on": "last_third_of_arm_pilot",
+    "resample_seed": 36
+  },
+  "nM_ladder": [
+    588,
+    504,
+    406,
+    350,
+    294,
+    252,
+    196,
+    154
+  ],
+  "plans": [
+    "P0",
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9",
+    "P10"
+  ],
+  "plan_defs": {
+    "P0": {
+      "nM": 588,
+      "forced": true,
+      "neg_fc": true,
+      "k8_gpqa_de": true
+    },
+    "P1": {
+      "nM": 588,
+      "forced": true,
+      "neg_fc": false,
+      "k8_gpqa_de": true
+    },
+    "P2": {
+      "nM": 504,
+      "forced": true,
+      "neg_fc": false,
+      "k8_gpqa_de": true
+    },
+    "P3": {
+      "nM": 406,
+      "forced": true,
+      "neg_fc": false,
+      "k8_gpqa_de": true
+    },
+    "P4": {
+      "nM": 350,
+      "forced": true,
+      "neg_fc": false,
+      "k8_gpqa_de": true
+    },
+    "P5": {
+      "nM": 294,
+      "forced": true,
+      "neg_fc": false,
+      "k8_gpqa_de": true
+    },
+    "P6": {
+      "nM": 252,
+      "forced": true,
+      "neg_fc": false,
+      "k8_gpqa_de": true
+    },
+    "P7": {
+      "nM": 196,
+      "forced": true,
+      "neg_fc": false,
+      "k8_gpqa_de": true
+    },
+    "P8": {
+      "nM": 196,
+      "forced": false,
+      "neg_fc": false,
+      "k8_gpqa_de": true
+    },
+    "P9": {
+      "nM": 154,
+      "forced": false,
+      "neg_fc": false,
+      "k8_gpqa_de": true
+    },
+    "P10": {
+      "nM": 154,
+      "forced": false,
+      "neg_fc": false,
+      "k8_gpqa_de": false
+    }
+  },
+  "plan_defs_source": "HYPOTHESIS.md 'Pilot and the rule that fixes n' (P0-P10 table)",
+  "tier_a_queue": [
+    {
+      "arm": "K8",
+      "task": "gpqa_en",
+      "effort": "high",
+      "n": 198,
+      "group": "core"
+    },
+    {
+      "arm": "K8",
+      "task": "gpqa_de",
+      "effort": "high",
+      "n": 198,
+      "group": "k8_gpqa_de"
+    },
+    {
+      "arm": "K8",
+      "task": "mmlu_en",
+      "effort": "high",
+      "n": "nM",
+      "group": "core"
+    },
+    {
+      "arm": "K8",
+      "task": "mmlu_de",
+      "effort": "high",
+      "n": "nM",
+      "group": "core"
+    },
+    {
+      "arm": "K8",
+      "task": "ifbench",
+      "effort": "high",
+      "n": 300,
+      "group": "core"
+    },
+    {
+      "arm": "K8",
+      "task": "rgb_cb",
+      "effort": "high",
+      "n": 400,
+      "group": "core"
+    },
+    {
+      "arm": "G8",
+      "task": "mmlu_en",
+      "effort": "high",
+      "n": "nM",
+      "group": "core"
+    },
+    {
+      "arm": "G8",
+      "task": "mmlu_de",
+      "effort": "high",
+      "n": "nM",
+      "group": "core"
+    },
+    {
+      "arm": "Q36-8",
+      "task": "mmlu_en",
+      "effort": "high",
+      "n": "nM",
+      "group": "core"
+    },
+    {
+      "arm": "Q36-8",
+      "task": "mmlu_de",
+      "effort": "high",
+      "n": "nM",
+      "group": "core"
+    },
+    {
+      "arm": "Q36-8",
+      "task": "ifbench",
+      "effort": "high",
+      "n": 300,
+      "group": "core"
+    },
+    {
+      "arm": "G8",
+      "task": "ifbench",
+      "effort": "high",
+      "n": 300,
+      "group": "core"
+    },
+    {
+      "arm": "G8",
+      "task": "rgb_cb",
+      "effort": "high",
+      "n": 400,
+      "group": "core"
+    },
+    {
+      "arm": "Q36-8",
+      "task": "rgb_cb",
+      "effort": "high",
+      "n": 400,
+      "group": "core"
+    },
+    {
+      "arm": "K4",
+      "task": "mmlu_en",
+      "effort": "high",
+      "n": "nM",
+      "group": "core"
+    },
+    {
+      "arm": "K4",
+      "task": "mmlu_de",
+      "effort": "high",
+      "n": "nM",
+      "group": "core"
+    },
+    {
+      "arm": "K4",
+      "task": "ifbench",
+      "effort": "high",
+      "n": 300,
+      "group": "core"
+    },
+    {
+      "arm": "K4",
+      "task": "rgb_cb",
+      "effort": "high",
+      "n": 400,
+      "group": "core"
+    },
+    {
+      "arm": "K8",
+      "task": "rgb_forced",
+      "effort": "high",
+      "n": 400,
+      "group": "forced"
+    },
+    {
+      "arm": "G8",
+      "task": "rgb_forced",
+      "effort": "high",
+      "n": 400,
+      "group": "forced"
+    },
+    {
+      "arm": "Q36-8",
+      "task": "rgb_forced",
+      "effort": "high",
+      "n": 400,
+      "group": "forced"
+    },
+    {
+      "arm": "K8",
+      "task": "rgb_neg",
+      "effort": "high",
+      "n": 300,
+      "group": "neg_fc"
+    },
+    {
+      "arm": "K8",
+      "task": "rgb_fact",
+      "effort": "high",
+      "n": 100,
+      "group": "neg_fc"
+    },
+    {
+      "arm": "G8",
+      "task": "rgb_neg",
+      "effort": "high",
+      "n": 300,
+      "group": "neg_fc"
+    },
+    {
+      "arm": "G8",
+      "task": "rgb_fact",
+      "effort": "high",
+      "n": 100,
+      "group": "neg_fc"
+    },
+    {
+      "arm": "Q36-8",
+      "task": "rgb_neg",
+      "effort": "high",
+      "n": 300,
+      "group": "neg_fc"
+    },
+    {
+      "arm": "Q36-8",
+      "task": "rgb_fact",
+      "effort": "high",
+      "n": 100,
+      "group": "neg_fc"
+    }
+  ],
+  "tier_a_queue_source": "HYPOTHESIS.md 'Tier A cells, in queue order'; groups: core always, k8_gpqa_de unless P10, forced P0-P7, neg_fc P0 only",
+  "tier_b_order": [
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "B7",
+    "B8",
+    "B9",
+    "B10"
+  ],
+  "tier_b_cells": {
+    "B1": [
+      {
+        "arm": "K8",
+        "task": "aime_en",
+        "effort": "high",
+        "n": 30
+      },
+      {
+        "arm": "K8",
+        "task": "aime_de",
+        "effort": "high",
+        "n": 30
+      }
+    ],
+    "B2": [
+      {
+        "arm": "G8",
+        "task": "aime_en",
+        "effort": "high",
+        "n": 30
+      },
+      {
+        "arm": "G8",
+        "task": "aime_de",
+        "effort": "high",
+        "n": 30
+      },
+      {
+        "arm": "Q36-8",
+        "task": "aime_en",
+        "effort": "high",
+        "n": 30
+      },
+      {
+        "arm": "Q36-8",
+        "task": "aime_de",
+        "effort": "high",
+        "n": 30
+      }
+    ],
+    "B3": [
+      {
+        "arm": "G8",
+        "task": "gpqa_en",
+        "effort": "high",
+        "n": 198
+      },
+      {
+        "arm": "Q36-8",
+        "task": "gpqa_en",
+        "effort": "high",
+        "n": 198
+      }
+    ],
+    "B4": [
+      {
+        "arm": "bench",
+        "task": "ladder",
+        "effort": "na",
+        "n": 0,
+        "fixed_h_key": "B4",
+        "needs": "tier2"
+      }
+    ],
+    "B5": [
+      {
+        "arm": "K8",
+        "task": "gpqa_en",
+        "effort": "none",
+        "n": 198
+      },
+      {
+        "arm": "K8",
+        "task": "gpqa_de",
+        "effort": "none",
+        "n": 198
+      },
+      {
+        "arm": "K8",
+        "task": "mmlu_en",
+        "effort": "none",
+        "n": "nM"
+      },
+      {
+        "arm": "K8",
+        "task": "mmlu_de",
+        "effort": "none",
+        "n": "nM"
+      },
+      {
+        "arm": "K8",
+        "task": "ifbench",
+        "effort": "none",
+        "n": 300
+      },
+      {
+        "arm": "K8",
+        "task": "rgb_cb",
+        "effort": "none",
+        "n": 400
+      }
+    ],
+    "B6": [
+      {
+        "arm": "G8",
+        "task": "gpqa_de",
+        "effort": "high",
+        "n": 198
+      },
+      {
+        "arm": "Q36-8",
+        "task": "gpqa_de",
+        "effort": "high",
+        "n": 198
+      }
+    ],
+    "B7": [
+      {
+        "arm": "K8",
+        "task": "gpqa_en",
+        "effort": "low",
+        "n": 198
+      },
+      {
+        "arm": "K8",
+        "task": "gpqa_en",
+        "effort": "medium",
+        "n": 198
+      }
+    ],
+    "B8": [
+      {
+        "arm": "K4",
+        "task": "gpqa_en",
+        "effort": "high",
+        "n": 198
+      },
+      {
+        "arm": "K4",
+        "task": "gpqa_de",
+        "effort": "high",
+        "n": 198
+      }
+    ],
+    "B9": [
+      {
+        "arm": "Q38-8",
+        "task": "gpqa_de",
+        "effort": "high",
+        "n": 198
+      }
+    ],
+    "B10": [
+      {
+        "arm": "K8",
+        "task": "gpqa_en",
+        "effort": "high",
+        "n": 198,
+        "pass": 1
+      },
+      {
+        "arm": "K8",
+        "task": "gpqa_de",
+        "effort": "high",
+        "n": 198,
+        "group": "k8_gpqa_de",
+        "pass": 1
+      }
+    ]
+  },
+  "ladder_estimate_h": {
+    "B4": 1.4
+  },
+  "crash_fallback": {
+    "heartbeat_stale_min": 30,
+    "max_fallbacks": 2
+  },
+  "fixed_window_bytes": {
+    "kolibri": 42024960,
+    "gemma4": 209715200,
+    "qwen3_6": 64389120,
+    "qwen3_8": 153944064
+  },
+  "fixed_window_bytes_note": "bf16 sliding-window KV per sequence (Kolibri 40 x 513 x 2 x 4 x 128 x 2 B; Gemma 4 25 x 1024 x 2 x 8 x 256 x 2 B) and the DeltaNet state of Qwen3.6 / Qwen3.8 (fp32 recurrent state plus conv state, from config); tools/kv_bytes.py overrides these when present",
+  "prompt_max_tokens": {
+    "gpqa": 2048,
+    "mmlu": 2048,
+    "aime": 1024,
+    "ifbench": 2048,
+    "rgb": 4096
+  },
+  "prompt_max_note": "conservative per-task bound on rendered prompt tokens for the memory rule; run.py uses the measured maximum when it is larger",
+  "prompt_tokens_default": {
+    "gpqa": 300,
+    "mmlu": 400,
+    "aime": 200,
+    "ifbench": 150,
+    "rgb_cb": 50,
+    "rgb_forced": 60,
+    "rgb_neg": 1500,
+    "rgb_fact": 1500
+  },
+  "prompt_tokens_note": "projection fallback when no pilot cell measured the prompt length of a cell's task (RGB Negative and Fact-Check carry documents)",
+  "pilot": {
+    "effort": "high",
+    "arms": [
+      "K8",
+      "G8",
+      "Q36-8",
+      "K4"
+    ],
+    "cells": {
+      "K8": [
+        {
+          "task": "gpqa_main_en",
+          "n": 8
+        },
+        {
+          "task": "gpqa_main_de",
+          "n": 8
+        },
+        {
+          "task": "mmlu_full_en",
+          "n": 8
+        },
+        {
+          "task": "mmlu_full_de",
+          "n": 8
+        },
+        {
+          "task": "ifbench_pilot",
+          "n": 8
+        },
+        {
+          "task": "rgb_int_cb",
+          "n": 16
+        },
+        {
+          "task": "rgb_int_forced",
+          "n": 8
+        },
+        {
+          "task": "aime_en_pilot",
+          "n": 4
+        }
+      ],
+      "G8": [
+        {
+          "task": "gpqa_main_en",
+          "n": 8
+        },
+        {
+          "task": "gpqa_main_de",
+          "n": 8
+        },
+        {
+          "task": "mmlu_full_en",
+          "n": 8
+        },
+        {
+          "task": "mmlu_full_de",
+          "n": 8
+        },
+        {
+          "task": "ifbench_pilot",
+          "n": 8
+        },
+        {
+          "task": "rgb_int_cb",
+          "n": 16
+        },
+        {
+          "task": "rgb_int_forced",
+          "n": 8
+        }
+      ],
+      "Q36-8": [
+        {
+          "task": "gpqa_main_en",
+          "n": 8
+        },
+        {
+          "task": "gpqa_main_de",
+          "n": 8
+        },
+        {
+          "task": "mmlu_full_en",
+          "n": 8
+        },
+        {
+          "task": "mmlu_full_de",
+          "n": 8
+        },
+        {
+          "task": "ifbench_pilot",
+          "n": 8
+        },
+        {
+          "task": "rgb_int_cb",
+          "n": 16
+        },
+        {
+          "task": "rgb_int_forced",
+          "n": 8
+        }
+      ],
+      "K4": [
+        {
+          "task": "gpqa_main_en",
+          "n": 8
+        },
+        {
+          "task": "gpqa_main_de",
+          "n": 8
+        },
+        {
+          "task": "mmlu_full_en",
+          "n": 8
+        },
+        {
+          "task": "mmlu_full_de",
+          "n": 8
+        },
+        {
+          "task": "ifbench_pilot",
+          "n": 8
+        },
+        {
+          "task": "rgb_int_cb",
+          "n": 16
+        }
+      ]
+    },
+    "parse_gate_tasks": [
+      "gpqa_main_en",
+      "gpqa_main_de",
+      "mmlu_full_en",
+      "mmlu_full_de",
+      "rgb_int_cb",
+      "rgb_int_forced"
+    ],
+    "discarded_tasks": [
+      "ifbench_pilot",
+      "aime_en_pilot"
+    ]
+  },
+  "pilot_source": {
+    "gpqa_en": "gpqa_main_en",
+    "gpqa_de": "gpqa_main_de",
+    "mmlu_en": "mmlu_full_en",
+    "mmlu_de": "mmlu_full_de",
+    "ifbench": "ifbench_pilot",
+    "rgb_cb": "rgb_int_cb",
+    "rgb_forced": "rgb_int_forced",
+    "rgb_neg": "rgb_int_cb",
+    "rgb_fact": "rgb_int_cb",
+    "aime_en": "aime_en_pilot",
+    "aime_de": "aime_en_pilot"
+  },
+  "pilot_source_note": "RGB Negative and Fact-Check have no pilot cell: their lengths come from the arm's closed-book pilot, their prompt lengths from prompt_tokens_default. AIME-DE uses the AIME EN pilot. A task missing from an arm's pilot falls back to the same arm's rgb_int_cb for RGB tasks.",
+  "derived_lengths": {
+    "peer_aime": "the arm's GPQA pilot lengths (EN for aime_en, DE for aime_de) x K8's mean AIME pilot length / K8's mean GPQA EN pilot length",
+    "kolibri_effort_ratio": {
+      "none": 0.08,
+      "low": 0.4,
+      "medium": 0.7
+    },
+    "q38_gpqa": "Q36-8's GPQA pilot lengths of the same language; step model fitted on Q38-8's descriptive speed cells",
+    "B4": "fixed: ladder_estimate_h.B4 simulated hours"
+  },
+  "rows": {
+    "H2": [
+      "gpqa_en",
+      "gpqa_de",
+      "mmlu_en",
+      "mmlu_de",
+      "ifbench"
+    ],
+    "H2_P10_drop": "gpqa_de",
+    "H2_secondary_if_B1": [
+      "aime_en",
+      "aime_de"
+    ],
+    "H7": [
+      "mmlu_en",
+      "mmlu_de",
+      "ifbench",
+      "rgb_cb"
+    ],
+    "H7_if_B8": [
+      "gpqa_en",
+      "gpqa_de"
+    ]
+  }
+}

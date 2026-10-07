@@ -1,0 +1,233 @@
+{
+  "schema": "exp_036 asset manifest v2",
+  "note": "Every local path is relative to $EXP036_MODELS (default ~/models/exp036) on the run host. The kit's preflight checks each entry exists, matches its revision, and hashes it into the run's version record. Nothing in the kit downloads; fetching is done by hand with the commands in ASSETS.md.",
+  "run_host": "miktam-mbp (MacBook Pro 14\", Apple M5 Max, 128 GB unified)",
+  "recorded_utc": "2026-10-03T16:00:28Z",
+  "models": [
+    {
+      "repo": "Aleph-Alpha/Kolibri-1-BF16",
+      "revision": "7a8f290e7858825c3cf5e4c447ba68345de9f1d3",
+      "path": "Kolibri-1-BF16",
+      "bytes": 156228414296,
+      "role": "source weights for the MLX 8-bit and 4-bit conversions and for the layer-streaming reference",
+      "status": "download started by Andrei 2026-10-03"
+    },
+    {
+      "repo": "mlx-community/gemma-4-26b-a4b-it-8bit",
+      "revision": "33c6d23798a0af159529890f79329206dbfbd73c",
+      "path": "gemma-4-26b-a4b-it-8bit",
+      "bytes": 28000000000,
+      "quant": "affine, 8-bit, group 64",
+      "role": "peer, 8-bit arm",
+      "status": "requested 2026-10-03"
+    },
+    {
+      "repo": "mlx-community/Qwen3.6-35B-A3B-8bit",
+      "revision": "e06a74e6236a60c8367e1a3214e83d8b61b637b0",
+      "path": "Qwen3.6-35B-A3B-8bit",
+      "bytes": 37700000000,
+      "quant": "affine, 8-bit, group 64",
+      "role": "peer, 8-bit arm",
+      "status": "requested 2026-10-03"
+    },
+    {
+      "repo": "mlx-community/Qwen3.8-27B-8bit",
+      "revision": "815b83c0df8ffd1d1b5244cf75fd6ef14fca9ef9",
+      "path": "Qwen3.8-27B-8bit",
+      "bytes": 29500000000,
+      "quant": "affine, 8-bit, group 64",
+      "role": "peer, 8-bit arm",
+      "status": "requested 2026-10-03"
+    },
+    {
+      "repo": "mlx-community/gemma-4-26b-a4b-it-4bit",
+      "revision": "0d77464eeb233a2da68ebf9d7dc4edaac7db956d",
+      "path": "gemma-4-26b-a4b-it-4bit",
+      "bytes": 15400000000,
+      "quant": "affine, 4-bit, group 64",
+      "role": "peer, 4-bit (64 GB node) arm",
+      "status": "requested 2026-10-03"
+    },
+    {
+      "repo": "mlx-community/Qwen3.6-35B-A3B-4bit",
+      "revision": "38740b847e4cb78f352aba30aa41c76e08e6eb46",
+      "path": "Qwen3.6-35B-A3B-4bit",
+      "bytes": 20400000000,
+      "quant": "affine, 4-bit, group 64",
+      "role": "peer, 4-bit (64 GB node) arm",
+      "status": "requested 2026-10-03"
+    },
+    {
+      "repo": "mlx-community/Qwen3.8-27B-4bit",
+      "revision": "10c35caafbb80f7dc6a7a432cdd11af10a6d4818",
+      "path": "Qwen3.8-27B-4bit",
+      "bytes": 16100000000,
+      "quant": "affine, 4-bit, group 64",
+      "role": "peer, 4-bit (64 GB node) arm",
+      "status": "requested 2026-10-03"
+    }
+  ],
+  "datasets": [
+    {
+      "repo": "math-ai/aime26",
+      "revision": "79037aebdb6580008fb960d17cb21fd3099083e3",
+      "path": "data/aime26",
+      "gated": false,
+      "status": "downloaded by Andrei 2026-10-03"
+    },
+    {
+      "repo": "ellamind/aime26-multilingual",
+      "revision": "3c8bc18f6c185ed2d66803dbd394839a3917fd82",
+      "path": "data/aime26-multilingual",
+      "gated": false,
+      "status": "downloaded by Andrei 2026-10-03"
+    },
+    {
+      "repo": "allenai/IFBench_test",
+      "revision": "2e8a48de45ff3bf41242f927254ca81b59ca3ae2",
+      "path": "data/IFBench_test",
+      "gated": false,
+      "status": "downloaded by Andrei 2026-10-03"
+    },
+    {
+      "repo": "li-lab/MMLU-ProX-Lite",
+      "revision": "e82aafb9460529687d3c7e51b401d8dd1dd309dd",
+      "path": "data/MMLU-ProX-Lite",
+      "gated": false,
+      "status": "downloaded by Andrei 2026-10-03"
+    },
+    {
+      "repo": "li-lab/MMLU-ProX",
+      "revision": "8e6106a6c6ce1c5027e66cc338143cf997b2aa09",
+      "path": "data/MMLU-ProX",
+      "gated": false,
+      "status": "downloaded by Andrei 2026-10-03"
+    },
+    {
+      "repo": "Idavidrein/gpqa",
+      "revision": "83022cefff930aea54f654c0b282e74b9eeda5c6",
+      "path": "data/gpqa",
+      "gated": true,
+      "publish_items": false,
+      "status": "downloaded by Andrei 2026-10-03"
+    },
+    {
+      "repo": "ellamind/gpqa-multilingual",
+      "revision": "bc70ca1791afa241a98c972e126c2decaf0a367d",
+      "path": "data/gpqa-multilingual",
+      "gated": true,
+      "publish_items": false,
+      "status": "downloaded by Andrei 2026-10-03"
+    },
+    {
+      "repo": "HuggingFaceFW/fineweb-2",
+      "revision": "af9c13333eb981300149d5ca60a8e9d659b276b9",
+      "files": [
+        "data/deu_Latn/test/000_00000.parquet"
+      ],
+      "path": "data/fineweb-2",
+      "bytes": 104264728,
+      "sha256": {
+        "data/deu_Latn/test/000_00000.parquet": "f370564f527a10cf125f267d8f10175d6a6366390480620e90a469bbf80a2a46"
+      },
+      "gated": false,
+      "licence": "ODC-By 1.0; subject to Common Crawl terms",
+      "publish_items": false,
+      "role": "H5 German tokenizer economy; gate texts T5, T6, T9 (built locally, never committed)",
+      "status": "new 2026-10-03, approved by Andrei; to download on the mbp"
+    }
+  ],
+  "code": [
+    {
+      "repo": "https://github.com/allenai/IFBench",
+      "commit": "1c40f0c10d9b5c5c2f10a175a28007ebb64f7f4d",
+      "path": "data/IFBench-src",
+      "role": "IFBench deterministic instruction checkers (Apache-2.0)",
+      "status": "cloned by Andrei 2026-10-03"
+    },
+    {
+      "repo": "https://github.com/chen700564/RGB",
+      "commit": "65ec39e40e7dc9abb50e9bf1b4f32be3f6f16615",
+      "path": "data/RGB-src",
+      "licence": "code and data CC BY-NC-SA 4.0 (README, Licence section); used for evaluation, scores only, nothing redistributed",
+      "sha256": {
+        "data/en.json": "872fc551cfb609895326bb9d76754855164d5cc715fe22694daeded8962f5285",
+        "data/en_fact.json": "92f4b2330ee407f74fbd923197028ef5140cfbc1f4b4092efec2d4d10ae6c9e5",
+        "data/en_int.json": "ab824393a15bb3e0a6b2c9037c8b50f2865874fc7984091ffdec1961f9b37bdf",
+        "config/instruction.yaml": "0232a62c325544f7527d0c35bf672169f4ec14f04af722b22c2ea381070390e3",
+        "evalue.py": "506436ffbd7b97a6cadeb34961f4b4a4a9f04bf8afe7a1729e467811243352c0"
+      },
+      "publish_items": false,
+      "role": "H6 closed-book, RGB negative / fact-check rows, E2, E3; our own scorer implements RGB's rule",
+      "status": "new 2026-10-03, approved by Andrei; to clone on the mbp"
+    }
+  ],
+  "updated_utc": "2026-10-03T18:20:00Z",
+  "environments": [
+    {
+      "name": "ifbench-venv",
+      "path": "ifbench-venv",
+      "built_from": "data/IFBench-src/uv.lock (uv sync --frozen, Python 3.12)",
+      "uv_lock_sha256": "1c235a49f73d79274797746a083a6b675af284e6652cb6b788f9100e41e3001a",
+      "note": "spaCy in IFBench's requirements.txt is not imported at the pinned commit; the locked project dependencies are complete"
+    },
+    {
+      "name": "nltk_data",
+      "path": "nltk_data",
+      "packages": [
+        "punkt",
+        "punkt_tab",
+        "stopwords",
+        "averaged_perceptron_tagger_eng"
+      ],
+      "note": "IFBench downloads these at run time if missing; pre-fetching them and setting NLTK_DATA keeps scoring offline"
+    }
+  ],
+  "mini_build_assets": {
+    "root": "~/models/exp036-mini (on miktam-mini; build-time only, used to build and test the kit, not by the run)",
+    "fetched_utc": "2026-10-03T18:14Z",
+    "items": [
+      {
+        "what": "upstream peer tokenizer/template files",
+        "repos": {
+          "google/gemma-4-26B-A4B-it": [
+            "20da991ab4afab98e8f910c4a2e8f4fbefc404ad",
+            "4d7ae4984b7db7de8f8457170b3f1a419ee76d52"
+          ],
+          "Qwen/Qwen3.6-35B-A3B": [
+            "995ad96eacd98c81ed38be0c5b274b04031597b0"
+          ],
+          "Qwen/Qwen3.8-27B": [
+            "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0"
+          ]
+        },
+        "files": [
+          "tokenizer.json",
+          "tokenizer_config.json",
+          "chat_template.jinja",
+          "generation_config.json",
+          "config.json"
+        ],
+        "note": "mlx-community Gemma builds carry the 20da991a (June) chat template; upstream main 4d7ae498 has a newer one"
+      },
+      {
+        "what": "mlx-community peer tokenizer/template/config files at the assets.json revisions"
+      },
+      {
+        "what": "Kolibri-1-BF16 tokenizer.json, tokenizer_config.json, config.json, generation_config.json, model.safetensors.index.json @ 7a8f290e"
+      },
+      {
+        "what": "Aleph-Alpha-Research/eval-framework",
+        "tag": "v0.14.2",
+        "commit": "3532e9f16e19e396fc2b4d4543878cdccc4d04da"
+      },
+      {
+        "what": "Grundgesetz XML (gesetze-im-internet.de/gg/xml.zip), public domain (\u00a7 5 UrhG), source of gate text T4",
+        "sha256": "b0dbbb71c7d04ed323f16c1926d1826e640103a531458dd52892864b7705fc37"
+      },
+      {
+        "what": "the FineWeb-2 parquet, RGB, IFBench_test, IFBench-src, ifbench-venv and nltk_data, at the same pins as above"
+      }
+    ]
+  }
+}

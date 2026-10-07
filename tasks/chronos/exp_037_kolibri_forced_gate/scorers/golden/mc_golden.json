@@ -1,0 +1,23 @@
+{
+  "about": "Hand-written synthetic answers (no dataset text) and the letter each multiple-choice extractor must return; null = parse failure. Columns: gpqa_en = tulu_answer_v2(4), mmlu_en = tulu_answer_v2(10), gpqa_de = tulu_answer_de(), mmlu_de = tulu_answer_de() with A-J.",
+  "cases": [
+    {"answer": "Therefore, the answer is (B)", "gpqa_en": "B", "mmlu_en": "B", "gpqa_de": "B", "mmlu_de": "B"},
+    {"answer": "so the answer is c", "gpqa_en": "C", "mmlu_en": "C", "gpqa_de": "C", "mmlu_de": "C"},
+    {"answer": "The answer is: (D).", "gpqa_en": "D", "mmlu_en": "D", "gpqa_de": null, "mmlu_de": null},
+    {"answer": "Therefore, the answer is (E)", "gpqa_en": null, "mmlu_en": "E", "gpqa_de": null, "mmlu_de": "E"},
+    {"answer": "At first the answer is (A), but on reflection the answer is (C).", "gpqa_en": "C", "mmlu_en": "C", "gpqa_de": "C", "mmlu_de": "C"},
+    {"answer": "Answer: B", "gpqa_en": null, "mmlu_en": null, "gpqa_de": null, "mmlu_de": null},
+    {"answer": "The answer is (Bb)", "gpqa_en": null, "mmlu_en": null, "gpqa_de": null, "mmlu_de": null},
+    {"answer": "The answer isn't obvious.", "gpqa_en": null, "mmlu_en": null, "gpqa_de": null, "mmlu_de": null},
+    {"answer": "Therefore, the answer is (J)", "gpqa_en": null, "mmlu_en": "J", "gpqa_de": null, "mmlu_de": "J"},
+    {"answer": "Daher ist die Antwort (C)", "gpqa_en": null, "mmlu_en": null, "gpqa_de": "C", "mmlu_de": "C"},
+    {"answer": "Die richtige Antwort ist B.", "gpqa_en": null, "mmlu_en": null, "gpqa_de": "B", "mmlu_de": "B"},
+    {"answer": "Antwort: (G)", "gpqa_en": null, "mmlu_en": null, "gpqa_de": null, "mmlu_de": "G"},
+    {"answer": "Daher ist die Antwort (A). Final check: the answer is (D)", "gpqa_en": "D", "mmlu_en": "D", "gpqa_de": "D", "mmlu_de": "D"},
+    {"answer": "Option D wirkt plausibel, Antwort D ist es aber nicht.", "gpqa_en": null, "mmlu_en": null, "gpqa_de": null, "mmlu_de": null},
+    {"answer": "Therefore, the answer is (b)", "gpqa_en": "B", "mmlu_en": "B", "gpqa_de": "B", "mmlu_de": "B"},
+    {"answer": "The answer is A or B, I cannot tell.", "gpqa_en": "A", "mmlu_en": "A", "gpqa_de": "A", "mmlu_de": "A"},
+    {"answer": "Daher ist die Antwort (H), nicht (A).", "gpqa_en": null, "mmlu_en": null, "gpqa_de": null, "mmlu_de": "H"},
+    {"answer": "ANSWER IS (f)", "gpqa_en": null, "mmlu_en": "F", "gpqa_de": null, "mmlu_de": "F"}
+  ]
+}

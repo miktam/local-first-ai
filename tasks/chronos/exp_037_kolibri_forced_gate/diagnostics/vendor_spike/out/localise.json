@@ -1,0 +1,994 @@
+{
+ "rl_s23:ids600": {
+  "ck": "rl_s23",
+  "seq": "ids600",
+  "embedding_exact": true,
+  "bias_exact": true,
+  "layers": [
+   {
+    "layer": 0,
+    "type": "sliding_attention",
+    "free_rel_l2": 1.9425926832337795e-06,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 1.9425926832337795e-06,
+    "local_nat_rowmax": 3.179748130671215e-06,
+    "local_forced_rel_l2": 1.9425926832337795e-06,
+    "local_forced_rowmax": 3.179748130671215e-06,
+    "local_router_rel_l2": 1.6668896556120649e-06,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 1,
+    "type": "sliding_attention",
+    "free_rel_l2": 5.179575610699641e-06,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 1.323512063450806e-06,
+    "local_nat_rowmax": 2.240426326193917e-06,
+    "local_forced_rel_l2": 1.323512063450806e-06,
+    "local_forced_rowmax": 2.240426326193917e-06,
+    "local_router_rel_l2": 1.2197967651126719e-06,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 2,
+    "type": "sliding_attention",
+    "free_rel_l2": 1.0891714164088884e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 1.0766680611736766e-06,
+    "local_nat_rowmax": 1.7202106517441026e-06,
+    "local_forced_rel_l2": 1.0766680611736766e-06,
+    "local_forced_rowmax": 1.7202106517441026e-06,
+    "local_router_rel_l2": 1.038654616003962e-06,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 3,
+    "type": "sliding_attention",
+    "free_rel_l2": 1.9747283638873635e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 8.776565477259984e-07,
+    "local_nat_rowmax": 1.3937668310401455e-06,
+    "local_forced_rel_l2": 8.776565477259984e-07,
+    "local_forced_rowmax": 1.3937668310401455e-06,
+    "local_router_rel_l2": 8.738288943747669e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 4,
+    "type": "full_attention",
+    "free_rel_l2": 3.238695124815424e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 7.971750978015358e-07,
+    "local_nat_rowmax": 1.3131574522588685e-06,
+    "local_forced_rel_l2": 7.971750978015358e-07,
+    "local_forced_rowmax": 1.3131574522588685e-06,
+    "local_router_rel_l2": 8.193943358752217e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 5,
+    "type": "sliding_attention",
+    "free_rel_l2": 5.0280971310087035e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 7.212317451388073e-07,
+    "local_nat_rowmax": 1.1589183556049575e-06,
+    "local_forced_rel_l2": 7.212317451388073e-07,
+    "local_forced_rowmax": 1.1589183556049575e-06,
+    "local_router_rel_l2": 7.474584866933988e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 6,
+    "type": "sliding_attention",
+    "free_rel_l2": 7.370267636910687e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 6.628009997620775e-07,
+    "local_nat_rowmax": 1.1484496145735712e-06,
+    "local_forced_rel_l2": 6.628009997620775e-07,
+    "local_forced_rowmax": 1.1484496145735712e-06,
+    "local_router_rel_l2": 7.043460982148147e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 7,
+    "type": "sliding_attention",
+    "free_rel_l2": 0.005021849227815195,
+    "free_flips_tokens": 1,
+    "local_nat_rel_l2": 6.182831125379232e-07,
+    "local_nat_rowmax": 1.0153375696692217e-06,
+    "local_forced_rel_l2": 6.182831125379232e-07,
+    "local_forced_rowmax": 1.0153375696692217e-06,
+    "local_router_rel_l2": 6.756463454034287e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 8,
+    "type": "sliding_attention",
+    "free_rel_l2": 0.014511032842980639,
+    "free_flips_tokens": 5,
+    "local_nat_rel_l2": 5.868199526487732e-07,
+    "local_nat_rowmax": 9.787166993940778e-07,
+    "local_forced_rel_l2": 5.868199526487732e-07,
+    "local_forced_rowmax": 9.787166993940778e-07,
+    "local_router_rel_l2": 6.494835742487247e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 9,
+    "type": "full_attention",
+    "free_rel_l2": 0.02214871624897673,
+    "free_flips_tokens": 8,
+    "local_nat_rel_l2": 5.42033725431074e-07,
+    "local_nat_rowmax": 1.015235085141492e-06,
+    "local_forced_rel_l2": 5.42033725431074e-07,
+    "local_forced_rowmax": 1.015235085141492e-06,
+    "local_router_rel_l2": 6.132903708845169e-07,
+    "local_flips_tokens": 0
+   }
+  ],
+  "flips": [
+   {
+    "layer": 7,
+    "token": 244,
+    "vendor_set": [
+     15,
+     20,
+     36,
+     41,
+     43,
+     45
+    ],
+    "ref_set": [
+     15,
+     29,
+     36,
+     41,
+     43,
+     45
+    ],
+    "vendor_gap": 5.626678466796875e-05
+   },
+   {
+    "layer": 8,
+    "token": 244,
+    "vendor_set": [
+     10,
+     35,
+     38,
+     53,
+     54,
+     61
+    ],
+    "ref_set": [
+     10,
+     14,
+     35,
+     38,
+     53,
+     61
+    ],
+    "vendor_gap": 0.10219931602478027
+   },
+   {
+    "layer": 8,
+    "token": 249,
+    "vendor_set": [
+     10,
+     28,
+     35,
+     38,
+     58,
+     61
+    ],
+    "ref_set": [
+     10,
+     11,
+     35,
+     38,
+     58,
+     61
+    ],
+    "vendor_gap": 0.0019714832305908203
+   },
+   {
+    "layer": 8,
+    "token": 271,
+    "vendor_set": [
+     8,
+     9,
+     25,
+     33,
+     35,
+     38
+    ],
+    "ref_set": [
+     8,
+     9,
+     33,
+     35,
+     38,
+     62
+    ],
+    "vendor_gap": 0.007375001907348633
+   },
+   {
+    "layer": 8,
+    "token": 367,
+    "vendor_set": [
+     9,
+     10,
+     25,
+     33,
+     48,
+     58
+    ],
+    "ref_set": [
+     9,
+     10,
+     25,
+     33,
+     38,
+     48
+    ],
+    "vendor_gap": 0.03127694129943848
+   },
+   {
+    "layer": 8,
+    "token": 457,
+    "vendor_set": [
+     10,
+     14,
+     25,
+     35,
+     38,
+     53
+    ],
+    "ref_set": [
+     10,
+     25,
+     35,
+     38,
+     53,
+     58
+    ],
+    "vendor_gap": 0.013715505599975586
+   },
+   {
+    "layer": 9,
+    "token": 244,
+    "vendor_set": [
+     6,
+     11,
+     33,
+     37,
+     42,
+     47
+    ],
+    "ref_set": [
+     6,
+     11,
+     30,
+     33,
+     37,
+     47
+    ],
+    "vendor_gap": 0.05650806427001953
+   },
+   {
+    "layer": 9,
+    "token": 249,
+    "vendor_set": [
+     11,
+     17,
+     33,
+     42,
+     45,
+     47
+    ],
+    "ref_set": [
+     11,
+     17,
+     33,
+     42,
+     45,
+     55
+    ],
+    "vendor_gap": 0.10408878326416016
+   },
+   {
+    "layer": 9,
+    "token": 260,
+    "vendor_set": [
+     1,
+     11,
+     17,
+     33,
+     54,
+     61
+    ],
+    "ref_set": [
+     1,
+     11,
+     16,
+     33,
+     54,
+     61
+    ],
+    "vendor_gap": 0.07259011268615723
+   },
+   {
+    "layer": 9,
+    "token": 265,
+    "vendor_set": [
+     11,
+     33,
+     36,
+     45,
+     55,
+     61
+    ],
+    "ref_set": [
+     4,
+     11,
+     33,
+     45,
+     55,
+     61
+    ],
+    "vendor_gap": 0.0202789306640625
+   },
+   {
+    "layer": 9,
+    "token": 312,
+    "vendor_set": [
+     2,
+     11,
+     23,
+     33,
+     51,
+     55
+    ],
+    "ref_set": [
+     11,
+     23,
+     33,
+     51,
+     55,
+     58
+    ],
+    "vendor_gap": 0.0646204948425293
+   }
+  ],
+  "final_norm_local": 4.5405472150041524e-08,
+  "head_local": 0.0,
+  "chaos_control_rel_l2": [
+   1.5002341259778086e-06,
+   4.272416015632827e-06,
+   0.006381157632768766,
+   0.022274034030605808,
+   0.05233938254237438,
+   0.08783608990900824,
+   0.12819426886043114,
+   0.17390814163837576,
+   0.2198933255381176,
+   0.2671430467617329
+  ],
+  "chaos_control_logits_rel_l2": 0.2670995167363603
+ },
+ "rl_s29:ids600": {
+  "ck": "rl_s29",
+  "seq": "ids600",
+  "embedding_exact": true,
+  "bias_exact": true,
+  "layers": [
+   {
+    "layer": 0,
+    "type": "sliding_attention",
+    "free_rel_l2": 1.928012354821625e-06,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 1.928012354821625e-06,
+    "local_nat_rowmax": 3.4097647056930247e-06,
+    "local_forced_rel_l2": 1.928012354821625e-06,
+    "local_forced_rowmax": 3.4097647056930247e-06,
+    "local_router_rel_l2": 1.6698207850983378e-06,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 1,
+    "type": "sliding_attention",
+    "free_rel_l2": 5.006034491580141e-06,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 1.3042141345326768e-06,
+    "local_nat_rowmax": 2.0868609663628917e-06,
+    "local_forced_rel_l2": 1.3042141345326768e-06,
+    "local_forced_rowmax": 2.0868609663628917e-06,
+    "local_router_rel_l2": 1.2176580976805486e-06,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 2,
+    "type": "sliding_attention",
+    "free_rel_l2": 1.0285915773465686e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 1.047648984137972e-06,
+    "local_nat_rowmax": 1.6838096703402263e-06,
+    "local_forced_rel_l2": 1.047648984137972e-06,
+    "local_forced_rowmax": 1.6838096703402263e-06,
+    "local_router_rel_l2": 1.0186282408982268e-06,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 3,
+    "type": "sliding_attention",
+    "free_rel_l2": 1.8557612940306063e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 8.990338103639788e-07,
+    "local_nat_rowmax": 1.560040204980376e-06,
+    "local_forced_rel_l2": 8.990338103639788e-07,
+    "local_forced_rowmax": 1.560040204980376e-06,
+    "local_router_rel_l2": 8.964185051983171e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 4,
+    "type": "full_attention",
+    "free_rel_l2": 3.0035209657291205e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 7.890511897070778e-07,
+    "local_nat_rowmax": 1.6055844238613009e-06,
+    "local_forced_rel_l2": 7.890511897070778e-07,
+    "local_forced_rowmax": 1.6055844238613009e-06,
+    "local_router_rel_l2": 8.055171446533547e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 5,
+    "type": "sliding_attention",
+    "free_rel_l2": 4.629568683668895e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 7.10448636948122e-07,
+    "local_nat_rowmax": 1.2255669402093803e-06,
+    "local_forced_rel_l2": 7.10448636948122e-07,
+    "local_forced_rowmax": 1.2255669402093803e-06,
+    "local_router_rel_l2": 7.518467281053398e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 6,
+    "type": "sliding_attention",
+    "free_rel_l2": 6.774629911944917e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 6.598500069012457e-07,
+    "local_nat_rowmax": 1.0452421212672567e-06,
+    "local_forced_rel_l2": 6.598500069012457e-07,
+    "local_forced_rowmax": 1.0452421212672567e-06,
+    "local_router_rel_l2": 7.137143513146186e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 7,
+    "type": "sliding_attention",
+    "free_rel_l2": 9.603301213828542e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 6.01740072177564e-07,
+    "local_nat_rowmax": 1.023346394976088e-06,
+    "local_forced_rel_l2": 6.01740072177564e-07,
+    "local_forced_rowmax": 1.023346394976088e-06,
+    "local_router_rel_l2": 6.583520132672759e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 8,
+    "type": "sliding_attention",
+    "free_rel_l2": 0.0001310425050489525,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 5.705801956566689e-07,
+    "local_nat_rowmax": 8.790024297423553e-07,
+    "local_forced_rel_l2": 5.705801956566689e-07,
+    "local_forced_rowmax": 8.790024297423553e-07,
+    "local_router_rel_l2": 6.338060746504581e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 9,
+    "type": "full_attention",
+    "free_rel_l2": 0.00017117464276694328,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 5.283618010436176e-07,
+    "local_nat_rowmax": 8.980695900129791e-07,
+    "local_forced_rel_l2": 5.283618010436176e-07,
+    "local_forced_rowmax": 8.980695900129791e-07,
+    "local_router_rel_l2": 5.975904445328526e-07,
+    "local_flips_tokens": 0
+   }
+  ],
+  "flips": [],
+  "final_norm_local": 4.63949916637225e-08,
+  "head_local": 0.0,
+  "chaos_control_rel_l2": [
+   1.5002420367110078e-06,
+   4.208320620873266e-06,
+   9.018037883845724e-06,
+   1.6630941112102174e-05,
+   2.7398589404621888e-05,
+   4.276130597979505e-05,
+   6.330778983038406e-05,
+   9.053336972769832e-05,
+   0.00012616278706893827,
+   0.005054387335295788
+  ],
+  "chaos_control_logits_rel_l2": 0.0047791671912087615
+ },
+ "rl_s23:ids64": {
+  "ck": "rl_s23",
+  "seq": "ids64",
+  "embedding_exact": true,
+  "bias_exact": true,
+  "layers": [
+   {
+    "layer": 0,
+    "type": "sliding_attention",
+    "free_rel_l2": 1.33319378767494e-06,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 1.33319378767494e-06,
+    "local_nat_rowmax": 2.089107248838703e-06,
+    "local_forced_rel_l2": 1.33319378767494e-06,
+    "local_forced_rowmax": 2.089107248838703e-06,
+    "local_router_rel_l2": 1.1884357971008351e-06,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 1,
+    "type": "sliding_attention",
+    "free_rel_l2": 3.0506433606797454e-06,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 9.003471071805363e-07,
+    "local_nat_rowmax": 1.4920155478104511e-06,
+    "local_forced_rel_l2": 9.003471071805363e-07,
+    "local_forced_rowmax": 1.4920155478104511e-06,
+    "local_router_rel_l2": 8.63284910803073e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 2,
+    "type": "sliding_attention",
+    "free_rel_l2": 5.534105320286475e-06,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 7.188942098161618e-07,
+    "local_nat_rowmax": 1.0466730654420342e-06,
+    "local_forced_rel_l2": 7.188942098161618e-07,
+    "local_forced_rowmax": 1.0466730654420342e-06,
+    "local_router_rel_l2": 7.286034705130075e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 3,
+    "type": "sliding_attention",
+    "free_rel_l2": 8.859099241972704e-06,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 5.770138188976813e-07,
+    "local_nat_rowmax": 9.192779419416382e-07,
+    "local_forced_rel_l2": 5.770138188976813e-07,
+    "local_forced_rowmax": 9.192779419416382e-07,
+    "local_router_rel_l2": 6.293452819400006e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 4,
+    "type": "full_attention",
+    "free_rel_l2": 1.3269429448632974e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 5.172138721888295e-07,
+    "local_nat_rowmax": 8.426410862222959e-07,
+    "local_forced_rel_l2": 5.172138721888295e-07,
+    "local_forced_rowmax": 8.426410862222959e-07,
+    "local_router_rel_l2": 5.601454343461827e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 5,
+    "type": "sliding_attention",
+    "free_rel_l2": 1.839849675860642e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 4.586004253634631e-07,
+    "local_nat_rowmax": 7.724184482391496e-07,
+    "local_forced_rel_l2": 4.586004253634631e-07,
+    "local_forced_rowmax": 7.724184482391496e-07,
+    "local_router_rel_l2": 5.195922559039049e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 6,
+    "type": "sliding_attention",
+    "free_rel_l2": 2.4802167501299805e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 4.2939792476329554e-07,
+    "local_nat_rowmax": 7.39437261091879e-07,
+    "local_forced_rel_l2": 4.2939792476329554e-07,
+    "local_forced_rowmax": 7.39437261091879e-07,
+    "local_router_rel_l2": 4.99159455929563e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 7,
+    "type": "sliding_attention",
+    "free_rel_l2": 3.1679054014312784e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 4.039948185363535e-07,
+    "local_nat_rowmax": 5.607756824402539e-07,
+    "local_forced_rel_l2": 4.039948185363535e-07,
+    "local_forced_rowmax": 5.607756824402539e-07,
+    "local_router_rel_l2": 4.7362001961468185e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 8,
+    "type": "sliding_attention",
+    "free_rel_l2": 4.01411038794181e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 3.768940974119544e-07,
+    "local_nat_rowmax": 5.037659783702433e-07,
+    "local_forced_rel_l2": 3.768940974119544e-07,
+    "local_forced_rowmax": 5.037659783702433e-07,
+    "local_router_rel_l2": 4.5055729556253805e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 9,
+    "type": "full_attention",
+    "free_rel_l2": 4.8472871288972224e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 3.467968525746355e-07,
+    "local_nat_rowmax": 5.627188096840779e-07,
+    "local_forced_rel_l2": 3.467968525746355e-07,
+    "local_forced_rowmax": 5.627188096840779e-07,
+    "local_router_rel_l2": 4.2455593880149775e-07,
+    "local_flips_tokens": 0
+   }
+  ],
+  "flips": [],
+  "final_norm_local": 5.230143216211188e-08,
+  "head_local": 0.0,
+  "chaos_control_rel_l2": [
+   1.5000984158133444e-06,
+   3.65404523043673e-06,
+   6.730866994405589e-06,
+   1.0537637561640842e-05,
+   1.594141579163917e-05,
+   2.2917055640330543e-05,
+   3.0438156867568027e-05,
+   3.9320398340744006e-05,
+   4.8783958857893615e-05,
+   5.962970476763064e-05
+  ],
+  "chaos_control_logits_rel_l2": 6.008847331953467e-05
+ },
+ "rl_s29:ids64": {
+  "ck": "rl_s29",
+  "seq": "ids64",
+  "embedding_exact": true,
+  "bias_exact": true,
+  "layers": [
+   {
+    "layer": 0,
+    "type": "sliding_attention",
+    "free_rel_l2": 1.295827247947596e-06,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 1.295827247947596e-06,
+    "local_nat_rowmax": 1.7725880995295173e-06,
+    "local_forced_rel_l2": 1.295827247947596e-06,
+    "local_forced_rowmax": 1.7725880995295173e-06,
+    "local_router_rel_l2": 1.1403136615929773e-06,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 1,
+    "type": "sliding_attention",
+    "free_rel_l2": 3.133362910315095e-06,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 8.732610315112399e-07,
+    "local_nat_rowmax": 1.3322293402069226e-06,
+    "local_forced_rel_l2": 8.732610315112399e-07,
+    "local_forced_rowmax": 1.3322293402069226e-06,
+    "local_router_rel_l2": 8.464816126718703e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 2,
+    "type": "sliding_attention",
+    "free_rel_l2": 5.690854271760994e-06,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 7.054049314487667e-07,
+    "local_nat_rowmax": 1.0497943244159794e-06,
+    "local_forced_rel_l2": 7.054049314487667e-07,
+    "local_forced_rowmax": 1.0497943244159794e-06,
+    "local_router_rel_l2": 7.005900108837398e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 3,
+    "type": "sliding_attention",
+    "free_rel_l2": 8.983449643428436e-06,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 5.985943439288448e-07,
+    "local_nat_rowmax": 1.0296688407459075e-06,
+    "local_forced_rel_l2": 5.985943439288448e-07,
+    "local_forced_rowmax": 1.0296688407459075e-06,
+    "local_router_rel_l2": 6.362332163879502e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 4,
+    "type": "full_attention",
+    "free_rel_l2": 1.292701948857494e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 5.268457894241613e-07,
+    "local_nat_rowmax": 9.639007047387802e-07,
+    "local_forced_rel_l2": 5.268457894241613e-07,
+    "local_forced_rowmax": 9.639007047387802e-07,
+    "local_router_rel_l2": 5.58369585041173e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 5,
+    "type": "sliding_attention",
+    "free_rel_l2": 1.7770742323688698e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 4.686236141342435e-07,
+    "local_nat_rowmax": 7.17346606184412e-07,
+    "local_forced_rel_l2": 4.686236141342435e-07,
+    "local_forced_rowmax": 7.17346606184412e-07,
+    "local_router_rel_l2": 5.126339416675708e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 6,
+    "type": "sliding_attention",
+    "free_rel_l2": 2.3586415439483793e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 4.3725348929491763e-07,
+    "local_nat_rowmax": 6.714976581701954e-07,
+    "local_forced_rel_l2": 4.3725348929491763e-07,
+    "local_forced_rowmax": 6.714976581701954e-07,
+    "local_router_rel_l2": 5.132419767540938e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 7,
+    "type": "sliding_attention",
+    "free_rel_l2": 2.960181754062951e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 3.847270464394967e-07,
+    "local_nat_rowmax": 5.917747593417741e-07,
+    "local_forced_rel_l2": 3.847270464394967e-07,
+    "local_forced_rowmax": 5.917747593417741e-07,
+    "local_router_rel_l2": 4.5082557031066584e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 8,
+    "type": "sliding_attention",
+    "free_rel_l2": 3.635901511895415e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 3.802354054052207e-07,
+    "local_nat_rowmax": 7.443921704192579e-07,
+    "local_forced_rel_l2": 3.802354054052207e-07,
+    "local_forced_rowmax": 7.443921704192579e-07,
+    "local_router_rel_l2": 4.7428727738124663e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 9,
+    "type": "full_attention",
+    "free_rel_l2": 4.3840126733542416e-05,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 3.4180722840296906e-07,
+    "local_nat_rowmax": 4.7138426366286256e-07,
+    "local_forced_rel_l2": 3.4180722840296906e-07,
+    "local_forced_rowmax": 4.7138426366286256e-07,
+    "local_router_rel_l2": 4.269074621321583e-07,
+    "local_flips_tokens": 0
+   }
+  ],
+  "flips": [],
+  "final_norm_local": 4.0429532991617675e-08,
+  "head_local": 0.0,
+  "chaos_control_rel_l2": [
+   1.499790060709707e-06,
+   3.6007391942340316e-06,
+   6.827326990706863e-06,
+   1.089508827960846e-05,
+   1.594974699789687e-05,
+   2.173911204674735e-05,
+   2.867653340432292e-05,
+   3.6069006819059934e-05,
+   4.505095289969727e-05,
+   5.484362113939652e-05
+  ],
+  "chaos_control_logits_rel_l2": 5.561435304908164e-05
+ },
+ "vendor_s0:ids600": {
+  "ck": "vendor_s0",
+  "seq": "ids600",
+  "embedding_exact": true,
+  "bias_exact": true,
+  "layers": [
+   {
+    "layer": 0,
+    "type": "sliding_attention",
+    "free_rel_l2": 4.975051767233851e-07,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 4.975051767233851e-07,
+    "local_nat_rowmax": 7.283576004863036e-07,
+    "local_forced_rel_l2": 4.975051767233851e-07,
+    "local_forced_rowmax": 7.283576004863036e-07,
+    "local_router_rel_l2": 4.36391364785295e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 1,
+    "type": "sliding_attention",
+    "free_rel_l2": 6.557892578933386e-07,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 2.9456474624979306e-07,
+    "local_nat_rowmax": 3.9397880214661625e-07,
+    "local_forced_rel_l2": 2.9456474624979306e-07,
+    "local_forced_rowmax": 3.9397880214661625e-07,
+    "local_router_rel_l2": 3.0576308438609585e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 2,
+    "type": "sliding_attention",
+    "free_rel_l2": 7.35226447386685e-07,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 2.286294405069429e-07,
+    "local_nat_rowmax": 3.074434541829825e-07,
+    "local_forced_rel_l2": 2.286294405069429e-07,
+    "local_forced_rowmax": 3.074434541829825e-07,
+    "local_router_rel_l2": 2.579359038317546e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 3,
+    "type": "sliding_attention",
+    "free_rel_l2": 7.972170335004865e-07,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 1.9525298867700452e-07,
+    "local_nat_rowmax": 2.663417531169874e-07,
+    "local_forced_rel_l2": 1.9525298867700452e-07,
+    "local_forced_rowmax": 2.663417531169874e-07,
+    "local_router_rel_l2": 2.5755216597681575e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 4,
+    "type": "full_attention",
+    "free_rel_l2": 8.439112749031699e-07,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 2.2101021659021405e-07,
+    "local_nat_rowmax": 3.189728516750973e-07,
+    "local_forced_rel_l2": 2.2101021659021405e-07,
+    "local_forced_rowmax": 3.189728516750973e-07,
+    "local_router_rel_l2": 2.8746580052448733e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 5,
+    "type": "full_attention",
+    "free_rel_l2": 9.008868464931646e-07,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 2.0900303220342583e-07,
+    "local_nat_rowmax": 2.973924323539692e-07,
+    "local_forced_rel_l2": 2.0900303220342583e-07,
+    "local_forced_rowmax": 2.973924323539692e-07,
+    "local_router_rel_l2": 3.0318371576198403e-07,
+    "local_flips_tokens": 0
+   }
+  ],
+  "flips": [],
+  "final_norm_local": 4.538936626285357e-08,
+  "head_local": 0.0,
+  "chaos_control_rel_l2": [
+   1.500240934738583e-06,
+   1.6487962734196416e-06,
+   1.7149901534485605e-06,
+   1.7728656278588477e-06,
+   1.8071721980331963e-06,
+   1.874973204701727e-06
+  ],
+  "chaos_control_logits_rel_l2": 1.922710360720469e-06
+ },
+ "w513_s0:ids600": {
+  "ck": "w513_s0",
+  "seq": "ids600",
+  "embedding_exact": true,
+  "bias_exact": true,
+  "layers": [
+   {
+    "layer": 0,
+    "type": "sliding_attention",
+    "free_rel_l2": 5.901149407483639e-07,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 5.901149407483639e-07,
+    "local_nat_rowmax": 8.780903024237209e-07,
+    "local_forced_rel_l2": 5.901149407483639e-07,
+    "local_forced_rowmax": 8.780903024237209e-07,
+    "local_router_rel_l2": 5.001544443802427e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 1,
+    "type": "sliding_attention",
+    "free_rel_l2": 7.149088443591334e-07,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 3.5136989626170274e-07,
+    "local_nat_rowmax": 5.565798646764064e-07,
+    "local_forced_rel_l2": 3.5136989626170274e-07,
+    "local_forced_rowmax": 5.565798646764064e-07,
+    "local_router_rel_l2": 3.761922469477508e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 2,
+    "type": "sliding_attention",
+    "free_rel_l2": 7.889745079308854e-07,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 2.875804288934046e-07,
+    "local_nat_rowmax": 4.565649983270046e-07,
+    "local_forced_rel_l2": 2.875804288934046e-07,
+    "local_forced_rowmax": 4.565649983270046e-07,
+    "local_router_rel_l2": 3.0594589645607594e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 3,
+    "type": "sliding_attention",
+    "free_rel_l2": 8.338380313849905e-07,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 2.2564436722189898e-07,
+    "local_nat_rowmax": 3.2546221799976935e-07,
+    "local_forced_rel_l2": 2.2564436722189898e-07,
+    "local_forced_rowmax": 3.2546221799976935e-07,
+    "local_router_rel_l2": 3.004107666057739e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 4,
+    "type": "full_attention",
+    "free_rel_l2": 8.704045060755919e-07,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 2.1034967152006274e-07,
+    "local_nat_rowmax": 3.1213792009259845e-07,
+    "local_forced_rel_l2": 2.1034967152006274e-07,
+    "local_forced_rowmax": 3.1213792009259845e-07,
+    "local_router_rel_l2": 2.782262695637071e-07,
+    "local_flips_tokens": 0
+   },
+   {
+    "layer": 5,
+    "type": "full_attention",
+    "free_rel_l2": 9.103402275524177e-07,
+    "free_flips_tokens": 0,
+    "local_nat_rel_l2": 1.967645633738521e-07,
+    "local_nat_rowmax": 3.1525702606384806e-07,
+    "local_forced_rel_l2": 1.967645633738521e-07,
+    "local_forced_rowmax": 3.1525702606384806e-07,
+    "local_router_rel_l2": 2.983679411124544e-07,
+    "local_flips_tokens": 0
+   }
+  ],
+  "flips": [],
+  "final_norm_local": 4.6750072470657836e-08,
+  "head_local": 0.0,
+  "chaos_control_rel_l2": [
+   1.5002602998441163e-06,
+   1.5686922096722872e-06,
+   1.6181820987848716e-06,
+   1.6410669322482664e-06,
+   1.6672973138180083e-06,
+   1.707993534411582e-06
+  ],
+  "chaos_control_logits_rel_l2": 1.7699960349780651e-06
+ }
+}

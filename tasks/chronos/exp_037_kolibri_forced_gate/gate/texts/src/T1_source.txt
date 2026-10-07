@@ -1,0 +1,80 @@
+
+The idea fit on an index card. A small model on an iPhone answers questions about buying property in Spain — in English, Polish or Spanish — the way a *colegiado* would: gives the Spanish term, cites the tema and the article, and refuses to make the decision for you. The facts never live in the model. They come from retrieval over a study guide one of us wrote this summer while qualifying as a real-estate agent, about 300 KB of it, on the device. Only the *manner* goes into the weights: which language to answer in, plain text, cite, hand off. Facts in retrieval, form in the weights. Nothing leaves the phone.
+
+We pre-registered it on the morning of the 21st: hypotheses, pass floors, the train/validation/test split, all written before a training step ran. Thirty-six hours later the thesis is refuted at this scale, and the best build we have contains no trained weights. That's a fine outcome for an experiment and an odd one for a product, and both halves deserve an explanation.
+
+---
+
+The phone chose the models before we wrote a line of pipeline. Qwen2.5-1.5B runs at 39 tokens a second on an iPhone 14 Pro and cannot speak Polish: zero of three answers coherent. Qwen3-1.7B clears the Polish floor at 15–33 tok/s and 1.2 GB. Qwen3-4B is 2.5 GB, 14 tok/s cold and about 7 once the phone warms up, with an eight-second wait before the first word when you hand it a 1,200-token context. Gemma 3 4B is 3.3 GB, exactly the per-app memory cap; the smallest Gemma 4 is 6 GB and doesn't fit. Memory, not quality, set the shortlist, and it's better to learn that on day one than after training.
+
+Then the eval, before anything else. We had no questions, so the strongest model we have access to wrote them: sixty, ten per module of the guide, in three languages, across five shapes (lookup, multi-part, arithmetic, advice, out of scope), each with a gold answer and the numbers and citations that must survive. Then the same model was told to attack the set. It rewrote 51 of the 60 and flagged 16 places where the guide contradicts itself and 43 where it's silent. The set was sealed with a hash. The 363 training examples came the same way — written to a brief with the retrieved context inside the prompt exactly as the phone would produce it, and gated by a regex that every number and citation in the answer exists in that context. This is a rule we now hold hard: the strongest intelligence writes and reviews the material first; the local model is the student, never the teacher.
+
+Scoring is split the way we split it for [the GDPR redactor](/posts/2026-05-09-redactor-fidelity/) in May. Numbers, citations, language and plain text: regex, never a model. Correctness, usefulness and native fluency: a cloud judge with a rubric frozen before the first run and not edited since.
+
+---
+
+Retrieval did its job immediately. With the guide indexed — plain BM25, chunked by tema, a glossary built from the guide's own vocabulary tables, and 826 synthetic buyer questions attached to their temas as a bridge between how buyers ask and how the guide is written — the untrained 1.7B went from preserving 24 % of the required numbers to 90 %, and from citing nothing to citing correctly 94 % of the time. The right tema was in context on 93 % of rows.
+
+The judge scored those answers 0.78 out of 2. Fewer than one in five fully correct. The dominant failure was a confident inversion of a rule that was sitting right there in the context. That was the pre-registered gate for fine-tuning, and we went through it: the failure was form, not retrieval, so form should be trainable.
+
+**v1**, Qwen3-1.7B, LoRA rank 16, two epochs. The shape moved exactly as predicted: language 100 %, plain text 60/60, refusals 3/3, citations in 98 % of answers. Correctness went from 0.78 to 0.88, against a floor of 1.4. The held-out module *fell* from 1.0 to 0.5 while the seen modules rose — tema-specific patterns had gone into the weights, precisely the leak the design promised not to have. Two confounds surfaced along the way and are recorded because they moved numbers: a presence penalty we'd chosen to stop the *base* looping was garbling the fine-tuned model (legal answers reuse their terms constantly), and 55 of the 363 examples — every one of them Polish, which tokenises 1.6× denser than our estimate — were truncated before their end-of-sequence token. Half the Polish data had taught "don't stop".
+
+**v2**, Qwen3-4B, same recipe, truncation fixed. The untrained 4B was already much better: 1.13 overall, and 1.50 with 61 % fully correct on the 38 rows where retrieval had put the substance in front of it. After training: shape installed on six of seven floors, no memorisation this time, and correctness with the substance in context **down** to 1.18. Native Spanish 9 of 12 → 3. Hand-off 88 % → 65 %. Twenty-eight answers open correctly and then continue into invented checks and routes. We ran the diagnostics in the pre-registered order: Q8_0 instead of Q4_K_M, same failures; the checkpoint at the validation-loss minimum, not better; temperature 0.7 instead of 0, same profile. The spec's own null — prompt-only formatting on the untrained 4B — was worse still: an explicit "answer in the language of the question" rule flipped every Spanish question into English.
+
+Then we opened the adapter file. mlx-lm's default LoRA key set targets all seven projections — attention *and* the MLP — on every layer. Thirty-three million parameters at lr 2e-4 on 363 examples, rewriting the layers usually credited with holding a model's language and facts in order to teach it where to put the parentheses. A PEFT-style default written for much larger data, carried into a toolchain that silently applies it everywhere.
+
+**v3**, attention-only, rank 8, last 16 layers, lr 5e-5, one epoch: 1.3 million parameters, 25× fewer. The shape barely installed (hand-off 19 %, twelve truncated answers) and the substance damage was the same: 1.21 with the substance in context, native Spanish 2 of 12.
+
+| | 4B untrained | v2 (33 M params) | v3 (1.3 M) | **Form in glue** |
+|---|---|---|---|---|
+| Format floors met (of 7) | 1 | 6 | 1 | **7** |
+| Correctness with substance in context | 1.50 | 1.18 | 1.21 | **1.50** |
+| Native ES / PL | 9/12 · 3/17 | 3/12 · 1/17 | 2/12 · 1/17 | **10/12 · 11/17** |
+| Hand-off present | 88 % | 65 % | 19 % | **100 %** |
+| Answers that collapse after a correct opener | 10/60 | 28/60 | 27/60 | **7/60** |
+
+The last column is where we ended up, and it's the design we'd have been embarrassed to start with.
+
+---
+
+Form in the glue means: the **untrained** 4B, the best substance we had, with the manner enforced deterministically around it. Detect the question's language and render the system prompt *in that language* — the English prompt was what pulled Spanish and Polish answers into English. One narrow classification call, in scope or out, with a templated decline for out. Retrieval as before. Then post-processing: strip markdown, remove every citation that isn't in the retrieved context, append a templated hand-off when the answer routes nowhere, and send drafting, pricing and decision requests to a refusal-to-decide that never produces a figure or a document. Two model calls. No training. It's [the deterministic-glue pattern](/posts/2026-04-22-control-plane-vs-data-plane/) this site has been arguing for since April, applied to the one place we'd tried to skip it.
+
+It matches the untrained base on substance instead of paying 0.3 for the format, and it takes every format floor the fine-tunes bought at that price, including the two no fine-tune reached. Native Polish is the best of any build, and it came from the prompt language, not from the 55 Polish examples we'd been so careful to un-truncate. The three substance hypotheses the fine-tunes failed all pass on the build with no trained weights.
+
+The glue went through ten builds in an afternoon, and how the defects were found matters more than what they were. Not one was caught by the mechanical scorer. One build deleted any line starting with a chunk header — the model legitimately opens some answers with "Módulo 2 · Tema 21:", so eight answers were reduced to the hand-off template. Another added a filler-sentence filter whose splitter broke at abbreviation periods: "Under art. 9 LAU" became "9 LAU" in 21 rows, and on one row the splitter *ate the model's wrong headline* and raised that row's score. A rendering bug that improves a metric by concealing an error is the worst kind, and the regex scorer showed that build at parity with the one before. Mechanical metrics bound the floor; they do not see the page.
+
+---
+
+What it still can't do. Thirteen of sixty answers would mislead a buyer: the untrained 4B substituting or inverting a rule, concentrated in the tax module and on retrieval misses. Four of the thirteen have the correct rule in the retrieved chunk. The Spanish term appears at first use of a concept 43.5 % of the time by strict judgment. None of that is glue-fixable; it's the model's ceiling on this hardware.
+
+The obvious lever was a verify pass, a third call that re-reads the context and checks the answer against it. Asked broadly — "find every rule or number in the answer that isn't in the material" — the 4B flagged 13 of 13 harmful rows and 42 of 44 clean ones. Asked to find fault, it finds fault everywhere. Asked one claim at a time, yes or no, it produced 1.15 flags per harmful row against 0.43 per clean row. Same weights, narrower question, and the question was the whole variable — the pattern [we keep meeting](/posts/2026-06-06-adversarial-critic/). Built out with a repair step it didn't earn its latency: of twelve repairs, three fixed a wrong claim, seven changed nothing, two made it worse, at twenty seconds a question on the phone. Kept as a negative result with a prescription attached.
+
+We also ran Gemma 3 4B through the identical glue. Level on correctness (1.23 vs 1.22, one point over sixty rows), clearly better at native Polish and Spanish (14/17, 11/12), and it opens seventeen of its Polish and Spanish answers with "Good morning! As your advisor…", runs 1.5× longer, collapses in the tail twice as often, and invents article numbers inside real statutes — fake precision a number-in-context check can't catch. At 3.3 GB it sits on the phone's memory cap with nothing left for the index. Qwen stays, and the bar a future swap has to clear is written down.
+
+---
+
+Two things we owe the reader before the conclusion.
+
+The test module was meant to be burned after the first trained model was scored. It wasn't. Once training stopped, we kept scoring all sixty rows through every glue build, and glue fixes were prompted by judge notes on rows from every module, the test module included. Nothing was trained on them, but the glue's regexes were written with them in view: for the glue, the sealed set had become a development set. The substance numbers above are unaffected — glue never changed the model's text — but the format floors carry that contamination until they're re-measured on questions the glue has never seen.
+
+We've since written those questions, and the first attempt taught us something about eval hygiene. The same model that wrote and attacked the first set wrote thirty new ones from the guide alone, blind to the old set. A wording-similarity check against the sixty old questions, the synthetic questions in the index and the training set flagged one, and it was rewritten. Then we read each new gold answer against the old ones. Twenty-three of the twenty-eight in-scope questions tested a rule the old set had already tested: new figures, a different town, the same rule. In five of them the rule wasn't an old question's headline but a supporting sentence inside an old answer. Written by the same model from the same 300 KB, the two sets had converged on the same salient rules, and a question that sends new text down glue paths tuned on the old rule is not a fresh test.
+
+So the criterion became rule-level: no new question's key rule may appear anywhere in an old gold answer. The set was rewritten twice, each new row checked mechanically against all sixty old answers and read against every one that shared a tema, an article or a term, before an independent reviewer attacked it. The price is that fresh rules are less-travelled ones — cost-method formulas, planning instruments, municipal tax reliefs — so the re-score will say how the glue handles rules it has never met, not how it handles typical traffic. It runs once, after the set is sealed, and the number will be added here.
+
+And the cause of the damage is a hypothesis, not a finding. What's established is what it *isn't*: not quantisation, epochs, truncation, decoding or adapter strength, each tested and filed. What's left standing is the data and the objective — 363 answer-only sequences under prompt masking teach the base a distribution over answers that it then follows into invented continuations. The all-projection default made it worse; v3 shows it didn't cause it. There's one confound we didn't close: every training answer was written by a much stronger model. A 4B imitating that confident register may be learning to *sound* certain where the base would have hedged. The experiment that would settle it is cheap and named — train on the base's own outputs, shape-edited only, and see whether the damage disappears. We've published the weights — [v1](https://huggingface.co/miktam/coapi-voice-v1-gguf), [v2](https://huggingface.co/miktam/coapi-voice-v2-gguf), [v3](https://huggingface.co/miktam/coapi-voice-v3-gguf) — so someone can run it before we do. What we're *not* claiming is that LoRA can't carry form. We're claiming that at a few hundred examples on models this size, answer-only fine-tuning cost more substance than it bought, on every configuration we tried, and that the glue got there for free.
+
+---
+
+What we'd tell ourselves on the 21st:
+
+- Benchmark the device first. The memory cap chose the models; everything downstream inherited that choice.
+- Print the adapter's key set before training. Ours wasn't a decision anyone made.
+- Try the glue before the training, not after. It has a floor — the untrained base's own numbers — and training doesn't.
+- Keep regex for what regex can check, and put a stronger reader than the writer on the rendered page for everything else.
+- Deduplicate an eval by rule, not by wording. A second set written by the same model from the same source re-asks the first set's rules in new words, and a similarity check won't see it.
+
+The model on the phone is not fine-tuned on anything. It's an off-the-shelf 4B behind our study notes, with the answers coming from the retrieved text and the manner coming from code that can be read, tested and diffed. It doesn't *know* Spanish property law. It reads what we hand it, most of the time correctly, and the cases where it doesn't are enumerated by row.
+
+Next: the one re-score on the fresh set; the reference build ported to the phone itself, so the numbers above come from the device rather than the desk; the thirteen rows, attacked through the guide rather than the model; and the confound experiment, if nobody beats us to it.
+
+*The full experiment — pre-registration, every hypothesis with its null, three version records, all judge files, the retrieval-miss analysis, the glue's build-by-build history and the construction record of the fresh set — is Chronos experiment 035: [`exp_035_coapi_voice`](https://github.com/miktam/local-first-ai/tree/main/tasks/chronos/exp_035_coapi_voice). The v1–v3 weights are on Hugging Face as evidence, not product: [`coapi-voice-v1-gguf`](https://huggingface.co/miktam/coapi-voice-v1-gguf), [`coapi-voice-v2-gguf`](https://huggingface.co/miktam/coapi-voice-v2-gguf), [`coapi-voice-v3-gguf`](https://huggingface.co/miktam/coapi-voice-v3-gguf).*

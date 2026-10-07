@@ -1,0 +1,61 @@
+# exp_036 (BUILD_SPEC §1). Withheld text, weights, web text and work files never enter the repo.
+
+# Python and test caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Arrays, weights, datasets, documents (the leak check refuses them too)
+*.npy
+*.npz
+*.safetensors
+*.parquet
+*.pdf
+# Archives and binary formats (review fix 2026-10-03; the leak check refuses them inside the kit)
+*.gz
+*.zip
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.zst
+*.arrow
+*.bin
+*.pt
+*.pth
+*.gguf
+*.h5
+
+# Raw powermetrics logs (tools/power_log.py): never committed; only their results/power/ records are
+*.plist
+
+# Per-step decode logs (runner/generate.py StepLog; about 190 B a decode step; pre-freeze review 2026-10-06).
+# A session's (about 190 MB for a K8 cell at B = 1), in results/raw/<session>/ and as an aborted cell's copy
+# aborted/<UTC>-<arm>-<stem>/<session>-<stem>.steps.jsonl (runner/run.py abort_cell): working files, never committed,
+# never deleted; copied to the mini at hand-back (RUNBOOK step 18); the session run-record blocks give their sha256.
+# The pilot's (results/pilot/**, and aborted/<UTC>-pilot/** after runner/run.py abort-pilot, with the rest of that
+# pilot) are committed: the plan rule fits its step model on a summarised pilot's (each cell's steps_file;
+# runner/plan_fix.py load_steps). A pilot step log over 50 MB goes in the mbp's
+# .git/info/exclude, never here (RUNBOOK step 13).
+results/raw/**/*.steps.jsonl
+aborted/*/S*-*.steps.jsonl
+
+# Private, withheld and work directories, at any depth
+private/
+withheld/
+work/
+**/private/
+**/withheld/
+**/work/
+
+# Host-local overrides of env/exp036.env (paths, LFA, PY) and editor files
+env/*.local.env
+*.local.env
+.DS_Store
+*.swp
+*~
+
+# Temporary files of tools/hash_tree.py and tools/status.py
+*.hash_tree.tmp
+*.status.tmp

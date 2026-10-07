@@ -1,0 +1,718 @@
+{
+  "block": 2048,
+  "block_means": [2.060683689847937e-08, 3.4546769013721286e-08, 3.7534949993039575e-08, 3.8691292085080224e-08, 3.995689914150549e-08, 4.111937260262544e-08, 3.9733320794816475e-08, 3.998297981354592e-08],
+  "calibration": {
+    "I": "the ascending sort of the tiny R1's natural top-6 (R1: the fp32 reference on the tiny BF16 checkpoint)",
+    "cap_met": true,
+    "checkpoint": {
+      "bf16": {
+        "config_sha256": "a5870685701e5442bb51e3dffeb41dc4ce9f69a8dd7903a81785fe653465be4c",
+        "index_sha256": "bed133df21f2e1bd4aff2c9f508f6def756dc0a16011940a609639eb7e21045d",
+        "shards_sha256": {
+          "model-00001-of-00002.safetensors": "52b676b4b53ae081d3aa3ef86144ed4b97341f1c024a1c733279cebb866412a3",
+          "model-00002-of-00002.safetensors": "ed2f74e5adeb4e89103bc2b1ac060870614bff3a620c93eeef1443f10f36299c"
+        }
+      },
+      "builder": "tests/tiny_real_layout.py build_real_layout_set (exp_036 diagnostics/gate1/mini/bughunt/verify/build_ck.py's recipe); the K8 build by port/convert.py, 8 bits, group 64",
+      "k8": {
+        "bits": 8,
+        "config_sha256": "e4e741b0c8b9812bf571f27ec2ba15e231148545dc561787a3d3bc66bf151068",
+        "group_size": 64,
+        "shards_sha256": {
+          "model.safetensors": "7dd63c9fb1a0194ac33b9936a183d6771fa808eb527d88d6b2cf0da23e06ce4f"
+        }
+      },
+      "layout": {
+        "head_dim": 128,
+        "hidden_size": 256,
+        "layer_types": [
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention"
+        ],
+        "moe_intermediate_size": 64,
+        "num_attention_heads": 48,
+        "num_experts": 64,
+        "num_experts_per_tok": 6,
+        "num_hidden_layers": 10,
+        "num_key_value_heads": 4,
+        "shared_expert_intermediate_size": 64,
+        "sliding_window": 513,
+        "vocab_size": 1024
+      },
+      "preset": "w513",
+      "seed": 23,
+      "sharpen_qk_norms": 3.0
+    },
+    "chunk": 2048,
+    "measured": {
+      "argmax_block": 5,
+      "n_positions": 16384,
+      "references": {
+        "forced_keys": {
+          "fp32": "6af9741ca97e8d70c8df1ef09c9ab8d262ee18508b5b5df4566126141c4ebc5b"
+        },
+        "i_sha256": "d239ecbe7423e9b6fff5341212b4a5dddd9e67829cf1bbe066ee2709853d5e8c",
+        "r1_record_sha256": "5fe1353c7f7dc7d5f66dbb62ea203dcaf571e7ae7e33a785897bbe0c76fe3eb9",
+        "text_key": "dff8df61a2e9c534f8a277195c7343960ca8d23752ba448c4f2df27f73065112"
+      },
+      "seconds": 110.38185524940491,
+      "series": {
+        "max_kl": 1.6928831051978723e-07,
+        "mean_kl": 3.652155254285172e-08,
+        "min_kl": 1.1588455604319753e-12,
+        "n_top1_changes": 11,
+        "n_top1_changes_decisive": 0,
+        "p99_kl": 8.241663399698775e-08,
+        "shadow_disagree_rate": 0.000360107421875
+      }
+    },
+    "tokens": {
+      "draw_high": 1008,
+      "ids_sha256_rule": "sha256 of the decimal token ids joined by ',' (no spaces, no brackets), UTF-8",
+      "labels": [
+        "T9"
+      ],
+      "lengths": [16384],
+      "name": "calibration",
+      "pack_ids_sha256": "b937d79918c38864a5597e523ce066b43c22207a02060a627482350486f85348",
+      "token_rng": "np.random.default_rng(5).integers(0, 1008, 16384), split in pack order into ['T9'] of [16384] tokens",
+      "token_seed": 5
+    }
+  },
+  "cap": 1e-05,
+  "cap_rule": "F_tiny <= 1e-5 (= 10 x the Csort mean ceiling 1e-6; thresholds.json G4F32 f_tiny_cap); above it, stop for Andrei before the freeze; the cap is not raised",
+  "code_path": "gate/checks/g4_forced.py: make_fp32_port (set_dtype(float32), fp32_on_dequantised_weights), forced_texts (ForcedTrunk 'force' onto I, chunked through one cache, kl_rows against R2F), block_means; validation: g4_f32_run (with Csort), g4_mutants, then gate/rules.py g4_f32",
+  "context": "exp_036's bughunt number 6.4e-7 (a block max of the tiny series, computed with fp32 log-prob inputs) is context only and is not F_tiny (DESIGN §5.1)",
+  "estimator": "gate.common.kl_rows(R2F_logits, port_logits): KL(R2F || port) per position in nats, a float64 log-softmax of fp32 logits over the full vocabulary (DESIGN §3.0); never a KL of fp32 log-probabilities",
+  "f_tiny": 4.111937260262544e-07,
+  "f_tiny_rule": "F_tiny = 10 x max over the 2,048-position blocks b of one 16,384-position sequence of mean_{t in b} KL(R2F_tiny || port_tiny)(t) (DESIGN §5.1)",
+  "factor": 10.0,
+  "provenance": {
+    "code_sha256": {
+      "gate/checks/ftiny.py": "937cecc4b2a93c5d5734eefaa7fe7de5652f2325874f3642b15edaaee0547416",
+      "gate/checks/g4_forced.py": "b8a438de16e41f3585a2888cc474058130a8de04b2f20518ab8038e03dd1e775",
+      "gate/checks/ref_drivers.py": "89e132b1e8056d956a436afde088f82448fafe1fd352ffd04cb23ffa8cb517ba",
+      "gate/checks/ref_pass.py": "22a7dbc753d689e267806ac76d5df1deed0bc42f893861c386bb93b2d78c55d3",
+      "gate/common.py": "fd38842c2dc8517d42f399de3cac57b259c69f4f6ce117d4595a41fd6e609a14",
+      "gate/harness.py": "eca0d9b4e8f5638dbe67875c4429c5dd7d2de9ac6f9eb80698330e53eff7b042",
+      "gate/port_mutants.py": "6b0967c718cf16382cd98d63d9e5530616cc24aab25b589cb7915e5d62b610ca",
+      "gate/rules.py": "fe2c99f07626f07dcc5473cd3f05dc35e8a3fbcb095931c0466df5f6a71fd8a4"
+    },
+    "controls_sha256": "7cd0342efba12abcecf7d908dc25fd3d3baf7e7a25b6253e6e1e74bfec82c7d3",
+    "environment": {
+      "MLX_ENABLE_TF32": "0",
+      "architecture": "applegpu_g16s",
+      "host": "mini (M4 Pro, 64 GB)",
+      "macos": "26.5.1",
+      "packages": {
+        "mlx": "0.32.3",
+        "mlx-lm": "0.32.0",
+        "mlx-metal": "0.32.3",
+        "numpy": "2.5.3"
+      },
+      "python": "3.12.13"
+    },
+    "port_sha256": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182",
+    "reference_tree_sha256": "85337ed7efeef6b0463f3560fff6da6496661a2fa7a14de5e50a1bce9e251bbd",
+    "thresholds_sha256": "e27bdc0650a8d072aa1709a583b0afcadb12172446aca312565be47253c1f4c4",
+    "utc": "2026-10-06T15:10:32Z"
+  },
+  "reference_path": "I: gate/checks/ref_pass.fp32_dump (R1: KolibriReference on the BF16 checkpoint, natural) and ref_drivers.i_from_r1; R2F / R3: ref_drivers.forced_ref_pass (KolibriReference on the BF16 config with the K8 build's dequantised weights, emulate_bf16 for R3, forced onto I)",
+  "source": "DESIGN §5.1 (F_tiny, fix 4); written by gate/checks/ftiny.py (build task W5d); frozen with GATE_RULES_SHA256 (tools/hash_tree.py scope gate_rules)",
+  "validation": {
+    "all_met": true,
+    "checkpoint": {
+      "bf16": {
+        "config_sha256": "a5870685701e5442bb51e3dffeb41dc4ce9f69a8dd7903a81785fe653465be4c",
+        "index_sha256": "bed133df21f2e1bd4aff2c9f508f6def756dc0a16011940a609639eb7e21045d",
+        "shards_sha256": {
+          "model-00001-of-00002.safetensors": "057123e65808633602ae9359f4b600f688d719fd8c6315fd265e83b9ed4e549f",
+          "model-00002-of-00002.safetensors": "be34b2e072cc099d0cf6a4d6089822d06b47848e46a466518f41d33a6e4a01c1"
+        }
+      },
+      "builder": "tests/tiny_real_layout.py build_real_layout_set (exp_036 diagnostics/gate1/mini/bughunt/verify/build_ck.py's recipe); the K8 build by port/convert.py, 8 bits, group 64",
+      "k8": {
+        "bits": 8,
+        "config_sha256": "e4e741b0c8b9812bf571f27ec2ba15e231148545dc561787a3d3bc66bf151068",
+        "group_size": 64,
+        "shards_sha256": {
+          "model.safetensors": "1dd8d52124b2e80ce9a5ffd7c25d7c18f11b2bc0f95338bbc761e0c7b32d5d11"
+        }
+      },
+      "layout": {
+        "head_dim": 128,
+        "hidden_size": 256,
+        "layer_types": [
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "sliding_attention",
+          "full_attention"
+        ],
+        "moe_intermediate_size": 64,
+        "num_attention_heads": 48,
+        "num_experts": 64,
+        "num_experts_per_tok": 6,
+        "num_hidden_layers": 10,
+        "num_key_value_heads": 4,
+        "shared_expert_intermediate_size": 64,
+        "sliding_window": 513,
+        "vocab_size": 1024
+      },
+      "preset": "w513",
+      "seed": 29,
+      "sharpen_qk_norms": 3.0
+    },
+    "criteria": [
+      {
+        "met": true,
+        "name": "state",
+        "reason": null,
+        "state": "PASS"
+      },
+      {
+        "fired": false,
+        "met": true,
+        "name": "F1 silent"
+      },
+      {
+        "fired": false,
+        "met": true,
+        "name": "F3 silent"
+      },
+      {
+        "fired": false,
+        "met": true,
+        "name": "F5 silent"
+      },
+      {
+        "fired": false,
+        "met": true,
+        "name": "F6 silent"
+      },
+      {
+        "bound": 4.111937260262544e-08,
+        "headroom": 2.6001432926791193,
+        "mean_kl": 1.5814271743561148e-08,
+        "met": true,
+        "name": "F2 T1-8 mean <= tau / 10",
+        "tau": 4.111937260262544e-07
+      },
+      {
+        "bound": 4.111937260262544e-08,
+        "headroom": 1.180641997049017,
+        "mean_kl": 3.482797724068957e-08,
+        "met": true,
+        "name": "F2 T9 mean <= tau / 10",
+        "tau": 4.111937260262544e-07
+      },
+      {
+        "bound": 4.111937260262544e-08,
+        "headroom": 2.150580973676764,
+        "mean_kl": 1.9120122936977938e-08,
+        "met": true,
+        "name": "F2 T9:0-2048 mean <= tau / 10",
+        "tau": 4.111937260262544e-07
+      },
+      {
+        "bound": 4.111937260262544e-08,
+        "headroom": 1.1805756073789795,
+        "mean_kl": 3.4829935792012014e-08,
+        "met": true,
+        "name": "F2 T9:2048-8192 mean <= tau / 10",
+        "tau": 4.111937260262544e-07
+      },
+      {
+        "bound": 4.111937260262544e-08,
+        "headroom": 1.061050031992333,
+        "mean_kl": 3.8753471903125644e-08,
+        "met": true,
+        "name": "F2 T9:8192-16384 mean <= tau / 10",
+        "tau": 4.111937260262544e-07
+      },
+      {
+        "caught": true,
+        "leg": "F6",
+        "margin": {
+          "met": true,
+          "required": 10.0,
+          "unbounded": false,
+          "unit": "count",
+          "value": 64
+        },
+        "met": true,
+        "mutant": 1,
+        "name": "control G4F32/1 caught with the §4.2 margin"
+      },
+      {
+        "caught": true,
+        "leg": "F2",
+        "margin": {
+          "met": true,
+          "required": 10.0,
+          "unbounded": false,
+          "unit": "mean",
+          "value": 906087.1202701946
+        },
+        "met": true,
+        "mutant": 19,
+        "name": "control G4F32/19 caught with the §4.2 margin"
+      },
+      {
+        "caught": true,
+        "leg": "F2",
+        "margin": {
+          "met": true,
+          "required": 10.0,
+          "unbounded": false,
+          "unit": "mean",
+          "value": 1193560.468018156
+        },
+        "met": true,
+        "mutant": 6,
+        "name": "control G4F32/6 caught with the §4.2 margin"
+      }
+    ],
+    "csort": {
+      "T1-8": {
+        "max": 7.417218609859185e-09,
+        "mean": 1.4164735899299275e-09
+      },
+      "T9": {
+        "max": 1.2091882196500045e-08,
+        "mean": 2.8073919498306765e-09
+      }
+    },
+    "layout": {
+      "T1-8": "8 independent 1536-token sequences, each from position 0, one forward each",
+      "T9": "one 16384-token sequence in 2048-token forwards through one cache",
+      "pack_order": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7",
+        "T8",
+        "T9"
+      ],
+      "t9_buckets": [
+        [0, 2048],
+        [2048, 8192],
+        [8192, 16384]
+      ]
+    },
+    "references": {
+      "forced_keys": {
+        "emu": "c68f5cb40dda284ee56ab22967377f26aa38d61a372421a2a9685768acf798dc",
+        "fp32": "ec9a06c0c28b5fcf8403f293ffe281970994fc1bd7c3348f02fb7e41058ca513"
+      },
+      "i_sha256": "bfed1f4e57852f4f7ffeccb1730a5f3c1062e09108bd876b2cfac6d3c4c1738e",
+      "r1_record_sha256": "9bfd5dfe94dcd224a813ac71924b0d4612049b7cb49efdb816d24836c7f43257",
+      "text_key": "ce36e5ea0f17fa6ed8dfe9604f4e211a2801c254458a281a307bfc72bb36fe2b"
+    },
+    "rule": "the full G4-F32 code with tau = max(F_tiny, 100 x that run's mean Csort) per set: F1, F3, F5 and F6 do not fire; every F2 set and bucket mean <= tau / 10; mutants 1, 6 and 19 each fire their bound leg with the §4.2 margin. Any failure: stop for Andrei before the freeze",
+    "rules_g4_f32": {
+      "controls": {
+        "G4F32/1": {
+          "caught": true,
+          "check": "g4_f32_K8",
+          "id": "G4F32/1",
+          "leg": "F6",
+          "margin": {
+            "met": true,
+            "required": 10.0,
+            "unbounded": false,
+            "unit": "count",
+            "value": 64
+          },
+          "mutant": 1,
+          "mutant_name": "sigmoid_bias_select",
+          "values": {
+            "T1-8": {
+              "count": 32,
+              "disagree_rate": 0.9895426432291666,
+              "max_gap": 2.4617109298706055,
+              "n_disagree": 121595
+            },
+            "T9": {
+              "count": 32,
+              "disagree_rate": 0.9891845703125,
+              "max_gap": 2.331298351287842,
+              "n_disagree": 162068
+            }
+          }
+        },
+        "G4F32/19": {
+          "caught": true,
+          "check": "g4_f32_K8",
+          "id": "G4F32/19",
+          "leg": "F2",
+          "margin": {
+            "met": true,
+            "required": 10.0,
+            "unbounded": false,
+            "unit": "mean",
+            "value": 906087.1202701946
+          },
+          "mutant": 19,
+          "mutant_name": "rope_restart_per_chunk",
+          "values": {
+            "T9": {
+              "fired": true,
+              "mean_kl": 0.3248434702741385,
+              "ratio": 790001.0377429677,
+              "tau": 4.111937260262544e-07
+            },
+            "T9:0-2048": {
+              "fired": false,
+              "mean_kl": 1.9120122936977938e-08,
+              "ratio": 0.04649906291555901,
+              "tau": 4.111937260262544e-07
+            },
+            "T9:2048-8192": {
+              "fired": true,
+              "mean_kl": 0.3694794622399282,
+              "ratio": 898553.2581213004,
+              "tau": 4.111937260262544e-07
+            },
+            "T9:8192-16384": {
+              "fired": true,
+              "mean_kl": 0.3725773390883002,
+              "ratio": 906087.1202701946,
+              "tau": 4.111937260262544e-07
+            }
+          }
+        },
+        "G4F32/6": {
+          "caught": true,
+          "check": "g4_f32_K8",
+          "id": "G4F32/6",
+          "leg": "F2",
+          "margin": {
+            "met": true,
+            "required": 10.0,
+            "unbounded": false,
+            "unit": "mean",
+            "value": 1193560.468018156
+          },
+          "mutant": 6,
+          "mutant_name": "renorm_topk",
+          "values": {
+            "T1-8": {
+              "fired": true,
+              "mean_kl": 0.4866954660788538,
+              "ratio": 1183615.9826226984,
+              "tau": 4.111937260262544e-07
+            },
+            "T9": {
+              "fired": true,
+              "mean_kl": 0.49078457608202564,
+              "ratio": 1193560.468018156,
+              "tau": 4.111937260262544e-07
+            }
+          }
+        }
+      },
+      "legs": {
+        "F1": {
+          "count": 0,
+          "fired": false,
+          "per": {
+            "T1-8": {
+              "count": 0,
+              "max_lead": 0.0002789497375488281,
+              "n_top1_changes": 4
+            },
+            "T9": {
+              "count": 0,
+              "max_lead": 0.0006337165832519531,
+              "n_top1_changes": 7
+            }
+          }
+        },
+        "F2": {
+          "fired": false,
+          "per": {
+            "T1-8": {
+              "fired": false,
+              "mean_kl": 1.5814271743561148e-08,
+              "ratio": 0.03845941886416676,
+              "tau": 4.111937260262544e-07
+            },
+            "T9": {
+              "fired": false,
+              "mean_kl": 3.482797724068957e-08,
+              "ratio": 0.08469968055511097,
+              "tau": 4.111937260262544e-07
+            },
+            "T9:0-2048": {
+              "fired": false,
+              "mean_kl": 1.9120122936977938e-08,
+              "ratio": 0.04649906291555901,
+              "tau": 4.111937260262544e-07
+            },
+            "T9:2048-8192": {
+              "fired": false,
+              "mean_kl": 3.4829935792012014e-08,
+              "ratio": 0.08470444364170125,
+              "tau": 4.111937260262544e-07
+            },
+            "T9:8192-16384": {
+              "fired": false,
+              "mean_kl": 3.8753471903125644e-08,
+              "ratio": 0.09424626265005626,
+              "tau": 4.111937260262544e-07
+            }
+          }
+        },
+        "F3": {
+          "buckets": [
+            "0-2048",
+            "8192-16384"
+          ],
+          "csort_mean_B2": 3.064202051491111e-09,
+          "fired": false,
+          "mean_kl_B2": 3.8753471903125644e-08,
+          "rho_B0": 1.3081946025378698e-07,
+          "rho_B2": 2.2356754905074065e-07
+        },
+        "F5": {
+          "fired": false,
+          "max_kl": 1.7025799692348739e-07,
+          "per": {
+            "T1-8": {
+              "count": 0,
+              "max_kl": 1.231528722637746e-07
+            },
+            "T9": {
+              "count": 0,
+              "max_kl": 1.7025799692348739e-07
+            }
+          }
+        },
+        "F6": {
+          "count": 0,
+          "fired": false,
+          "per": {
+            "T1-8": {
+              "count": 0,
+              "disagree_rate": 0.00030110677083333335,
+              "max_gap": 0.0011208057403564453,
+              "n_disagree": 37
+            },
+            "T9": {
+              "count": 0,
+              "disagree_rate": 0.0003173828125,
+              "max_gap": 0.0010371208190917969,
+              "n_disagree": 52
+            }
+          }
+        }
+      },
+      "measured": {
+        "csort": {
+          "T1-8": {
+            "max": 7.417218609859185e-09,
+            "mean": 1.4164735899299275e-09
+          },
+          "T9": {
+            "max": 1.2091882196500045e-08,
+            "mean": 2.8073919498306765e-09
+          }
+        },
+        "csort_ceiling": {
+          "T1-8": {
+            "breach": false,
+            "ceiling": 1e-06,
+            "csort_mean": 1.4164735899299275e-09
+          },
+          "T9": {
+            "breach": false,
+            "ceiling": 1e-06,
+            "csort_mean": 2.8073919498306765e-09
+          }
+        },
+        "descriptive": {
+          "T1-8": {
+            "shadow_disagree_rate": 0.00030110677083333335
+          },
+          "T9": {
+            "shadow_disagree_rate": 0.0003173828125
+          }
+        },
+        "f_tiny": 4.111937260262544e-07,
+        "tau": {
+          "T1-8": 4.111937260262544e-07,
+          "T9": 4.111937260262544e-07
+        }
+      },
+      "reason": null,
+      "state": "PASS",
+      "threshold": {
+        "csort_mean_ceiling": 1e-06,
+        "f1_decisive_lead_nats": 2.0,
+        "f3_csort_factor": 10.0,
+        "f3_rho_factor": 10.0,
+        "f5_position_kl_max": 0.01,
+        "f6_shadow_gap_min": 0.01,
+        "f_tiny_cap": 1e-05,
+        "tau_csort_factor": 100.0
+      }
+    },
+    "seconds": 258.7875940799713,
+    "summary": {
+      "mutants": {
+        "1": {
+          "sets": {
+            "T1-8": {
+              "max_kl": 1.231528722637746e-07,
+              "mean_kl": 1.5814271743561148e-08,
+              "shadow_disagree_rate": 0.9895426432291666
+            },
+            "T9": {
+              "max_kl": 1.7025799692348739e-07,
+              "mean_kl": 3.482797724068957e-08,
+              "shadow_disagree_rate": 0.9891845703125
+            }
+          },
+          "t9_buckets": {
+            "0-2048": 1.9120122936977938e-08,
+            "2048-8192": 3.4829935792012014e-08,
+            "8192-16384": 3.8753471903125644e-08
+          }
+        },
+        "19": {
+          "sets": {
+            "T1-8": {
+              "max_kl": 1.231528722637746e-07,
+              "mean_kl": 1.5814271743561148e-08,
+              "shadow_disagree_rate": 0.00030110677083333335
+            },
+            "T9": {
+              "max_kl": 0.7724708459840569,
+              "mean_kl": 0.3248434702741385,
+              "shadow_disagree_rate": 0.69541015625
+            }
+          },
+          "t9_buckets": {
+            "0-2048": 1.9120122936977938e-08,
+            "2048-8192": 0.3694794622399282,
+            "8192-16384": 0.3725773390883002
+          }
+        },
+        "6": {
+          "sets": {
+            "T1-8": {
+              "max_kl": 0.7549317647357271,
+              "mean_kl": 0.4866954660788538,
+              "shadow_disagree_rate": 0.8957438151041667
+            },
+            "T9": {
+              "max_kl": 0.7449897640980976,
+              "mean_kl": 0.49078457608202564,
+              "shadow_disagree_rate": 0.8957763671875
+            }
+          },
+          "t9_buckets": {
+            "0-2048": 0.48751008226636156,
+            "2048-8192": 0.49150315422992613,
+            "8192-16384": 0.49106426592501634
+          }
+        }
+      },
+      "sets": {
+        "T1-8": {
+          "csort_max": 7.417218609859185e-09,
+          "csort_mean": 1.4164735899299275e-09,
+          "max_kl": 1.231528722637746e-07,
+          "mean_S": 0.13890567730028772,
+          "mean_kl": 1.5814271743561148e-08,
+          "n": 12288,
+          "n_top1_changes": 4,
+          "n_top1_changes_decisive": 0,
+          "shadow_disagree_rate": 0.00030110677083333335
+        },
+        "T9": {
+          "csort_max": 1.2091882196500045e-08,
+          "csort_mean": 2.8073919498306765e-09,
+          "max_kl": 1.7025799692348739e-07,
+          "mean_S": 0.16882765171628653,
+          "mean_kl": 3.482797724068957e-08,
+          "n": 16384,
+          "n_top1_changes": 7,
+          "n_top1_changes_decisive": 0,
+          "shadow_disagree_rate": 0.0003173828125
+        }
+      },
+      "t9_buckets": {
+        "0-2048": {
+          "csort_mean": 1.6622016492877803e-09,
+          "hi": 2048,
+          "lo": 0,
+          "max_kl": 1.7025799692348739e-07,
+          "mean_S": 0.14615656493219972,
+          "mean_kl": 1.9120122936977938e-08,
+          "n": 2048
+        },
+        "2048-8192": {
+          "csort_mean": 2.8467085811310626e-09,
+          "hi": 8192,
+          "lo": 2048,
+          "max_kl": 1.2546081228101593e-07,
+          "mean_S": 0.17036658841695992,
+          "mean_kl": 3.4829935792012014e-08,
+          "n": 6144
+        },
+        "8192-16384": {
+          "csort_mean": 3.064202051491111e-09,
+          "hi": 16384,
+          "lo": 8192,
+          "max_kl": 1.3676157327584512e-07,
+          "mean_S": 0.1733412208868032,
+          "mean_kl": 3.8753471903125644e-08,
+          "n": 8192
+        }
+      }
+    },
+    "tau": {
+      "T1-8": 4.111937260262544e-07,
+      "T9": 4.111937260262544e-07
+    },
+    "tokens": {
+      "draw_high": 1008,
+      "ids_sha256_rule": "sha256 of the decimal token ids joined by ',' (no spaces, no brackets), UTF-8",
+      "labels": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7",
+        "T8",
+        "T9"
+      ],
+      "lengths": [1536, 1536, 1536, 1536, 1536, 1536, 1536, 1536, 16384],
+      "name": "validation",
+      "pack_ids_sha256": "40ca8af7f689625a8a90399d22a9c7bd9f4c7d564420ce8b0c5f183a70ca0d92",
+      "token_rng": "np.random.default_rng(6).integers(0, 1008, 28672), split in pack order into ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9'] of [1536, 1536, 1536, 1536, 1536, 1536, 1536, 1536, 16384] tokens",
+      "token_seed": 6
+    }
+  },
+  "version": "exp037-calibration-1"
+}

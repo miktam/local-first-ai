@@ -1,0 +1,394 @@
+{
+  "schema": "exp_036 mbp preflight v2",
+  "schema_changes_from_v1": [
+    "downloads.hf_download_processes_running (counted processes, including the caffeinate wrapper) is replaced by hf_downloads_running (distinct --local-dir targets) and hf_download_targets",
+    "smoke_test gains model, revision, runs[] (command, source, started_utc_window, loaded, exit_code, german_text, detail) and not_recorded",
+    "rows may carry revision_note",
+    "top-level row_conventions (replacing the v1 size_ok note) and previous_preflight added"
+  ],
+  "row_conventions": "revision_ok: true = every recorded .metadata matches the pin (for code rows: the checked-out commit matches pinned_commit) and the asset is complete; false = folder absent or a recorded revision differs; null = cannot be judged yet (download in progress, or only README.md recorded). size_ok: within 1% of manifest bytes with no .incomplete files; where the manifest records no size, null if data files are present and false if none are.",
+  "utc": "2026-10-03T17:01:52Z",
+  "manifest_recorded_utc": "2026-10-03T16:00:28Z",
+  "previous_preflight": "mbp_preflight_20261003T161330Z.json",
+  "chip": "Apple M5 Max",
+  "memory_bytes": 137438953472,
+  "macos": {
+    "product_version": "27.0",
+    "build": "26A428"
+  },
+  "mx_device_info": {
+    "device_name": "Apple M5 Max",
+    "max_recommended_working_set_size": 115448725504,
+    "memory_size": 137438953472,
+    "architecture": "applegpu_g17s",
+    "max_buffer_length": 86586540032,
+    "resource_limit": 499000
+  },
+  "wired_limit_mb": 0,
+  "wired_limit_note": "0 means the macOS default; nothing was changed",
+  "disk_free": {
+    "volume": "home data volume",
+    "size": "3.6Ti",
+    "avail": "2.9Ti",
+    "avail_bytes": 3136868868096,
+    "assets_md_requirement": "keep ~450 GB free"
+  },
+  "python": "3.12.13",
+  "mlx": "0.31.2",
+  "mlx_metal": "0.31.2",
+  "mlx_lm": "0.31.3",
+  "pip_freeze": [
+    "annotated-doc==0.0.5",
+    "anyio==4.15.1",
+    "certifi==2026.7.22",
+    "click==8.5.0",
+    "filelock==4.0.9",
+    "fsspec==2026.9.0",
+    "h11==0.16.0",
+    "hf-xet==1.6.0",
+    "httpcore==1.0.9",
+    "httpx==0.28.1",
+    "huggingface-hub==1.33.0",
+    "idna==3.20",
+    "jinja2==3.1.6",
+    "markdown-it-py==4.2.0",
+    "markupsafe==3.0.4",
+    "mdurl==0.1.2",
+    "mlx==0.31.2",
+    "mlx-lm==0.31.3",
+    "mlx-metal==0.31.2",
+    "numpy==2.5.3",
+    "packaging==26.3",
+    "protobuf==7.36.2",
+    "pygments==2.21.0",
+    "pyyaml==6.0.3",
+    "regex==2026.9.29",
+    "rich==15.0.0",
+    "safetensors==0.8.0",
+    "sentencepiece==0.2.2",
+    "shellingham==1.5.4",
+    "tokenizers==0.23.2",
+    "tqdm==4.70.1",
+    "transformers==5.18.0",
+    "typer==0.27.2",
+    "typing-extensions==4.16.0"
+  ],
+  "venv": {
+    "path": "~/models/exp036/venv",
+    "created_by_this_preflight": false,
+    "pre_existing_since_utc": "2026-10-03T16:08:57Z",
+    "built_with": "uv 0.11.21 per pyvenv.cfg (~/.local/bin/uv); /opt/homebrew/bin/uv 0.12.0 is first on PATH",
+    "pins": {
+      "mlx": "0.31.2",
+      "mlx-lm": "0.31.3",
+      "source": "preflight brief, step 3 install command; ASSETS.md and assets.json pin no mlx versions"
+    },
+    "matches_pins": true
+  },
+  "downloads": {
+    "checked_utc": "2026-10-03T17:01:52Z",
+    "hf_downloads_running": 1,
+    "hf_download_targets": [
+      "~/models/exp036/Kolibri-1-BF16"
+    ],
+    "models": [
+      {
+        "repo": "Aleph-Alpha/Kolibri-1-BF16",
+        "path": "$EXP036_MODELS/Kolibri-1-BF16",
+        "pinned_revision": "7a8f290e7858825c3cf5e4c447ba68345de9f1d3",
+        "present": true,
+        "still_downloading": true,
+        "bytes_on_disk": 252045,
+        "bytes_manifest": 156228414296,
+        "size_ok": false,
+        "recorded_revisions": [
+          "7a8f290e7858825c3cf5e4c447ba68345de9f1d3"
+        ],
+        "revision_ok": null,
+        "incomplete_files": 8,
+        "complete": false,
+        "revision_note": "cannot be judged yet: download in progress; the 5 finished files recorded so far are all at the pin"
+      },
+      {
+        "repo": "mlx-community/gemma-4-26b-a4b-it-8bit",
+        "path": "$EXP036_MODELS/gemma-4-26b-a4b-it-8bit",
+        "pinned_revision": "33c6d23798a0af159529890f79329206dbfbd73c",
+        "present": false,
+        "still_downloading": false,
+        "size_ok": false,
+        "revision_ok": false,
+        "bytes_on_disk": 0,
+        "bytes_manifest": 28000000000,
+        "recorded_revisions": [],
+        "incomplete_files": 0,
+        "complete": false
+      },
+      {
+        "repo": "mlx-community/Qwen3.6-35B-A3B-8bit",
+        "path": "$EXP036_MODELS/Qwen3.6-35B-A3B-8bit",
+        "pinned_revision": "e06a74e6236a60c8367e1a3214e83d8b61b637b0",
+        "present": false,
+        "still_downloading": false,
+        "size_ok": false,
+        "revision_ok": false,
+        "bytes_on_disk": 0,
+        "bytes_manifest": 37700000000,
+        "recorded_revisions": [],
+        "incomplete_files": 0,
+        "complete": false
+      },
+      {
+        "repo": "mlx-community/Qwen3.8-27B-8bit",
+        "path": "$EXP036_MODELS/Qwen3.8-27B-8bit",
+        "pinned_revision": "815b83c0df8ffd1d1b5244cf75fd6ef14fca9ef9",
+        "present": false,
+        "still_downloading": false,
+        "size_ok": false,
+        "revision_ok": false,
+        "bytes_on_disk": 0,
+        "bytes_manifest": 29500000000,
+        "recorded_revisions": [],
+        "incomplete_files": 0,
+        "complete": false
+      },
+      {
+        "repo": "mlx-community/gemma-4-26b-a4b-it-4bit",
+        "path": "$EXP036_MODELS/gemma-4-26b-a4b-it-4bit",
+        "pinned_revision": "0d77464eeb233a2da68ebf9d7dc4edaac7db956d",
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 15373588575,
+        "bytes_manifest": 15400000000,
+        "size_ok": true,
+        "recorded_revisions": [
+          "0d77464eeb233a2da68ebf9d7dc4edaac7db956d"
+        ],
+        "revision_ok": true,
+        "incomplete_files": 0,
+        "complete": true
+      },
+      {
+        "repo": "mlx-community/Qwen3.6-35B-A3B-4bit",
+        "path": "$EXP036_MODELS/Qwen3.6-35B-A3B-4bit",
+        "pinned_revision": "38740b847e4cb78f352aba30aa41c76e08e6eb46",
+        "present": false,
+        "still_downloading": false,
+        "size_ok": false,
+        "revision_ok": false,
+        "bytes_on_disk": 0,
+        "bytes_manifest": 20400000000,
+        "recorded_revisions": [],
+        "incomplete_files": 0,
+        "complete": false
+      },
+      {
+        "repo": "mlx-community/Qwen3.8-27B-4bit",
+        "path": "$EXP036_MODELS/Qwen3.8-27B-4bit",
+        "pinned_revision": "10c35caafbb80f7dc6a7a432cdd11af10a6d4818",
+        "present": false,
+        "still_downloading": false,
+        "size_ok": false,
+        "revision_ok": false,
+        "bytes_on_disk": 0,
+        "bytes_manifest": 16100000000,
+        "recorded_revisions": [],
+        "incomplete_files": 0,
+        "complete": false
+      }
+    ],
+    "datasets": [
+      {
+        "repo": "math-ai/aime26",
+        "path": "$EXP036_MODELS/data/aime26",
+        "pinned_revision": "79037aebdb6580008fb960d17cb21fd3099083e3",
+        "gated": false,
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 16488,
+        "files": 3,
+        "data_files": 1,
+        "incomplete_files": 0,
+        "size_ok": null,
+        "size_note": "manifest records no size for datasets",
+        "recorded_revisions": [
+          "79037aebdb6580008fb960d17cb21fd3099083e3"
+        ],
+        "revision_ok": true,
+        "complete": true
+      },
+      {
+        "repo": "ellamind/aime26-multilingual",
+        "path": "$EXP036_MODELS/data/aime26-multilingual",
+        "pinned_revision": "3c8bc18f6c185ed2d66803dbd394839a3917fd82",
+        "gated": false,
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 87299,
+        "files": 6,
+        "data_files": 4,
+        "incomplete_files": 0,
+        "size_ok": null,
+        "size_note": "manifest records no size for datasets",
+        "recorded_revisions": [
+          "3c8bc18f6c185ed2d66803dbd394839a3917fd82"
+        ],
+        "revision_ok": true,
+        "complete": true
+      },
+      {
+        "repo": "allenai/IFBench_test",
+        "path": "$EXP036_MODELS/data/IFBench_test",
+        "pinned_revision": "2e8a48de45ff3bf41242f927254ca81b59ca3ae2",
+        "gated": false,
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 99777,
+        "files": 3,
+        "data_files": 1,
+        "incomplete_files": 0,
+        "size_ok": null,
+        "size_note": "manifest records no size for datasets",
+        "recorded_revisions": [
+          "2e8a48de45ff3bf41242f927254ca81b59ca3ae2"
+        ],
+        "revision_ok": true,
+        "complete": true
+      },
+      {
+        "repo": "li-lab/MMLU-ProX-Lite",
+        "path": "$EXP036_MODELS/data/MMLU-ProX-Lite",
+        "pinned_revision": "e82aafb9460529687d3c7e51b401d8dd1dd309dd",
+        "gated": false,
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 11552384,
+        "files": 60,
+        "data_files": 58,
+        "incomplete_files": 0,
+        "size_ok": null,
+        "size_note": "manifest records no size for datasets",
+        "recorded_revisions": [
+          "e82aafb9460529687d3c7e51b401d8dd1dd309dd"
+        ],
+        "revision_ok": true,
+        "complete": true
+      },
+      {
+        "repo": "li-lab/MMLU-ProX",
+        "path": "$EXP036_MODELS/data/MMLU-ProX",
+        "pinned_revision": "8e6106a6c6ce1c5027e66cc338143cf997b2aa09",
+        "gated": false,
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 178260098,
+        "files": 60,
+        "data_files": 58,
+        "incomplete_files": 0,
+        "size_ok": null,
+        "size_note": "manifest records no size for datasets",
+        "recorded_revisions": [
+          "8e6106a6c6ce1c5027e66cc338143cf997b2aa09"
+        ],
+        "revision_ok": true,
+        "complete": true
+      },
+      {
+        "repo": "Idavidrein/gpqa",
+        "path": "$EXP036_MODELS/data/gpqa",
+        "pinned_revision": "83022cefff930aea54f654c0b282e74b9eeda5c6",
+        "gated": true,
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 3141,
+        "files": 1,
+        "data_files": 0,
+        "incomplete_files": 0,
+        "size_ok": false,
+        "size_note": "no data files on disk, only README.md",
+        "recorded_revisions": [
+          "83022cefff930aea54f654c0b282e74b9eeda5c6"
+        ],
+        "revision_ok": null,
+        "complete": false,
+        "revision_note": "only README.md.metadata was recorded (it matches the pin); no data file revision to check"
+      },
+      {
+        "repo": "ellamind/gpqa-multilingual",
+        "path": "$EXP036_MODELS/data/gpqa-multilingual",
+        "pinned_revision": "bc70ca1791afa241a98c972e126c2decaf0a367d",
+        "gated": true,
+        "present": true,
+        "still_downloading": false,
+        "bytes_on_disk": 4647,
+        "files": 1,
+        "data_files": 0,
+        "incomplete_files": 0,
+        "size_ok": false,
+        "size_note": "no data files on disk, only README.md",
+        "recorded_revisions": [
+          "bc70ca1791afa241a98c972e126c2decaf0a367d"
+        ],
+        "revision_ok": null,
+        "complete": false,
+        "revision_note": "only README.md.metadata was recorded (it matches the pin); no data file revision to check"
+      }
+    ],
+    "code": [
+      {
+        "repo": "https://github.com/allenai/IFBench",
+        "path": "$EXP036_MODELS/data/IFBench-src",
+        "pinned_commit": "1c40f0c10d9b5c5c2f10a175a28007ebb64f7f4d",
+        "present": true,
+        "size_ok": null,
+        "size_note": "git checkout; no size in manifest",
+        "recorded_commit": "1c40f0c10d9b5c5c2f10a175a28007ebb64f7f4d",
+        "revision_ok": true,
+        "working_tree_clean": true,
+        "still_downloading": false,
+        "complete": true
+      }
+    ]
+  },
+  "fits_8bit_kolibri": {
+    "answer": "yes",
+    "raise_wired_limit_needed": false,
+    "arithmetic": "max_recommended_working_set_size = 115448725504 B = 107.52 GiB; 0.9 x that = 103903852953.6 B = 96.77 GiB; 8-bit Kolibri ~78 GiB = 83751862272 B; headroom = 18.77 GiB",
+    "scope": "weights only; KV cache and activations come out of the headroom"
+  },
+  "smoke_test": {
+    "status": "failed",
+    "reason": "The brief's step 5 command loaded the model and exited 0 but produced no German text within its 30 tokens: the model spent them in a '<|channel>thought' thinking channel. Whether this blocks anything is for Andrei to decide.",
+    "model": "$EXP036_MODELS/gemma-4-26b-a4b-it-4bit",
+    "revision": "0d77464eeb233a2da68ebf9d7dc4edaac7db956d",
+    "runs": [
+      {
+        "command": "mlx_lm.generate --model ~/models/exp036/gemma-4-26b-a4b-it-4bit --prompt \"Sag Hallo.\" --max-tokens 30",
+        "source": "preflight brief, step 5",
+        "started_utc_window": "between 2026-10-03T16:49:07Z and 16:50:46Z (16:49:07Z: gemma hf process seen exited; 16:50:46Z: date -u taken after both runs); exact start not logged",
+        "loaded": true,
+        "exit_code": 0,
+        "german_text": false,
+        "detail": "the token budget ran out inside the thinking channel, before any answer"
+      },
+      {
+        "command": "mlx_lm.generate --model ~/models/exp036/gemma-4-26b-a4b-it-4bit --prompt \"Sag Hallo.\" --max-tokens 400",
+        "source": "deviation from brief step 5: an extra diagnostic run, not requested, made after seeing the 30-token result, to tell token budget apart from capability",
+        "started_utc_window": "after the 30-token run, before 2026-10-03T16:50:46Z (16:49:07Z: gemma hf process seen exited; 16:50:46Z: date -u taken after both runs); exact start not logged",
+        "loaded": true,
+        "exit_code": 0,
+        "german_text": true,
+        "detail": "the thinking channel closed and German text followed"
+      }
+    ],
+    "not_recorded": "output text, tokens/s, peak memory and timings; the speed and memory lines were filtered out before display"
+  },
+  "notes": [
+    "Follow-up to mbp_preflight_20261003T161330Z.json, which is unchanged. This file re-measures every asset and adds the smoke test.",
+    "gemma-4-26b-a4b-it-4bit was downloaded by Andrei. Its last file was written at 2026-10-03T16:49:04Z (file mtime) and the hf process had exited when checked at 16:49:07Z: 12 files, all recorded at the pinned revision, no .incomplete files. The smoke test ran after that.",
+    "Kolibri-1-BF16 was downloading at check time, started by Andrei after hf auth login. The other five peer builds had not been started.",
+    "GPQA on disk, by file listing only: still README.md only, with no item text opened. hf is now logged in with a fine-grained token whose whoami record shows canReadGatedRepos true; Kolibri is not gated (hub gated field false). Shortly before 2026-10-03T16:49Z, huggingface_hub.auth_check (an access check that returns no file content) gave 403 for both GPQA repos, and the hub's gated field for both is \"auto\". Next step: Andrei accepts both gates on huggingface.co, then re-runs the two ASSETS.md commands.",
+    "Smoke test failed on the brief's own command (no German within 30 tokens). An extra 400-token run, a deviation from the brief, produced German text. Both runs are recorded separately under smoke_test.runs.",
+    "Thinking mode, from source (read, not run): in mlx_lm 0.31.3, TokenizerWrapper.apply_chat_template sets enable_thinking to has_thinking when the caller does not pass it (tokenizer_utils.py:336-337), and has_thinking (391-392) is true because Gemma 4's vocab has <|channel> and <channel|> (274-282). With enable_thinking true, the model's chat_template.jinja adds <|think|> (lines 182-183). With it false or unset, the template prefills an empty, closed '<|channel>thought\\n<channel|>' (lines 359-360). mlx_lm.generate accepts --chat-template-config to pass template arguments.",
+    "No benchmark file was opened, and no speed or memory figure was measured or recorded."
+  ]
+}

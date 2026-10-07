@@ -1,0 +1,565 @@
+{
+  "data": {
+    "anchor": {
+      "n_rows": 1235,
+      "n_sequences": 114,
+      "n_tokens": 16189
+    },
+    "logprob_files": {
+      "n_files": 360,
+      "problems": []
+    },
+    "r1": {
+      "dir": "$EXP036_WORK/exp037/run/20261006T124326Z/r1_anchor",
+      "num_rows": 1235,
+      "num_tokens": 16189,
+      "pack_ids_sha256": "a5c924a4aff04fad8a33301d0afe1b6739a1feaf33fe8bf7899508fa5f9918e7",
+      "record_sha256": "e815f57035dcb580bb1f4108304a23f28ee2e12300da0eba28bef6339493b357",
+      "ref_version": "exp036-ref-2",
+      "wall_s": 17.128587007522583
+    },
+    "reduced": {
+      "anchor": {
+        "n_rows": 1235,
+        "n_sequences": 114,
+        "n_tokens": 16189
+      },
+      "decisive_lead_nats": 2.0,
+      "files_loaded": 344,
+      "g5_bp": {
+        "K4": {
+          "16": {
+            "B": 16,
+            "admitted_mid_run": 10,
+            "block": "K4/g5_bp_B16",
+            "descriptive_single_vs_batched": {
+              "all": {
+                "max_kl": 0.0602401782060742,
+                "mean_kl": 0.0005783755220635003,
+                "n": 220,
+                "top1_dis": 0.013636363636363636
+              },
+              "first_wave": {
+                "max_kl": 0.0602401782060742,
+                "mean_kl": 0.0009567111441172142,
+                "n": 133,
+                "top1_dis": 0.022556390977443608
+              },
+              "mid_run": {
+                "max_kl": 2.0756464285319786e-09,
+                "mean_kl": 3.75705523788121e-10,
+                "n": 87,
+                "top1_dis": 0.0
+              },
+              "other": {
+                "max_kl": {
+                  "$nonfinite": "nan"
+                },
+                "mean_kl": {
+                  "$nonfinite": "nan"
+                },
+                "n": 0,
+                "top1_dis": {
+                  "$nonfinite": "nan"
+                }
+              }
+            },
+            "first_wave": {
+              "mean_kl_r1_batched": 0.4760521029700361,
+              "mean_kl_r1_single": 0.4758162985486189,
+              "n": 133
+            },
+            "max_live": 16,
+            "mid_run": {
+              "mean_kl_r1_batched": 0.48231877849421523,
+              "mean_kl_r1_single": 0.4823189102537658,
+              "n": 87
+            },
+            "other": {
+              "mean_kl_r1_batched": {
+                "$nonfinite": "nan"
+              },
+              "mean_kl_r1_single": {
+                "$nonfinite": "nan"
+              },
+              "n": 0
+            }
+          },
+          "8": {
+            "B": 8,
+            "admitted_mid_run": 18,
+            "block": "K4/g5_bp_B8",
+            "descriptive_single_vs_batched": {
+              "all": {
+                "max_kl": 2.932071465736284e-09,
+                "mean_kl": 5.238074267407952e-10,
+                "n": 220,
+                "top1_dis": 0.0
+              },
+              "first_wave": {
+                "max_kl": 2.932071465736284e-09,
+                "mean_kl": 8.597292827098043e-10,
+                "n": 65,
+                "top1_dis": 0.0
+              },
+              "mid_run": {
+                "max_kl": 2.230734450460542e-09,
+                "mean_kl": 3.8293697101185594e-10,
+                "n": 155,
+                "top1_dis": 0.0
+              },
+              "other": {
+                "max_kl": {
+                  "$nonfinite": "nan"
+                },
+                "mean_kl": {
+                  "$nonfinite": "nan"
+                },
+                "n": 0,
+                "top1_dis": {
+                  "$nonfinite": "nan"
+                }
+              }
+            },
+            "first_wave": {
+              "mean_kl_r1_batched": 0.46897202525037157,
+              "mean_kl_r1_single": 0.46897175269161695,
+              "n": 65
+            },
+            "max_live": 8,
+            "mid_run": {
+              "mean_kl_r1_batched": 0.4800471919170971,
+              "mean_kl_r1_single": 0.48004728426858473,
+              "n": 155
+            },
+            "other": {
+              "mean_kl_r1_batched": {
+                "$nonfinite": "nan"
+              },
+              "mean_kl_r1_single": {
+                "$nonfinite": "nan"
+              },
+              "n": 0
+            }
+          }
+        },
+        "K8": {
+          "16": {
+            "B": 16,
+            "admitted_mid_run": 10,
+            "block": "K8/g5_bp_B16",
+            "descriptive_single_vs_batched": {
+              "all": {
+                "max_kl": 4.4068564999956027e-05,
+                "mean_kl": 5.418445367062195e-07,
+                "n": 220,
+                "top1_dis": 0.0
+              },
+              "first_wave": {
+                "max_kl": 4.4068564999956027e-05,
+                "mean_kl": 8.960462494659433e-07,
+                "n": 133,
+                "top1_dis": 0.0
+              },
+              "mid_run": {
+                "max_kl": 1.3206219864596962e-09,
+                "mean_kl": 3.637574298604024e-10,
+                "n": 87,
+                "top1_dis": 0.0
+              },
+              "other": {
+                "max_kl": {
+                  "$nonfinite": "nan"
+                },
+                "mean_kl": {
+                  "$nonfinite": "nan"
+                },
+                "n": 0,
+                "top1_dis": {
+                  "$nonfinite": "nan"
+                }
+              }
+            },
+            "first_wave": {
+              "mean_kl_r1_batched": 0.2948458258781002,
+              "mean_kl_r1_single": 0.29484798369391074,
+              "n": 133
+            },
+            "max_live": 16,
+            "mid_run": {
+              "mean_kl_r1_batched": 0.31225859921301824,
+              "mean_kl_r1_single": 0.3122583545678932,
+              "n": 87
+            },
+            "other": {
+              "mean_kl_r1_batched": {
+                "$nonfinite": "nan"
+              },
+              "mean_kl_r1_single": {
+                "$nonfinite": "nan"
+              },
+              "n": 0
+            }
+          },
+          "8": {
+            "B": 8,
+            "admitted_mid_run": 18,
+            "block": "K8/g5_bp_B8",
+            "descriptive_single_vs_batched": {
+              "all": {
+                "max_kl": 3.0849797090672223e-09,
+                "mean_kl": 5.52680588462632e-10,
+                "n": 220,
+                "top1_dis": 0.0
+              },
+              "first_wave": {
+                "max_kl": 3.0849797090672223e-09,
+                "mean_kl": 9.400088470567698e-10,
+                "n": 65,
+                "top1_dis": 0.0
+              },
+              "mid_run": {
+                "max_kl": 1.6308645177652535e-09,
+                "mean_kl": 3.9025260905218716e-10,
+                "n": 155,
+                "top1_dis": 0.0
+              },
+              "other": {
+                "max_kl": {
+                  "$nonfinite": "nan"
+                },
+                "mean_kl": {
+                  "$nonfinite": "nan"
+                },
+                "n": 0,
+                "top1_dis": {
+                  "$nonfinite": "nan"
+                }
+              }
+            },
+            "first_wave": {
+              "mean_kl_r1_batched": 0.28603782755377966,
+              "mean_kl_r1_single": 0.28603803206742545,
+              "n": 65
+            },
+            "max_live": 8,
+            "mid_run": {
+              "mean_kl_r1_batched": 0.30831475668805347,
+              "mean_kl_r1_single": 0.30831475222138177,
+              "n": 155
+            },
+            "other": {
+              "mean_kl_r1_batched": {
+                "$nonfinite": "nan"
+              },
+              "mean_kl_r1_single": {
+                "$nonfinite": "nan"
+              },
+              "n": 0
+            }
+          }
+        }
+      },
+      "g5_bp_mutants": {
+        "22": {
+          "B": 8,
+          "admitted_mid_run": 18,
+          "arm": "K8",
+          "block": "K8/g5_bp_m22",
+          "descriptive_single_vs_batched": {
+            "all": {
+              "max_kl": 0.6923560983513173,
+              "mean_kl": 0.4793786860858651,
+              "n": 220,
+              "top1_dis": 0.8909090909090909
+            },
+            "first_wave": {
+              "max_kl": 0.6519893570263753,
+              "mean_kl": 0.46394094619936344,
+              "n": 65,
+              "top1_dis": 0.8923076923076924
+            },
+            "mid_run": {
+              "max_kl": 0.6923560983513173,
+              "mean_kl": 0.4858525770060108,
+              "n": 155,
+              "top1_dis": 0.8903225806451613
+            },
+            "other": {
+              "max_kl": {
+                "$nonfinite": "nan"
+              },
+              "mean_kl": {
+                "$nonfinite": "nan"
+              },
+              "n": 0,
+              "top1_dis": {
+                "$nonfinite": "nan"
+              }
+            }
+          },
+          "first_wave": {
+            "mean_kl_r1_batched": 0.5044619597018957,
+            "mean_kl_r1_single": 0.2870718838345177,
+            "n": 65
+          },
+          "max_live": 8,
+          "mid_run": {
+            "mean_kl_r1_batched": 0.5180858693829937,
+            "mean_kl_r1_single": 0.30389840624034664,
+            "n": 155
+          },
+          "other": {
+            "mean_kl_r1_batched": {
+              "$nonfinite": "nan"
+            },
+            "mean_kl_r1_single": {
+              "$nonfinite": "nan"
+            },
+            "n": 0
+          }
+        },
+        "27": {
+          "B": 8,
+          "admitted_mid_run": 18,
+          "arm": "K8",
+          "block": "K8/g5_bp_m27",
+          "descriptive_single_vs_batched": {
+            "all": {
+              "max_kl": 0.6619066580029915,
+              "mean_kl": 0.2721442862870084,
+              "n": 220,
+              "top1_dis": 0.6136363636363636
+            },
+            "first_wave": {
+              "max_kl": 0.5891299745230871,
+              "mean_kl": 0.40715629757383864,
+              "n": 65,
+              "top1_dis": 0.9076923076923077
+            },
+            "mid_run": {
+              "max_kl": 0.6619066580029915,
+              "mean_kl": 0.2155263460699505,
+              "n": 155,
+              "top1_dis": 0.49032258064516127
+            },
+            "other": {
+              "max_kl": {
+                "$nonfinite": "nan"
+              },
+              "mean_kl": {
+                "$nonfinite": "nan"
+              },
+              "n": 0,
+              "top1_dis": {
+                "$nonfinite": "nan"
+              }
+            }
+          },
+          "first_wave": {
+            "mean_kl_r1_batched": 0.4447914770555935,
+            "mean_kl_r1_single": 0.2839334995523814,
+            "n": 65
+          },
+          "max_live": 8,
+          "mid_run": {
+            "mean_kl_r1_batched": 0.3942821389837189,
+            "mean_kl_r1_single": 0.30763537110269323,
+            "n": 155
+          },
+          "other": {
+            "mean_kl_r1_batched": {
+              "$nonfinite": "nan"
+            },
+            "mean_kl_r1_single": {
+              "$nonfinite": "nan"
+            },
+            "n": 0
+          }
+        }
+      },
+      "g5_greedy": {
+        "block": "K8/greedy",
+        "decisive_top1": null,
+        "in_top5": 0.052083333333333336,
+        "n_decisive": 0,
+        "n_positions": 192,
+        "per_prompt": {
+          "G5_tiny_0": {
+            "decisive_top1": null,
+            "finished": "length",
+            "in_top5": 0.041666666666666664,
+            "n": 24,
+            "n_decisive": 0
+          },
+          "G5_tiny_1": {
+            "decisive_top1": null,
+            "finished": "length",
+            "in_top5": 0.08333333333333333,
+            "n": 24,
+            "n_decisive": 0
+          },
+          "G5_tiny_2": {
+            "decisive_top1": null,
+            "finished": "length",
+            "in_top5": 0.041666666666666664,
+            "n": 24,
+            "n_decisive": 0
+          },
+          "G5_tiny_3": {
+            "decisive_top1": null,
+            "finished": "length",
+            "in_top5": 0.041666666666666664,
+            "n": 24,
+            "n_decisive": 0
+          },
+          "G5_tiny_4": {
+            "decisive_top1": null,
+            "finished": "length",
+            "in_top5": 0.041666666666666664,
+            "n": 24,
+            "n_decisive": 0
+          },
+          "G5_tiny_5": {
+            "decisive_top1": null,
+            "finished": "length",
+            "in_top5": 0.08333333333333333,
+            "n": 24,
+            "n_decisive": 0
+          },
+          "G5_tiny_6": {
+            "decisive_top1": null,
+            "finished": "length",
+            "in_top5": 0.041666666666666664,
+            "n": 24,
+            "n_decisive": 0
+          },
+          "G5_tiny_7": {
+            "decisive_top1": null,
+            "finished": "length",
+            "in_top5": 0.041666666666666664,
+            "n": 24,
+            "n_decisive": 0
+          }
+        }
+      },
+      "g5_r1": {
+        "K4": {
+          "anchor": {
+            "mean_kl_r1_runner": 0.5244709183686647,
+            "mean_kl_r1_single": 0.5244706687124325,
+            "n": 192
+          },
+          "block": "K4/g5_r1",
+          "parity": {
+            "mean_kl": 8.235401973035914e-10,
+            "n": 192,
+            "top1_dis": 0.0
+          }
+        },
+        "K8": {
+          "anchor": {
+            "mean_kl_r1_runner": 0.39396798020713725,
+            "mean_kl_r1_single": 0.3939675972339464,
+            "n": 192
+          },
+          "block": "K8/g5_r1",
+          "greedy": {
+            "decisive_top1": null,
+            "in_top5": 0.052083333333333336,
+            "n": 192,
+            "n_decisive": 0,
+            "n_positions": 192,
+            "per_prompt": {
+              "G5_tiny_0": {
+                "decisive_top1": null,
+                "finished": "length",
+                "in_top5": 0.041666666666666664,
+                "n": 24,
+                "n_decisive": 0
+              },
+              "G5_tiny_1": {
+                "decisive_top1": null,
+                "finished": "length",
+                "in_top5": 0.08333333333333333,
+                "n": 24,
+                "n_decisive": 0
+              },
+              "G5_tiny_2": {
+                "decisive_top1": null,
+                "finished": "length",
+                "in_top5": 0.041666666666666664,
+                "n": 24,
+                "n_decisive": 0
+              },
+              "G5_tiny_3": {
+                "decisive_top1": null,
+                "finished": "length",
+                "in_top5": 0.041666666666666664,
+                "n": 24,
+                "n_decisive": 0
+              },
+              "G5_tiny_4": {
+                "decisive_top1": null,
+                "finished": "length",
+                "in_top5": 0.041666666666666664,
+                "n": 24,
+                "n_decisive": 0
+              },
+              "G5_tiny_5": {
+                "decisive_top1": null,
+                "finished": "length",
+                "in_top5": 0.041666666666666664,
+                "n": 24,
+                "n_decisive": 0
+              },
+              "G5_tiny_6": {
+                "decisive_top1": null,
+                "finished": "length",
+                "in_top5": 0.041666666666666664,
+                "n": 24,
+                "n_decisive": 0
+              },
+              "G5_tiny_7": {
+                "decisive_top1": null,
+                "finished": "length",
+                "in_top5": 0.08333333333333333,
+                "n": 24,
+                "n_decisive": 0
+              }
+            }
+          },
+          "parity": {
+            "mean_kl": 8.479996673137959e-10,
+            "n": 192,
+            "top1_dis": 0.0
+          }
+        }
+      },
+      "g5_r1_mutants": {
+        "26": {
+          "arm": "K8",
+          "block": "K8/g5_r1_m26",
+          "parity": {
+            "mean_kl": 0.5475830180096168,
+            "n": 192,
+            "top1_dis": 0.9583333333333334
+          }
+        }
+      },
+      "schema": "exp037 g5 reductions v1"
+    },
+    "reference_passes": [
+      {
+        "bytes": 133699641,
+        "what": "R1 anchor: fp32 reference on 114 G5 sequences (16189 tokens)"
+      }
+    ]
+  },
+  "peak_rss_bytes": 9912107008,
+  "phase": "6",
+  "t_end": "2026-10-06T12:50:11Z",
+  "t_start": "2026-10-06T12:49:54Z",
+  "title": "R1 anchor over the G5 sequences of both arms, and the R1-dependent reductions",
+  "wall_s": 17.2725088596344
+}

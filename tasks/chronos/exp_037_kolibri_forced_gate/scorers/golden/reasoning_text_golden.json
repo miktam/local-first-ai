@@ -1,0 +1,30 @@
+{
+  "about": "Hand-written completions (special tokens kept) per family and prompt state, and the split the rule must give: [reasoning, answer, status]. Prompt states: open = the generation prompt ends inside an open block (Qwen, thinking on); closed = an empty block is prefilled (Kolibri effort none; thinking off); plain = no block in the prompt (Kolibri low/medium/high, Gemma 4 thinking on).",
+  "cases": [
+    {"family": "kolibri", "state": "closed", "completion": "The answer is 4.<|im_end|>", "expected": ["", "The answer is 4.", "none"]},
+    {"family": "kolibri", "state": "closed", "completion": "<think>stray</think>Four.<|im_end|>", "expected": ["", "<think>stray</think>Four.", "none"]},
+    {"family": "kolibri", "state": "plain", "completion": "<think>\nAdd two and two.\n</think>\n\nThe answer is 4.<|im_end|>", "expected": ["\nAdd two and two.\n", "\n\nThe answer is 4.", "closed"]},
+    {"family": "kolibri", "state": "plain", "completion": "<think>\nAdd two and two, then add", "expected": ["\nAdd two and two, then add", "", "unclosed"]},
+    {"family": "kolibri", "state": "plain", "completion": "The answer is 4.<|im_end|>", "expected": ["", "The answer is 4.", "none"]},
+    {"family": "kolibri", "state": "plain", "completion": "\n<think>x</think>y<|endoftext|>", "expected": ["x", "y", "closed"]},
+    {"family": "kolibri", "state": "plain", "completion": "Sure. <think>x</think>y", "expected": ["", "Sure. <think>x</think>y", "none"]},
+    {"family": "kolibri", "state": "plain", "completion": "<think>a</think>b</think>c<|im_end|>", "expected": ["a", "b</think>c", "closed"]},
+    {"family": "kolibri", "state": "plain", "completion": "<think>stopped early<|im_end|>", "expected": ["stopped early", "", "unclosed"]},
+    {"family": "qwen3_6", "state": "open", "completion": "Add.\n</think>\n\nThe answer is 4.<|im_end|>", "expected": ["Add.\n", "\n\nThe answer is 4.", "closed"]},
+    {"family": "qwen3_6", "state": "open", "completion": "Add and add and", "expected": ["Add and add and", "", "unclosed"]},
+    {"family": "qwen3_8", "state": "open", "completion": "</think>Four.<|im_end|>", "expected": ["", "Four.", "closed"]},
+    {"family": "qwen3_8", "state": "closed", "completion": "Four.<|endoftext|>", "expected": ["", "Four.", "none"]},
+    {"family": "gemma4", "state": "plain", "completion": "<|channel>thought\nAdd.<channel|>The answer is 4.<turn|>", "expected": ["thought\nAdd.", "The answer is 4.", "closed"]},
+    {"family": "gemma4", "state": "plain", "completion": "The answer is 4.<turn|>", "expected": ["", "The answer is 4.", "none"]},
+    {"family": "gemma4", "state": "plain", "completion": "<|channel>thought\nAdd and", "expected": ["thought\nAdd and", "", "unclosed"]},
+    {"family": "gemma4", "state": "closed", "completion": "Four.<eos>", "expected": ["", "Four.", "none"]}
+  ],
+  "prompt_tails": [
+    {"family": "kolibri", "prompt": "<|im_start|>system\nBe brief.<|im_end|>\n<|im_start|>user\nQ<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n", "state": "closed"},
+    {"family": "kolibri", "prompt": "<|im_start|>user\nQ<|im_end|>\n<|im_start|>assistant\n", "state": "plain"},
+    {"family": "qwen3_6", "prompt": "<|im_start|>user\nQ<|im_end|>\n<|im_start|>assistant\n<think>\n", "state": "open"},
+    {"family": "qwen3_6", "prompt": "<|im_start|>user\n<think>quoted</think> Q<|im_end|>\n<|im_start|>assistant\n<think>\n", "state": "open"},
+    {"family": "gemma4", "prompt": "<bos><|turn>system\n<|think|>\n<turn|>\n<|turn>user\nQ<turn|>\n<|turn>model\n", "state": "plain"},
+    {"family": "gemma4", "prompt": "<bos><|turn>user\nQ<turn|>\n<|turn>model\n<|channel>thought\n<channel|>", "state": "closed"}
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "data": {
+    "R2F": {
+      "dir": "$EXP036_WORK/exp037/ref_forced/17389c139aeba6a4/fp32",
+      "key": {
+        "i_sha256": "28fe0fbd02f6f5498984e6721a29c39fe0bbb0181893afbbc83e8cf3f9cf434c",
+        "k8_shards": [
+          [
+            "model.safetensors",
+            "1dd8d52124b2e80ce9a5ffd7c25d7c18f11b2bc0f95338bbc761e0c7b32d5d11"
+          ]
+        ],
+        "mode": "fp32",
+        "reference_tree_sha256": "85337ed7efeef6b0463f3560fff6da6496661a2fa7a14de5e50a1bce9e251bbd",
+        "text_key": "c1909ea0fedbc587cf0a85d3fa536805a99a87ee43d1ac99f46dd118f4d64a72"
+      },
+      "key_sha256": "17389c139aeba6a46734602704bf09298cd5442472f05129230544e74b67423a",
+      "record_sha256": "692eae62c04db692c2fb2b8a1f59f2b84b64fa2ce5d8d832a8997f0b2b3434c3",
+      "reused": false,
+      "wall_s": 22.74155616760254
+    },
+    "R3": {
+      "dir": "$EXP036_WORK/exp037/ref_forced/2e9a5b0480e65849/emu",
+      "key": {
+        "i_sha256": "28fe0fbd02f6f5498984e6721a29c39fe0bbb0181893afbbc83e8cf3f9cf434c",
+        "k8_shards": [
+          [
+            "model.safetensors",
+            "1dd8d52124b2e80ce9a5ffd7c25d7c18f11b2bc0f95338bbc761e0c7b32d5d11"
+          ]
+        ],
+        "mode": "emu",
+        "reference_tree_sha256": "85337ed7efeef6b0463f3560fff6da6496661a2fa7a14de5e50a1bce9e251bbd",
+        "text_key": "c1909ea0fedbc587cf0a85d3fa536805a99a87ee43d1ac99f46dd118f4d64a72"
+      },
+      "key_sha256": "2e9a5b0480e65849af17b8dc2f4c43acd8febb39fd85755badc4d0116d0ebcb8",
+      "record_sha256": "bdfbcb46f0b2223cf38b0cb566a3a2c3a9efd41fa8c7dca622a930595e3ccc79",
+      "reused": false,
+      "wall_s": 27.216697692871094
+    },
+    "i_sha256": "28fe0fbd02f6f5498984e6721a29c39fe0bbb0181893afbbc83e8cf3f9cf434c",
+    "reference_passes": [
+      {
+        "bytes": 71438897,
+        "what": "R2F: forced reference (fp32) on the dequantised K8, T1-T8 and T9"
+      },
+      {
+        "bytes": 71438897,
+        "what": "R3: forced reference (emu) on the dequantised K8, T1-T8 and T9"
+      }
+    ]
+  },
+  "peak_rss_bytes": 9912107008,
+  "phase": "2c",
+  "t_end": "2026-10-06T12:47:33Z",
+  "t_start": "2026-10-06T12:46:43Z",
+  "title": "R2F and R3 (forced references on the dequantised K8)",
+  "wall_s": 50.05047082901001
+}

@@ -1,0 +1,18 @@
+{
+  "about": "Hand-written synthetic sentences and the tag the frozen rule must give.",
+  "cases": [
+    {"text": "Die Antwort ist nicht einfach, aber wir können es versuchen.", "expected": "de"},
+    {"text": "The answer is not simple, but we can try it.", "expected": "en"},
+    {"text": "Die answer is the beste, und we haben it.", "expected": "mixed"},
+    {"text": "42", "expected": "unknown"},
+    {"text": "", "expected": "unknown"},
+    {"text": "Berlin.", "expected": "unknown"},
+    {"text": "这是一个测试", "expected": "unknown"},
+    {"text": "Zunächst berechnen wir die Summe. Dann ist das Ergebnis 7.", "expected": "de"},
+    {"text": "Wir verwenden den Algorithmus von Dijkstra, der die kürzesten Wege findet; the shortest path.", "expected": "de"},
+    {"text": "ÜBER DIE BRÜCKE UND DURCH DEN WALD", "expected": "de"},
+    {"text": "First we add the numbers, then we divide them by two.", "expected": "en"},
+    {"text": "def f(x): return x + 1", "expected": "unknown"},
+    {"text": "Ich denke, the result is clear, denn es ist so.", "expected": "mixed"}
+  ]
+}
