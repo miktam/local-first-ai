@@ -1,6 +1,6 @@
 # Experiment 037 — Kolibri through a forced gate: does it fit, how fast, and does its scorecard hold on public rows?
 
-*Pre-registered: 2026-10-07T04:14:29Z · Status: K8/K4 builds cloned and refreshed; Session 1 in progress; no scored run*
+*Pre-registered: 2026-10-07T04:14:29Z · Status: fidelity record recorded (2026-10-07T05:53:55Z)*
 
 **Builds on:**
 - **exp_036** (`../exp_036_kolibri_local_eval/`, tree at `222c845`): the question, hypotheses, arms, task sets, plan rules and kit, re-registered here. exp_036's Phase 0 gate failed for K8 (G2, G3, G4 and G5; record `e3e01b5c…`) and it was published as a gate failure with no scored run. On 2026-10-05 Andrei chose to re-register the hypotheses with a gate built from that run's bug hunt (decision D8, below). Nothing from exp_036 is cited as evidence about Kolibri's quality.
@@ -1472,3 +1472,11 @@ Pre-registration commit: 5dfcfecf6070b3649f0d9f48cbd4ad7e0a5a3af4
 - Result files (sha256):
   - `results/convert/refresh_8bit_20261007T053702Z.json` `17943c5c039440706bc5c22291ecaf39067dde5b9b9dd44f26b41f6189f69ba0`
   - `results/convert/refresh_4bit_20261007T053702Z.json` `2a9871566855f04d8a6478b7d5b4891092898e41c0cf2e19e6c940101ba19820`
+
+## fidelity record — run record (2026-10-07T05:53:55Z)
+
+- Phase: fidelity record
+- UTC: 2026-10-07T05:53:55Z (from the clock)
+- Commit: 014373fb3e36898d64e07a2bab7a8ca5f6200165 (uncommitted changes: yes)
+- Result files (sha256):
+  - `diagnostics/gemma_quant_check_20261007T054737Z.json` `7e3d75ade841d21946cfd6f6e95c8bacbc6049c900cea183686ff4cc49fcfd16`
