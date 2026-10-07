@@ -1,0 +1,55 @@
+<failure message> of tests.test_runner_tiny::test_resume_after_simulated_crash_gives_identical_records in junit_20261007T110355Z.xml
+AssertionError: assert {'q000': {'an...36, ...}, ...} == {'q000': {'an...36, ...}, ...}
+  
+  Omitting 3 identical items, use -vv to show
+  Differing items:
+  {'q003': {'answer_text': '<678><741><134><278><850><882><856><580><501><908><206><864><347><180>', 'answer_tokens': 14, 'batch_size': 1, 'cell_seed': 36, ...}} != {'q003': {'answer_text': '<678><741><134><278><850><882><856><580><501><908><206><864><347><180>', 'answer_tokens': 14, 'batch_size': 1, 'cell_seed': 36, ...}}
+  {'q004': {'answer_text': '<764><614><347><639><347><162><349><413><109><98><347><678><975><349><295><295>', 'answer_tokens': 16, 'batch_size': 1, 'cell_seed': 36, ...}} != {'q004': {'answer_text'...
+  
+  ...Full output truncated (3 lines hidden), use '-vv' to show
+
+<failure text>
+model = Model(
+  (model): Kolibri1Model(
+    (embed_tokens): Embedding(1024, 256)
+    (layers.0): DecoderLayer(
+      (self_at...e-06)
+    )
+    (norm): RMSNorm(256, eps=1e-06)
+  )
+  (lm_head): Linear(input_dims=256, output_dims=1024, bias=False)
+)
+tmp_path = PosixPath('<tmpdir>/pytest-of-<name>/pytest-13/test_resume_after_simulated_cr0')
+
+    def test_resume_after_simulated_crash_gives_identical_records(model, tmp_path):
+        its = items(6, max_tokens=lambda k: 8 + 2 * k)
+        ref = tmp_path / "ref.jsonl"
+        run(model, ref, its, B=1, cap=20)
+    
+        p = tmp_path / "raw/S2/K8/mmlu_en_high.jsonl"
+    
+        def stop_after_three():
+            recs = [r for r in jsonl.read_jsonl(p) if r.get("type") == "record"] if p.exists() else []
+            return len(recs) >= 3
+    
+        summ = run(model, p, its, B=1, cap=20, stop=stop_after_three)
+        assert summ["stopped"] and summ["n_done"] == 3
+        with open(p, "ab") as f:  # killed while writing the 4th line
+            f.write(b'{"completion_ids": [1, 2, 3], "key": {"it')
+        done = jsonl.completed_keys("K8", "mmlu_en", "high", root=tmp_path / "raw")
+        assert len(done) == 3
+        summ = run(model, p, its, B=1, cap=20, done=done)
+        assert summ["n_todo"] == 3 and summ["n_done"] == 3
+        recs, bad = jsonl.scan(p)
+        assert bad == 1 and [r["type"] for r in recs if r["type"] != "record"] == ["header", "resume"]
+>       assert content(records(p)) == content(records(ref))
+E       AssertionError: assert {'q000': {'an...36, ...}, ...} == {'q000': {'an...36, ...}, ...}
+E         
+E         Omitting 3 identical items, use -vv to show
+E         Differing items:
+E         {'q003': {'answer_text': '<678><741><134><278><850><882><856><580><501><908><206><864><347><180>', 'answer_tokens': 14, 'batch_size': 1, 'cell_seed': 36, ...}} != {'q003': {'answer_text': '<678><741><134><278><850><882><856><580><501><908><206><864><347><180>', 'answer_tokens': 14, 'batch_size': 1, 'cell_seed': 36, ...}}
+E         {'q004': {'answer_text': '<764><614><347><639><347><162><349><413><109><98><347><678><975><349><295><295>', 'answer_tokens': 16, 'batch_size': 1, 'cell_seed': 36, ...}} != {'q004': {'answer_text'...
+E         
+E         ...Full output truncated (3 lines hidden), use '-vv' to show
+
+tests/test_runner_tiny.py:222: AssertionError
