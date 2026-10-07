@@ -1,6 +1,6 @@
 # Experiment 037 — Kolibri through a forced gate: does it fit, how fast, and does its scorecard hold on public rows?
 
-*Pre-registered: 2026-10-07T04:14:29Z · Status: Pre-registered; awaiting Andrei's sign-off; no gate run, no scored run*
+*Pre-registered: 2026-10-07T04:14:29Z · Status: signed off; Session 1 in progress; no scored run*
 
 **Builds on:**
 - **exp_036** (`../exp_036_kolibri_local_eval/`, tree at `222c845`): the question, hypotheses, arms, task sets, plan rules and kit, re-registered here. exp_036's Phase 0 gate failed for K8 (G2, G3, G4 and G5; record `e3e01b5c…`) and it was published as a gate failure with no scored run. On 2026-10-05 Andrei chose to re-register the hypotheses with a gate built from that run's bug hunt (decision D8, below). Nothing from exp_036 is cited as evidence about Kolibri's quality.
@@ -1432,14 +1432,14 @@ These go to build task W8c.
 
 *Typed by Andrei on the mbp before the first gate run (RUNBOOK step 6); committed and pushed from the mbp. Claude never fills any field of this block. It re-confirms the items decided with A–E. A choice that differs from the pre-registered value is recorded in the same commit as **Amendment 0**: only the H2 margin can differ (`analysis/margins.json`, with the line `hash_tree --amend-line analysis` prints); the head policy cannot, because P4 binds exp_036's quantised-head builds.*
 
-- Signed off by:
-- Date and time (UTC, read from the clock):
-- H2 margin (−4 pp as pre-registered and re-confirmed with A–E, −3 pp or −5 pp):
-- Kolibri `embed_tokens` / `lm_head` policy, applied to K8 and K4 (re-confirm: quantised at the arm's bits with fp32 logits, as in exp_036's builds that exp_037 reuses; vendor-faithful would need a new conversion, which this pre-registration does not provide):
-- K8 Metal limit (sysctl value run by hand, "not needed" if preflight printed no line, or declined):
-- Overrun ceiling for S3b (44 h as pre-registered):
-- Cloud FP8 anchor (declined, as decided with G3 and A–E):
-- Commit:
+- Signed off by: Andrei (typed by Andrei on the mbp, 2026-10-07T05:28:24Z)
+- Date and time (UTC, read from the clock): 2026-10-07T05:28:24Z
+- H2 margin (−4 pp as pre-registered and re-confirmed with A–E, −3 pp or −5 pp): -4 pp
+- Kolibri `embed_tokens` / `lm_head` policy, applied to K8 and K4 (re-confirm: quantised at the arm's bits with fp32 logits, as in exp_036's builds that exp_037 reuses; vendor-faithful would need a new conversion, which this pre-registration does not provide): quantised at the arm's bits with fp32 logits
+- K8 Metal limit (sysctl value run by hand, "not needed" if preflight printed no line, or declined): not needed
+- Overrun ceiling for S3b (44 h as pre-registered): 44h
+- Cloud FP8 anchor (declined, as decided with G3 and A–E): declined
+- Commit: 5fb17d0
 
 The "Signed off by" line must read `Signed off by: Andrei (typed by Andrei on the mbp, <UTC>)`; the runner checks this form.
 
@@ -1448,3 +1448,10 @@ The "Signed off by" line must read `Signed off by: Andrei (typed by Andrei on th
 *Experiment design: Andrei + Claude Opus 5.5 · 2026-10-06*
 
 Pre-registration commit: 5dfcfecf6070b3649f0d9f48cbd4ad7e0a5a3af4
+
+## sign-off — run record (2026-10-07T05:30:56Z)
+
+- Phase: sign-off
+- UTC: 2026-10-07T05:30:56Z (from the clock)
+- Commit: 5fb17d07cf9d11fffb1a293d32f82ed903262850 (uncommitted changes: yes)
+- Result files: none
