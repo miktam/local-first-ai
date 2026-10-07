@@ -1,0 +1,270 @@
+{
+ "decision": "fix",
+ "decision_text": "gate fix: one amendment lists every fix named (PLAN.md 6.8); writing it and any re-run need Andrei's go",
+ "fixes": [
+  "6.6"
+ ],
+ "follow_ups": [],
+ "governing_host": "mbp",
+ "inputs": [
+  {
+   "file": "mbp_cachestate_20261007T171033Z.json",
+   "sha256": "bc9048861fdd6b1f095232fdfc5a6b36a4c48341c81e2163f782f969ca78f771"
+  },
+  {
+   "file": "mbp_g1ctx_20261007T172746Z.json",
+   "sha256": "acfe3d390e08d2cbfa0c4ba2cb59c1b4c9bbcf12497db43e92090641c5e14d52"
+  },
+  {
+   "file": "mbp_inproc_20261007T175350Z.json",
+   "sha256": "54c6a41f0b077a4ddd72aafc4da2dd60f05885493fd21d7a07de1180d196bb21"
+  },
+  {
+   "file": "mbp_isolated_20261007T171043Z.json",
+   "sha256": "453a7d3d21b73a7d290c68dab916ecafe6d405c466a6de0cb72f9ab7182ead0a"
+  },
+  {
+   "file": "mbp_module_20261007T172211Z.json",
+   "sha256": "0748c5c0864ed1986d54ce2aeb0176a2dca71bfbec048248a751e788192f2e41"
+  },
+  {
+   "file": "mbp_pair_20261007T172422Z.json",
+   "sha256": "1bbfcebc2497ffe005610e5121fa5da244f6e17d0aa211a0f64f46b8b4b91bad"
+  },
+  {
+   "file": "mini_cachestate_20261007T182220Z.json",
+   "sha256": "3652e0b6bdfb34e65396f9ec558618aa12a237a88404f7740a65e06c36942b2d"
+  },
+  {
+   "file": "mini_g1ctx_20261007T182320Z.json",
+   "sha256": "174629506110b9874377286f2ba0fd66c02683a6c2f1adfa9108d7bf77c8fee3"
+  },
+  {
+   "file": "mini_inproc_20261007T183024Z.json",
+   "sha256": "50d81177dc3b02914ba270d65522f79960bc98dc9a5f9587314692a1d2530164"
+  },
+  {
+   "file": "mini_isolated_20261007T182222Z.json",
+   "sha256": "75ea0b71d743429269c7da0115e4b639b0dbd86110800924c7ef83e4068d7d5d"
+  }
+ ],
+ "matched": [
+  {
+   "consequence": "(iv) shows on the run host that a StubTok created after the batch-flip test's calls lands on a stale check-cache id and gets the scorers split in the failing test's scenario -> gate fix at runner.generate._scorer_split (PLAN.md 6.6).",
+   "fix": "6.6",
+   "outcome": "O7",
+   "rule": 7,
+   "status": "fix",
+   "sub": "O7"
+  }
+ ],
+ "mini_fallback": false,
+ "mini_matches_descriptive": [],
+ "mini_reproduced": false,
+ "observations": {
+  "mbp": {
+   "cachestate": {
+    "complete": true,
+    "complete_outputs": 1,
+    "duplicate": false,
+    "files": 1,
+    "n_valid": 1,
+    "outcome": "hit"
+   },
+   "fresh": {
+    "ac": {},
+    "c_assert": 0,
+    "c_assert_checks": [],
+    "complete": false,
+    "complete_outputs": 0,
+    "duplicate": false,
+    "field_only": 0,
+    "field_only_fields": [],
+    "files": 0,
+    "n_valid": 0,
+    "uninterrupted": {}
+   },
+   "g1ctx": {
+    "c_assert": 0,
+    "c_assert_lines": [],
+    "complete": true,
+    "complete_outputs": 1,
+    "duplicate": false,
+    "field_only": 0,
+    "field_only_fields": [],
+    "files": 1,
+    "gen_or_other": 0,
+    "kinds": {
+     "equal": 4
+    },
+    "n_valid": 4
+   },
+   "inproc": {
+    "ac": {
+     "equal": 50
+    },
+    "c_assert": 0,
+    "c_assert_checks": [],
+    "complete": true,
+    "complete_outputs": 1,
+    "duplicate": false,
+    "field_only": 0,
+    "field_only_fields": [],
+    "files": 1,
+    "n_valid": 50,
+    "uninterrupted": {
+     "equal": 50
+    }
+   },
+   "isolated": {
+    "c_assert": 0,
+    "c_assert_lines": [],
+    "complete": true,
+    "complete_outputs": 1,
+    "duplicate": false,
+    "field_only": 0,
+    "field_only_fields": [],
+    "files": 1,
+    "gen_or_other": 0,
+    "kinds": {
+     "equal": 50
+    },
+    "n_valid": 50
+   },
+   "module": {
+    "c_assert": 0,
+    "c_assert_lines": [],
+    "complete": true,
+    "complete_outputs": 1,
+    "duplicate": false,
+    "field_only": 0,
+    "field_only_fields": [],
+    "files": 1,
+    "gen_or_other": 0,
+    "kinds": {
+     "equal": 30
+    },
+    "n_valid": 30
+   },
+   "pair": {
+    "c_assert": 0,
+    "c_assert_lines": [],
+    "complete": true,
+    "complete_outputs": 1,
+    "duplicate": false,
+    "field_only": 0,
+    "field_only_fields": [],
+    "files": 1,
+    "gen_or_other": 0,
+    "kinds": {
+     "equal": 30
+    },
+    "n_valid": 30
+   },
+   "reproductions": []
+  },
+  "mini": {
+   "cachestate": {
+    "complete": true,
+    "complete_outputs": 1,
+    "duplicate": false,
+    "files": 1,
+    "n_valid": 1,
+    "outcome": "stale_only"
+   },
+   "fresh": {
+    "ac": {},
+    "c_assert": 0,
+    "c_assert_checks": [],
+    "complete": false,
+    "complete_outputs": 0,
+    "duplicate": false,
+    "field_only": 0,
+    "field_only_fields": [],
+    "files": 0,
+    "n_valid": 0,
+    "uninterrupted": {}
+   },
+   "g1ctx": {
+    "c_assert": 0,
+    "c_assert_lines": [],
+    "complete": true,
+    "complete_outputs": 1,
+    "duplicate": false,
+    "field_only": 0,
+    "field_only_fields": [],
+    "files": 1,
+    "gen_or_other": 0,
+    "kinds": {
+     "equal": 1
+    },
+    "n_valid": 1
+   },
+   "inproc": {
+    "ac": {
+     "equal": 50
+    },
+    "c_assert": 0,
+    "c_assert_checks": [],
+    "complete": true,
+    "complete_outputs": 1,
+    "duplicate": false,
+    "field_only": 0,
+    "field_only_fields": [],
+    "files": 1,
+    "n_valid": 50,
+    "uninterrupted": {
+     "equal": 50
+    }
+   },
+   "isolated": {
+    "c_assert": 0,
+    "c_assert_lines": [],
+    "complete": true,
+    "complete_outputs": 1,
+    "duplicate": false,
+    "field_only": 0,
+    "field_only_fields": [],
+    "files": 1,
+    "gen_or_other": 0,
+    "kinds": {
+     "equal": 50
+    },
+    "n_valid": 50
+   },
+   "module": {
+    "c_assert": 0,
+    "c_assert_lines": [],
+    "complete": false,
+    "complete_outputs": 0,
+    "duplicate": false,
+    "field_only": 0,
+    "field_only_fields": [],
+    "files": 0,
+    "gen_or_other": 0,
+    "kinds": {},
+    "n_valid": 0
+   },
+   "pair": {
+    "c_assert": 0,
+    "c_assert_lines": [],
+    "complete": false,
+    "complete_outputs": 0,
+    "duplicate": false,
+    "field_only": 0,
+    "field_only_fields": [],
+    "files": 0,
+    "gen_or_other": 0,
+    "kinds": {},
+    "n_valid": 0
+   },
+   "reproductions": []
+  }
+ },
+ "outcome": "O7",
+ "package": "diagnostics/g1_resume_20261007",
+ "schema": "exp037 g1-resume diagnostics v2",
+ "status": "applied",
+ "sub": "O7",
+ "utc": "20261007T183129Z"
+}
