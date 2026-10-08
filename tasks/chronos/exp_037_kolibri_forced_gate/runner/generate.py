@@ -181,13 +181,26 @@ def split_ids(
 def _scorer_split(family: str, tokenizer):
     """scorers/reasoning.py's id-level split (the one scoring uses), bound to
     this family and tokenizer, or None when that module is absent or its
-    delimiter table does not match this tokenizer (e.g. a test tokenizer)."""
+    delimiter table does not match this tokenizer (e.g. a test tokenizer).
+
+    exp_037 Amendment 1 (gate fix 6.6): on every call the tokenizer's
+    turn-start, delimiter and EOS ids are compared with the family table, the
+    comparison scorers.reasoning.check_tokenizer makes, without its cache of
+    passed checks (_CHECKED, keyed by id(tokenizer)). A freed tokenizer's id
+    left in that cache can be reused by another object, which then got the
+    scorers' split without matching the table. A tokenizer whose ids match the
+    table gets the same split as before; one whose ids do not gets None, as an
+    uncached check_tokenizer would decide."""
     try:
         from scorers import reasoning  # sibling area; lazy
     except ModuleNotFoundError:
         return None
     try:
-        reasoning.check_tokenizer(family, tokenizer)
+        spec = reasoning.family_spec(family)
+        want = {spec.turn_start: spec.turn_start_id, spec.open: spec.open_id, spec.close: spec.close_id}
+        want.update(zip(spec.eos, spec.eos_ids))
+        if any(reasoning.token_id(tokenizer, tok) != want[tok] for tok in want):
+            return None
     except Exception:
         return None
 
