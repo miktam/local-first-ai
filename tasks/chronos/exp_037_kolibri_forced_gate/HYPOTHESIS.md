@@ -1668,3 +1668,234 @@ hash_tree: TESTS_SHA256 = 5adae3c86ae59b4cb655ac91dfe5b620028ebd52b4b61e8fcf54ad
   - `results/bench/speed_desc_20261008T071901Z.jsonl` `575653038defe51b26728a90e768243729a8d48f3c666f6b1a1d606f7f16738b`
   - `results/tokenizer_20261008T080017Z.json` `9474f2df64d357a08f9f4fe826633caa402113bbc833ed5d5b536535c2b95c8e`
   - `results/kl_8v4_20261008T075810Z.json` `a75601b608515c3339dea9ebb7460cb141ad8fca8ffe0616b1cd11d0d5779ae3`
+
+## Amendment 2 — gate fix (2026-10-08T15:10:23Z)
+
+*Written after a gate result and after a pilot crash: gate run 2 (`20261008T050643Z`, exit 0: K8 PASS, K4 PASS, committed in `c6b5429`), then the bench (step 11, committed in `e6e525e`), then pilot `20261008T082355Z`, which crashed (step 12). Typed by the main session on the mini on Andrei's go, pushed as `amendments/2_gatefix_20261008T151023Z.md`, and appended verbatim by the mbp session with `tools/status.py --sync-amendments` (one writer). It changes no hypothesis, threshold, control, mutant, gate text, gate rule, arm, task, n or verdict rule.*
+
+**Andrei's decisions.** Both given at 2026-10-08T14:32:42Z, choosing among the diagnosis's options.
+- **Path B: gate fix plus gate run 3.** This is the go for this gate fix: this file and its code. Gate run 3 needs a separate go, given only after RUNBOOK step 3 passes on the mbp. That go comes after this file is appended, so it is not recorded here. The mbp session records it with its UTC time and label as a run-record block in HYPOTHESIS.md (`tools/status.py --record-block`) and commits it before step 10, as it recorded Andrei's choice after gate run 1 (commit `d60f3b6`; HYPOTHESIS "Who acts").
+- **"They stand."** If gate run 3 fails, H1, H5, H8 and D1 stand and are published, with run 3's failure disclosed. The bench measured them under run 2's PASS (step 11, `e6e525e`), on a code path this fix leaves byte-identical (see "Step 11 is not re-run").
+  - **Which exits it covers: 1 and 5.** Andrei's words name no exit code.
+    - Exit 4 already has a registered consequence: "exit 4, after which H1, H7, H8 and D1 are NOT RUN if the cycles end with K4 failing" (HYPOTHESIS.md:506, "Pre-registered consequences"; RUNBOOK step 10, exit 4). No gate run remains after run 3, so an exit 4 there is exactly "the cycles end with K4 failing".
+    - exp_037 has no verdict-rule-change amendment (HYPOTHESIS "No relaxation route"), so this amendment cannot set that consequence aside.
+    - **On exit 4, the registered consequence applies:** H1, H7, H8 and D1 are NOT RUN. H5 stands, because no model runs in it.
+    - Andrei confirmed this reading at 2026-10-08T17:02:58Z ("Registered rule"): exit 4 keeps its registered consequence, and his decision of 14:32:42Z covers exits 1 and 5 only. No deviation is made.
+  - **The clauses it is read against (exits 1 and 5).** HYPOTHESIS.md:431 ("Verdicts, exits and the record", "On FAIL or INCOMPLETE") and HYPOTHESIS.md:513 ("Who acts", "End of the gate"): after the third failing run, or on stop, the gate failure is the exp_037 result, and no speed, memory or quality number from an ungated port is reported. Why they do not take these four away:
+    - **Gated when measured.** The bench admitted every Kolibri arm through `require_pass` (`bench/common.require_gates` → `runner/guard.require_gate`) on run 2's record, which says PASS for K8 and K4. These are not numbers from an ungated port.
+    - **The same port.** Run 3 checks the port, reference, thresholds, `gate_rules`, gate text and builds that run 2 checked, byte-identical by hash. Only the `runner` and `tests` trees change, and the bench runs none of the changed code.
+    - **Not the third failing run.** With exits [1, 0, x], a failing run 3 would be the second failing run. The gate would end because no gate run remains (`gate_runs_max` 3), that is, on stop.
+    - Read this way, the decision settles a case the rules did not name before the run: run 2 passed, and the bench ran under its PASS. Read strictly, it is Andrei's disclosed deviation from those two clauses. Either way, the publication states run 3's failure and its failing checks, and that the four were measured under run 2's PASS.
+- **The options he chose from.**
+  - (A) Re-run the pilot unchanged: it would very likely crash again (scope, below).
+  - (C) The same fix in `port/`: it touches the gated port and its mutant hooks, for no gain.
+  - (D) A runner fix without a gate run: not a registered route, because run 2 certified runner tree `772d08e7…`.
+  - (G) Stop and publish: available, and it stays available at every point.
+
+**Why.**
+1. **The crash.**
+   - Pilot `20261008T082355Z` ran on the mbp from 08:23:54Z (commit `42a15e2`; the power window starts at `20261008T082354Z`). It stopped at about 09:17:28Z in K8 `aime_en_pilot_high` (B = 4, cap 65,536), after 49,661 decode steps in that cell (its step log, below), with:
+     `RuntimeError: [metal::malloc] Resource limit (499000) exceeded`
+   - The error was raised at `mx.async_eval` in mlx_lm's `GenerationBatch._step` (`generate.py:1405`). It was reached from `run_cell`'s `gen.next()` (`runner/generate.py:413` at `e6e525e`) through mlx_lm `generate.py:1870 → 1790 → 1449 → 1405`.
+   - **The partial pilot and its record.** The mbp moved it aside with `runner/run.py abort-pilot` and committed it in `42a15e2` (2026-10-08T15:00:23Z).
+     - `aborted/20261008T082355Z-pilot/` holds the cell files and step logs, with its NOTE.md (sha256 `2c0bbe90…`). The four private files went to `$EXP036_PRIVATE/exp037/aborted/`, with their sha256 in the NOTE and in `evidence/withheld_manifest.jsonl`. The power record is `results/power/power_20261008T145946Z.json`.
+     - Seven K8 cells were complete. In `aime_en_pilot_high`, all four items were admitted at step 0. Three finished, with 2,695, 3,582 and 5,478 tokens. The fourth was still decoding when the error came.
+     - That cell's step log has 49,664 lines: 2 env lines and 49,662 step lines (steps 0 to 49,661), from 09:02:16Z to 09:17:27Z. Step 0 is the prefill; the other 49,661 are decode steps (`n_live` > 0).
+     - From step 5,479 on, the fourth item ran alone (`n_live` 1). The last line has `n_live` 1 and `padded_len` 50,094, so it had decoded about 49,660 tokens, below its cap of 65,536. **The crash came through the scope's single-item route** (one item running past about 49.5k tokens; "The scope", below), not through refill: n = B = 4, so no item was ever refilled.
+     - The NOTE says only "interrupted or crashed before its summary was written". The error line and the frames above were relayed to the main session from the mbp's terminal; the traceback is not committed.
+2. **The cause.** The main session diagnosed it on the mini. The kit at `e6e525e` and the venv were only read; the probes ran in the session's scratch directory and are not committed.
+   - **Where the graph grows.** In mlx-lm 0.32.0, `BatchKVCache.update_and_fetch` runs `self.offset = self.offset + keys.shape[2]` on every decode step (`mlx_lm/models/cache.py:929`). It is lazy, and nothing forces it. `BatchRotatingKVCache` forces its own offset (`cache.py:1172, 1225`); `BatchKVCache` has no such line.
+   - **Why nothing frees it.** On Kolibri's 10 NoPE full-attention layers (`i % 5 == 4`), nothing in decode reads the offset:
+     - `rope_offset` runs on RoPE layers only (`port/kolibri1.py:331-334`);
+     - the mask uses `_idx` and `left_padding` (`cache.py:977-980`);
+     - SDPA does not take the offset.
+
+     `filter` and `extend` rebind it lazily too (`cache.py:989, 1042-1043`). `mx.clear_cache()` frees cached buffers only, not live ones.
+   - **Why it crashes.** Each decode step leaves 10 more live Metal buffers, one per NoPE layer. They stay for as long as the decode batch is non-empty, and with refill that is the whole cell. `resource_limit` (499,000) counts buffers, not bytes, so the next allocation past it raises the error.
+   - **Where the defect sits.** It is in the pinned mlx-lm 0.32.0 (Decision F); the port's NoPE layers only expose it. `libmlx` reads the sysctl `iogpu.rsrc_limit`. That sysctl does not exist on the mini, so MLX uses its default of 499,000. The mbp's error names the same value.
+3. **The evidence.** Tiny builds of the kit's tiny checkpoint ran through `runner.generate.run_cell` on the mini (MLX 0.32.3, mlx-lm 0.32.0, the same `resource_limit`).
+   - **The graph.** Counted with `mx.export_to_dot`, the graph behind one NoPE layer's offset had steps + 2 leaves at every checkpoint up to 20,000 steps. This held through `run_cell` and through a bare `BatchGenerator`, at B = 1 and B = 4. On a sliding-window layer: 1 leaf. With `stream_generate` (`KVCache`, whose offset is a Python int): no growth.
+   - **Pure MLX.** `o = o + 1`, never evaluated, gave the error after 498,999 links.
+   - **10 layers, all NoPE,** B = 1, cap 65,536: the error after 49,824 steps.
+   - **The production layout** (50 layers, 10 NoPE), B = 4, with 420,000, 440,000 and 490,000 buffers pre-allocated: the error after 7,642, 5,642 and 645 steps. That is exactly 10 buffers per step, with about 2,550–2,580 other live buffers.
+   - **The prediction for the pilot cell** was (499,000 − 2,580) / 10 ≈ 49,640 steps, less about 4 per item ("The scope", below): about 49,624 at n = 4. The cell stopped after 49,661 decode steps, 37 (0.07 %) above that, and the traceback frames are identical.
+   - **With the offsets evaluated every step** (`mx.async_eval`) and 490,000 buffers held: 20,000 steps with no error. Unfixed, the same run stopped at 645.
+   - **Strength.** Confirmed: the mechanism and the buffer count. One inference: that the real K8 build behaves like a tiny build of its layout; the step counts support it. Ruled out: a byte or working-set limit (each leaked buffer holds 4 B), the AIME task itself, and B.
+4. **The scope.**
+   - **The ceiling** per cell attempt is about 49,640 − 4n decode steps (about 40 more buffers per item, from admissions and finishes). With refill, a cell needs about Σ completion tokens / B, plus one item length for the tail. A cell crashes when it needs more steps than the ceiling. In particular, any single item that runs past about 49.5k tokens crashes it, whatever B: this is the single-item route.
+   - **Arms.** K8 and K4 are affected. The peers are not, because every attention layer with a cache reads `cache.offset` for RoPE on every step (`gemma4_text.py:258`, `qwen3_next.py:139-140`). The diagnosis read this from the code. A review of this amendment, on the mini, then measured it on tiny random-init builds made from the real peer configs, shrunk (no peer weights were read): `gemma4_text` (BatchKVCache and BatchRotatingKVCache), `qwen3_5` and `qwen3_5_moe` (ArraysCache and BatchKVCache).
+     - Through `e6e525e`'s `run_cell`, the graph behind their BatchKVCache offsets stayed at 2–5 nodes, with no growth.
+     - With the fix, the records, the step logs and the MLX RNG state after the cell equal the pre-fix ones, greedy and sampled, at B = 1 and at B = 4 with refill.
+     - This is not a measurement on the real peer weights. The review's probes and outputs stay in its scratch directory and are not committed.
+   - **Prefill** does not leak.
+   - **The pilot.** Every pilot cell has n ≤ B, so only K8 `aime_en_pilot` (cap 65,536) can cross the ceiling. A rerun uses the same seed, B and items, and sampled generation through `run_cell` reproduced row for row across gate runs 1 and 2 (every per-row `completion_tokens` of `g5_behaviour_K8` and `_K4`). So **a rerun would most likely crash at the same item**, after about 54 minutes of K8 cells.
+   - **S2 and S3.** The table uses the Kolibri planning means in HYPOTHESIS "Sessions & budget":
+     - K8 GPQA-D EN and DE, and K4 GPQA-D: crash in every scenario;
+     - MMLU: crashes whenever n_M ≥ 252, and at smaller n_M in the pessimistic scenario;
+     - IFBench: passes in the nominal scenario, is at the edge in the pessimistic one and crashes in the adverse one (in every scenario at B = 8);
+     - AIME EN and DE: crash;
+     - RGB: passes.
+
+     A crash ends the session process (`run.py:648-655`). The cell then steps down to a lower B, and after two step-downs it is NOT RUN. K8 GPQA EN is first in the S2 queue, so **S2 would stop in its first cell.**
+   - **Conclusion.** The pilot rerun and S2 would crash. The fix goes into `run_cell`, the generation path that the pilot and the sessions use.
+5. **The rules this fix is made under.**
+   - **Where the change may be.** HYPOTHESIS "Gate fix" (HYPOTHESIS.md:498) allows "a code change in `port/`, in the generation path of `runner/`, or in gate measurement code". `runner/generate.py` is in the generation path as a whole file (`diagnostics/g1_resume_20261007/PLAN.md` section 4). The rule limits where the change is made, not where the defect lies. Here the defect is in mlx-lm 0.32.0, and the change is in `run_cell`.
+   - **The g1_resume package's class D does not govern this crash.**
+     - PLAN.md section 4, class D: "Inside MLX or mlx-lm: class M; a gate fix only through 6.5's listed remedies, else stop and publish". Section 6.5's last row: "inside mlx-lm (BatchGenerator, its caches, its finish reasons) | none: stop and publish".
+     - These are the outcome-to-action rules of that package, pre-registered for the G1 failure of gate run 1 (`20261007T110355Z`; PLAN.md title and "Binding rules"). Its classes route a differing output (a generation difference or a field-only difference) by where the state that produced it lives.
+     - This crash is a resource exhaustion, not a differing output. The fix leaves every record and step-log field unchanged (T3 below; `g5_behaviour` in run 3).
+     - A reader may still take class D as a precedent of stop and publish for any defect inside mlx-lm. This amendment does not follow it, for these reasons. Andrei chose path B with stop and publish (G) on offer.
+   - **Disclosed: this diagnosis had no pre-committed rules.** HYPOTHESIS "Diagnostics between runs" (HYPOTHESIS.md:508) asks that a diagnostic's outcome-to-action rules be committed before it runs.
+     - The pilot-crash diagnosis had none. It followed a crash in the pilot after a PASS, not a failing gate run, and no package like `g1_resume_20261007` was registered for it.
+     - It wrote no gate record, replaced no gate value and is not a cycle. Its one consequence is this gate fix, one of the three consequences that rule permits, chosen by Andrei among the options it listed.
+     - Its note, probes and outputs stay in the main session's scratch directory and are not committed.
+
+**Change.** One file in `runner`: `runner/generate.py`, sha256 `ef85ee00…` before and `9c542639…` after. Two parts, and nothing else in the file changes.
+- **A new helper,** `_settle_batch_offsets(gen)`. It collects the `.offset` of every mlx_lm `BatchKVCache` in `gen._generation_batch.prompt_cache`, if there are any, and passes them to `mx.async_eval`. `run_cell` already reads `gen._generation_batch` in `_padded_len`.
+- **One call in `run_cell`,** right after the `with gen.stats() as st:` block and before `on_step`. It is outside the timed window, so `step_seconds` and `call_seconds` do not include it.
+- **What it touches.** Only `BatchKVCache.offset`, an int32 `[B]` vector. Evaluating it earlier runs the same integer adds, which are exact.
+  - Kolibri never reads the offset in decode, and `extract()` takes its offset from `keys.shape`.
+  - For the peers, RoPE reads the same int32 values whether they are evaluated early or late.
+  - No PRNG key is consumed. Admission, B, `max_tokens`, EOS, prefill sizes, the record fields and the step-log fields are unchanged, and so is `run_cell`'s signature.
+- **Cost.** One `async_eval` per `gen.next()`. On tiny weights, 4,000 steps at B = 4 took 47.9 s with it and 47.9 s without.
+- **Who runs it.**
+  - The pilot and the sessions (`runner/run.py`).
+  - In the gate, `g5_behaviour` only: `gate/checks/g5_generation.behaviour` is the one call of `run_cell` in `gate/`. G5's batched checks use the gate's own admission loop (`g5_generation.run_admission`) on `make_batch_generator`.
+  - The bench imports only `make_batch_generator` from `runner.generate` and runs its cells in `bench/`'s own code. None of these runs the new step.
+- **Not touched.** `port/`, site-packages, `make_batch_generator`, `bench/`, `gate/`.
+
+**Tests.** One new file, `tests/test_runner_offset_leak.py` (sha256 `ab98b1f1…`). Nothing else under `tests/` changes.
+- **The builds.** Every model is a tiny real-layout build written by the tests' own writers (`tests/tiny_real_layout.py`, `tests/conftest.py`), never real weights. The EOS id is 5000, outside the 1,024-token tiny vocabulary, so every sequence runs to its `max_tokens` and every step count is fixed.
+- **T1, structural:** `test_t1_no_graph_behind_batch_kv_offsets`.
+  - **Oracle.** Symbolic: the primitive nodes behind each offset, counted with MLX's own `mx.export_to_dot`. The test first checks the oracle itself: a five-link lazy int32 chain shows at least 5 nodes before `mx.eval` and 0 after.
+  - **Setup.** conftest's `tiny_real_val_unsharp` (seed 29, unsharpened: the whole tiny gate's validation build), 8 bits, group 64, loaded with `port_harness.load_port` as the kit loads K8. It has 10 layers, with NoPE at 4 and 9. `run_cell` runs greedy at B = 2 with three items, `max_tokens` 120, 200 and 90: one refill, and the decode batch is never empty before the end.
+  - **What it asserts.** Through `on_step`, after every `gen.next()` with a non-empty decode batch, it counts the nodes behind each `BatchKVCache.offset`. Both NoPE caches are counted at every step, and the run reaches at least 200 decode steps (212). The last step's counts must be [0, 0], and no step may have a non-zero count.
+- **T2, behavioural:** `test_t2_resource_limit_not_reached_with_the_buffers_nearly_exhausted`.
+  - **Oracle.** MLX's own limit, `mx.device_info()["resource_limit"]`.
+  - **The build.** `tiny_real_layout`'s gate-validation recipe (seed 29, unsharpened, the real head and expert layout) at the released depth: 50 layers, with NoPE at `i % 5 == 4` (10 layers). `port/convert.py` converts it to 8 bits, group 64, in the test's temporary directory.
+  - **The subprocess.** The test runs `sys.executable -c <child>` with the test environment, from the kit directory, with a 900 s timeout; a timeout fails the test with that message. A subprocess means it neither depends on nor disturbs the rest of the suite (Amendment 1's G1 failure was a test-order effect).
+  - **What the child does.**
+    1. It loads the build and clears MLX's cache.
+    2. It holds `resource_limit` − 15,000 evaluated scalar arrays, one Metal buffer each.
+    3. It runs `run_cell` greedy with 4 items (prompts of 16–19 tokens), B = 4, `max_tokens` = cap = 4,000: exactly 4,000 decode steps.
+    4. It reports any exception from `run_cell` instead of raising it.
+  - **What it asserts.**
+    - the child ran the same `runner.generate` file as the test process;
+    - the build has 50 layers, with NoPE at 4, 9, …, 49;
+    - the held count is `resource_limit` − 15,000;
+    - there is no error;
+    - 4,000 decode steps;
+    - four records of 4,000 tokens, each with `finish_reason` "length".
+  - **What it bounds.** With the fix, about 12,400 buffers of headroom remain over 4,000 steps, so any residual growth is below about 3 buffers per step. Tighter bounds come from elsewhere:
+    - the diagnosis's 20,000-step run with 490,000 buffers held bounds it below 0.32 per step;
+    - T1 shows no graph at all;
+    - a review of this amendment ran T2's own child with the fixed runner on a 10-layer tiny K8 build (NoPE at 4 and 9): B = 4, 60,000 decode steps per sequence, 496,000 of 499,000 buffers held. It completed, four records of 60,000 tokens with `finish_reason` "length" (526.8 s). That is past the pilot's 49,661 decode steps, and it bounds residual growth below about 0.05 buffers per step. Its output stays in the review's scratch directory and is not committed.
+- **T3, output-neutral:** `test_t3_settle_step_leaves_records_and_steps_unchanged[greedy]` and `[vendor]`.
+  - **Oracle.** The pre-fix code path: `runner.generate._settle_batch_offsets` patched to a no-op.
+  - **Setup.** The same K8 tiny build as T1, with five items, `max_tokens` 260, 200, 170, 150 and 90, at B = 2: three refills, and the decode batch is never empty before the end. Cap 512. It runs greedy, and under Kolibri's vendor sampler (`chat.sampling_for("kolibri")`: T 1.0, top-p 0.97, top-k 128).
+  - **The two arms.** In one test, through `monkeypatch`: first the no-op, then a counting wrapper around the real step.
+  - **What it asserts.**
+    - every record is complete, with the lengths above;
+    - the records are identical between the arms in every field except `t_submit`, `t_first_token`, `t_done` and `wall_s`, including completion ids, texts, the split and `batch_id`;
+    - the step logs are identical in every field except the times;
+    - under the vendor sampler, q000 has more than 50 distinct tokens, so the sampler was in effect;
+    - the active arm called the step once per `gen.next()` (466 calls);
+    - the no-op arm's final offsets have at least as many graph nodes as decode steps;
+    - the active arm's offsets have 0 at every step.
+- **No skips.** None of the tests skips, here or on the mbp. G1 allows skips only with reasons that start with `build-host only:`, and these tests have none.
+
+**Before and after.** Each test fails on `e6e525e`'s `runner/generate.py` and passes on this amendment's.
+- **Setting.** The mini; venv312 (Python 3.12.13) and venv314 (Python 3.14.7), both with MLX 0.32.3, mlx-lm 0.32.0 and pytest 9.1.1; `EXP036_REQUIRE_ALL=1`, `EXP036_TOK`, `EXP036_MODELS` and `EXP036_DATA` set, `PYTHONDONTWRITEBYTECODE=1`, `-p no:cacheprovider`.
+- **How the old code was loaded.**
+  - The pre-fix `runner/generate.py` was backed up before the edit; its sha256 `ef85ee00…` is that of the blob at `e6e525e`.
+  - For the before runs only, a scratch `sitecustomize.py`, kept outside the repository, was put on `PYTHONPATH`. At interpreter start it checked that sha256, loaded the backup as `runner.generate` and set it as the `runner` package's `generate` attribute.
+  - It did this in the pytest process and in T2's child, which inherits the environment. Its log has two lines per run, both naming the backup.
+  - The kit's file was not edited back.
+- **Before.** 4 failed in each venv: venv312 2026-10-08T14:45:14Z–14:45:39Z, venv314 14:46:49Z–14:47:15Z.
+  - **T1:** "after 212 decode steps the BatchKVCache offsets still have [435, 435] primitive nodes behind them", in both venvs.
+  - **T2:** `RuntimeError: [metal::malloc] Resource limit (499000) exceeded.` after 1,242 decode steps (venv312) and 1,247 (venv314), with 484,000 of 499,000 buffers held. The frames were `run_cell` (line 413 of the pre-fix file) → mlx_lm `generate.py:1870 → 1790 → 1449 → 1405`, the pilot's.
+  - **T3, greedy and vendor.** Both arms ran the pre-fix `run_cell`, so the records and step logs were equal. Each failed at "run_cell called the settle step 0 times in 466 gen.next() calls".
+  - **Repeated** with the same shim and the same files (venv312 15:19:10Z–15:19:36Z, venv314 15:19:36Z–15:20:01Z): 4 failed in each venv, with the same messages. T2 stopped after 1,242 decode steps in both.
+  - **T2's crash step varies** by a few steps between runs, with the buffers the allocator holds at that point: 1,242–1,247 decode steps here, about 1,240 predicted by the diagnosis. A review of this amendment, on a copy of the kit, saw 1,243.
+- **After.** On this amendment's `runner/generate.py` (sha256 `9c542639…`): 4 passed in each venv, 57.6 s per run (venv312 14:45:45Z–14:46:44Z, venv314 14:47:15Z–14:48:14Z).
+- **Where the evidence is.** The pytest logs, the backup and the shim stay in the session's scratch directory and are not committed. The claim rests on the reproduction below, which anyone can re-run from the repository.
+- **To re-check.**
+  1. From the kit directory, write the pre-fix file: `git show e6e525e:./runner/generate.py` (sha256 `ef85ee00…`).
+  2. Write a `sitecustomize.py` that puts the kit directory on `sys.path`, imports `runner`, and loads that file as `runner.generate`: `importlib.util.spec_from_file_location("runner.generate", <file>)`, put the module in `sys.modules["runner.generate"]`, execute it, and set it as the `runner` package's `generate` attribute. Put its directory on `PYTHONPATH`, so that T2's child loads the same file.
+  3. Run `pytest -p no:cacheprovider tests/test_runner_offset_leak.py` with the settings above: 4 failed, as listed. T1's and T3's messages repeat exactly; T2's crash comes after about 1,240 decode steps, give or take a few.
+  4. Run it again without that `PYTHONPATH`: 4 passed.
+
+**Tests run on the mini after the fix.** Both venvs, with the settings above.
+- **The runner's own files,** in one process, with `tests/test_bench_batch_flip.py` first, as in G1's order:
+  - the new file, `test_runner_tiny.py` and `test_runner_scorer_split_cache.py`;
+  - every test file that imports `runner.generate`: `test_bench_common.py`, `test_gate_checks.py`, `test_gate_g5_runner.py`, `test_port_ref_cache_batching.py`, `test_runner_allowed_b.py`, `test_runner_mlxlm032.py` and `test_runner_session.py`.
+
+  184 passed in venv312 (14:48:54Z–14:50:47Z) and 184 in venv314 (14:50:51Z–14:52:45Z).
+- **Files that reach `runner.generate` through `runner/run.py`, `gate/` or `bench/`:** `test_tools_dry_run.py`, `test_integration_contracts.py`, `test_gate_preconditions.py`, `test_bench_speed.py`, `test_bench_support.py`, `test_runner_plan_fix.py`, `test_runner_guard.py`, `test_runner_jsonl.py`, `test_tools_precision.py`, `test_gate_common_exp037.py`, `test_tools_peer_check.py` and `test_tools_peer_check_reference.py`. 291 passed in each venv.
+- **The whole tiny gate,** `tests/test_gate_end_to_end_tiny.py`. Its `g5_behaviour` runs through `run_cell`; G1 leaves this file out. 6 passed in each venv: 303.7 s in venv312, 307.7 s in venv314.
+- **The leak check.** `tools/leak_check.py` on the two changed files and this file: 0 findings, 0 warnings. `tools/leak_check.py --all`, with this file in place: 0 findings and 4 warnings. All 4 are the host name in hand-written files that this amendment does not touch: `ASSETS.md`, `assets.json`, `reference/README.md` and `tests/INTEGRATION_LOG.md`.
+- **Full suite.** `pytest -q -p no:cacheprovider -rfEs tests/` on the mini, with the settings above, on the final `runner/generate.py` (sha256 `9c542639…`) and the final test file (sha256 `ab98b1f1…`):
+  - venv312 (Python 3.12.13): 1,972 passed, 0 failed, 0 skipped, 2026-10-08T15:20:11Z to 15:48:30Z;
+  - venv314 (Python 3.14.7): 1,972 passed, 0 failed, 0 skipped, 15:48:30Z to 16:16:06Z.
+
+  The 1,972 are Amendment 1's 1,968 plus the 4 new tests.
+  - **G1's order.** `pytest tests/` takes the files in the order G1 does (`gate/checks/g1_synthetic.run`: `tests/` with three files ignored), with G1's three excluded files in addition. So the new file ran where it runs in G1, between `test_runner_mlxlm032.py` and `test_runner_plan_fix.py`, with every later file after it in the same process. G1's own count is 1,915 + 4 = 1,919.
+  - RUNBOOK step 3 runs the full suite on the mbp before the re-run.
+
+**Scopes changed, with their new values.** Two of the 20 scopes change. The other 18 keep their registered values. On the mini, `tools/hash_tree.py --check HYPOTHESIS.md` reports 18 matches; `runner` and `tests` show MISMATCH until this amendment is appended.
+
+hash_tree: RUNNER_SHA256 = 75a50caa8d541396c7a5f82468b50049330cded96426255ecc56deff1ee83c87
+hash_tree: TESTS_SHA256 = 8a15a4eac2b048d9068039508623f397c07501487b7ed22e0356b0f580f8c244
+
+- **What changed.** In `runner`, only `runner/generate.py` (Amendment 1's tree was `772d08e7…`). In `tests`, only the new test file (Amendment 1's tree was `5adae3c8…`).
+- **What did not change, by hash.** `port`, `convert`, `reference`, `gate` (gate code), `gate_rules`, `thresholds`, `gate_text`, `scorers`, `bench`, `tools`, `env` and every other scope.
+  - No mutant, control, threshold, gate text, `gate_rules` file, scorer or bench file changes.
+  - HYPOTHESIS.md and RUNBOOK.md are not edited; the mbp appends this file.
+- **Step 8 is not needed:** the port did not change.
+
+**Pre-registered prediction for gate run 3.** Compared with run 2's record (`results/gate/gate_20261008T050643Z.json`, sha256 `a35c23da…`), every check's measured values are equal, byte for byte, except in two checks.
+- **`g1`.** `tests` goes from 1,915 to 1,919 (the four new tests), with `failures` 0, `errors` 0 and `skipped` 8, all `build-host only:`. So `summary`, `junit_sha256`, `t_start`, `t_end` and `wall_s` change.
+- **`g0_tokenizer_parity`.** Its identifier lines are read from the kit's `*.py` files.
+  - The `identifiers` group goes from n 16,647 to 16,708, and its sha256 from `db24b4ecacee04b91b6597983861709e199753022065a49eb2ee3a260c97496a` to `398f9327a4d91c17342571b214beed0a606152e5bbad8d3908afb88bba136c6c`. `n_lines` goes from 44,713 to 44,774.
+  - **Which files.** `identifier_lines` takes every `*.py` under the kit by `rglob`, untracked files and `diagnostics/` included, with no git filter. It skips only paths with a `__pycache__`, `.pytest_cache`, `results`, `aborted` or `evidence` part (`gate/tokenizer_lines.py:29, 40-46`).
+  - **So the prediction holds for the kit's `*.py` set at the commit that adds this amendment.** No `*.py` file, tracked or not, is added to the kit before run 3. One that was would change this group for a reason unrelated to the fix, and it would be disclosed.
+  - `mismatches` and `roundtrip_fail` stay 0; the pass rule is 0 mismatches.
+  - A pre-check on the mini used the same rule, the pinned Kolibri tokenizer and the same comparison (raw `tokenizers` against the harness): 0 mismatches and 0 round-trip failures over the 16,708 lines, the 61 new identifiers included. Run on `e6e525e`, the same computation reproduced run 2's group: n 16,647, `db24b4ec…`.
+- **`g5_behaviour_K8` and `g5_behaviour_K4`** are the only checks that run the new step. They are the in-gate check of the fix on the real weights: the prediction is that every per-row `completion_tokens`, and every other value of theirs, is unchanged.
+- **Verdicts.** K8 PASS and K4 PASS, with allowed_B {1, 2, 4, 8, 16} for each.
+- **Record fields that are not check values** change by construction: the runner and tests code hashes, the UTC times, the git commit and `run_counts`.
+- **The basis.** From run 1 to run 2, 41 of the 43 checks' measured values were identical. The 2 that changed were exactly `g1` and `g0_tokenizer_parity`, computed from the two committed records.
+- **The prediction decides nothing.** The gate's own rules decide run 3's verdict. Any measured value outside the prediction is disclosed with the result.
+
+**Step 11 (the bench) is not re-run.**
+- **The bench's code path is untouched.** Its cells run in `bench/`'s own code, which calls `make_batch_generator` (the only name it imports from `runner.generate`) and `stream_generate`, and never `run_cell`. `bench/`, `port/` and `make_batch_generator` are byte-identical, so the new step never runs there. A rerun would measure the same code again.
+- **Its cells stayed far below the ceiling.**
+  - H1 decodes 256 tokens per run, and D1 decodes 512, through `stream_generate`, whose `KVCache` offset is a Python int.
+  - The descriptive speed cells decode 256 tokens per row, through `stream_generate` or one `BatchGenerator` of B ≤ 4 rows.
+  - H5 and H8 do not decode.
+  - C1 is the only cell with a refilled `BatchGenerator`. At B = 8 it ran 100 items with 65,287 completion tokens in all: about 9,900 decode steps, by a refill simulation of its recorded lengths. At B = 1 the batch empties after every item, so a chain lasts at most 4,096 steps.
+  - None of these reaches more than about a fifth of the ceiling of about 49,640 steps, and step 11 exited 0.
+- **Cost.** A rerun would add about 1.3 h to S1 and could lower B_main to about 30.3 h. Without it, the cost of this path is the re-run below: S1 rises to about 7.1–8.4 h, and B_main stays 31 h.
+- **What stands.** The bench records of `e6e525e` stand. If run 3 exits 1 or 5, H1, H5, H8 and D1 stand by Andrei's decision above. If it exits 4, H5 stands, and H1, H7, H8 and D1 are NOT RUN as registered.
+
+**Gate run 3 is run 3 of 3, and it is not a cycle.**
+- **The counts.** Run 2's record has `run_counts` exits [1, 0], gate runs 2 of 3, cycles used 1 of 2, `next_run_is_cycle: false` and `may_run_again: true`.
+- **Why it is not a cycle.** `gate/rules.py` `run_counts` counts a cycle only for a run that follows a run that exited 1, 4 or 5 (lines 1283-1286). Run 2 exited 0, so run 3 is not a cycle, and the cycles stay at 1 of 2.
+- **No gate run remains after it.** `gate_runs_max` = 1 + `fix_cycles_max` = 3 binds first. After run 3, no gate run remains, whatever its exit, so cycle 2 can never be used. A later runner or port defect found in S2 or S3 could not be fixed and re-gated.
+- **P1(d).** A re-run after a run that did not exit 0 needs a changed code tree. Run 2 exited 0, and the runner tree changed anyway.
+- **What each exit means.**
+  - **0:** continue with step 12.
+  - **1 (K8 FAIL) or 5:** exp_037 ends on the gate: RUNBOOK step 10 "After exit 1, 4 or 5, stop here", no gate run remains, and HYPOTHESIS "End of the gate" applies. `require_pass` also refuses every arm whose verdict in the newest record is not PASS (`gate/run_gate.py:1734-1784`; it checks `verdict[arm]` only). H1, H5, H8 and D1 stand and are published with run 3's failure disclosed (Andrei's decision).
+  - **4 (K4 FAIL):** the registered consequence applies (HYPOTHESIS.md:506; RUNBOOK step 10, exit 4). The run continues without K4: step 12 runs `pilot --without K4`, and `plan_fix` queues no K4 cell. H1, H7, H8 and D1 are NOT RUN; H5 stands. Step 11 is not re-run, as above.
+  - **3:** a precondition failure, a crash or environment drift is not a gate run. Step 10 may be repeated unchanged once the cause is fixed outside the kit; after two unchanged repeats, Andrei decides (HYPOTHESIS "Gate runs, cycles and crashes", item 3).
+
+**The re-run sequence.**
+1. Step 1 (pull).
+2. `"$PY" tools/status.py --sync-amendments`, which appends this file.
+3. Step 3: venv sync and the unit suite on the mbp. It must pass.
+4. Optionally, 3b: the dry run, about 12 min. It drives the tiny gate, the pilot and the sessions through `run_cell`.
+5. Andrei's separate go for gate run 3, recorded with its UTC time and label as a run-record block in HYPOTHESIS.md and committed (see "Andrei's decisions").
+6. Step 10 in full, with its power logger. Matching dumps are reused. There is no step 8, because the port did not change.
+7. On exit 0: step 12, the pilot, in full, under a new stamp. The crashed pilot stays in `aborted/`. Then step 13 as registered.
+
+Step 11 is not re-run (above). Stop and publish stays available at every point.
