@@ -259,6 +259,23 @@ def _padded_len(gen) -> int:
     return best
 
 
+def _settle_batch_offsets(gen) -> None:
+    """exp_037 Amendment 2 (gate fix): evaluate the decode batch's BatchKVCache offsets, once per gen.next().
+
+    mlx_lm 0.32.0 BatchKVCache.update_and_fetch rebinds `offset` lazily on every decode step
+    (cache.py:929) and, unlike BatchRotatingKVCache (cache.py:1172, 1225), never forces it. On
+    Kolibri's NoPE layers nothing reads it, so each step leaves one live Metal buffer per such layer
+    until the decode batch empties (pilot 20261008T082355Z: Resource limit (499000) exceeded).
+    Evaluating it runs the same int32 adds earlier; no token, log-prob or PRNG draw depends on when."""
+    import mlx.core as mx
+    from mlx_lm.models.cache import BatchKVCache
+
+    offs = [c.offset for c in (getattr(gen._generation_batch, "prompt_cache", None) or [])
+            if isinstance(c, BatchKVCache)]
+    if offs:
+        mx.async_eval(offs)
+
+
 def _decode(tokenizer, ids: list[int]) -> str:
     from runner.chat import hf_tokenizer
 
@@ -412,6 +429,7 @@ def run_cell(
                 t0 = time.perf_counter()
                 prompt_resps, gen_resps = gen.next()
                 dt = time.perf_counter() - t0
+            _settle_batch_offsets(gen)  # Amendment 2: outside the timed window, before on_step
             p_tok = int(st.prompt_tokens)
             p_sec = float(st.prompt_time)
             if on_step is not None:
