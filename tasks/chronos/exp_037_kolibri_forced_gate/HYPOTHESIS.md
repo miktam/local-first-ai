@@ -1,6 +1,6 @@
 # Experiment 037 — Kolibri through a forced gate: does it fit, how fast, and does its scorecard hold on public rows?
 
-*Pre-registered: 2026-10-07T04:14:29Z · Status: S1 bench cells recorded; Session 1 in progress; no scored run*
+*Pre-registered: 2026-10-07T04:14:29Z · Status: gate run 2 (20261008T050643Z) PASS; pilot 20261008T082355Z crashed, aborted; Amendment 2 (gate fix); Andrei's go for gate run 3 (2026-10-08T18:05:51Z); no scored run*
 
 **Builds on:**
 - **exp_036** (`../exp_036_kolibri_local_eval/`, tree at `222c845`): the question, hypotheses, arms, task sets, plan rules and kit, re-registered here. exp_036's Phase 0 gate failed for K8 (G2, G3, G4 and G5; record `e3e01b5c…`) and it was published as a gate failure with no scored run. On 2026-10-05 Andrei chose to re-register the hypotheses with a gate built from that run's bug hunt (decision D8, below). Nothing from exp_036 is cited as evidence about Kolibri's quality.
@@ -1899,3 +1899,10 @@ hash_tree: TESTS_SHA256 = 8a15a4eac2b048d9068039508623f397c07501487b7ed22e0356b0
 7. On exit 0: step 12, the pilot, in full, under a new stamp. The crashed pilot stays in `aborted/`. Then step 13 as registered.
 
 Step 11 is not re-run (above). Stop and publish stays available at every point.
+
+## go for gate run 3: "Go: gate run 3", by Andrei at 2026-10-08T18:05:51Z — run record (2026-10-08T18:05:53Z)
+
+- Phase: go for gate run 3: "Go: gate run 3", by Andrei at 2026-10-08T18:05:51Z
+- UTC: 2026-10-08T18:05:53Z (from the clock)
+- Commit: 8beef07ac741f78129dd5ac704e9bc154872697b (uncommitted changes: no)
+- Result files: none
