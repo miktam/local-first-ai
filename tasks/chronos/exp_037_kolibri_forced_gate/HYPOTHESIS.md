@@ -1504,3 +1504,145 @@ Pre-registration commit: 5dfcfecf6070b3649f0d9f48cbd4ad7e0a5a3af4
 - UTC: 2026-10-07T15:40:20Z (from the clock)
 - Commit: 1efbadca1c4eaf70f0399950a570069149287e22 (uncommitted changes: no)
 - Result files: none
+
+## Amendment 1 — gate fix (2026-10-07T18:45:20Z)
+
+*Written after a gate result: gate run 1 (`20261007T110355Z`, exit 1: K8 FAIL on check G1 only, K4 PASS). Typed by the main session on the mini on Andrei's go, pushed as `amendments/1_gatefix_20261007T184520Z.md`, and appended verbatim by the mbp session with `tools/status.py --sync-amendments` (one writer). It changes no hypothesis, threshold, control, mutant, gate text, gate rule, arm, task, n or verdict rule.*
+
+**Andrei's go.** Two answers, both recorded here.
+- **Before the classification: a conditional go.** "ok, done, go" (relayed at 2026-10-07T18:31:35Z) answered the main session's request to commit the mini outputs, run the classification and, *if* it named gate fix 6.6, write it. That time lies 9 s after commit `f5b28a6` (18:31:26Z), 6 s after the classification file's stamp (`20261007T183129Z`) and 4 s before commit `c4e3189` (18:31:39Z). So it was given before Andrei had read the result, and it is recorded as conditional only.
+- **After the classification: the go for this fix.** The main session reported the classification (O7, fix 6.6) to Andrei, together with the code change, the before/after test, the full-suite results and the residual risk below. Andrei answered "Go: push the fix" at 2026-10-08T04:35:08Z. That is the go for writing and pushing this amendment and its code (PLAN.md section 5 and 9.4).
+- **The re-run.** In the same answer, at 2026-10-08T04:35:08Z, Andrei gave the separate go for the re-run ("Go: re-run"): fix cycle 1 of 2, the whole gate, after `--sync-amendments` and RUNBOOK step 3.
+
+**Why.**
+1. **Gate run 1.**
+   - Run `20261007T110355Z` on the mbp. Record `results/gate/gate_20261007T110355Z.json` (sha256 `cb21c2df…`), committed in `1efbadc`; the gate ran code `8dea1dc`.
+   - G1 reported 1 failed, 1,900 passed and 8 skipped (all `build-host only:`).
+   - The failing test was `tests/test_runner_tiny.py::test_resume_after_simulated_crash_gives_identical_records`, at line 222: `assert content(records(p)) == content(records(ref))`.
+   - Its junit text (`diagnostics/g1_resume_20261007/gate1_junit_failure.txt`, commit `9bdbb5e`) says "Omitting 3 identical items". q003 and q004 are shown differing with equal `answer_text`; pytest's `-q` truncation cut off the field that differed.
+2. **Andrei's choice.** (b) diagnostics, at 2026-10-07T14:49:52Z. It is recorded in this file's run-record block, commit `d60f3b6`.
+3. **The diagnostics.**
+   - The package `diagnostics/g1_resume_20261007/` (`PLAN.md`, `README.md`, `diag_resume.py`) was committed in `6ba420e`, before any run.
+   - The outputs were committed in `a2cdf8d` (mbp) and `f5b28a6` (mini).
+   - The classification, `out/classification_20261007T183129Z.json` (sha256 `0c6215d4…`), was committed in `c4e3189`. Outcome **O7**, by rule 7 only. Decision: gate fix, fix **6.6**. The mbp is the governing host; rule 8 (the mini fallback) did not apply.
+   - No pytest arm reproduced the failure, and neither did (iii).
+     - mbp: (i) 50 of 50 runs equal, (i′) 30 of 30, (i″) 30 of 30, (ii) 4 of 4. In (iii), all 50 A–C pairs and all 50 uninterrupted pairs were equal.
+     - mini: (i) 50 of 50, (ii) 1 of 1, (iii) 50 and 50 equal. Its (iv) outcome was "stale_only".
+     - These counts are disclosed with the result. Under PLAN.md section 5 they select no rule.
+4. **The mechanism.** (iv) on the mbp showed it: `out/mbp_cachestate_20261007T171033Z.json` (sha256 `bc904886…`), outcome "hit".
+   - `scorers.reasoning.check_tokenizer` caches every passed check in the module-global set `_CHECKED`, keyed by `(family, id(tokenizer))`. It never removes a key.
+   - Earlier in G1's order, `tests/test_bench_batch_flip.py::test_default_prepare_and_extract_through_the_sibling_modules` checks a real Kolibri tokenizer (`mlx_lm.tokenizer_utils.TokenizerWrapper`) and then frees it. The check runs through `bench.batch_flip.default_extract` and `scorers.reasoning.split_reasoning`. The probe recorded:
+     - one key added, the tokenizer's;
+     - the tokenizer freed (checked through a weak reference).
+   - `TokenizerWrapper` and the test's `StubTok` have the same object layout: `__basicsize__` 16, no `__slots__`. A later `StubTok()` can therefore be given the freed address.
+     - In the probe, no `StubTok` hit the freed address in phase A's 20,000 one-at-a-time allocations.
+     - In phase B, the second held `StubTok` did.
+   - For that stub, `check_tokenizer` returned early, so `runner.generate._scorer_split` returned the scorers' split. Every record of that `run_cell` call then got `split_by = "scorers.reasoning.split_ids"` instead of `"runner.generate.split_ids"`.
+   - The probe then ran the failing test's scenario with that stub as the resumed run's tokenizer. The result was a field-only difference:
+     - q003, q004 and q005 differ in `split_by` only; `completion_ids` and `answer_text` are equal;
+     - q000–q002 are equal.
+   - Two comparison runs:
+     - the control, with stubs outside the cache, was equal;
+     - the seeded run, with a stub put into `_CHECKED`, gave the same difference as the hit.
+   - This matches the gate's visible output: three differing items, with equal `answer_text`.
+   - The probe shows what the kit does with this allocation history. It cannot show what G1's own process did (PLAN.md 3.6 and section 8).
+   - **Scope class B** (PLAN.md section 4). The state is written by `scorers/` (reached through `bench/`) and read by the generation path. The fix therefore goes at the reading site.
+
+**Change.** One function changes: `_scorer_split` in `runner/generate.py`. Its signature and return contract are unchanged. Nothing else in the file changes, and nothing in `scorers/` does.
+- **Before.** It called `scorers.reasoning.check_tokenizer(family, tokenizer)` and returned the scorers' split unless that raised. A tokenizer whose id was in `_CHECKED` passed without its ids being looked at.
+- **After.** On every call it compares the tokenizer's ids with the family table itself, using the scorers' public helpers:
+  - `family_spec(family)` gives the turn-start, open, close and EOS tokens with their ids;
+  - `token_id(tokenizer, token)` must equal each of those ids;
+  - any mismatch, or any exception, returns None (the runner's split).
+
+  It neither reads nor writes `_CHECKED`, and it keeps no state keyed by `id()`.
+- **Why real tokenizers are unaffected.** This is the same comparison `check_tokenizer` makes, without the cache. For every tokenizer, the decision now equals what an uncached `check_tokenizer` decides.
+  - A tokenizer whose ids match its family table gets the same split as before: `scorers.reasoning.split_ids` on `prompt_state_ids`. Every record field stays as it was. This includes the pinned tokenizers that `runner/run.py` and `gate/checks/g5_generation.py` pass to `run_cell`.
+  - A tokenizer whose ids do not match got None before, unless its id happened to be a stale cache key. It now gets None in every case. That stale-id case is the only change in what `_scorer_split` returns.
+  - **One side effect goes.** Through `check_tokenizer`, the old code added `(family, id(tokenizer))` to `_CHECKED` for every tokenizer that passed. `run_cell` no longer does. A later scorers check on the same tokenizer object therefore runs the comparison again instead of skipping it, with the same result. No record field changes, and the runner no longer leaves keys of its own in `_CHECKED`, stale ones included.
+- **Cost.** At most five `token_id` calls per `run_cell` call for Kolibri, Qwen3.6 and Qwen3.8, and six for Gemma 4 (three EOS tokens). The comparison stops at the first mismatch. `run_cell` calls `_scorer_split` once, not per record.
+
+**Test.** One new file, `tests/test_runner_scorer_split_cache.py`. Nothing else under `tests/` changes.
+- **`test_resume_with_the_stub_in_the_check_cache_gives_identical_records`** (the 6.6 test).
+  - **Setup.** It is the failing test's scenario, step by step. It uses `tests/test_runner_tiny.py`'s own `items`, `run`, `records`, `content` and `StubTok`, on that module's fixture `model`: the tiny vendor checkpoint, seed 0, fp32.
+  - **Steps.** Reference run; a stopped run after three records; a torn fourth line; `completed_keys`; the resumed run.
+  - **The seeded stub.** The resumed run's `StubTok` is created first and held for the whole test. It is made the only key of `_CHECKED`, as `("kolibri", id(stub))`, the key form `check_tokenizer` writes (it keys by `family_spec(family).name`). `run()` receives that stub where it calls `StubTok()`, through a `monkeypatch` context around the resumed call only.
+  - **What it asserts.**
+    - every assertion of the original test;
+    - `content(records(p)) == content(records(ref))`, with an itemised field diff as the failure message;
+    - every record carries `split_by = "runner.generate.split_ids"`;
+    - `_scorer_split("kolibri", stub)` is None, both with the key seeded and with the cache empty.
+- **`test_scorer_split_follows_the_family_table_whatever_the_cache_holds`**, for each of gemma4, kolibri, qwen3_6 and qwen3_8.
+  - **Three tokenizer stubs per family:**
+    - one carrying the table's ids;
+    - `StubTok`;
+    - one carrying the table's ids except its EOS ids, shifted by 1.
+  - **Three cache states:** `_CHECKED` empty; holding the three stubs' keys; holding their keys for every family.
+  - **What it asserts in every state.**
+    - The first stub gets the scorers' split, checked against `scorers.reasoning.split_ids` on seven prompt/completion cases. The cases cover plain, closed and open prompts; closed, unclosed and none splits; a leading blank; and a trailing EOS.
+    - The other two stubs get None.
+  - **Agreement with the uncached check.** On an empty cache, the uncached `check_tokenizer` passes for the first stub and raises for the other two.
+- **`test_scorer_split_unchanged_for_the_real_kolibri_tokenizer`.**
+  - **Setup.** The real Kolibri tokenizer comes from conftest's `tokenizer_dir` fixture, under its skip policy: the first of `EXP036_TOK`, `EXP036_TOKENIZER_DIR` and `$EXP036_MODELS/Kolibri-1-BF16` that holds `tokenizer.json` and `tokenizer_config.json`, else skip (a failure under `EXP036_REQUIRE_ALL`). It is loaded by `mlx_lm.tokenizer_utils.load` as a `TokenizerWrapper`, the class that `mlx_lm.load` gives `run_cell`.
+  - **What it asserts.** With the cache empty or holding its key, the tokenizer gets the scorers' split, checked as above with `run_cell`'s `is_blank`.
+- Every test snapshots `_CHECKED` and restores it in a `finally` block, so none leaves a key behind.
+- **Oracle.** Symbolic: the family table's turn-start, delimiter and EOS ids (`scorers.reasoning.FAMILIES`) against the tokenizer's, plus the scorers' own `split_ids`. It is independent of every gate value. The tiny checkpoint serves only as the scenario's generator.
+- **Trigger.** Deterministic: a seeded cache state (PLAN.md 6.8). So there is one invocation before the fix and one after.
+  - **Setting.** Both ran on the mini, in venv312 (Python 3.12.13, pytest 9.1.1), with `EXP036_REQUIRE_ALL=1`, `EXP036_TOK` set, `PYTHONDONTWRITEBYTECODE=1` and `-p no:cacheprovider`.
+  - **Before** (2026-10-07T18:40:41Z).
+    - **How the old code was loaded.** The pre-fix `runner/generate.py` was backed up before the edit; its sha256 `e1cce3fb…` is that of the blob at `c4e3189`. A scratch pytest plugin, kept outside the repository, loaded it as `runner.generate` before any test module imported it. The kit's file was not edited back.
+    - **Result.** 5 failed, 1 passed.
+    - **The 6.6 test** failed at the content comparison; every earlier assertion of the scenario passed. For q003, q004 and q005, `split_by` was `'scorers.reasoning.split_ids'` in the resumed file and `'runner.generate.split_ids'` in the reference. No other field differed.
+    - **The four family cases** failed at `_scorer_split(family, StubTok) is None` with the stub's key seeded.
+    - **The real-tokenizer test** passed. Its behaviour is unchanged by the fix.
+  - **After** (2026-10-07T18:47:07Z). The kit's fixed `runner/generate.py`, final version (sha256 `ef85ee00…`): 6 passed.
+  - **Where the evidence is.** The two pytest logs and the scratch plugin stayed in the session's scratch directory and are not committed. The claim rests on the reproduction below, which anyone can re-run from the repository.
+  - **To re-check.**
+    1. From the kit directory, write the pre-fix file: `git show c4e3189:./runner/generate.py` (sha256 `e1cce3fb…`).
+    2. Before any test module is imported, load that file as `runner.generate`: `importlib.util.spec_from_file_location("runner.generate", <file>)`, put the module in `sys.modules["runner.generate"]`, execute it, and set it as the `runner` package's `generate` attribute. A pytest plugin passed with `-p` does this early enough.
+    3. Run `pytest -p no:cacheprovider tests/test_runner_scorer_split_cache.py` with the settings above: 5 failed, 1 passed, as listed.
+    4. Run it again without the plugin, on this amendment's `runner/generate.py`: 6 passed.
+
+    These steps were re-run as written on the mini, with a new plugin, in venv312 and venv314 (2026-10-07T19:50:56Z–19:51:00Z). Both venvs gave 5 failed and 1 passed before, with the same three `split_by` differences, and 6 passed after.
+
+**Tests run on the mini after the fix.**
+- **Setting.** Both venvs, `EXP036_REQUIRE_ALL=1`, all files in one process.
+- **Files**, with `tests/test_bench_batch_flip.py` first, as in G1's order:
+  - the new file, `tests/test_runner_tiny.py` and `tests/test_bench_batch_flip.py`;
+  - every test file that imports `runner.generate` or `scorers.reasoning`: `test_bench_common.py`, `test_gate_checks.py`, `test_gate_g5_runner.py`, `test_port_ref_cache_batching.py`, `test_runner_allowed_b.py`, `test_runner_mlxlm032.py`, `test_runner_session.py` and `test_scorers_reasoning.py`.
+- **Results.** 220 passed in venv312 (Python 3.12.13). 220 passed in venv314 (Python 3.14.7).
+- **Full suite.** `pytest -q -p no:cacheprovider -rfEs tests/` on the mini, with the same settings, on the final `runner/generate.py` (sha256 `ef85ee00…`) and the final test file:
+  - venv312 (Python 3.12.13): 1,968 passed, 0 failed, 0 skipped, 2026-10-07T18:53:38Z to 19:18:25Z;
+  - venv314 (Python 3.14.7): 1,968 passed, 0 failed, 0 skipped, 19:18:25Z to 19:43:10Z.
+
+  The 1,968 include the 6 new tests. RUNBOOK step 3 runs the full suite on the mbp before the re-run.
+
+**Scopes changed, with their new values.** Two of the 20 scopes change. The other 18 keep their registered values. On the mini, `tools/hash_tree.py --check HYPOTHESIS.md` reports 18 matches; `runner` and `tests` show MISMATCH until this amendment is appended.
+
+hash_tree: RUNNER_SHA256 = 772d08e760d9ba0d04f6939e31c7082644b27eefaa968773659aa122da1b3dee
+hash_tree: TESTS_SHA256 = 5adae3c86ae59b4cb655ac91dfe5b620028ebd52b4b61e8fcf54adea09a71fc7
+
+- **What changed.** In `runner`, only `runner/generate.py`. In `tests`, only the new test file.
+- **What did not change, by hash.** `port`, `convert`, `reference`, `gate` (gate code), `gate_rules`, `thresholds`, `gate_text`, `scorers`, `bench`, `tools`, `env` and every other scope.
+  - No mutant, control, threshold, gate text, `gate_rules` file or `scorers/` file changes.
+  - HYPOTHESIS.md and RUNBOOK.md are not edited; the mbp appends this file.
+- **P1(d).** The runner tree is one of the code hashes P1(d) compares (port, reference tree, runner tree, gate-code tree, builds manifest). P1(d) therefore admits a re-run.
+
+**The re-run.** It is fix cycle 1 of 2. Gate runs so far: 1 of 3.
+- **What it is.** The whole gate (PLAN.md 6.8; RUNBOOK "After exit 1, 4 or 5", item 4):
+  1. step 1 (pull);
+  2. `"$PY" tools/status.py --sync-amendments`;
+  3. step 3;
+  4. step 8, only if the port changed (it did not);
+  5. step 10 in full.
+
+  Matching dumps are reused.
+- **Andrei's go.** Given at 2026-10-08T04:35:08Z ("Go: re-run"), separately from the go for this fix (above).
+- **Stop and publish** stays available.
+- **Residual risk, outside 6.6.** 6.6 changes nothing in `scorers/`, so `_CHECKED` still serves the scorers' own callers (`split_reasoning`, `split_reasoning_ids`, `split_token_counts`).
+  - One G1 test relies on that check to refuse a tokenizer: `tests/test_scorers_reasoning.py::test_wrong_tokenizer_is_refused`. It expects `split_reasoning("gemma4", …)` to raise for a fresh Kolibri `tokenizers.Tokenizer`.
+  - A scratch probe on the mini ran `tests/test_bench_batch_flip.py` and `tests/test_scorers_reasoning.py` in 10 processes (2026-10-07T19:47:04Z to 19:48:34Z). Each time, when this test ran, `_CHECKED` held four gemma4 keys, left by the two gemma4 template tests before it (each checks a `tokenizers.Tokenizer` and a transformers tokenizer). The fresh tokenizer never had one of those addresses.
+  - If it did, the check would pass and the test would fail.
+  - Such a failure would be state written and read outside the generation path (PLAN.md section 4, class C). No code is changed for it.
+
+**The diagnostics package.** `diag_resume.py` pins `runner/generate.py` at sha256 `e1cce3fb…` as a precondition, so it now refuses to run (exit 3). Its outputs are complete and classified, and nothing in PLAN.md calls for running it again.
