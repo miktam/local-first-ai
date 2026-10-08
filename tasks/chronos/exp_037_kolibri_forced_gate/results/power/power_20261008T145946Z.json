@@ -1,0 +1,741 @@
+{
+  "again_after": [],
+  "caveats": [
+    "combined is CPU + GPU + ANE only, the 'SoC subsystems' whose power the powermetrics man page says it estimates; it is not the whole SoC and not wall power.",
+    "It is a lower bound of the machine's energy, and a loose one that may be about half of it. For scale only, from a different machine: on the mini (Apple M4 Pro; macmon spot reading, 2026-10-06, MLX GPU load) CPU + GPU power read 28.6 W against a system total of 64.6 W, about 44 %. No factor converts it to the whole SoC or to wall energy here.",
+    "The powermetrics man page: average power values 'are estimated and may be inaccurate' and 'should not be used for any comparison between devices'; this record compares nothing across machines.",
+    "The logger adds a small background load (one root sampler at 1 Hz) to every logged step alike; it is not measured or corrected for.",
+    "Descriptive only: no hypothesis, verdict, gate rule, threshold or plan rule reads this record."
+  ],
+  "command": "/usr/bin/powermetrics --samplers cpu_power,gpu_power,ane_power -i 1000 -f plist",
+  "descriptive": "Descriptive only: no hypothesis, verdict, gate rule, threshold or plan rule reads this record.",
+  "interval_ms_declared": 1000,
+  "label": "CPU + GPU + ANE power (powermetrics combined_power, an estimate); not the whole SoC, not wall power",
+  "method": {
+    "combined": "processor.combined_power (mW): CPU + GPU + ANE, not the whole SoC (memory controllers and fabric, SLC, media and display engines, I/O and DRAM are not in it) and not wall power; cpu + gpu + ane when the key is absent (counted as combined_from_components)",
+    "components": "processor.<c>_power (mW), else processor.<c>_energy (mJ) / elapsed (counted as from_energy); the GPU's also from the gpu dict",
+    "coverage": "union of the sample intervals inside the window / window length",
+    "double_count": "per raw file, excess_s = sum of elapsed - span (first start to last end); about 0 for a clean stream; above 2 % of the span + 2 s (poweravg summaries or duplicates) no record is written",
+    "energy_wh": "sum over samples of power x overlap(sample interval, window), in Wh",
+    "gaps_over_5s": "uncovered stretches inside the window longer than 5 s, window edges included",
+    "long_samples": "documents whose elapsed is over 3 x the file's median (a poweravg summary or a sleep): counted; --check fails on them, a record keeps them",
+    "mean_w": "energy / sampled time inside the window; nothing is extrapolated over gaps",
+    "overlap_s": "sampled_s - covered_s, time counted by more than one sample: a few ms per sample from whole-second timestamps (each sample's energy is still counted once); a raw log whose documents overlap is refused (double_count)",
+    "peak_w": "largest per-sample power among the samples that overlap the window",
+    "sample_interval": "[timestamp - elapsed_ns, timestamp]; elapsed_ns an integer or a real; the timestamp is taken as the end of the sample's interval (plist dates have whole-second resolution)",
+    "sampled_s": "sum of the samples' overlaps with the window; sampled_s <= duration_s is expected",
+    "windows": "t_start / t_end of the run records under results/ (gate and its phases, peer check, preflight --deep, clone-and-refresh, bench cells and their cool-down idle, pilot and its arms, S2/S3/S3b session start/stop pairs), --window, and the whole log; a discovered window that does not overlap the log is left out"
+  },
+  "not_measured": [
+    "the rest of the SoC: the memory controllers and fabric, the system-level cache (SLC), the media and display engines, and I/O",
+    "DRAM (the unified memory itself), which bandwidth-bound decode loads heavily",
+    "wall (AC) power and the power adapter's conversion losses",
+    "battery charging",
+    "the display",
+    "the SSD",
+    "fans and the rest of the board (I/O controllers, USB, Wi-Fi)"
+  ],
+  "raw_files": [
+    {
+      "bytes": 1964022886,
+      "combined_from_components": 0,
+      "covered_s": 34536.634,
+      "dir": "$EXP036_WORK/exp037/power",
+      "documents": 34504,
+      "elapsed_sum_s": 35525.144,
+      "excess_s": 0.124,
+      "first_sample_utc": "2026-10-08T05:06:21Z",
+      "from_energy": 0,
+      "interval_ms": {
+        "declared": 1000,
+        "max": 2211.549,
+        "median": 1030.855,
+        "min": 1019.209
+      },
+      "last_sample_utc": "2026-10-08T14:58:27Z",
+      "long_samples": {
+        "max_ms": null,
+        "n": 0
+      },
+      "model_family": "Mac17",
+      "name": "power_20261008T050621Z.plist",
+      "overlap_s": 988.51,
+      "samplers_seen": [
+        "ane_power",
+        "cpu_power",
+        "gpu_power"
+      ],
+      "samples": 34504,
+      "sha256": "040787f500a1220fccc852b7625b3480f047865a0e124a93c8315e2da7e750d1",
+      "skipped": {
+        "no_power": 0,
+        "no_time": 0,
+        "not_delta": 0
+      },
+      "span_s": 35525.019,
+      "text_bytes_skipped": 0,
+      "truncated_tail": false,
+      "unreadable": 0
+    }
+  ],
+  "raw_policy": "the raw log is never committed or copied into the repository (it carries boot and host fields); only these derived numbers and its sha256 and size",
+  "samplers_declared": [
+    "cpu_power",
+    "gpu_power",
+    "ane_power"
+  ],
+  "schema": "exp037 power v1",
+  "tool_sha256": "349657c8d32395e53b8cd1578263b87dd309193f3127155aaf4ea91bed66b3c4",
+  "utc": "2026-10-08T14:59:46Z",
+  "windows": [
+    {
+      "coverage": 0.9722,
+      "covered_s": 34536.634,
+      "duration_s": 35525.019,
+      "energy_wh": {
+        "ane": 0.005696,
+        "combined": 59.416554,
+        "cpu": 18.830831,
+        "gpu": 40.580028
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "log",
+      "mean_w": {
+        "ane": 0.001,
+        "combined": 6.021,
+        "cpu": 1.908,
+        "gpu": 4.112
+      },
+      "n_samples": 34504,
+      "name": "log",
+      "overlap_s": 988.51,
+      "peak_w": {
+        "ane": 1.534,
+        "combined": 133.89,
+        "cpu": 33.118,
+        "gpu": 127.142
+      },
+      "sampled_s": 35525.144,
+      "source": null,
+      "t_end": "2026-10-08T14:58:27Z",
+      "t_start": "2026-10-08T05:06:21Z"
+    },
+    {
+      "coverage": 0.976,
+      "covered_s": 3136.987,
+      "duration_s": 3214.0,
+      "energy_wh": {
+        "ane": 0.000604,
+        "combined": 16.591124,
+        "cpu": 3.527017,
+        "gpu": 13.063503
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "explicit",
+      "mean_w": {
+        "ane": 0.001,
+        "combined": 18.585,
+        "cpu": 3.951,
+        "gpu": 14.633
+      },
+      "n_samples": 3136,
+      "name": "pilot_20261008T082355Z",
+      "overlap_s": 76.834,
+      "peak_w": {
+        "ane": 0.418,
+        "combined": 110.315,
+        "cpu": 17.907,
+        "gpu": 104.642
+      },
+      "sampled_s": 3213.821,
+      "source": null,
+      "t_end": "2026-10-08T09:17:28Z",
+      "t_start": "2026-10-08T08:23:54Z"
+    },
+    {
+      "coverage": 0.9786,
+      "covered_s": 4344.794,
+      "duration_s": 4440.0,
+      "energy_wh": {
+        "ane": 0.002162,
+        "combined": 21.857199,
+        "cpu": 11.16484,
+        "gpu": 10.690197
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate",
+      "mean_w": {
+        "ane": 0.002,
+        "combined": 17.725,
+        "cpu": 9.054,
+        "gpu": 8.669
+      },
+      "n_samples": 4342,
+      "name": "gate 20261008T050643Z",
+      "overlap_s": 94.547,
+      "peak_w": {
+        "ane": 1.534,
+        "combined": 113.972,
+        "cpu": 28.07,
+        "gpu": 109.083
+      },
+      "sampled_s": 4439.341,
+      "source": "results/gate/gate_20261008T050643Z.json",
+      "t_end": "2026-10-08T06:20:43Z",
+      "t_start": "2026-10-08T05:06:43Z"
+    },
+    {
+      "coverage": 0.9806,
+      "covered_s": 99.042,
+      "duration_s": 101.0,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 0.496796,
+        "cpu": 0.389968,
+        "gpu": 0.106828
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 17.693,
+        "cpu": 13.888,
+        "gpu": 3.805
+      },
+      "n_samples": 100,
+      "name": "gate 20261008T050643Z phase 0",
+      "overlap_s": 2.042,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 30.172,
+        "cpu": 26.973,
+        "gpu": 16.302
+      },
+      "sampled_s": 101.084,
+      "source": "results/gate/gate_20261008T050643Z.json",
+      "t_end": "2026-10-08T05:08:24Z",
+      "t_start": "2026-10-08T05:06:43Z"
+    },
+    {
+      "coverage": 0.9781,
+      "covered_s": 393.207,
+      "duration_s": 402.0,
+      "energy_wh": {
+        "ane": 0.000432,
+        "combined": 1.481056,
+        "cpu": 1.174265,
+        "gpu": 0.306359
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.004,
+        "combined": 13.285,
+        "cpu": 10.533,
+        "gpu": 2.748
+      },
+      "n_samples": 394,
+      "name": "gate 20261008T050643Z phase 1",
+      "overlap_s": 8.145,
+      "peak_w": {
+        "ane": 1.519,
+        "combined": 67.86,
+        "cpu": 28.07,
+        "gpu": 64.195
+      },
+      "sampled_s": 401.352,
+      "source": "results/gate/gate_20261008T050643Z.json",
+      "t_end": "2026-10-08T05:15:06Z",
+      "t_start": "2026-10-08T05:08:24Z"
+    },
+    {
+      "coverage": 0.981,
+      "covered_s": 303.128,
+      "duration_s": 309.0,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 0.895223,
+        "cpu": 0.890866,
+        "gpu": 0.004357
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 10.416,
+        "cpu": 10.365,
+        "gpu": 0.051
+      },
+      "n_samples": 304,
+      "name": "gate 20261008T050643Z phase 2a",
+      "overlap_s": 6.284,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 27.363,
+        "cpu": 27.3,
+        "gpu": 0.476
+      },
+      "sampled_s": 309.411,
+      "source": "results/gate/gate_20261008T050643Z.json",
+      "t_end": "2026-10-08T05:20:15Z",
+      "t_start": "2026-10-08T05:15:06Z"
+    },
+    {
+      "coverage": 0.9708,
+      "covered_s": 65.042,
+      "duration_s": 67.0,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 0.323265,
+        "cpu": 0.197862,
+        "gpu": 0.125403
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 17.501,
+        "cpu": 10.712,
+        "gpu": 6.789
+      },
+      "n_samples": 66,
+      "name": "gate 20261008T050643Z phase 2b",
+      "overlap_s": 1.454,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 84.376,
+        "cpu": 19.52,
+        "gpu": 78.535
+      },
+      "sampled_s": 66.496,
+      "source": "results/gate/gate_20261008T050643Z.json",
+      "t_end": "2026-10-08T05:21:22Z",
+      "t_start": "2026-10-08T05:20:15Z"
+    },
+    {
+      "coverage": 0.9799,
+      "covered_s": 860.392,
+      "duration_s": 878.0,
+      "energy_wh": {
+        "ane": 0.000435,
+        "combined": 3.991233,
+        "cpu": 2.126697,
+        "gpu": 1.864102
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.002,
+        "combined": 16.356,
+        "cpu": 8.715,
+        "gpu": 7.639
+      },
+      "n_samples": 861,
+      "name": "gate 20261008T050643Z phase 3",
+      "overlap_s": 18.08,
+      "peak_w": {
+        "ane": 1.53,
+        "combined": 113.972,
+        "cpu": 21.598,
+        "gpu": 109.083
+      },
+      "sampled_s": 878.472,
+      "source": "results/gate/gate_20261008T050643Z.json",
+      "t_end": "2026-10-08T05:36:00Z",
+      "t_start": "2026-10-08T05:21:22Z"
+    },
+    {
+      "coverage": 0.9767,
+      "covered_s": 1450.444,
+      "duration_s": 1485.0,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 9.714609,
+        "cpu": 2.581192,
+        "gpu": 7.133418
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 23.561,
+        "cpu": 6.26,
+        "gpu": 17.301
+      },
+      "n_samples": 1449,
+      "name": "gate 20261008T050643Z phase 4",
+      "overlap_s": 33.919,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 84.608,
+        "cpu": 21.776,
+        "gpu": 78.524
+      },
+      "sampled_s": 1484.363,
+      "source": "results/gate/gate_20261008T050643Z.json",
+      "t_end": "2026-10-08T06:00:45Z",
+      "t_start": "2026-10-08T05:36:00Z"
+    },
+    {
+      "coverage": 0.9816,
+      "covered_s": 209.087,
+      "duration_s": 213.0,
+      "energy_wh": {
+        "ane": 0.000859,
+        "combined": 1.52301,
+        "cpu": 0.386445,
+        "gpu": 1.135706
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.014,
+        "combined": 25.674,
+        "cpu": 6.514,
+        "gpu": 19.145
+      },
+      "n_samples": 210,
+      "name": "gate 20261008T050643Z phase 5",
+      "overlap_s": 4.468,
+      "peak_w": {
+        "ane": 0.671,
+        "combined": 78.849,
+        "cpu": 13.587,
+        "gpu": 74.85
+      },
+      "sampled_s": 213.555,
+      "source": "results/gate/gate_20261008T050643Z.json",
+      "t_end": "2026-10-08T06:04:18Z",
+      "t_start": "2026-10-08T06:00:45Z"
+    },
+    {
+      "coverage": 0.9791,
+      "covered_s": 964.452,
+      "duration_s": 985.0,
+      "energy_wh": {
+        "ane": 0.000436,
+        "combined": 3.432006,
+        "cpu": 3.417546,
+        "gpu": 0.014024
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "gate_phase",
+      "mean_w": {
+        "ane": 0.002,
+        "combined": 12.548,
+        "cpu": 12.496,
+        "gpu": 0.051
+      },
+      "n_samples": 965,
+      "name": "gate 20261008T050643Z phase 6",
+      "overlap_s": 20.156,
+      "peak_w": {
+        "ane": 1.534,
+        "combined": 23.49,
+        "cpu": 23.386,
+        "gpu": 1.003
+      },
+      "sampled_s": 984.608,
+      "source": "results/gate/gate_20261008T050643Z.json",
+      "t_end": "2026-10-08T06:20:43Z",
+      "t_start": "2026-10-08T06:04:18Z"
+    },
+    {
+      "coverage": 0.9709,
+      "covered_s": 582.617,
+      "duration_s": 600.056,
+      "energy_wh": {
+        "ane": 1e-06,
+        "combined": 0.055777,
+        "cpu": 0.04018,
+        "gpu": 0.015596
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "idle",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 0.335,
+        "cpu": 0.241,
+        "gpu": 0.094
+      },
+      "n_samples": 583,
+      "name": "bench cool-down idle 20261008T065204Z",
+      "overlap_s": 17.572,
+      "peak_w": {
+        "ane": 0.001,
+        "combined": 5.629,
+        "cpu": 5.537,
+        "gpu": 0.187
+      },
+      "sampled_s": 600.189,
+      "source": "results/bench/speed_20261008T070210Z.jsonl",
+      "t_end": "2026-10-08T07:02:04Z",
+      "t_start": "2026-10-08T06:52:04Z"
+    },
+    {
+      "coverage": 0.9712,
+      "covered_s": 980.952,
+      "duration_s": 1010.049,
+      "energy_wh": {
+        "ane": 0.000715,
+        "combined": 1.021636,
+        "cpu": 0.248708,
+        "gpu": 0.772213
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "bench",
+      "mean_w": {
+        "ane": 0.003,
+        "combined": 3.64,
+        "cpu": 0.886,
+        "gpu": 2.751
+      },
+      "n_samples": 982,
+      "name": "bench speed_20261008T070210Z",
+      "overlap_s": 29.4,
+      "peak_w": {
+        "ane": 1.456,
+        "combined": 89.454,
+        "cpu": 11.774,
+        "gpu": 86.443
+      },
+      "sampled_s": 1010.353,
+      "source": "results/bench/speed_20261008T070210Z.jsonl",
+      "t_end": "2026-10-08T07:19:00Z",
+      "t_start": "2026-10-08T07:02:10Z"
+    },
+    {
+      "coverage": 0.9731,
+      "covered_s": 2103.58,
+      "duration_s": 2161.838,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 9.888043,
+        "cpu": 1.213999,
+        "gpu": 8.674046
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "bench",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 16.468,
+        "cpu": 2.022,
+        "gpu": 14.446
+      },
+      "n_samples": 2103,
+      "name": "bench speed_desc_20261008T071901Z",
+      "overlap_s": 58.011,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 133.89,
+        "cpu": 17.585,
+        "gpu": 127.142
+      },
+      "sampled_s": 2161.591,
+      "source": "results/bench/speed_desc_20261008T071901Z.jsonl",
+      "t_end": "2026-10-08T07:55:03Z",
+      "t_start": "2026-10-08T07:19:01Z"
+    },
+    {
+      "coverage": 0.9734,
+      "covered_s": 178.219,
+      "duration_s": 183.095,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 2.303992,
+        "cpu": 0.112954,
+        "gpu": 2.191039
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "bench",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 45.38,
+        "cpu": 2.225,
+        "gpu": 43.155
+      },
+      "n_samples": 179,
+      "name": "bench fit_20261008T075507Z",
+      "overlap_s": 4.558,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 96.565,
+        "cpu": 9.295,
+        "gpu": 95.713
+      },
+      "sampled_s": 182.776,
+      "source": "results/bench/fit_20261008T075507Z.jsonl",
+      "t_end": "2026-10-08T07:58:10Z",
+      "t_start": "2026-10-08T07:55:07Z"
+    },
+    {
+      "coverage": 0.9764,
+      "covered_s": 120.575,
+      "duration_s": 123.496,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 0.894513,
+        "cpu": 0.235802,
+        "gpu": 0.658711
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "bench",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 26.006,
+        "cpu": 6.855,
+        "gpu": 19.151
+      },
+      "n_samples": 121,
+      "name": "bench kl_8v4_20261008T075810Z",
+      "overlap_s": 3.252,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 83.765,
+        "cpu": 19.92,
+        "gpu": 81.027
+      },
+      "sampled_s": 123.828,
+      "source": "results/kl_8v4_20261008T075810Z.json",
+      "t_end": "2026-10-08T08:00:13Z",
+      "t_start": "2026-10-08T07:58:10Z"
+    },
+    {
+      "coverage": 1.0,
+      "covered_s": 3.919,
+      "duration_s": 3.919,
+      "energy_wh": {
+        "ane": 0.0,
+        "combined": 0.025447,
+        "cpu": 0.025445,
+        "gpu": 2e-06
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "bench",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 22.796,
+        "cpu": 22.794,
+        "gpu": 0.002
+      },
+      "n_samples": 5,
+      "name": "bench tokenizer_20261008T080017Z",
+      "overlap_s": 0.099,
+      "peak_w": {
+        "ane": 0.0,
+        "combined": 33.12,
+        "cpu": 33.118,
+        "gpu": 0.003
+      },
+      "sampled_s": 4.019,
+      "source": "results/tokenizer_20261008T080017Z.json",
+      "t_end": "2026-10-08T08:00:17Z",
+      "t_start": "2026-10-08T08:00:13Z"
+    },
+    {
+      "coverage": 0.9755,
+      "covered_s": 1277.045,
+      "duration_s": 1309.185,
+      "energy_wh": {
+        "ane": 0.000633,
+        "combined": 5.641156,
+        "cpu": 1.183345,
+        "gpu": 4.457178
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "bench",
+      "mean_w": {
+        "ane": 0.002,
+        "combined": 15.509,
+        "cpu": 3.253,
+        "gpu": 12.254
+      },
+      "n_samples": 1278,
+      "name": "bench c1_20261008T082207Z",
+      "overlap_s": 32.384,
+      "peak_w": {
+        "ane": 0.454,
+        "combined": 53.448,
+        "cpu": 20.256,
+        "gpu": 49.385
+      },
+      "sampled_s": 1309.43,
+      "source": "results/bench/c1_20261008T082207Z.jsonl",
+      "t_end": "2026-10-08T08:22:07Z",
+      "t_start": "2026-10-08T08:00:17Z"
+    }
+  ],
+  "windows_left_out_no_overlap": 13
+}
