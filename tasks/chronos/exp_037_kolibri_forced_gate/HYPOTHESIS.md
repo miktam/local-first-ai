@@ -1,6 +1,6 @@
 # Experiment 037 — Kolibri through a forced gate: does it fit, how fast, and does its scorecard hold on public rows?
 
-*Pre-registered: 2026-10-07T04:14:29Z · Status: gate run 1 (20261007T110355Z) K8 FAIL (g1), K4 PASS; Andrei's choice b · diagnostics (2026-10-07T14:49:52Z); no scored run*
+*Pre-registered: 2026-10-07T04:14:29Z · Status: gate K4 PASS, K8 PASS; Session 1 in progress; no scored run*
 
 **Builds on:**
 - **exp_036** (`../exp_036_kolibri_local_eval/`, tree at `222c845`): the question, hypotheses, arms, task sets, plan rules and kit, re-registered here. exp_036's Phase 0 gate failed for K8 (G2, G3, G4 and G5; record `e3e01b5c…`) and it was published as a gate failure with no scored run. On 2026-10-05 Andrei chose to re-register the hypotheses with a gate built from that run's bug hunt (decision D8, below). Nothing from exp_036 is cited as evidence about Kolibri's quality.
@@ -1646,3 +1646,12 @@ hash_tree: TESTS_SHA256 = 5adae3c86ae59b4cb655ac91dfe5b620028ebd52b4b61e8fcf54ad
   - Such a failure would be state written and read outside the generation path (PLAN.md section 4, class C). No code is changed for it.
 
 **The diagnostics package.** `diag_resume.py` pins `runner/generate.py` at sha256 `e1cce3fb…` as a precondition, so it now refuses to run (exit 3). Its outputs are complete and classified, and nothing in PLAN.md calls for running it again.
+
+## gate — run record (2026-10-08T06:49:15Z)
+
+- Phase: gate
+- UTC: 2026-10-08T06:49:15Z (from the clock)
+- Commit: 1f123edc9f41433d7976bb512bd8860026290b33 (uncommitted changes: yes)
+- Result files (sha256):
+  - `results/gate/gate_20261008T050643Z.json` `a35c23da7ca4cfb4bb49705a1494796e673f2495ee131fe2379b1318cb39e3a4`
+- Gate verdict: K4 PASS, K8 PASS

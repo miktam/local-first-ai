@@ -1,0 +1,100 @@
+{
+  "data": {
+    "reference_passes": [
+      {
+        "bytes": 6248536102,
+        "what": "P5a: reference layers [0, 4] on R1's pack"
+      }
+    ]
+  },
+  "failed_preconditions": [],
+  "peak_rss_bytes": 66499969024,
+  "phase": "2b",
+  "precondition_failed": false,
+  "preconditions": {
+    "P5": {
+      "ok": true,
+      "reason": null,
+      "values": {
+        "arm": "K8",
+        "measured": {
+          "p5a": {
+            "bitwise": {
+              "0": true,
+              "4": true
+            }
+          },
+          "p5b": {
+            "bitwise": true
+          },
+          "p5c": {
+            "mean_kl": 2.6578194208906276
+          }
+        },
+        "p5a": {
+          "dump_record_sha256": "7877ac682e0bc5a9e852ccf0d4ed1a05756b5df6f4f1eea0fa5135cbb2112341",
+          "layers": {
+            "layer00": {
+              "bitwise_equal": true,
+              "layer": 0,
+              "layer_type": "sliding_attention",
+              "max_abs_diff": 0.0,
+              "n_rows": 28672,
+              "rows_differing": 0,
+              "seconds": 9.032233953475952
+            },
+            "layer04": {
+              "bitwise_equal": true,
+              "layer": 4,
+              "layer_type": "full_attention",
+              "max_abs_diff": 0.0,
+              "n_rows": 28672,
+              "rows_differing": 0,
+              "seconds": 23.607962131500244
+            }
+          }
+        },
+        "p5b": {
+          "bitwise_equal": true,
+          "chunk": 1536,
+          "max_abs_diff": 0.0,
+          "n_positions": 1536,
+          "rows_differing": 0,
+          "shadow_set_disagreements": 0
+        },
+        "p5c": {
+          "max_kl": 13.453108547832572,
+          "mean_kl": 2.6578194208906276,
+          "median_kl": 2.201123447516682,
+          "min_mean_kl": 0.1,
+          "n_positions": 1535
+        },
+        "port": "K8 fp32 port (unmutated)",
+        "rule": {
+          "ok": true,
+          "parts": {
+            "P5a": {
+              "layers": {
+                "0": true,
+                "4": true
+              },
+              "ok": true
+            },
+            "P5b": {
+              "ok": true
+            },
+            "P5c": {
+              "mean_kl": 2.6578194208906276,
+              "min": 0.1,
+              "ok": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "t_end": "2026-10-08T05:21:22Z",
+  "t_start": "2026-10-08T05:20:15Z",
+  "title": "P5: harness integrity",
+  "wall_s": 66.86335897445679
+}
