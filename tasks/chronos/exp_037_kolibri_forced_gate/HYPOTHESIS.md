@@ -1,6 +1,6 @@
 # Experiment 037 — Kolibri through a forced gate: does it fit, how fast, and does its scorecard hold on public rows?
 
-*Pre-registered: 2026-10-07T04:14:29Z · Status: gate K4 PASS, K8 PASS; Session 1 in progress; no scored run*
+*Pre-registered: 2026-10-07T04:14:29Z · Status: plan STOP by rule; no scored run*
 
 **Builds on:**
 - **exp_036** (`../exp_036_kolibri_local_eval/`, tree at `222c845`): the question, hypotheses, arms, task sets, plan rules and kit, re-registered here. exp_036's Phase 0 gate failed for K8 (G2, G3, G4 and G5; record `e3e01b5c…`) and it was published as a gate failure with no scored run. On 2026-10-05 Andrei chose to re-register the hypotheses with a gate built from that run's bug hunt (decision D8, below). Nothing from exp_036 is cited as evidence about Kolibri's quality.
@@ -1915,3 +1915,90 @@ Step 11 is not re-run (above). Stop and publish stays available at every point.
 - Result files (sha256):
   - `results/gate/gate_20261008T180634Z.json` `e6d80d7b4565fef08ba275b1c15f635880c3155441784c713ff4d8b296c62341`
 - Gate verdict: K4 PASS, K8 PASS
+
+## Amendment 3 — plan (2026-10-09T08:12:07.530Z)
+
+*Written by `runner/plan_fix.py` from the pilot, by the frozen rule (HYPOTHESIS "Pilot and the rule that fixes n and max_tokens"; `runner/plan_rules.json` exp036-plan-2).*
+
+- Status: STOP
+- plan_fixed: `results/plan_fixed_20261009T081207Z.json`, sha256 `92258867f29df8dba1e5e651ab1f51da9a363aca829adbc8dbf36d11baa35db3`
+- Scorers tree sha256: `7d90acdc0b8b7aa4b4dd1161d4e9290e6f31bdbfee5bee898898e1eff52cd7d6`
+- Supersedes: none
+- S1 hours: 8.4818; B_main = min(31, 40 − S1) = 31.0 h
+- Caps (completion tokens): aime 98,304, gpqa 65,536, ifbench 32,768, mmlu 65,536, rgb 16,384; raised to the ceiling: aime, gpqa, ifbench, mmlu
+- Metal limit L used: 115,448,725,504 B (107.52 GiB)
+- Reason: even P10 does not fit B_main with two sessions <= 16 h: no scored run until Andrei decides on a 4th session by amendment
+
+## plan — run record (2026-10-09T08:23:06Z)
+
+- Phase: plan
+- UTC: 2026-10-09T08:23:06Z (from the clock)
+- Commit: f75de2139aee0ac7ca39ec68baab205eea31e258 (uncommitted changes: yes)
+- Result files (sha256):
+  - `results/plan_fixed_20261009T081207Z.json` `92258867f29df8dba1e5e651ab1f51da9a363aca829adbc8dbf36d11baa35db3`
+  - `results/AMENDMENT_3_20261009T081207Z.md` `1ef2fc8776f5a319d0b7436d6d6aedb6bcc980ea049bbe80ff2c03831528b90d`
+  - `results/pilot_summary_20261009T045611Z.json` `15ee46e6e3b33a2aa0dee8bb74c8908618b6970637120b8a4a934b8359bc482c`
+  - `results/pilot/20261009T045611Z/G8/gpqa_main_de_high.jsonl` `7ca650a7848eb35142de1f26432ea440d70f06692e49b4fa6517724f196b036e`
+  - `results/pilot/20261009T045611Z/G8/gpqa_main_de_high.steps.jsonl` `3246f562671c244f857755ed2cb49c2d73a7ca6435a2d2f1080440f75d98666e`
+  - `results/pilot/20261009T045611Z/G8/gpqa_main_en_high.jsonl` `b0bcbcb96b3485b35b421fe82fbaac166eea7c43922837b0acb94be347ec8c92`
+  - `results/pilot/20261009T045611Z/G8/gpqa_main_en_high.steps.jsonl` `5440f30df87a63b9d7b8141ed21d5c8d49a5040273e0cc2b7104d2993566964c`
+  - `results/pilot/20261009T045611Z/G8/ifbench_pilot_high.jsonl` `2793a10b12898fe7dfc12f32529c66bf141d132e4ce291623941ce1ac5698efb`
+  - `results/pilot/20261009T045611Z/G8/ifbench_pilot_high.steps.jsonl` `3c8e6f9b025c985a6134c01bd0ef30916acf535ed3de01427218a68129f0c87a`
+  - `results/pilot/20261009T045611Z/G8/mmlu_full_de_high.jsonl` `2e5efba214baf35235b5c9bdccc431996d17b0c7c5b64e516269800ee2485a37`
+  - `results/pilot/20261009T045611Z/G8/mmlu_full_de_high.steps.jsonl` `96099bfaac0e95f26aa74a661ff6cb12d4ee38c29143c58976e9a2fe411d8cc3`
+  - `results/pilot/20261009T045611Z/G8/mmlu_full_en_high.jsonl` `03adc2bf38d105856938a9e898871fac8aa4b2ecb6711a5b425f178514a34deb`
+  - `results/pilot/20261009T045611Z/G8/mmlu_full_en_high.steps.jsonl` `63cef4380efdef4e954167d7e84c4632c64b71d3f50c962d791db2a2668517ce`
+  - `results/pilot/20261009T045611Z/G8/rgb_int_cb_high.jsonl` `9ebe78898568a4818b4d259582fc4f7769142f4ae316f8e8f60811c36ecefb71`
+  - `results/pilot/20261009T045611Z/G8/rgb_int_cb_high.steps.jsonl` `7598a06d3e2d04495ff82fe640bbd6ee2ef96ac7894dfbd494fd5755bf308f87`
+  - `results/pilot/20261009T045611Z/G8/rgb_int_forced_high.jsonl` `29bcf4cc8a4f68371de2cebd46f06d3f5c085b51096524061f877c2eb307f762`
+  - `results/pilot/20261009T045611Z/G8/rgb_int_forced_high.steps.jsonl` `9d79113b2713ef96c2b1a8aa311b9710b46714abb9cbdd0c7b77f875cf8a0b7d`
+  - `results/pilot/20261009T045611Z/K4/gpqa_main_de_high.jsonl` `3e8149c7b49965de40ff000add1ad0f96ca4eabd16b71212dbed4be9acd77eab`
+  - `results/pilot/20261009T045611Z/K4/gpqa_main_de_high.steps.jsonl` `24577660ab1bf83e143e3da371c3a4e36b3d205d900bb5dc05446c979877636a`
+  - `results/pilot/20261009T045611Z/K4/gpqa_main_en_high.jsonl` `715e665a7f352a085afcec2d1c5b58f6fad6aaf9899effd4aa35a7f32bf3576d`
+  - `results/pilot/20261009T045611Z/K4/gpqa_main_en_high.steps.jsonl` `77bb0774885b1a364149a958f33c20621abe60de34b2976f1b90e32809b77716`
+  - `results/pilot/20261009T045611Z/K4/ifbench_pilot_high.jsonl` `afb27c6bacac1dfd7aa4a3fc3edda7822f6982c3507ade1b585da566d249cc56`
+  - `results/pilot/20261009T045611Z/K4/ifbench_pilot_high.steps.jsonl` `dd373658ab6d57f104523f0401de29d54b7cb1a6a68c0731844fd4bdbadb9838`
+  - `results/pilot/20261009T045611Z/K4/mmlu_full_de_high.jsonl` `bbf56b6b42f446292758b9ca2a6dbb520d19f8762776493a59927a44d49e2662`
+  - `results/pilot/20261009T045611Z/K4/mmlu_full_de_high.steps.jsonl` `ffc93c4ca88038d5f8936b21b6287e3f4174cd62c6c5b9be9c428199c472a2ab`
+  - `results/pilot/20261009T045611Z/K4/mmlu_full_en_high.jsonl` `bd7a70f8528003f90b1d78b3c6ab40af93995a16155a917122a98914baef5c34`
+  - `results/pilot/20261009T045611Z/K4/mmlu_full_en_high.steps.jsonl` `56d48fbfef6e0adc9f2d950f6d0c658a7634a5f07c007e05d47c7d2ec8072ab3`
+  - `results/pilot/20261009T045611Z/K4/rgb_int_cb_high.jsonl` `7041bf311c556182441ee28980fa7046bc1efbe3f5738ffe51c8592bbdec7f30`
+  - `results/pilot/20261009T045611Z/K4/rgb_int_cb_high.steps.jsonl` `23aafa1d677dd00419257089eaf7955e3c48c0d4dd988c31b66f3a8fe1596571`
+  - `results/pilot/20261009T045611Z/K8/aime_en_pilot_high.jsonl` `5f9499a5e2b20ce7af62907984f00dab5f40dcdf005a66924166175fcfbaf6c8`
+  - `results/pilot/20261009T045611Z/K8/aime_en_pilot_high.steps.jsonl` `517e5d592e0ae337aa48f7c9934cab4bc72628a1536029172bf2fad6ba752a81`
+  - `results/pilot/20261009T045611Z/K8/gpqa_main_de_high.jsonl` `5297990467d77853801b85ee8ca4f224aa7abf03309101165a64faa6f32bae93`
+  - `results/pilot/20261009T045611Z/K8/gpqa_main_de_high.steps.jsonl` `2b810718a47f6b3bee27309287dbbaaf444a8d3791a577dee1d6098dee1188c6`
+  - `results/pilot/20261009T045611Z/K8/gpqa_main_en_high.jsonl` `c0dcce0a5b00a0c9423bc86e6e2e16a1ff65219468bc8688c4c4ac69e6faf309`
+  - `results/pilot/20261009T045611Z/K8/gpqa_main_en_high.steps.jsonl` `7636f60c3c50b16b43ea787a478bdaae4dab946dcce04d742bc35a110f554998`
+  - `results/pilot/20261009T045611Z/K8/ifbench_pilot_high.jsonl` `c0befd7ed5f09516cd5e9d9e86880b04b8a0515f5219717d41c8992106a5c58d`
+  - `results/pilot/20261009T045611Z/K8/ifbench_pilot_high.steps.jsonl` `026e6789de5762ada9c402ec5a13d134b5f3a8fb6fd4e6eef4a7654952bfaa58`
+  - `results/pilot/20261009T045611Z/K8/mmlu_full_de_high.jsonl` `537597f3a7da4be0a069ffe9e16103bb40e441be171e27c6cc737612d39edf28`
+  - `results/pilot/20261009T045611Z/K8/mmlu_full_de_high.steps.jsonl` `ba82b69f0eb908ca4cc2357b07af6ff91b356e24537e0d19dd3cd6dedcbefcf2`
+  - `results/pilot/20261009T045611Z/K8/mmlu_full_en_high.jsonl` `2dc9d97ec3c19f24fc05d5fc6d1ddc28a2d669416ab6009df3d14e67b657ab45`
+  - `results/pilot/20261009T045611Z/K8/mmlu_full_en_high.steps.jsonl` `258ba88d0dfcb6438428427253a685f376f22add6fef72c1edeaa32a7317ab93`
+  - `results/pilot/20261009T045611Z/K8/rgb_int_cb_high.jsonl` `127cf55a5b060318b304fd40fefcc703d8d1bed44aadf246cb328ed1a45c0010`
+  - `results/pilot/20261009T045611Z/K8/rgb_int_cb_high.steps.jsonl` `4fb8400b6f5c298d3188fe9ebc2b0a3b2339df921f56d66d566a4e34f356c1fe`
+  - `results/pilot/20261009T045611Z/K8/rgb_int_forced_high.jsonl` `46d6317f98cff58670e2cd3fb65c68459495c620a8db59c28f88ff0422fcb6cd`
+  - `results/pilot/20261009T045611Z/K8/rgb_int_forced_high.steps.jsonl` `6efdb62353838170e22a51d5a524108d4c71348930039f1e60a6aff3087193c7`
+  - `results/pilot/20261009T045611Z/Q36-8/gpqa_main_de_high.jsonl` `a93e4ca830abd13d140a1e47ec234ecf01fe08455aa07c219c1bec889db045bc`
+  - `results/pilot/20261009T045611Z/Q36-8/gpqa_main_de_high.steps.jsonl` `00ffb933c4ec862bd805634bcdda75eddce88df9feddcc2a695987d0c227e75e`
+  - `results/pilot/20261009T045611Z/Q36-8/gpqa_main_en_high.jsonl` `5d1e204a55419d327c21522768fa9747f46ce5518465f5598b8a49bac684615f`
+  - `results/pilot/20261009T045611Z/Q36-8/gpqa_main_en_high.steps.jsonl` `c6c299463b0a0f6f52d1ea73ca404b5bcfb51047d233e822b8e4879cd868b85a`
+  - `results/pilot/20261009T045611Z/Q36-8/ifbench_pilot_high.jsonl` `aa4e1418d3b39706a01906c0f725e73860486e009dc2fbb96f31c8e962e66fc2`
+  - `results/pilot/20261009T045611Z/Q36-8/ifbench_pilot_high.steps.jsonl` `aa0f8c98f6e27553514eb55fd7e8b437648e0b4702931bb40c3adbaff43cad16`
+  - `results/pilot/20261009T045611Z/Q36-8/mmlu_full_de_high.jsonl` `87c0c088f9141e0b1a7ab0a92401a80492233180a146f6f3c5c363c0c3bf5340`
+  - `results/pilot/20261009T045611Z/Q36-8/mmlu_full_de_high.steps.jsonl` `62f1e4eab1e508b6a0da12fbf0595373eaf89a50347e388d8432be1e536fb7b0`
+  - `results/pilot/20261009T045611Z/Q36-8/mmlu_full_en_high.jsonl` `28e8155d0d69360c3037a700e7bba919ac38d74c7b621dd428c1307346d5d38c`
+  - `results/pilot/20261009T045611Z/Q36-8/mmlu_full_en_high.steps.jsonl` `fb8adb8444940af7e07399eea7b3167e01948f422f1713b11f90c4520102319d`
+  - `results/pilot/20261009T045611Z/Q36-8/rgb_int_cb_high.jsonl` `078353f3b59e51b35727f62d618972400140f7c7f2d6683258eb1cc191c25d6b`
+  - `results/pilot/20261009T045611Z/Q36-8/rgb_int_cb_high.steps.jsonl` `0d34e66a541ba1733fe98279720f3c37434c2908992bfc98c5345160274baf00`
+  - `results/pilot/20261009T045611Z/Q36-8/rgb_int_forced_high.jsonl` `4c87c79572178e3417ee3605c9183e899df42df68f4a64efd52625c0453cea96`
+  - `results/pilot/20261009T045611Z/Q36-8/rgb_int_forced_high.steps.jsonl` `b31428c5fd870bd77ba1687f035c30c4b14d539c6ecd06bca363fa0a91c6032e`
+  - `aborted/20261008T082355Z-pilot/pilot/K8/aime_en_pilot_high.steps.jsonl` `891f5359da33251bdae44ce4dea988cd3abf1dde1ac3b4c38dd5120dcc4dc8df`
+  - `aborted/20261008T082355Z-pilot/pilot/K8/gpqa_main_de_high.steps.jsonl` `84d683b965bf30a9c477f5e7b93062dc7499464c3cf620a0a9593534bcbc4cb7`
+  - `aborted/20261008T082355Z-pilot/pilot/K8/gpqa_main_en_high.steps.jsonl` `c91d6504ea00b3525ef5b9c4625c2b69f14c0be5b20fe50d872a6e55265b9784`
+  - `aborted/20261008T082355Z-pilot/pilot/K8/ifbench_pilot_high.steps.jsonl` `b9f308cbda457f26f2f8311f8751db5dc8d7530f0a8a34a73d57b0e99a9b6b95`
+  - `aborted/20261008T082355Z-pilot/pilot/K8/mmlu_full_de_high.steps.jsonl` `781cdd6a2544dd5372d8d5c8f053429697a95ee2f4a5aae02ebbc81dee597285`
+  - `aborted/20261008T082355Z-pilot/pilot/K8/mmlu_full_en_high.steps.jsonl` `6e98cdaa4bbd8b6306bd0f3c263de1c64c826a2a789cf5f0c14e23387124c05e`
+  - `aborted/20261008T082355Z-pilot/pilot/K8/rgb_int_cb_high.steps.jsonl` `be989dea75217bf798df8d84a865d3fe6b13d1aa4a0817747fc9bd4784e73505`
+  - `aborted/20261008T082355Z-pilot/pilot/K8/rgb_int_forced_high.steps.jsonl` `583e0a6cda7a57efff470949eda8c60f0f435ecce592eddfff8c7ce8ed978d64`

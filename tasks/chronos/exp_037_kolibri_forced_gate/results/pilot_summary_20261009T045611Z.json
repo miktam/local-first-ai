@@ -1,0 +1,1753 @@
+{
+  "L_bytes": 115448725504,
+  "L_sources": {
+    "chosen": "max_recommended_working_set_size",
+    "iogpu_bytes": 0,
+    "iogpu_wired_limit_mb": 0,
+    "max_recommended_working_set_size": 115448725504
+  },
+  "allowed_B": {
+    "K4": [
+      1,
+      2,
+      4,
+      8,
+      16
+    ],
+    "K8": [
+      1,
+      2,
+      4,
+      8,
+      16
+    ]
+  },
+  "arms": {
+    "G8": {
+      "prefill_seconds": 31.54811900001608,
+      "prefill_tokens": 13522.0,
+      "t_end": 1791528030.8850079,
+      "t_start": 1791525412.17794
+    },
+    "K4": {
+      "prefill_seconds": 9.824001000000093,
+      "prefill_tokens": 14096.0,
+      "t_end": 1791531230.9182348,
+      "t_start": 1791529398.015425
+    },
+    "K8": {
+      "prefill_seconds": 13.052742999998541,
+      "prefill_tokens": 15979.0,
+      "t_end": 1791525412.1642308,
+      "t_start": 1791521771.0296059
+    },
+    "Q36-8": {
+      "prefill_seconds": 5.7729380000027595,
+      "prefill_tokens": 13290.0,
+      "t_end": 1791529397.994764,
+      "t_start": 1791528030.910559
+    }
+  },
+  "caps": {
+    "aime": 65536,
+    "gpqa": 32768,
+    "ifbench": 16384,
+    "mmlu": 32768,
+    "rgb": 16384
+  },
+  "cells": [
+    {
+      "B": 8,
+      "arm": "K8",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/K8/gpqa_main_en_high.jsonl",
+      "len_max": 32768,
+      "len_mean": 10115.25,
+      "len_se": 4258.17,
+      "lengths": [
+        1558,
+        1635,
+        2194,
+        3060,
+        5662,
+        8981,
+        25064,
+        32768
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 1,
+      "prompt_tokens": [
+        312,
+        543,
+        299,
+        315,
+        287,
+        408,
+        584,
+        459
+      ],
+      "status_counts": {
+        "closed": 7,
+        "unclosed": 1
+      },
+      "steps_file": "results/pilot/20261009T045611Z/K8/gpqa_main_en_high.steps.jsonl",
+      "t_end": "2026-10-09T05:09:37.349Z",
+      "t_start": "2026-10-09T04:56:22.014Z",
+      "task": "gpqa_main_en",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "B": 8,
+      "arm": "K8",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/K8/gpqa_main_de_high.jsonl",
+      "len_max": 32768,
+      "len_mean": 11656.75,
+      "len_se": 4659.16,
+      "lengths": [
+        1414,
+        3292,
+        3448,
+        5139,
+        7132,
+        7293,
+        32768,
+        32768
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 2,
+      "prompt_tokens": [
+        317,
+        343,
+        312,
+        442,
+        319,
+        311,
+        464,
+        315
+      ],
+      "status_counts": {
+        "closed": 6,
+        "unclosed": 2
+      },
+      "steps_file": "results/pilot/20261009T045611Z/K8/gpqa_main_de_high.steps.jsonl",
+      "t_end": "2026-10-09T05:25:24.528Z",
+      "t_start": "2026-10-09T05:09:37.572Z",
+      "task": "gpqa_main_de",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true
+      ]
+    },
+    {
+      "B": 8,
+      "arm": "K8",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/K8/mmlu_full_en_high.jsonl",
+      "len_max": 5600,
+      "len_mean": 2037.38,
+      "len_se": 563.27,
+      "lengths": [
+        523,
+        710,
+        1096,
+        1795,
+        2145,
+        2203,
+        2227,
+        5600
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        383,
+        437,
+        237,
+        286,
+        251,
+        539,
+        367,
+        334
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/K8/mmlu_full_en_high.steps.jsonl",
+      "t_end": "2026-10-09T05:27:47.353Z",
+      "t_start": "2026-10-09T05:25:24.915Z",
+      "task": "mmlu_full_en",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 8,
+      "arm": "K8",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/K8/mmlu_full_de_high.jsonl",
+      "len_max": 8456,
+      "len_mean": 3185.88,
+      "len_se": 1137.69,
+      "lengths": [
+        398,
+        405,
+        841,
+        969,
+        2280,
+        5249,
+        6889,
+        8456
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        253,
+        259,
+        446,
+        305,
+        380,
+        549,
+        411,
+        340
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/K8/mmlu_full_de_high.steps.jsonl",
+      "t_end": "2026-10-09T05:31:27.491Z",
+      "t_start": "2026-10-09T05:27:47.883Z",
+      "task": "mmlu_full_de",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "K8",
+      "cap": 16384,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/K8/ifbench_pilot_high.jsonl",
+      "len_max": 4192,
+      "len_mean": 1702.75,
+      "len_se": 467.11,
+      "lengths": [
+        370,
+        680,
+        857,
+        1136,
+        1177,
+        2245,
+        2965,
+        4192
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        102,
+        91,
+        103,
+        178,
+        115,
+        249,
+        158,
+        192
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/K8/ifbench_pilot_high.steps.jsonl",
+      "t_end": "2026-10-09T05:33:15.573Z",
+      "t_start": "2026-10-09T05:31:27.585Z",
+      "task": "ifbench_pilot",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "K8",
+      "cap": 16384,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/K8/rgb_int_cb_high.jsonl",
+      "len_max": 2277,
+      "len_mean": 778.62,
+      "len_se": 151.29,
+      "lengths": [
+        140,
+        149,
+        152,
+        349,
+        353,
+        411,
+        424,
+        629,
+        735,
+        821,
+        907,
+        1004,
+        1049,
+        1272,
+        1786,
+        2277
+      ],
+      "n": 16,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        63,
+        72,
+        69,
+        77,
+        73,
+        75,
+        79,
+        76,
+        74,
+        67,
+        73,
+        74,
+        72,
+        65,
+        71,
+        77
+      ],
+      "status_counts": {
+        "closed": 16
+      },
+      "steps_file": "results/pilot/20261009T045611Z/K8/rgb_int_cb_high.steps.jsonl",
+      "t_end": "2026-10-09T05:34:33.903Z",
+      "t_start": "2026-10-09T05:33:15.704Z",
+      "task": "rgb_int_cb",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "K8",
+      "cap": 16384,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/K8/rgb_int_forced_high.jsonl",
+      "len_max": 1655,
+      "len_mean": 886.38,
+      "len_se": 154.31,
+      "lengths": [
+        328,
+        455,
+        657,
+        730,
+        981,
+        1025,
+        1260,
+        1655
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        84,
+        81,
+        74,
+        81,
+        83,
+        76,
+        88,
+        81
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/K8/rgb_int_forced_high.steps.jsonl",
+      "t_end": "2026-10-09T05:35:22.104Z",
+      "t_start": "2026-10-09T05:34:34.036Z",
+      "task": "rgb_int_forced",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 4,
+      "arm": "K8",
+      "cap": 65536,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/K8/aime_en_pilot_high.jsonl",
+      "len_max": 65536,
+      "len_mean": 19322.75,
+      "len_se": 15415.35,
+      "lengths": [
+        2695,
+        3582,
+        5478,
+        65536
+      ],
+      "n": 4,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 1,
+      "prompt_tokens": [
+        300,
+        243,
+        271,
+        433
+      ],
+      "status_counts": {
+        "closed": 3,
+        "unclosed": 1
+      },
+      "steps_file": "results/pilot/20261009T045611Z/K8/aime_en_pilot_high.steps.jsonl",
+      "t_end": "2026-10-09T05:56:51.968Z",
+      "t_start": "2026-10-09T05:35:22.200Z",
+      "task": "aime_en_pilot",
+      "truncated": [
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "G8",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/G8/gpqa_main_en_high.jsonl",
+      "len_max": 23529,
+      "len_mean": 9474.25,
+      "len_se": 2303.65,
+      "lengths": [
+        2859,
+        4141,
+        5151,
+        8580,
+        8745,
+        11246,
+        11543,
+        23529
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        379,
+        270,
+        292,
+        543,
+        544,
+        262,
+        292,
+        422
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/G8/gpqa_main_en_high.steps.jsonl",
+      "t_end": "2026-10-09T06:08:39.623Z",
+      "t_start": "2026-10-09T05:57:09.644Z",
+      "task": "gpqa_main_en",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "G8",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/G8/gpqa_main_de_high.jsonl",
+      "len_max": 23747,
+      "len_mean": 6932.25,
+      "len_se": 2707.15,
+      "lengths": [
+        1390,
+        1682,
+        1804,
+        2432,
+        5534,
+        7390,
+        11479,
+        23747
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        323,
+        359,
+        335,
+        322,
+        442,
+        484,
+        309,
+        306
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/G8/gpqa_main_de_high.steps.jsonl",
+      "t_end": "2026-10-09T06:18:01.869Z",
+      "t_start": "2026-10-09T06:08:39.714Z",
+      "task": "gpqa_main_de",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "G8",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/G8/mmlu_full_en_high.jsonl",
+      "len_max": 17594,
+      "len_mean": 7723.38,
+      "len_se": 1886.82,
+      "lengths": [
+        1807,
+        3475,
+        3811,
+        5787,
+        7388,
+        8873,
+        13052,
+        17594
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        416,
+        363,
+        226,
+        274,
+        506,
+        226,
+        314,
+        347
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/G8/mmlu_full_en_high.steps.jsonl",
+      "t_end": "2026-10-09T06:27:06.324Z",
+      "t_start": "2026-10-09T06:18:02.233Z",
+      "task": "mmlu_full_en",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "G8",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/G8/mmlu_full_de_high.jsonl",
+      "len_max": 18255,
+      "len_mean": 5258.0,
+      "len_se": 2163.57,
+      "lengths": [
+        733,
+        1291,
+        1628,
+        1862,
+        2574,
+        5458,
+        10263,
+        18255
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        254,
+        471,
+        330,
+        445,
+        261,
+        544,
+        339,
+        392
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/G8/mmlu_full_de_high.steps.jsonl",
+      "t_end": "2026-10-09T06:34:22.292Z",
+      "t_start": "2026-10-09T06:27:06.750Z",
+      "task": "mmlu_full_de",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "G8",
+      "cap": 16384,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/G8/ifbench_pilot_high.jsonl",
+      "len_max": 8025,
+      "len_mean": 4828.62,
+      "len_se": 849.2,
+      "lengths": [
+        278,
+        2350,
+        5303,
+        5309,
+        5561,
+        5800,
+        6003,
+        8025
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        69,
+        127,
+        229,
+        58,
+        70,
+        82,
+        145,
+        163
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/G8/ifbench_pilot_high.steps.jsonl",
+      "t_end": "2026-10-09T06:39:34.298Z",
+      "t_start": "2026-10-09T06:34:22.371Z",
+      "task": "ifbench_pilot",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "G8",
+      "cap": 16384,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/G8/rgb_int_cb_high.jsonl",
+      "len_max": 833,
+      "len_mean": 541.81,
+      "len_se": 46.21,
+      "lengths": [
+        289,
+        319,
+        327,
+        394,
+        403,
+        419,
+        441,
+        534,
+        535,
+        550,
+        575,
+        728,
+        731,
+        772,
+        819,
+        833
+      ],
+      "n": 16,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        46,
+        40,
+        45,
+        46,
+        32,
+        46,
+        43,
+        41,
+        37,
+        45,
+        41,
+        46,
+        39,
+        42,
+        34,
+        42
+      ],
+      "status_counts": {
+        "closed": 16
+      },
+      "steps_file": "results/pilot/20261009T045611Z/G8/rgb_int_cb_high.steps.jsonl",
+      "t_end": "2026-10-09T06:40:19.103Z",
+      "t_start": "2026-10-09T06:39:34.429Z",
+      "task": "rgb_int_cb",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "G8",
+      "cap": 16384,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/G8/rgb_int_forced_high.jsonl",
+      "len_max": 350,
+      "len_mean": 225.25,
+      "len_se": 21.51,
+      "lengths": [
+        138,
+        200,
+        207,
+        207,
+        217,
+        221,
+        262,
+        350
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        48,
+        47,
+        53,
+        46,
+        53,
+        50,
+        41,
+        48
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/G8/rgb_int_forced_high.steps.jsonl",
+      "t_end": "2026-10-09T06:40:30.752Z",
+      "t_start": "2026-10-09T06:40:19.199Z",
+      "task": "rgb_int_forced",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "Q36-8",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/Q36-8/gpqa_main_en_high.jsonl",
+      "len_max": 16792,
+      "len_mean": 7074.88,
+      "len_se": 1694.54,
+      "lengths": [
+        2457,
+        2717,
+        3848,
+        5392,
+        6939,
+        7897,
+        10557,
+        16792
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        549,
+        393,
+        269,
+        257,
+        286,
+        434,
+        297,
+        574
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/Q36-8/gpqa_main_en_high.steps.jsonl",
+      "t_end": "2026-10-09T06:46:56.345Z",
+      "t_start": "2026-10-09T06:40:34.874Z",
+      "task": "gpqa_main_en",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "Q36-8",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/Q36-8/gpqa_main_de_high.jsonl",
+      "len_max": 13708,
+      "len_mean": 4351.38,
+      "len_se": 1395.1,
+      "lengths": [
+        1894,
+        1969,
+        2087,
+        2497,
+        3465,
+        4234,
+        4957,
+        13708
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        321,
+        320,
+        358,
+        336,
+        436,
+        496,
+        305,
+        323
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/Q36-8/gpqa_main_de_high.steps.jsonl",
+      "t_end": "2026-10-09T06:51:13.514Z",
+      "t_start": "2026-10-09T06:46:56.496Z",
+      "task": "gpqa_main_de",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "Q36-8",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/Q36-8/mmlu_full_en_high.jsonl",
+      "len_max": 5278,
+      "len_mean": 2505.12,
+      "len_se": 577.1,
+      "lengths": [
+        833,
+        1341,
+        1434,
+        1550,
+        1895,
+        3249,
+        4461,
+        5278
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        220,
+        354,
+        266,
+        407,
+        219,
+        512,
+        303,
+        337
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/Q36-8/mmlu_full_en_high.steps.jsonl",
+      "t_end": "2026-10-09T06:53:17.486Z",
+      "t_start": "2026-10-09T06:51:14.102Z",
+      "task": "mmlu_full_en",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "Q36-8",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/Q36-8/mmlu_full_de_high.jsonl",
+      "len_max": 4984,
+      "len_mean": 2713.62,
+      "len_se": 482.49,
+      "lengths": [
+        443,
+        1658,
+        2287,
+        2485,
+        2802,
+        3362,
+        3688,
+        4984
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        250,
+        328,
+        464,
+        427,
+        255,
+        547,
+        381,
+        331
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/Q36-8/mmlu_full_de_high.steps.jsonl",
+      "t_end": "2026-10-09T06:55:32.272Z",
+      "t_start": "2026-10-09T06:53:18.151Z",
+      "task": "mmlu_full_de",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "Q36-8",
+      "cap": 16384,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/Q36-8/ifbench_pilot_high.jsonl",
+      "len_max": 16384,
+      "len_mean": 5519.38,
+      "len_se": 1682.15,
+      "lengths": [
+        320,
+        2667,
+        3585,
+        4527,
+        5029,
+        5599,
+        6044,
+        16384
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 1,
+      "prompt_tokens": [
+        61,
+        53,
+        75,
+        138,
+        241,
+        121,
+        64,
+        157
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/Q36-8/ifbench_pilot_high.steps.jsonl",
+      "t_end": "2026-10-09T07:01:09.702Z",
+      "t_start": "2026-10-09T06:55:32.407Z",
+      "task": "ifbench_pilot",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "Q36-8",
+      "cap": 16384,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/Q36-8/rgb_int_cb_high.jsonl",
+      "len_max": 1411,
+      "len_mean": 970.94,
+      "len_se": 86.08,
+      "lengths": [
+        422,
+        488,
+        494,
+        608,
+        733,
+        806,
+        915,
+        987,
+        1045,
+        1125,
+        1172,
+        1277,
+        1280,
+        1373,
+        1399,
+        1411
+      ],
+      "n": 16,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        37,
+        35,
+        30,
+        39,
+        31,
+        34,
+        36,
+        36,
+        38,
+        33,
+        39,
+        34,
+        28,
+        41,
+        35,
+        25
+      ],
+      "status_counts": {
+        "closed": 16
+      },
+      "steps_file": "results/pilot/20261009T045611Z/Q36-8/rgb_int_cb_high.steps.jsonl",
+      "t_end": "2026-10-09T07:02:15.014Z",
+      "t_start": "2026-10-09T07:01:09.907Z",
+      "task": "rgb_int_cb",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "Q36-8",
+      "cap": 16384,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/Q36-8/rgb_int_forced_high.jsonl",
+      "len_max": 2548,
+      "len_mean": 1411.5,
+      "len_se": 190.85,
+      "lengths": [
+        749,
+        1017,
+        1226,
+        1233,
+        1384,
+        1430,
+        1705,
+        2548
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        45,
+        42,
+        39,
+        41,
+        42,
+        44,
+        36,
+        49
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/Q36-8/rgb_int_forced_high.steps.jsonl",
+      "t_end": "2026-10-09T07:03:17.867Z",
+      "t_start": "2026-10-09T07:02:15.113Z",
+      "task": "rgb_int_forced",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "K4",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/K4/gpqa_main_en_high.jsonl",
+      "len_max": 32768,
+      "len_mean": 10746.88,
+      "len_se": 3950.27,
+      "lengths": [
+        1973,
+        2339,
+        2446,
+        5427,
+        8611,
+        9885,
+        22526,
+        32768
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 1,
+      "prompt_tokens": [
+        315,
+        299,
+        543,
+        287,
+        408,
+        312,
+        584,
+        459
+      ],
+      "status_counts": {
+        "closed": 7,
+        "unclosed": 1
+      },
+      "steps_file": "results/pilot/20261009T045611Z/K4/gpqa_main_en_high.steps.jsonl",
+      "t_end": "2026-10-09T07:14:56.741Z",
+      "t_start": "2026-10-09T07:03:29.409Z",
+      "task": "gpqa_main_en",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "K4",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/K4/gpqa_main_de_high.jsonl",
+      "len_max": 32768,
+      "len_mean": 12076.12,
+      "len_se": 4855.53,
+      "lengths": [
+        669,
+        754,
+        2184,
+        3598,
+        7699,
+        16169,
+        32768,
+        32768
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 2,
+      "prompt_tokens": [
+        343,
+        312,
+        317,
+        319,
+        464,
+        442,
+        311,
+        315
+      ],
+      "status_counts": {
+        "closed": 6,
+        "unclosed": 2
+      },
+      "steps_file": "results/pilot/20261009T045611Z/K4/gpqa_main_de_high.steps.jsonl",
+      "t_end": "2026-10-09T07:28:05.138Z",
+      "t_start": "2026-10-09T07:14:56.830Z",
+      "task": "gpqa_main_de",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "K4",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/K4/mmlu_full_en_high.jsonl",
+      "len_max": 3634,
+      "len_mean": 1782.12,
+      "len_se": 399.94,
+      "lengths": [
+        754,
+        762,
+        765,
+        1330,
+        1501,
+        2426,
+        3085,
+        3634
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        383,
+        437,
+        251,
+        367,
+        539,
+        237,
+        286,
+        334
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/K4/mmlu_full_en_high.steps.jsonl",
+      "t_end": "2026-10-09T07:29:28.683Z",
+      "t_start": "2026-10-09T07:28:05.486Z",
+      "task": "mmlu_full_en",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "K4",
+      "cap": 32768,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/K4/mmlu_full_de_high.jsonl",
+      "len_max": 4529,
+      "len_mean": 2561.88,
+      "len_se": 534.42,
+      "lengths": [
+        383,
+        865,
+        1537,
+        2315,
+        3527,
+        3646,
+        3693,
+        4529
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        259,
+        446,
+        305,
+        253,
+        340,
+        380,
+        549,
+        411
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/K4/mmlu_full_de_high.steps.jsonl",
+      "t_end": "2026-10-09T07:31:24.242Z",
+      "t_start": "2026-10-09T07:29:29.158Z",
+      "task": "mmlu_full_de",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "K4",
+      "cap": 16384,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/K4/ifbench_pilot_high.jsonl",
+      "len_max": 5339,
+      "len_mean": 2083.38,
+      "len_se": 572.01,
+      "lengths": [
+        539,
+        693,
+        951,
+        1343,
+        1883,
+        2952,
+        2967,
+        5339
+      ],
+      "n": 8,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        91,
+        115,
+        103,
+        178,
+        102,
+        158,
+        249,
+        192
+      ],
+      "status_counts": {
+        "closed": 8
+      },
+      "steps_file": "results/pilot/20261009T045611Z/K4/ifbench_pilot_high.steps.jsonl",
+      "t_end": "2026-10-09T07:33:07.897Z",
+      "t_start": "2026-10-09T07:31:24.341Z",
+      "task": "ifbench_pilot",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "B": 16,
+      "arm": "K4",
+      "cap": 16384,
+      "diagnoses": {},
+      "effort": "high",
+      "file": "results/pilot/20261009T045611Z/K4/rgb_int_cb_high.jsonl",
+      "len_max": 1091,
+      "len_mean": 658.56,
+      "len_se": 62.17,
+      "lengths": [
+        111,
+        362,
+        465,
+        515,
+        579,
+        588,
+        601,
+        605,
+        685,
+        695,
+        716,
+        733,
+        781,
+        930,
+        1080,
+        1091
+      ],
+      "n": 16,
+      "n_defect": 0,
+      "n_parse_fail": 0,
+      "n_truncated": 0,
+      "prompt_tokens": [
+        63,
+        77,
+        73,
+        76,
+        79,
+        75,
+        71,
+        67,
+        77,
+        74,
+        69,
+        65,
+        72,
+        73,
+        74,
+        72
+      ],
+      "status_counts": {
+        "closed": 16
+      },
+      "steps_file": "results/pilot/20261009T045611Z/K4/rgb_int_cb_high.steps.jsonl",
+      "t_end": "2026-10-09T07:33:50.807Z",
+      "t_start": "2026-10-09T07:33:08.014Z",
+      "task": "rgb_int_cb",
+      "truncated": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  ],
+  "complete": true,
+  "effort": "high",
+  "environment": {
+    "binding": "judged",
+    "gate_mode": "real",
+    "gate_record": "gate_20261008T180634Z.json",
+    "observed": {
+      "MLX_ENABLE_TF32": "0",
+      "architecture": "applegpu_g17s",
+      "macos": "27.0",
+      "mlx": "0.32.3",
+      "mlx-lm": "0.32.0",
+      "mlx-metal": "0.32.3",
+      "os_build": "26A428"
+    },
+    "pins": {
+      "MLX_ENABLE_TF32": "0",
+      "architecture_prefix": "applegpu_g17",
+      "macos": "27.0",
+      "mlx": "0.32.3",
+      "mlx-lm": "0.32.0",
+      "mlx-metal": "0.32.3",
+      "os_build": "26A428"
+    }
+  },
+  "pilot_dir": "results/pilot/20261009T045611Z",
+  "repilot": false,
+  "requested": [
+    [
+      "G8",
+      "gpqa_main_de"
+    ],
+    [
+      "G8",
+      "gpqa_main_en"
+    ],
+    [
+      "G8",
+      "ifbench_pilot"
+    ],
+    [
+      "G8",
+      "mmlu_full_de"
+    ],
+    [
+      "G8",
+      "mmlu_full_en"
+    ],
+    [
+      "G8",
+      "rgb_int_cb"
+    ],
+    [
+      "G8",
+      "rgb_int_forced"
+    ],
+    [
+      "K4",
+      "gpqa_main_de"
+    ],
+    [
+      "K4",
+      "gpqa_main_en"
+    ],
+    [
+      "K4",
+      "ifbench_pilot"
+    ],
+    [
+      "K4",
+      "mmlu_full_de"
+    ],
+    [
+      "K4",
+      "mmlu_full_en"
+    ],
+    [
+      "K4",
+      "rgb_int_cb"
+    ],
+    [
+      "K8",
+      "aime_en_pilot"
+    ],
+    [
+      "K8",
+      "gpqa_main_de"
+    ],
+    [
+      "K8",
+      "gpqa_main_en"
+    ],
+    [
+      "K8",
+      "ifbench_pilot"
+    ],
+    [
+      "K8",
+      "mmlu_full_de"
+    ],
+    [
+      "K8",
+      "mmlu_full_en"
+    ],
+    [
+      "K8",
+      "rgb_int_cb"
+    ],
+    [
+      "K8",
+      "rgb_int_forced"
+    ],
+    [
+      "Q36-8",
+      "gpqa_main_de"
+    ],
+    [
+      "Q36-8",
+      "gpqa_main_en"
+    ],
+    [
+      "Q36-8",
+      "ifbench_pilot"
+    ],
+    [
+      "Q36-8",
+      "mmlu_full_de"
+    ],
+    [
+      "Q36-8",
+      "mmlu_full_en"
+    ],
+    [
+      "Q36-8",
+      "rgb_int_cb"
+    ],
+    [
+      "Q36-8",
+      "rgb_int_forced"
+    ]
+  ],
+  "rules_version": "exp036-plan-2",
+  "skipped": [],
+  "t_end": "2026-10-09T07:33:50.932Z",
+  "t_start": "2026-10-09T04:56:11.029Z",
+  "type": "pilot_summary",
+  "utc": "2026-10-09T04:56:11.029Z",
+  "without": {}
+}

@@ -1,0 +1,309 @@
+{
+  "again_after": [],
+  "caveats": [
+    "combined is CPU + GPU + ANE only, the 'SoC subsystems' whose power the powermetrics man page says it estimates; it is not the whole SoC and not wall power.",
+    "It is a lower bound of the machine's energy, and a loose one that may be about half of it. For scale only, from a different machine: on the mini (Apple M4 Pro; macmon spot reading, 2026-10-06, MLX GPU load) CPU + GPU power read 28.6 W against a system total of 64.6 W, about 44 %. No factor converts it to the whole SoC or to wall energy here.",
+    "The powermetrics man page: average power values 'are estimated and may be inaccurate' and 'should not be used for any comparison between devices'; this record compares nothing across machines.",
+    "The logger adds a small background load (one root sampler at 1 Hz) to every logged step alike; it is not measured or corrected for.",
+    "Descriptive only: no hypothesis, verdict, gate rule, threshold or plan rule reads this record."
+  ],
+  "command": "/usr/bin/powermetrics --samplers cpu_power,gpu_power,ane_power -i 1000 -f plist",
+  "descriptive": "Descriptive only: no hypothesis, verdict, gate rule, threshold or plan rule reads this record.",
+  "interval_ms_declared": 1000,
+  "label": "CPU + GPU + ANE power (powermetrics combined_power, an estimate); not the whole SoC, not wall power",
+  "method": {
+    "combined": "processor.combined_power (mW): CPU + GPU + ANE, not the whole SoC (memory controllers and fabric, SLC, media and display engines, I/O and DRAM are not in it) and not wall power; cpu + gpu + ane when the key is absent (counted as combined_from_components)",
+    "components": "processor.<c>_power (mW), else processor.<c>_energy (mJ) / elapsed (counted as from_energy); the GPU's also from the gpu dict",
+    "coverage": "union of the sample intervals inside the window / window length",
+    "double_count": "per raw file, excess_s = sum of elapsed - span (first start to last end); about 0 for a clean stream; above 2 % of the span + 2 s (poweravg summaries or duplicates) no record is written",
+    "energy_wh": "sum over samples of power x overlap(sample interval, window), in Wh",
+    "gaps_over_5s": "uncovered stretches inside the window longer than 5 s, window edges included",
+    "long_samples": "documents whose elapsed is over 3 x the file's median (a poweravg summary or a sleep): counted; --check fails on them, a record keeps them",
+    "mean_w": "energy / sampled time inside the window; nothing is extrapolated over gaps",
+    "overlap_s": "sampled_s - covered_s, time counted by more than one sample: a few ms per sample from whole-second timestamps (each sample's energy is still counted once); a raw log whose documents overlap is refused (double_count)",
+    "peak_w": "largest per-sample power among the samples that overlap the window",
+    "sample_interval": "[timestamp - elapsed_ns, timestamp]; elapsed_ns an integer or a real; the timestamp is taken as the end of the sample's interval (plist dates have whole-second resolution)",
+    "sampled_s": "sum of the samples' overlaps with the window; sampled_s <= duration_s is expected",
+    "windows": "t_start / t_end of the run records under results/ (gate and its phases, peer check, preflight --deep, clone-and-refresh, bench cells and their cool-down idle, pilot and its arms, S2/S3/S3b session start/stop pairs), --window, and the whole log; a discovered window that does not overlap the log is left out"
+  },
+  "not_measured": [
+    "the rest of the SoC: the memory controllers and fabric, the system-level cache (SLC), the media and display engines, and I/O",
+    "DRAM (the unified memory itself), which bandwidth-bound decode loads heavily",
+    "wall (AC) power and the power adapter's conversion losses",
+    "battery charging",
+    "the display",
+    "the SSD",
+    "fans and the rest of the board (I/O controllers, USB, Wi-Fi)"
+  ],
+  "raw_files": [
+    {
+      "bytes": 656752718,
+      "combined_from_components": 0,
+      "covered_s": 11494.135,
+      "dir": "$EXP036_WORK/exp037/power",
+      "documents": 11486,
+      "elapsed_sum_s": 11776.311,
+      "excess_s": 0.29,
+      "first_sample_utc": "2026-10-09T04:55:55Z",
+      "from_energy": 0,
+      "interval_ms": {
+        "declared": 1000,
+        "max": 1422.956,
+        "median": 1021.986,
+        "min": 1019.486
+      },
+      "last_sample_utc": "2026-10-09T08:12:12Z",
+      "long_samples": {
+        "max_ms": null,
+        "n": 0
+      },
+      "model_family": "Mac17",
+      "name": "power_20261009T045556Z.plist",
+      "overlap_s": 282.176,
+      "samplers_seen": [
+        "ane_power",
+        "cpu_power",
+        "gpu_power"
+      ],
+      "samples": 11486,
+      "sha256": "3bb4e47e44ba65e8c16887e8488204b4055b79495a51eea77a211c4318266947",
+      "skipped": {
+        "no_power": 0,
+        "no_time": 0,
+        "not_delta": 0
+      },
+      "span_s": 11776.02,
+      "text_bytes_skipped": 0,
+      "truncated_tail": false,
+      "unreadable": 0
+    }
+  ],
+  "raw_policy": "the raw log is never committed or copied into the repository (it carries boot and host fields); only these derived numbers and its sha256 and size",
+  "samplers_declared": [
+    "cpu_power",
+    "gpu_power",
+    "ane_power"
+  ],
+  "schema": "exp037 power v1",
+  "tool_sha256": "349657c8d32395e53b8cd1578263b87dd309193f3127155aaf4ea91bed66b3c4",
+  "utc": "2026-10-09T08:22:50Z",
+  "windows": [
+    {
+      "coverage": 0.9761,
+      "covered_s": 11494.135,
+      "duration_s": 11776.02,
+      "energy_wh": {
+        "ane": 0.077153,
+        "combined": 46.610797,
+        "cpu": 11.558545,
+        "gpu": 34.975098
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "log",
+      "mean_w": {
+        "ane": 0.024,
+        "combined": 14.249,
+        "cpu": 3.533,
+        "gpu": 10.692
+      },
+      "n_samples": 11486,
+      "name": "log",
+      "overlap_s": 282.176,
+      "peak_w": {
+        "ane": 1.471,
+        "combined": 85.664,
+        "cpu": 29.267,
+        "gpu": 83.046
+      },
+      "sampled_s": 11776.311,
+      "source": null,
+      "t_end": "2026-10-09T08:12:12Z",
+      "t_start": "2026-10-09T04:55:55Z"
+    },
+    {
+      "coverage": 0.9787,
+      "covered_s": 9258.805,
+      "duration_s": 9459.903,
+      "energy_wh": {
+        "ane": 0.076043,
+        "combined": 46.183179,
+        "cpu": 11.178178,
+        "gpu": 34.928958
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "pilot",
+      "mean_w": {
+        "ane": 0.029,
+        "combined": 17.577,
+        "cpu": 4.254,
+        "gpu": 13.294
+      },
+      "n_samples": 9254,
+      "name": "pilot 20261009T045611Z",
+      "overlap_s": 200.13,
+      "peak_w": {
+        "ane": 1.471,
+        "combined": 85.664,
+        "cpu": 25.266,
+        "gpu": 83.046
+      },
+      "sampled_s": 9458.935,
+      "source": "results/pilot_summary_20261009T045611Z.json",
+      "t_end": "2026-10-09T07:33:50Z",
+      "t_start": "2026-10-09T04:56:11Z"
+    },
+    {
+      "coverage": 0.9788,
+      "covered_s": 3563.877,
+      "duration_s": 3641.135,
+      "energy_wh": {
+        "ane": 0.067294,
+        "combined": 19.239114,
+        "cpu": 5.111166,
+        "gpu": 14.060655
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "pilot_arm",
+      "mean_w": {
+        "ane": 0.067,
+        "combined": 19.026,
+        "cpu": 5.055,
+        "gpu": 13.905
+      },
+      "n_samples": 3563,
+      "name": "pilot 20261009T045611Z K8",
+      "overlap_s": 76.409,
+      "peak_w": {
+        "ane": 1.471,
+        "combined": 85.664,
+        "cpu": 17.063,
+        "gpu": 83.046
+      },
+      "sampled_s": 3640.286,
+      "source": "results/pilot_summary_20261009T045611Z.json",
+      "t_end": "2026-10-09T05:56:52Z",
+      "t_start": "2026-10-09T04:56:11Z"
+    },
+    {
+      "coverage": 0.9792,
+      "covered_s": 2564.119,
+      "duration_s": 2618.707,
+      "energy_wh": {
+        "ane": 0.007905,
+        "combined": 10.75194,
+        "cpu": 2.408025,
+        "gpu": 8.33601
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "pilot_arm",
+      "mean_w": {
+        "ane": 0.011,
+        "combined": 14.776,
+        "cpu": 3.309,
+        "gpu": 11.456
+      },
+      "n_samples": 2563,
+      "name": "pilot 20261009T045611Z G8",
+      "overlap_s": 55.434,
+      "peak_w": {
+        "ane": 0.987,
+        "combined": 45.179,
+        "cpu": 25.266,
+        "gpu": 43.208
+      },
+      "sampled_s": 2619.553,
+      "source": "results/pilot_summary_20261009T045611Z.json",
+      "t_end": "2026-10-09T06:40:30Z",
+      "t_start": "2026-10-09T05:56:52Z"
+    },
+    {
+      "coverage": 0.9779,
+      "covered_s": 1336.807,
+      "duration_s": 1367.084,
+      "energy_wh": {
+        "ane": 6.5e-05,
+        "combined": 5.449352,
+        "cpu": 1.320617,
+        "gpu": 4.128671
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "pilot_arm",
+      "mean_w": {
+        "ane": 0.0,
+        "combined": 14.353,
+        "cpu": 3.478,
+        "gpu": 10.875
+      },
+      "n_samples": 1338,
+      "name": "pilot 20261009T045611Z Q36-8",
+      "overlap_s": 29.964,
+      "peak_w": {
+        "ane": 0.147,
+        "combined": 62.313,
+        "cpu": 17.677,
+        "gpu": 58.481
+      },
+      "sampled_s": 1366.771,
+      "source": "results/pilot_summary_20261009T045611Z.json",
+      "t_end": "2026-10-09T07:03:17Z",
+      "t_start": "2026-10-09T06:40:30Z"
+    },
+    {
+      "coverage": 0.9787,
+      "covered_s": 1793.928,
+      "duration_s": 1832.903,
+      "energy_wh": {
+        "ane": 0.000779,
+        "combined": 10.742488,
+        "cpu": 2.338132,
+        "gpu": 8.403577
+      },
+      "gaps_over_5s": {
+        "listed": [],
+        "n": 0,
+        "total_s": 0
+      },
+      "kind": "pilot_arm",
+      "mean_w": {
+        "ane": 0.002,
+        "combined": 21.107,
+        "cpu": 4.594,
+        "gpu": 16.511
+      },
+      "n_samples": 1793,
+      "name": "pilot 20261009T045611Z K4",
+      "overlap_s": 38.319,
+      "peak_w": {
+        "ane": 0.493,
+        "combined": 44.753,
+        "cpu": 15.623,
+        "gpu": 40.264
+      },
+      "sampled_s": 1832.246,
+      "source": "results/pilot_summary_20261009T045611Z.json",
+      "t_end": "2026-10-09T07:33:50Z",
+      "t_start": "2026-10-09T07:03:18Z"
+    }
+  ],
+  "windows_left_out_no_overlap": 38
+}
