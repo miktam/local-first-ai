@@ -1,0 +1,355 @@
+{
+  "data": {
+    "code_hashes": {
+      "builds_manifest": {
+        "K4": "1f9dea1425205f0af9c89d8425f1732e4d3930a56b5cde99166e04790bf85357",
+        "K8": "e897fe2fde92717dd099900926de4202f37c47eacc8066552337fc39a2ac5020"
+      },
+      "gate_code": "1d41328359b9c6af3c58b51894cfd1f38ac028f79c6866cfcf246d293ac8edbf",
+      "port": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182",
+      "reference_tree": "85337ed7efeef6b0463f3560fff6da6496661a2fa7a14de5e50a1bce9e251bbd",
+      "runner_tree": "75a50caa8d541396c7a5f82468b50049330cded96426255ecc56deff1ee83c87"
+    },
+    "could_not_run_checks": {
+      "K4_port_sha256": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182",
+      "K8_port_sha256": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182",
+      "port_sha256": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182"
+    }
+  },
+  "failed_preconditions": [],
+  "peak_rss_bytes": 9897902080,
+  "phase": "0",
+  "precondition_failed": false,
+  "preconditions": {
+    "P1": {
+      "ok": true,
+      "reason": null,
+      "values": {
+        "a": {
+          "ok": true,
+          "reason": null,
+          "values": {
+            "scopes": {
+              "analysis": {
+                "current": "0a40ec19b38c43bed57df2e9c6d03fc1e9149159dbea172d921af4e7a6345187",
+                "registered": "0a40ec19b38c43bed57df2e9c6d03fc1e9149159dbea172d921af4e7a6345187",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "assets": {
+                "current": "42803f55e14c90c3bf7b229010b7aad76ba2135d51e4b0e83bd526fda47ff5a3",
+                "registered": "42803f55e14c90c3bf7b229010b7aad76ba2135d51e4b0e83bd526fda47ff5a3",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "bench": {
+                "current": "2f923d0b80cb357173ed5cdfefa6d7ef5b56fb21485cc288a86046c51c3d6709",
+                "registered": "2f923d0b80cb357173ed5cdfefa6d7ef5b56fb21485cc288a86046c51c3d6709",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "convert": {
+                "current": "99dfad12a4dde03dfa0355f94183953cd52fd846ad123d9f4adeb0f0ea25ef68",
+                "registered": "99dfad12a4dde03dfa0355f94183953cd52fd846ad123d9f4adeb0f0ea25ef68",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "env": {
+                "current": "8d97b3df8207fb8a7621977a52693b436c6cb267cee37f9042b76248bb78e6a9",
+                "registered": "8d97b3df8207fb8a7621977a52693b436c6cb267cee37f9042b76248bb78e6a9",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "evalfw": {
+                "current": "e7ff393392d7e60d8e2ba81e76a70c12233da01511d8da2bb7de6ea751bde1bb",
+                "registered": "e7ff393392d7e60d8e2ba81e76a70c12233da01511d8da2bb7de6ea751bde1bb",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "gate": {
+                "current": "1d41328359b9c6af3c58b51894cfd1f38ac028f79c6866cfcf246d293ac8edbf",
+                "registered": "1d41328359b9c6af3c58b51894cfd1f38ac028f79c6866cfcf246d293ac8edbf",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "gate_rules": {
+                "current": "5e9e1a530496e57657f1d1c2661d0992520a0f2b0717737e5b9cbb18c4a33cd0",
+                "registered": "5e9e1a530496e57657f1d1c2661d0992520a0f2b0717737e5b9cbb18c4a33cd0",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "gate_text": {
+                "current": "1a295dacf20d285512dcf6db755623e89053ec704abef2bd151682178d91b9e8",
+                "registered": "1a295dacf20d285512dcf6db755623e89053ec704abef2bd151682178d91b9e8",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "manifest_rule": {
+                "current": "4c3fa6803e74b4a58f7282ed19965769f1de62d16d53979b7854a84b77f69857",
+                "registered": "4c3fa6803e74b4a58f7282ed19965769f1de62d16d53979b7854a84b77f69857",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "plan_rules": {
+                "current": "2707ea2571cc122b7388f9c9794e3e1130aefdf13c6f844b7de449485bce878c",
+                "registered": "2707ea2571cc122b7388f9c9794e3e1130aefdf13c6f844b7de449485bce878c",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "port": {
+                "current": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182",
+                "registered": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "reference": {
+                "current": "85337ed7efeef6b0463f3560fff6da6496661a2fa7a14de5e50a1bce9e251bbd",
+                "registered": "85337ed7efeef6b0463f3560fff6da6496661a2fa7a14de5e50a1bce9e251bbd",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "requirements": {
+                "current": "32488f23411026229ef831ef9ec475fb922d10fd24d6be062ab08f7d4df533e6",
+                "registered": "32488f23411026229ef831ef9ec475fb922d10fd24d6be062ab08f7d4df533e6",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "runner": {
+                "current": "75a50caa8d541396c7a5f82468b50049330cded96426255ecc56deff1ee83c87",
+                "registered": "75a50caa8d541396c7a5f82468b50049330cded96426255ecc56deff1ee83c87",
+                "source": "amendment 2",
+                "status": "match"
+              },
+              "scorers": {
+                "current": "7d90acdc0b8b7aa4b4dd1161d4e9290e6f31bdbfee5bee898898e1eff52cd7d6",
+                "registered": "7d90acdc0b8b7aa4b4dd1161d4e9290e6f31bdbfee5bee898898e1eff52cd7d6",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "tasks": {
+                "current": "306861c155653ddff747cc78c4ad5a49262c926b1d256890c9a7555a53d11334",
+                "registered": "306861c155653ddff747cc78c4ad5a49262c926b1d256890c9a7555a53d11334",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "tests": {
+                "current": "8a15a4eac2b048d9068039508623f397c07501487b7ed22e0356b0f580f8c244",
+                "registered": "8a15a4eac2b048d9068039508623f397c07501487b7ed22e0356b0f580f8c244",
+                "source": "amendment 2",
+                "status": "match"
+              },
+              "thresholds": {
+                "current": "e27bdc0650a8d072aa1709a583b0afcadb12172446aca312565be47253c1f4c4",
+                "registered": "e27bdc0650a8d072aa1709a583b0afcadb12172446aca312565be47253c1f4c4",
+                "source": "pre-registration",
+                "status": "match"
+              },
+              "tools": {
+                "current": "d2e85aa8e3e6c62bcbd4207ce87d3a568a91ae69da8431eef1e7bf334dcc4f0e",
+                "registered": "d2e85aa8e3e6c62bcbd4207ce87d3a568a91ae69da8431eef1e7bf334dcc4f0e",
+                "source": "pre-registration",
+                "status": "match"
+              }
+            },
+            "status": {
+              "analysis": "match",
+              "assets": "match",
+              "bench": "match",
+              "convert": "match",
+              "env": "match",
+              "evalfw": "match",
+              "gate": "match",
+              "gate_rules": "match",
+              "gate_text": "match",
+              "manifest_rule": "match",
+              "plan_rules": "match",
+              "port": "match",
+              "reference": "match",
+              "requirements": "match",
+              "runner": "match",
+              "scorers": "match",
+              "tasks": "match",
+              "tests": "match",
+              "thresholds": "match",
+              "tools": "match"
+            }
+          }
+        },
+        "b": {
+          "ok": true,
+          "reason": null,
+          "values": {
+            "frozen_amendment_lines": [],
+            "sources": {
+              "gate_rules": "pre-registration",
+              "gate_text": "pre-registration",
+              "thresholds": "pre-registration"
+            }
+          }
+        },
+        "c": {
+          "ok": true,
+          "reason": null,
+          "values": {
+            "ancestor_of_head": true,
+            "ancestor_of_upstream": true,
+            "prereg_commit": "5dfcfecf6070b3649f0d9f48cbd4ad7e0a5a3af4",
+            "upstream": "origin/main"
+          }
+        },
+        "d": {
+          "ok": true,
+          "reason": null,
+          "values": {
+            "blind_crashes": [],
+            "orphaned_runs": [],
+            "run_counts": {
+              "cycles_max": 2,
+              "cycles_used": 1,
+              "exit3_records": 0,
+              "exits": [1, 0],
+              "gate_runs": 2,
+              "gate_runs_max": 3,
+              "latest_utc": "20261008T050643Z",
+              "may_run_again": true,
+              "next_run_is_cycle": false
+            }
+          }
+        },
+        "e": {
+          "ok": true,
+          "reason": null,
+          "values": {
+            "differs_HEAD": [],
+            "differs_worktree": [],
+            "prereg_commit": "5dfcfecf6070b3649f0d9f48cbd4ad7e0a5a3af4",
+            "rows": 44,
+            "unfilled_in_prereg": []
+          }
+        }
+      }
+    },
+    "P2": {
+      "ok": true,
+      "reason": null,
+      "values": {
+        "judged": true,
+        "mode": "real",
+        "observed": {
+          "architecture": "applegpu_g17s",
+          "fp32": {
+            "MLX_ENABLE_TF32": "0",
+            "probe_rel_l2": 2.8845241586328215e-07
+          },
+          "macos": "27.0",
+          "macos_build": "26A428",
+          "packages": {
+            "mlx": "0.32.3",
+            "mlx-lm": "0.32.0",
+            "mlx-metal": "0.32.3"
+          }
+        },
+        "pins": {
+          "MLX_ENABLE_TF32": "0",
+          "architecture_prefix": "applegpu_g17",
+          "macos": "27.0",
+          "macos_build": "26A428",
+          "packages": {
+            "mlx": "0.32.3",
+            "mlx-lm": "0.32.0",
+            "mlx-metal": "0.32.3"
+          }
+        },
+        "preflight_record": {
+          "file": "preflight_20261007T052430Z.json",
+          "problems": [],
+          "sha256": "59d4311dd992ff49be4664d6ba5d6c00d0bff0a8fb2998035df266d8664ae5ce"
+        },
+        "process_problems": [],
+        "version_record": {
+          "file": "version_record_20261007T052455Z.json",
+          "problems": [],
+          "sha256": "7e9759e31cdc00cf7fb0207cc6cb1819d6d8a915e411f9c63b85b6a21ea05d32"
+        }
+      }
+    },
+    "P3": {
+      "ok": true,
+      "reason": null,
+      "values": {
+        "absent": [],
+        "env": {
+          "MLX_ENABLE_TF32": "0",
+          "arch": "applegpu_g17s",
+          "device": "Apple M5 Max",
+          "macos": "27.0",
+          "mlx": "0.32.3",
+          "mlx_lm": "0.32.0",
+          "python": "3.12.13",
+          "seed": 37
+        },
+        "failing": [],
+        "file": {
+          "path": "$EXP036_WORK/exp037/run/20261008T180634Z/g0k.json",
+          "sha256": "a74239f3ce2a8183ae06c0dff7dee220cbd858c67248d0a4a71286c19d44681c"
+        },
+        "measured": 144,
+        "n_judged": 136,
+        "ok": true,
+        "seconds": 87.4,
+        "worst_ratio": {
+          "bits": 8,
+          "projection": "down",
+          "ratio": 1.408051703442012,
+          "routing": "hot",
+          "rows": 2048
+        }
+      }
+    },
+    "P4": {
+      "ok": true,
+      "reason": null,
+      "values": {
+        "arms": {
+          "K4": {
+            "ok": true,
+            "reason": null,
+            "values": {
+              "config_sha256": "4630308774a4ac5df78244bd37bdb3d2f06eb670c76eaa51ab3f53992c1975dc",
+              "dir": "$EXP036_MODELS/exp037-builds/Kolibri-1-MLX-4bit-g64",
+              "extra": [],
+              "missing": [],
+              "port_sha256": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182",
+              "record": "$LFA/tasks/chronos/exp_036_kolibri_local_eval/results/convert/convert_4bit_20261004T133455Z.json",
+              "record_sha256": "e1ec02c764667c7873f49dedd00c353db804409c3592f913444c8599b5d7f8a2",
+              "record_sha256_pinned": "e1ec02c764667c7873f49dedd00c353db804409c3592f913444c8599b5d7f8a2",
+              "shard_mismatches": [],
+              "shards": 9
+            }
+          },
+          "K8": {
+            "ok": true,
+            "reason": null,
+            "values": {
+              "config_sha256": "0074597037a9ec93fbeb181e90e8639dd49c10676c4a5e6e3538ae07898c714a",
+              "dir": "$EXP036_MODELS/exp037-builds/Kolibri-1-MLX-8bit-g64",
+              "extra": [],
+              "missing": [],
+              "port_sha256": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182",
+              "record": "$LFA/tasks/chronos/exp_036_kolibri_local_eval/results/convert/convert_8bit_20261004T133423Z.json",
+              "record_sha256": "bd84bf3b7c4a3db891c02e41f86f618c1d93301581146fca8e598e04313e0e9d",
+              "record_sha256_pinned": "bd84bf3b7c4a3db891c02e41f86f618c1d93301581146fca8e598e04313e0e9d",
+              "shard_mismatches": [],
+              "shards": 17
+            }
+          }
+        },
+        "mode": "real"
+      }
+    }
+  },
+  "t_end": "2026-10-08T18:08:15Z",
+  "t_start": "2026-10-08T18:06:34Z",
+  "title": "P1-P4: hashes and freeze, environment binding, G0k, build identity",
+  "wall_s": 101.51622486114502
+}

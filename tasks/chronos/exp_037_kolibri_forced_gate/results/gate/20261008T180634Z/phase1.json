@@ -1,0 +1,252 @@
+{
+  "data": {
+    "g0": {
+      "census": {
+        "dtypes": [
+          "BF16"
+        ],
+        "expected": {
+          "full_attention_layers": [4, 9, 14, 19, 24, 29, 34, 39, 44, 49],
+          "param_count": 78103074560,
+          "tensor_count": 58353
+        },
+        "full_attention_layers": [4, 9, 14, 19, 24, 29, 34, 39, 44, 49],
+        "n_shards": 32,
+        "params": 78103074560,
+        "shard_sha": {
+          "against": "download etag and tools/kolibri_lfs_oids.json",
+          "mismatches": [],
+          "n_committed_oids": 32,
+          "n_reused": 0,
+          "source": "computed",
+          "status": "checked"
+        },
+        "tensors": 58353
+      },
+      "converted_config": {
+        "K4": {
+          "expected_policy": {
+            "embed_tokens": "4bit",
+            "lm_head": "4bit"
+          },
+          "n_problems": 0,
+          "n_quantised_tensors": 502,
+          "observed_policy": {
+            "embed_tokens": "4bit",
+            "lm_head": "4bit"
+          },
+          "policy_name": "quantised_head",
+          "problems": [],
+          "quantization": {
+            "bits": 4,
+            "group_size": 64,
+            "mode": "affine"
+          },
+          "record_policy": {
+            "attention": "arm_bits",
+            "embed_tokens": "arm_bits",
+            "expert_bias": "fp32",
+            "lm_head": "arm_bits",
+            "norms": "bf16",
+            "routed_experts": "arm_bits",
+            "router_weight": "fp32",
+            "shared_experts": "arm_bits"
+          },
+          "router_weight_dtypes": [
+            "F32"
+          ]
+        },
+        "K8": {
+          "expected_policy": {
+            "embed_tokens": "8bit",
+            "lm_head": "8bit"
+          },
+          "n_problems": 0,
+          "n_quantised_tensors": 502,
+          "observed_policy": {
+            "embed_tokens": "8bit",
+            "lm_head": "8bit"
+          },
+          "policy_name": "quantised_head",
+          "problems": [],
+          "quantization": {
+            "bits": 8,
+            "group_size": 64,
+            "mode": "affine"
+          },
+          "record_policy": {
+            "attention": "arm_bits",
+            "embed_tokens": "arm_bits",
+            "expert_bias": "fp32",
+            "lm_head": "arm_bits",
+            "norms": "bf16",
+            "routed_experts": "arm_bits",
+            "router_weight": "fp32",
+            "shared_experts": "arm_bits"
+          },
+          "router_weight_dtypes": [
+            "F32"
+          ]
+        }
+      },
+      "expected": {
+        "full_attention_layers": [4, 9, 14, 19, 24, 29, 34, 39, 44, 49],
+        "param_count": 78103074560,
+        "tensor_count": 58353
+      },
+      "port_shas": {
+        "K4": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182",
+        "K8": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182",
+        "port": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182"
+      },
+      "strict_load": {
+        "K4": {
+          "checkpoint_tensors": 1907,
+          "load_error": null,
+          "missing_params": [],
+          "n_missing_params": 0,
+          "n_unused_ckpt_tensors": 0,
+          "numel_checkpoint": 12245538560,
+          "numel_equal": true,
+          "numel_params": 12245538560,
+          "quantized": true,
+          "shape_mismatch": [],
+          "unused_ckpt_tensors": []
+        },
+        "K8": {
+          "checkpoint_tensors": 1907,
+          "load_error": null,
+          "missing_params": [],
+          "n_missing_params": 0,
+          "n_unused_ckpt_tensors": 0,
+          "numel_checkpoint": 22002210560,
+          "numel_equal": true,
+          "numel_params": 22002210560,
+          "quantized": true,
+          "shape_mismatch": [],
+          "unused_ckpt_tensors": []
+        },
+        "source": {
+          "checkpoint_tensors": 58353,
+          "load_error": null,
+          "missing_params": [],
+          "n_missing_params": 0,
+          "n_unused_ckpt_tensors": 0,
+          "numel_checkpoint": 78103074560,
+          "numel_equal": true,
+          "numel_params": 78103074560,
+          "quantized": false,
+          "shape_mismatch": [],
+          "unused_ckpt_tensors": []
+        }
+      },
+      "template": {
+        "cases_sha256": "c652f92bb69ba7e421b57f6efca4046d53e66f1f5a5639ed20c6d85650e73a69",
+        "mismatches": [],
+        "n": 120,
+        "n_conversations": 12,
+        "n_settings": 10,
+        "runner_chat": {
+          "mismatches": [],
+          "n": 48,
+          "present": true
+        },
+        "vendor_jinja_sha256": "51b9ae6f83e7a30d428fccc75da306653801be73d4ed936e838667d5de7a6617"
+      },
+      "tokenizer": {
+        "examples": [],
+        "fix_mistral_regex": null,
+        "gate_texts": {
+          "T1": {
+            "decode_equals_text": true,
+            "harness_equals_raw": true
+          },
+          "T2": {
+            "decode_equals_text": true,
+            "harness_equals_raw": true
+          },
+          "T3": {
+            "decode_equals_text": true,
+            "harness_equals_raw": true
+          },
+          "T4": {
+            "decode_equals_text": true,
+            "harness_equals_raw": true
+          },
+          "T7": {
+            "decode_equals_text": true,
+            "harness_equals_raw": true
+          },
+          "T8": {
+            "decode_equals_text": true,
+            "harness_equals_raw": true
+          }
+        },
+        "groups": {
+          "digits": {
+            "mismatches": 0,
+            "n": 600,
+            "sha256": "cbd30db570e2b90af24a77d75ebce5862d62ca99eb46107396eba97e095ef8f1"
+          },
+          "identifiers": {
+            "mismatches": 0,
+            "n": 16708,
+            "sha256": "398f9327a4d91c17342571b214beed0a606152e5bbad8d3908afb88bba136c6c"
+          },
+          "mmlu": {
+            "mismatches": 0,
+            "n": 27273,
+            "sha256": "00076074435d1428d5daca8bb301c16e20acc0ca1d56a103e22636940c517b3d"
+          },
+          "sources": {
+            "mismatches": 0,
+            "n": 187,
+            "sha256": "f97666dd98bfe0ebe4206016738cd041d9a4d87fc9dc339b2c4478bfffd6746a"
+          }
+        },
+        "mismatches": 0,
+        "mmlu_files": [
+          "$EXP036_DATA/MMLU-ProX-Lite/de/test-00000-of-00001.parquet",
+          "$EXP036_DATA/MMLU-ProX-Lite/en/test-00000-of-00001.parquet",
+          "$EXP036_DATA/MMLU-ProX/de/test-00000-of-00001.parquet",
+          "$EXP036_DATA/MMLU-ProX/en/test-00000-of-00001.parquet"
+        ],
+        "n_lines": 44774,
+        "roundtrip_fail": 0,
+        "tokenizer_json_sha256": "5d4798f2a8c9d598d6dc005614216989d4b6aeffaf9f6f5e136f0ec5fc4a4c13"
+      }
+    },
+    "g1": {
+      "errors": 0,
+      "excluded": [
+        "test_gate_drivers_tiny.py",
+        "test_gate_end_to_end_tiny.py",
+        "test_gate_ftiny.py"
+      ],
+      "failures": 0,
+      "junit_sha256": "30825b61e22fe4f5ab8fdecf79c3dbb46ae675470f0948a6d9da74b57a7c51bf",
+      "require_all": "run-host",
+      "returncode": 0,
+      "selection": [
+        "tests/ (all)"
+      ],
+      "skipped": 8,
+      "skipped_build_host_only": 8,
+      "summary": "1911 passed, 8 skipped in 424.47s (0:07:04)",
+      "t_end": "2026-10-08T18:15:36Z",
+      "t_start": "2026-10-08T18:08:31Z",
+      "tests": 1919,
+      "wall_s": 424.8383092880249
+    },
+    "head_policy": {
+      "policy": "quantised_head",
+      "source": "sign-off: quantised at the arm's bits with fp32 logits"
+    }
+  },
+  "peak_rss_bytes": 787857408,
+  "phase": "1",
+  "t_end": "2026-10-08T18:15:36Z",
+  "t_start": "2026-10-08T18:08:15Z",
+  "title": "G0 static, G1",
+  "wall_s": 440.87767815589905
+}
