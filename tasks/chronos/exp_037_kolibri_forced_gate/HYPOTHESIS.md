@@ -1,6 +1,6 @@
 # Experiment 037 — Kolibri through a forced gate: does it fit, how fast, and does its scorecard hold on public rows?
 
-*Pre-registered: 2026-10-07T04:14:29Z · Status: plan STOP by rule; no scored run*
+*Pre-registered: 2026-10-07T04:14:29Z · Status: Stopped — budget (plan STOP by rule); no scored run*
 
 **Builds on:**
 - **exp_036** (`../exp_036_kolibri_local_eval/`, tree at `222c845`): the question, hypotheses, arms, task sets, plan rules and kit, re-registered here. exp_036's Phase 0 gate failed for K8 (G2, G3, G4 and G5; record `e3e01b5c…`) and it was published as a gate failure with no scored run. On 2026-10-05 Andrei chose to re-register the hypotheses with a gate built from that run's bug hunt (decision D8, below). Nothing from exp_036 is cited as evidence about Kolibri's quality.
@@ -2002,3 +2002,10 @@ Step 11 is not re-run (above). Stop and publish stays available at every point.
   - `aborted/20261008T082355Z-pilot/pilot/K8/mmlu_full_en_high.steps.jsonl` `6e98cdaa4bbd8b6306bd0f3c263de1c64c826a2a789cf5f0c14e23387124c05e`
   - `aborted/20261008T082355Z-pilot/pilot/K8/rgb_int_cb_high.steps.jsonl` `be989dea75217bf798df8d84a865d3fe6b13d1aa4a0817747fc9bd4784e73505`
   - `aborted/20261008T082355Z-pilot/pilot/K8/rgb_int_forced_high.steps.jsonl` `583e0a6cda7a57efff470949eda8c60f0f435ecce592eddfff8c7ce8ed978d64`
+
+## Andrei's decision after plan STOP: accept STOP and publish, no 4th session (2026-10-09T08:32:59Z) — run record (2026-10-09T08:34:07Z)
+
+- Phase: Andrei's decision after plan STOP: accept STOP and publish, no 4th session (2026-10-09T08:32:59Z)
+- UTC: 2026-10-09T08:34:07Z (from the clock)
+- Commit: 7f423188a82467017587899fc61b3a990d4887d9 (uncommitted changes: no)
+- Result files: none
