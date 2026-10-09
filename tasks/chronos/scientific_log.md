@@ -2074,3 +2074,31 @@ The disclosures are in HYPOTHESIS.
 *Evidence: `exp_036_kolibri_local_eval/HYPOTHESIS.md` ("Gate failure — the exp_036 result"), `results/gate/`, `aborted/20261005T050112Z-gate/`, `diagnostics/gate1/` (`FROZEN_RULES.md`, `BUGHUNT.md` §6, `out/`, `confirm/out/`, `mini/`).*
 *Status: Gate failed — K8 (G2, G3, G4, G5); stopped and published 2026-10-05. A follow-up, exp_037, will be pre-registered separately.*
 
+## Experiment 037 — Kolibri through a forced gate: does it fit, how fast, and does its scorecard hold on public rows?
+
+**Pre-registered: 2026-10-07T04:14:29Z.** exp_036's question, hypotheses (H1–H8, Holm; D1 outside it), arms and task sets, re-registered behind a Phase 0 gate built from exp_036's bug hunt. Our MLX port of Kolibri-1 is checked against the same separately written numpy reference with the reference's expert choices forced, per layer and end to end, so arithmetic is tested apart from routing; every blocking check has a deliberately broken build it must catch. The port takes vLLM's RoPE angles and runs on MLX 0.32.3 / mlx-lm 0.32.0, which carries the fix for the M5 defect behind exp_036's batch-parity failure (mlx#3922). Host (MacBook Pro, M5 Max, 128 GB) and peers (Gemma 4 26B-A4B, Qwen3.6 35B-A3B, Qwen3.8 27B) are exp_036's. Full design, the 20 hashed scopes and the rules are in `exp_037_kolibri_forced_gate/HYPOTHESIS.md`, frozen at `5dfcfec` before any gate run; exp_037 has no threshold-change and no verdict-rule-change amendment. H5 and H8 are not blind; the disclosure is in HYPOTHESIS. Nothing from exp_036 is cited as evidence about Kolibri's quality.
+
+### Result — gate passed; plan STOP by rule 2026-10-09; stopped and published as the result
+
+**Phase 0 gate: K8 PASS, K4 PASS,** in runs 2 and 3 of the three permitted. Andrei signed off on 2026-10-07.
+- Run 1 (`20261007T110355Z`) failed K8 on G1 alone, the kit's weight-free test suite. Andrei chose diagnostics, whose rules were committed before they ran. The failure did not reproduce; a probe showed that a stale tokenizer-check cache, keyed by object address, could cause it, and Amendment 1 took the runner off that cache. Run 2 was fix cycle 1 of 2.
+- Run 2 (`20261008T050643Z`) passed both builds, and the bench (H1, D1, H5, H8) ran under that PASS.
+- The first pilot (`20261008T082355Z`) crashed on a Metal resource limit. In mlx-lm 0.32.0 the batched KV cache updates its offset lazily, and Kolibri's NoPE layers never read it, so every decode step left live buffers behind. Amendment 2, on Andrei's go, evaluates those offsets in the runner at every step.
+- Run 3 (`20261008T180634Z`) passed both builds, and no gate run remains after it. Across the three runs the port, reference, gate code, gate rules, thresholds and builds are byte-identical; only the runner and the tests changed.
+
+**The stop.** The re-pilot (`20261009T045611Z`) completed with no cell blocked, and the caps rose to their ceilings on every task but RGB. The frozen plan rule (Amendment 3) then returned STOP: no rung of the ladder, P10 included, fits the main budget, and none splits into two sessions, because the first queued cell, K8 GPQA-Diamond EN, is projected above the session cap on its own. STOP is a registered outcome of the rule, not a failure, and the rule leaves a 4th session to Andrei by amendment. At 2026-10-09T08:32:59Z he chose to accept the STOP and publish, with no 4th session.
+
+**What this leaves.** No scored session ran. H2, H3, H4, H6 and H7 were not run (plan STOP: budget), so no claim is made about Kolibri's scorecard, its knowledge gap in English and German, its instruction following, its closed-book deficit or what 4-bit costs on tasks. The H2 tripwire and the Tier-B cells did not run, and E1–E12 were not computed. No converted build is uploaded.
+
+**The bench hypotheses.** The bench measured H1, D1, H5 and H8 under run 2's PASS, and its records are public. They were not run to a verdict: the frozen verdict code refuses without score files, and the plan STOP produced none. By Andrei's choice (2026-10-09T10:48:13Z), HYPOTHESIS reports each measured value beside its pre-registered threshold, with no verdict word; the scratch preview shown to him before he chose is disclosed there and is not a result.
+
+**What the gate runs show.** These hold for the passing runs and decide no hypothesis:
+- **The port.** It met every blocking check in runs 2 and 3, the forced-routing comparisons with the reference among them, and every required control was caught in both runs.
+- **Batching on the M5.** On MLX 0.32.3, G5-BP-lean allowed every registered batch size for both builds.
+- **Two defects outside the port.** Each was found after a gate result or the pilot crash and fixed by a typed gate fix with a before/after test: the stale cache in the test path, and the buffer leak in mlx-lm 0.32.0 that Kolibri's NoPE layers expose.
+- **The blind spot stays.** A misreading shared by port and reference passes every comparison between them. Its only downstream check, the H2 tripwire on the vendor's public scorecard, did not run.
+
+The disclosures are in HYPOTHESIS.
+
+*Evidence: `exp_037_kolibri_forced_gate/HYPOTHESIS.md` ("Stopped — budget: the exp_037 result", the run-record blocks, Amendments 1–3), `amendments/`, `results/gate/`, `diagnostics/g1_resume_20261007/`, `results/bench/`, `results/tokenizer_20261008T080017Z.json`, `results/kl_8v4_20261008T075810Z.json`, `aborted/20261008T082355Z-pilot/`, `results/pilot/20261009T045611Z/`, `results/pilot_summary_20261009T045611Z.json`, `results/plan_fixed_20261009T081207Z.json`, `results/power/`. One re-pilot file, K8 `aime_en_pilot_high.jsonl`, stays out of the public repository because the frozen leak check flags its math notation; its sha256 is in the plan run record.*
+*Status: Stopped — budget (plan STOP by rule); no scored run. Gate passed (K8, K4); stopped and published 2026-10-09.*

@@ -94,7 +94,7 @@ months can be tested against the same on-disk evidence.
 | Exp 025 | Context-allocation isolation (gemma4:31b's slowdown) | H1+H2 confirmed, H3 superseded — fixed directly | [`exp_025_context_config_isolation/`](./exp_025_context_config_isolation/) |
 | Exp 026 | Contextual retrieval on the COAPI corpus, fully local | Complete (pilot scale) | [`exp_026_contextual_retrieval/`](./exp_026_contextual_retrieval/) |
 | Exp 036 | Kolibri on a MacBook: fit, speed, scorecard, EN/DE vs local peers (own MLX port) | Gate failed — K8 (G2, G3, G4, G5); stopped and published | [`exp_036_kolibri_local_eval/`](./exp_036_kolibri_local_eval/) |
-| Exp 037 | Kolibri through a forced gate: exp_036's questions re-registered behind a gate built from its bug hunt | Pre-registered | [`exp_037_kolibri_forced_gate/`](./exp_037_kolibri_forced_gate/) |
+| Exp 037 | Kolibri through a forced gate: exp_036's questions re-registered behind a gate built from its bug hunt | Stopped — budget (plan STOP by rule); gate PASS | [`exp_037_kolibri_forced_gate/`](./exp_037_kolibri_forced_gate/) |
 | Watcher Run 001 | Adversarial watcher — CasaSol gap analysis | Complete | [`watcher_run_001/`](./watcher_run_001/) |
 | Pre-Chronos benchmarks | Ad-hoc bench scripts (unnumbered) | Reference | [`experiments/`](./experiments/) |
 

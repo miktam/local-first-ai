@@ -2009,3 +2009,291 @@ Step 11 is not re-run (above). Stop and publish stays available at every point.
 - UTC: 2026-10-09T08:34:07Z (from the clock)
 - Commit: 7f423188a82467017587899fc61b3a990d4887d9 (uncommitted changes: no)
 - Result files: none
+
+## Stopped — budget: the exp_037 result (2026-10-09T11:14:11Z)
+
+*Written by the main session on the mini. It follows "Gate failure or STOP" under Publication angle (l.1136): a dated block in this file, a scientific_log block and README status "Stopped — budget", pushed with Andrei's go; a post only on his go.*
+- *The hand-back.* The mbp session's last commit is 6ba8d9a (2026-10-09T08:34:09Z), the record of Andrei's decision. It reported RUNBOOK step 19 items 1–2 done: `git status --porcelain` empty, HEAD = origin = `6ba8d9a8691e91a154adc27fa5d71930c8c72f09`. The mini fast-forwarded 7f42318..6ba8d9a with a clean tree. Step 18's private mirror checks on the mini: `tools/status.py --verify-private` `"ok": true` (19 files listed, 19 verified, 0 missing, 0 sha256 mismatches, 15 expected exp_036 extras); the step-log check exits 0 (36 step logs in the run records, 0 moved, every one present at its newest sha256). Since the hand-back, the main session is the only writer of this file (l.23; RUNBOOK step 19).
+- *This block changes no hypothesis, check, threshold, rule or code, and no tree hash. The Status line (l.3) already reads "Stopped — budget (plan STOP by rule); no scored run", written by the mbp's run-record block (6ba8d9a); this block leaves it as it is.*
+
+**Result.** The registered plan rule ended exp_037 at **STOP** (Amendment 3, `results/plan_fixed_20261009T081207Z.json`, sha256 `92258867…`): even P10, the smallest plan, does not fit the main budget B_main = 31.00 h with two sessions of at most 16 h. Andrei accepted the STOP at 2026-10-09T08:32:59Z, with no 4th session. **No scored run took place.**
+- **What was reached.** The port passed its forced gate: gate run 3 (`20261008T180634Z`) **K8 PASS, K4 PASS, exit 0**, allowed_B {1, 2, 4, 8, 16} for both arms, after two gate fixes, neither of which touched the port, the reference, a threshold or a gate rule.
+- **What is reported.** The measured values of the four bench hypotheses (H1, H5, H8, D1), taken under run 2's PASS, each beside its pre-registered threshold and with no verdict word, by Andrei's choice (2026-10-09T10:48:13Z). There is no verdict because the frozen `verdicts.py` refuses without score files, and the plan STOP produced none.
+- **What is not.** H2, H3, H4, H6 and H7 were not run (plan STOP: budget). exp_037 makes no claim about Kolibri's scorecard, its quality, its English–German standing against the peers, its closed-book answers or the task cost of 4-bit.
+
+**What was asked.** The five questions of "What this experiment tests" (l.29–39), re-registered from exp_036 behind a gate built from exp_036's bug hunt: does Kolibri-1 run on our kind of hardware and how fast (Q1: H1, D1); does it live up to its scorecard on the public, deterministically scored rows (Q2: H2); how does it compare with Gemma 4 and Qwen3.6 in English and German (Q3: H3, H4, H5); where is it weak (Q4: H6); and what 4-bit costs (Q5: H7, H8). The bench measured part of Q1 (H1, D1), Q3's tokenizer row (H5) and Q5's logit-fidelity row (H8); what is reported for them is under "The bench hypotheses". No other hypothesis was measured.
+
+---
+
+**What was reached: the gated port.** Three gate runs, the registered maximum (`gate_runs_max` 3). No threshold was relaxed and no amendment changed `gate_rules`, `thresholds` or `gate_text`; 1 of the 2 fix cycles was used.
+
+| Run | Record (sha256) | Window (UTC) | Exit | K8 | K4 | Counts | Committed in |
+|---|---|---|---|---|---|---|---|
+| 1 | `gate_20261007T110355Z.json` (`cb21c2df…`) | 2026-10-07 11:03:55–12:55:09 | 1 | FAIL (`g1` only) | PASS | run 1 of 3 | 1efbadc |
+| 2 | `gate_20261008T050643Z.json` (`a35c23da…`) | 2026-10-08 05:06:43–06:20:43 | 0 | PASS | PASS | run 2 of 3; fix cycle 1 of 2 | c6b5429 |
+| 3 | `gate_20261008T180634Z.json` (`e6d80d7b…`) | 2026-10-08 18:06:34–19:21:13 | 0 | PASS | PASS | run 3 of 3; not a cycle; `may_run_again` false | f75de21 |
+
+The gate ran code `8dea1dc`, `1f123ed` and `cddb3b9` (each record's `git.head`, each marked dirty).
+
+The three records agree on the measured values of 41 of their 43 checks, byte for byte. Only `g1` and `g0_tokenizer_parity` differ between runs 1 and 2 and between runs 2 and 3; the second differs because its identifier lines are read from the kit's own `*.py` files (16,166 → 16,647 → 16,708 lines, 0 mismatches each time). The port (`2c153357…`), the reference tree (`85337ed7…`), the gate code (`1d413283…`) and both builds' manifests (K8 `e897fe2f…`, K4 `1f9dea14…`) are the same in all three; only the runner tree moves (`439590de…` → `772d08e7…` → `75a50caa…`).
+
+Gate run 3, the record the plan cites (blocking checks unless marked; the bench records cite run 2's record, `a35c23da…`, and the tokenizer record, which loads no port, cites none):
+
+| Check | Rule (registered) | Run 3 |
+|---|---|---|
+| G4-F32 (K8 fp32 port, forced onto I, against R2F) | F2 mean KL ≤ τ = F_tiny = 4.112e-7 per set and T9 bucket; F1, F3, F5, F6 silent; Csort mean ≤ 1e-6 | T1–8 7.55e-10, T9 5.54e-11, T9 buckets 3.43e-11 to 7.18e-11; F1, F3, F5, F6 silent (F5 max 8.96e-6); Csort mean 2.04e-11 / 1.57e-10 |
+| G4-F16 (K8 bf16, forced, against R2F) | mean KL ≤ 9 × mean KL(R2F‖R3); R3 ≤ 1e-2 | ratio 1.0085 (T1–8), 1.0146 (T9); R3 7.83e-4 / 1.64e-3; no VOID |
+| G4-N(i) (K8 bf16, free routing, against R1) | mean KL ≤ 0.10 per set | 0.0411 (T1–8), 0.0844 (T9). Decisive top-1, descriptive: 0.99695 / 0.99024 (58 of 5,943 missed on T9; exp_036's registered 99 % allowed 59) |
+| G5-D32 (forced decode and chunk 64, fp32) | mean ≤ max(1e-8, 100 × Csort mean); max ≤ max(1e-6, 100 × Csort max); 0 decisive top-1 changes | T1, T3: means ≤ 3.02e-11, maxima ≤ 1.56e-9 against 1e-8 / 1e-6; T9 decode mean 2.77e-7 against 4.40e-6, max 7.52e-5 against 1.10e-3; 0 changes |
+| G5-R1 (the runner at B = 1) | R-anchor ratio ≤ 3; R-greedy as G5 greedy; R-parity mean KL ≤ 0.2550, top-1 disagreement ≤ 0.2071 | K8: 0.935; 993 of 993 decisive, 100 % in R1's top 5; 0.00198 and 0.0159. K4 R-anchor: 1.020 |
+| G5 greedy; decode vs prefill | ≥ 99.5 % / ≥ 99 %; KL ≤ 0.2550, disagreement ≤ 0.2071 | 1.0 / 1.0 (993 decisive of 1,698 positions); 0.0530, 0.0506 |
+| G2 bf16 natural selection | (a) fraction ≤ 2.474 %; (p) M_port ≤ min(8, 1.2 × M_emu) = 7.3205 | 1.381 %; 6.0795 (beyond 6σ: 1 pair, as the emulation) |
+| G3b (seven reference mutants) | no mutant better | 7 of 7 "reference_better" |
+| G5 behaviour (K8, K4; high and none) | < 2 of 20 loop / no EOS / unknown language | 0 / 0 / 0 in all four cells |
+| G5-BP-lean (sets allowed_B; never fails) | (d) batched ≤ 3 × single, first wave and mid-run; (e) | K8 B 8 0.948 / 0.896, B 16 1.204 / 0.893; K4 B 8 0.975 / 1.369, B 16 0.948 / 1.288; (e) holds: allowed_B {1, 2, 4, 8, 16} for both |
+| G3a (descriptive) | exp_036's 1.2 bits per byte and 1.25 × the best peer, "not an exp_037 criterion" | T1 1.3106; 1.2968 × Qwen3.6's pooled bits per byte. The blind spot (l.58) stands as registered |
+
+Every required control was caught on the real weights: G2's registered mutants, G4F32/1, /6 and /19, G4F16/6, G5D32/20, G5R1/26 and G5BP/27. G5R1/26 fired at 3.41 × its R-parity bound; the record also prints the 10 × tiny margin as not met, which is not the real-weight rule. G5BP/27's (d) ratio was 36.25 (first wave).
+
+**The two gate fixes.** Both changed only `runner/generate.py` and added one test file. Neither changed `port/`, `reference/`, `gate/`, `bench/`, `scorers/`, a mutant, a control or a threshold.
+
+1. **Amendment 1, fix 6.6 (after run 1; Andrei's go 2026-10-08T04:35:08Z).** Run 1 failed K8 on `g1` alone: 1 failed, 1,900 passed and 8 skipped (`build-host only:`) of 1,909 tests. The failing test, `tests/test_runner_tiny.py::test_resume_after_simulated_crash_gives_identical_records`, saw three resumed records differ from the reference: its junit text says "Omitting 3 identical items" and shows q003 and q004 differing; pytest's truncation hid the third resumed record and cut off the field that differed (Amendment 1). The diagnostics' probe reproduced a difference in `split_by` only; the cause is inferred (finding 1 below).
+   - **Change.** `_scorer_split` compares the tokenizer's ids with the family table on every call (`family_spec`, `token_id`), and neither reads nor writes `_CHECKED`.
+   - **A test artefact, and output-neutral.** For every tokenizer the decision now equals the uncached check's. The pinned tokenizers match their family tables, so every record field the pilot, the sessions or the gate write stays as it was. Only the stale-id case changes, and only a test stub ever reached it.
+   - **Evidence.** The new test failed before the fix and passed after it (5 failed, 1 passed → 6 passed; venv312 and venv314). Run 2 then reproduced run 1 on every other check, as above. G1: 1,907 passed, 8 skipped of 1,915.
+2. **Amendment 2 (after the crash of pilot `20261008T082355Z`; Andrei's path B, 2026-10-08T14:32:42Z).** The cause is finding 2 below.
+   - **Change.** A helper, `_settle_batch_offsets(gen)`, passes the `.offset` of every `BatchKVCache` in the generation batch to `mx.async_eval`. `run_cell` calls it once per `gen.next()`, outside the timed window.
+   - **Output-neutral.** It evaluates the same exact int32 adds earlier, consumes no PRNG key, and changes no admission, B, `max_tokens`, EOS, prefill size, record field or step-log field. On a tiny real-layout K8 build, greedy and under Kolibri's sampler, with three refills, records and step logs are identical in every field except the times (test T3).
+   - **Evidence on the real weights.**
+     - Run 3 equals run 2 except `g1` (1,915 → 1,919 tests: 1,911 passed, 8 skipped) and `g0_tokenizer_parity` (16,647 → 16,708 identifier lines, sha256 `398f9327…`), as Amendment 2 pre-registered. That includes `g5_behaviour_K8` and `_K4`, the only gate checks that run the new step.
+     - *Post hoc, for this block:* the re-pilot's 67 K8 records (64 in committed files; the 3 finished AIME rows in the uncommitted file, below) equal the crashed pilot's in every field except `t_submit`, `t_first_token`, `t_done` and `wall_s`. The re-pilot's K8 `aime_en_pilot_high` cell then ran 65,536 decode steps, past the ≈ 49,640-step ceiling, and finished.
+   - **The bench** (step 11, `e6e525e`) calls `make_batch_generator` and `stream_generate`, never `run_cell`, and was not re-run.
+
+**Two infrastructure findings.** Neither is a defect of Kolibri or of the port.
+- **Finding 1: a tokenizer check cache keyed by `id()`.** `scorers.reasoning.check_tokenizer(family, tokenizer)` records every passed check in the module-global set `_CHECKED` under `(family, id(tokenizer))` and never removes a key. CPython may give a freed object's address to a later object. A different tokenizer object allocated at a freed, checked tokenizer's address is therefore taken as checked, and its ids are never compared with the family table.
+  - In G1's order, `tests/test_bench_batch_flip.py` checks and frees a real Kolibri tokenizer (mlx-lm's `TokenizerWrapper`). The test stub `StubTok` has the same object layout.
+  - The diagnostics' probe (`diagnostics/g1_resume_20261007/out/mbp_cachestate_20261007T171033Z.json`, outcome "hit") reproduced the field-only difference this way. That G1's own process took this path is an inference; the probe cannot show it (Amendment 1).
+  - Fix 6.6 removes the dependence from the runner. `_CHECKED` still serves the scorers' own callers, a residual risk outside the generation path (Amendment 1, "Residual risk").
+- **Finding 2: the mlx-lm 0.32.0 `BatchKVCache` offset leak.** `BatchKVCache.update_and_fetch` rebinds `self.offset = self.offset + keys.shape[2]` lazily on every decode step (`mlx_lm/models/cache.py:929`). `BatchRotatingKVCache` forces its offset (`cache.py:1172, 1225`); `BatchKVCache` does not.
+  - Where nothing in decode reads the offset, the lazy chain grows by one node per layer per step, each holding a live Metal buffer, for as long as the decode batch is non-empty. That is the case on Kolibri's 10 NoPE full-attention layers (`i % 5 == 4`): the mask uses `_idx` and `left_padding`, and SDPA takes no offset.
+  - MLX's `resource_limit` counts buffers, not bytes (499,000). It is reached after about 49,640 − 4n decode steps per cell attempt, and the next allocation raises `[metal::malloc] Resource limit (499000) exceeded`.
+  - The pilot stopped so after 49,661 decode steps in K8 `aime_en_pilot_high` (predicted ≈ 49,624), on one item still decoding at about 49,660 tokens.
+  - The peers are not affected: each attention layer with a cache reads `cache.offset` for RoPE on every step. This was read from mlx-lm's code and measured only on tiny random-init builds of the peer configurations.
+  - The defect is in the pinned mlx-lm 0.32.0 (decision F2); the port's NoPE layers only expose it. Whether a later mlx-lm release changes it was not checked.
+
+---
+
+**The bench hypotheses: H1, H5, H8 and D1, as measured values.**
+- **Gated when measured.** Step 11 (`e6e525e`, 2026-10-08 06:52–08:22Z) admitted every Kolibri arm through `require_pass` on run 2's record (K8 PASS, K4 PASS). Run 3 re-certified the same port, reference and builds. The bench code is untouched by both fixes, and no input is a scored output. These are numbers from a gated port.
+- **No verdict.** By Andrei's choice (2026-10-09T10:48:13Z, "(b) Values only (Recommended)"), each of the four is reported as its measured value beside its pre-registered threshold, quoted from its section above, with no verdict word. There is no verdict because the frozen `analysis/verdicts.py` refuses without score files ("no results/scores/**/*.jsonl to compute verdicts from", `check_rescore`, l.494–496, called first by `compute()`, l.1923–1926), and the plan STOP produced none. No verdict rule was applied, and this block reports no p-value, bootstrap interval or Holm adjustment.
+- **Sources.** Every value below is read from, or recomputed in closed form from, the bench files, by sha256 as in the bench run record (l.1659–1670): `bench/speed_20261008T070210Z.jsonl` `99677306…`, `bench/speed_desc_20261008T071901Z.jsonl` `57565303…`, `bench/fit_20261008T075507Z.jsonl` `c5c75de2…`, `tokenizer_20261008T080017Z.json` `9474f2df…`, `kl_8v4_20261008T075810Z.json` `a75601b6…`. H8's peer median follows the plan record's `h8_families_left` (`92258867…`), which cites the peer check (`peers_20261007T060615Z.json`, `a071bc76…`).
+- **H1** (l.631–632). Registered: "Kolibri 4-bit decodes at batch 1 at least 0.75 × as fast as Gemma 4 26B-A4B 4-bit." Null: "K4/G4 batch-1 decode ratio ≤ 0.75."
+  - Measured: K4/G4 batch-1 decode ratio 0.8455, the geometric mean over the 10 blocks; 95 % t interval [0.8430, 0.8479], the registered interval (l.639), recomputed in closed form and not a test (df 9; log-ratio mean −0.16785, SD 0.0041; the power table assumed 0.042). Pre-registered threshold: 0.75.
+  - K4 decoded at 110.52 tok/s at batch 1 (median of its 10 runs) and G4 at 130.27–131.69 tok/s. Prediction ≈ 0.85.
+  - *Descriptive* (M5 Max, MLX 0.32.3): K8 86.13 tok/s at batch 1 (median of 5), G8 93.47, K8/G8 0.9214. K4/G4 prefill at 4,096 tokens 0.7719 (medians 2,546.2 and 3,298.8 tok/s). Aggregate decode at B = 1 / 2 / 4: K8 82.84 / 126.00 / 180.73 tok/s, G8 91.65 / 134.81 / 182.30.
+- **H5** (l.760–761). Registered: "On German web text, Kolibri's tokenizer packs at least 1.15 × the UTF-8 bytes per token of both the Gemma 4 tokenizer and the Qwen3.6 tokenizer." Null: "either ratio ≤ 1.15."
+  - Measured, on the first 5,000 FineWeb-2 deu_Latn test documents: ratios 1.1771 against Gemma 4 and 1.1685 against Qwen3.6, against the report's implied 1.186 and 1.175. Pre-registered threshold: 1.15, for each ratio.
+  - Bytes per token: Kolibri 4.7925, Gemma 4 4.0714, Qwen3.6 4.1013. The report gives 4.90 / 4.13 / 4.17. The bands registered for Kolibri's absolute value, by point estimate (l.771): "report-consistent if the estimate is in [4.80, 5.00]; card-consistent (≈ 4.7) if it is in [4.60, 4.80); neither otherwise."
+  - Qwen3.8's tokenizer gives token ids identical to Qwen3.6's on all 5,000 documents, so it is reported as one; its `tokenizer.json` differs by sha256 (`06b95093…` against `87a7830d…`).
+  - *Descriptive:* digit-dense subset (82 documents) 1.1180 against Gemma 4 and 1.1094 against Qwen3.6. Not FineWeb, English: T1 1.0241 / 1.0143, T2 1.0273 / 1.0176, the 588 MMLU-ProX-Lite EN questions 1.0093 / 1.0199 (against Gemma 4 / Qwen3.6).
+  - Not blind, as disclosed at registration (l.779).
+- **H8** (l.822–823, l.833). Registered: "Kolibri's KL(8-bit ‖ 4-bit) per UTF-8 byte is ≤ 1.5 × the median of Gemma 4's, Qwen3.6's and Qwen3.8's". Null: "ratio ≥ 1.5." The rule adds a per-text condition: "Kolibri's per-text ratio is ≤ 1.5 on ≥ 5 of the 6 texts".
+  - KL(8-bit ‖ 4-bit) per UTF-8 byte on T1–T6, chat-wrapped, bf16-rounded logits: Kolibri 0.008510; Qwen3.6 0.022689; Qwen3.8 0.016706.
+  - Measured: Kolibri's ratio to the peer median 0.4320. Pre-registered threshold: 1.5.
+  - Gemma 4 left the peer median because G4 is `speed-only`: the peer check's fidelity attribution gives KL(bf16‖G4) 0.3787 per token against 0.2 (edge case 7 with exp_036 Amendment 6's rule; `h8_families_left` in the plan). The median is therefore over Qwen3.6 and Qwen3.8.
+  - Per-text ratios T1 0.651, T2 0.644, T3 0.300, T4 0.257, T5 0.603, T6 0.344, beside the per-text threshold of 1.5 on at least 5 of the 6 texts.
+  - Per token, the registered sensitivity (l.828): 0.4870, beside the same 1.5. With Kolibri's fp32 logits (descriptive): 0.4304. Prediction ≈ 1.0.
+  - *Post hoc, deciding nothing (Disclosure 7):* with Gemma 4 kept in the peer median (0.0801 per byte), the median is Qwen3.6's 0.0227 and the ratio 0.375.
+  - Not blind, as disclosed at registration (l.839). The estimand is these six texts, not English or German text in general.
+- **D1** (l.650–651, l.655). Registered: "Kolibri 4-bit, as the only resident model, peaks at ≤ 46.66 GiB of MLX memory with a 64k-token context: 0.9 × the 51.84 GiB Metal working-set limit measured on the mini." Null: "peak at 64k > 46.66 GiB." The rule reads the median peak at 64k; its other bound, 51.84 GiB, marks "does not fit at 64k even with zero headroom".
+  - K4 alone, prefill of exactly N tokens of `pad_120k.txt`, then 512 greedy tokens.
+  - Measured: median peak MLX memory at 64k 43.367 GiB (46,564,794,029 B, the same in each of the three reps). Pre-registered threshold: 46.66 GiB. At 32k, descriptive: 42.710 GiB (45,860,019,885 B) in each rep. Prediction ≈ 43.7 GiB.
+  - Prefill at 64k: 1,957.8 / 1,922.0 / 1,873.0 tok/s. At 32k: 2,521.1 / 2,386.6 / 2,369.2.
+  - Measured on the M5 Max under MLX 0.32.3. The transfer to the 64 GB M4 Pro is an assumption (C18), and on a 64 GB node Kolibri would have to be the only resident model: the mini keeps its Ollama models resident, and they would have to be unloaded (l.659).
+
+---
+
+**The pilot.** Re-pilot `20261009T045611Z` ran on the mbp from 04:56:11Z to 07:33:50Z: 28 cells (K8 8, G8 7, Q36-8 7, K4 6), complete, at the initial caps, under gate run 3's record. The crashed pilot stays in `aborted/20261008T082355Z-pilot/`. Pilot outputs are never scored for accuracy.
+- **Parse and reasoning gate.** 0 parse failures and 0 reasoning defects in every cell; no cell BLOCKED.
+- **Truncations** (at the cap, counted as such):
+  - K8: GPQA EN 1 of 8, GPQA DE 2 of 8, AIME EN 1 of 4. Each with its reasoning unclosed; the AIME item at 65,536 tokens.
+  - K4: GPQA EN 1 of 8, GPQA DE 2 of 8 (reasoning unclosed).
+  - Q36-8: IFBench 1 of 8, at 16,384, after its reasoning closed.
+  - G8: none.
+- **Cap raises by rule 2.** GPQA and MMLU to 65,536, IFBench to 32,768, AIME to 98,304; RGB stays at 16,384. The triggers are in the plan record (`cap_triggers`).
+
+Completion tokens per cell: mean (SE), max and truncations, at the pilot's B and cap:
+
+| Arm | Task | B | Cap | n | Mean (SE) | Max | Trunc. |
+|---|---|---|---|---|---|---|---|
+| K8 | gpqa_main_en | 8 | 32,768 | 8 | 10,115 (4,258) | 32,768 | 1 |
+| K8 | gpqa_main_de | 8 | 32,768 | 8 | 11,657 (4,659) | 32,768 | 2 |
+| K8 | mmlu_full_en | 8 | 32,768 | 8 | 2,037 (563) | 5,600 | 0 |
+| K8 | mmlu_full_de | 8 | 32,768 | 8 | 3,186 (1,138) | 8,456 | 0 |
+| K8 | ifbench_pilot | 16 | 16,384 | 8 | 1,703 (467) | 4,192 | 0 |
+| K8 | rgb_int_cb | 16 | 16,384 | 16 | 779 (151) | 2,277 | 0 |
+| K8 | rgb_int_forced | 16 | 16,384 | 8 | 886 (154) | 1,655 | 0 |
+| K8 | aime_en_pilot | 4 | 65,536 | 4 | 19,323 (15,415) | 65,536 | 1 |
+| G8 | gpqa_main_en | 16 | 32,768 | 8 | 9,474 (2,304) | 23,529 | 0 |
+| G8 | gpqa_main_de | 16 | 32,768 | 8 | 6,932 (2,707) | 23,747 | 0 |
+| G8 | mmlu_full_en | 16 | 32,768 | 8 | 7,723 (1,887) | 17,594 | 0 |
+| G8 | mmlu_full_de | 16 | 32,768 | 8 | 5,258 (2,164) | 18,255 | 0 |
+| G8 | ifbench_pilot | 16 | 16,384 | 8 | 4,829 (849) | 8,025 | 0 |
+| G8 | rgb_int_cb | 16 | 16,384 | 16 | 542 (46) | 833 | 0 |
+| G8 | rgb_int_forced | 16 | 16,384 | 8 | 225 (22) | 350 | 0 |
+| Q36-8 | gpqa_main_en | 16 | 32,768 | 8 | 7,075 (1,695) | 16,792 | 0 |
+| Q36-8 | gpqa_main_de | 16 | 32,768 | 8 | 4,351 (1,395) | 13,708 | 0 |
+| Q36-8 | mmlu_full_en | 16 | 32,768 | 8 | 2,505 (577) | 5,278 | 0 |
+| Q36-8 | mmlu_full_de | 16 | 32,768 | 8 | 2,714 (482) | 4,984 | 0 |
+| Q36-8 | ifbench_pilot | 16 | 16,384 | 8 | 5,519 (1,682) | 16,384 | 1 |
+| Q36-8 | rgb_int_cb | 16 | 16,384 | 16 | 971 (86) | 1,411 | 0 |
+| Q36-8 | rgb_int_forced | 16 | 16,384 | 8 | 1,412 (191) | 2,548 | 0 |
+| K4 | gpqa_main_en | 16 | 32,768 | 8 | 10,747 (3,950) | 32,768 | 1 |
+| K4 | gpqa_main_de | 16 | 32,768 | 8 | 12,076 (4,856) | 32,768 | 2 |
+| K4 | mmlu_full_en | 16 | 32,768 | 8 | 1,782 (400) | 3,634 | 0 |
+| K4 | mmlu_full_de | 16 | 32,768 | 8 | 2,562 (534) | 4,529 | 0 |
+| K4 | ifbench_pilot | 16 | 16,384 | 8 | 2,083 (572) | 5,339 | 0 |
+| K4 | rgb_int_cb | 16 | 16,384 | 16 | 659 (62) | 1,091 | 0 |
+
+**The plan STOP (Amendment 3, `runner/plan_fix.py`, rules exp036-plan-2).**
+- **The budget.** S1 hours 8.4818, so B_main = min(31, 40 − 8.4818) = 31.00 h. L = 115,448,725,504 B (107.52 GiB).
+- **Step models,** fitted on the last third of each arm's pilot decode steps (a + b·n_live + c·n_live·padded_len, in s). K8: a 0.009099, b 0.004982, c 1.375e-7 on 62,991 steps. Pilot prefill rates: K8 1,224.19, K4 1,434.85, G8 428.62, Q36-8 2,302.12 tok/s.
+- **The ladder,** Tier A, projected hours × 1.15, in the record's `ladder`:
+
+| P0 | P1 | P2 | P3 | P4 | P5 | P6 | P7 | P8 | P9 | P10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 132.67 | 129.26 | 117.75 | 106.53 | 100.05 | 94.85 | 89.04 | 83.40 | 80.11 | 74.58 | 56.34 |
+
+- **Why STOP.** Every plan fails both conditions, as the record's `ladder` shows for each rung: `fits_budget` is false, because each total exceeds B_main = 31.00 h (P10's 56.34 h is 25.34 h over); and `split_ok` is false, with `S2_h` 0.0.
+  - `S2_h` 0.0 on every rung follows from the split rule (`split_two`): S2 is the longest prefix of the queue whose projected hours stay ≤ 16 h, so it is empty only when the first queued cell alone exceeds 16 h. In every plan that cell is K8 GPQA-D EN: 198 items, cap 65,536 after the raise, first in `tier_a_queue` (`runner/plan_rules.json`), at B = 4 by the memory rule (need(8) > 0.9 L; "4 after a raise to 65k", l.539; Disclosure 7).
+  - *Post hoc, for illustration only (Disclosure 7):* the frozen projector gives that cell 16.24 h, and K8 GPQA-D DE, queued second in P0–P9, 18.24 h. The plan record holds rung totals only.
+- **The rule mechanics in the K8 GPQA projections.** Rule 4 counts each pilot item truncated at the initial cap at the raised cap (three K8 GPQA items at 65,536). It scales GPQA lengths by (mean + 1 SE)/mean × 1.25 (main → Diamond). The raise to 65,536 halves K8's GPQA B, from 8 to 4.
+- **Against the planning totals.** The registered planning totals for P10 were 9.9 / 22.9 / 30.3 h (nominal / pessimistic / adverse, "Sessions & budget"); the pilot projects 56.34 h.
+- The rule's consequence is pre-registered (l.506, l.554): "No scored run until Andrei decides on a 4th session by amendment."
+
+**Andrei's decision.** At 2026-10-09T08:32:59Z, after the plan STOP, he chose to accept the STOP and publish, with no 4th session. The mbp recorded it as a run-record block (6ba8d9a): "Andrei's decision after plan STOP: accept STOP and publish, no 4th session (2026-10-09T08:32:59Z)". The commit's subject gives it as "accept STOP, publish". No session, scoring or further amendment ran on the mbp after it.
+
+**His choice for the bench hypotheses.** The main session then put this question to Andrei: "How should exp_037 publish H1, H5, H8 and D1 (measured by the bench under a passing gate; the frozen verdicts.py refuses without a scored run)?" The options, verbatim:
+- "(b) Values only (Recommended)": "Each measured value beside its pre-registered threshold, no CONFIRMED/REFUTED words, one sentence on why there is no verdict. No rule bends."
+- "(a) Verdicts via Amendment 4": "Frozen compute() with only the score-file check off, disclosed as a process record written after results; reads as CONFIRMED ×4 with CIs and p-values."
+- "(c) No claim": "'Measured but not run to a verdict; no claim.' Most conservative; the numbers stay in the records only."
+
+At 2026-10-09T10:48:13Z he chose (b): "(b) Values only (Recommended)". No amendment was written for it; there is no Amendment 4. Before he chose, Andrei was shown a preview computed in scratch by the frozen `compute()` on the bench records with the score-file check off (Disclosure 9), and it read CONFIRMED for all four. That preview is not a record and is not published as a result.
+
+**NOT RUN.** Each reads "<H> was not run (<reason>); we make no claim about it." (l.1087).
+- **H2, H3, H4, H6, H7:** not run (plan STOP: budget), the registered reason (l.1088).
+- **The H2 tripwire T-G3:** NOT_RUN, because H2 was not run. No sentence is published for it (l.709, l.1089).
+- **Tier B, B1–B10:** not run (plan STOP: budget); none was queued under the STOP.
+- **Exploratory and descriptive items:**
+  - E1–E5, E8–E10 and E12 need Tier-A or Tier-B cells, so they were not run. E6 needs B4, which was not queued.
+  - E7 and E11 could draw on S1 records, but the Tier-2 analysis amendment was never made: it falls due before the first scoring or the first B4 cell (l.939), and neither came. They are not computed.
+  - Control C1 ran in S1 (`bench/c1_20261008T082207Z.jsonl`, K8 at effort none, greedy, B = 8 against B = 1, 100 MMLU-ProX full EN items). The record's own end summary, written by the frozen bench code, reads: 6 flips in 100 items (`flip_rate` 0.06), 93 items parsed in both runs, 65 diverging somewhere. The prediction recorded 2026-10-03 was "≤ 2 % of extracted answers flip". *Exploratory*, not analysed further. It controls the batching of scored cells, and none ran.
+- **Quality:** no quality number of any arm exists. The pilot is never scored for accuracy.
+
+**The excluded AIME pilot file.**
+- **Which file.** K8 `results/pilot/20261009T045611Z/K8/aime_en_pilot_high.jsonl`: 713,916 bytes, sha256 `5f9499a5e2b20ce7af62907984f00dab5f40dcdf005a66924166175fcfbaf6c8`. It is not in the public repository.
+- **Why.** The frozen leak check's withheld-shingle test reported 99 hits over 25 shingle hashes, all in one capped item (item 15: 65,536 tokens, finish "length", reasoning unclosed), and 0 in `answer_text` (7f42318's commit message).
+  - The windows are math notation built from 1–2-character tokens; the most repeated 8-gram occurs 8 times, so the item is not a loop.
+  - AIME 2026 EN raw outputs are publishable as registered (l.87). The hits are the checker's false-positive class on notation, not withheld text. The frozen check blocks the file regardless, and `tools/` is a frozen scope.
+- **Where it is.** The file is kept on the mbp and on the mini, where its sha256 was verified. On the mini, line 7 of `.git/info/exclude` keeps it out of commits; the mbp, which keeps it too, reported a clean tree at the hand-back. The plan run record binds its sha256 (l.1967).
+- **The plan does not need it.** Its step log is committed (`…/K8/aime_en_pilot_high.steps.jsonl`, 12,572,675 bytes, `517e5d59…`). Its lengths are in the pilot summary, and `plan_fix` reads only those two. The plan can be re-derived from the public repository without it.
+
+**Power and energy (descriptive).** CPU + GPU + ANE power (powermetrics combined_power, an estimate); not the whole SoC, not wall power. It is a loose lower bound of the mbp's energy, and nothing reads it. The raw logs stay on the mbp.
+
+| Window | Record | Energy | Mean | Coverage |
+|---|---|---|---|---|
+| Peer check `20261007T060615Z` | `power_20261007T060715Z.json` | 4.19 Wh | 22.7 W | 0.977 |
+| Gate run 1 | `power_20261007T135204Z.json` | 29.40 Wh | 15.9 W | 0.979 |
+| Gate run 2 | `power_20261008T145946Z.json` | 21.86 Wh | 17.7 W | 0.979 |
+| Bench cells (H1 speed incl. its 30 s idles; speed_desc; fit; kl_8v4; tokenizer; C1) | same | 1.02; 9.89; 2.30; 0.89; 0.03; 5.64 Wh | 3.6; 16.5; 45.4; 26.0; 22.8; 15.5 W | 0.971–1.0 |
+| Cool-down idle before H1 (baseline) | same | 0.06 Wh | 0.34 W | 0.971 |
+| Crashed pilot `20261008T082355Z` | same | 16.59 Wh | 18.6 W | 0.976 |
+| **Gate run 3** | `power_20261009T044826Z.json` | **21.74 Wh** (21.738591) | **17.5 W** (17.472) | 0.979 |
+| **Re-pilot `20261009T045611Z`** | `power_20261009T082250Z.json` | **46.18 Wh** (46.183179) | **17.6 W** (17.577) | 0.979 |
+
+The re-pilot by arm: K8 19.24 Wh (19.0 W), G8 10.75 Wh (14.8 W), Q36-8 5.45 Wh (14.4 W), K4 10.74 Wh (21.1 W). No window has a gap over 5 s.
+
+---
+
+**What is published, and what is not.**
+- **Published, in this repository:**
+  - this block and its records;
+  - the three gate records with their phase files, layer tables and mutant records;
+  - the bench records; the pilot summary, the pilot cell files (withheld sets as hashes) and every pilot step log; the plan record and Amendments 1–3;
+  - the power records; the aborted pilot with its NOTE;
+  - the port (`port/kolibri1.py`, `2c153357…`), the reference and the kit, as decided before the pre-registration push.
+- **Not published:**
+  - any quality number: there is no scored run;
+  - withheld text of any kind (GPQA, RGB, AIME-DE), which stays in `$EXP036_PRIVATE` and is listed by sha256 in `evidence/withheld_manifest.jsonl`;
+  - the K8 AIME pilot file above;
+  - the raw powermetrics logs.
+- **No Hugging Face upload.** The criteria (l.1073–1083) are not all met:
+  - 1 (K8 PASS within three gate runs) and 2 (G4-F32, G4-F16 and G4-N(i) pass in that run) hold, in run 3.
+  - 5 (the clean-venv check, recorded as a result file) never ran: that result file does not exist.
+  - 4 and 6 (the model card's statements; licence and labelling) were not reached: no upload was prepared.
+  - 3 (H2 not REFUTED, tripwire not TRIPPED) is not assessed here: H2 and the tripwire are NOT RUN.
+  - Meeting the criteria would only permit the upload, which needs Andrei's go. There is no K4 upload in any case.
+- **A post** only on Andrei's go (l.1136).
+
+**Reconciliations.**
+- **Status text.** The registered README status is "Stopped — budget" (l.1136). This file's Status line carries the longer "Stopped — budget (plan STOP by rule); no scored run". The root README row uses the short form; the chronos index appends the reason and the gate result, as exp_036's row there appended "stopped and published".
+- **`h8_families_left`.** In the plan record, this names the families that *left* H8's peer median (gemma4: G4), not the families that remain.
+- **"If identical to Qwen3.6, reported as one"** (H5, l.766) is read as identical token ids on the H5 corpus: the tokenizer record (`tokenizer_identity`) shows 0 of 5,000 documents differing. The `tokenizer.json` files are not byte-identical (above).
+
+**Disclosures.**
+1. **Thresholds and rules.** None was relaxed, and no threshold or verdict-rule amendment exists (l.481–483).
+   - The loosenings against exp_036 are those registered (l.1233–1250). On run 3, exp_036's old rules give:
+     - G2 6σ: 1 pair beyond, M_port 6.0795, so it would fail;
+     - G4 decisive top-1 99 % on T9: 0.99024, so it would pass;
+     - G3: T1 1.3106 and 1.2968 × the best peer, so it would fail;
+     - batch parity: replaced by G5-BP-lean, which passed at B = 8 and 16 for both arms. exp_036's statistic is not computed.
+2. **Fix cycles and runs.** 1 of 2 cycles used; gate runs 3 of 3. Run 3 was not a cycle, because run 2 exited 0 (`run_counts`).
+3. **Decisions made after results, all Andrei's:**
+   - (b) diagnostics after run 1 (2026-10-07T14:49:52Z);
+   - the go for fix 6.6 and the re-run (2026-10-08T04:35:08Z);
+   - path B and "They stand" after the pilot crash (14:32:42Z), with "Registered rule" for exit 4 (17:02:58Z);
+   - the go for gate run 3 (18:05:51Z);
+   - accepting the STOP (2026-10-09T08:32:59Z);
+   - reporting H1, H5, H8 and D1 as measured values beside their thresholds, with no verdict word: (b), "(b) Values only (Recommended)" (2026-10-09T10:48:13Z).
+   "They stand" was conditional on run 3 failing. Run 3 passed, so it was never invoked.
+4. **The pilot-crash diagnosis had no pre-committed rules** (disclosed in Amendment 2). Its probes are not committed. Its one consequence was gate fix 2.
+5. **Amendment 2's prediction for run 3 held exactly** on the committed records, as above.
+6. **H5 and H8 are not blind** (l.779, l.839, "Hypotheses that are not blind").
+7. **Post hoc, computed for this block, deciding nothing:**
+   - the K8 record comparison across the two pilots;
+   - the per-cell projections of K8 GPQA-D EN (16.24 h) and DE (18.24 h), with the frozen projector. To re-run: `runner.plan_fix.Projector(pilot, steps, rules, plan["caps"], ctx)` with `pilot = merge_summaries([pilot_summary_20261009T045611Z.json])`, `steps = load_steps(<kit>, pilot)`, `rules = load_rules(runner/plan_rules.json)` and `ctx` carrying Q38-8's step model and prefill rate from `_q38_from_speed_desc(results/)`, as `build_context` does; then `.hours({"arm": "K8", "task": "gpqa_en", "effort": "high", "n": 198, "cap": 65536, "B": 4})` gives 16.2418 h, and the same with `"gpqa_de"` 18.2372 h (× 1.15 included). Its K8 step model equals the record's to floating-point rounding;
+   - H8's ratio with Gemma 4 kept in the peer median, 0.375: Kolibri's `totals.kl_per_byte` over the median of the three peers' (Qwen3.6's 0.0227), from the `kl_8v4` record;
+   - need(8) for those cells, by the memory rule (l.536): 83,129,677,964 B of K8 weights (in the gate, `kl_8v4` and C1 records) + 2 · 8 · (2,048 + 65,536) · 20,480 + 8 · 42,024,960 + 4 GiB = 109,906,770,060 B, above 0.9 L = 103,903,852,953.6 B; need(4) = 98,665,707,660 B fits. The plan record does not store B per cell.
+8. **No verdict for the bench hypotheses.** Their measured values are reported beside their pre-registered thresholds. By Andrei's choice, the rules registered for their verdicts (the H1, H5, H8 and D1 sections; "Holm family", l.841–842) were not applied, so they carry no verdict state. They are not listed as NOT RUN either: they ran, and the registered NOT RUN sentence (l.1087) would be false for them.
+9. **Scratch computations are not records.** A preview of the frozen verdict code's output on the bench records, with the score-file check off (the tests-only `require_rescore=False` and an empty score set, so H2, H3, H4, H6 and H7 came out NOT RUN), was computed in scratch and shown to Andrei before his decision on the bench hypotheses (above); it is not cited, and it is not published as a result. The post-hoc items of Disclosure 7 were computed in scratch from committed files with the frozen code; their calls are given so that anyone can re-run them, and they decide nothing. Only committed files with sha256 are cited, plus the one uncommitted AIME file, by sha256.
+
+**Records (sha256).**
+
+| Record | sha256 |
+|---|---|
+| `results/gate/gate_20261007T110355Z.json` | `cb21c2dfa461c0cd17b68f47e9577cca248062bf3a7c6becbbfbd90dc9bdd809` |
+| `results/gate/gate_20261008T050643Z.json` | `a35c23da7ca4cfb4bb49705a1494796e673f2495ee131fe2379b1318cb39e3a4` |
+| `results/gate/gate_20261008T180634Z.json` | `e6d80d7b4565fef08ba275b1c15f635880c3155441784c713ff4d8b296c62341` |
+| `results/peers_20261007T060615Z.json` | `a071bc76e5a6d86d011a35c99f866ede3655c8939268d6327278a402cefe6fa7` |
+| `diagnostics/gemma_quant_check_20261007T054737Z.json` | `7e3d75ade841d21946cfd6f6e95c8bacbc6049c900cea183686ff4cc49fcfd16` |
+| `results/bench/speed_20261008T070210Z.jsonl` | `99677306dc48064d00833bef1d1b157b049de1180518f81d88ee342e6f1618b9` |
+| `results/bench/speed_desc_20261008T071901Z.jsonl` | `575653038defe51b26728a90e768243729a8d48f3c666f6b1a1d606f7f16738b` |
+| `results/bench/fit_20261008T075507Z.jsonl` | `c5c75de2307dd435da386b83e44e48978c6f1d2f06b18189b592fd43c1d77a44` |
+| `results/bench/c1_20261008T082207Z.jsonl` | `7fcabba0629b4c0e090631d4128f5457352e8ba06c498f67af436f3e2b0ddd61` |
+| `results/tokenizer_20261008T080017Z.json` | `9474f2df64d357a08f9f4fe826633caa402113bbc833ed5d5b536535c2b95c8e` |
+| `results/kl_8v4_20261008T075810Z.json` | `a75601b608515c3339dea9ebb7460cb141ad8fca8ffe0616b1cd11d0d5779ae3` |
+| `results/pilot_summary_20261009T045611Z.json` | `15ee46e6e3b33a2aa0dee8bb74c8908618b6970637120b8a4a934b8359bc482c` |
+| `results/plan_fixed_20261009T081207Z.json` | `92258867f29df8dba1e5e651ab1f51da9a363aca829adbc8dbf36d11baa35db3` |
+| `results/AMENDMENT_3_20261009T081207Z.md` | `1ef2fc8776f5a319d0b7436d6d6aedb6bcc980ea049bbe80ff2c03831528b90d` |
+| `amendments/1_gatefix_20261007T184520Z.md` | `ff71bf886824228549b265efd0d38dae5852d7f9dee956dff7499e111ac343b5` |
+| `amendments/2_gatefix_20261008T151023Z.md` | `0181b048aac14b438cadb026415dc84efa25b4a04fe6f785758f6a7b50915cbb` |
+| `diagnostics/g1_resume_20261007/out/classification_20261007T183129Z.json` | `0c6215d4f879ab5bd838845406e2e93785584cb54792ca70f8428cb29a28627b` |
+| `aborted/20261008T082355Z-pilot/NOTE.md` | `2c0bbe90263fa8197f3bae0a8c981f9e10b5b299fd64f690cbd52a420c450902` |
+| `results/power/power_20261007T060715Z.json` | `96dbe0e3436988f7bde40da288f7a63cfac1e72e0cb3e05cc6472577e3c90eac` |
+| `results/power/power_20261007T135204Z.json` | `6a5cb6f79e03eacf8a1b42bd516d36cdabb9d00ac88efddbbee9ecb6b78e4eef` |
+| `results/power/power_20261008T145946Z.json` | `823d19f51cdf717253cd94e3ad1bc2cfb82b5b46f832b71a875fe7eb93c5a0b8` |
+| `results/power/power_20261009T044826Z.json` | `f42f99b42a532e973624d85876a7689fb140ef4ec242b45e85b8ae4e2972c52e` |
+| `results/power/power_20261009T082250Z.json` | `fc465e1677f5406c6f50496aa36bcfaef7b0a90db831094d0a904212984c8912` |
+| `results/pilot/20261009T045611Z/K8/aime_en_pilot_high.jsonl` (not committed; mbp and mini) | `5f9499a5e2b20ce7af62907984f00dab5f40dcdf005a66924166175fcfbaf6c8` |
+
+**What follows.** exp_037 ends here. Andrei declined the 4th session the rule offered, and nothing further is registered under this pre-registration.
