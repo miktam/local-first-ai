@@ -1,0 +1,24 @@
+{
+ "label": "w4_repl_keyrule",
+ "allowed": [
+  "vendor/coapi_voice/data/eval/coapi_eval_v1.jsonl",
+  "private/w4/keyrule_input_repl.json",
+  "private/w4/keyrule_gate_repl.json",
+  "<session scratchpad>/*"
+ ],
+ "reads": [
+  "private/w4/keyrule_input_repl.json",
+  "vendor/coapi_voice/data/eval/coapi_eval_v1.jsonl",
+  "vendor/coapi_voice/data/eval/coapi_eval_v1.jsonl",
+  "vendor/coapi_voice/data/eval/coapi_eval_v1.jsonl"
+ ],
+ "writes": [
+  "private/w4/keyrule_gate_repl.json"
+ ],
+ "n_searches": 0,
+ "n_bash": 0,
+ "other_tools": [],
+ "flags": [],
+ "audit_verdict": "CLEAN",
+ "reviewed_verdict": "CLEAN"
+}

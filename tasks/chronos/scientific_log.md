@@ -2102,3 +2102,26 @@ The disclosures are in HYPOTHESIS.
 
 *Evidence: `exp_037_kolibri_forced_gate/HYPOTHESIS.md` ("Stopped — budget: the exp_037 result", the run-record blocks, Amendments 1–3), `amendments/`, `results/gate/`, `diagnostics/g1_resume_20261007/`, `results/bench/`, `results/tokenizer_20261008T080017Z.json`, `results/kl_8v4_20261008T075810Z.json`, `aborted/20261008T082355Z-pilot/`, `results/pilot/20261009T045611Z/`, `results/pilot_summary_20261009T045611Z.json`, `results/plan_fixed_20261009T081207Z.json`, `results/power/`. One re-pilot file, K8 `aime_en_pilot_high.jsonl`, stays out of the public repository because the frozen leak check flags its math notation; its sha256 is in the plan run record.*
 *Status: Stopped — budget (plan STOP by rule); no scored run. Gate passed (K8, K4); stopped and published 2026-10-09.*
+
+## Experiment 038 — Kolibri as a drop-in answering model in CasaSol's COAPI glue
+
+**Pre-registered: 2026-10-10 (sets sealed 2026-10-10T08:28:27Z).** Untrained Kolibri-1 at 4-bit (K4), through exp_037's gated MLX port, swapped in as the answering model behind exp_035's A12 glue. It is compared with gemma4:26b (G26), the model CasaSol runs, on three sets: the 60 sealed v1 questions, a new 36-row German-buyer slice with English twins, and 10 beta-pattern probes. There is one confirmatory hypothesis: H1, K4 − G26 correctness on v1, margin +0.20, stratified paired bootstrap. H3, German, follows in fixed sequence. An ordered verdict map decides the result: "Earns a live-bot trial" needs the gain, every format floor in every language, a harm guard and a measured fit on a 64 GB Mac mini (E38-D1). The references are Kolibri 8-bit (K8), Kolibri at effort medium on the answer call (K4-MED), and the A12 anchor, which reproduces exp_035 byte for byte. The sets were written and checked by audited Fable subagents of the main Claude Code session, never through the API. Judging is blind, by Fable instances with audited file access. The glue, sets, outputs and judge notes stay private, bound by sha256. Full design in `exp_038_kolibri_casasol_dropin/HYPOTHESIS.md`.
+
+### Result — H1 refuted, ceiling-limited; no live-bot trial
+
+**Verdict** (map row 1, headroom rule): "A +0.20 gain is not attainable on this set (in the A12 glue); German: not tested, interaction +0.061 [−0.182, +0.303]; ceiling-limited".
+
+- **H1:** K4 − G26 on v1 is −0.100, 95 % CI [−0.200, 0.000]: REFUTED. Kolibri ties in English (+0.03), loses in Polish (−0.29 [−0.53, −0.12]) and loses in Spanish (−0.17).
+- **Headroom:** the attainable ceiling under X1 is 1.683 and G26 scored 1.617, so no arm could show +0.20 on this set. The rule fired.
+- **H3:** not tested, by the fixed sequence. Descriptively, K4 − G26 on the in-scope German rows is −0.03 [−0.15, +0.09]. No German edge.
+- **German fluency:** K4's German was judged native on 13 of 36 rows, against G26's 30. The judges' notes name English words carried over from the English retrieved context.
+- **K4 also fails** 4 format floors (out-of-scope declines in DE and EN; ES language; ES hand-off) and the harm guard (h+ 1, h− 0). These decide nothing once H1 is refuted.
+- **E38-D1 CONFIRMED:** K4 peaks at 43.37 GiB at 64k on the mini.
+- **References:** K4 − A12 is +0.45, so Kolibri is well above exp_035's 4B build. The 8-bit build adds +0.05 over K4 (n.s.). Effort medium brings K4 to 1.60 against G26's 1.62, at a 24 s median per call and 8 calls over 120 s.
+- **Judging:** re-judging 5 blocks by fresh judges gave exact agreement 0.970 (κ 0.959).
+- **The predictions held** except one: G26 was expected to hold every floor, and it misses three, including 2 fabricated citations kept.
+
+**Amendment 1 (judge protocol).** The mbp hand-back overwrote G26's complete v1 file with a stale 8-row copy before the first judging. That pass was aborted unread and judged again by fresh instances. Two post-push harness fixes, the E38-D1 build path and an exact-fp32 entry point, were made without a typed amendment. Both followed refusals that measured nothing, and HYPOTHESIS records them. The judge shifted on A12: the same answers score 1.067 here against 1.217 in exp_035.
+
+*Evidence: `exp_038_kolibri_casasol_dropin/HYPOTHESIS.md` ("Amendment 1 — judge protocol", "The exp_038 result"), `results/analysis.json`, `results/per_row_scores.jsonl`, `results/redeal_scores.jsonl`, `results/judge_export.json`, `results/arm_summaries.json`, `results/checks.json`, `results/blindness/`, `PRIVATE_SHA256.json`, `kit/`.*
+*Status: Complete — H1 refuted (ceiling-limited); no live-bot trial. Closed 2026-10-10.*

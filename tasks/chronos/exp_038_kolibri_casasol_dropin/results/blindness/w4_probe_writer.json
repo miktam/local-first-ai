@@ -1,0 +1,23 @@
+{
+ "label": "w4_probe_writer",
+ "allowed": [
+  "private/w4/PROBE_SHEET.md",
+  "private/w4/temas.json",
+  "private/writer_inputs/s1_en/*",
+  "private/sets/probes.jsonl",
+  "<session scratchpad>/*"
+ ],
+ "reads": [
+  "private/w4/PROBE_SHEET.md",
+  "private/writer_inputs/s1_en/study_guide_modulo1.md",
+  "private/writer_inputs/s1_en/study_guide_modulo4.md",
+  "private/writer_inputs/s1_en/study_guide_modulo1.md"
+ ],
+ "writes": [],
+ "n_searches": 0,
+ "n_bash": 4,
+ "other_tools": [],
+ "flags": [],
+ "audit_verdict": "CLEAN",
+ "reviewed_verdict": "CLEAN"
+}

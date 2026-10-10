@@ -1,0 +1,35 @@
+{
+ "label": "w4_reviewer",
+ "allowed": [
+  "private/w4/WRITER_BRIEF.md",
+  "private/w4/temas.json",
+  "private/sets/de_slice_draft.jsonl",
+  "private/writer_inputs/s1_en/*",
+  "private/w4/de_slice_review.json",
+  "<session scratchpad>/*"
+ ],
+ "reads": [
+  "private/w4/WRITER_BRIEF.md",
+  "private/w4/temas.json",
+  "private/sets/de_slice_draft.jsonl",
+  "private/sets/de_slice_draft.jsonl",
+  "private/writer_inputs/s1_en/study_guide_modulo1.md",
+  "private/writer_inputs/s1_en/study_guide_modulo1.md",
+  "private/writer_inputs/s1_en/study_guide_modulo2.md",
+  "private/writer_inputs/s1_en/study_guide_modulo3.md",
+  "private/writer_inputs/s1_en/study_guide_modulo1.md",
+  "private/writer_inputs/s1_en/study_guide_modulo1.md",
+  "private/writer_inputs/s1_en/study_guide_modulo4.md",
+  "private/writer_inputs/s1_en/study_guide_modulo5.md",
+  "private/writer_inputs/s1_en/study_guide_modulo6.md"
+ ],
+ "writes": [
+  "private/w4/de_slice_review.json"
+ ],
+ "n_searches": 0,
+ "n_bash": 2,
+ "other_tools": [],
+ "flags": [],
+ "audit_verdict": "CLEAN",
+ "reviewed_verdict": "CLEAN"
+}

@@ -1,0 +1,30 @@
+{
+ "label": "w4_replacement_writer",
+ "allowed": [
+  "private/w4/WRITER_BRIEF.md",
+  "private/w4/replace_brief.json",
+  "private/w4/temas.json",
+  "private/w4/v1_keyrule_avoidlist.json",
+  "private/writer_inputs/s1_en/*",
+  "private/sets/de_slice_repl.jsonl",
+  "private/sets/de_slice_reviewed.jsonl",
+  "<session scratchpad>/*"
+ ],
+ "reads": [
+  "private/w4/WRITER_BRIEF.md",
+  "private/w4/replace_brief.json",
+  "private/w4/temas.json",
+  "private/w4/v1_keyrule_avoidlist.json",
+  "private/writer_inputs/s1_en/study_guide_modulo4.md",
+  "private/writer_inputs/s1_en/study_guide_modulo6.md"
+ ],
+ "writes": [
+  "private/sets/de_slice_repl.jsonl"
+ ],
+ "n_searches": 0,
+ "n_bash": 1,
+ "other_tools": [],
+ "flags": [],
+ "audit_verdict": "CLEAN",
+ "reviewed_verdict": "CLEAN"
+}

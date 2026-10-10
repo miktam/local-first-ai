@@ -39,6 +39,9 @@ def main(argv=None) -> int:
         sys.exit("REFUSED: Ollama is running; stop it first (it keeps gemma4:26b resident)")
     if not a.model_dir.is_dir():
         sys.exit(f"REFUSED: {a.model_dir} missing (copy the K4 build from the mbp first)")
+    # exp_037's gate check resolves the K4 build under $EXP037_BUILDS; on the mini the copy lives in model_dir's parent
+    import os
+    os.environ["EXP037_BUILDS"] = str(a.model_dir.parent)
     for p in (str(E37), str(E37 / "tools")):
         sys.path.insert(0, p)
     import mlx.core as mx

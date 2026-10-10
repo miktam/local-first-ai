@@ -1,0 +1,22 @@
+{
+ "label": "w4_v1_checker",
+ "allowed": [
+  "vendor/coapi_voice/data/eval/coapi_eval_v1.jsonl",
+  "private/w4/v1_keyrule_avoidlist.json"
+ ],
+ "reads": [
+  "vendor/coapi_voice/data/eval/coapi_eval_v1.jsonl",
+  "vendor/coapi_voice/data/eval/coapi_eval_v1.jsonl",
+  "vendor/coapi_voice/data/eval/coapi_eval_v1.jsonl"
+ ],
+ "writes": [],
+ "n_searches": 0,
+ "n_bash": 2,
+ "other_tools": [],
+ "flags": [
+  "bash mentions forbidden marker 'coapi_eval_v1'"
+ ],
+ "audit_verdict": "REVIEW",
+ "reviewed_verdict": "CLEAN after manual review",
+ "review": "the marker is only a source-name value inside the JSON the agent wrote; its reads are its allowed input"
+}

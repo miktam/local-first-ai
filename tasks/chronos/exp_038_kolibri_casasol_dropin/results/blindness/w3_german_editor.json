@@ -1,0 +1,21 @@
+{
+ "label": "w3_german_editor",
+ "allowed": [
+  "private/w3/glue_strings.json",
+  "private/w3/de_strings_draft.json",
+  "private/w3/de_strings_edited.json"
+ ],
+ "reads": [
+  "private/w3/glue_strings.json",
+  "private/w3/de_strings_draft.json"
+ ],
+ "writes": [
+  "<session scratchpad>/edit_de.py"
+ ],
+ "n_searches": 0,
+ "n_bash": 1,
+ "other_tools": [],
+ "flags": [],
+ "audit_verdict": "CLEAN",
+ "reviewed_verdict": "CLEAN"
+}

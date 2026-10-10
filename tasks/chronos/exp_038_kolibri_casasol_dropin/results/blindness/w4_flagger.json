@@ -1,0 +1,23 @@
+{
+ "label": "w4_flagger",
+ "allowed": [
+  "private/w4/flags_input.json",
+  "private/w4/substance_flags.json",
+  "<session scratchpad>/*"
+ ],
+ "reads": [
+  "private/w4/flags_input.json",
+  "private/w4/flags_input.json",
+  "private/w4/flags_input.json",
+  "private/w4/flags_input.json"
+ ],
+ "writes": [
+  "private/w4/substance_flags.json"
+ ],
+ "n_searches": 0,
+ "n_bash": 1,
+ "other_tools": [],
+ "flags": [],
+ "audit_verdict": "CLEAN",
+ "reviewed_verdict": "CLEAN"
+}

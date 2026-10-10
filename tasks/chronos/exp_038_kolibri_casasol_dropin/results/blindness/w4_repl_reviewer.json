@@ -1,0 +1,28 @@
+{
+ "label": "w4_repl_reviewer",
+ "allowed": [
+  "private/w4/WRITER_BRIEF.md",
+  "private/w4/repl_review_input.json",
+  "private/w4/temas.json",
+  "private/writer_inputs/s1_en/*",
+  "private/w4/repl_review.json",
+  "<session scratchpad>/*"
+ ],
+ "reads": [
+  "private/w4/WRITER_BRIEF.md",
+  "private/w4/repl_review_input.json",
+  "private/w4/temas.json",
+  "private/writer_inputs/s1_en/study_guide_modulo4.md",
+  "private/writer_inputs/s1_en/study_guide_modulo6.md"
+ ],
+ "writes": [],
+ "n_searches": 0,
+ "n_bash": 2,
+ "other_tools": [],
+ "flags": [
+  "bash names a path outside the allowed list: rights/restrictions"
+ ],
+ "audit_verdict": "REVIEW",
+ "reviewed_verdict": "CLEAN after manual review",
+ "review": "the flagged string is prose inside the agent's own review JSON; no such file exists"
+}

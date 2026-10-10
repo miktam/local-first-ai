@@ -1,0 +1,33 @@
+{
+ "label": "w4_dev_writer",
+ "allowed": [
+  "private/w4/temas.json",
+  "private/w4/slice_keyrules.json",
+  "private/w4/v1_keyrule_avoidlist.json",
+  "private/writer_inputs/s1_en/*",
+  "private/sets/de_dev.jsonl",
+  "<session scratchpad>/*"
+ ],
+ "reads": [
+  "private/w4/temas.json",
+  "private/w4/slice_keyrules.json",
+  "private/w4/v1_keyrule_avoidlist.json",
+  "private/writer_inputs/s1_en/study_guide_modulo1.md",
+  "private/writer_inputs/s1_en/study_guide_modulo2.md",
+  "private/writer_inputs/s1_en/study_guide_modulo3.md",
+  "private/writer_inputs/s1_en/study_guide_modulo4.md",
+  "private/writer_inputs/s1_en/study_guide_modulo5.md",
+  "private/writer_inputs/s1_en/study_guide_modulo6.md",
+  "private/writer_inputs/s1_en/study_guide_modulo1.md",
+  "private/writer_inputs/s1_en/study_guide_modulo1.md"
+ ],
+ "writes": [
+  "<session scratchpad>/write_de_dev.py"
+ ],
+ "n_searches": 0,
+ "n_bash": 1,
+ "other_tools": [],
+ "flags": [],
+ "audit_verdict": "CLEAN",
+ "reviewed_verdict": "CLEAN"
+}

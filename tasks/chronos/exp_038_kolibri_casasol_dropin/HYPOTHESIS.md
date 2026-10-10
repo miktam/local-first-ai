@@ -319,3 +319,115 @@ A leak check (exp_037's pattern) runs before every push, with every private stri
 - **One judge family,** blind and audited.
 - **G26 is not the live responder.**
 - **The fit is measured on the mini; quality only on the mbp.**
+
+## Amendment 1 — judge protocol (2026-10-10T14:43:25Z)
+
+**What happened.**
+- The mbp session copied P38 at its setup while G26 was still running on the mini. At that point G26's v1 output file held 8 of its 60 rows.
+- At hand-back, the runbook copied the mbp's whole `runs/` folder back to the mini. That overwrote G26's complete 60-row v1 file with the stale 8-row copy. No other file changed: G26's probe, DE and twin files were not in the mbp's snapshot, and they are byte-identical to their committed versions.
+- Stage 1 and the judge bundles were then built from the clobbered file. The bundles had no G26 answer on 52 v1 rows: 536 coded answers instead of 588.
+- The 20 judges scored those bundles in full. The defect showed at collection, when G26 had 80 unblinded answers instead of 132.
+
+**No score was read.** The main session looked at counts only: answers per arm, schema errors and audit flags. It saw no correctness, usefulness or note value from that pass and no analysis output. The re-judging below is not driven by results.
+
+**Consequence (judge protocol).**
+1. G26's complete v1 file is restored byte for byte from its commit (60 rows, sha256 `29e6b88f613b8b52ca73303d1c16ec4d4bf6b7c729b3dd846688b58103c7d362`). G26's R6 re-runs still match it byte for byte.
+2. The first judging pass (bundles, judge files, unblind map, collections, agent map, audits) and the first stage 1 go to `aborted/judge_pass1_20261010T144325Z/` and `aborted/stage1_pass1_20261010T144325Z/` in P38. They are kept and never used for any statistic.
+3. Stage 1 is recomputed on the restored files and committed before any new judge call.
+4. The bundles are rebuilt from the same seeds. The deal into blocks depends only on the rows, so every block holds the same rows as before. Answer codes are drawn again, because the code sequence depends on the answer count.
+5. All 15 blocks and the 5 re-deal blocks are judged again by **fresh** Fable instances that did not see pass 1. Nothing else changes: the rubric, X1–X5, the fields and the analysis.
+
+**Fix to the runbook.** The hand-back copies only the folders the mbp produced (the Kolibri arms, their R6 runs and the pilot) and its two result files, never the whole `runs/` folder.
+
+## The exp_038 result (2026-10-10T15:04:07Z)
+
+**Verdict** (map row 1, with the headroom rule): **"A +0.20 gain is not attainable on this set (in the A12 glue); German: not tested, interaction +0.061 [−0.182, +0.303]; ceiling-limited".**
+
+**No live-bot trial is earned.** In CasaSol's A12 glue, untrained Kolibri-1 at 4-bit is not better than gemma4:26b. On the 60 v1 questions it scores 0.10 lower (95 % CI −0.20 to 0.00). It ties in English and loses in Polish and Spanish. It shows no edge in German, and its German reads less native, because it copies English words from the English context into German sentences.
+
+The verdict line from `harness/analysis.py` has no final "; ceiling-limited", because its REFUTED wording already says the gain is not attainable. The map asks for both, and the line above follows the map. No number changes.
+
+### The registered tests
+
+| Test | Result |
+|---|---|
+| **H1** (v1, n = 60): K4 − G26 correctness | −0.100, 95 % CI [−0.200, 0.000]; p = 0.978, p_rev = 0.0001: **REFUTED** |
+| **Headroom** | ceiling C = 1.683 under X1; G26 mean 1.617; C − G26 = 0.067 < 0.30. **The rule fires:** no arm could show +0.20 on this set |
+| **H3** (DE in scope, n = 33) | **Not tested** (fixed sequence: H1 not CONFIRMED). Descriptive: K4 − G26 −0.030 [−0.152, +0.091] |
+| **D4b** interaction (DE − twin, K4 − G26) | +0.061 [−0.182, +0.303], two-sided sign-flip p = 0.81 |
+| **K4 floors** | **4 failed:** out-of-scope declined DE 1/3 and EN 1/3; ES language 0.833; ES hand-off 0.909. Pooled numeric 1.000 and citation 0.950 (192/202) are met; 0 fabricated citations kept |
+| **Harm guard** | h+ = 1, h− = 0: **fails** (one v1 row harmful for K4 and not for G26) |
+| **E38-D1** | **CONFIRMED:** K4 peak 43.37 GiB at 64k on the mini (32k: 42.71), against 46.66 |
+| **Reliability** | 5 blocks re-judged by fresh judges, 199 answers: exact agreement 0.970, quadratic κ 0.959. H1 on that subset is REFUTED in both passes. No double judging |
+
+The floors, the harm guard and E38-D1 decide nothing here, because H1 is REFUTED (map row 1). They are reported as measured.
+
+### Per arm (descriptive)
+
+| | G26 | K4 | K8 | K4-MED | A12 |
+|---|---|---|---|---|---|
+| v1 correctness (0–2) | **1.617** | 1.517 | 1.567 | 1.600 | 1.067 |
+| v1 EN / PL / ES | 1.55 / 1.65 / 1.75 | 1.58 / 1.35 / 1.58 | 1.55 / 1.53 / 1.67 | 1.68 / 1.41 / 1.67 | 1.06 / 0.94 / 1.25 |
+| v1 usefulness (1–10) | 6.25 | 5.70 | 5.82 | 6.05 | 3.88 |
+| DE correctness / twins | 1.50 / 1.44 | 1.44 / 1.36 | 1.42 / 1.50 | 1.28 / 1.53 | — |
+| DE answers judged native | 30/36 | 13/36 | 10/36 | 10/36 | — |
+| Unsupported claims (all rows) | 23 | 90 | 89 | 39 | 100 (v1 only) |
+| Answers from weights (X1) | 2 | 10 | 9 | 3 | 1 |
+| Tail degradation | 3 | 18 | 13 | 3 | 9 |
+| Harmful v1 rows | 0 | 1 | 1 | 1 | 12 |
+| Fabricated citations kept | 2 | 0 | 0 | 1 | 3 |
+| Probes passed | 9/10 | 10/10 | 10/10 | 10/10 | 10/10 |
+| Floors failed | DE oos; EN language, oos; fabricated citations kept | DE oos; EN oos; ES language, hand-off | DE language, oos; EN language, oos, hand-off; ES language | DE oos; EN language, oos, hand-off; fabricated citations kept | fabricated citations kept |
+| Wall time per v1 row, median / max | 11.4 / 14.6 s | 3.5 / 6.8 s | 5.0 / 9.2 s | 24.0 / 202.6 s | 6.9 / 9.9 s |
+| Rows over 120 s (all sets) | 0 | 0 | 0 | 8 | 0 |
+
+The wall times come from two hosts: G26 and A12 ran on the mini (M4 Pro), and the three Kolibri arms on the MacBook Pro (M5 Max). They are not a speed comparison.
+
+**Contrasts (D items).**
+- **D1, H1 by language:** EN +0.032 [−0.097, +0.161]; PL −0.294 [−0.529, −0.118]; ES −0.167 [−0.417, 0.000].
+- **D2, substance rows only** (n = 38): −0.053 [−0.184, +0.079].
+- **D4, German penalty** (twin − DE, in scope): G26 −0.03, K4 −0.09, K8 +0.12, K4-MED +0.21.
+- **D5, K4 − A12:** +0.450 [+0.300, +0.600]. Kolibri is well above exp_035's 4B reference build.
+- **D8, the 8-bit build:** K8 − K4 +0.050 [−0.067, +0.183]; K8 − G26 −0.050 [−0.167, +0.067].
+- **D9, effort medium:** K4-MED − K4 +0.083 [−0.033, +0.217]; K4-MED − G26 −0.017 [−0.133, +0.100]. Medium effort closes most of the gap to gemma4:26b, at a 24 s median and 8 calls over 120 s (max 202.7 s), most of them German rows.
+
+**Why Kolibri's German fails the native check.** The judges marked 23 of K4's 36 German answers non-native. Their notes on those rows mostly name English words and phrases carried over from the retrieved context, which is English because retrieval routes on the English twin. G26's 6 non-native answers are mostly single invented words. This is a reading of the notes by the main session after the analysis ran. The notes stay private.
+
+### The predictions (designer's priors)
+
+| Item | Prediction | Observed |
+|---|---|---|
+| H1 | D̄ ≈ 0 (−0.10 to +0.15) | −0.100, at the bottom of the range |
+| H3, D4b | small and uncertain; D4b ≈ 0; any German edge in fluency | D4b +0.061 [−0.18, +0.30]; no fluency edge: K4's German is judged native less often than G26's |
+| H4 | K4 misses the language floor on ES and/or PL; G26 holds every floor | K4 misses ES language (0.833). **G26 does not hold every floor:** DE and EN out-of-scope, EN language, and 2 fabricated citations kept |
+| D9 | K4-MED ≥ K4; some calls above 120 s | +0.083; 8 rows above 120 s |
+| E38-D1 | CONFIRMED, about 43.4 GiB | CONFIRMED, 43.37 GiB |
+
+### Checks
+
+R1 PASS (both Pythons, 60/60 byte-identical). R2 PASS. R3 PASS on the mbp. R4: the answer-path tree `fd6b407c…` is unchanged. R5: 1,060 items identical. R6: 5/5 identical re-runs for G26, K4, K8 and K4-MED. R7 PASS (426 MLX rows replayed on the mini, 0 mismatches). The K4-MED reasoning cap is 16384 (longest pilot reasoning 7,375 tokens).
+
+### Deviations and disclosures
+
+1. **Amendment 1** (above): G26's v1 file was clobbered at the mbp hand-back. The first judging pass was aborted unread and judged again by fresh instances.
+2. **Two harness fixes without a typed amendment.** Both followed a refusal that measured nothing, and neither touches the R4-frozen answer path:
+   - `tools/e38_d1.py` points exp_037's gate check at the K4 copy (`EXP037_BUILDS`). The first E38-D1 attempt refused at that check.
+   - `harness/mlx_entry.py` pins exact fp32 (exp_037's `ensure_exact_fp32` with its GPU probe) before calling `run_arm.py` unchanged. R3 on the mbp refused with `MLX_ENABLE_TF32` unset. The runbook now exports it.
+
+   Each should have been a typed adapter-fix amendment. They are recorded here instead.
+3. **The judge shifted on A12.** A12's answers are exp_035's, byte for byte. They score 1.067 here against 1.217 in exp_035, under different judge instances and the X1 cap. Every comparison inside exp_038 uses one judge protocol. Absolute means should not be compared across experiments.
+4. **Blindness.** All 20 pass-2 judges opened only their own bundle and their own output. Eighteen audits raised the "judge" marker, which comes from their own folder paths. A manual review of every full bash command found no other file opened, listed or named. The audits are public as file lists in `results/blindness/`.
+5. **Tooling after the analysis.** `tools/export_results.py` writes the public results. The leak check (`tools/publish.py`) now shingles each JSON string value on its own, skips windows made only of field names, booleans, numbers and file-path parts, and exempts the analysis output, which is public by registration. The kit adds `run_analysis.py`, `r3.py`, `r7.py`, `mlx_entry.py` and `pilot_cap.py`. The analysis, stage-1 and judge code are byte-identical to the pre-registration push.
+
+### Evidence
+
+- `results/analysis.json` (the registered analysis output and the verdict line);
+- `results/per_row_scores.jsonl` (132 rows: judge scores, stage-1 checks and call timing per arm);
+- `results/redeal_scores.jsonl` (199 answers, both passes);
+- `results/judge_export.json` (block → row key → answer code → arm, set, id and scores);
+- `results/arm_summaries.json`;
+- `results/checks.json`;
+- `results/blindness/`;
+- `PRIVATE_SHA256.json`.
+
+The verdict can be re-derived from the per-row scores with `kit/harness/analysis.py`. Judge notes, claim texts, answers, contexts, sets and the glue stay private.

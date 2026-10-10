@@ -1,0 +1,25 @@
+{
+ "label": "w6_judge_B12_redeal",
+ "allowed": [
+  "private/w6/judge/bundles_redeal/B12.json",
+  "private/w6/judge/judged_redeal/B12.json",
+  "<session scratchpad>/*"
+ ],
+ "reads": [
+  "private/w6/judge/bundles_redeal/B12.json",
+  "private/w6/judge/bundles_redeal/B12.json"
+ ],
+ "writes": [
+  "private/w6/judge/judged_redeal/B12.json"
+ ],
+ "n_searches": 0,
+ "n_bash": 2,
+ "other_tools": [],
+ "flags": [
+  "bash mentions forbidden marker 'judge'",
+  "bash names a path outside the allowed list: private/w6/judge"
+ ],
+ "audit_verdict": "REVIEW",
+ "reviewed_verdict": "CLEAN after manual review",
+ "review": "the flags come from the judge's own directories (mkdir of its output dir, or cd into the judge dir with relative paths to its own two files); no other file opened, listed or named in any bash command"
+}

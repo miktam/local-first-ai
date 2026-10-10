@@ -22,12 +22,21 @@ P38 = Path(__file__).resolve().parents[1]
 PUBLIC = ["kit/mlx_backend.py", "kit/soak.py", "kit/tests/conftest.py", "kit/tests/test_mlx_backend.py",
           "harness/run_arm.py", "harness/r1.py", "harness/r2.py", "harness/stage1.py", "harness/analysis.py",
           "harness/judge_kit.py", "harness/with_side_server.sh", "harness/run_r1.sh", "harness/tests/test_analysis.py",
+          "harness/run_analysis.py", "harness/r3.py", "harness/r7.py", "harness/mlx_entry.py", "harness/pilot_cap.py",
+          "tools/export_results.py",
           "tools/audit_agents.py", "tools/de_gates.py", "tools/e38_d1.py", "tools/m0_shingle_check.py",
           "tools/make_writer_inputs.py", "tools/r4_freeze.py", "tools/redact_rubric.py", "tools/seal.py",
           "tools/slice_steps.py", "tools/publish.py"]
-PRIVATE_ROOTS = ["vendor", "private", "rights", "runs", "harness/de_path.py", "harness/tests/test_de_path.py"]
+PRIVATE_ROOTS = ["vendor", "private", "rights", "runs", "blindness", "aborted", "harness/de_path.py", "harness/tests/test_de_path.py"]
 TEXT = {".py", ".md", ".json", ".jsonl", ".txt", ".sh"}
 N = 8
+# The registered analysis output is public by design (its strings are the verdict and state labels); hashed, not forbidden
+PUBLIC_DERIVED = ["runs/results.json"]
+# Score and check field names that the public exports repeat; windows made only of these, booleans, numbers and file-path
+# components are structure (field lists, file lists), not private content
+STRUCT_WORDS = {"true", "false", "null", "none", "correctness", "usefulness", "language_ok", "language_native",
+                "tail_degradation", "from_weights", "n_unsupported_claims", "n_fabricated_citations_kept",
+                "unsupported_claims", "fabricated_citations_kept"}
 
 
 def sha(p: Path) -> str:
@@ -46,9 +55,17 @@ def words(t: str) -> list[str]:
     return re.findall(r"\w+", t.lower())
 
 
-def shingles(t: str) -> set[str]:
+def shingles(t: str, struct: frozenset = frozenset()) -> set[str]:
+    """8-word shingles; with `struct`, a window made only of structure words and numbers is skipped."""
     w = words(t)
-    return {hashlib.sha1(" ".join(w[i:i + N]).encode()).hexdigest() for i in range(len(w) - N + 1)}
+    return {hashlib.sha1(" ".join(w[i:i + N]).encode()).hexdigest() for i in range(len(w) - N + 1)
+            if not struct or not all(x in struct or x.isdigit() for x in w[i:i + N])}
+
+
+def struct_words() -> frozenset:
+    """STRUCT_WORDS plus every component of every P38 file path (file lists are public by registration)."""
+    comps = {x for p in P38.rglob("*") if p.is_file() and ".git" not in p.parts for x in words(str(p.relative_to(P38)))}
+    return frozenset(STRUCT_WORDS | comps | {"private", "json", "jsonl", "md", "py"})
 
 
 def stage(public: Path) -> None:
@@ -65,14 +82,37 @@ def stage(public: Path) -> None:
     print(json.dumps({"public_files": len(PUBLIC) + 2, "private_hashed": len(priv)}))
 
 
+def strings(x) -> list[str]:
+    """Every string value in a parsed JSON document (keys and numbers are structure, not private content)."""
+    if isinstance(x, dict):
+        return [s for v in x.values() for s in strings(v)]
+    if isinstance(x, list):
+        return [s for v in x for s in strings(v)]
+    return [x] if isinstance(x, str) else []
+
+
+def private_shingles(p: Path, struct: frozenset = frozenset()) -> set[str]:
+    """JSON and JSONL: the shingles of each string value on its own; other text files: the whole text."""
+    t = p.read_text(encoding="utf-8", errors="replace")
+    try:
+        docs = [json.loads(t)] if p.suffix == ".json" else [json.loads(x) for x in t.splitlines() if x.strip()] \
+            if p.suffix == ".jsonl" else None
+    except json.JSONDecodeError:
+        docs = None
+    if docs is None:
+        return shingles(t, struct)
+    return set().union(*(shingles(s, struct) for d in docs for s in strings(d)))
+
+
 def check(public: Path) -> int:
     forbidden = set()
     # public code legitimately shares lines with private copies of itself; only private *content* counts
     shared_code = {(P38 / r).read_text(encoding="utf-8", errors="replace") for r in PUBLIC}
     shared = set().union(*(shingles(t) for t in shared_code)) if shared_code else set()
+    struct = struct_words()
     for p in private_files():
-        if p.suffix in TEXT:
-            forbidden |= shingles(p.read_text(encoding="utf-8", errors="replace"))
+        if p.suffix in TEXT and str(p.relative_to(P38)) not in PUBLIC_DERIVED:
+            forbidden |= private_shingles(p, struct)
     forbidden -= shared
     hits = {}
     for p in sorted(x for x in public.rglob("*") if x.is_file()):

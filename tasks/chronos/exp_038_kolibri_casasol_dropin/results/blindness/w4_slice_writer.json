@@ -1,0 +1,36 @@
+{
+ "label": "w4_slice_writer",
+ "allowed": [
+  "private/w4/WRITER_BRIEF.md",
+  "private/sets/grid_de.jsonl",
+  "private/w4/temas.json",
+  "private/w4/v1_keyrule_avoidlist.json",
+  "private/writer_inputs/s1_en/*",
+  "private/sets/de_slice_draft.jsonl",
+  "<session scratchpad>/*"
+ ],
+ "reads": [
+  "private/w4/WRITER_BRIEF.md",
+  "private/writer_inputs/s1_en/study_guide_modulo1.md",
+  "private/writer_inputs/s1_en/study_guide_modulo1.md",
+  "private/writer_inputs/s1_en/study_guide_modulo2.md",
+  "private/writer_inputs/s1_en/study_guide_modulo3.md",
+  "private/writer_inputs/s1_en/study_guide_modulo4.md",
+  "private/writer_inputs/s1_en/study_guide_modulo5.md",
+  "private/writer_inputs/s1_en/study_guide_modulo6.md",
+  "private/writer_inputs/s1_en/study_guide_modulo1.md",
+  "private/writer_inputs/s1_en/study_guide_modulo1.md"
+ ],
+ "writes": [
+  "<session scratchpad>/rows_a.py",
+  "<session scratchpad>/rows_b.py",
+  "<session scratchpad>/rows_c.py",
+  "<session scratchpad>/build.py"
+ ],
+ "n_searches": 0,
+ "n_bash": 3,
+ "other_tools": [],
+ "flags": [],
+ "audit_verdict": "CLEAN",
+ "reviewed_verdict": "CLEAN"
+}

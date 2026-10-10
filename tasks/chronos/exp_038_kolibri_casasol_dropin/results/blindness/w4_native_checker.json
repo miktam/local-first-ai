@@ -1,0 +1,20 @@
+{
+ "label": "w4_native_checker",
+ "allowed": [
+  "private/w4/native_input.json",
+  "private/w4/native_check.json",
+  "<session scratchpad>/*"
+ ],
+ "reads": [
+  "private/w4/native_input.json"
+ ],
+ "writes": [
+  "private/w4/native_check.json"
+ ],
+ "n_searches": 0,
+ "n_bash": 0,
+ "other_tools": [],
+ "flags": [],
+ "audit_verdict": "CLEAN",
+ "reviewed_verdict": "CLEAN"
+}

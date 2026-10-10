@@ -1,0 +1,314 @@
+{
+ "R1": {
+  "r1_20261010T052335Z_py312": {
+   "check": "R1",
+   "python": "3.12.13",
+   "executable": "~/models/exp037-mini/venv312/bin/python",
+   "ollama_version": "0.33.0",
+   "base_url": "http://127.0.0.1:18435",
+   "model": "hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M",
+   "model_digest": "66f6d52aa56a",
+   "started_utc": "2026-10-10T05:30:24Z",
+   "ended_utc": "2026-10-10T05:37:07Z",
+   "n_rows": 60,
+   "n_rows_any_diff": 0,
+   "n_rows_must_match_failed": 0,
+   "diffs": [],
+   "outputs_sha256": "8a06493414612ec988a4c37c4afe6e47531f72122e46d1364d9d0f536a43230f",
+   "verdict": "PASS"
+  },
+  "r1_20261010T052335Z_py314": {
+   "check": "R1",
+   "python": "3.14.8",
+   "executable": "~/REPOS/casasol/.venv/bin/python3",
+   "ollama_version": "0.33.0",
+   "base_url": "http://127.0.0.1:18435",
+   "model": "hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M",
+   "model_digest": "66f6d52aa56a",
+   "started_utc": "2026-10-10T05:23:37Z",
+   "ended_utc": "2026-10-10T05:30:23Z",
+   "n_rows": 60,
+   "n_rows_any_diff": 0,
+   "n_rows_must_match_failed": 0,
+   "diffs": [],
+   "outputs_sha256": "6d91a294d8f7e3aca6f9b4e58df2503ca641fcd160bc9b3228a8d14fc8b132e9",
+   "verdict": "PASS"
+  }
+ },
+ "R2": {
+  "r2_20261010T053853Z": {
+   "check": "R2",
+   "r1_run": "r1_20261010T052335Z_py314",
+   "out": "r2_20261010T053853Z",
+   "summary_diffs": {
+    "e35_designA_A12_summary": [],
+    "reference_run_summary": []
+   },
+   "scores_diffs": [],
+   "verdict": "PASS"
+  },
+  "r2_20261010T053856Z": {
+   "check": "R2",
+   "r1_run": "r1_20261010T052335Z_py314",
+   "out": "r2_20261010T053856Z",
+   "summary_diffs": {
+    "e35_designA_A12_summary": [],
+    "reference_run_summary": []
+   },
+   "scores_diffs": [],
+   "verdict": "PASS"
+  }
+ },
+ "R3": {
+  "check": "R3",
+  "n_prompts": 10,
+  "arms": {
+   "K4": {
+    "rows": [
+     {
+      "i": 0,
+      "call": "gate",
+      "n": 2,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 1,
+      "call": "answer",
+      "n": 268,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 2,
+      "call": "gate",
+      "n": 2,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 3,
+      "call": "answer",
+      "n": 264,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 4,
+      "call": "gate",
+      "n": 2,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 5,
+      "call": "answer",
+      "n": 230,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 6,
+      "call": "gate",
+      "n": 2,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 7,
+      "call": "answer",
+      "n": 452,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 8,
+      "call": "gate",
+      "n": 2,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 9,
+      "call": "answer",
+      "n": 218,
+      "a_eq_b": true,
+      "a_eq_c": true
+     }
+    ],
+    "pass": true,
+    "binding": {
+     "gate_record": "gate_20261008T180634Z.json",
+     "gate_record_sha256": "e6d80d7b4565fef08ba275b1c15f635880c3155441784c713ff4d8b296c62341",
+     "runner_sha256": "75a50caa8d541396c7a5f82468b50049330cded96426255ecc56deff1ee83c87",
+     "port_sha256": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182"
+    }
+   },
+   "K8": {
+    "rows": [
+     {
+      "i": 0,
+      "call": "gate",
+      "n": 2,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 1,
+      "call": "answer",
+      "n": 244,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 2,
+      "call": "gate",
+      "n": 2,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 3,
+      "call": "answer",
+      "n": 281,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 4,
+      "call": "gate",
+      "n": 2,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 5,
+      "call": "answer",
+      "n": 193,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 6,
+      "call": "gate",
+      "n": 2,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 7,
+      "call": "answer",
+      "n": 240,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 8,
+      "call": "gate",
+      "n": 2,
+      "a_eq_b": true,
+      "a_eq_c": true
+     },
+     {
+      "i": 9,
+      "call": "answer",
+      "n": 328,
+      "a_eq_b": true,
+      "a_eq_c": true
+     }
+    ],
+    "pass": true,
+    "binding": {
+     "gate_record": "gate_20261008T180634Z.json",
+     "gate_record_sha256": "e6d80d7b4565fef08ba275b1c15f635880c3155441784c713ff4d8b296c62341",
+     "runner_sha256": "75a50caa8d541396c7a5f82468b50049330cded96426255ecc56deff1ee83c87",
+     "port_sha256": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182"
+    }
+   }
+  },
+  "verdict": "PASS"
+ },
+ "R4": {
+  "check": "R4",
+  "utc": "20261010T071126Z",
+  "tree_sha256": "fd6b407cf849415f2514ecdd3a0b719bbeca0f833be99e725f6e1baa2b987afd",
+  "n_files": 15,
+  "de_strings_final_sha256": "8d937dea7a30e1a8b28e7ba2e883d8b23fbe653ae829e6234e96caef744ae0b1"
+ },
+ "R6": {
+  "ids": [
+   "M2-04",
+   "M2-10",
+   "M4-01",
+   "M5-04",
+   "M6-01"
+  ],
+  "identity": {
+   "G26": {
+    "n": 5,
+    "identical": 5
+   },
+   "K4": {
+    "n": 5,
+    "identical": 5
+   },
+   "K8": {
+    "n": 5,
+    "identical": 5
+   },
+   "K4-MED": {
+    "n": 5,
+    "identical": 5
+   }
+  }
+ },
+ "R7": {
+  "K4": {
+   "rows": 142,
+   "mismatches": [],
+   "pass": true
+  },
+  "K8": {
+   "rows": 142,
+   "mismatches": [],
+   "pass": true
+  },
+  "K4-MED": {
+   "rows": 142,
+   "mismatches": [],
+   "pass": true
+  },
+  "verdict": "PASS"
+ },
+ "E38_D1": {
+  "check": "E38-D1",
+  "host_limit_gib": 51.84,
+  "port_sha256": "2c153357862f15b61f3cadaea4f436de2939567180bf5a01a304f3fa60e3f182",
+  "weights_bytes": 44102991060,
+  "fingerprint_matches_exp037": true,
+  "record": "fit_20261010T083317Z.jsonl",
+  "peaks_gib": {
+   "32768": [
+    42.7104717688635,
+    42.7104717688635,
+    42.7104717688635
+   ],
+   "65536": [
+    43.366843839176,
+    43.366843839176,
+    43.366843839176
+   ]
+  },
+  "median_peak_64k_gib": 43.366843839176,
+  "median_peak_32k_gib": 42.7104717688635,
+  "rule": "[text omitted]",
+  "state": "CONFIRMED"
+ },
+ "K4_MED_cap": {
+  "pilot_answer_calls": 21,
+  "longest_reasoning_tokens": 7375,
+  "pilot_rows_at_cap": 0,
+  "rule": "[text omitted]",
+  "cap": 16384
+ }
+}
