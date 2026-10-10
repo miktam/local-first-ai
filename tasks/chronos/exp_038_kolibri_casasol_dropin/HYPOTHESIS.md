@@ -1,6 +1,6 @@
 # Experiment 038: Kolibri as a drop-in answering model in CasaSol's COAPI glue
 
-*Pre-registered: 2026-10-10T08:29:29Z · Status: pre-registered; no scored row has run.*
+*Pre-registered: 2026-10-10T08:29:29Z · Status: Complete — H1 refuted (ceiling-limited); no live-bot trial*
 
 **Design:** rev 2, with Andrei's decisions of 2026-10-06 and 2026-10-10.
 **Builds on:**
@@ -431,3 +431,19 @@ R1 PASS (both Pythons, 60/60 byte-identical). R2 PASS. R3 PASS on the mbp. R4: t
 - `PRIVATE_SHA256.json`.
 
 The verdict can be re-derived from the per-row scores with `kit/harness/analysis.py`. Judge notes, claim texts, answers, contexts, sets and the glue stay private.
+
+### Addendum (2026-10-10T15:56Z): two registered items missing from the result block
+
+The result block above, pushed at 8e2efd1, left out two items the pre-registration names. Neither changes a test or the verdict.
+
+- **Drift check** ("Scoring"). A12's 60 v1 answers are byte-identical to exp_035's (R1). Scored by exp_035's judge and by exp_038's: exact agreement 0.85, quadratic κ 0.887. Every disagreement is one point lower in exp_038, on 9 of 60 rows: 4 rows 1 → 0 and 5 rows 2 → 1. None goes up. The means are 1.217 and 1.067. This fits exp_038's stricter protocol, including the X1 cap on answers from weights, and it is why absolute means are not compared across the two experiments.
+- **Word counts** (stage 1), median per answer on v1 / DE / twins:
+  - G26: 182 / 176 / 196;
+  - K4: 158 / 177 / 187;
+  - K8: 163 / 157 / 170;
+  - K4-MED: 133 / 128 / 148;
+  - A12: 119 on v1.
+
+  The maximum for any arm is 402 words, K4 on a twin row. They are in `results/arm_summaries.json`, and the drift check is in `results/checks.json`.
+
+The header's status line, which still read "pre-registered; no scored row has run", is updated to the result.

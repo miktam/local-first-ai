@@ -31,6 +31,7 @@ STAGE1_FIELDS = ["q_lang", "answer_lang", "lang_ok", "refused", "handoff", "plai
                  "output_tokens", "truncated", "scope", "failed_call"]
 RAW_FIELDS = ["wall_s", "prompt_tokens", "output_tokens", "repaired", "failed_call"]
 WALL_LIMIT_S = 120.0
+E35_JUDGE = Path.home() / "REPOS/local-first-ai/tasks/chronos/exp_035_coapi_voice/results/designA_A12_judge_20260922.json"
 SCRATCH = re.compile(r"/private/tmp/claude-\d+/[^/\s]+/[^/\s]+/scratchpad")  # the session scratchpad (carries the account)
 
 
@@ -64,9 +65,7 @@ def mean(xs):
 
 
 def rows_meta() -> dict:
-    v1_flag = {r["id"]: bool(r["substance_in_context"]) for r in json.loads(
-        (Path.home() / "REPOS/local-first-ai/tasks/chronos/exp_035_coapi_voice/results/designA_A12_judge_20260922.json")
-        .read_text())["rows"]}
+    v1_flag = {r["id"]: bool(r["substance_in_context"]) for r in json.loads(E35_JUDGE.read_text())["rows"]}
     meta = {}
     for r in jl(P38 / "vendor/coapi_voice/data/eval/coapi_eval_v1.jsonl"):
         meta[f"v1:{r['id']}"] = {"set": "v1", "id": r["id"], "lang": r["lang"], "type": r["type"],
@@ -101,6 +100,21 @@ def r6_identity() -> dict:
         rerun = jl(P38 / "runs/arms" / f"{arm}-R6" / "v1.jsonl")
         out[arm] = {"n": len(rerun), "identical": sum(main.get(r["id"]) == r["answer"] for r in rerun)}
     return out
+
+
+def drift_a12(J: dict) -> dict:
+    """HYPOTHESIS "Drift check": A12's v1 answers (byte-identical to exp_035's, R1) under exp_035's judge and ours."""
+    sys.path.insert(0, str(P38 / "harness"))
+    import analysis as A
+    e35 = {r["id"]: r["correctness"] for r in json.loads(E35_JUDGE.read_text())["rows"]}
+    ids = sorted(e35)
+    a, b = [e35[i] for i in ids], [J["scores"]["A12"][f"v1:{i}"]["correctness"] for i in ids]
+    moves = {}
+    for x, y in zip(a, b):
+        moves[f"{x}->{y}"] = moves.get(f"{x}->{y}", 0) + 1
+    return {"n": len(ids), "exp035_mean": round(sum(a) / len(a), 4), "exp038_mean": round(sum(b) / len(b), 4),
+            "exact_agreement": round(sum(x == y for x, y in zip(a, b)) / len(ids), 4),
+            "kappa_quadratic": round(A.quadratic_kappa(a, b), 4), "transitions": dict(sorted(moves.items()))}
 
 
 def main(public: Path) -> int:
@@ -176,6 +190,12 @@ def main(public: Path) -> int:
         toks = [raw[(arm, k)]["output_tokens"] for (ar, k) in raw if ar == arm and raw[(arm, k)]["output_tokens"] is not None]
         a["output_tokens_median"] = statistics.median(toks) if toks else None
         a["truncated"] = sum(bool(r.get("truncated")) for r in st[arm]["rows"].values())
+        a["answer_words"] = {}
+        for s in SETS:
+            f = P38 / "runs/arms" / arm / f"{s}.jsonl"
+            if f.is_file():
+                w = [len(re.findall(r"\w+", r.get("answer") or "")) for r in jl(f)]
+                a["answer_words"][s] = {"median": statistics.median(w), "max": max(w)}
         summ[arm] = a
     (res / "arm_summaries.json").write_text(json.dumps(summ, indent=1) + "\n")
 
@@ -194,7 +214,8 @@ def main(public: Path) -> int:
               "R6": {"ids": json.loads((P38 / "runs/r6_ids.json").read_text())["ids"], "identity": r6_identity()},
               "R7": short(json.loads((P38 / "runs/r7_result.json").read_text())),
               "E38_D1": short(json.loads((P38 / "runs/e38_d1/e38_d1_result.json").read_text())),
-              "K4_MED_cap": short(json.loads((P38 / "runs/k4med_cap.json").read_text()))}
+              "K4_MED_cap": short(json.loads((P38 / "runs/k4med_cap.json").read_text())),
+              "drift_A12": drift_a12(J)}
     (res / "checks.json").write_text(json.dumps(checks, indent=1) + "\n")
 
     # blindness audits: file lists only (bash bodies stay private: they carry the judges' own notes)
