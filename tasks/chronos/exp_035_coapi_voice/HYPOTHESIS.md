@@ -454,3 +454,25 @@ Reading the full v1 golds against the 12 rows amendment 9 meant to keep showed t
 **5. The guide will change after this run.** On 2026-10-13 Andrei asked for the study guide's errors against current law (found by the seal review, `ADJUDICATION.md` §E) to be fixed at the source. That edit happens after the scored run. The index used here stays at the pinned hashes, and the v2 golds stay pinned to the guide hashes in `split_manifest_v2.json`. Any later cell that uses a rebuilt index must first re-check the v2 golds against the corrected guide.
 
 **6. Unchanged.** Predictions E1–E3 as registered, the use policy (plan-review amendment 6), and the rule that v2 per-row judge notes never motivate a glue change.
+
+### A12 on eval v2: scored run, regex part of E1 (2026-10-13, clock-read 09:05)
+
+**Run.** `a12_side.sh scored` at 08:46: seal and manifest matched (sha256 `77a80573…`), no earlier A12-v2 run, the reproduction check passed again (3/3 byte-identical), then A12 answered the 30 sealed rows once (`casasol/coapi_voice/runs/glue_Qwen3-4B-GGUF-Q4-K-M_A12-v2_20261013-0846`, gitignored, kept on the mini). The guide was corrected after this run (amendment 11, point 5); the run used the pinned index.
+
+**E1, the contamination test (regex floors; the fabricated-citation floor waits for the judge):**
+
+| Floor (pre-registered) | v2 | Verdict |
+|---|---|---|
+| Language 100% | 29/30 | **missed** |
+| Plain text 100% | 30/30 | held |
+| Out-of-scope 2/2 | 0/2 | **missed** |
+| Hand-off on every in-scope row | 28/28 | held |
+| Numbers ≥ 98% | 98.9% (89/90) | held |
+| Citation-in-context ≥ 94% | 97.2% (69/71) | held |
+| No fabricated citation kept | (judge) | pending |
+
+Retrieval: expected-tema hit 28/30 (93.3%).
+
+**What the two misses are (read from the outputs, not used for any glue change).** Both out-of-scope rows passed the scope gate as in scope (`scope: in`), and the model then answered with invented content: V2-M2-04 (Spanish, a German car's registration) and V2-M4-05 (Polish, Spanish state schooling). The wrong-language row is V2-M6-01: an English question naming "Alhaurín el Grande" was detected as Spanish, so the prompt was rendered in Spanish and the answer came back in Spanish. Under the E1 null, these two floors were fitted to v1, and the claim is restated at the fresh numbers: out-of-scope 0/2 and language 29/30. Per plan-review amendment 6, any glue change prompted by this is justified and checked on v1 only.
+
+**Pending.** The Fable judge (E2, E3 from the judge, the fabricated-citation floor, the drift check) waits for the account's usage reset (2026-10-14, 12:00 Madrid).
