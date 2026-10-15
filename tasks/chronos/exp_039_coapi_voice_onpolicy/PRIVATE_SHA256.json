@@ -1,0 +1,22 @@
+{
+ "note": "sha256 of every private exp_039 input and artefact (casasol, private); the eval sets, the prompt set, the guide index and the glue stay private, bound here",
+ "files": {
+  "data/eval/coapi_eval_v1.jsonl": "efc16ab220cb38918262cc854f79c6b65033f8402cba8465a81fc1aff9e2fe1c",
+  "data/eval/coapi_eval_v2_1.jsonl": "b40a3c79942f565a9c1b8385190d4c320405b049f125379a4e367588fd94fd11",
+  "data/rl/train.jsonl": "ff21a5fda3fe6844440c999e2569114716d0d3dc393d9cbd45d06bb01f7f5836",
+  "data/rl/valid.jsonl": "2e7081dfa6a8a50474cc0e1c4eba74b785f4e6862fecb25617581e2c32429ea7",
+  "data/rl/manifest.json": "8bd865e32b8547e39b562a7238284dc151970b7e667d2e02e55c0402348731af",
+  "data/rl/glossary.json": "e4e0b9b71775df5adeb254d314005918e34eb455d82f29a6244d7b8b188530e4",
+  "index/guide_en.json": "f1e28120198675d62874a75a2ab0decee2949fe7b25feede2eefc42faef7fc44",
+  "index/guide_pl.json": "9a422b0e8ec125c652b1963b706185836697132bfa4d31dfc7e0e2dcab9ac853",
+  "glue.py": "1359871c93df167f08b26d5a997b893cac23c0e07a536e4ca18e3ada269a3a94",
+  "run_eval.py": "644b25cc1a0accfb02c534b338a117974995f14cef1c442d100d6b9db655761c",
+  "guide_bm25.py": "c1209d4d8603aff793c9176e67dcb84520b1b1775553b8f634d1a1659d27a8b6",
+  "runs_rl/r1/adapters.safetensors (run 1, step 105)": "1fd2c86b7dcdad7901438fd79e7847aec61e61a1b9505d22c83deb919a8fb3ea",
+  "runs_rl/r2/0000100_adapters.safetensors (run 2, step 100 = R2)": "0c57f0e77a9ae9391e5874fe1d05f7c71ef5250b58beb1e4c1de2c4bd0ea6996",
+  "models/coapi-voice-r2-Q4_K_M.gguf": "86fcc33083a4a1cea1c040a19ec746e4dfc20d9d76571377876b972c78ed8d7b",
+  "models/coapi-voice-r2-Q8_0.gguf": "63f1e254c310e928f5a44013fdc3a7af9518364cac44fa0d53f3c712252a0c3e",
+  "models/qwen3-4b-b11577-Q4_K_M.gguf": "5a3a3aabad78214b63484dc430d568bd5fa34ac23d6603b5848c9c0ded282e8b",
+  "models/qwen3-4b-b11577-Q8_0.gguf": "391074283823b3800b105240d982a0254154e863f2055d8522ef91c930bd80e5"
+ }
+}

@@ -2125,3 +2125,28 @@ The disclosures are in HYPOTHESIS.
 
 *Evidence: `exp_038_kolibri_casasol_dropin/HYPOTHESIS.md` ("Amendment 1 — judge protocol", "The exp_038 result"), `results/analysis.json`, `results/per_row_scores.jsonl`, `results/redeal_scores.jsonl`, `results/judge_export.json`, `results/arm_summaries.json`, `results/checks.json`, `results/blindness/`, `PRIVATE_SHA256.json`, `kit/`.*
 *Status: Complete — H1 refuted (ceiling-limited); no live-bot trial. Closed 2026-10-10.*
+
+---
+
+### exp_039 — COAPI Voice on-policy: GRPO against a code-only verifier (2026-10-12 → 2026-10-15)
+
+**Question.** exp_035's SFT on a stronger model's answers lost substance in all three runs. Does changing only the objective, to GRPO against a deterministic verifier with no teacher text, keep the substance and install the format? Same base (Qwen3-4B), same retrieval and prompts, LoRA r16 on q/k/v/o (11,796,480 parameters).
+
+**Runs.**
+- **Run 1:** stopped at the verifier audit (H5). A blind Fable reader judged 5/40 top-reward rollouts gamed, mostly padding past the reward's 80-word floor.
+- **Run 2:** the floor removed (amendment 4). The audit passed at 2/40.
+
+**Result.**
+- **At Q4_K_M (registered):** non-inferiority to the base passed. R2 − base = +0.20 (CI +0.05 to +0.375) on the 40 with-substance v1 rows.
+- **Form:** 0 of 7 format floors without the glue.
+- **Adversarial review (Fable, 2026-10-15):** every number reproduced. It found a quantisation confound: the same untrained weights score +0.225 higher in Unsloth's Q4 than in ours.
+- **Q8_0 control (amendment 5):** R2 − base = **−0.075 (CI −0.20 to +0.05), "Not shown"**. The Q4 gain was our quantiser's loss on the base, not training.
+- **Training traces:** the reward moved citation (0.09 → 0.42) and plain text. The correctness-bearing terms did not improve:
+  - arithmetic 0.57 → 0.07;
+  - hand-off −0.76 → −0.89;
+  - out-of-scope decline −1.1 → −1.2.
+
+**Reading.** The verifier taught what it measured. It measured form, and it carried one weak correctness channel, which training traded away. A code reward cannot see the base's main error, an inverted rule with the right numbers.
+
+*Evidence: `exp_039_coapi_voice_onpolicy/HYPOTHESIS.md` (amendments 1–5), `RESULT.md`, `RESULT_H5.md`, `REVIEW_2026-10-15.md`, `results/main/`, `results/q8_control/`, `results/training/r2_per_step.csv`, `PRIVATE_SHA256.json`.*
+*Status: Complete — no training gain; form not learned. Closed 2026-10-15.*

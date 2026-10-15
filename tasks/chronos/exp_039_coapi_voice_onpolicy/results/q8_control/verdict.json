@@ -1,0 +1,35 @@
+{
+  "verdict": "Not shown",
+  "mean_diff": -0.075,
+  "ci95": [
+    -0.2,
+    0.05
+  ],
+  "sign_flip_p_one_sided": 0.8867,
+  "up": 4,
+  "down": 7,
+  "same": 29,
+  "mean_correctness": {
+    "B0rq8": 1.425,
+    "R1q8": 1.35
+  },
+  "harmful": {
+    "B0rq8": [
+      "M3-01",
+      "M4-02",
+      "M4-03"
+    ],
+    "R1q8": [
+      "M1-08",
+      "M2-02",
+      "M3-01",
+      "M4-03",
+      "M5-01"
+    ]
+  },
+  "descriptive_vs_q4_main_run": {
+    "B0r_q4": 1.2,
+    "R1_q4": 1.4,
+    "note": "different judging session; drift applies"
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "H2a": {
+    "verdict": "PASS",
+    "mean_diff": 0.2,
+    "ci95": [
+      0.05,
+      0.375
+    ],
+    "n_rows": 40,
+    "harmful_R1": [
+      "M1-08",
+      "M2-02",
+      "M3-04",
+      "M4-02",
+      "M4-04",
+      "M4-06",
+      "M4-10"
+    ],
+    "harmful_B0r": [
+      "M1-08",
+      "M1-10",
+      "M2-02",
+      "M2-09",
+      "M3-04",
+      "M4-01",
+      "M4-02",
+      "M4-04",
+      "M4-05",
+      "M4-10",
+      "M5-03",
+      "M6-05",
+      "M6-09"
+    ]
+  },
+  "H2b": {
+    "descriptive": true,
+    "mean_diff": 0.1,
+    "ci95": [
+      -0.25,
+      0.45
+    ],
+    "n_rows": 20,
+    "harmful_R1": [
+      "V2-M1-03",
+      "V2-M1-05",
+      "V2-M2-02",
+      "V2-M2-04",
+      "V2-M2-05",
+      "V2-M3-05",
+      "V2-M4-01",
+      "V2-M5-04"
+    ],
+    "harmful_B0r": [
+      "V2-M1-03",
+      "V2-M1-05",
+      "V2-M2-01",
+      "V2-M2-04",
+      "V2-M4-05",
+      "V2-M5-04"
+    ]
+  },
+  "H1": {
+    "verdict": "NULL",
+    "met": 0,
+    "floors": {
+      "language_100": false,
+      "plain_ge_95": false,
+      "oos_all_declined": false,
+      "handoff_ge_90": false,
+      "citation_in_context_ge_94": false,
+      "numeric_ge_98": false,
+      "spanish_term_ge_80": false
+    },
+    "summary_R1_v21": {
+      "run": "exp039_R1_v21_20261014-213205",
+      "rows": 30,
+      "language_compliance": " 96.7% (29/30)",
+      "in_scope_answer_rate": "100.0% (28/28)",
+      "out_of_scope_refusal": "  0.0% (0/2)",
+      "handoff_present": "  3.6% (1/28)",
+      "plain_text": " 90.0% (27/30)",
+      "citation_in_context": " 86.0% (49/57)   [rows with ≥1 citation: 25/30]",
+      "numeric_preservation": " 97.9% (95/97)   [in context 89, in gold 4, derived 2, unsupported 2]",
+      "spanish_term_inclusion": " 78.3% (18/23)   [in-scope EN/PL answers; glossary term or Spanish acronym]",
+      "retrieval_hit": " 93.3% (28/30)",
+      "truncated_at_cap": 0,
+      "answer_lang_counts": {
+        "en": 14,
+        "pl": 9,
+        "es": 7
+      },
+      "per_lang_language_compliance": {
+        "en": " 93.3% (14/15)",
+        "pl": "100.0% (9/9)",
+        "es": "100.0% (6/6)"
+      }
+    }
+  },
+  "H3": {
+    "verdict": "PASS",
+    "checks": {
+      "term_first_use_ge_60": false,
+      "tail_le_3": true,
+      "harmful_2_fewer": false
+    },
+    "term_rate": 0.182,
+    "tail": 2,
+    "harmful_R1G": [
+      "V2-M1-03",
+      "V2-M1-05",
+      "V2-M2-02",
+      "V2-M2-04",
+      "V2-M2-05",
+      "V2-M4-01",
+      "V2-M5-04"
+    ],
+    "harmful_A12": [
+      "V2-M1-03",
+      "V2-M1-05",
+      "V2-M2-01",
+      "V2-M2-04",
+      "V2-M4-04",
+      "V2-M5-04"
+    ]
+  },
+  "H4": {
+    "verdict": "NULL",
+    "checks": {
+      "module_range_le_0.2": false,
+      "unsupported_numbers_le_B0r": true,
+      "fabricated_citations_le_B0r": true
+    },
+    "module_means": {
+      "1": 0.6,
+      "2": 1.0,
+      "3": 1.2,
+      "4": 1.5,
+      "5": 1.2,
+      "6": 1.6
+    },
+    "unsupported": [
+      2,
+      4
+    ],
+    "fabricated": [
+      4,
+      22
+    ]
+  },
+  "D1": {
+    "agree": 3,
+    "of": 10,
+    "rows": [
+      {
+        "id": "M1-01",
+        "agree": true,
+        "differs": []
+      },
+      {
+        "id": "M1-06",
+        "agree": true,
+        "differs": []
+      },
+      {
+        "id": "M2-04",
+        "agree": false,
+        "differs": [
+          "citations",
+          "numbers"
+        ]
+      },
+      {
+        "id": "M2-05",
+        "agree": false,
+        "differs": [
+          "numbers"
+        ]
+      },
+      {
+        "id": "M3-03",
+        "agree": true,
+        "differs": []
+      },
+      {
+        "id": "M3-06",
+        "agree": false,
+        "differs": [
+          "citations",
+          "numbers"
+        ]
+      },
+      {
+        "id": "M4-01",
+        "agree": false,
+        "differs": [
+          "numbers"
+        ]
+      },
+      {
+        "id": "M4-06",
+        "agree": false,
+        "differs": [
+          "handoff"
+        ]
+      },
+      {
+        "id": "M5-02",
+        "agree": false,
+        "differs": [
+          "citations",
+          "numbers"
+        ]
+      },
+      {
+        "id": "M6-03",
+        "agree": false,
+        "differs": [
+          "numbers"
+        ]
+      }
+    ]
+  },
+  "verdict": "Substance kept, form not learned"
+}

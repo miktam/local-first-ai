@@ -1,0 +1,110 @@
+{
+  "rule": "highest mean reward on the validation prompts, greedy, thinking off; ties \u2192 earlier step",
+  "n_valid": 51,
+  "selected": "105",
+  "checkpoints": {
+    "base": {
+      "n": 51,
+      "mean_total": 2.3529,
+      "components": {
+        "lang": 1.0,
+        "plain": 0.363,
+        "cite": 0.098,
+        "num": 0.902,
+        "arith": 1.0,
+        "term": 0.338,
+        "length": -0.137,
+        "repeat": 0.0,
+        "copy": -0.157
+      },
+      "at_cap": 0
+    },
+    "25": {
+      "n": 51,
+      "mean_total": 2.8431,
+      "components": {
+        "lang": 1.0,
+        "plain": 0.461,
+        "cite": 0.412,
+        "num": 0.882,
+        "arith": 1.0,
+        "term": 0.294,
+        "length": -0.069,
+        "repeat": 0.0,
+        "copy": -0.098
+      },
+      "at_cap": 0
+    },
+    "50": {
+      "n": 51,
+      "mean_total": 2.9608,
+      "components": {
+        "lang": 1.0,
+        "plain": 0.48,
+        "cite": 0.588,
+        "num": 0.882,
+        "arith": 1.0,
+        "term": 0.353,
+        "length": -0.069,
+        "repeat": 0.0,
+        "copy": -0.216
+      },
+      "at_cap": 0
+    },
+    "75": {
+      "n": 51,
+      "mean_total": 3.049,
+      "components": {
+        "lang": 1.0,
+        "plain": 0.5,
+        "cite": 0.627,
+        "num": 0.882,
+        "arith": 1.0,
+        "term": 0.324,
+        "length": -0.039,
+        "repeat": 0.0,
+        "copy": -0.196
+      },
+      "at_cap": 0
+    },
+    "100": {
+      "n": 51,
+      "mean_total": 3.0196,
+      "components": {
+        "lang": 1.0,
+        "plain": 0.5,
+        "cite": 0.627,
+        "num": 0.882,
+        "arith": 0.0,
+        "term": 0.368,
+        "length": -0.039,
+        "repeat": 0.0,
+        "copy": -0.196
+      },
+      "at_cap": 0
+    },
+    "105": {
+      "n": 51,
+      "mean_total": 3.0784,
+      "components": {
+        "lang": 1.0,
+        "plain": 0.5,
+        "cite": 0.647,
+        "num": 0.882,
+        "arith": 1.0,
+        "term": 0.368,
+        "length": -0.039,
+        "repeat": 0.0,
+        "copy": -0.216
+      },
+      "at_cap": 0
+    }
+  },
+  "adapter_sha256": {
+    "25": "7ddc01b50f515bfbc9b4b0e0a54c9ba7e09976c8a8bc6a4dc56044e5fff1b771",
+    "50": "5cb766ddae08fceebb197f621aac1161c8edbee258566a552a83e98f98b5931f",
+    "75": "72a0ce0eeba7d57334fa97f24da25e717de22a4af350d266869b4c6115d15742",
+    "100": "c0d6c41a2270797f9d907128ada9a652e4412c285e8029129bf3a23343b8f9de",
+    "105": "1fd2c86b7dcdad7901438fd79e7847aec61e61a1b9505d22c83deb919a8fb3ea"
+  }
+}
