@@ -1,0 +1,134 @@
+{
+  "experiment": "exp_040",
+  "built_by": "rl40/build_prompts40.py",
+  "seed": 40,
+  "reward_rev": 3,
+  "casasol_commit": "f6b6013440942be2ce83bbf87b98be9ed04307e9",
+  "code_dirty": false,
+  "args": {
+    "out": "/Users/miktam02/REPOS/casasol/coapi_voice/data/rl40/prompts",
+    "arith": 150,
+    "keep_unretrieved": false
+  },
+  "counts": {
+    "train": {
+      "total": 2267,
+      "by_lang": {
+        "pl": 883,
+        "en": 788,
+        "es": 596
+      },
+      "by_type": {
+        "arith": 450,
+        "categorical": 870,
+        "yesno": 146,
+        "abstain": 250,
+        "numeric": 551
+      },
+      "by_lang_type": {
+        "en/abstain": 81,
+        "en/arith": 150,
+        "en/categorical": 310,
+        "en/numeric": 195,
+        "en/yesno": 52,
+        "es/abstain": 87,
+        "es/arith": 150,
+        "es/categorical": 191,
+        "es/numeric": 140,
+        "es/yesno": 28,
+        "pl/abstain": 82,
+        "pl/arith": 150,
+        "pl/categorical": 369,
+        "pl/numeric": 216,
+        "pl/yesno": 66
+      },
+      "by_module": {
+        "-": 87,
+        "M1": 1161,
+        "M2": 308,
+        "M3": 275,
+        "M4": 301,
+        "M5": 135
+      }
+    },
+    "valid": {
+      "total": 79,
+      "by_lang": {
+        "en": 30,
+        "pl": 30,
+        "es": 19
+      },
+      "by_type": {
+        "categorical": 54,
+        "numeric": 16,
+        "yesno": 6,
+        "arith": 3
+      },
+      "by_lang_type": {
+        "en/arith": 1,
+        "en/categorical": 21,
+        "en/numeric": 6,
+        "en/yesno": 2,
+        "es/arith": 1,
+        "es/categorical": 12,
+        "es/numeric": 4,
+        "es/yesno": 2,
+        "pl/arith": 1,
+        "pl/categorical": 21,
+        "pl/numeric": 6,
+        "pl/yesno": 2
+      },
+      "by_module": {
+        "M5": 79
+      }
+    }
+  },
+  "train_type_shares": {
+    "arith": 0.1985,
+    "categorical": 0.3838,
+    "yesno": 0.0644,
+    "abstain": 0.1103,
+    "numeric": 0.2431
+  },
+  "drops": {
+    "lang_mismatch/en": 24,
+    "lang_mismatch/es": 1,
+    "lang_mismatch/pl": 2,
+    "source_not_retrieved/en": 153,
+    "source_not_retrieved/es": 386,
+    "source_not_retrieved/pl": 82
+  },
+  "twin_links_cleared": 28,
+  "arith_echo_redrawn": {
+    "F05": 16
+  },
+  "freshness": {
+    "threshold": 0.45,
+    "max_jaccard": {
+      "v1": 0.4394,
+      "v2_1": 0.3605
+    },
+    "dropped": {
+      "v1": 1
+    }
+  },
+  "sha256": {
+    "out/train.jsonl": "1f7cda16f20037cbeb511050a62711f07c8eacae353e2c5f7bb5645ddd7c5098",
+    "out/valid.jsonl": "8bdad1789942fa15fd4ebbfe6a563303e938290c68026cd944cde5e3259833b5",
+    "bank/BANK_FROZEN.jsonl": "6de249dd1174a310a91fe1459746513d96206079046b0d43618bda4d5ba4dfa2",
+    "bank/VALID_FROZEN.jsonl": "67934fb5446f662be89defe679e817bb3362aea780cb1bd52435328c28855771",
+    "bank/ABSTAIN_FROZEN.jsonl": "53421523ad2888323a7dd8f47a50ba9cd102e1c4e726b73a663d9c32a83acd6f",
+    "code/reward40.py": "a2b0d463d23ad7e56802f6b15b068a7a1320150fb899c94c34198aad0d1f7ddd",
+    "code/prompt40.py": "d0cf87a76aed757c3de5b06b8694ad1a49659312a4b1cdcac14e0c89d3affab0",
+    "code/build_prompts40.py": "7b196d11416e7e81909ab0c8c336c918baba88464d7b377b16987c2ef3504bf1",
+    "code/reward.py": "904f07a943422fe146f60e44a5f33130db10338ee5dde5fa9df5d3155e85a7c9",
+    "code/arith_templates.py": "3e978c21a01de637b08586c95efa107cc2c568ef854e0169161ec2b4019a4f1e",
+    "code/probes.py": "f0ccb91004a82fca1c28da50e59f0dfc5f86e69e4885f1e2191959cfa7d570b2",
+    "code/glue.py": "1359871c93df167f08b26d5a997b893cac23c0e07a536e4ca18e3ada269a3a94",
+    "code/guide_bm25.py": "c1209d4d8603aff793c9176e67dcb84520b1b1775553b8f634d1a1659d27a8b6",
+    "code/run_eval.py": "644b25cc1a0accfb02c534b338a117974995f14cef1c442d100d6b9db655761c",
+    "index/guide_en.json": "f1e28120198675d62874a75a2ab0decee2949fe7b25feede2eefc42faef7fc44",
+    "index/guide_pl.json": "9a422b0e8ec125c652b1963b706185836697132bfa4d31dfc7e0e2dcab9ac853"
+  },
+  "use": "exp_040 training prompts before the offline filter; v1, v2.1 and v3 are test sets and never enter this file"
+}

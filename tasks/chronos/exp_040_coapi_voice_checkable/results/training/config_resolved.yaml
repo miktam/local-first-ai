@@ -1,0 +1,43 @@
+model: /Users/service-user/.cache/huggingface/hub/models--Qwen--Qwen3-4B/snapshots/1cfa9a7208912126459214e8b04321603b3df60c
+train: true
+train_type: lora
+train_mode: grpo
+grpo_loss_type: grpo
+importance_sampling_level: token
+data: data/rl40/train
+seed: 40
+num_layers: -1
+lora_parameters:
+  rank: 16
+  scale: 2.0
+  dropout: 0.05
+  keys:
+  - self_attn.q_proj
+  - self_attn.k_proj
+  - self_attn.v_proj
+  - self_attn.o_proj
+group_size: 6
+batch_size: 8
+beta: 0.02
+epsilon: 0.2
+temperature: 0.9
+max_completion_length: 512
+max_seq_length: 3072
+reward_functions_file: rl40/reward40.py
+reward_functions: coapi40_answer,coapi40_lang,coapi40_plain,coapi40_cite,coapi40_num,coapi40_length,coapi40_repeat,coapi40_copy
+optimizer: adam
+learning_rate: 1.0e-05
+lr_schedule:
+  name: cosine_decay
+  warmup: 5
+  arguments:
+  - 1.0e-05
+  - 78
+grad_checkpoint: true
+adapter_path: runs_rl/r3
+save_every: 25
+steps_per_report: 1
+steps_per_eval: 1000000
+val_batches: 1
+fuse: false
+iters: 78

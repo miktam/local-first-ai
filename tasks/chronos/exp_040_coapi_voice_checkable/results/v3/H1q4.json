@@ -1,0 +1,84 @@
+{
+ "x": {
+  "arm": "R3",
+  "run": "exp040_R3_v3_20261017-081118",
+  "exact": 0.7733
+ },
+ "y": {
+  "arm": "B0i",
+  "run": "exp040_B0i_v3_20261017-080137",
+  "exact": 0.7067
+ },
+ "set_sha256": "2c6cbad123adff6d9e1b55ed91cd61c71259a3800cd0a5b25d83537a061da454",
+ "H1_exact": {
+  "n": 150,
+  "x": 0.7733,
+  "y": 0.7067,
+  "diff": 0.0667,
+  "ci95": [
+   0.0133,
+   0.12
+  ],
+  "discordant": {
+   "x_only": 14,
+   "y_only": 4
+  },
+  "mcnemar_p_one_sided": 0.01544,
+  "shown": true
+ },
+ "H3_pairs_both_right": {
+  "n": 30,
+  "x": 0.7,
+  "y": 0.5,
+  "diff": 0.2,
+  "ci95": [
+   0.0333,
+   0.3667
+  ],
+  "discordant": {
+   "x_only": 7,
+   "y_only": 1
+  },
+  "mcnemar_p_one_sided": 0.03516,
+  "shown": true,
+  "meets_registered_effect": true
+ },
+ "H4_abstention": {
+  "abstain_rows": 38,
+  "abstain_rate": {
+   "x": 0.5789,
+   "y": 0.4474
+  },
+  "answerable_rows": 112,
+  "false_abstention": {
+   "x": 0.0268,
+   "y": 0.0268
+  },
+  "abstain_paired": {
+   "n": 38,
+   "x": 0.5789,
+   "y": 0.4474,
+   "diff": 0.1316,
+   "ci95": [
+    0.0263,
+    0.2632
+   ],
+   "discordant": {
+    "x_only": 6,
+    "y_only": 1
+   },
+   "mcnemar_p_one_sided": 0.0625,
+   "shown": false
+  },
+  "rise": 0.1315,
+  "pass": false
+ },
+ "rules": {
+  "bootstrap": "10000 stratified paired resamples, seed 40, strata language \u00d7 kind",
+  "mcnemar": "exact, one-sided",
+  "alpha": 0.05,
+  "H3_min": 0.1,
+  "H4_rise": 0.2,
+  "H4_false_max": 0.05
+ }
+}

@@ -1,0 +1,210 @@
+{
+ "experiment": "exp_040",
+ "built_by": "rl40/dapo_filter.py select",
+ "casasol_commit": "88338f18c3909596fcc99c825f46d04fbf4d8b97",
+ "run": {
+  "model": "qwen3-4b-b11577:q4km-imat",
+  "digest": "92bfae6dd5dd6ccc529817e9e9dc3729948f4688fc91f7b0f06dc2c16ce4090c",
+  "server": "0.33.0",
+  "options": {
+   "temperature": 0.9,
+   "top_p": 0.95,
+   "top_k": 20,
+   "min_p": 0.0,
+   "repeat_penalty": 1.0,
+   "presence_penalty": 0.0,
+   "num_predict": 512,
+   "num_ctx": 4096
+  },
+  "n": 6,
+  "reward_rev": 3,
+  "started": "2026-10-15T10:12:09",
+  "prompt_sets": [
+   "f4907021ee23fd0709bfcc97f867916e85821a70b59a61820deb9d1856cc6b47",
+   "5703a9223347ed48c836cca8d34b0726d567d3c7e854170d36e3b82dae968a67",
+   "1f7cda16f20037cbeb511050a62711f07c8eacae353e2c5f7bb5645ddd7c5098"
+  ],
+  "note": "prompt_sha backfilled 2026-10-16 from prompts f4907021 (committed d7206ee); originals in *.pre_options.*"
+ },
+ "partial": false,
+ "incomplete_rows": 0,
+ "stale_samples_ignored": 6096,
+ "sampled": 2267,
+ "kept": 622,
+ "dropped_all_wrong": 349,
+ "dropped_all_right": 1296,
+ "twin_links_cleared": 62,
+ "base_right_rate": 0.7169,
+ "verdicts": {
+  "right": 9751,
+  "wrong": 3450,
+  "hedge": 124,
+  "missing": 277
+ },
+ "right_count_histogram_by_lang_type": {
+  "en/abstain": {
+   "0": 21,
+   "1": 7,
+   "2": 4,
+   "3": 2,
+   "4": 5,
+   "5": 6,
+   "6": 36
+  },
+  "en/arith": {
+   "0": 43,
+   "1": 17,
+   "2": 13,
+   "3": 11,
+   "4": 10,
+   "5": 10,
+   "6": 46
+  },
+  "en/categorical": {
+   "0": 12,
+   "1": 5,
+   "2": 7,
+   "3": 6,
+   "4": 5,
+   "5": 30,
+   "6": 245
+  },
+  "en/numeric": {
+   "0": 9,
+   "1": 9,
+   "2": 4,
+   "3": 3,
+   "4": 4,
+   "5": 17,
+   "6": 149
+  },
+  "en/yesno": {
+   "1": 4,
+   "2": 3,
+   "3": 2,
+   "4": 4,
+   "5": 5,
+   "6": 34
+  },
+  "es/abstain": {
+   "0": 32,
+   "1": 9,
+   "2": 3,
+   "3": 6,
+   "4": 5,
+   "5": 4,
+   "6": 28
+  },
+  "es/arith": {
+   "0": 72,
+   "1": 18,
+   "2": 6,
+   "3": 9,
+   "4": 2,
+   "5": 8,
+   "6": 35
+  },
+  "es/categorical": {
+   "0": 8,
+   "1": 5,
+   "2": 3,
+   "3": 4,
+   "4": 4,
+   "5": 24,
+   "6": 143
+  },
+  "es/numeric": {
+   "0": 7,
+   "1": 2,
+   "2": 6,
+   "3": 5,
+   "4": 7,
+   "5": 15,
+   "6": 98
+  },
+  "es/yesno": {
+   "1": 2,
+   "3": 3,
+   "4": 4,
+   "5": 4,
+   "6": 15
+  },
+  "pl/abstain": {
+   "0": 28,
+   "1": 11,
+   "2": 5,
+   "3": 5,
+   "4": 3,
+   "5": 4,
+   "6": 26
+  },
+  "pl/arith": {
+   "0": 69,
+   "1": 15,
+   "2": 9,
+   "3": 3,
+   "4": 5,
+   "5": 8,
+   "6": 41
+  },
+  "pl/categorical": {
+   "0": 32,
+   "1": 17,
+   "2": 16,
+   "3": 16,
+   "4": 22,
+   "5": 40,
+   "6": 226
+  },
+  "pl/numeric": {
+   "0": 10,
+   "1": 15,
+   "2": 11,
+   "3": 9,
+   "4": 6,
+   "5": 14,
+   "6": 151
+  },
+  "pl/yesno": {
+   "0": 6,
+   "1": 6,
+   "2": 7,
+   "3": 8,
+   "4": 6,
+   "5": 10,
+   "6": 23
+  }
+ },
+ "kept_by_lang_type": {
+  "en/abstain": 24,
+  "en/arith": 61,
+  "en/categorical": 53,
+  "en/numeric": 37,
+  "en/yesno": 18,
+  "es/abstain": 27,
+  "es/arith": 43,
+  "es/categorical": 40,
+  "es/numeric": 35,
+  "es/yesno": 13,
+  "pl/abstain": 28,
+  "pl/arith": 40,
+  "pl/categorical": 111,
+  "pl/numeric": 55,
+  "pl/yesno": 37
+ },
+ "kept_by_module": {
+  "-": 10,
+  "M1": 339,
+  "M2": 52,
+  "M3": 69,
+  "M4": 123,
+  "M5": 29
+ },
+ "sha256": {
+  "train.jsonl": "9fe67900fb0e7a01892c4f356e80646abea2f2fc8812575a8c19d8193af2af23",
+  "valid.jsonl": "8bdad1789942fa15fd4ebbfe6a563303e938290c68026cd944cde5e3259833b5",
+  "samples.jsonl": "8ab5e0ae671ea40ecf01c0a914261140d514053398de12432b00c5d09e910f37",
+  "prompts/train.jsonl": "1f7cda16f20037cbeb511050a62711f07c8eacae353e2c5f7bb5645ddd7c5098",
+  "code/reward40.py": "a2b0d463d23ad7e56802f6b15b068a7a1320150fb899c94c34198aad0d1f7ddd"
+ }
+}

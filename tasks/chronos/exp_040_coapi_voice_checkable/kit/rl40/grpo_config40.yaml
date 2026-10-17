@@ -1,0 +1,56 @@
+# exp_040 R3 — GRPO on Qwen3-4B against the correctness-checkable reward (DESIGN §6–7). mlx-lm-lora 5.8.6, exact pin.
+# exp_039's configuration with four changes: data, reward, seed, adapter path. Everything else is byte-for-byte exp_039's.
+# Run from coapi_voice/ through the launcher:  python rl40/train40.py
+# Every value the design names is set explicitly, because the package defaults differ
+# (beta 0.1, group_size 4, epsilon 1e-4, rank 8, scale 10, max_seq_length 2048, fuse true).
+# Forced by the package, recorded not chosen: rollout top_p 0.95, top_k 20, min_p 0
+# (GRPOTrainingArgs defaults; train.py does not pass them) — same top_k as serve.
+# One configuration, pre-registered; a change is a re-registration.
+
+model: ~/.cache/huggingface/hub/models--Qwen--Qwen3-4B/snapshots/1cfa9a7208912126459214e8b04321603b3df60c
+                                     # bf16, the E35 snapshot; thinking is switched off by the launcher (train = serve)
+train: true
+train_type: lora
+train_mode: grpo
+grpo_loss_type: grpo
+importance_sampling_level: token
+data: data/rl40/train                # rl40/build_prompts40.py → rl40/dapo_filter.py select: train.jsonl (622), valid.jsonl (79)
+seed: 40
+
+# adapter: LoRA r16, alpha 32 (scale = alpha / rank = 2.0), dropout 0.05, q/k/v/o on all 36 layers
+num_layers: -1
+lora_parameters:
+  rank: 16
+  scale: 2.0
+  dropout: 0.05
+  keys: [self_attn.q_proj, self_attn.k_proj, self_attn.v_proj, self_attn.o_proj]
+
+# GRPO
+group_size: 6
+batch_size: 8                        # prompts per step → 48 rollouts
+beta: 0.02                           # KL leash (decision 4)
+epsilon: 0.2                         # PPO clip; the package default 1e-4 would be a different method
+temperature: 0.9
+max_completion_length: 512           # = reward.CAP = run_eval.OPTIONS["num_predict"]
+max_seq_length: 3072                 # system ~300 + context ≤1200 + question + 512 completion > the 2048 default
+reward_functions_file: rl40/reward40.py
+reward_functions: coapi40_answer,coapi40_lang,coapi40_plain,coapi40_cite,coapi40_num,coapi40_length,coapi40_repeat,coapi40_copy
+# reward_weights: unset → all 1.0; the component values carry the design's weights
+
+# schedule: one pass over the train prompts (iters = ceil(622 / 8) = 78, set by the launcher), cosine, 5 warm-up steps
+optimizer: adam
+learning_rate: 1.0e-5
+lr_schedule:
+  name: cosine_decay
+  warmup: 5
+  arguments: [1.0e-5, 100]           # decay steps = iters; the launcher writes the real value
+grad_checkpoint: true
+
+# checkpoints every 25 steps, all kept; selection is by validation reward, done after the run
+adapter_path: runs_rl/r3                  # exp_040 R3 (reward40 rev 3)
+save_every: 25
+steps_per_report: 1
+steps_per_eval: 1000000              # the package's own eval is not the selection rule
+val_batches: 1                       # it still runs at step 1 and the last step (grpo_trainer: it == 1 or it == iters);
+                                     # the default 25 batches × 48 rollouts would cost hours for a number not used
+fuse: false

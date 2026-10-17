@@ -1,0 +1,23 @@
+{
+ "note": "sha256 of every private exp_040 input and artefact (casasol, private): the test set v3, the training bank and prompts, the guide index and the glue stay private, bound here. Per-row v3 results are published as verdicts only (results/v3/verdicts_*.jsonl), so v3 stays usable as a sealed test.",
+ "files": {
+  "data/eval/coapi_eval_v3.jsonl (sealed test set; private)": "2c6cbad123adff6d9e1b55ed91cd61c71259a3800cd0a5b25d83537a061da454",
+  "data/bank40/BANK_FROZEN.jsonl (training bank)": "6de249dd1174a310a91fe1459746513d96206079046b0d43618bda4d5ba4dfa2",
+  "data/bank40/VALID_FROZEN.jsonl": "67934fb5446f662be89defe679e817bb3362aea780cb1bd52435328c28855771",
+  "data/bank40/ABSTAIN_FROZEN.jsonl": "53421523ad2888323a7dd8f47a50ba9cd102e1c4e726b73a663d9c32a83acd6f",
+  "data/rl40/prompts/train.jsonl (2,267 prompts before the filter)": "1f7cda16f20037cbeb511050a62711f07c8eacae353e2c5f7bb5645ddd7c5098",
+  "data/rl40/train/train.jsonl (622 trained rows)": "9fe67900fb0e7a01892c4f356e80646abea2f2fc8812575a8c19d8193af2af23",
+  "data/rl40/train/valid.jsonl": "8bdad1789942fa15fd4ebbfe6a563303e938290c68026cd944cde5e3259833b5",
+  "index/guide_en.json": "f1e28120198675d62874a75a2ab0decee2949fe7b25feede2eefc42faef7fc44",
+  "index/guide_pl.json": "9a422b0e8ec125c652b1963b706185836697132bfa4d31dfc7e0e2dcab9ac853",
+  "glue.py": "1359871c93df167f08b26d5a997b893cac23c0e07a536e4ca18e3ada269a3a94",
+  "run_eval.py": "644b25cc1a0accfb02c534b338a117974995f14cef1c442d100d6b9db655761c",
+  "guide_bm25.py": "c1209d4d8603aff793c9176e67dcb84520b1b1775553b8f634d1a1659d27a8b6",
+  "runs_rl/r3/0000050_adapters.safetensors (selected = R3)": "57487762b8ba0324e24da13878894645c8115715dcb0bf0b9e39a1c95fd0692d",
+  "runs_rl/r3/adapters.safetensors (final, step 78)": "3c8529196bb5114f6436f0e87a20fa8f6eb1b9ce945eedb37a21210b3ba7c132",
+  "models/r3/r3-Q4_K_M-imat.gguf": "2a93e4057331812f512a4659a8d9b5d44a335cc3a589ced4a0f34a1085a1cfbb",
+  "models/r3/r3-Q8_0.gguf": "d4bca5e799f468e84729b2705b6b4a003653b719a23f9b76d2ee6c9608a5bcd5",
+  "models/qwen3-4b-b11577/qwen3-4b-Q4_K_M-imat.gguf (B0i)": "38623d2a0c34cdc53b4967bfb61602a447d3ef704e1fbe02ea2e0a39ed005372",
+  "models/qwen3-4b-b11577/imatrix_guide_en_pl.gguf (step 0)": "a6f11973e2c7808bc1948a5d3614538f90bac49a7cc992d5ca3678ebc0bb2e02"
+ }
+}

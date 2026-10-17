@@ -1,0 +1,103 @@
+{
+ "arm": "R3",
+ "set": "v3",
+ "mode": "prompt",
+ "model": "coapi-voice:r3",
+ "digest": "1a916697be8c",
+ "n": 150,
+ "exact": 0.7733,
+ "verdicts": {
+  "right": 116,
+  "wrong": 33,
+  "missing": 1
+ },
+ "by_kind": {
+  "abstain": {
+   "n": 23,
+   "exact": 0.4348
+  },
+  "oos": {
+   "n": 15,
+   "exact": 0.8
+  },
+  "pair": {
+   "n": 60,
+   "exact": 0.8333
+  },
+  "single": {
+   "n": 52,
+   "exact": 0.8462
+  }
+ },
+ "by_lang": {
+  "en": {
+   "n": 50,
+   "exact": 0.86
+  },
+  "es": {
+   "n": 50,
+   "exact": 0.64
+  },
+  "pl": {
+   "n": 50,
+   "exact": 0.82
+  }
+ },
+ "by_type": {
+  "abstain": {
+   "n": 38,
+   "exact": 0.5789
+  },
+  "categorical": {
+   "n": 32,
+   "exact": 0.9375
+  },
+  "numeric": {
+   "n": 76,
+   "exact": 0.7895
+  },
+  "yesno": {
+   "n": 4,
+   "exact": 1.0
+  }
+ },
+ "glue_declined": 0,
+ "detect_lang_mismatch": 2,
+ "options": {
+  "temperature": 0.0,
+  "seed": 42,
+  "num_predict": 512,
+  "top_k": 20,
+  "top_p": 0.8,
+  "min_p": 0.05,
+  "repeat_penalty": 1.05,
+  "presence_penalty": 0.0,
+  "repeat_last_n": 256,
+  "num_ctx": 4096
+ },
+ "think": false,
+ "server": "ollama 0.33.0",
+ "code_pin": "b1a648c",
+ "sha256": {
+  "set": "2c6cbad123adff6d9e1b55ed91cd61c71259a3800cd0a5b25d83537a061da454",
+  "reward40.py": "a2b0d463d23ad7e56802f6b15b068a7a1320150fb899c94c34198aad0d1f7ddd",
+  "prompt40.py": "b6f60ff59386d46d3fb241f1e54c082dfdf3c2f2d3eada5003111e9deb723b4d",
+  "run_arm40.py": "ebbdacc03b1b65ca72be186ad5cebe333d4889ac76bc6626a427b2d3b25c7020"
+ },
+ "r3_manifest": {
+  "step": 50,
+  "adapter": "/Users/miktam02/REPOS/casasol/coapi_voice/runs_rl/mbp_20261016_r3/r3/0000050_adapters.safetensors",
+  "adapter_sha256": "57487762b8ba0324e24da13878894645c8115715dcb0bf0b9e39a1c95fd0692d",
+  "gguf_sha256": {
+   "r3-Q4_K_M-imat.gguf": "2a93e4057331812f512a4659a8d9b5d44a335cc3a589ced4a0f34a1085a1cfbb",
+   "r3-Q8_0.gguf": "d4bca5e799f468e84729b2705b6b4a003653b719a23f9b76d2ee6c9608a5bcd5",
+   "r3-f16.gguf": "0e609f21f0cfd6514b35e4f5820261070d9d366306bc3b8e22d13a92b9cf140f"
+  },
+  "digest": {
+   "coapi-voice:r3": "1a916697be8c",
+   "coapi-voice:r3-q8": "5ddc2e625000"
+  },
+  "recipe": "mlx-lm 0.32 fuse (exp039-venv) → llama.cpp b11577 convert_hf_to_gguf f16 → llama-quantize Q4_K_M --imatrix imatrix_guide_en_pl.gguf (step 0) / Q8_0"
+ },
+ "seconds": 565
+}

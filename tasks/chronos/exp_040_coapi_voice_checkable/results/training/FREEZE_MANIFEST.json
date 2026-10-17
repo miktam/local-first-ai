@@ -1,0 +1,137 @@
+{
+ "train": {
+  "n": 734,
+  "sha256": "6de249dd1174a310a91fe1459746513d96206079046b0d43618bda4d5ba4dfa2",
+  "by_type": {
+   "yesno": 70,
+   "numeric": 237,
+   "categorical": 427
+  },
+  "by_module": {
+   "M1": 453,
+   "M4": 65,
+   "M5": 41,
+   "M3": 88,
+   "M2": 87
+  },
+  "twins": 131,
+  "chunks": 261,
+  "dropped_dup": [],
+  "dropped_yesno_cap": [],
+  "twin_links_cleared": 0
+ },
+ "valid": {
+  "n": 29,
+  "sha256": "67934fb5446f662be89defe679e817bb3362aea780cb1bd52435328c28855771",
+  "by_type": {
+   "categorical": 21,
+   "numeric": 6,
+   "yesno": 2
+  },
+  "dropped_dup_vs_train": [],
+  "twin_links_cleared": 0
+ },
+ "arith_templates": [
+  {
+   "id": "F01",
+   "tema": "M2:T21",
+   "split": "train",
+   "guide_quote": "Monthly rate from annual TIN (simple/proportional): `i_monthly = TIN / 12` … French system constant installment: `a = Co·i / [1 − (1+i)⁻ⁿ]`"
+  },
+  {
+   "id": "F02",
+   "tema": "M2:T21",
+   "split": "train",
+   "guide_quote": "Outstanding principal after s installments (French): `Cs = a·[1 − (1+i)⁻⁽ⁿ⁻ˢ⁾] / i`"
+  },
+  {
+   "id": "F05",
+   "tema": "M1:T8",
+   "split": "train",
+   "guide_quote": "Security deposit / fianza (art. 36): MANDATORY — 1 month's rent (housing) or 2 months' rent (other uses), in cash; not updatable during first 5/7 years;"
+  },
+  {
+   "id": "F06",
+   "tema": "M1:T8",
+   "split": "train",
+   "guide_quote": "art. 32 lets a business/professional tenant sublet/assign WITHOUT landlord consent (contrast with housing leases) but landlord gets a rent increase (10% partial sublease, 20% assignment/full sublease)"
+  },
+  {
+   "id": "F08",
+   "tema": "M1:T10",
+   "split": "train",
+   "guide_quote": "contribute to the mandatory reserve fund (fondo de reserva, min. 10% of last ordinary budget — art. 9.1.f)"
+  },
+  {
+   "id": "F09",
+   "tema": "M1:T10",
+   "split": "train",
+   "guide_quote": "Participation quota (cuota de participación, art. 5): assigned in the title deed based on useful floor area, location, and presumed use of common elements; expressed in hundredths of the building's total value; serves as the module for both charges and benefits."
+  },
+  {
+   "id": "F13",
+   "tema": "M1:T14",
+   "split": "train",
+   "guide_quote": "Household goods (ajuar doméstico, art. 15): automatically valued at 3% of the estate unless a different value is proven or their non-existence is shown."
+  },
+  {
+   "id": "F14",
+   "tema": "M1:T14",
+   "split": "train",
+   "guide_quote": "and a 99% bonus on the tax due for Groups I and II, on inheritances (art. 39) and on gifts formalised in a public document (art. 40)."
+  },
+  {
+   "id": "F16",
+   "tema": "M3:T42",
+   "split": "train",
+   "guide_quote": "a compensatory payment of 10% of the material execution budget of the works, excluding machinery (reducible by regulation) (art. 22 LISTA)"
+  },
+  {
+   "id": "F18",
+   "tema": "M4:T1",
+   "split": "train",
+   "guide_quote": "penalty reductions (art. 188 LGT): **65%** for an agreed assessment (*acta con acuerdo*), **30%** for conformity, then a further **40%** off what remains if it is paid within the voluntary period and not appealed."
+  },
+  {
+   "id": "F20",
+   "tema": "M4:T4",
+   "split": "train",
+   "guide_quote": "2% (real estate businesses registered under IAE 833.2 or 861.1 buying a home worth ≤€500k for resale within 2 years — since 1-1-2026, Law 8/2025; previously 5 years)"
+  },
+  {
+   "id": "F21",
+   "tema": "M4:T4",
+   "split": "train",
+   "guide_quote": "reduced 1% (habitual residence ≤€150k), 0.3% (under-35 ≤€150k) and 0.1% (disability or large family ≤€250k)"
+  },
+  {
+   "id": "F22",
+   "tema": "M4:T7",
+   "split": "train",
+   "guide_quote": "Interest + repair/maintenance expenses are jointly capped at the property's gross income (excess carried forward 4 years)"
+  },
+  {
+   "id": "F24",
+   "tema": "M5:T40",
+   "split": "train",
+   "guide_quote": "very serious, fine from €150,000 up to the greatest of 10% of turnover, 2x the transaction value, 5x the profit, or €10M (art. 56)"
+  },
+  {
+   "id": "F25",
+   "tema": "M5:T43",
+   "split": "valid",
+   "guide_quote": "promoters = 9–10, neutral = 7–8, detractors = 0–6. NPS = %promoters − %detractors."
+  }
+ ],
+ "sources": {
+  "train": [
+   "pilot_chk",
+   "wave1_chk",
+   "wave2_chk",
+   "wave3_chk"
+  ],
+  "valid": [
+   "validw_chk"
+  ]
+ }
+}

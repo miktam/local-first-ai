@@ -1,0 +1,74 @@
+{
+  "rule": "highest exact match on the validation prompts, greedy, thinking off; ties \u2192 earlier step",
+  "n_valid": 79,
+  "selected": "50",
+  "checkpoints": {
+    "base": {
+      "n": 79,
+      "exact": 0.9873,
+      "mean_total": 3.5696,
+      "verdicts": {
+        "right": 78,
+        "wrong": 1,
+        "hedge": 0,
+        "missing": 0
+      },
+      "at_cap": 0
+    },
+    "25": {
+      "n": 79,
+      "exact": 0.962,
+      "mean_total": 3.4715,
+      "verdicts": {
+        "right": 76,
+        "wrong": 2,
+        "hedge": 0,
+        "missing": 1
+      },
+      "at_cap": 0
+    },
+    "50": {
+      "n": 79,
+      "exact": 0.9873,
+      "mean_total": 3.6424,
+      "verdicts": {
+        "right": 78,
+        "wrong": 1,
+        "hedge": 0,
+        "missing": 0
+      },
+      "at_cap": 0
+    },
+    "75": {
+      "n": 79,
+      "exact": 0.9747,
+      "mean_total": 3.5696,
+      "verdicts": {
+        "right": 77,
+        "wrong": 2,
+        "hedge": 0,
+        "missing": 0
+      },
+      "at_cap": 0
+    },
+    "78": {
+      "n": 79,
+      "exact": 0.9873,
+      "mean_total": 3.6203,
+      "verdicts": {
+        "right": 78,
+        "wrong": 1,
+        "hedge": 0,
+        "missing": 0
+      },
+      "at_cap": 0
+    }
+  },
+  "adapter_sha256": {
+    "25": "ec46444d46a21e3f4f0e83fdc4a2e35a4a34e30f869498a4ac48e33f138f8bfc",
+    "50": "57487762b8ba0324e24da13878894645c8115715dcb0bf0b9e39a1c95fd0692d",
+    "75": "a509e2228f6d1a4db882a236e61e71072fc1fca4d1effcef2b90546a0f8786bf",
+    "78": "3c8529196bb5114f6436f0e87a20fa8f6eb1b9ce945eedb37a21210b3ba7c132"
+  },
+  "valid_sha256": "8bdad1789942fa15fd4ebbfe6a563303e938290c68026cd944cde5e3259833b5"
+}
