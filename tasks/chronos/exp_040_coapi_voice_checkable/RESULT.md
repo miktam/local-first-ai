@@ -63,3 +63,16 @@ The glue declined 15 rows for A13 and 11 for R3G; a decline counts as an abstent
 - **Selection carried no information**, because validation was at ceiling.
 
 **Publication:** as HYPOTHESIS ("weights to Hugging Face whichever way the result goes; training data not published; Andrei decides at the end").
+
+
+---
+
+## Addendum 2026-10-17: point 1 restated
+
+Point 1 above ("The correctness reward is not gamed … fixed the verifier problem") states more than the evidence shows. The original text is left as published. Restated:
+
+**In our audit, a reward that checks the answer was not gamed; the form reward was.**
+- **What the audit was:** one audit per experiment, of 40 top-reward training answers, read by two blind readers. exp_040 found 0/40 (Fable) and 1/40 (Opus); exp_039 run 1 found 5/40.
+- **What the reward cannot see:** it reads only the final line, so whether the explanation above it is right goes unchecked. The one answer Opus flagged argued "no" and then answered "yes".
+- **What was not run:** the judged check of the explanations (H2), so whether explanations got better or worse under this reward is not measured.
+- **What remains open:** a confident guess among 3–4 options is still paid when it lands. Options are shuffled and hedging costs −2, but this is not excluded.
