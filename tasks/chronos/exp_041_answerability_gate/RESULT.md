@@ -67,3 +67,12 @@ Andrei: fix it before starting a new experiment. Done in casasol `1257a46` (`coa
 - **Cost:** about 0.8 s per Spanish question.
 - **Remaining gap:** EN itself retrieves the source only 0.782 of the time (PL 0.888), so about a fifth of questions still miss their rule in any language. That is general retrieval, not a Spanish problem.
 - **Ruler note:** `glue.py` now differs from b1a648c, so the exp_039/040 runners refuse by design. They reproduce from that commit.
+
+---
+
+*Added 2026-10-18, after publication.*
+
+## SO WHAT (2026-10-18)
+
+- **No gate was adopted** (the verdict), but the diagnosis cascaded. Retrieval was fixed in the COAPI glue (Spanish via translation, two chunks from the leading tema, budget 1,350; casasol 1257a46, 0f8f600), and a `glue.clean()` bug that cut complete answers was fixed (a43e26b).
+- **It seeded exp_042:** the same gates, with answerability defined by the material the model saw. That gate was adopted in the glue; see exp_042's SO WHAT.

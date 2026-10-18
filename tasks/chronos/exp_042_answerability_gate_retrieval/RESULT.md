@@ -54,3 +54,43 @@ The retrieval fix alone moved the untrained voice from 0.707 to 0.753 exact on t
   - Clef 27B is the registered winner: 0 false abstentions, about 12 s, and 29 GB that stays loaded.
   - Kev-4B has 1 false abstention, about 2 s and 4.5 GB.
 - **Serve it:** a llama.cpp b11711 `llama-server` beside Ollama on the mini.
+
+---
+
+*Added 2026-10-18, after publication.*
+
+## After adoption (2026-10-18): Kev-4B wired, per-language thresholds
+
+These are configuration changes, not a new measurement.
+- **Wired:** Kev-4B is wired into `glue.answer` (casasol 3b5b2b7) and served by `ai.casasol.gate-kev4b` on :18442, which Andrei loaded from the miktam account. If the gate is unreachable, the glue answers as before (fail open).
+- **Per-language thresholds (Andrei):** the same rule per language on this experiment's dev probabilities. EN 0.600, PL 0.448, ES 0.576.
+  - Dev: PL wrong refusals 4 → 2 of 80, PL correct refusals 0.730 → 0.607; EN 0.719 → 0.744, wrong 1 → 2.
+  - Each value rests on 80 answerable rows, so it is provisional.
+- **Live smoke, 6 questions (anecdotes):**
+  - EN boiler repair: passes, answered right.
+  - EN obscure fine: blocked, right.
+  - ES boiler: blocked. Spanish retrieval missed the chunk with the rule.
+  - ES inheritance deadline: passes on a near-miss rule (the transfer-tax deadline) and is answered wrong ("2 months").
+  - PL resale transfer tax: blocked at the global threshold; under the PL threshold it passes and is answered wrong (1.2 %, the AJD rate; the material says ITP 7 %), with the question echoed first.
+- **Lesson:** the gate judges whether the material can answer. Whether the 4B voice answers correctly is a separate, still-open weakness.
+
+## SO WHAT (2026-10-18)
+
+**Adopted (true today):**
+- The COAPI Voice glue runs the Kev-4B gate (casasol 3b5b2b7, per-language thresholds 671eb3d), served by `ai.casasol.gate-kev4b` on the mini.
+- The retrieval fixes this experiment depended on are in the glue: Spanish via translation, two chunks from the leading tema, budget 1,350.
+
+**Not adopted yet: CasaSolGuide.** The live bot (`scripts/telegram_bot.py`) does not use the glue. Its legal and process answers come from its own chromadb collection (`coapi_knowledge_{lang}`, top 3) and gemma4:26b, in up to 7 languages. The gate's thresholds were measured on the glue's material, not the bot's, so they do not transfer as they are.
+
+**Cascade: CasaSolGuide runs the gate in SHADOW MODE since 2026-10-18** (casasol 3b84827, deployed with `deploy.sh bot`, Andrei). For legal, fiscal, process and market answers, Kev-4B scores the bot's own retrieved chunks in a background thread and logs P(answerable) to `logs/gate_shadow.jsonl`. It blocks nothing and stores no text. The first live check shows the glue's thresholds do not transfer: on the bot's material a basic plusvalía question scored 0.33, below EN's 0.600.
+
+**Originally proposed:** put the gate into CasaSolGuide's legal, fiscal, process and market intents.
+- First in **shadow mode**: log P(answerable) per answer, block nothing.
+- Then set a bot-specific threshold from the logged or replayed traffic, and switch to blocking.
+
+**Seeds for experiments:**
+1. **The voice confuses neighbouring rules** even when the material is right: ITP 7 % answered as AJD 1.2 %; one tax's deadline for another's. Two candidates:
+   - a deterministic check that the answer's figure sits beside the matching tax or term in the material;
+   - a stronger voice behind the same glue and gate.
+2. **Spanish retrieval still misses 23 %** of sources, and the gate then refuses those questions: correct about the material, frustrating for the user.
+3. **The gate can be fooled by a near-miss rule** (a deadline for another tax). A second `noul` asking "does the material state *this* rule?" is a candidate.
