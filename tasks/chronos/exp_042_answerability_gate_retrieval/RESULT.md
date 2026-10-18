@@ -94,3 +94,5 @@ These are configuration changes, not a new measurement.
    - a stronger voice behind the same glue and gate.
 2. **Spanish retrieval still misses 23 %** of sources, and the gate then refuses those questions: correct about the material, frustrating for the user.
 3. **The gate can be fooled by a near-miss rule** (a deadline for another tax). A second `noul` asking "does the material state *this* rule?" is a candidate.
+
+*Added 2026-10-18, later the same day: shadow-mode check.* We replayed 60 guide-answerable questions (20 per language) through CasaSol Guide's own retrieval, which returns three 500-word chunks of the course text. At the glue's thresholds the gate would refuse 29 of 60 (EN 11, PL 11, ES 7); below 0.30, 12; below 0.10, 1. The bot's model (gemma4:26b) also abstains by itself where the untrained 4B did not. The gate therefore stays in shadow mode. Whether it adds anything in front of gemma4:26b, and at what threshold, is the next experiment.
