@@ -1,6 +1,6 @@
 # Field note: aprimerose.com website hygiene (2026-10-17/18)
 
-**What this is:** the record behind the post *80% of Our Website's Traffic Was a Dead Subdomain Redirecting to Itself* ([localfirstai.eu](https://localfirstai.eu/posts/2026-10-18-dead-subdomain-redirecting-to-itself/)).
+**What this is:** the record behind the post *80% of Our Web Traffic Was a Dead Subdomain Redirecting to Itself* ([localfirstai.eu](https://localfirstai.eu/posts/2026-10-18-dead-subdomain-redirecting-to-itself/)).
 
 **What this is not:** a Chronos experiment. This was an operational clean-up, recorded after the fact. No hypothesis was registered beforehand, and the figures are observations from production traffic, not measurements under controlled conditions. Claims are limited to what was observed.
 

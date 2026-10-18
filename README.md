@@ -27,7 +27,7 @@ Some posts describe operational work rather than experiments: what we observed, 
 
 | Date | Field note | Post |
 |---|---|---|
-| 2026-10-18 | [Website hygiene: aprimerose.com](./field-notes/2026-10-18-website-hygiene/) | 80% of Our Website's Traffic Was a Dead Subdomain Redirecting to Itself |
+| 2026-10-18 | [Website hygiene: aprimerose.com](./field-notes/2026-10-18-website-hygiene/) | 80% of Our Web Traffic Was a Dead Subdomain Redirecting to Itself |
 
 ---
 
