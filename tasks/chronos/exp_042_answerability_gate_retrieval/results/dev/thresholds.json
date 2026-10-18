@@ -1,0 +1,33 @@
+{
+ "rule": "abstain iff P(answerable) < tau; tau = largest value with dev false abstention <= 0.03; gates fixed, G4 primary",
+ "dev_sha256": "d130fd7de6b2f4a11858054ee393572a4248d6631ff38af3e1b192363e9d0fda",
+ "primary": "G4",
+ "gates": {
+  "G4": {
+   "tau": 0.6020943831438449,
+   "abstain_dev": 0.7514,
+   "false_abstention_dev": 0.0292,
+   "auroc": 0.9173,
+   "ece": 0.1744,
+   "blocked_share_by_src": {
+    "src=bank": 0.0292,
+    "src=bank_lost": 0.475,
+    "src=oos": 1.0,
+    "src=variant": 0.8221
+   }
+  },
+  "G2": {
+   "tau": 0.5756800355342344,
+   "abstain_dev": 0.7135,
+   "false_abstention_dev": 0.0292,
+   "auroc": 0.9073,
+   "ece": 0.1927,
+   "blocked_share_by_src": {
+    "src=bank": 0.0292,
+    "src=bank_lost": 0.3917,
+    "src=oos": 1.0,
+    "src=variant": 0.7975
+   }
+  }
+ }
+}

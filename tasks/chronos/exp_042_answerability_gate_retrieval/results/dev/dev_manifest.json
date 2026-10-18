@@ -1,0 +1,29 @@
+{
+ "n": 610,
+ "sha256": "d130fd7de6b2f4a11858054ee393572a4248d6631ff38af3e1b192363e9d0fda",
+ "label": {
+  "answerable": 240,
+  "not_answerable": 370
+ },
+ "by_lang_label": {
+  "en/answerable": 80,
+  "en/not_answerable": 121,
+  "es/answerable": 80,
+  "es/not_answerable": 127,
+  "pl/answerable": 80,
+  "pl/not_answerable": 122
+ },
+ "retrieval": {
+  "k": 5,
+  "budget": 1350,
+  "lead_depth": 2,
+  "es_translator": "hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M"
+ },
+ "by_src": {
+  "bank": 240,
+  "bank_lost": 120,
+  "variant": 163,
+  "oos": 87
+ },
+ "seed": 42
+}

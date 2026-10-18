@@ -1,0 +1,13 @@
+{
+ "note": "sha256 of exp_042's private inputs and the gate model files. Per-row results are published as ids, labels, verdicts and probabilities only; the sets stay private. Runtimes: llama.cpp b11711 (9d1e036) for the gates, Ollama 0.33.0 for the voice.",
+ "files": {
+  "data/gate42/dev.jsonl (private)": "d130fd7de6b2f4a11858054ee393572a4248d6631ff38af3e1b192363e9d0fda",
+  "data/gate42/v3_rendered.jsonl (private; v3 text)": "6e344e12d982b6875488f0a6ba29ae1e611affe6981c6f2745fb933f2ea88d79",
+  "data/eval/coapi_eval_v3.jsonl (sealed test set; private)": "2c6cbad123adff6d9e1b55ed91cd61c71259a3800cd0a5b25d83537a061da454",
+  "glue.py (casasol a43e26b; private)": "755d8dc6c3e2fa8b9e0541acb722f2d0c4cbc65c1f9cd4ce7dc3932ed94563fb",
+  "guide_bm25.py (casasol a43e26b; private)": "28903892e03899a1128f8d298984f2612597db8d0a86046053df849adf3a1242",
+  "models: Cloudflare_clef-Q8_0.gguf": "9fe953f084858a97ccb86e5f71ef0652a405f1c2652fe4793db846f6bcaa5334",
+  "models: Kev-4B-Q8_0.gguf": "7c2ebed90560522c2801389db482ac1dc4c36d828f201f6074c1d60e433948da",
+  "models: qwen3-4b-Q4_K_M-imat.gguf (S0 voice)": "38623d2a0c34cdc53b4967bfb61602a447d3ef704e1fbe02ea2e0a39ed005372"
+ }
+}
