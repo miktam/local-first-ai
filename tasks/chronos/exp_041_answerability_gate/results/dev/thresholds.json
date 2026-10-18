@@ -1,0 +1,151 @@
+{
+ "rule": "abstain iff P(answerable) < tau; tau = largest value with dev false abstention <= 0.03; primary = highest dev abstention at tau, ties -> faster gate",
+ "dev_sha256": "f0153ba9b2c1f6f7cfa467116c2ef269205da99472e49bb6915d65d288c4f02d",
+ "primary": "G4",
+ "gates": {
+  "G1": {
+   "complete": true,
+   "n": 615,
+   "tau": 0.054326031032689105,
+   "abstain_dev": 0.568,
+   "false_abstention_dev": 0.0274,
+   "auroc": 0.9148,
+   "ece": 0.165,
+   "by": {
+    "lang=en": {
+     "abstain": 0.5802,
+     "false_abstention": 0.0234
+    },
+    "lang=es": {
+     "abstain": 0.5287,
+     "false_abstention": 0.0088
+    },
+    "lang=pl": {
+     "abstain": 0.5976,
+     "false_abstention": 0.0488
+    },
+    "src=bank": {
+     "abstain": null,
+     "false_abstention": 0.0167
+    },
+    "src=oos": {
+     "abstain": 0.977,
+     "false_abstention": null
+    },
+    "src=variant": {
+     "abstain": 0.3497,
+     "false_abstention": 0.048
+    }
+   },
+   "probs_sha256": "e08a3342c7492e87dead1a1a1239a51b998993498385d163d4b68385c02af83a"
+  },
+  "G2": {
+   "complete": true,
+   "n": 615,
+   "tau": 0.4843655583827238,
+   "abstain_dev": 0.832,
+   "false_abstention_dev": 0.0274,
+   "auroc": 0.9856,
+   "ece": 0.1208,
+   "by": {
+    "lang=en": {
+     "abstain": 0.8272,
+     "false_abstention": 0.0
+    },
+    "lang=es": {
+     "abstain": 0.8276,
+     "false_abstention": 0.0175
+    },
+    "lang=pl": {
+     "abstain": 0.8415,
+     "false_abstention": 0.065
+    },
+    "src=bank": {
+     "abstain": null,
+     "false_abstention": 0.0417
+    },
+    "src=oos": {
+     "abstain": 1.0,
+     "false_abstention": null
+    },
+    "src=variant": {
+     "abstain": 0.7423,
+     "false_abstention": 0.0
+    }
+   },
+   "probs_sha256": "298e480368a8089a85c3b725d4c08dd842c4c56f67bc892165c3bc8598d2e540"
+  },
+  "G3": {
+   "complete": true,
+   "n": 615,
+   "tau": 0.30298900449632094,
+   "abstain_dev": 0.696,
+   "false_abstention_dev": 0.0274,
+   "auroc": 0.9696,
+   "ece": 0.076,
+   "by": {
+    "lang=en": {
+     "abstain": 0.679,
+     "false_abstention": 0.0391
+    },
+    "lang=es": {
+     "abstain": 0.6897,
+     "false_abstention": 0.0
+    },
+    "lang=pl": {
+     "abstain": 0.7195,
+     "false_abstention": 0.0407
+    },
+    "src=bank": {
+     "abstain": null,
+     "false_abstention": 0.0292
+    },
+    "src=oos": {
+     "abstain": 1.0,
+     "false_abstention": null
+    },
+    "src=variant": {
+     "abstain": 0.5337,
+     "false_abstention": 0.024
+    }
+   },
+   "probs_sha256": "acf290e3f755fc1715ca86e7e87b0387904987706a2a4a953f93bb9d9c1df0ad"
+  },
+  "G4": {
+   "complete": true,
+   "n": 615,
+   "tau": 0.4866703750289173,
+   "abstain_dev": 0.932,
+   "false_abstention_dev": 0.0274,
+   "auroc": 0.9901,
+   "ece": 0.0646,
+   "by": {
+    "lang=en": {
+     "abstain": 0.9506,
+     "false_abstention": 0.0078
+    },
+    "lang=es": {
+     "abstain": 0.9195,
+     "false_abstention": 0.0
+    },
+    "lang=pl": {
+     "abstain": 0.9268,
+     "false_abstention": 0.0732
+    },
+    "src=bank": {
+     "abstain": null,
+     "false_abstention": 0.0375
+    },
+    "src=oos": {
+     "abstain": 1.0,
+     "false_abstention": null
+    },
+    "src=variant": {
+     "abstain": 0.8957,
+     "false_abstention": 0.008
+    }
+   },
+   "probs_sha256": "07837d7b3ec8c61bd1990bacb24835c0692d703699077c6574b6029b3a9285a9"
+  }
+ }
+}

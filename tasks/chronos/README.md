@@ -98,6 +98,7 @@ months can be tested against the same on-disk evidence.
 | Exp 038 | Kolibri as a drop-in answering model in CasaSol's COAPI glue | Complete — H1 refuted (ceiling-limited) | [`exp_038_kolibri_casasol_dropin/`](./exp_038_kolibri_casasol_dropin/) |
 | Exp 039 | COAPI Voice on-policy: GRPO against a code-only verifier on Qwen3-4B (LoRA, attention only), same base and data as exp_035's SFT | Complete — no training gain (the Q4 +0.20 was quantisation); form not learned | [`exp_039_coapi_voice_onpolicy/`](./exp_039_coapi_voice_onpolicy/) |
 | Exp 040 | COAPI Voice, correctness checkable: GRPO on Qwen3-4B against a reward that checks the final answer line (closed options, computed numbers, "not in the material"), offline dynamic sampling, imatrix Q4 | Complete — not robust (gain at Q4, none at Q8) | [`exp_040_coapi_voice_checkable/`](./exp_040_coapi_voice_checkable/) |
+| Exp 041 | Answerability gate: a local decision model (Qwen3-4B prompted, Kev-4B, Clef-Flash 9B, Clef 27B on llama.cpp `/v1/systemone`) asks "can this material answer?" before the voice | Complete — no gate earns its place (over-blocking; all blocked answerable rows had lost their source in retrieval) | [`exp_041_answerability_gate/`](./exp_041_answerability_gate/) |
 | Watcher Run 001 | Adversarial watcher — CasaSol gap analysis | Complete | [`watcher_run_001/`](./watcher_run_001/) |
 | Pre-Chronos benchmarks | Ad-hoc bench scripts (unnumbered) | Reference | [`experiments/`](./experiments/) |
 

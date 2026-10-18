@@ -1,0 +1,13 @@
+{
+ "note": "sha256 of exp_041's private inputs and the public gate model files used. Per-row results are published as ids and probabilities only (results/*/probs_*.jsonl); the dev set and v3 stay private. Runtime: llama.cpp b11711 (9d1e036).",
+ "files": {
+  "data/gate41/dev.jsonl (dev set: exp_040 bank and abstention variants; private)": "f0153ba9b2c1f6f7cfa467116c2ef269205da99472e49bb6915d65d288c4f02d",
+  "data/eval/coapi_eval_v3.jsonl (sealed test set; private)": "2c6cbad123adff6d9e1b55ed91cd61c71259a3800cd0a5b25d83537a061da454",
+  "data/bank40/abstain/rows.jsonl (abstention variants)": "515ca73f8e4f6568f5bf245377b5cef259eac0de144454b67ebf0bcb31a9e6e5",
+  "models: Kev-4B-Q8_0.gguf (ggml-org/Kev-4B-GGUF)": "7c2ebed90560522c2801389db482ac1dc4c36d828f201f6074c1d60e433948da",
+  "models: Cloudflare_clef-flash-Q8_0.gguf (bartowski)": "55c222dfc9f5760d06015ee6d6452ea45113bb6f333178c345c489dbc134bcfe",
+  "models: Cloudflare_clef-Q8_0.gguf (bartowski)": "9fe953f084858a97ccb86e5f71ef0652a405f1c2652fe4793db846f6bcaa5334",
+  "models: qwen3-4b-Q4_K_M-imat.gguf (exp_040 B0i)": "38623d2a0c34cdc53b4967bfb61602a447d3ef704e1fbe02ea2e0a39ed005372",
+  "glue.py (at scoring, = b1a648c)": "git:b1a648c"
+ }
+}
