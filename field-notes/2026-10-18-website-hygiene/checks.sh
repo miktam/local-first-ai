@@ -38,4 +38,4 @@ curl -s -m 15 -A "$UA" -H "Accept: text/html" "https://$D/" | grep -o -E 'https?
 
 echo; echo "## Cloudflare Web Analytics beacon"
 echo "plain curl:          $(curl -s -m 15 "https://$D/" | grep -c cloudflareinsights) occurrence(s)"
-echo "browser-like request: $(curl -s -m 15 -A "$UA" -H "Accept: text/html" "https://$D/" | grep -c cloudflareinsights) occurrence(s)"
+echo "Accept: text/html:   $(curl -s -m 15 -H "Accept: text/html" "https://$D/" | grep -c cloudflareinsights) occurrence(s)"
