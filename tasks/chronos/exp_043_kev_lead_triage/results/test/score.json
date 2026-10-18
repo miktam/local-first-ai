@@ -1,0 +1,58 @@
+{
+ "intent": {
+  "n": 235,
+  "accuracy": 0.894
+ },
+ "property_type": {
+  "n": 234,
+  "accuracy": 0.885
+ },
+ "timeline": {
+  "n": 224,
+  "accuracy": 0.732
+ },
+ "financing": {
+  "n": 50,
+  "accuracy": 1.0
+ },
+ "foreign_buyer": {
+  "n": 80,
+  "accuracy": 0.887
+ },
+ "qualified": {
+  "n": 235,
+  "accuracy": 0.783
+ },
+ "urgency": {
+  "n": 228,
+  "accuracy": 0.759,
+  "within_1": 0.93
+ },
+ "action": {
+  "n": 235,
+  "accuracy": 0.898
+ },
+ "spam": {
+  "recall": 0.906,
+  "false_spam_rate": 0.015
+ },
+ "intent_confusions_top": [
+  "buy→rent_holiday: 10",
+  "info→buy: 3",
+  "spam→sell: 2",
+  "info→rent_holiday: 2",
+  "buy→info: 1",
+  "invest→spam: 1",
+  "invest→rent_holiday: 1",
+  "spam→buy: 1"
+ ],
+ "by_lang_intent_acc": {
+  "de": 0.903,
+  "en": 0.867,
+  "es": 0.967,
+  "fr": 0.893,
+  "pl": 0.769,
+  "ru": 0.867,
+  "sv": 1.0
+ }
+}
