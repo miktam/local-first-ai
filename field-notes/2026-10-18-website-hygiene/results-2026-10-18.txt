@@ -1,0 +1,42 @@
+# checks.sh aprimerose.com — 2026-10-18T06:10Z
+
+## DNS
+nameserver:      nikon.ns.cloudflare.com.
+MX:              1 aspmx.l.google.com. 5 alt1.aspmx.l.google.com. 5 alt2.aspmx.l.google.com. 10 alt3.aspmx.l.google.com. 10 alt4.aspmx.l.google.com. 
+SPF:             "v=spf1 include:_spf.google.com include:spf.mandrillapp.com ~all"
+SPF records:     1 (must be 1)
+DMARC:           "v=DMARC1; p=none; rua=mailto:865f4c593ca54862836a015c3e178f5a@dmarc-reports.cloudflare.net;"
+DKIM google:     "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BA
+DS at parent:    2371 13 2 330D678A7A7E83E165FF8590EECC1ABEF027F7785756A10A0256DB7F 8163AD58
+DNSSEC:          validated (AD flag via 1.1.1.1)
+
+## Redirects
+http://aprimerose.com/          301 text/html; charset=UTF-8 https://aprimerose.com/
+https://www.aprimerose.com/     301 text/html; charset=UTF-8 https://aprimerose.com/
+
+## Paths (plain URL, then cache-busted)
+/                plain:  200 text/html; charset=utf-8 
+/                busted: 200 text/html; charset=utf-8 
+/no-such-page    plain:  404 text/html; charset=utf-8 
+/no-such-page    busted: 404 text/html; charset=utf-8 
+/wp-login.php    plain:  404 text/html; charset=utf-8 
+/wp-login.php    busted: 404 text/html; charset=utf-8 
+/robots.txt      plain:  200 text/plain; charset=utf-8 
+/robots.txt      busted: 200 text/plain; charset=utf-8 
+/sitemap.xml     plain:  200 application/xml 
+/sitemap.xml     busted: 200 application/xml 
+/wrangler.toml   plain:  200 application/toml 
+/wrangler.toml   busted: 404 text/html; charset=utf-8 
+
+## Security headers on /
+x-frame-options: DENY
+strict-transport-security: max-age=31536000
+
+## External hosts referenced by the homepage (browser-like request)
+   1 https://static.cloudflareinsights.com
+   1 https://localfirstai.eu
+   1 https://aprimerose.com
+
+## Cloudflare Web Analytics beacon
+plain curl:          0 occurrence(s)
+browser-like request: 1 occurrence(s)

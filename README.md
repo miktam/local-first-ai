@@ -21,9 +21,19 @@ This repo accompanies the blog at [localfirstai.eu](https://localfirstai.eu) and
 
 ---
 
+## Field notes
+
+Some posts describe operational work rather than experiments: what we observed, what we changed, and the evidence. Each has a field note with the data behind every claim and a script to re-check what can still be checked. Field notes are recorded after the fact, so the Chronos rule (hypothesis registered before the run) does not apply to them, and their claims are limited to what was observed.
+
+| Date | Field note | Post |
+|---|---|---|
+| 2026-10-18 | [Website hygiene: aprimerose.com](./field-notes/2026-10-18-website-hygiene/) | 80% of Our Website's Traffic Was a Dead Subdomain Redirecting to Itself |
+
+---
+
 ## Project Chronos
 
-Every claim on the blog is backed by a pre-registered experiment logged in [`tasks/chronos/scientific_log.md`](./tasks/chronos/scientific_log.md). The methodology: observation → hypothesis → experiment → evidence → conclusion. No retrofitted results.
+Every experimental claim on the blog is backed by a pre-registered experiment logged in [`tasks/chronos/scientific_log.md`](./tasks/chronos/scientific_log.md). The methodology: observation → hypothesis → experiment → evidence → conclusion. No retrofitted results.
 
 Roadmap and pending experiments: [`tasks/chronos/roadmap.md`](./tasks/chronos/roadmap.md)
 
