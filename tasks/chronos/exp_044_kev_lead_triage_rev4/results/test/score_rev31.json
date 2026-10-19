@@ -1,0 +1,252 @@
+{
+ "n": 331,
+ "by_stratum": {
+  "standard": {
+   "intent": {
+    "n": 241,
+    "accuracy": 0.896
+   },
+   "property_type": {
+    "n": 238,
+    "accuracy": 0.891
+   },
+   "timeline": {
+    "n": 229,
+    "accuracy": 0.707
+   },
+   "financing": {
+    "n": 49,
+    "accuracy": 1.0
+   },
+   "foreign_buyer": {
+    "n": 68,
+    "accuracy": 0.882
+   },
+   "qualified": {
+    "n": 241,
+    "accuracy": 0.822
+   },
+   "urgency": {
+    "n": 231,
+    "accuracy": 0.71
+   },
+   "action": {
+    "n": 241,
+    "accuracy": 0.938
+   },
+   "budget_eur": {
+    "n": 238,
+    "accuracy": 0.735
+   },
+   "urgency_within_1": 0.944
+  },
+  "hard_b2b": {
+   "intent": {
+    "n": 30,
+    "accuracy": 0.833
+   },
+   "property_type": {
+    "n": 28,
+    "accuracy": 0.75
+   },
+   "timeline": {
+    "n": 28,
+    "accuracy": 0.643
+   },
+   "financing": {
+    "n": 8,
+    "accuracy": 1.0
+   },
+   "foreign_buyer": {
+    "n": 10,
+    "accuracy": 0.8
+   },
+   "qualified": {
+    "n": 30,
+    "accuracy": 0.767
+   },
+   "urgency": {
+    "n": 28,
+    "accuracy": 0.75
+   },
+   "action": {
+    "n": 30,
+    "accuracy": 0.833
+   },
+   "budget_eur": {
+    "n": 30,
+    "accuracy": 0.533
+   },
+   "urgency_within_1": 0.964
+  },
+  "hard_holiday": {
+   "intent": {
+    "n": 31,
+    "accuracy": 0.871
+   },
+   "property_type": {
+    "n": 31,
+    "accuracy": 0.968
+   },
+   "timeline": {
+    "n": 26,
+    "accuracy": 0.577
+   },
+   "financing": {
+    "n": 8,
+    "accuracy": 1.0
+   },
+   "foreign_buyer": {
+    "n": 13,
+    "accuracy": 0.846
+   },
+   "qualified": {
+    "n": 31,
+    "accuracy": 1.0
+   },
+   "urgency": {
+    "n": 23,
+    "accuracy": 0.478
+   },
+   "action": {
+    "n": 30,
+    "accuracy": 0.867
+   },
+   "budget_eur": {
+    "n": 31,
+    "accuracy": 0.774
+   },
+   "urgency_within_1": 0.826
+  },
+  "hard_budget": {
+   "intent": {
+    "n": 29,
+    "accuracy": 0.862
+   },
+   "property_type": {
+    "n": 29,
+    "accuracy": 0.931
+   },
+   "timeline": {
+    "n": 25,
+    "accuracy": 0.8
+   },
+   "financing": {
+    "n": 15,
+    "accuracy": 1.0
+   },
+   "foreign_buyer": {
+    "n": 14,
+    "accuracy": 0.857
+   },
+   "qualified": {
+    "n": 28,
+    "accuracy": 1.0
+   },
+   "urgency": {
+    "n": 25,
+    "accuracy": 0.6
+   },
+   "action": {
+    "n": 29,
+    "accuracy": 1.0
+   },
+   "budget_eur": {
+    "n": 29,
+    "accuracy": 0.0
+   },
+   "urgency_within_1": 0.92
+  },
+  "all": {
+   "intent": {
+    "n": 331,
+    "accuracy": 0.885
+   },
+   "property_type": {
+    "n": 326,
+    "accuracy": 0.89
+   },
+   "timeline": {
+    "n": 308,
+    "accuracy": 0.698
+   },
+   "financing": {
+    "n": 80,
+    "accuracy": 1.0
+   },
+   "foreign_buyer": {
+    "n": 105,
+    "accuracy": 0.867
+   },
+   "qualified": {
+    "n": 330,
+    "accuracy": 0.848
+   },
+   "urgency": {
+    "n": 307,
+    "accuracy": 0.687
+   },
+   "action": {
+    "n": 330,
+    "accuracy": 0.927
+   },
+   "budget_eur": {
+    "n": 328,
+    "accuracy": 0.655
+   },
+   "urgency_within_1": 0.935
+  }
+ },
+ "spam": {
+  "spam_n": 49,
+  "caught": 47,
+  "recall": 0.959,
+  "genuine_n": 282,
+  "false_spam": 5,
+  "false_spam_rate": 0.0177,
+  "false_spam_ids": [
+   "X1-05",
+   "X1-38",
+   "X4-04",
+   "X3-09",
+   "X3-57"
+  ]
+ },
+ "bands": {
+  "sure": {
+   "n": 146,
+   "accuracy": 1.0
+  },
+  "fairly_sure": {
+   "n": 91,
+   "accuracy": 0.868
+  },
+  "unsure": {
+   "n": 94,
+   "accuracy": 0.723
+  },
+  "ece": 0.236
+ },
+ "standard_by_lang_intent": {
+  "de": 0.897,
+  "en": 0.86,
+  "es": 0.906,
+  "fr": 1.0,
+  "pl": 0.833,
+  "ru": 0.871,
+  "sv": 0.933
+ },
+ "intent_confusions_top": [
+  "buy→rent_holiday: 11",
+  "valuation→sell: 9",
+  "rent_long→spam: 3",
+  "buy→rent_long: 3",
+  "info→buy: 3",
+  "buy→spam: 2",
+  "invest→rent_holiday: 2",
+  "spam→sell: 1",
+  "rent_holiday→rent_long: 1",
+  "spam→rent_holiday: 1"
+ ],
+ "median_ms": 1591
+}

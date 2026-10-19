@@ -1,0 +1,80 @@
+{
+ "H1_no_regression_standard": {
+  "intent": {
+   "rev31": 0.896,
+   "rev4": 0.909,
+   "diff": 0.013
+  },
+  "action": {
+   "rev31": 0.938,
+   "rev4": 0.938,
+   "diff": 0.0
+  },
+  "pass": true
+ },
+ "H2_safer_spam": {
+  "rev31": {
+   "caught": 47,
+   "spam_n": 49,
+   "recall": 0.959,
+   "false_spam": 5,
+   "genuine_n": 282,
+   "false_spam_rate": 0.0177
+  },
+  "rev4": {
+   "caught": 46,
+   "spam_n": 49,
+   "recall": 0.939,
+   "false_spam": 2,
+   "genuine_n": 282,
+   "false_spam_rate": 0.0071
+  },
+  "rev4_false_spam_ids": [
+   "X1-38",
+   "X3-57"
+  ],
+  "pass": true
+ },
+ "H3_holiday": {
+  "n": 31,
+  "rev31": 0.871,
+  "rev4": 0.935,
+  "rev4_only_right": 2,
+  "rev31_only_right": 0,
+  "p_one_sided": 0.25,
+  "diff": 0.064,
+  "pass": false
+ },
+ "H4_budget_words": {
+  "n": 29,
+  "rev31": 0.0,
+  "rev4": 1.0,
+  "pass": true
+ },
+ "H5_bands_rev4": {
+  "sure": {
+   "n": 147,
+   "accuracy": 1.0
+  },
+  "fairly_sure": {
+   "n": 90,
+   "accuracy": 0.889
+  },
+  "unsure": {
+   "n": 94,
+   "accuracy": 0.798
+  },
+  "ece": 0.262,
+  "pass": true
+ },
+ "replication_rev31_standard_vs_exp043": {
+  "exp043": {
+   "intent": 0.894,
+   "action": 0.898
+  },
+  "exp044_rev31": {
+   "intent": 0.896,
+   "action": 0.938
+  }
+ }
+}
