@@ -45,3 +45,5 @@
 4. **Polish is weakest (0.77),** the same pattern as the COAPI gate.
 
 **After the result (2026-10-18, Andrei):** spam is never discarded. Its action is `review`, a human review folder ([kit/kev_knife_current.py](kit/kev_knife_current.py); not measured on this test). "We don't want to miss any business."
+
+**After the result (2026-10-19):** spam's action is `review` in code (never discard), and only fields that passed are shown. The tool runs as an admin-only demo in CasaSol Guide (typed or voice; when unsure it names its top two readings); it reads no real inbound leads. CasaSol now offers agencies a free assessment on 50–300 of their own enquiries under a data-processing agreement: the real-lead test this record could not do. Field notes while building the demo, not measured: the model gives about 0.6 to facts a message never states (financing), so the demo shows yes/no facts only from 0.7; the bot's language detector treated "ó" as Polish-only and read Spanish as Polish (fixed). Post: [localfirstai.eu/posts/2026-10-19-lead-triage](https://localfirstai.eu/posts/2026-10-19-lead-triage/).
