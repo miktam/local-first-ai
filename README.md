@@ -31,6 +31,17 @@ Some posts describe operational work rather than experiments: what we observed, 
 
 ---
 
+## Build log
+
+A dated line for each change to the local tools: what changed, what prompted it (a real input, one of our tests, or reading), how it was checked, and what was learned. Model notes keep what we know about each model, one sourced fact per line.
+
+| | |
+|---|---|
+| Log | [log/](./log/) · [October 2026](./log/2026-10.md) |
+| Model notes | [Kev-4B](./log/models/kev-4b.md) · [Jev](./log/models/jev.md) |
+
+---
+
 ## Project Chronos
 
 Every experimental claim on the blog is backed by a pre-registered experiment logged in [`tasks/chronos/scientific_log.md`](./tasks/chronos/scientific_log.md). The methodology: observation → hypothesis → experiment → evidence → conclusion. No retrofitted results.
