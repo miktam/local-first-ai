@@ -16,7 +16,7 @@ intent `buy` · type `villa` · timeline `now` · financing `False` · foreign `
 
 **X5-25** (de, whatsapp, standard)
 
-> Hallo Frau García, wir haben am Dienstag mit Ihnen die Wohnung in Cancelada besichtigt (die mit der großen Terrasse). Wir möchten ein Angebot machen: 385.000 €, die Finanzierung über unsere Bank steht bereits. Bitte rufen Sie mich heute noch an: +34 600 000 104. Danke, Sabine Kraus
+> Hallo Frau García, wir haben am Dienstag mit Ihnen die Wohnung in Cancelada besichtigt (die mit der großen Terrasse). Wir möchten ein Angebot machen: 385.000 €, die Finanzierung über unsere Bank steht bereits. Bitte rufen Sie mich heute noch an: +44 7700 900104. Danke, Sabine Kraus
 
 intent `buy` · type `apartment` · timeline `now` · financing `True` · foreign `None` · qualified `True` · urgency `3` · action `call_now` · budget `385000`
 
@@ -53,7 +53,7 @@ intent `rent_long` · type `None` · timeline `months` · financing `None` · fo
 
 **X4-57** (es, voice, hard_holiday)
 
-> Hola, eh, sí, mira, somos de Pamplona, venimos una semana cada dos meses más o menos a Benalmádena, siempre a alquilar… y ya, eh, ya estamos cansados de pagar alquileres, queremos algo nuestro para las escapadas, para los veranos y Semana Santa… un apartamento de dos habitaciones, con piscina, en Benalmádena Costa o Arroyo de la Miel, que no pase de 220.000, vamos, hipoteca una parte… venimos el puente de noviembre, del 31 al 2, podríamos ver cosas… llámame al +34 600 000 926, soy Javier.
+> Hola, eh, sí, mira, somos de Pamplona, venimos una semana cada dos meses más o menos a Benalmádena, siempre a alquilar… y ya, eh, ya estamos cansados de pagar alquileres, queremos algo nuestro para las escapadas, para los veranos y Semana Santa… un apartamento de dos habitaciones, con piscina, en Benalmádena Costa o Arroyo de la Miel, que no pase de 220.000, vamos, hipoteca una parte… venimos el puente de noviembre, del 31 al 2, podríamos ver cosas… llámame al +44 7700 900926, soy Javier.
 
 intent `buy` · type `apartment` · timeline `now` · financing `True` · foreign `False` · qualified `True` · urgency `2` · action `call_now` · budget `220000`
 
@@ -118,7 +118,7 @@ intent `spam` · type `unspecified` · timeline `unspecified` · financing `None
 
 **X7-41** (fr, whatsapp, standard)
 
-> slt on cherche un appart pour la semaine prochaine, 7 nuits a partir de samedi, a estepona ou manilva 4 pers budget 900 la semaine merci 👍 +34 600 000 173
+> slt on cherche un appart pour la semaine prochaine, 7 nuits a partir de samedi, a estepona ou manilva 4 pers budget 900 la semaine merci 👍 +44 7700 900173
 
 intent `rent_holiday` · type `apartment` · timeline `now` · financing `None` · foreign `None` · qualified `True` · urgency `2` · action `call_now` · budget `900`
 
@@ -190,7 +190,7 @@ intent `rent_holiday` · type `villa` · timeline `None` · financing `None` · 
 
 **X5-01** (de, whatsapp, standard)
 
-> hallo wir suchen ne wohnung in nueva andalucia 2-3 schlafzimmer bis 800k sind nächste woche vor ort 😊 können sie uns was zeigen? 0034 600 000 101 lg petra u. jochen
+> hallo wir suchen ne wohnung in nueva andalucia 2-3 schlafzimmer bis 800k sind nächste woche vor ort 😊 können sie uns was zeigen? +44 7700 900101 lg petra u. jochen
 
 intent `buy` · type `apartment` · timeline `now` · financing `None` · foreign `None` · qualified `True` · urgency `2` · action `call_now` · budget `800000`
 

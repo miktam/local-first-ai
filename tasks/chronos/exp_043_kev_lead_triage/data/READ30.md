@@ -111,7 +111,7 @@ intent `info` · type `unspecified` · timeline `None` · financing `None` · fo
 
 wir besitzen eine 3-Zimmer-Wohnung in Riviera del Sol (Mijas Costa), die ab 1. November frei wird, und möchten sie langfristig vermieten, Mietvorstellung 1.400 €/Monat. Da wir in Düsseldorf leben, suchen wir eine Agentur, die Vermietung und Verwaltung vor Ort übernimmt.
 
-Bitte rufen Sie mich kurz an, um das Weitere zu besprechen: +34 600 000 141.
+Bitte rufen Sie mich kurz an, um das Weitere zu besprechen: +44 7700 900141.
 
 Mit freundlichen Grüßen
 Petra S.
@@ -156,7 +156,7 @@ intent `buy` · type `apartment` · timeline `later` · financing `True` · fore
 
 **W3-04** (pl, form)
 
-> Interesuje mnie oferta nr 4521 (penthouse, Nueva Andalucía). Czy jest nadal dostępna i czy można obejrzeć w tym tygodniu? Przyleciałem z Warszawy, jestem w Marbelli do piątku. Tel. +34 600 000 112.
+> Interesuje mnie oferta nr 4521 (penthouse, Nueva Andalucía). Czy jest nadal dostępna i czy można obejrzeć w tym tygodniu? Przyleciałem z Warszawy, jestem w Marbelli do piątku. Tel. +44 7700 900112.
 
 intent `buy` · type `penthouse` · timeline `now` · financing `None` · foreign `True` · qualified `True` · urgency `3` · action `call_now`
 
@@ -185,7 +185,7 @@ intent `buy` · type `villa` · timeline `months` · financing `None` · foreign
 
 Nous arrivons de Lille à Málaga vendredi prochain pour 10 jours et notre location Airbnb vient d'être annulée. Nous cherchons en urgence un appartement 2 chambres à Fuengirola ou Benalmádena, budget jusqu'à 2 000 € pour le séjour, 3 adultes.
 
-Merci de m'appeler dès que possible au +33 6 00 00 02 34.
+Merci de m'appeler dès que possible au +44 7700 900706.
 
 Cordialement,
 Laure
