@@ -1,0 +1,241 @@
+{
+ "set": "dev",
+ "n": 209,
+ "request": {
+  "n": 209,
+  "native": 0.923,
+  "translated": 0.895,
+  "diff": -0.028,
+  "translated_only_right": 3,
+  "native_only_right": 9,
+  "p_one_sided": 0.9807
+ },
+ "next_step": {
+  "n": 209,
+  "native": 0.861,
+  "translated": 0.852,
+  "diff": -0.009,
+  "translated_only_right": 5,
+  "native_only_right": 7,
+  "p_one_sided": 0.8062
+ },
+ "spam": {
+  "native": {
+   "caught": 32,
+   "spam_n": 34,
+   "recall": 0.941,
+   "false_spam": 1,
+   "genuine_n": 175,
+   "false_spam_ids": [
+    "X4-69"
+   ]
+  },
+  "translated": {
+   "caught": 31,
+   "spam_n": 34,
+   "recall": 0.912,
+   "false_spam": 2,
+   "genuine_n": 175,
+   "false_spam_ids": [
+    "X4-69",
+    "X7-29"
+   ]
+  }
+ },
+ "by_language": {
+  "de": {
+   "request": {
+    "n": 35,
+    "native": 0.943,
+    "translated": 0.971,
+    "diff": 0.028,
+    "translated_only_right": 1,
+    "native_only_right": 0,
+    "p_one_sided": 0.5
+   },
+   "next_step": {
+    "n": 35,
+    "native": 0.914,
+    "translated": 0.914,
+    "diff": 0.0,
+    "translated_only_right": 0,
+    "native_only_right": 0,
+    "p_one_sided": 1.0
+   }
+  },
+  "es": {
+   "request": {
+    "n": 37,
+    "native": 0.919,
+    "translated": 0.865,
+    "diff": -0.054,
+    "translated_only_right": 0,
+    "native_only_right": 2,
+    "p_one_sided": 1.0
+   },
+   "next_step": {
+    "n": 37,
+    "native": 0.865,
+    "translated": 0.784,
+    "diff": -0.081,
+    "translated_only_right": 0,
+    "native_only_right": 3,
+    "p_one_sided": 1.0
+   }
+  },
+  "fr": {
+   "request": {
+    "n": 36,
+    "native": 0.917,
+    "translated": 0.806,
+    "diff": -0.111,
+    "translated_only_right": 0,
+    "native_only_right": 4,
+    "p_one_sided": 1.0
+   },
+   "next_step": {
+    "n": 36,
+    "native": 0.861,
+    "translated": 0.806,
+    "diff": -0.055,
+    "translated_only_right": 0,
+    "native_only_right": 2,
+    "p_one_sided": 1.0
+   }
+  },
+  "pl": {
+   "request": {
+    "n": 33,
+    "native": 0.848,
+    "translated": 0.879,
+    "diff": 0.031,
+    "translated_only_right": 2,
+    "native_only_right": 1,
+    "p_one_sided": 0.5
+   },
+   "next_step": {
+    "n": 33,
+    "native": 0.818,
+    "translated": 0.909,
+    "diff": 0.091,
+    "translated_only_right": 3,
+    "native_only_right": 0,
+    "p_one_sided": 0.125
+   }
+  },
+  "ru": {
+   "request": {
+    "n": 34,
+    "native": 0.912,
+    "translated": 0.882,
+    "diff": -0.03,
+    "translated_only_right": 0,
+    "native_only_right": 1,
+    "p_one_sided": 1.0
+   },
+   "next_step": {
+    "n": 34,
+    "native": 0.824,
+    "translated": 0.853,
+    "diff": 0.029,
+    "translated_only_right": 1,
+    "native_only_right": 0,
+    "p_one_sided": 0.5
+   }
+  },
+  "sv": {
+   "request": {
+    "n": 34,
+    "native": 1.0,
+    "translated": 0.971,
+    "diff": -0.029,
+    "translated_only_right": 0,
+    "native_only_right": 1,
+    "p_one_sided": 1.0
+   },
+   "next_step": {
+    "n": 34,
+    "native": 0.882,
+    "translated": 0.853,
+    "diff": -0.029,
+    "translated_only_right": 1,
+    "native_only_right": 2,
+    "p_one_sided": 0.875
+   }
+  }
+ },
+ "by_source": {
+  "exp_043": {
+   "n": 90,
+   "native": 0.933,
+   "translated": 0.922,
+   "diff": -0.011,
+   "translated_only_right": 2,
+   "native_only_right": 3,
+   "p_one_sided": 0.8125
+  },
+  "exp_044": {
+   "n": 119,
+   "native": 0.916,
+   "translated": 0.874,
+   "diff": -0.042,
+   "translated_only_right": 1,
+   "native_only_right": 6,
+   "p_one_sided": 0.9922
+  }
+ },
+ "translation": {
+  "ok": 206,
+  "fallbacks": {
+   "marker lost or added": 3
+  },
+  "median_ms": 1704
+ },
+ "translated_confusions_top": [
+  "buy→rent_holiday: 5",
+  "info→sell: 2",
+  "invest→rent_long: 2",
+  "valuation→sell: 2",
+  "buy→spam: 2",
+  "invest→rent_holiday: 1",
+  "spam→sell: 1",
+  "invest→buy: 1"
+ ],
+ "flips": [
+  "W4-47 [de]: valuation | native sell | translated valuation",
+  "W2-05 [es]: buy | native buy | translated rent_holiday",
+  "W6-54 [fr]: info | native info | translated sell",
+  "W6-20 [fr]: invest | native invest | translated rent_long",
+  "W3-50 [pl]: buy | native sell | translated buy",
+  "X4-46 [es]: spam | native spam | translated invest",
+  "X7-29 [fr]: buy | native buy | translated spam",
+  "X7-47 [fr]: buy | native buy | translated rent_holiday",
+  "X3-58 [pl]: info | native buy | translated info",
+  "X3-01 [pl]: buy | native buy | translated rent_holiday",
+  "X8-30 [ru]: sell | native sell | translated buy",
+  "X6-73 [sv]: info | native info | translated buy"
+ ],
+ "hypotheses": {
+  "H1_request_gain": {
+   "diff": -0.028,
+   "p": 0.9807,
+   "pass": false
+  },
+  "H2_next_step_no_harm": {
+   "diff": -0.009,
+   "pass": true
+  },
+  "H3_spam_safety": {
+   "false_spam": [
+    1,
+    2
+   ],
+   "recall_translated": 0.912,
+   "pass": true
+  },
+  "H4_polish": {
+   "diff": 0.031,
+   "pass": false
+  }
+ }
+}

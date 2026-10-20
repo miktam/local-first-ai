@@ -1,0 +1,79 @@
+test native 25/425
+test native 50/425
+test native 75/425
+test native 100/425
+test native 125/425
+test native 150/425
+test native 175/425
+test native 200/425
+test native 225/425
+test native 250/425
+test native 275/425
+test native 300/425
+test native 325/425
+test native 350/425
+test native 375/425
+test native 400/425
+test native 425/425
+done
+test translated 25/425
+test translated 50/425
+test translated 75/425
+test translated 100/425
+test translated 125/425
+test translated 150/425
+test translated 175/425
+test translated 200/425
+test translated 225/425
+test translated 250/425
+test translated 275/425
+test translated 300/425
+test translated 325/425
+test translated 350/425
+test translated 375/425
+test translated 400/425
+test translated 425/425
+done
+regress 50/331
+regress 100/331
+regress 150/331
+regress 200/331
+regress 250/331
+regress 300/331
+{
+ "candidate": "/Users/miktam02/REPOS/casasol/scripts/kev_knife.py",
+ "sha256": "2acc7a1db1296e5284cd264762166c4a61d139376291e6002b8b6c1fd6ada956",
+ "checks": {
+  "intent": {
+   "rev4": 0.912,
+   "candidate": 0.912,
+   "ok": true
+  },
+  "action": {
+   "rev4": 0.933,
+   "candidate": 0.933,
+   "ok": true
+  },
+  "false_spam": {
+   "rev4": 2,
+   "candidate": 2,
+   "ok": true
+  },
+  "spam_recall": {
+   "rev4": 0.939,
+   "candidate": 0.939,
+   "ok": true
+  },
+  "budget_words": {
+   "rev4": 1.0,
+   "candidate": 1.0,
+   "ok": true
+  }
+ },
+ "pass": true,
+ "candidate_false_spam_ids": [
+  "X1-38",
+  "X3-57"
+ ]
+}
+[exp046-test] exit 0 at Tue 20 Oct 2026 19:28:13 CEST

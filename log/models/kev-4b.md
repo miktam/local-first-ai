@@ -10,6 +10,7 @@
 - 2026-10-18 · Lead triage, on 235 synthetic leads in seven languages: request 0.894, next step 0.898, spam caught 29 of 32 with 3 of 203 genuine leads flagged. [exp_043](../../tasks/chronos/exp_043_kev_lead_triage/RESULT.md)
 - 2026-10-19 · Rev 4, on 331 fresh synthetic leads: request 0.909 and next step 0.938 (standard stratum); 2 of 282 genuine leads flagged as spam. [exp_044](../../tasks/chronos/exp_044_kev_lead_triage_rev4/RESULT.md)
 - 2026-10-20 · From WhatsApp-quality voice notes, transcribed by Whisper large-v3-turbo, triage stayed within about a point of typed text: request 0.900 against 0.912, next step 0.921 against 0.931, on 331 synthetic enquiries read by computer voices. [exp_045](../../tasks/chronos/exp_045_voice_triage/RESULT.md)
+- 2026-10-20 · Its model card says English only, yet on 425 non-English synthetic enquiries in six languages it read the request right 0.927 of the time, and translating them into English first (gemma4:26b) gave 0.925. [exp_046](../../tasks/chronos/exp_046_translate_first/RESULT.md)
 
 ## Speed and cost
 
@@ -27,6 +28,7 @@
 - 2026-10-19 · Its raw confidence is ordered but not calibrated (ECE 0.262): Sure 1.00 right, Fairly sure 0.889, Unsure 0.798. Show the bands, never the number. [exp_044](../../tasks/chronos/exp_044_kev_lead_triage_rev4/RESULT.md)
 - 2026-10-19 · New top confusion: an owner who asks for a price and mentions selling is read as a seller (9 times). [exp_044](../../tasks/chronos/exp_044_kev_lead_triage_rev4/RESULT.md)
 - 2026-10-20 · Transcription tips borderline buyers toward holiday rent: voice moved 7 enquiries there, 5 of which it had right when typed. [exp_045](../../tasks/chronos/exp_045_voice_triage/RESULT.md)
+- 2026-10-20 · Polish stays its weakest language (0.853), and translation into English does not fix it (0.868, +1 net of 68). [exp_046](../../tasks/chronos/exp_046_translate_first/RESULT.md)
 
 ## What helped
 
