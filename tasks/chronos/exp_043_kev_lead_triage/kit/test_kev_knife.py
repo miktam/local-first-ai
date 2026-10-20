@@ -36,8 +36,8 @@ def test_b2b_pitch_becomes_spam_only_above_the_cut():
 
 
 def test_contacts_are_masked_before_kev():
-    m = K.masked("call me +34 600 000 123 or anna@example.com")
-    assert "600" not in m and "@" not in m and "[phone]" in m and "[email]" in m
+    m = K.masked("call me +44 7700 900123 or anna@example.com")
+    assert "7700" not in m and "@" not in m and "[phone]" in m and "[email]" in m
 
 
 def test_budget_units_in_russian_and_german():

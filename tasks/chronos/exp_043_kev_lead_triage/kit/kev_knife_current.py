@@ -144,7 +144,7 @@ def triage(text: str) -> dict:
 
 
 DEMO = [
-    "Hi, we are a Swedish couple looking for a 3-bed villa in Benahavís, budget around 1.5M, cash buyers, visiting next week. Can someone call me? +46 70 123 4567",
+    "Hi, we are a Swedish couple looking for a 3-bed villa in Benahavís, budget around 1.5M, cash buyers, visiting next week. Can someone call me? +44 7700 900123",
     "Dzień dobry, szukamy mieszkania do wynajęcia na dłużej w Marbelli, 2 sypialnie, do 2000 € miesięcznie, od stycznia.",
     "Hola, quiero vender mi ático en Nueva Andalucía y saber cuánto vale. ¿Pueden venir a verlo esta semana?",
     "Is it true that non-residents pay a 3% withholding when they sell? Just curious, not selling yet.",
