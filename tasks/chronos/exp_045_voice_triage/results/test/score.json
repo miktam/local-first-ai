@@ -1,0 +1,402 @@
+{
+ "set": "test",
+ "set_sha256": "514b6386dfba45464089a472d579097df58c3380964c1203aab9a39deddae808",
+ "text_vs_exp044_recorded": {
+  "n": 331,
+  "same_request_and_next_step": 331,
+  "differ": []
+ },
+ "whatsapp": {
+  "n": 331,
+  "empty_transcripts": 0,
+  "intent": {
+   "text": 0.912,
+   "voice": 0.9,
+   "voice_only_right": 5,
+   "text_only_right": 9,
+   "p_two_sided": 0.424,
+   "same_decision": 0.952,
+   "diff": -0.012
+  },
+  "action": {
+   "text": 0.931,
+   "voice": 0.921,
+   "voice_only_right": 6,
+   "text_only_right": 9,
+   "p_two_sided": 0.6072,
+   "same_decision": 0.952,
+   "diff": -0.01
+  },
+  "spam": {
+   "text": {
+    "caught": 46,
+    "spam_n": 49,
+    "recall": 0.939,
+    "false_spam": 2,
+    "genuine_n": 282,
+    "false_spam_ids": [
+     "X1-38",
+     "X3-57"
+    ]
+   },
+   "voice": {
+    "caught": 48,
+    "spam_n": 49,
+    "recall": 0.98,
+    "false_spam": 3,
+    "genuine_n": 282,
+    "false_spam_ids": [
+     "X1-38",
+     "X7-08",
+     "X3-57"
+    ]
+   }
+  },
+  "budget": {
+   "stated": {
+    "n": 211,
+    "text": 0.763,
+    "voice": 0.701
+   },
+   "in_words": {
+    "n": 29,
+    "text": 1.0,
+    "voice": 0.966
+   },
+   "lost_in_voice": {
+    "n": 15,
+    "abbreviation_in_text": [
+     "X4-27",
+     "X4-67",
+     "X6-58",
+     "X7-18",
+     "X7-26",
+     "X7-56",
+     "X7-61"
+    ],
+    "other": [
+     "X1-12",
+     "X1-35",
+     "X1-38",
+     "X2-73",
+     "X5-64",
+     "X6-02",
+     "X8-25",
+     "X8-72"
+    ]
+   }
+  },
+  "language": {
+   "whisper_heard_right": 1.0,
+   "shown_right_voice": 1.0,
+   "shown_right_text": 0.976,
+   "heard_wrong": {}
+  },
+  "by_language_intent": {
+   "de": {
+    "n": 39,
+    "text": 0.897,
+    "voice": 0.923,
+    "transcript_similarity_median": 0.9661016949152542
+   },
+   "en": {
+    "n": 81,
+    "text": 0.877,
+    "voice": 0.877,
+    "transcript_similarity_median": 0.9649122807017544
+   },
+   "es": {
+    "n": 43,
+    "text": 0.93,
+    "voice": 0.93,
+    "transcript_similarity_median": 0.9828326180257511
+   },
+   "fr": {
+    "n": 44,
+    "text": 1.0,
+    "voice": 0.932,
+    "transcript_similarity_median": 0.9135082604470359
+   },
+   "pl": {
+    "n": 42,
+    "text": 0.857,
+    "voice": 0.833,
+    "transcript_similarity_median": 0.9595375722543352
+   },
+   "ru": {
+    "n": 41,
+    "text": 0.902,
+    "voice": 0.927,
+    "transcript_similarity_median": 0.9435897435897436
+   },
+   "sv": {
+    "n": 41,
+    "text": 0.951,
+    "voice": 0.902,
+    "transcript_similarity_median": 0.9333333333333333
+   }
+  },
+  "by_stratum_intent": {
+   "standard": {
+    "text": 0.909,
+    "voice": 0.896
+   },
+   "hard_b2b": {
+    "text": 0.9,
+    "voice": 0.933
+   },
+   "hard_holiday": {
+    "text": 0.935,
+    "voice": 0.903
+   },
+   "hard_budget": {
+    "text": 0.931,
+    "voice": 0.897
+   }
+  },
+  "phone_seen": {
+   "text": 48,
+   "voice": 51
+  },
+  "median": {
+   "speech_s": 20.3,
+   "stt_ms": 1127,
+   "kev_ms": 1660
+  },
+  "flips_intent": [
+   "X5-18: spam | text sell | voice spam",
+   "X2-55: buy | text rent_long | voice rent_holiday",
+   "X2-73: buy | text buy | voice rent_long",
+   "X2-19: buy | text rent_holiday | voice buy",
+   "X4-15: spam | text sell | voice spam",
+   "X4-18: buy | text buy | voice rent_holiday",
+   "X4-34: invest | text buy | voice rent_holiday",
+   "X7-08: rent_long | text rent_long | voice spam",
+   "X7-61: buy | text buy | voice rent_holiday",
+   "X7-09: invest | text invest | voice rent_holiday",
+   "X3-54: buy | text buy | voice rent_holiday",
+   "X3-63: valuation | text sell | voice valuation",
+   "X3-47: buy | text buy | voice rent_long",
+   "X8-38: info | text rent_holiday | voice info",
+   "X6-68: rent_holiday | text rent_holiday | voice buy",
+   "X6-37: buy | text buy | voice rent_holiday"
+  ]
+ },
+ "noisy": {
+  "n": 331,
+  "empty_transcripts": 0,
+  "intent": {
+   "text": 0.912,
+   "voice": 0.909,
+   "voice_only_right": 7,
+   "text_only_right": 8,
+   "p_two_sided": 1.0,
+   "same_decision": 0.949,
+   "diff": -0.003
+  },
+  "action": {
+   "text": 0.931,
+   "voice": 0.924,
+   "voice_only_right": 7,
+   "text_only_right": 9,
+   "p_two_sided": 0.8036,
+   "same_decision": 0.946,
+   "diff": -0.007
+  },
+  "spam": {
+   "text": {
+    "caught": 46,
+    "spam_n": 49,
+    "recall": 0.939,
+    "false_spam": 2,
+    "genuine_n": 282,
+    "false_spam_ids": [
+     "X1-38",
+     "X3-57"
+    ]
+   },
+   "voice": {
+    "caught": 49,
+    "spam_n": 49,
+    "recall": 1.0,
+    "false_spam": 3,
+    "genuine_n": 282,
+    "false_spam_ids": [
+     "X1-38",
+     "X7-08",
+     "X3-57"
+    ]
+   }
+  },
+  "budget": {
+   "stated": {
+    "n": 211,
+    "text": 0.763,
+    "voice": 0.682
+   },
+   "in_words": {
+    "n": 29,
+    "text": 1.0,
+    "voice": 0.897
+   },
+   "lost_in_voice": {
+    "n": 20,
+    "abbreviation_in_text": [
+     "X3-27",
+     "X3-33",
+     "X3-47",
+     "X4-27",
+     "X4-67",
+     "X6-27",
+     "X7-18",
+     "X7-26",
+     "X7-56",
+     "X7-61"
+    ],
+    "other": [
+     "X1-12",
+     "X1-35",
+     "X1-38",
+     "X2-73",
+     "X3-29",
+     "X5-64",
+     "X6-47",
+     "X8-25",
+     "X8-32",
+     "X8-72"
+    ]
+   }
+  },
+  "language": {
+   "whisper_heard_right": 1.0,
+   "shown_right_voice": 1.0,
+   "shown_right_text": 0.976,
+   "heard_wrong": {}
+  },
+  "by_language_intent": {
+   "de": {
+    "n": 39,
+    "text": 0.897,
+    "voice": 0.923,
+    "transcript_similarity_median": 0.9527027027027027
+   },
+   "en": {
+    "n": 81,
+    "text": 0.877,
+    "voice": 0.877,
+    "transcript_similarity_median": 0.9523809523809523
+   },
+   "es": {
+    "n": 43,
+    "text": 0.93,
+    "voice": 0.907,
+    "transcript_similarity_median": 0.9503722084367245
+   },
+   "fr": {
+    "n": 44,
+    "text": 1.0,
+    "voice": 0.932,
+    "transcript_similarity_median": 0.9075862068965517
+   },
+   "pl": {
+    "n": 42,
+    "text": 0.857,
+    "voice": 0.857,
+    "transcript_similarity_median": 0.9085545722713865
+   },
+   "ru": {
+    "n": 41,
+    "text": 0.902,
+    "voice": 0.927,
+    "transcript_similarity_median": 0.9263565891472868
+   },
+   "sv": {
+    "n": 41,
+    "text": 0.951,
+    "voice": 0.976,
+    "transcript_similarity_median": 0.881578947368421
+   }
+  },
+  "by_stratum_intent": {
+   "standard": {
+    "text": 0.909,
+    "voice": 0.905
+   },
+   "hard_b2b": {
+    "text": 0.9,
+    "voice": 0.933
+   },
+   "hard_holiday": {
+    "text": 0.935,
+    "voice": 0.935
+   },
+   "hard_budget": {
+    "text": 0.931,
+    "voice": 0.897
+   }
+  },
+  "phone_seen": {
+   "text": 48,
+   "voice": 50
+  },
+  "median": {
+   "speech_s": 20.3,
+   "stt_ms": 1115,
+   "kev_ms": 1661
+  },
+  "flips_intent": [
+   "X5-18: spam | text sell | voice spam",
+   "X2-55: buy | text rent_long | voice rent_holiday",
+   "X2-73: buy | text buy | voice rent_long",
+   "X2-19: buy | text rent_holiday | voice buy",
+   "X4-15: spam | text sell | voice spam",
+   "X4-18: buy | text buy | voice rent_holiday",
+   "X4-34: invest | text buy | voice rent_holiday",
+   "X4-63: buy | text buy | voice rent_holiday",
+   "X7-08: rent_long | text rent_long | voice spam",
+   "X7-61: buy | text buy | voice rent_holiday",
+   "X7-09: invest | text invest | voice rent_holiday",
+   "X3-54: buy | text buy | voice rent_holiday",
+   "X3-63: valuation | text sell | voice valuation",
+   "X3-62: spam | text rent_holiday | voice spam",
+   "X3-46: info | text info | voice buy",
+   "X8-38: info | text rent_holiday | voice info",
+   "X6-58: buy | text rent_holiday | voice buy"
+  ]
+ },
+ "hypotheses_whatsapp": {
+  "H1_request": {
+   "diff": -0.012,
+   "pass": true
+  },
+  "H2_next_step": {
+   "diff": -0.01,
+   "pass": true
+  },
+  "H3_spam": {
+   "false_spam": [
+    2,
+    3
+   ],
+   "recall_voice": 0.98,
+   "pass": true
+  },
+  "H4_budget": {
+   "stated": {
+    "n": 211,
+    "text": 0.763,
+    "voice": 0.701
+   },
+   "in_words": {
+    "n": 29,
+    "text": 1.0,
+    "voice": 0.966
+   },
+   "pass": false
+  },
+  "H5_language_shown": {
+   "voice": 1.0,
+   "pass": true
+  }
+ }
+}
