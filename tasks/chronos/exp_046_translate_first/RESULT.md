@@ -13,6 +13,8 @@
 
 The verdict map stops at rule 2. H4 fails too, so there is no Polish-only seed.
 
+**Correction (2026-10-20, after publication):** the next-step numbers above are understated in both arms. exp_043's labels call spam's next step "discard", and the code has called it "review" since 2026-10-18 (the same decision, renamed). `translate46.py` scored the 32 exp_043 spam enquiries as wrong in both arms. Read with "discard" = "review", next step is **0.922 native and 0.920 translated** (−0.002). H2 still passes, and the verdict is unchanged. `score.json` is kept as computed. Found while building exp_047, whose scorer converts the label.
+
 ## What changed (descriptive)
 
 - **Translation trades errors rather than removing them.** 25 enquiries change their request: 12 get it right only when translated, 13 only natively.
