@@ -1,0 +1,219 @@
+{
+ "set": "dev",
+ "n": 60,
+ "fields": {
+  "intent": {
+   "n": 60,
+   "flash": 0.867,
+   "kev": 0.933,
+   "clef27b": 0.967,
+   "hybrid": 0.933,
+   "share_of_clef27b_gain": -1.94,
+   "flash_only_right": 3,
+   "kev_only_right": 7,
+   "p_one_sided_flash_better": 0.9453
+  },
+  "action": {
+   "n": 60,
+   "flash": 0.933,
+   "kev": 0.967,
+   "clef27b": 0.983,
+   "hybrid": 0.967,
+   "share_of_clef27b_gain": -2.12,
+   "flash_only_right": 2,
+   "kev_only_right": 4,
+   "p_one_sided_flash_better": 0.8906
+  },
+  "qualified": {
+   "n": 60,
+   "flash": 0.9,
+   "kev": 0.783,
+   "clef27b": 0.933,
+   "hybrid": 0.9,
+   "share_of_clef27b_gain": 0.78,
+   "flash_only_right": 8,
+   "kev_only_right": 1,
+   "p_one_sided_flash_better": 0.0195
+  },
+  "timeline": {
+   "n": 59,
+   "flash": 0.864,
+   "kev": 0.746,
+   "clef27b": 0.915,
+   "hybrid": 0.864,
+   "share_of_clef27b_gain": 0.7,
+   "flash_only_right": 12,
+   "kev_only_right": 5,
+   "p_one_sided_flash_better": 0.0717
+  },
+  "property_type": {
+   "n": 60,
+   "flash": 0.967,
+   "kev": 0.883,
+   "clef27b": 0.967,
+   "hybrid": 0.967,
+   "share_of_clef27b_gain": 1.0,
+   "flash_only_right": 5,
+   "kev_only_right": 0,
+   "p_one_sided_flash_better": 0.0312
+  },
+  "financing": {
+   "n": 17,
+   "flash": 1.0,
+   "kev": 1.0,
+   "clef27b": 1.0,
+   "hybrid": 1.0,
+   "share_of_clef27b_gain": null,
+   "flash_only_right": 0,
+   "kev_only_right": 0,
+   "p_one_sided_flash_better": 1.0
+  },
+  "foreign_buyer": {
+   "n": 18,
+   "flash": 1.0,
+   "kev": 0.889,
+   "clef27b": 0.944,
+   "hybrid": 1.0,
+   "share_of_clef27b_gain": 2.02,
+   "flash_only_right": 2,
+   "kev_only_right": 0,
+   "p_one_sided_flash_better": 0.25
+  }
+ },
+ "urgency_within_1": {
+  "flash": 0.965,
+  "kev": 0.895,
+  "clef27b": 1.0,
+  "hybrid": 1.0
+ },
+ "spam": {
+  "flash": {
+   "caught": 10,
+   "spam_n": 11,
+   "recall": 0.909,
+   "false_spam": 2,
+   "genuine_n": 49,
+   "false_spam_ids": [
+    "X5-38",
+    "X4-39"
+   ]
+  },
+  "kev": {
+   "caught": 10,
+   "spam_n": 11,
+   "recall": 0.909,
+   "false_spam": 0,
+   "genuine_n": 49,
+   "false_spam_ids": []
+  },
+  "clef27b": {
+   "caught": 10,
+   "spam_n": 11,
+   "recall": 0.909,
+   "false_spam": 0,
+   "genuine_n": 49,
+   "false_spam_ids": []
+  },
+  "hybrid": {
+   "caught": 10,
+   "spam_n": 11,
+   "recall": 0.909,
+   "false_spam": 0,
+   "genuine_n": 49,
+   "false_spam_ids": []
+  }
+ },
+ "by_language_request": {
+  "de": {
+   "flash": 0.889,
+   "kev": 1.0,
+   "clef27b": 1.0,
+   "hybrid": 1.0
+  },
+  "en": {
+   "flash": 0.882,
+   "kev": 0.941,
+   "clef27b": 0.882,
+   "hybrid": 0.941
+  },
+  "es": {
+   "flash": 0.889,
+   "kev": 1.0,
+   "clef27b": 1.0,
+   "hybrid": 1.0
+  },
+  "fr": {
+   "flash": 0.8,
+   "kev": 0.9,
+   "clef27b": 1.0,
+   "hybrid": 0.9
+  },
+  "pl": {
+   "flash": 0.875,
+   "kev": 0.75,
+   "clef27b": 1.0,
+   "hybrid": 0.75
+  },
+  "ru": {
+   "flash": 1.0,
+   "kev": 1.0,
+   "clef27b": 1.0,
+   "hybrid": 1.0
+  },
+  "sv": {
+   "flash": 0.667,
+   "kev": 1.0,
+   "clef27b": 1.0,
+   "hybrid": 1.0
+  }
+ },
+ "confusions_flash": [
+  "buy→invest: 3",
+  "buy→spam: 2",
+  "sell→valuation: 1",
+  "spam→rent_long: 1",
+  "invest→rent_long: 1"
+ ],
+ "median_ms": {
+  "flash": 3727,
+  "kev": 1697,
+  "clef27b": 13163,
+  "hybrid": 0
+ },
+ "hypotheses": {
+  "H1_qualified_showable": {
+   "flash": 0.9,
+   "pass": true
+  },
+  "H2_timeline_showable": {
+   "flash": 0.864,
+   "pass": true
+  },
+  "H3_no_regression_vs_kev": {
+   "request": -0.066,
+   "next_step": -0.034,
+   "pass": false
+  },
+  "H4_spam_safety": {
+   "false_spam": 2,
+   "kev": 0,
+   "recall": 0.909,
+   "pass": false
+  },
+  "H5_most_of_the_gain": {
+   "share_request_qualified_timeline": [
+    -1.94,
+    0.78,
+    0.7
+   ],
+   "pass": false
+  },
+  "H6_hybrid": {
+   "request": 0.933,
+   "next_step": 0.967,
+   "kev_next_step": 0.967,
+   "false_spam": 0,
+   "pass": true
+  }
+ }
+}

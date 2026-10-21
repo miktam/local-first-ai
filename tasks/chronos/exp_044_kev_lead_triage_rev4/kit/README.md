@@ -20,3 +20,5 @@ X/runs/exp044_test_rev4/pred.jsonl         ← results/test/pred_rev4.jsonl
 The output equals `results/test/compare.json` (checked 2026-10-19, on the public copy of the data).
 
 **To re-run Kev** you need the CasaSol repo (the knife imports the bot's `detect_language`) and Kev-4B served on llama.cpp `/v1/systemone` at `127.0.0.1:18442`.
+
+**Public copy (2026-10-21):** the one phone number in `DEMO`, the built-in example list, was a valid-format Swedish mobile (+46 70 …). It is now in Ofcom's fiction range, as in exp_043's kit. Nothing else changed, and `DEMO` is not on the triage path. The as-run hashes above are of the files the runs used. This copy's hashes: `kev_knife_rev31.py` `e5a4cc4261be0ae9…`; `kev_knife_rev4.py` `2cdfbdf794ff50b5…`.

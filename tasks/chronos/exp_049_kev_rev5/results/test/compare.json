@@ -1,0 +1,261 @@
+{
+ "set": "test",
+ "n": 350,
+ "standard": {
+  "intent": {
+   "n": 188,
+   "rev42": 0.931,
+   "rev5": 0.941,
+   "diff": 0.01,
+   "rev5_only_right": 2,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.25
+  },
+  "action": {
+   "n": 188,
+   "rev42": 0.931,
+   "rev5": 0.936,
+   "diff": 0.005,
+   "rev5_only_right": 2,
+   "rev42_only_right": 1,
+   "p_one_sided": 0.5
+  },
+  "timeline": {
+   "n": 186,
+   "rev42": 0.737,
+   "rev5": 0.817,
+   "diff": 0.08,
+   "rev5_only_right": 20,
+   "rev42_only_right": 5,
+   "p_one_sided": 0.002
+  }
+ },
+ "hard_intermediary": {
+  "intent": {
+   "n": 54,
+   "rev42": 0.907,
+   "rev5": 0.944,
+   "diff": 0.037,
+   "rev5_only_right": 2,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.25
+  },
+  "spam_rev42": {
+   "false_spam": 2,
+   "genuine": 27,
+   "caught": 26,
+   "spam_n": 27,
+   "recall": 0.963,
+   "false_spam_ids": [
+    "Y5-06",
+    "Y8-52"
+   ]
+  },
+  "spam_rev5": {
+   "false_spam": 0,
+   "genuine": 27,
+   "caught": 26,
+   "spam_n": 27,
+   "recall": 0.963,
+   "false_spam_ids": []
+  }
+ },
+ "hard_valuation": {
+  "intent": {
+   "n": 54,
+   "rev42": 0.852,
+   "rev5": 0.926,
+   "diff": 0.074,
+   "rev5_only_right": 4,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.0625
+  }
+ },
+ "hard_timing": {
+  "timeline": {
+   "n": 54,
+   "rev42": 0.444,
+   "rev5": 0.87,
+   "diff": 0.426,
+   "rev5_only_right": 23,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.0
+  }
+ },
+ "all": {
+  "intent": {
+   "n": 350,
+   "rev42": 0.923,
+   "rev5": 0.946,
+   "diff": 0.023,
+   "rev5_only_right": 8,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.0039
+  },
+  "action": {
+   "n": 350,
+   "rev42": 0.934,
+   "rev5": 0.949,
+   "diff": 0.015,
+   "rev5_only_right": 7,
+   "rev42_only_right": 2,
+   "p_one_sided": 0.0898
+  },
+  "timeline": {
+   "n": 346,
+   "rev42": 0.723,
+   "rev5": 0.838,
+   "diff": 0.115,
+   "rev5_only_right": 50,
+   "rev42_only_right": 10,
+   "p_one_sided": 0.0
+  },
+  "qualified": {
+   "n": 347,
+   "rev42": 0.873,
+   "rev5": 0.867,
+   "diff": -0.006,
+   "rev5_only_right": 2,
+   "rev42_only_right": 4,
+   "p_one_sided": 0.8906
+  },
+  "financing": {
+   "n": 65,
+   "rev42": 0.985,
+   "rev5": 1.0,
+   "diff": 0.015,
+   "rev5_only_right": 1,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.5
+  },
+  "property_type": {
+   "n": 342,
+   "rev42": 0.947,
+   "rev5": 0.947,
+   "diff": 0.0,
+   "rev5_only_right": 0,
+   "rev42_only_right": 0,
+   "p_one_sided": 1.0
+  }
+ },
+ "spam_all": {
+  "rev42": {
+   "false_spam": 2,
+   "genuine": 296,
+   "caught": 52,
+   "spam_n": 54,
+   "recall": 0.963,
+   "false_spam_ids": [
+    "Y5-06",
+    "Y8-52"
+   ]
+  },
+  "rev5": {
+   "false_spam": 0,
+   "genuine": 296,
+   "caught": 52,
+   "spam_n": 54,
+   "recall": 0.963,
+   "false_spam_ids": []
+  }
+ },
+ "on_behalf_rev5": 0.991,
+ "by_language_intent": {
+  "de": {
+   "n": 44,
+   "rev42": 0.909,
+   "rev5": 0.955,
+   "diff": 0.046,
+   "rev5_only_right": 2,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.25
+  },
+  "en": {
+   "n": 85,
+   "rev42": 0.941,
+   "rev5": 0.953,
+   "diff": 0.012,
+   "rev5_only_right": 1,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.5
+  },
+  "es": {
+   "n": 42,
+   "rev42": 0.976,
+   "rev5": 0.976,
+   "diff": 0.0,
+   "rev5_only_right": 0,
+   "rev42_only_right": 0,
+   "p_one_sided": 1.0
+  },
+  "fr": {
+   "n": 45,
+   "rev42": 0.911,
+   "rev5": 0.956,
+   "diff": 0.045,
+   "rev5_only_right": 2,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.25
+  },
+  "pl": {
+   "n": 45,
+   "rev42": 0.978,
+   "rev5": 0.978,
+   "diff": 0.0,
+   "rev5_only_right": 0,
+   "rev42_only_right": 0,
+   "p_one_sided": 1.0
+  },
+  "ru": {
+   "n": 44,
+   "rev42": 0.841,
+   "rev5": 0.886,
+   "diff": 0.045,
+   "rev5_only_right": 2,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.25
+  },
+  "sv": {
+   "n": 45,
+   "rev42": 0.889,
+   "rev5": 0.911,
+   "diff": 0.022,
+   "rev5_only_right": 1,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.5
+  }
+ },
+ "hypotheses": {
+  "H1_no_regression_standard": {
+   "request": 0.01,
+   "next_step": 0.005,
+   "pass": true
+  },
+  "H2_intermediaries": {
+   "false_spam_hard": [
+    2,
+    0
+   ],
+   "false_spam_all": [
+    2,
+    0
+   ],
+   "recall_all": [
+    0.963,
+    0.963
+   ],
+   "pass": true
+  },
+  "H3_valuation": {
+   "diff": 0.074,
+   "p": 0.0625,
+   "pass": false
+  },
+  "H4_timing": {
+   "diff": 0.426,
+   "p": 0.0,
+   "standard_timeline": 0.08,
+   "pass": true
+  }
+ }
+}

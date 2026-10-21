@@ -1,0 +1,259 @@
+{
+ "set": "dev",
+ "n": 163,
+ "standard": {
+  "intent": {
+   "n": 91,
+   "rev42": 0.934,
+   "rev5": 0.956,
+   "diff": 0.022,
+   "rev5_only_right": 2,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.25
+  },
+  "action": {
+   "n": 91,
+   "rev42": 0.956,
+   "rev5": 0.978,
+   "diff": 0.022,
+   "rev5_only_right": 2,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.25
+  },
+  "timeline": {
+   "n": 90,
+   "rev42": 0.789,
+   "rev5": 0.889,
+   "diff": 0.1,
+   "rev5_only_right": 11,
+   "rev42_only_right": 2,
+   "p_one_sided": 0.0112
+  }
+ },
+ "hard_intermediary": {
+  "intent": {
+   "n": 24,
+   "rev42": 0.917,
+   "rev5": 0.958,
+   "diff": 0.041,
+   "rev5_only_right": 1,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.5
+  },
+  "spam_rev42": {
+   "false_spam": 1,
+   "genuine": 11,
+   "caught": 13,
+   "spam_n": 13,
+   "recall": 1.0,
+   "false_spam_ids": [
+    "Y2-50"
+   ]
+  },
+  "spam_rev5": {
+   "false_spam": 0,
+   "genuine": 11,
+   "caught": 13,
+   "spam_n": 13,
+   "recall": 1.0,
+   "false_spam_ids": []
+  }
+ },
+ "hard_valuation": {
+  "intent": {
+   "n": 24,
+   "rev42": 0.875,
+   "rev5": 0.917,
+   "diff": 0.042,
+   "rev5_only_right": 2,
+   "rev42_only_right": 1,
+   "p_one_sided": 0.5
+  }
+ },
+ "hard_timing": {
+  "timeline": {
+   "n": 24,
+   "rev42": 0.417,
+   "rev5": 0.833,
+   "diff": 0.416,
+   "rev5_only_right": 10,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.001
+  }
+ },
+ "all": {
+  "intent": {
+   "n": 163,
+   "rev42": 0.933,
+   "rev5": 0.957,
+   "diff": 0.024,
+   "rev5_only_right": 5,
+   "rev42_only_right": 1,
+   "p_one_sided": 0.1094
+  },
+  "action": {
+   "n": 163,
+   "rev42": 0.951,
+   "rev5": 0.975,
+   "diff": 0.024,
+   "rev5_only_right": 4,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.0625
+  },
+  "timeline": {
+   "n": 161,
+   "rev42": 0.708,
+   "rev5": 0.832,
+   "diff": 0.124,
+   "rev5_only_right": 25,
+   "rev42_only_right": 5,
+   "p_one_sided": 0.0002
+  },
+  "qualified": {
+   "n": 162,
+   "rev42": 0.901,
+   "rev5": 0.889,
+   "diff": -0.012,
+   "rev5_only_right": 0,
+   "rev42_only_right": 2,
+   "p_one_sided": 1.0
+  },
+  "financing": {
+   "n": 29,
+   "rev42": 1.0,
+   "rev5": 1.0,
+   "diff": 0.0,
+   "rev5_only_right": 0,
+   "rev42_only_right": 0,
+   "p_one_sided": 1.0
+  },
+  "property_type": {
+   "n": 160,
+   "rev42": 0.994,
+   "rev5": 0.994,
+   "diff": 0.0,
+   "rev5_only_right": 0,
+   "rev42_only_right": 0,
+   "p_one_sided": 1.0
+  }
+ },
+ "spam_all": {
+  "rev42": {
+   "false_spam": 1,
+   "genuine": 143,
+   "caught": 20,
+   "spam_n": 20,
+   "recall": 1.0,
+   "false_spam_ids": [
+    "Y2-50"
+   ]
+  },
+  "rev5": {
+   "false_spam": 0,
+   "genuine": 143,
+   "caught": 20,
+   "spam_n": 20,
+   "recall": 1.0,
+   "false_spam_ids": []
+  }
+ },
+ "on_behalf_rev5": 0.957,
+ "by_language_intent": {
+  "de": {
+   "n": 21,
+   "rev42": 0.952,
+   "rev5": 0.952,
+   "diff": 0.0,
+   "rev5_only_right": 0,
+   "rev42_only_right": 0,
+   "p_one_sided": 1.0
+  },
+  "en": {
+   "n": 40,
+   "rev42": 0.875,
+   "rev5": 0.925,
+   "diff": 0.05,
+   "rev5_only_right": 2,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.25
+  },
+  "es": {
+   "n": 20,
+   "rev42": 1.0,
+   "rev5": 1.0,
+   "diff": 0.0,
+   "rev5_only_right": 0,
+   "rev42_only_right": 0,
+   "p_one_sided": 1.0
+  },
+  "fr": {
+   "n": 21,
+   "rev42": 0.905,
+   "rev5": 0.905,
+   "diff": 0.0,
+   "rev5_only_right": 0,
+   "rev42_only_right": 0,
+   "p_one_sided": 1.0
+  },
+  "pl": {
+   "n": 21,
+   "rev42": 0.952,
+   "rev5": 1.0,
+   "diff": 0.048,
+   "rev5_only_right": 1,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.5
+  },
+  "ru": {
+   "n": 20,
+   "rev42": 0.95,
+   "rev5": 0.95,
+   "diff": 0.0,
+   "rev5_only_right": 1,
+   "rev42_only_right": 1,
+   "p_one_sided": 0.75
+  },
+  "sv": {
+   "n": 20,
+   "rev42": 0.95,
+   "rev5": 1.0,
+   "diff": 0.05,
+   "rev5_only_right": 1,
+   "rev42_only_right": 0,
+   "p_one_sided": 0.5
+  }
+ },
+ "hypotheses": {
+  "H1_no_regression_standard": {
+   "request": 0.022,
+   "next_step": 0.022,
+   "pass": true
+  },
+  "H2_intermediaries": {
+   "false_spam_hard": [
+    1,
+    0
+   ],
+   "false_spam_all": [
+    1,
+    0
+   ],
+   "recall_all": [
+    1.0,
+    1.0
+   ],
+   "pass": true
+  },
+  "H3_valuation": {
+   "diff": 0.042,
+   "p": 0.5,
+   "pass": false
+  },
+  "H4_timing": {
+   "diff": 0.416,
+   "p": 0.001,
+   "standard_timeline": 0.1,
+   "pass": true
+  }
+ }
+}

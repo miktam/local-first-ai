@@ -1,0 +1,235 @@
+{
+ "set": "test",
+ "n": 566,
+ "fields": {
+  "intent": {
+   "n": 566,
+   "flash": 0.965,
+   "kev": 0.919,
+   "clef27b": 0.991,
+   "hybrid": 0.919,
+   "share_of_clef27b_gain": 0.64,
+   "flash_only_right": 39,
+   "kev_only_right": 13,
+   "p_one_sided_flash_better": 0.0002
+  },
+  "action": {
+   "n": 565,
+   "flash": 0.943,
+   "kev": 0.924,
+   "clef27b": 0.973,
+   "hybrid": 0.933,
+   "share_of_clef27b_gain": 0.39,
+   "flash_only_right": 33,
+   "kev_only_right": 22,
+   "p_one_sided_flash_better": 0.0885
+  },
+  "qualified": {
+   "n": 565,
+   "flash": 0.901,
+   "kev": 0.821,
+   "clef27b": 0.936,
+   "hybrid": 0.901,
+   "share_of_clef27b_gain": 0.7,
+   "flash_only_right": 58,
+   "kev_only_right": 13,
+   "p_one_sided_flash_better": 0.0
+  },
+  "timeline": {
+   "n": 532,
+   "flash": 0.773,
+   "kev": 0.712,
+   "clef27b": 0.833,
+   "hybrid": 0.773,
+   "share_of_clef27b_gain": 0.5,
+   "flash_only_right": 84,
+   "kev_only_right": 52,
+   "p_one_sided_flash_better": 0.0038
+  },
+  "property_type": {
+   "n": 560,
+   "flash": 0.963,
+   "kev": 0.887,
+   "clef27b": 0.977,
+   "hybrid": 0.963,
+   "share_of_clef27b_gain": 0.84,
+   "flash_only_right": 47,
+   "kev_only_right": 5,
+   "p_one_sided_flash_better": 0.0
+  },
+  "financing": {
+   "n": 130,
+   "flash": 0.985,
+   "kev": 1.0,
+   "clef27b": 0.923,
+   "hybrid": 0.985,
+   "share_of_clef27b_gain": 0.19,
+   "flash_only_right": 0,
+   "kev_only_right": 2,
+   "p_one_sided_flash_better": 1.0
+  },
+  "foreign_buyer": {
+   "n": 185,
+   "flash": 0.951,
+   "kev": 0.876,
+   "clef27b": 0.968,
+   "hybrid": 0.951,
+   "share_of_clef27b_gain": 0.82,
+   "flash_only_right": 20,
+   "kev_only_right": 6,
+   "p_one_sided_flash_better": 0.0047
+  }
+ },
+ "urgency_within_1": {
+  "flash": 0.976,
+  "kev": 0.929,
+  "clef27b": 0.979,
+  "hybrid": 0.979
+ },
+ "spam": {
+  "flash": {
+   "caught": 81,
+   "spam_n": 81,
+   "recall": 1.0,
+   "false_spam": 9,
+   "genuine_n": 485,
+   "false_spam_ids": [
+    "X5-25",
+    "X1-53",
+    "X1-05",
+    "X2-03",
+    "X4-27",
+    "X3-09",
+    "X3-57",
+    "X8-48",
+    "X6-41"
+   ]
+  },
+  "kev": {
+   "caught": 75,
+   "spam_n": 81,
+   "recall": 0.926,
+   "false_spam": 2,
+   "genuine_n": 485,
+   "false_spam_ids": [
+    "X1-38",
+    "X3-57"
+   ]
+  },
+  "clef27b": {
+   "caught": 81,
+   "spam_n": 81,
+   "recall": 1.0,
+   "false_spam": 0,
+   "genuine_n": 485,
+   "false_spam_ids": []
+  },
+  "hybrid": {
+   "caught": 75,
+   "spam_n": 81,
+   "recall": 0.926,
+   "false_spam": 2,
+   "genuine_n": 485,
+   "false_spam_ids": [
+    "X1-38",
+    "X3-57"
+   ]
+  }
+ },
+ "by_language_request": {
+  "de": {
+   "flash": 0.971,
+   "kev": 0.9,
+   "clef27b": 0.986,
+   "hybrid": 0.9
+  },
+  "en": {
+   "flash": 0.95,
+   "kev": 0.894,
+   "clef27b": 0.986,
+   "hybrid": 0.894
+  },
+  "es": {
+   "flash": 0.973,
+   "kev": 0.945,
+   "clef27b": 1.0,
+   "hybrid": 0.945
+  },
+  "fr": {
+   "flash": 0.972,
+   "kev": 0.986,
+   "clef27b": 1.0,
+   "hybrid": 0.986
+  },
+  "pl": {
+   "flash": 0.941,
+   "kev": 0.853,
+   "clef27b": 0.985,
+   "hybrid": 0.853
+  },
+  "ru": {
+   "flash": 0.972,
+   "kev": 0.901,
+   "clef27b": 0.986,
+   "hybrid": 0.901
+  },
+  "sv": {
+   "flash": 0.986,
+   "kev": 0.972,
+   "clef27b": 1.0,
+   "hybrid": 0.972
+  }
+ },
+ "confusions_flash": [
+  "buy→spam: 6",
+  "buy→info: 3",
+  "buy→rent_holiday: 3",
+  "buy→invest: 2",
+  "rent_long→spam: 2",
+  "buy→sell: 1",
+  "info→valuation: 1",
+  "buy→valuation: 1"
+ ],
+ "median_ms": {
+  "flash": 3782,
+  "kev": 1662,
+  "clef27b": 13481,
+  "hybrid": 0
+ },
+ "hypotheses": {
+  "H1_qualified_showable": {
+   "flash": 0.901,
+   "pass": true
+  },
+  "H2_timeline_showable": {
+   "flash": 0.773,
+   "pass": true
+  },
+  "H3_no_regression_vs_kev": {
+   "request": 0.046,
+   "next_step": 0.019,
+   "pass": true
+  },
+  "H4_spam_safety": {
+   "false_spam": 9,
+   "kev": 2,
+   "recall": 1.0,
+   "pass": false
+  },
+  "H5_most_of_the_gain": {
+   "share_request_qualified_timeline": [
+    0.64,
+    0.7,
+    0.5
+   ],
+   "pass": true
+  },
+  "H6_hybrid": {
+   "request": 0.919,
+   "next_step": 0.933,
+   "kev_next_step": 0.924,
+   "false_spam": 2,
+   "pass": true
+  }
+ }
+}
