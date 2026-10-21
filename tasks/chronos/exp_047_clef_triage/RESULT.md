@@ -48,6 +48,12 @@ All four discordant splits favour Clef with one-sided McNemar p < 0.001. The ver
   - Its watcher logged gemma4:26b loaded again from 22:22 onward, 103 warnings, yet no error occurred.
   - So the first failure was most likely the moment gemma4:26b was loading while Clef was mid-computation, not the two models side by side.
 - **What reloads gemma4:26b is not identified.** Nothing was connected to Ollama when checked, and the bot's logs show nothing. Two other Claude sessions in this workspace were busy at the time.
+- **Addendum 2026-10-21: the reloader is identified.** It was one of those sessions: the inbound-threat triage build (`tools/triage` in the workspace), whose test agents called gemma4:26b through Ollama without checking for a running experiment. Evidence from `/opt/homebrew/var/log/ollama.log`, this run's logs and that session's agent transcripts:
+  - **21:46:37:** an integration agent ran the triage corpus eval with the live model. Ollama began loading gemma4:26b (predicted 16.3 GiB) with 5.3 GiB of system memory free. The load finished at 21:47:43 after 1 min 5 s. In that window Clef's server logged `Insufficient Memory (kIOGPUCommandBufferCallbackErrorOutOfMemory)`, and the runner exited at 21:47:51 on HTTP 500. The first failure was the load racing Clef for unified memory, as reasoned above.
+  - **21:48–21:49:** the same agent, diagnosing empty replies, loaded gemma4:e4b, unloaded it and reloaded gemma4:26b. The runner had already stopped, and the resume unloaded the models again.
+  - **22:21:23:** that session's screenshot tests with the live model loaded gemma4:26b once more. This is the watcher's first "Ollama reloaded" at 22:22, and it was the only model load during the resume. gemma4:26b then stayed resident: the warnings are the watcher seeing it loaded, not new loads. Ollama logged 119 chat/generate requests between 22:00 and 00:05, which matches that session's review agents.
+  - **Effect on this result:** none on the scores. The failed enquiry was never written, and the resume re-ran from 36. Speed: Clef's median before any interference (enquiries 1–35) was 13.2 s, against 13.5 s after (36–566). The 13.5 s figure is at most slightly inflated by the shared GPU.
+  - **Fix:** a session checks `ollama ps` and running experiments before a live-model test pass, and uses leaf replay or no model while one runs (workspace memory `shared-ollama-contention`).
 
 ## Known limits (as registered)
 
