@@ -1,0 +1,163 @@
+{
+ "experiment": "exp_020 re-check",
+ "timestamp": "2026-10-21T16:38:00+00:00",
+ "account": "miktam02",
+ "method": "sudo -n -l <argv> (policy query, nothing runs); stat of every granted path; sudo defaults; fdesetup status",
+ "sudo_defaults": {
+  "secure_path": true,
+  "always_set_home": true
+ },
+ "queries": [
+  {
+   "query": "cp, any file",
+   "argv": [
+    "/bin/cp",
+    "/dev/null",
+    "/tmp/recheck-x"
+   ],
+   "allowed": false,
+   "expected": false,
+   "ok": true
+  },
+  {
+   "query": "tail, any file",
+   "argv": [
+    "/usr/bin/tail",
+    "/private/var/root/recheck-x"
+   ],
+   "allowed": false,
+   "expected": false,
+   "ok": true
+  },
+  {
+   "query": "tail -f, the one log it is scoped to",
+   "argv": [
+    "/usr/bin/tail",
+    "-f",
+    "/Users/<other-account>/pharos-bot/bot.log"
+   ],
+   "allowed": true,
+   "expected": true,
+   "ok": true
+  },
+  {
+   "query": "deploy script, root-owned copy",
+   "argv": [
+    "/usr/local/sbin/pharos-deploy-bot"
+   ],
+   "allowed": true,
+   "expected": true,
+   "ok": true
+  },
+  {
+   "query": "deploy script, old path in the account's home",
+   "argv": [
+    "/Users/miktam02/REPOS/pharos/tools/deploy-bot.sh"
+   ],
+   "allowed": false,
+   "expected": false,
+   "ok": true
+  },
+  {
+   "query": "shutdown",
+   "argv": [
+    "/sbin/shutdown",
+    "-h",
+    "+999"
+   ],
+   "allowed": true,
+   "expected": true,
+   "ok": true
+  }
+ ],
+ "granted_paths": [
+  {
+   "path": "/bin/launchctl",
+   "exists": true,
+   "owner": "root",
+   "mode": "0o755",
+   "writable_by_account": false,
+   "dir_owner": "root",
+   "dir_writable_by_account": false
+  },
+  {
+   "path": "/sbin/shutdown",
+   "exists": true,
+   "owner": "root",
+   "mode": "0o755",
+   "writable_by_account": false,
+   "dir_owner": "root",
+   "dir_writable_by_account": false
+  },
+  {
+   "path": "/usr/bin/killall",
+   "exists": true,
+   "owner": "root",
+   "mode": "0o755",
+   "writable_by_account": false,
+   "dir_owner": "root",
+   "dir_writable_by_account": false
+  },
+  {
+   "path": "/usr/bin/pkill",
+   "exists": true,
+   "owner": "root",
+   "mode": "0o755",
+   "writable_by_account": false,
+   "dir_owner": "root",
+   "dir_writable_by_account": false
+  },
+  {
+   "path": "/usr/bin/powermetrics",
+   "exists": true,
+   "owner": "root",
+   "mode": "0o755",
+   "writable_by_account": false,
+   "dir_owner": "root",
+   "dir_writable_by_account": false
+  },
+  {
+   "path": "/usr/bin/tail",
+   "exists": true,
+   "owner": "root",
+   "mode": "0o755",
+   "writable_by_account": false,
+   "dir_owner": "root",
+   "dir_writable_by_account": false
+  },
+  {
+   "path": "/usr/local/bin/asitop",
+   "exists": true,
+   "owner": "root",
+   "mode": "0o755",
+   "writable_by_account": false,
+   "dir_owner": "root",
+   "dir_writable_by_account": false
+  },
+  {
+   "path": "/usr/local/sbin/pharos-deploy-bot",
+   "exists": true,
+   "owner": "root",
+   "mode": "0o755",
+   "writable_by_account": false,
+   "dir_owner": "root",
+   "dir_writable_by_account": false
+  },
+  {
+   "path": "/usr/sbin/lsof",
+   "exists": true,
+   "owner": "root",
+   "mode": "0o755",
+   "writable_by_account": false,
+   "dir_owner": "root",
+   "dir_writable_by_account": false
+  },
+  {
+   "path": "/usr/sbin/pmset",
+   "exists": false
+  }
+ ],
+ "granted_path_problems": [],
+ "filevault": "FileVault is On.",
+ "all_ok": true
+}

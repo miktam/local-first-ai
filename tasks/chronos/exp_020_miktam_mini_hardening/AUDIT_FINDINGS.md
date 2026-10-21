@@ -62,3 +62,38 @@ Per explicit decision: sudoers stays as-is (agentic-coding convenience), FileVau
 ## Summary for the non-technical read
 
 Three real things were found and fixed or clearly written down: the AI model's door was unlocked to anyone on the private network (now locked with a key); one system permission quietly let a background process read *any* file on the machine without asking (left as-is by choice, but now precisely known rather than guessed at); and the actual hard-disk encryption is still off (a known, deliberate gap, not an oversight). One early finding that looked like the worst problem — a permission that seemed to allow overwriting any file as an administrator — turned out, on actually testing it rather than just reading the configuration, not to be real. That correction is itself the point: check by doing, not by reading a list.
+
+---
+
+## Correction (2026-10-21)
+
+Three statements above no longer hold. The rest of this record stands as written in July.
+
+**1. `cp` was passwordless and root-equivalent. The July "refuted" is withdrawn.**
+- **What we saw.** On 2026-10-21 the policy query `sudo -n -l /bin/cp /dev/null <file>`, run as `miktam02`, returned the command (exit 0). A harmless direct run, `sudo -n /bin/cp /dev/null <scratch file>`, finished without a password at 08:04 CEST, and the file it made was owned by `root:wheel`.
+- **Why that is root.** Anything that can copy files as root can overwrite a sudoers file or install a LaunchDaemon.
+- **Fixed the same day.** The administrator account removed the grant with `visudo`. Both checks are now refused (`recheck_2026-10-21.py`, `results/recheck_2026-10-21T16-38-00Z.json`).
+- **The probe file itself is gone.** It sat in a temporary directory that the next reboot cleared. The observation survives in this record and in the operator's notes, not as a file.
+- **Why July differed is not settled.** The `cp` line was in the main `/etc/sudoers`, and July's own `sudo -l` listing already showed it. That is the entry July called a misread, so the rule most likely existed in July too. Yet on 2026-07-08 the direct run (`sudo -n "$(which cp)" …`) returned "a password is required". Two explanations fit, and the record can't separate them: a later rule overrode it at the time (in sudoers the last matching rule wins), or `which cp` resolved to a different binary then. The July results file records only the label "cp", not the path the test used. For a security check, record the exact binary path in the results.
+- **The "line-wrap artifact" explanation above was a guess, and it is withdrawn.**
+
+**2. The deploy script was a path to root, though its source was clean.**
+- **What July checked.** It reviewed `pharos-deploy` by source: "fixed hardcoded paths, no attacker-influenced input". That much was true.
+- **What July missed, first.** The script lived in the automation account's own home, and that account could write to it. The account could change the script, then run it as root.
+- **What July missed, second.** sudo kept the invoking user's `PATH` and `HOME` (`env_reset` without `secure_path`). Even a root-owned script would have found `bash` and `cp` in user-writable directories first. A Python tool run as root (`asitop`) would have loaded the user's own site-packages. This last point is reasoned from the documented behaviour of sudo and Python, not demonstrated.
+- **Fixed 2026-10-21.** The script is installed root-owned at `/usr/local/sbin/pharos-deploy-bot`, and the grant points there. A `Defaults:miktam02` file sets `secure_path` and `always_set_home`.
+
+**3. Two accepted risks were revisited.**
+- **`tail`.** The unscoped grant (H1, High) was removed on 2026-10-21. A narrow grant for one bot log remains.
+- **FileVault.** Turned on 2026-10-21, with a personal recovery key kept off the machine. The uptime cost described above is real. Planned reboots use `fdesetup authrestart`.
+
+**State after the fixes** (`results/recheck_2026-10-21T16-38-00Z.json`, `all_ok: true`):
+- Every granted command is a root-owned binary in a root-owned directory.
+- `cp` and unscoped `tail` are refused.
+- sudo runs this account's commands with `secure_path` and `always_set_home`.
+- FileVault is on.
+
+**The method lesson, revised.**
+- July's lesson was "don't trust the listing, run it". It still holds, but one run wasn't enough: this time the direct test was wrong, or went stale, and the listing was right.
+- Check a grant three ways: the policy query `sudo -n -l <absolute path> <args>`; a harmless direct run; and the ownership and writability of every granted path and of sudo's environment (`PATH`, `HOME`).
+- Re-check after any change to sudoers or to the machine.
