@@ -1,0 +1,53 @@
+test kev 25/566
+test kev 50/566
+test kev 75/566
+test kev 100/566
+test kev 125/566
+test kev 150/566
+test kev 175/566
+test kev 200/566
+test kev 225/566
+test kev 250/566
+test kev 275/566
+test kev 300/566
+test kev 325/566
+test kev 350/566
+test kev 375/566
+test kev 400/566
+test kev 425/566
+test kev 450/566
+test kev 475/566
+test kev 500/566
+test kev 525/566
+test kev 550/566
+done
+test clef 25/566
+Traceback (most recent call last):
+  File "/Users/miktam02/REPOS/casasol/scripts/clef47.py", line 168, in <module>
+    cmd_run(set_, arm, opt("--limit", 0), opt("--max-seconds", 0.0))
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/miktam02/REPOS/casasol/scripts/clef47.py", line 87, in cmd_run
+    f.write(json.dumps({"id": r["id"], **K.triage(r["text"])}, ensure_ascii=False) + "\n")
+                                         ~~~~~~~~^^^^^^^^^^^
+  File "/Users/miktam02/REPOS/casasol/scripts/kev_knife.py", line 218, in triage
+    a = ask(masked(text), LEAD_SCHEMA)
+  File "/Users/miktam02/REPOS/casasol/scripts/kev_knife.py", line 165, in ask
+    with urllib.request.urlopen(req, timeout=60) as r:
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 187, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 493, in open
+    response = meth(req, response)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 602, in http_response
+    response = self.parent.error(
+        'http', request, response, code, msg, hdrs)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 531, in error
+    return self._call_chain(*args)
+           ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 464, in _call_chain
+    result = func(*args)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 611, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+[exp047-test] exit 1 at Tue 20 Oct 2026 21:47:51 CEST

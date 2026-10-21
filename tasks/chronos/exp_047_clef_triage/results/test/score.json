@@ -1,0 +1,233 @@
+{
+ "set": "test",
+ "n": 566,
+ "fields": {
+  "intent": {
+   "n": 566,
+   "kev": 0.919,
+   "clef": 0.991,
+   "diff": 0.072,
+   "clef_only_right": 42,
+   "kev_only_right": 1,
+   "p_one_sided_clef_better": 0.0
+  },
+  "action": {
+   "n": 565,
+   "kev": 0.924,
+   "clef": 0.973,
+   "diff": 0.049,
+   "clef_only_right": 36,
+   "kev_only_right": 8,
+   "p_one_sided_clef_better": 0.0
+  },
+  "qualified": {
+   "n": 565,
+   "kev": 0.821,
+   "clef": 0.936,
+   "diff": 0.115,
+   "clef_only_right": 76,
+   "kev_only_right": 11,
+   "p_one_sided_clef_better": 0.0
+  },
+  "timeline": {
+   "n": 532,
+   "kev": 0.712,
+   "clef": 0.833,
+   "diff": 0.121,
+   "clef_only_right": 99,
+   "kev_only_right": 35,
+   "p_one_sided_clef_better": 0.0
+  },
+  "property_type": {
+   "n": 560,
+   "kev": 0.887,
+   "clef": 0.977,
+   "diff": 0.09,
+   "clef_only_right": 55,
+   "kev_only_right": 5,
+   "p_one_sided_clef_better": 0.0
+  },
+  "intent_before_rules": {
+   "n": 566,
+   "kev": 0.883,
+   "clef": 0.991,
+   "diff": 0.108,
+   "clef_only_right": 63,
+   "kev_only_right": 2,
+   "p_one_sided_clef_better": 0.0
+  },
+  "financing": {
+   "n": 130,
+   "kev": 1.0,
+   "clef": 0.923,
+   "diff": -0.077,
+   "clef_only_right": 0,
+   "kev_only_right": 10,
+   "p_one_sided_clef_better": 1.0
+  },
+  "foreign_buyer": {
+   "n": 185,
+   "kev": 0.876,
+   "clef": 0.968,
+   "diff": 0.092,
+   "clef_only_right": 22,
+   "kev_only_right": 5,
+   "p_one_sided_clef_better": 0.0008
+  }
+ },
+ "urgency_within_1": {
+  "kev": 0.929,
+  "clef": 0.979
+ },
+ "spam": {
+  "kev": {
+   "caught": 75,
+   "spam_n": 81,
+   "recall": 0.926,
+   "false_spam": 2,
+   "genuine_n": 485,
+   "false_spam_ids": [
+    "X1-38",
+    "X3-57"
+   ]
+  },
+  "clef": {
+   "caught": 81,
+   "spam_n": 81,
+   "recall": 1.0,
+   "false_spam": 0,
+   "genuine_n": 485,
+   "false_spam_ids": []
+  }
+ },
+ "by_language_request": {
+  "de": {
+   "n": 70,
+   "kev": 0.9,
+   "clef": 0.986,
+   "diff": 0.086,
+   "clef_only_right": 6,
+   "kev_only_right": 0,
+   "p_one_sided_clef_better": 0.0156
+  },
+  "en": {
+   "n": 141,
+   "kev": 0.894,
+   "clef": 0.986,
+   "diff": 0.092,
+   "clef_only_right": 14,
+   "kev_only_right": 1,
+   "p_one_sided_clef_better": 0.0005
+  },
+  "es": {
+   "n": 73,
+   "kev": 0.945,
+   "clef": 1.0,
+   "diff": 0.055,
+   "clef_only_right": 4,
+   "kev_only_right": 0,
+   "p_one_sided_clef_better": 0.0625
+  },
+  "fr": {
+   "n": 72,
+   "kev": 0.986,
+   "clef": 1.0,
+   "diff": 0.014,
+   "clef_only_right": 1,
+   "kev_only_right": 0,
+   "p_one_sided_clef_better": 0.5
+  },
+  "pl": {
+   "n": 68,
+   "kev": 0.853,
+   "clef": 0.985,
+   "diff": 0.132,
+   "clef_only_right": 9,
+   "kev_only_right": 0,
+   "p_one_sided_clef_better": 0.002
+  },
+  "ru": {
+   "n": 71,
+   "kev": 0.901,
+   "clef": 0.986,
+   "diff": 0.085,
+   "clef_only_right": 6,
+   "kev_only_right": 0,
+   "p_one_sided_clef_better": 0.0156
+  },
+  "sv": {
+   "n": 71,
+   "kev": 0.972,
+   "clef": 1.0,
+   "diff": 0.028,
+   "clef_only_right": 2,
+   "kev_only_right": 0,
+   "p_one_sided_clef_better": 0.25
+  }
+ },
+ "by_source_request": {
+  "exp_043": {
+   "n": 235,
+   "kev": 0.928,
+   "clef": 0.987,
+   "diff": 0.059,
+   "clef_only_right": 15,
+   "kev_only_right": 1,
+   "p_one_sided_clef_better": 0.0003
+  },
+  "exp_044": {
+   "n": 331,
+   "kev": 0.912,
+   "clef": 0.994,
+   "diff": 0.082,
+   "clef_only_right": 27,
+   "kev_only_right": 0,
+   "p_one_sided_clef_better": 0.0
+  }
+ },
+ "confusions_kev": [
+  "valuation→sell: 10",
+  "buy→rent_holiday: 9",
+  "info→buy: 7",
+  "spam→sell: 4",
+  "buy→rent_long: 3",
+  "invest→buy: 2",
+  "info→rent_long: 2",
+  "info→rent_holiday: 2"
+ ],
+ "confusions_clef": [
+  "buy→invest: 2",
+  "buy→info: 1",
+  "buy→rent_holiday: 1",
+  "valuation→sell: 1"
+ ],
+ "median_ms": {
+  "kev": 1662,
+  "clef": 13481
+ },
+ "hypotheses": {
+  "H1_qualified": {
+   "kev": 0.821,
+   "clef": 0.936,
+   "pass": true
+  },
+  "H2_timeline": {
+   "kev": 0.712,
+   "clef": 0.833,
+   "pass": true
+  },
+  "H3_no_regression": {
+   "request": 0.072,
+   "next_step": 0.049,
+   "pass": true
+  },
+  "H4_spam_safety": {
+   "false_spam": [
+    2,
+    0
+   ],
+   "recall_clef": 1.0,
+   "pass": true
+  }
+ }
+}
