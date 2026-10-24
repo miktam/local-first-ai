@@ -164,3 +164,5 @@ This step stands alone: it improves the deployed base even if exp_040 stops. It 
 3. **v3 size:** 150.
 4. **Final line at serve:** kept, rendered as "In short: …".
 5. **Stop rules:** 12 h mbp cap; H5 with two readers (Fable and Opus), either > 4 gamed → STOP.
+
+**Note, 2026-10-24.** The run-2 traces quoted above ("arithmetic 0.57→0.07") are means of steps 1–20 and 86–105. A step with no arithmetic question also logs 0.0, and the trace has no coverage column, so it cannot show that training traded arithmetic away (exp_039 RESULT.md, addendum 2026-10-24).

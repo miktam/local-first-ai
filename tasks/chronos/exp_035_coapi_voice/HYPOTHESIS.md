@@ -476,3 +476,9 @@ Retrieval: expected-tema hit 28/30 (93.3%).
 **What the two misses are (read from the outputs, not used for any glue change).** Both out-of-scope rows passed the scope gate as in scope (`scope: in`), and the model then answered with invented content: V2-M2-04 (Spanish, a German car's registration) and V2-M4-05 (Polish, Spanish state schooling). The wrong-language row is V2-M6-01: an English question naming "Alhaurín el Grande" was detected as Spanish, so the prompt was rendered in Spanish and the answer came back in Spanish. Under the E1 null, these two floors were fitted to v1, and the claim is restated at the fresh numbers: out-of-scope 0/2 and language 29/30. Per plan-review amendment 6, any glue change prompted by this is justified and checked on v1 only.
 
 **Pending.** The Fable judge (E2, E3 from the judge, the fabricated-citation floor, the drift check) waits for the account's usage reset (2026-10-14, 12:00 Madrid).
+
+### Note, 2026-10-24: three numbers in the tables above
+
+- **Base 4B plain text.** The H6 row and the summary table give the untrained 4B 18 % plain text. `results/b2m_Qwen3-4B_summary_20260922.json` records 81.7 % (49/60).
+- **v2's floor count.** The summary table gives v2 6 of 7 format floors. The v2 verdict ("passed on every format floor except oos (2/3) and Spanish-term (89.6 %)") and `results/b3_v2_judge_20260922.json` give 5.
+- **A12's floor count.** `results/designA_A12_judge_20260922.json` (`reference_recommendation.preregistered_floors_status`) records 5 of 7: answers citing (43/60) and artefact rows (15) missed. The post of 2026-09-22 said 7; it now carries a correction.

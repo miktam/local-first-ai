@@ -2151,3 +2151,22 @@ The disclosures are in HYPOTHESIS.
 
 *Evidence: `exp_039_coapi_voice_onpolicy/HYPOTHESIS.md` (amendments 1–5), `RESULT.md`, `RESULT_H5.md`, `REVIEW_2026-10-15.md`, `results/main/`, `results/q8_control/`, `results/training/r2_per_step.csv`, `PRIVATE_SHA256.json`.*
 *Status: Complete — no training gain; form not learned. Closed 2026-10-15.*
+
+---
+
+## Corrections audit, 2026-10-24: the published posts against this log
+
+Nine posts on localfirstai.eu, checked against the evidence files, got dated correction boxes. Where this log carries the same error, it is noted here; the entries above are left as written.
+
+- **Exp 007, MBP slope.** A least-squares fit above onset gives 0.027 ms/tok per 1K tokens for the MacBook Pro (50K–120K) and 0.95 for the Mini (20K–40K): about 35× flatter, not "~20×".
+- **Incident 007-Alpha.** The flag evidence is the Mini's Ollama log. Exp 007's per-repeat files have no flags field, so no record shows the MacBook Pro's flags; "throughout the entire bench run" holds for the Mini only. The Mini's <18K ceiling is an artefact of FA=1 + q8_0 (Exp 008's conclusion), not a valid optimised ceiling.
+- **Exp 010, Phase A table, Condition D.** 2.775 and 11.252 ms/tok are Exp 007 three-repeat means, which include cache hits. The repeat-1 values are 8.316 (15K) and 33.752 (35K).
+- **Exp 010, H1.** "Degrades gen t/s by 31–39% across all context sizes" holds from 15K up. At 4K the drop is 17 % (40.42 → 33.44) and at 8K 26 % (42.60 → 31.70).
+- **Exp 011, the prompt.** `bench.py`'s `load_fixture` looks for `{key}.txt` (for example `15k.txt`); the files are `pad_15k.txt`. Every MLX run therefore used the fallback: "The quick brown fox jumps over the lazy dog." repeated and cut at four characters per target token. The recorded MLX token counts match that fallback at all 12 sizes, and the ~89 % ratio is the cut, not the tokeniser. Confound 3's "both runtimes benchmarked on the same prompt text" is false. At each size label the MLX prompt was shorter (13,333 against 15,011 tokens at 15K; 35,555 against 39,991 at 40K), so H1–H3 compare different text at different lengths. What stands: no MLX cliff up to 35,555 tokens of one repeated sentence. MLX was not re-run on the real fixtures.
+- **Exp 011, A4B.** gemma4:26b is also Gemma 4 26B-A4B (Exp 012-Alpha). The A4B reasoning in Confound 2 and H3 does not explain MLX's generation lead at 4K (52.41 against 42.05 t/s).
+- **Exp 012, cost.** Each model's total covers 3 runs of both tasks (six calls); one audit costs about a third. The totals reproduce exactly from the result files' token counts at $1/$5 (Haiku), $3/$15 (Sonnet) and $5/$25 (Opus) per million tokens; the pre-registration's estimate used other prices. The Claude calls ran at the API's default temperature (`run.py` sets none).
+- **Exp 012, Task B.** The per-run Task B scores do not match the item hit rates: Haiku's runs are 2, 2, 2 (sum 6) but its items add to 5; Sonnet's are 3, 3, 3 (sum 9) but its items add to 8. Exp 014's "Haiku was already 2/3 on B3 in Exp 012" contradicts Exp 012's "—". Not re-scored here.
+- **Exp 039, training traces (entry above).** A step with no arithmetic question also logs `arith` 0.0, and 52 of 105 steps do; the trace has no coverage column. "Arithmetic 0.57 → 0.07" therefore cannot show that training traded arithmetic away. The hand-off and decline terms have the same gap. The "+0.225 in Unsloth's Q4" compared Unsloth's Q4_K_M behind the glue; exp_040's step 0 puts about 0.125 of it on the quantiser and 0.10 on the glue. See the addendum in `exp_039_coapi_voice_onpolicy/RESULT.md`.
+- **Exp 043.** The baselines missing from the verdict table are added in its `RESULT.md` (addendum 2026-10-24). A constant guess meets the bars for foreign buyer (0.800) and urgency within ±1 (always 1: 0.934).
+
+*Status: notes only; no verdict above changes except where stated in the experiment's own record.*

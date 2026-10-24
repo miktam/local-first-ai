@@ -30,7 +30,7 @@ and tiered pipeline end-to-end (Phase C).
 
 Baseline throughput references:
 - Exp 007 — `gemma4:26b` via Ollama on MBP: 57–92 tok/s gen across 4K–35K context sizes.
-- Exp 011 — `gemma4:26b` via MLX on mini: 52 tok/s gen at 4K, no cliff through 40K tokens.
+- Exp 011 — `gemma4:26b` via MLX on mini: 52 tok/s gen at 4K, no cliff through 35,555 tokens of a repeated sentence (log note 2026-10-24).
   MLX is the chosen runtime for MBP — native unified memory, no FA cliff, OpenAI-compatible
   server via `mlx_lm.server`.
 
@@ -72,7 +72,7 @@ whether the smart tier is genuinely better at tasks that the cheap tier will exe
 Server: `mlx_lm.server --model mlx-community/<model-id> --host 0.0.0.0 --port 8080`  
 API: OpenAI-compatible at `http://miktam-mbp.local:8080/v1`.
 
-Rationale: Exp 011 ran MLX on the mini — no cliff through 40K tokens, 52 tok/s at 4K
+Rationale: Exp 011 ran MLX on the mini — no cliff through 35,555 tokens of a repeated sentence, 52 tok/s at 4K
 (vs Ollama FA=0 ~40 tok/s). MLX is Apple's native unified-memory runtime; on M5 Max with
 128 GB it is the right choice. Ollama is not installed on the MBP and not required.
 

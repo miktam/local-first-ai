@@ -47,3 +47,16 @@
 **After the result (2026-10-18, Andrei):** spam is never discarded. Its action is `review`, a human review folder ([kit/kev_knife_current.py](kit/kev_knife_current.py); not measured on this test). "We don't want to miss any business."
 
 **After the result (2026-10-19):** spam's action is `review` in code (never discard), and only fields that passed are shown. The tool runs as an admin-only demo in CasaSol Guide (typed or voice; when unsure it names its top two readings); it reads no real inbound leads. CasaSol now offers agencies a free assessment on 50–300 of their own enquiries under a data-processing agreement: the real-lead test this record could not do. Field notes while building the demo, not measured: the model gives about 0.6 to facts a message never states (financing), so the demo shows yes/no facts only from 0.7; the bot's language detector treated "ó" as Polish-only and read Spanish as Polish (fixed). Post: [localfirstai.eu/posts/2026-10-19-lead-triage](https://localfirstai.eu/posts/2026-10-19-lead-triage/).
+
+## Addendum 2026-10-24: the baseline for every field
+
+The pre-registration asked for the majority-class baseline for each field; the table above gave four. Computed from `data/test.jsonl` with `kit/leads43.py cmd_score`'s rule (most common label, leaving out blank and disagreed labels):
+
+| Field | Model | Always the most common label |
+|---|---|---|
+| property type | 0.885 | 0.402 (apartment, 94/234) |
+| financing, where stated | 1.00 | 0.540 (no, 27/50) |
+| foreign buyer, where stated | 0.887 | **0.800** (yes, 64/80): equal to the bar |
+| urgency within ±1 | 0.930 | 0.772 (always 0, 176/228); **always 1 scores 0.934 (213/228)** |
+
+H6's foreign-buyer half and H7 pass their bars, but a constant guess meets those bars too, so they say little on their own. The verdict rests on H1–H3 and does not change.

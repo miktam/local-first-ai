@@ -181,3 +181,8 @@ A swap needs its own pre-registered test.
 
 - `casasol/coapi_voice/runs/exp039_results/`: `verdict.json`, `judge.jsonl`, `judge_rows.jsonl`, `cells.json`, `d1.json`, `key.jsonl`, `batches/`, `replies/`.
 - Model files: `coapi_voice/models/coapi-voice-r2/` (adapter `0c57f0e7…`, GGUF `86fcc330…`, Ollama `0d974e5fc4a3`).
+
+## Addendum 2026-10-24: two readings narrowed
+
+- **The arithmetic trace.** In `results/training/r2_per_step.csv`, 52 of 105 steps log `arith` 0.0. A step with no arithmetic question also logs 0.0, and the CSV has no coverage column to tell the two apart (`kit/rl/reward.py`). Means over 21-step blocks run 0.548, 0.262, 0.012, 0.419, 0.067. The trace cannot show that training traded arithmetic away. The hand-off and decline terms have the same gap.
+- **"Unsloth's quantisation … scores like our Q8_0"** compared A12, which is Unsloth's Q4_K_M *behind the glue*. exp_040's `STEP0_RESULT.md` later judged Unsloth's Q4_K_M without the glue at 1.325. That splits the 0.225 gap over our Q4_K_M into about +0.125 from the quantiser and +0.10 from the glue, across judging sessions. The Q8_0 control's verdict (no gain from training) does not depend on this.
