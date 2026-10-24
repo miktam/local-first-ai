@@ -5,6 +5,7 @@
   - **M:** one call with the rules and the whole inventory.
   - It also holds `InfraError`, which separates serving failures from the model's own output, and the prompt log.
 - **`leads50.py`:** the inventory generator, the data pipeline (writer validation, checker batches, agreement, split, extra listings), the runner and `compare`, which has the registered bars. It includes the dated scorer correction (casasol `7612456`), off by default; with `EXP50_SCORER=corrected` it applies.
+- **`figures50.py`:** the four figures in the localfirstai.eu post, as inline HTML and SVG built from these files. In the layout below, it also reads `X/runs/exp050_test_compare.json` ← `test_run/compare_registered.json`. Run it with `EXP50_SCORER=corrected python3 X/scripts/figures50.py`.
 - **Helpers published with earlier experiments:**
   - triage rev 5.1: [`kev_knife_rev51.py`](../../exp_049_kev_rev5/kit/kev_knife_rev51.py) in exp_049's kit. It is the public copy: its demo list's one phone number was replaced, which changes the hash, not the logic.
   - [`leads44_2026-10-21.py`](../../exp_048_flash_hybrid/kit/leads44_2026-10-21.py) in exp_048's kit.
