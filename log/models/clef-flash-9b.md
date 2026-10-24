@@ -9,6 +9,7 @@
 - 2026-10-21 · Behind the same rules as Kev-4B, on 566 synthetic enquiries, it read "qualified" right 0.901 of the time (Kev 0.821), timeline 0.773 (0.712), property type 0.963 (0.887) and the request 0.965 (0.919). That is 50–70 % of Clef 27B's gain at about a third of the size. [exp_048](../../tasks/chronos/exp_048_flash_hybrid/RESULT.md)
 - 2026-10-21 · Narrow yes/no questions: "writing on behalf of someone else?" 0.991 right on 350 fresh enquiries (Kev 0.957 on dev), and "only wants a price?" 24/24 on a valuation stratum (Kev 18/24). [exp_049](../../tasks/chronos/exp_049_kev_rev5/RESULT.md)
 - 2026-10-21 · Told today's date in the question, it read timing given as a bare month ("from 1 November", "for Easter") right 0.870 of the time, against 0.444 without the date. [exp_049](../../tasks/chronos/exp_049_kev_rev5/RESULT.md)
+- 2026-10-24 · Asked what a buyer needs (eight areas, Marbella in general, bedrooms, eight features), its 2,240 yes/no answers on 140 seekers were right 0.957 of the time and well calibrated (ECE 0.021). The criteria built from them matched the labels exactly for areas 0.964, features 0.986 and bedrooms 0.993. [exp_050](../../tasks/chronos/exp_050_society_vs_one_model/RESULT.md)
 
 ## Speed and cost
 

@@ -30,6 +30,7 @@
 - 2026-10-20 · Transcription tips borderline buyers toward holiday rent: voice moved 7 enquiries there, 5 of which it had right when typed. [exp_045](../../tasks/chronos/exp_045_voice_triage/RESULT.md)
 - 2026-10-20 · Polish stays its weakest language (0.853), and translation into English does not fix it (0.868, +1 net of 68). [exp_046](../../tasks/chronos/exp_046_translate_first/RESULT.md)
 - 2026-10-21 · Behind the same rules, Clef 27B ([clef-27b.md](./clef-27b.md)) read the request right 0.991 of the time against Kev's 0.919, and removed most of Kev's known confusions (valuation read as sell, 10 → 1). Kev was the ceiling, not the rules. [exp_047](../../tasks/chronos/exp_047_clef_triage/RESULT.md)
+- 2026-10-24 · Its intent confidence is underconfident (ECE 0.268): below 0.5 it read the request right 83 % of the time (53 leads), and above 0.8 on 95 of 95. A hand-off at 0.5 sent most of those to a person. [exp_050](../../tasks/chronos/exp_050_society_vs_one_model/RESULT.md)
 
 ## What helped
 
