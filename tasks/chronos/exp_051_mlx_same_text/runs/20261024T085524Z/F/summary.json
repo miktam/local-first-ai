@@ -1,0 +1,85 @@
+{
+  "experiment": "051",
+  "arm": "F",
+  "tag": "",
+  "started": "2026-10-24T09:49:49.062446Z",
+  "sizes": [
+    "4k",
+    "8k",
+    "15k",
+    "20k",
+    "25k",
+    "30k",
+    "35k",
+    "40k"
+  ],
+  "reps": 3,
+  "idle_s": 20,
+  "max_new_tokens": 128,
+  "instruction": "\n\nWrite a one-sentence summary of the text above.",
+  "runtime": "mlx",
+  "mlx_version": "0.32.4",
+  "mlx_lm_version": "0.32.2",
+  "model": "mlx-community/gemma-4-26B-A4B-it-OptiQ-4bit",
+  "kv_cache": "mlx-lm default (unquantised); the build's kv_config.json is not read",
+  "ollama_models_stopped_at_start": [],
+  "ended": "2026-10-24T10:04:47.509662Z",
+  "sizes_summary": [
+    {
+      "size": "4k",
+      "prompt_tokens": 3591,
+      "prefill_ms_per_tok_median": 1.2328048128616798,
+      "gen_tps_median": 47.926727989087595,
+      "clean_reps": 3
+    },
+    {
+      "size": "8k",
+      "prompt_tokens": 7148,
+      "prefill_ms_per_tok_median": 1.29020494712735,
+      "gen_tps_median": 42.88038563358247,
+      "clean_reps": 3
+    },
+    {
+      "size": "15k",
+      "prompt_tokens": 13368,
+      "prefill_ms_per_tok_median": 1.4482075759276714,
+      "gen_tps_median": 35.96908460855154,
+      "clean_reps": 3
+    },
+    {
+      "size": "20k",
+      "prompt_tokens": 17813,
+      "prefill_ms_per_tok_median": 1.461350481784747,
+      "gen_tps_median": 32.5530896671987,
+      "clean_reps": 3
+    },
+    {
+      "size": "25k",
+      "prompt_tokens": 22259,
+      "prefill_ms_per_tok_median": 1.4770420709795273,
+      "gen_tps_median": 29.5557827554504,
+      "clean_reps": 3
+    },
+    {
+      "size": "30k",
+      "prompt_tokens": 26701,
+      "prefill_ms_per_tok_median": 1.4980351016811388,
+      "gen_tps_median": 27.05052741618964,
+      "clean_reps": 3
+    },
+    {
+      "size": "35k",
+      "prompt_tokens": 31148,
+      "prefill_ms_per_tok_median": 1.548143365287892,
+      "gen_tps_median": 25.03804173128258,
+      "clean_reps": 3
+    },
+    {
+      "size": "40k",
+      "prompt_tokens": 35590,
+      "prefill_ms_per_tok_median": 1.5797299159832852,
+      "gen_tps_median": 25.31424603962142,
+      "clean_reps": 3
+    }
+  ]
+}

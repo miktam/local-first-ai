@@ -1,0 +1,84 @@
+{
+  "experiment": "051",
+  "arm": "O",
+  "tag": "",
+  "started": "2026-10-24T08:55:27.174838Z",
+  "sizes": [
+    "4k",
+    "8k",
+    "15k",
+    "20k",
+    "25k",
+    "30k",
+    "35k",
+    "40k"
+  ],
+  "reps": 3,
+  "idle_s": 20,
+  "max_new_tokens": 128,
+  "instruction": "\n\nWrite a one-sentence summary of the text above.",
+  "runtime": "ollama",
+  "ollama_version": "0.40.2",
+  "model": "gemma4:26b",
+  "num_ctx": 65536,
+  "settings_documented": "OLLAMA_FLASH_ATTENTION=0, default fp16 KV cache (production since 2026-08-30)",
+  "ended": "2026-10-24T09:15:45.264963Z",
+  "sizes_summary": [
+    {
+      "size": "4k",
+      "prompt_tokens": 4029,
+      "prefill_ms_per_tok_median": 1.4543360635393399,
+      "gen_tps_median": 47.515498437578614,
+      "clean_reps": 3
+    },
+    {
+      "size": "8k",
+      "prompt_tokens": 8022,
+      "prefill_ms_per_tok_median": 1.5110487409623534,
+      "gen_tps_median": 43.21412237519221,
+      "clean_reps": 3
+    },
+    {
+      "size": "15k",
+      "prompt_tokens": 15018,
+      "prefill_ms_per_tok_median": 1.6832746821117104,
+      "gen_tps_median": 38.25221791140978,
+      "clean_reps": 3
+    },
+    {
+      "size": "20k",
+      "prompt_tokens": 20013,
+      "prefill_ms_per_tok_median": 1.7435960327770559,
+      "gen_tps_median": 34.87882292021603,
+      "clean_reps": 3
+    },
+    {
+      "size": "25k",
+      "prompt_tokens": 25001,
+      "prefill_ms_per_tok_median": 1.827616390688745,
+      "gen_tps_median": 33.0527625971161,
+      "clean_reps": 3
+    },
+    {
+      "size": "30k",
+      "prompt_tokens": 30005,
+      "prefill_ms_per_tok_median": 1.9140924845859024,
+      "gen_tps_median": 32.17576442945699,
+      "clean_reps": 3
+    },
+    {
+      "size": "35k",
+      "prompt_tokens": 35004,
+      "prefill_ms_per_tok_median": 2.038765962917464,
+      "gen_tps_median": 30.587011813645102,
+      "clean_reps": 3
+    },
+    {
+      "size": "40k",
+      "prompt_tokens": 40000,
+      "prefill_ms_per_tok_median": 2.1413218499999997,
+      "gen_tps_median": 28.598232404937512,
+      "clean_reps": 3
+    }
+  ]
+}

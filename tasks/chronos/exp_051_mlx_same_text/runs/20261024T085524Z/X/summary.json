@@ -1,0 +1,87 @@
+{
+  "experiment": "051",
+  "arm": "X",
+  "tag": "",
+  "started": "2026-10-24T09:24:59.730501Z",
+  "sizes": [
+    "4k",
+    "8k",
+    "15k",
+    "20k",
+    "25k",
+    "30k",
+    "35k",
+    "40k"
+  ],
+  "reps": 3,
+  "idle_s": 20,
+  "max_new_tokens": 128,
+  "instruction": "\n\nWrite a one-sentence summary of the text above.",
+  "runtime": "mlx",
+  "mlx_version": "0.32.4",
+  "mlx_lm_version": "0.32.2",
+  "model": "mlx-community/gemma-4-26B-A4B-it-OptiQ-4bit",
+  "kv_cache": "mlx-lm default (unquantised); the build's kv_config.json is not read",
+  "ollama_models_stopped_at_start": [
+    "gemma4:26b"
+  ],
+  "ended": "2026-10-24T09:41:57.556365Z",
+  "sizes_summary": [
+    {
+      "size": "4k",
+      "prompt_tokens": 4028,
+      "prefill_ms_per_tok_median": 1.2476559833519345,
+      "gen_tps_median": 47.0707142946074,
+      "clean_reps": 3
+    },
+    {
+      "size": "8k",
+      "prompt_tokens": 8021,
+      "prefill_ms_per_tok_median": 1.3206712639327591,
+      "gen_tps_median": 41.35573760250149,
+      "clean_reps": 3
+    },
+    {
+      "size": "15k",
+      "prompt_tokens": 15020,
+      "prefill_ms_per_tok_median": 1.4877419657784794,
+      "gen_tps_median": 33.95982186343602,
+      "clean_reps": 3
+    },
+    {
+      "size": "20k",
+      "prompt_tokens": 20014,
+      "prefill_ms_per_tok_median": 1.4687411103732906,
+      "gen_tps_median": 30.477915208872847,
+      "clean_reps": 3
+    },
+    {
+      "size": "25k",
+      "prompt_tokens": 25002,
+      "prefill_ms_per_tok_median": 1.505865553697289,
+      "gen_tps_median": 27.54453796441319,
+      "clean_reps": 3
+    },
+    {
+      "size": "30k",
+      "prompt_tokens": 30006,
+      "prefill_ms_per_tok_median": 1.5298604362460184,
+      "gen_tps_median": 25.108789318104638,
+      "clean_reps": 3
+    },
+    {
+      "size": "35k",
+      "prompt_tokens": 35004,
+      "prefill_ms_per_tok_median": 1.5920270957036637,
+      "gen_tps_median": 25.152745821118707,
+      "clean_reps": 3
+    },
+    {
+      "size": "40k",
+      "prompt_tokens": 39999,
+      "prefill_ms_per_tok_median": 1.6276960924019497,
+      "gen_tps_median": 23.377179478257954,
+      "clean_reps": 3
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+exp_051 run 20261024T085417Z  ollama {"version":"0.40.2"}  macOS 26.5.1
+loaded before: 
+kit/run51.sh:12: no such file or directory: python3.14 -I kit/bench51.py
+kit/run51.sh:13: no such file or directory: python3.14 -I kit/bench51.py
+kit/run51.sh:14: no such file or directory: python3.14 -I kit/bench51.py
+kit/run51.sh:15: no such file or directory: python3.14 -I kit/bench51.py
+kit/run51.sh:16: no such file or directory: python3.14 -I kit/bench51.py
+kit/run51.sh:17: no such file or directory: python3.14 -I kit/bench51.py
+Traceback (most recent call last):
+  File "/Users/miktam02/.openclaw/workspace/tasks/exp051/kit/score51.py", line 95, in <module>
+    main()
+    ~~~~^^
+  File "/Users/miktam02/.openclaw/workspace/tasks/exp051/kit/score51.py", line 37, in main
+    O, ON, X, XN, F = (load(run, a) for a in ("O", "ON", "X", "XN", "F"))
+    ^^^^^^^^^^^^^^^
+  File "/Users/miktam02/.openclaw/workspace/tasks/exp051/kit/score51.py", line 37, in <genexpr>
+    O, ON, X, XN, F = (load(run, a) for a in ("O", "ON", "X", "XN", "F"))
+                       ~~~~^^^^^^^^
+  File "/Users/miktam02/.openclaw/workspace/tasks/exp051/kit/score51.py", line 14, in load
+    s = json.loads((run / arm / "summary.json").read_text())
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 787, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'runs/20261024T085417Z/O/summary.json'
+exp_051 run 20261024T085417Z finished 08:54:27Z; loaded after: gemma4:e4b gemma4:26b 

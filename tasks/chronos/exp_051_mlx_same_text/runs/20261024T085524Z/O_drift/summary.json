@@ -1,0 +1,28 @@
+{
+  "experiment": "051",
+  "arm": "O",
+  "tag": "drift",
+  "started": "2026-10-24T10:04:53.654267Z",
+  "sizes": [
+    "15k"
+  ],
+  "reps": 3,
+  "idle_s": 20,
+  "max_new_tokens": 128,
+  "instruction": "\n\nWrite a one-sentence summary of the text above.",
+  "runtime": "ollama",
+  "ollama_version": "0.40.2",
+  "model": "gemma4:26b",
+  "num_ctx": 65536,
+  "settings_documented": "OLLAMA_FLASH_ATTENTION=0, default fp16 KV cache (production since 2026-08-30)",
+  "ended": "2026-10-24T10:06:33.141571Z",
+  "sizes_summary": [
+    {
+      "size": "15k",
+      "prompt_tokens": 15020,
+      "prefill_ms_per_tok_median": 1.6477829039344918,
+      "gen_tps_median": 37.94634386976814,
+      "clean_reps": 3
+    }
+  ]
+}

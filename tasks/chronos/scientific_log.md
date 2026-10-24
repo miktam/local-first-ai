@@ -2170,3 +2170,34 @@ Nine posts on localfirstai.eu, checked against the evidence files, got dated cor
 - **Exp 043.** The baselines missing from the verdict table are added in its `RESULT.md` (addendum 2026-10-24). A constant guess meets the bars for foreign buyer (0.800) and urgency within ±1 (always 1: 0.934).
 
 *Status: notes only; no verdict above changes except where stated in the experiment's own record.*
+
+---
+
+## Experiment 051 — MLX against Ollama on the same text (2026-10-24)
+
+**Pre-registered: 2026-10-24, before any measured call** (`exp_051_mlx_same_text/HYPOTHESIS.md`). This re-runs Exp 011, whose MLX runs read a repeated "quick brown fox" sentence instead of the fixtures (corrections audit above).
+
+**Arms.** Both runtimes ran gemma 4 26B-A4B on the Mac mini, the same day:
+- **Ollama:** 0.40.2, the production settings (FA off, fp16 KV), on the GGUF Q4_K_M.
+- **MLX:** mlx 0.32.4 and mlx-lm 0.32.2, on Exp 011's OptiQ build.
+
+Each ran on three texts: exp_007's fixtures at 4K–40K; Exp 011's fallback sentence (MLX only); and natural text, 916 published synthetic enquiries with none repeated, at 4K–35K.
+
+**Protocol.** Three repetitions per size, with a new nonce on every call so no prompt cache is reused, greedy decoding and thinking off. After every call the Ollama log was checked for outside requests.
+
+Finding while registering: exp_007's fixtures cycle the same 31 sentences, so they are not natural text either.
+
+**Result.** 99 calls, all clean; drift between the first and last Ollama check: −2.1 %.
+- **H1 PASS:** MLX has no prefill cliff to 40K (40K is 1.09 × its 15K).
+- **H2 PASS / H6 PASS:** MLX prefill is faster than Ollama's on the same text:
+  - fixtures: 0.88 × at 15K, 0.78 × at 35K;
+  - natural text: 0.83 × and 0.78 ×.
+- **H3 FAIL:** MLX generation is level with Ollama at 4K (0.99 ×) and 4–22 % slower from 8K up. Exp 011's 52 against 42 t/s at 4K does not reproduce.
+- **H4 FAIL, in the good direction:** today's MLX on Exp 011's own input is 12–28 % faster than Exp 011 recorded. Ollama is also faster than Exp 008 recorded (15K 1.774 → 1.683; 35K 2.241 → 2.039).
+- **H5 PASS:** at matched prompt length the repeated sentence runs at the fixtures' per-token speed (within 0.3 %). Exp 011's bug changed the prompt lengths it compared, not MLX's speed curve.
+
+**Reading.** On this machine MLX reads long prompts faster than Ollama, and generates no faster. For an 8K prompt with a 300-token answer, that is about 1.2 s saved per answer, with different weights (5.0 bits per weight against Q4_K_M). Moving the CasaSol answering model to MLX is therefore a candidate for its own registered test with quality checks, not a clear win.
+
+*Evidence: `exp_051_mlx_same_text/` (HYPOTHESIS.md with Amendment 1, RESULT.md, kit/, natural/, runs/20261024T085524Z/, aborted/).*
+*Status: Complete. Closed 2026-10-24.*
+

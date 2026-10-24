@@ -77,7 +77,7 @@ months can be tested against the same on-disk evidence.
 | Exp 008 | Flash Attention + q8_0 KV cache | Complete | [`exp_008_flash_attention/`](./exp_008_flash_attention/) |
 | Exp 009 | Adversarial critic (local vs frontier) | Complete | [`exp_009_adversarial_critic/`](./exp_009_adversarial_critic/) |
 | Exp 010 | FA vs q8_0 factorial isolation | Complete | [`exp_010_fa_isolation/`](./exp_010_fa_isolation/) |
-| Exp 011 | MLX runtime vs Ollama context cliff | Complete | [`exp_011_mlx_runtime/`](./exp_011_mlx_runtime/) |
+| Exp 011 | MLX runtime vs Ollama context cliff | Complete ⚠ MLX read a repeated sentence; re-run in Exp 051 | [`exp_011_mlx_runtime/`](./exp_011_mlx_runtime/) |
 | Exp 012 | Cost vs capability curve | Complete | [`exp_012_cost_capability/`](./exp_012_cost_capability/) |
 | Exp 013 | Local audit loop scaffolding | Complete | [`exp_013_local_audit_loop/`](./exp_013_local_audit_loop/) |
 | Exp 014 | Capability variance floor | Complete | [`exp_014_capability_variance/`](./exp_014_capability_variance/) |
@@ -108,6 +108,7 @@ months can be tested against the same on-disk evidence.
 | Exp 048 | The middle-sized decision model: Clef-Flash 9B behind rev 4.1's rules on the same 566 enquiries, and a split where Kev-4B reads the request and Flash the facts; no cloud model | Complete — split the work (hybrid: request 0.919 = Kev, qualified 0.901, timeline 0.773, false spam 2); Flash alone reads the request better (0.965) but flagged 9 genuine clients writing through intermediaries as spam; adopted as rev 4.2 | [`exp_048_flash_hybrid/`](./exp_048_flash_hybrid/) |
 | Exp 049 | Rev 5 against rev 4.2 on 350 fresh enquiries written from rev 4.2's recorded errors (Fable writers, Opus blind checker, gemma4:26b third reader): an on-behalf question, a price-only question, a dated timeline question, financing "use" | Complete — adopt on-behalf (intermediary false spam 2 → 0) and the dated timeline (bare-month timing 0.444 → 0.870, 23 vs 0); price-only off (+0.074, p 0.06); live as rev 5.1 | [`exp_049_kev_rev5/`](./exp_049_kev_rev5/) |
 | Exp 050 | The front desk as a society of small models (Kev-4B + Clef-Flash 9B → rules → listing join → gemma4:26b writer → printed cards → audit) against gemma4:26b doing it all, on 247 fresh enquiries (Fable writers, Opus blind checker, invented inventory) | Complete — H1 safety fail (0.040 vs 0.065, p 0.16), H2 usefulness fail (0.758 vs 0.943, M thinking), H3 stability pass (1.000 vs 0.773), H4 4B writer pass, H5 privacy pass (0 contacts in 988 prompts) | [`exp_050_society_vs_one_model/`](./exp_050_society_vs_one_model/) |
+| Exp 051 | MLX against Ollama on the same text, re-running Exp 011 (whose MLX runs read a repeated sentence): fixtures, Exp 011's fallback and natural enquiries, 99 clean calls | Complete — H1 pass (no MLX cliff to 40K), H2/H6 pass (MLX prefill 12–24 % faster), H3 fail (generation not faster), H4 fail (both runtimes faster than June), H5 pass (the repeated sentence did not change MLX speed) | [`exp_051_mlx_same_text/`](./exp_051_mlx_same_text/) |
 | Watcher Run 001 | Adversarial watcher — CasaSol gap analysis | Complete | [`watcher_run_001/`](./watcher_run_001/) |
 | Pre-Chronos benchmarks | Ad-hoc bench scripts (unnumbered) | Reference | [`experiments/`](./experiments/) |
 

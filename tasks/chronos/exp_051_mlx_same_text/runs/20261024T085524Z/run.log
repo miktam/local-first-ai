@@ -1,0 +1,122 @@
+exp_051 run 20261024T085524Z  ollama {"version":"0.40.2"}  macOS 26.5.1
+loaded before: gemma4:e4b gemma4:26b 
+{"experiment": "051", "arm": "O", "tag": "", "started": "2026-10-24T08:55:27.174838Z", "sizes": ["4k", "8k", "15k", "20k", "25k", "30k", "35k", "40k"], "reps": 3, "idle_s": 20, "max_new_tokens": 128, "instruction": "\n\nWrite a one-sentence summary of the text above.", "runtime": "ollama", "ollama_version": "0.40.2", "model": "gemma4:26b", "num_ctx": 65536, "settings_documented": "OLLAMA_FLASH_ATTENTION=0, default fp16 KV cache (production since 2026-08-30)"}
+O 4k rep1 try1 tok=4027 prefill=1.460 ms/tok gen=47.52 t/s n=34
+O 4k rep2 try1 tok=4029 prefill=1.454 ms/tok gen=47.06 t/s n=33
+O 4k rep3 try1 tok=4029 prefill=1.452 ms/tok gen=47.69 t/s n=41
+O 8k rep1 try1 tok=8020 prefill=1.505 ms/tok gen=43.87 t/s n=36
+O 8k rep2 try1 tok=8022 prefill=1.513 ms/tok gen=43.21 t/s n=48
+O 8k rep3 try1 tok=8022 prefill=1.511 ms/tok gen=43.10 t/s n=50
+O 15k rep1 try1 tok=15018 prefill=1.614 ms/tok gen=38.35 t/s n=39
+O 15k rep2 try1 tok=15018 prefill=1.689 ms/tok gen=38.25 t/s n=40
+O 15k rep3 try1 tok=15021 prefill=1.683 ms/tok gen=37.71 t/s n=31
+O 20k rep1 try1 tok=20012 prefill=1.714 ms/tok gen=35.31 t/s n=33
+O 20k rep2 try1 tok=20013 prefill=1.783 ms/tok gen=34.88 t/s n=39
+O 20k rep3 try1 tok=20014 prefill=1.744 ms/tok gen=34.09 t/s n=50
+O 25k rep1 try1 tok=25001 prefill=1.796 ms/tok gen=33.05 t/s n=35
+O 25k rep2 try1 tok=25001 prefill=1.831 ms/tok gen=32.69 t/s n=47
+O 25k rep3 try1 tok=25002 prefill=1.828 ms/tok gen=33.56 t/s n=51
+O 30k rep1 try1 tok=30006 prefill=1.893 ms/tok gen=32.18 t/s n=41
+O 30k rep2 try1 tok=30005 prefill=1.920 ms/tok gen=32.20 t/s n=41
+O 30k rep3 try1 tok=30005 prefill=1.914 ms/tok gen=32.12 t/s n=37
+O 35k rep1 try1 tok=35005 prefill=2.008 ms/tok gen=30.63 t/s n=40
+O 35k rep2 try1 tok=35004 prefill=2.043 ms/tok gen=30.59 t/s n=39
+O 35k rep3 try1 tok=35003 prefill=2.039 ms/tok gen=30.32 t/s n=40
+O 40k rep1 try1 tok=40001 prefill=2.122 ms/tok gen=28.59 t/s n=52
+O 40k rep2 try1 tok=39998 prefill=2.142 ms/tok gen=28.76 t/s n=40
+O 40k rep3 try1 tok=40000 prefill=2.141 ms/tok gen=28.60 t/s n=51
+done runs/20261024T085524Z/O
+{"experiment": "051", "arm": "ON", "tag": "", "started": "2026-10-24T09:15:45.745348Z", "sizes": ["4k", "15k", "25k", "35k"], "reps": 3, "idle_s": 20, "max_new_tokens": 128, "instruction": "\n\nWrite a one-sentence summary of the text above.", "runtime": "ollama", "ollama_version": "0.40.2", "model": "gemma4:26b", "num_ctx": 65536, "settings_documented": "OLLAMA_FLASH_ATTENTION=0, default fp16 KV cache (production since 2026-08-30)"}
+ON 4k rep1 try1 tok=3905 prefill=1.459 ms/tok gen=47.00 t/s n=49
+ON 4k rep2 try1 tok=3906 prefill=1.456 ms/tok gen=46.40 t/s n=49
+ON 4k rep3 try1 tok=3906 prefill=1.460 ms/tok gen=46.74 t/s n=43
+ON 15k rep1 try1 tok=14942 prefill=1.624 ms/tok gen=37.58 t/s n=51
+ON 15k rep2 try1 tok=14940 prefill=1.724 ms/tok gen=37.37 t/s n=51
+ON 15k rep3 try1 tok=14940 prefill=1.725 ms/tok gen=37.48 t/s n=44
+ON 25k rep1 try1 tok=25032 prefill=1.818 ms/tok gen=34.86 t/s n=43
+ON 25k rep2 try1 tok=25031 prefill=1.857 ms/tok gen=33.50 t/s n=43
+ON 25k rep3 try1 tok=25030 prefill=1.838 ms/tok gen=33.02 t/s n=54
+ON 35k rep1 try1 tok=34982 prefill=2.016 ms/tok gen=30.46 t/s n=50
+ON 35k rep2 try1 tok=34982 prefill=2.048 ms/tok gen=30.29 t/s n=50
+ON 35k rep3 try1 tok=34979 prefill=2.051 ms/tok gen=30.43 t/s n=44
+done runs/20261024T085524Z/ON
+{"experiment": "051", "arm": "X", "tag": "", "started": "2026-10-24T09:24:59.730501Z", "sizes": ["4k", "8k", "15k", "20k", "25k", "30k", "35k", "40k"], "reps": 3, "idle_s": 20, "max_new_tokens": 128, "instruction": "\n\nWrite a one-sentence summary of the text above.", "runtime": "mlx", "mlx_version": "0.32.4", "mlx_lm_version": "0.32.2", "model": "mlx-community/gemma-4-26B-A4B-it-OptiQ-4bit", "kv_cache": "mlx-lm default (unquantised); the build's kv_config.json is not read", "ollama_models_stopped_at_start": ["gemma4:26b"]}
+X 4k rep1 try1 tok=4028 prefill=1.297 ms/tok gen=47.02 t/s n=30
+X 4k rep2 try1 tok=4025 prefill=1.248 ms/tok gen=47.07 t/s n=30
+X 4k rep3 try1 tok=4028 prefill=1.247 ms/tok gen=47.84 t/s n=30
+X 8k rep1 try1 tok=8021 prefill=1.321 ms/tok gen=41.29 t/s n=40
+X 8k rep2 try1 tok=8022 prefill=1.296 ms/tok gen=41.40 t/s n=39
+X 8k rep3 try1 tok=8020 prefill=1.334 ms/tok gen=41.36 t/s n=40
+X 15k rep1 try1 tok=15020 prefill=1.423 ms/tok gen=34.16 t/s n=40
+X 15k rep2 try1 tok=15020 prefill=1.496 ms/tok gen=33.87 t/s n=40
+X 15k rep3 try1 tok=15019 prefill=1.488 ms/tok gen=33.96 t/s n=41
+X 20k rep1 try1 tok=20014 prefill=1.452 ms/tok gen=30.76 t/s n=29
+X 20k rep2 try1 tok=20013 prefill=1.505 ms/tok gen=30.39 t/s n=41
+X 20k rep3 try1 tok=20014 prefill=1.469 ms/tok gen=30.48 t/s n=39
+X 25k rep1 try1 tok=25002 prefill=1.475 ms/tok gen=27.54 t/s n=41
+X 25k rep2 try1 tok=25002 prefill=1.512 ms/tok gen=27.71 t/s n=40
+X 25k rep3 try1 tok=25001 prefill=1.506 ms/tok gen=27.48 t/s n=41
+X 30k rep1 try1 tok=30005 prefill=1.520 ms/tok gen=25.11 t/s n=39
+X 30k rep2 try1 tok=30006 prefill=1.537 ms/tok gen=25.11 t/s n=37
+X 30k rep3 try1 tok=30006 prefill=1.530 ms/tok gen=24.87 t/s n=40
+X 35k rep1 try1 tok=35005 prefill=1.573 ms/tok gen=25.32 t/s n=29
+X 35k rep2 try1 tok=35004 prefill=1.592 ms/tok gen=25.11 t/s n=40
+X 35k rep3 try1 tok=35004 prefill=1.598 ms/tok gen=25.15 t/s n=39
+X 40k rep1 try1 tok=39999 prefill=1.620 ms/tok gen=23.38 t/s n=41
+X 40k rep2 try1 tok=40001 prefill=1.628 ms/tok gen=23.43 t/s n=37
+X 40k rep3 try1 tok=39999 prefill=1.628 ms/tok gen=23.37 t/s n=40
+done runs/20261024T085524Z/X
+{"experiment": "051", "arm": "XN", "tag": "", "started": "2026-10-24T09:42:00.750905Z", "sizes": ["4k", "15k", "25k", "35k"], "reps": 3, "idle_s": 20, "max_new_tokens": 128, "instruction": "\n\nWrite a one-sentence summary of the text above.", "runtime": "mlx", "mlx_version": "0.32.4", "mlx_lm_version": "0.32.2", "model": "mlx-community/gemma-4-26B-A4B-it-OptiQ-4bit", "kv_cache": "mlx-lm default (unquantised); the build's kv_config.json is not read", "ollama_models_stopped_at_start": []}
+XN 4k rep1 try1 tok=3905 prefill=1.272 ms/tok gen=46.87 t/s n=43
+XN 4k rep2 try1 tok=3905 prefill=1.240 ms/tok gen=47.27 t/s n=45
+XN 4k rep3 try1 tok=3905 prefill=1.246 ms/tok gen=47.45 t/s n=50
+XN 15k rep1 try1 tok=14942 prefill=1.379 ms/tok gen=34.33 t/s n=45
+XN 15k rep2 try1 tok=14940 prefill=1.423 ms/tok gen=34.15 t/s n=42
+XN 15k rep3 try1 tok=14942 prefill=1.463 ms/tok gen=34.12 t/s n=42
+XN 25k rep1 try1 tok=25031 prefill=1.529 ms/tok gen=27.60 t/s n=39
+XN 25k rep2 try1 tok=25029 prefill=1.560 ms/tok gen=27.60 t/s n=54
+XN 25k rep3 try1 tok=25032 prefill=1.512 ms/tok gen=27.34 t/s n=54
+XN 35k rep1 try1 tok=34980 prefill=1.579 ms/tok gen=25.02 t/s n=43
+XN 35k rep2 try1 tok=34981 prefill=1.602 ms/tok gen=24.90 t/s n=54
+XN 35k rep3 try1 tok=34981 prefill=1.601 ms/tok gen=24.96 t/s n=43
+done runs/20261024T085524Z/XN
+{"experiment": "051", "arm": "F", "tag": "", "started": "2026-10-24T09:49:49.062446Z", "sizes": ["4k", "8k", "15k", "20k", "25k", "30k", "35k", "40k"], "reps": 3, "idle_s": 20, "max_new_tokens": 128, "instruction": "\n\nWrite a one-sentence summary of the text above.", "runtime": "mlx", "mlx_version": "0.32.4", "mlx_lm_version": "0.32.2", "model": "mlx-community/gemma-4-26B-A4B-it-OptiQ-4bit", "kv_cache": "mlx-lm default (unquantised); the build's kv_config.json is not read", "ollama_models_stopped_at_start": []}
+F 4k rep1 try1 tok=3591 prefill=1.269 ms/tok gen=47.87 t/s n=24
+F 4k rep2 try1 tok=3592 prefill=1.230 ms/tok gen=47.93 t/s n=24
+F 4k rep3 try1 tok=3591 prefill=1.233 ms/tok gen=47.98 t/s n=24
+F 8k rep1 try1 tok=7148 prefill=1.303 ms/tok gen=42.88 t/s n=24
+F 8k rep2 try1 tok=7147 prefill=1.284 ms/tok gen=42.81 t/s n=24
+F 8k rep3 try1 tok=7149 prefill=1.290 ms/tok gen=43.21 t/s n=24
+F 15k rep1 try1 tok=13368 prefill=1.374 ms/tok gen=35.97 t/s n=24
+F 15k rep2 try1 tok=13369 prefill=1.451 ms/tok gen=36.03 t/s n=23
+F 15k rep3 try1 tok=13368 prefill=1.448 ms/tok gen=35.96 t/s n=24
+F 20k rep1 try1 tok=17813 prefill=1.428 ms/tok gen=32.51 t/s n=24
+F 20k rep2 try1 tok=17813 prefill=1.489 ms/tok gen=32.57 t/s n=24
+F 20k rep3 try1 tok=17815 prefill=1.461 ms/tok gen=32.55 t/s n=24
+F 25k rep1 try1 tok=22259 prefill=1.440 ms/tok gen=29.56 t/s n=24
+F 25k rep2 try1 tok=22260 prefill=1.477 ms/tok gen=29.58 t/s n=24
+F 25k rep3 try1 tok=22259 prefill=1.480 ms/tok gen=29.47 t/s n=24
+F 30k rep1 try1 tok=26701 prefill=1.488 ms/tok gen=27.06 t/s n=24
+F 30k rep2 try1 tok=26702 prefill=1.507 ms/tok gen=27.03 t/s n=24
+F 30k rep3 try1 tok=26701 prefill=1.498 ms/tok gen=27.05 t/s n=24
+F 35k rep1 try1 tok=31148 prefill=1.525 ms/tok gen=25.22 t/s n=24
+F 35k rep2 try1 tok=31148 prefill=1.548 ms/tok gen=25.04 t/s n=24
+F 35k rep3 try1 tok=31145 prefill=1.556 ms/tok gen=25.00 t/s n=24
+F 40k rep1 try1 tok=35590 prefill=1.571 ms/tok gen=25.40 t/s n=24
+F 40k rep2 try1 tok=35590 prefill=1.582 ms/tok gen=25.31 t/s n=24
+F 40k rep3 try1 tok=35588 prefill=1.580 ms/tok gen=25.31 t/s n=24
+done runs/20261024T085524Z/F
+{"experiment": "051", "arm": "O", "tag": "drift", "started": "2026-10-24T10:04:53.654267Z", "sizes": ["15k"], "reps": 3, "idle_s": 20, "max_new_tokens": 128, "instruction": "\n\nWrite a one-sentence summary of the text above.", "runtime": "ollama", "ollama_version": "0.40.2", "model": "gemma4:26b", "num_ctx": 65536, "settings_documented": "OLLAMA_FLASH_ATTENTION=0, default fp16 KV cache (production since 2026-08-30)"}
+O 15k rep1 try1 tok=15020 prefill=1.611 ms/tok gen=38.07 t/s n=39
+O 15k rep2 try1 tok=15021 prefill=1.648 ms/tok gen=37.95 t/s n=39
+O 15k rep3 try1 tok=15020 prefill=1.671 ms/tok gen=37.64 t/s n=50
+done runs/20261024T085524Z/O_drift
+H1_mlx_no_cliff pass
+H2_mlx_prefill_not_slower pass
+H3_mlx_generation_lead_4k fail
+H4_replicates_exp011_on_its_input fail
+H5_text_does_not_change_mlx_prefill pass
+H6_mlx_prefill_not_slower_natural_text pass
+drift {'o_15k_first': 1.6832746821117104, 'o_15k_last': 1.6477829039344918, 'rel': -0.021084959308419804, 'within_5pct': True}
+wrote runs/20261024T085524Z/score.json
+exp_051 run 20261024T085524Z finished 10:06:41Z; loaded after: gemma4:e4b gemma4:26b 

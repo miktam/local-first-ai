@@ -1,0 +1,53 @@
+{
+  "experiment": "051",
+  "arm": "XN",
+  "tag": "",
+  "started": "2026-10-24T09:42:00.750905Z",
+  "sizes": [
+    "4k",
+    "15k",
+    "25k",
+    "35k"
+  ],
+  "reps": 3,
+  "idle_s": 20,
+  "max_new_tokens": 128,
+  "instruction": "\n\nWrite a one-sentence summary of the text above.",
+  "runtime": "mlx",
+  "mlx_version": "0.32.4",
+  "mlx_lm_version": "0.32.2",
+  "model": "mlx-community/gemma-4-26B-A4B-it-OptiQ-4bit",
+  "kv_cache": "mlx-lm default (unquantised); the build's kv_config.json is not read",
+  "ollama_models_stopped_at_start": [],
+  "ended": "2026-10-24T09:49:46.109186Z",
+  "sizes_summary": [
+    {
+      "size": "4k",
+      "prompt_tokens": 3905,
+      "prefill_ms_per_tok_median": 1.2459016110057608,
+      "gen_tps_median": 47.26714909626211,
+      "clean_reps": 3
+    },
+    {
+      "size": "15k",
+      "prompt_tokens": 14942,
+      "prefill_ms_per_tok_median": 1.4232232234943496,
+      "gen_tps_median": 34.153017044978185,
+      "clean_reps": 3
+    },
+    {
+      "size": "25k",
+      "prompt_tokens": 25031,
+      "prefill_ms_per_tok_median": 1.529221079182097,
+      "gen_tps_median": 27.59688778506466,
+      "clean_reps": 3
+    },
+    {
+      "size": "35k",
+      "prompt_tokens": 34981,
+      "prefill_ms_per_tok_median": 1.6009562571961946,
+      "gen_tps_median": 24.962972799992134,
+      "clean_reps": 3
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "experiment": "051",
+  "arm": "ON",
+  "tag": "",
+  "started": "2026-10-24T09:15:45.745348Z",
+  "sizes": [
+    "4k",
+    "15k",
+    "25k",
+    "35k"
+  ],
+  "reps": 3,
+  "idle_s": 20,
+  "max_new_tokens": 128,
+  "instruction": "\n\nWrite a one-sentence summary of the text above.",
+  "runtime": "ollama",
+  "ollama_version": "0.40.2",
+  "model": "gemma4:26b",
+  "num_ctx": 65536,
+  "settings_documented": "OLLAMA_FLASH_ATTENTION=0, default fp16 KV cache (production since 2026-08-30)",
+  "ended": "2026-10-24T09:24:54.405189Z",
+  "sizes_summary": [
+    {
+      "size": "4k",
+      "prompt_tokens": 3906,
+      "prefill_ms_per_tok_median": 1.4586827144686298,
+      "gen_tps_median": 46.74177236104649,
+      "clean_reps": 3
+    },
+    {
+      "size": "15k",
+      "prompt_tokens": 14940,
+      "prefill_ms_per_tok_median": 1.7242815261044175,
+      "gen_tps_median": 37.47857758576632,
+      "clean_reps": 3
+    },
+    {
+      "size": "25k",
+      "prompt_tokens": 25031,
+      "prefill_ms_per_tok_median": 1.8383696364362765,
+      "gen_tps_median": 33.50041992386835,
+      "clean_reps": 3
+    },
+    {
+      "size": "35k",
+      "prompt_tokens": 34982,
+      "prefill_ms_per_tok_median": 2.0481577954376537,
+      "gen_tps_median": 30.43133653046799,
+      "clean_reps": 3
+    }
+  ]
+}
