@@ -56,7 +56,7 @@ def main():
     if changed and not a.check:
         head.write_text(t2)
     for mod_path in sorted((HERE / "posts").glob("*.py")):
-        if a.only and a.only not in mod_path.stem:
+        if mod_path.stem.startswith("_") or (a.only and a.only not in mod_path.stem):
             continue
         m = load(mod_path)
         post = blog / "content/posts" / m.POST

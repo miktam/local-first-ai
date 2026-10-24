@@ -218,13 +218,15 @@ def dot_ci(rows, caption, xlab="", unit="", dec=2, label="", series=None, xmin=N
     return figure(f'{leg}<svg viewBox="0 0 {W} {H}" role="img" aria-label="{esc(label or caption)}">{svg}</svg>', caption, label)
 
 
-def line_chart(series, caption, xlab, ylab, xticks=None, yunit="", ydec=0, xdec=0, label="", logx=False, ymin=0, ymax=None, end_labels=True):
-    """Lines over a continuous x. series: [(name, css var, [(x, y), ...])]; one shared y axis."""
-    xs = [x for _, _, pts in series for x, _ in pts]
-    ys = [y for _, _, pts in series for _, y in pts]
+def line_chart(series, caption, xlab, ylab, xticks=None, yunit="", ydec=0, xdec=0, label="", logx=False, ymin=0, ymax=None, end_labels=True,
+               hrefs=(), xfmt=None):
+    """Lines over a continuous x. series: [(name, css var, [(x, y), ...])] or with a 4th item {"dash": bool, "end": label or None};
+    one shared y axis; hrefs: [(y, label, css var)] reference lines."""
+    xs = [x for s_ in series for x, _ in s_[2]]
+    ys = [y for s_ in series for _, y in s_[2]]
     x0, x1 = min(xs), max(xs)
     y1 = ymax if ymax is not None else max(ys) * 1.1
-    W, left, right, top, bottom = 640, 56, 130 if end_labels else 20, 18, 44
+    W, left, right, top, bottom = 640, 56, 130 if end_labels else 20, 30, 44
     pw, ph = W - left - right, 260
     H = top + ph + bottom
 
@@ -241,20 +243,30 @@ def line_chart(series, caption, xlab, ylab, xticks=None, yunit="", ydec=0, xdec=
             svg += (f'<line x1="{left}" x2="{left + pw}" y1="{Y(t):.1f}" y2="{Y(t):.1f}" stroke="var(--grid)" stroke-width="1"/>'
                     f'<text x="{left - 8}" y="{Y(t) + 4:.1f}" text-anchor="end" font-size="11.5" fill="var(--muted)">{fmt(t, ydec, yunit)}</text>')
     for t in (xticks or nice_ticks(x0, x1, 5)):
-        svg += f'<text x="{X(t):.1f}" y="{top + ph + 18}" text-anchor="middle" font-size="11.5" fill="var(--muted)">{fmt(t, xdec)}</text>'
+        svg += f'<text x="{X(t):.1f}" y="{top + ph + 18}" text-anchor="middle" font-size="11.5" fill="var(--muted)">{xfmt(t) if xfmt else fmt(t, xdec)}</text>'
+    for hy, hl, hv in hrefs:
+        svg += (f'<line x1="{left}" x2="{left + pw}" y1="{Y(hy):.1f}" y2="{Y(hy):.1f}" stroke="var({hv})" stroke-width="1" opacity=".7"/>'
+                f'<text x="{left + 4}" y="{Y(hy) - 4:.1f}" font-size="10.5" fill="var(--ink2)">{esc(hl)}</text>')
     svg += f'<line x1="{left}" x2="{left + pw}" y1="{top + ph}" y2="{top + ph}" stroke="var(--base)" stroke-width="1"/>'
     svg += f'<text x="{left + pw / 2:.1f}" y="{H - 6}" text-anchor="middle" font-size="12" fill="var(--ink2)">{esc(xlab)}</text>'
-    svg += f'<text x="{left - 46}" y="{top - 6}" font-size="12" fill="var(--ink2)">{esc(ylab)}</text>'
-    for name, var, pts in series:
+    svg += f'<text x="{left - 46}" y="{top - 16}" font-size="12" fill="var(--ink2)">{esc(ylab)}</text>'
+    for s_ in series:
+        name, var, pts = s_[:3]
+        opt = s_[3] if len(s_) > 3 else {}
         d = " ".join(f"{'M' if k == 0 else 'L'}{X(x):.1f},{Y(y):.1f}" for k, (x, y) in enumerate(pts))
-        svg += f'<path d="{d}" fill="none" stroke="var({var})" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'
+        dash = ' stroke-dasharray="6 4"' if opt.get("dash") else ""
+        svg += f'<path d="{d}" fill="none" stroke="var({var})" stroke-width="2"{dash} stroke-linejoin="round" stroke-linecap="round"/>'
         for x, y in pts:
             svg += (f'<circle cx="{X(x):.1f}" cy="{Y(y):.1f}" r="4" fill="var({var})" stroke="var(--surface)" stroke-width="2">'
                     f'<title>{esc(name)}: {fmt(x, xdec)} → {fmt(y, ydec, yunit)}</title></circle>')
-        if end_labels:
+        if end_labels and opt.get("end", name):
             xe, ye = pts[-1]
-            svg += f'<text x="{X(xe) + 9:.1f}" y="{Y(ye) + 4:.1f}" font-size="12.5" fill="var(--ink)">{esc(name)}</text>'
-    leg = legend([(n, v) for n, v, _ in series]) if len(series) > 1 else ""
+            svg += f'<text x="{X(xe) + 9:.1f}" y="{Y(ye) + 4 + opt.get("dy", 0):.1f}" font-size="12.5" fill="var(--ink)">{esc(opt.get("end", name))}</text>'
+    def key(s_):
+        o = s_[3] if len(s_) > 3 else {}
+        line = f'<line x1="1" x2="21" y1="7" y2="7" stroke="var({s_[1]})" stroke-width="2.5"{" stroke-dasharray=\"5 3\"" if o.get("dash") else ""}/>'
+        return f'<span><svg width="22" height="14" style="display:inline;width:22px;vertical-align:-2px;margin-right:.35em">{line}</svg>{esc(s_[0])}</span>'
+    leg = f'<div class="leg">{"".join(key(s_) for s_ in series)}</div>' if len(series) > 1 else ""
     return figure(f'{leg}<svg viewBox="0 0 {W} {H}" role="img" aria-label="{esc(label or caption)}">{svg}</svg>', caption, label)
 
 
@@ -542,3 +554,43 @@ def range_vs_point(items, caption, budget=None, budget_label="", ylab="", label=
            'registered estimate: nominal to adverse, tick at pessimistic</span>'
            '<span><i style="background:var(--s2);border-radius:50%"></i>projected from the pilot</span></div>')
     return figure(f'{leg}<svg viewBox="0 0 {W} {H}" role="img" aria-label="{esc(label or caption)}">{svg}</svg>', caption, label)
+
+
+def cat_dots(cats, caption, ylab="", ymin=0, ymax=8, label="", marks_legend=()):
+    """Per category on x, each repetition as a dot on y, spread sideways so none hide; an optional tick for a summary.
+    cats: [{"label", "sub", "groups": [(values, css var, filled bool)], "tick": value or None}]."""
+    W, H, left, right, tp, bottom = 660, 310, 44, 10, 28, 52
+    pw, ph = W - left - right, H - tp - bottom
+    cw = pw / len(cats)
+
+    def Y(v):
+        return tp + ph * (1 - (v - ymin) / (ymax - ymin))
+    svg = ""
+    for t in range(int(ymin), int(ymax) + 1, 2 if ymax - ymin > 6 else 1):
+        svg += (f'<line x1="{left}" x2="{left + pw}" y1="{Y(t):.1f}" y2="{Y(t):.1f}" stroke="var(--grid)" stroke-width="1"/>'
+                f'<text x="{left - 6}" y="{Y(t) + 4:.1f}" text-anchor="end" font-size="11" fill="var(--muted)">{t}</text>')
+    for k, c in enumerate(cats):
+        cx = left + k * cw + cw / 2
+        off = -((len(c["groups"]) - 1) * 26) / 2
+        for gi, (vals, var, filled) in enumerate(c["groups"]):
+            gx = cx + off + gi * 26
+            seen = {}
+            for v in vals:
+                n = seen.get(v, 0)
+                seen[v] = n + 1
+                x = gx + (n - (vals.count(v) - 1) / 2) * 9
+                svg += (f'<circle cx="{x:.1f}" cy="{Y(v):.1f}" r="4.2" fill="{f"var({var})" if filled else "var(--surface)"}" '
+                        f'stroke="var({var})" stroke-width="{2 if not filled else 1}"><title>{esc(c["label"])}: {v}</title></circle>')
+        if c.get("tick") is not None:
+            svg += f'<line x1="{cx - 30:.1f}" x2="{cx + 30:.1f}" y1="{Y(c["tick"]):.1f}" y2="{Y(c["tick"]):.1f}" stroke="var(--ink)" stroke-width="2"/>'
+        svg += (f'<text x="{cx:.1f}" y="{tp + ph + 18}" text-anchor="middle" font-size="12" fill="var(--ink2)">{esc(c["label"])}</text>'
+                f'<text x="{cx:.1f}" y="{tp + ph + 34}" text-anchor="middle" font-size="11" fill="var(--muted)">{esc(c.get("sub", ""))}</text>')
+    svg += f'<line x1="{left}" x2="{left + pw}" y1="{Y(ymin):.1f}" y2="{Y(ymin):.1f}" stroke="var(--base)" stroke-width="1"/>'
+    if ylab:
+        svg += f'<text x="{left}" y="11" font-size="11.5" fill="var(--ink2)">{esc(ylab)}</text>'
+    leg = "".join(
+        f'<span><svg width="14" height="14" style="display:inline;width:14px;vertical-align:-2px;margin-right:.35em">'
+        + (f'<line x1="1" x2="13" y1="7" y2="7" stroke="var(--ink)" stroke-width="2"/>' if kind == "tick" else
+           f'<circle cx="7" cy="7" r="4.2" fill="{"var(" + var + ")" if kind == "filled" else "var(--surface)"}" stroke="var({var})" stroke-width="2"/>')
+        + f'</svg>{esc(text)}</span>' for kind, var, text in marks_legend)
+    return figure(f'<div class="leg">{leg}</div><svg viewBox="0 0 {W} {H}" role="img" aria-label="{esc(label or caption)}">{svg}</svg>', caption, label)
