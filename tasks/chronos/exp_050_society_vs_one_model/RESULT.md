@@ -15,7 +15,7 @@
 With the scorer correction below, H1 is 0.036 against 0.061 (p 0.15) and H2 0.764 against 0.949. No verdict changes.
 
 **In short.**
-- **One model that thinks for a minute was as safe as the society and far more useful.** It got 94 % of the leads that should go out right, against the society's 76 %, and its wrong-reply rate was not significantly higher.
+- **One model that thinks for a minute was far more useful, and the society was not shown to be safer.** It got 94 % of the leads that should go out right, against the society's 76 %, and its wrong-reply rate was not significantly higher.
 - **What the society did that one model didn't:**
   - **Its decisions did not move.** The same 247 decisions came out in all three runs, with the inventory reshuffled and two homes added. One model changed 56 of them.
   - **Its errors are the same 9 leads every run.** One model's wrong replies landed on 22 different leads across the three runs.
@@ -47,7 +47,7 @@ M's wrong replies fell on 22 different leads across the three runs, and on only 
 
 **H4: the writer is a part, shown.** G-small replaced gemma4:26b with gemma4:e4b as the writer. It sent 9 wrong replies (G: 10; corrected, 9 and 9) and got 0.758 of should-be-ready leads right (G: 0.758). Nothing that decides anything depends on the writer. The contrast, reported: **M on the same e4b** sent **56 wrong (0.227)** and got **0.611** right, against M's 0.065 and 0.943 on the 26B.
 
-**H5: privacy, shown.** 988 logged prompts from G and G-small were scanned for the 247 leads' labelled contacts (digits, spelled out, e-mail): none found. M sees the raw enquiry by design.
+**H5: privacy, shown.** 988 per-enquiry prompt logs from G and G-small (3,052 model calls) were scanned for the 247 leads' labelled contacts (digits, spelled out, e-mail): none found. M sees the raw enquiry by design.
 
 ## Reported, with no bar
 
@@ -123,7 +123,7 @@ The judge's notes on replies it would not send as is (a note can name more than 
 
 ## Verdict map, applied
 
-- **H1 fails.** On this task, one model that thinks was as safe as the society, and the glue did not earn its place on safety. M+audit did not match G either (14 against 9, p 0.20), so the code check alone is not the whole story. But neither is the decomposition shown to be safer.
+- **H1 fails.** On this task, the society was not shown to be safer than one model that thinks (10 against 16 wrong replies sent, p 0.16; equivalence is not shown either), and the glue did not earn its place on safety. M+audit did not match G either (14 against 9, p 0.20), so the code check alone is not the whole story. But neither is the decomposition shown to be safer.
 - **H2 fails.** The society hands too much to a person. The B-brain report names the reason: Kev's confidence is underconfident, and the unsure cut at 0.5 holds leads Kev read right 83 % of the time.
 - **H3 passes.** The measured line: **the society made the same decision on every lead in every run, and one model changed one decision in four.**
 - **H4 passes.** A 4B writer runs this desk, and the 26B is not needed for this blade. One model on the same 4B is not usable.
@@ -142,7 +142,7 @@ The judge's notes on replies it would not send as is (a note can name more than 
 
 **What changed:**
 - **Nothing in production.** CasaSol's triage stays rev 5.1, and no reply drafter goes into the bot from this experiment.
-- **The case for deterministic glue changes.** "It's safer" is not shown here against a model that thinks for a minute. What is shown: the same decision every time, errors that can be found and fixed, 6× the speed, a 4B writer, and no personal data reaching any model.
+- **The case for deterministic glue changes.** "It's safer" is not shown here against a model that thinks for a minute. What is shown: the same decision every time, errors that can be found and fixed, 6× the speed, a 4B writer, and no phone number or e-mail reaching any model.
 
 **What it opens:**
 - **The agreement gate** (exploratory, computed after the test). Send G's reply only when M is also ready with the same next step. Run 1 would have sent 120 replies with **2 wrong** (G alone: 9) and kept should-be-ready sent right at 0.752 (G: 0.764). The errors were disjoint, so the two desks check each other. It costs M's 70 s per lead in a queue, which the front desk doesn't need to wait on.
