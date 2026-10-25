@@ -59,3 +59,8 @@ The registered audit, re-run unchanged against the fixed code (`runs/20261025T15
 
 The written claim, *platforms are never looked up*, is now true as measured. The verdict above stays as registered: the code under test failed H4.
 
+**Later the same day.** Public link shorteners (`bit.ly`, `tinyurl.com` and the rest of Parry's `SHORTENERS`) are skipped too, for the same reason (workspace 74ead96). No written claim covered them, but their age says nothing about the link. The change was exported to the private Codeberg repository `Aprimerose/parry` (f4e26eb) by the documented procedure:
+- two byte-identical exports;
+- the suite from the export with an empty home: 660 OK, 38 skipped;
+- privacy check clean;
+- a clone back identical to the export, passing the same suite.
