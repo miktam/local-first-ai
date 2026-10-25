@@ -2247,7 +2247,7 @@ Finding while registering: exp_007's fixtures cycle the same 31 sentences, so th
   - V1 misread short French and German declines that named Spanish places.
   
   Both are corrected descriptively (`check_v2`, `detect_v2`: 914/916 on labelled enquiries). The decisions do not change.
-- **Errors every build made,** fixed in the bot afterwards (CasaSol 52311e4, ba813f1):
+- **Errors every build made,** fixed in the bot afterwards (CasaSol 8ee29fa):
   - a contributor's name carried over from the area guide;
   - the course's sales-pitch figures presented as market data;
   - four legal facts: the 7-year lease depends on the landlord; AJD in Andalusia is 1.2 %; no stressed zones are declared in Andalusia; the bank pays AJD and the costs on a mortgage deed.
