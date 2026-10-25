@@ -2257,3 +2257,53 @@ Finding while registering: exp_007's fixtures cycle the same 31 sentences, so th
 *Evidence: `exp_053_precision_behind_the_bot/` (code, registration, questions, aggregates; private files by sha256).*
 *Status: Complete. Closed 2026-10-24.*
 
+---
+
+## Experiment 054 — What leaves the machine during an Exposure Review (2026-10-25)
+
+**Pre-registered: 2026-10-25, before any measured run** (`exp_054_exposure_review_egress/HYPOTHESIS.md`). Aprimerose's Exposure Review tells clients in writing what leaves the machine; those claims had been checked by reading code only.
+
+**Method.**
+- A fictional subject's review was run step by step: `build`, `snapshot`, `delta`, `week`, `report`, then the message check on 15 test messages, at the default registry tier and offline.
+- An audit hook recorded every socket, name resolution, URL request and spawned program, with `lsof` as a cross-check.
+- Two controls proved the recorder sees what it must.
+
+**Result.**
+- Controls pass.
+- **H1 PASS:** the non-message commands make no network call.
+- **H2 PASS:** all 120 model calls are on loopback.
+- **H3 PASS:** only IANA's bootstrap, registry RDAP hosts, `whois.iana.org` (sent bare TLDs) and IANA-named whois servers are contacted. No DNS records are read, and **the resolver is never asked about a message's domains**.
+- **H5 PASS:** offline sends nothing.
+- **H4 FAIL:** the cap of 12 holds, but the platform link shorteners `t.co` and `lnkd.in` are sent to registries, although the documents say platforms are never looked up.
+
+*Evidence: `exp_054_exposure_review_egress/`. Status: Complete. Closed 2026-10-25.*
+
+---
+
+## Experiment 055 — Targeted lures built from a person's own footprint (2026-10-25)
+
+**Pre-registered: 2026-10-25, before any arm ran** (`exp_055_exposure_review_lures/HYPOTHESIS.md`, Amendment 1 before scoring).
+
+**Corpus.** 110 lures and 110 genuine messages, written by four Fable writers from a fictional subject's 26 footprint items. Labels are by construction, with no model filtering the set. Registry facts are seeded and the arms run offline.
+
+**Arms.**
+- **P:** Exposure Review's check as built (Parry plus the footprint join).
+- **R:** rules only.
+- **G:** gemma4:26b alone, with the whole footprint.
+- **O:** Opus alone, blind.
+
+**Result.** All five hypotheses fail.
+
+| Arm | Catches | False alarms | Balanced accuracy | Attribution |
+|---|---|---|---|---|
+| P | 75.5 % | 12.7 % | 0.814 | 54 % |
+| R | 61.8 % | **0 %** | 0.809 | |
+| G | 83.6 % | 7.3 % | 0.882 | 85 % (22 empty answers) |
+| O | 95.5 % | 5.5 % | 0.950 | |
+
+**Where P is blind.** It caught every new-domain lure, 10 of 24 on aged domains and 1 of 14 with no link. All 14 of its false alarms come from its single model step.
+
+**Reading.** As built, the check is a precise domain-age detector. A local model given the whole picture beat the pipeline here. The next design keeps the rules as hard evidence and makes the local model the primary reader.
+
+*Evidence: `exp_055_exposure_review_lures/` (five invented domains found registered were replaced by `.example` names in the published copy; the run used the originals, which are hashed). Status: Complete. Closed 2026-10-25.*
+

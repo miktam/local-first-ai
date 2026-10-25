@@ -1,0 +1,158 @@
+{
+  "verdict": {
+    "score": 30,
+    "deterministic_score": 30,
+    "persona_points": 0,
+    "persona_reasons": [],
+    "persona_gated": null,
+    "persona_ungated": null,
+    "lookups_missing": false,
+    "band": "suspicious",
+    "families": [
+      "infrastructure",
+      "steering"
+    ],
+    "single_family_cap": false,
+    "indicators": [
+      {
+        "id": "link_handle_mismatch",
+        "tier": null,
+        "evidence": [
+          "LinkedIn link belongs to 'irisk', not to the sender 'LinkedIn' or anyone named in the message"
+        ],
+        "data": {},
+        "points": 15,
+        "family": "steering"
+      },
+      {
+        "id": "free_hosting_link",
+        "tier": null,
+        "data": {},
+        "evidence": [
+          "https://irisk.github.io/ is on github.io: anyone can publish there, and the message names Google, LinkedIn",
+          "https://demo-site.pages.dev/ is on pages.dev: anyone can publish there, and the message names Google, LinkedIn",
+          "https://irisk.github.io/ is on github.io: anyone can publish there, and the message names Google, LinkedIn",
+          "https://demo-site.pages.dev/ is on pages.dev: anyone can publish there, and the message names Google, LinkedIn"
+        ],
+        "points": 15,
+        "family": "infrastructure"
+      }
+    ],
+    "must_not": [],
+    "why": "The meeting/chat link belongs to someone else; a link is on a free hosting platform, where anyone can publish.",
+    "action": "verify out of band",
+    "action_detail": "Check the sender through a channel you already trust before you reply, click or move to another app.",
+    "notes": [
+      "cites your public footprint: irisk, https://vennholt-partners.example/about (personalisation hook; not scored)"
+    ],
+    "unresolved": [
+      "mail authentication: no headers in the paste (export the original .eml to check it)"
+    ],
+    "manual_checks": [],
+    "persona": {
+      "ok": true,
+      "output": {
+        "approach": "other",
+        "asks": [
+          "click_link"
+        ],
+        "confidence": "low"
+      },
+      "error": null,
+      "model": "gemma4:26b",
+      "digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+      "ollama_version": "0.40.2",
+      "quantization": "Q4_K_M",
+      "runner": "llamacpp",
+      "prompt_sha256": "af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1",
+      "options": {
+        "temperature": 0,
+        "seed": 7,
+        "num_ctx": 8192,
+        "think": false
+      },
+      "latency_s": 0.8,
+      "prompt_chars": 1267,
+      "note": null
+    },
+    "message": {
+      "input": "eml",
+      "channel": "email",
+      "sender_name": "LinkedIn",
+      "sender_addr": "notifications@linkedin.com",
+      "claim": null,
+      "date": "2026-10-23T10:00:00+02:00",
+      "subject": "Profile views",
+      "observed": []
+    },
+    "complete": false,
+    "lookups_contacted": [],
+    "network": [
+      {
+        "kind": "model",
+        "host": "127.0.0.1",
+        "sent": "message text",
+        "operator": "local model (not measured: ledger off)",
+        "recorded_by": "pipeline"
+      }
+    ],
+    "links_opened": null,
+    "integrity_error": false,
+    "fingerprint": {
+      "tool_version": "0.2.0",
+      "weights_version": "47d6894886cd",
+      "code_version": "7db3945",
+      "registry_sha256": "6ed8a3a18324",
+      "prompt_sha256": "af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1",
+      "model": "gemma4:26b",
+      "model_digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+      "ollama_version": "0.40.2",
+      "quantization": "Q4_K_M",
+      "runner": "llamacpp",
+      "leaf_ran": true,
+      "net": "none",
+      "profile_sha256": "a9720170ec57",
+      "copy_index_sha256": null,
+      "python": "3.14.8",
+      "macos": "26.5.1",
+      "machine": "arm64"
+    },
+    "run_dir": "runs/20261025T093602Z/subject/runs/20261025-103655-email"
+  },
+  "join": {
+    "schema": "exposure-join/1",
+    "generated": "2026-10-25T10:36:55+01:00",
+    "subject_id": "demo",
+    "run_id": "20261025-103655-email",
+    "inventory_sha256": "061de63c20e17e594a7b24ca1c31835f85602d1508fcfdf732b0108b5db25565",
+    "channel": "email",
+    "band": "suspicious",
+    "complete": false,
+    "reach": {
+      "status": "item",
+      "item_id": "C-526e13",
+      "gap_surface": null,
+      "platform": "email",
+      "evidence": "delivered to a published address on vennholt-partners.example"
+    },
+    "hooks": [
+      {
+        "item_id": "A-cfcf47",
+        "group": "artifact",
+        "kind": "site",
+        "level": "strong",
+        "match": "link-domain",
+        "matched": "vennholt-partners.example",
+        "theme": null
+      }
+    ],
+    "suppressed": [],
+    "themes": [],
+    "unexplained_themes": [],
+    "authority_claimed": [],
+    "proposed_gaps": []
+  },
+  "run_id": "20261025-103655-email"
+}
+
+--- stderr ---

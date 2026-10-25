@@ -1,0 +1,500 @@
+{
+  "controls": {
+    "C2_recorder_sees_resolution_http_and_spawn": true,
+    "C1_recorder_sees_dns_at_full_tier": true,
+    "C1_dig_queries": [
+      [
+        "/usr/bin/dig",
+        "+short",
+        "+time=3",
+        "+tries=1",
+        "NS",
+        "com"
+      ],
+      [
+        "/usr/bin/dig",
+        "+norecurse",
+        "+noall",
+        "+answer",
+        "+authority",
+        "+time=3",
+        "+tries=1",
+        "@a.gtld-servers.net",
+        "NS",
+        "northgate-ledger.com"
+      ],
+      [
+        "/usr/bin/dig",
+        "+short",
+        "+time=3",
+        "+tries=1",
+        "TXT",
+        "northgate-ledger.com"
+      ],
+      [
+        "/usr/bin/dig",
+        "+short",
+        "+time=3",
+        "+tries=1",
+        "TXT",
+        "_dmarc.northgate-ledger.com"
+      ],
+      [
+        "/usr/bin/dig",
+        "+short",
+        "+time=3",
+        "+tries=1",
+        "MX",
+        "northgate-ledger.com"
+      ]
+    ]
+  },
+  "H1_review_commands_make_no_network_call": {
+    "findings": {
+      "cmd_build": [],
+      "cmd_delta": [],
+      "cmd_report": [],
+      "cmd_snapshot": [],
+      "cmd_week": []
+    },
+    "steps_missing": [],
+    "verdict": "pass"
+  },
+  "H2_model_calls_stay_on_this_machine": {
+    "model_connects_seen": 120,
+    "findings": [],
+    "verdict": "pass"
+  },
+  "H3_registry_tier_contacts_only_registries": {
+    "allowed": {
+      "rdap_hosts_in_bootstrap": 379,
+      "whois_servers_named_by_iana": [
+        "whois.dns.pl",
+        "whois.iis.se",
+        "whois.nic.ch",
+        "whois.nic.fr",
+        "whois.nic.io",
+        "whois.nic.it",
+        "whois.nic.online",
+        "whois.nic.top",
+        "whois.nic.xyz",
+        "whois.registry.co",
+        "whois.tcinet.ru",
+        "whois.verisign-grs.com"
+      ]
+    },
+    "findings": {},
+    "verdict": "pass"
+  },
+  "H4_disclosure_capped_and_exclusions_hold": {
+    "findings": {
+      "M13": [
+        "excluded domain disclosed: lnkd.in",
+        "excluded domain disclosed: t.co"
+      ]
+    },
+    "verdict": "fail"
+  },
+  "per_message": {
+    "M01": {
+      "purpose": "sender only, .com (RDAP)",
+      "domains_in_message": 1,
+      "disclosed": [
+        "northgate-ledger.com"
+      ],
+      "iana_whois_queries": [
+        "com"
+      ],
+      "rdap_requests": [
+        "https://rdap.verisign.com/com/v1/domain/northgate-ledger.com"
+      ],
+      "bootstrap_fetches": 1
+    },
+    "M02": {
+      "purpose": ".es (no RDAP: whois fallback)",
+      "domains_in_message": 1,
+      "disclosed": [],
+      "iana_whois_queries": [],
+      "rdap_requests": [],
+      "bootstrap_fetches": 0
+    },
+    "M03": {
+      "purpose": ".de (no RDAP: whois fallback)",
+      "domains_in_message": 1,
+      "disclosed": [],
+      "iana_whois_queries": [],
+      "rdap_requests": [],
+      "bootstrap_fetches": 0
+    },
+    "M04": {
+      "purpose": "lookalike of a platform",
+      "domains_in_message": 1,
+      "disclosed": [
+        "linkedln-verify.com"
+      ],
+      "iana_whois_queries": [],
+      "rdap_requests": [
+        "https://rdap.verisign.com/com/v1/domain/linkedln-verify.com"
+      ],
+      "bootstrap_fetches": 0
+    },
+    "M05": {
+      "purpose": "link text shows the subject's own domain, href goes elsewhere",
+      "domains_in_message": 2,
+      "disclosed": [
+        "vennholt-portal-access.xyz"
+      ],
+      "iana_whois_queries": [
+        "xyz"
+      ],
+      "rdap_requests": [
+        "https://rdap.centralnic.com/xyz/domain/vennholt-portal-access.xyz"
+      ],
+      "bootstrap_fetches": 0
+    },
+    "M06": {
+      "purpose": "21 domains: the cap of 12",
+      "domains_in_message": 21,
+      "disclosed": [
+        "alder-quay-supply.com",
+        "brisk-harbor-tools.net",
+        "cobalt-fennel.info",
+        "dunmore-atlas.online",
+        "ember-larch.top",
+        "fjord-pixel.xyz",
+        "granite-wren.io",
+        "juniper-ostoja.pl",
+        "kestrel-maison.fr",
+        "larkspur-ledger.com"
+      ],
+      "iana_whois_queries": [
+        "net",
+        "info",
+        "online",
+        "top",
+        "io",
+        "pl",
+        "fr"
+      ],
+      "rdap_requests": [
+        "https://rdap.verisign.com/com/v1/domain/larkspur-ledger.com",
+        "https://rdap.verisign.com/com/v1/domain/alder-quay-supply.com",
+        "https://rdap.verisign.com/net/v1/domain/brisk-harbor-tools.net",
+        "https://rdap.identitydigital.services/rdap/domain/cobalt-fennel.info",
+        "https://rdap.radix.host/rdap/domain/dunmore-atlas.online",
+        "https://rdap.zdnsgtld.com/top/domain/ember-larch.top",
+        "https://rdap.centralnic.com/xyz/domain/fjord-pixel.xyz",
+        "https://rdap.dns.pl/domain/juniper-ostoja.pl",
+        "https://rdap.nic.fr/domain/kestrel-maison.fr"
+      ],
+      "bootstrap_fetches": 0
+    },
+    "M07": {
+      "purpose": "only excluded classes: platforms, free hosting, the subject's own",
+      "domains_in_message": 6,
+      "disclosed": [],
+      "iana_whois_queries": [],
+      "rdap_requests": [],
+      "bootstrap_fetches": 0
+    },
+    "M08": {
+      "purpose": "carries Authentication-Results",
+      "domains_in_message": 1,
+      "disclosed": [
+        "corvid-secure.net"
+      ],
+      "iana_whois_queries": [],
+      "rdap_requests": [
+        "https://rdap.verisign.com/net/v1/domain/corvid-secure.net"
+      ],
+      "bootstrap_fetches": 0
+    },
+    "M09": {
+      "purpose": "redirect parameter",
+      "domains_in_message": 2,
+      "disclosed": [
+        "harrow-mailer.top",
+        "willowmere-final.online"
+      ],
+      "iana_whois_queries": [],
+      "rdap_requests": [
+        "https://rdap.zdnsgtld.com/top/domain/harrow-mailer.top",
+        "https://rdap.radix.host/rdap/domain/willowmere-final.online"
+      ],
+      "bootstrap_fetches": 0
+    },
+    "M10": {
+      "purpose": ".ru and .it (no RDAP)",
+      "domains_in_message": 2,
+      "disclosed": [
+        "alba-verde.it",
+        "svetlov-trade.ru"
+      ],
+      "iana_whois_queries": [
+        "it",
+        "ru"
+      ],
+      "rdap_requests": [],
+      "bootstrap_fetches": 0
+    },
+    "M11": {
+      "purpose": ".pl (RDAP), .se and .ch (no RDAP)",
+      "domains_in_message": 3,
+      "disclosed": [
+        "alpenrand.ch",
+        "nordlys-kontor.se",
+        "wierzba-handel.pl"
+      ],
+      "iana_whois_queries": [
+        "se",
+        "ch"
+      ],
+      "rdap_requests": [
+        "https://rdap.dns.pl/domain/wierzba-handel.pl"
+      ],
+      "bootstrap_fetches": 0
+    },
+    "M12": {
+      "purpose": "pasted chat message, not e-mail",
+      "domains_in_message": 1,
+      "disclosed": [
+        "quick-share-docs.online"
+      ],
+      "iana_whois_queries": [],
+      "rdap_requests": [
+        "https://rdap.radix.host/rdap/domain/quick-share-docs.online"
+      ],
+      "bootstrap_fetches": 0
+    },
+    "M13": {
+      "purpose": "shorteners of platforms",
+      "domains_in_message": 3,
+      "disclosed": [
+        "lnkd.in",
+        "t.co",
+        "verbena-news.com"
+      ],
+      "iana_whois_queries": [
+        "co"
+      ],
+      "rdap_requests": [
+        "https://rdap.nixiregistry.in/rdap/domain/lnkd.in",
+        "https://rdap.verisign.com/com/v1/domain/verbena-news.com"
+      ],
+      "bootstrap_fetches": 0
+    },
+    "M14": {
+      "purpose": "a platform, no links",
+      "domains_in_message": 1,
+      "disclosed": [],
+      "iana_whois_queries": [],
+      "rdap_requests": [],
+      "bootstrap_fetches": 0
+    },
+    "M15": {
+      "purpose": "repeats M01's domain (cache)",
+      "domains_in_message": 1,
+      "disclosed": [
+        "northgate-ledger.com"
+      ],
+      "iana_whois_queries": [],
+      "rdap_requests": [
+        "https://rdap.verisign.com/com/v1/domain/northgate-ledger.com"
+      ],
+      "bootstrap_fetches": 0
+    }
+  },
+  "H5_offline_sends_nothing": {
+    "findings": {},
+    "verdict": "pass"
+  },
+  "lsof_unexplained_endpoints": {},
+  "steps": [
+    {
+      "step": "C2",
+      "rc": 0,
+      "seconds": 0.3
+    },
+    {
+      "step": "cmd_build",
+      "rc": 0,
+      "seconds": 0.3
+    },
+    {
+      "step": "cmd_snapshot",
+      "rc": 0,
+      "seconds": 0.3
+    },
+    {
+      "step": "cmd_delta",
+      "rc": 0,
+      "seconds": 0.3
+    },
+    {
+      "step": "cmd_week",
+      "rc": 0,
+      "seconds": 0.3
+    },
+    {
+      "step": "cmd_report",
+      "rc": 0,
+      "seconds": 0.3
+    },
+    {
+      "step": "reg_M01",
+      "rc": 1,
+      "seconds": 2.5
+    },
+    {
+      "step": "reg_M02",
+      "rc": 0,
+      "seconds": 1.4
+    },
+    {
+      "step": "reg_M03",
+      "rc": 0,
+      "seconds": 1.9
+    },
+    {
+      "step": "reg_M04",
+      "rc": 2,
+      "seconds": 2.2
+    },
+    {
+      "step": "reg_M05",
+      "rc": 1,
+      "seconds": 2.3
+    },
+    {
+      "step": "reg_M06",
+      "rc": 1,
+      "seconds": 8.4
+    },
+    {
+      "step": "reg_M07",
+      "rc": 1,
+      "seconds": 2.0
+    },
+    {
+      "step": "reg_M08",
+      "rc": 0,
+      "seconds": 2.2
+    },
+    {
+      "step": "reg_M09",
+      "rc": 1,
+      "seconds": 2.9
+    },
+    {
+      "step": "reg_M10",
+      "rc": 0,
+      "seconds": 2.9
+    },
+    {
+      "step": "reg_M11",
+      "rc": 0,
+      "seconds": 3.4
+    },
+    {
+      "step": "reg_M12",
+      "rc": 0,
+      "seconds": 2.6
+    },
+    {
+      "step": "reg_M13",
+      "rc": 1,
+      "seconds": 2.9
+    },
+    {
+      "step": "reg_M14",
+      "rc": 0,
+      "seconds": 2.0
+    },
+    {
+      "step": "reg_M15",
+      "rc": 1,
+      "seconds": 2.5
+    },
+    {
+      "step": "off_M01",
+      "rc": 1,
+      "seconds": 1.1
+    },
+    {
+      "step": "off_M02",
+      "rc": 0,
+      "seconds": 1.1
+    },
+    {
+      "step": "off_M03",
+      "rc": 0,
+      "seconds": 1.1
+    },
+    {
+      "step": "off_M04",
+      "rc": 2,
+      "seconds": 2.0
+    },
+    {
+      "step": "off_M05",
+      "rc": 1,
+      "seconds": 1.1
+    },
+    {
+      "step": "off_M06",
+      "rc": 1,
+      "seconds": 2.0
+    },
+    {
+      "step": "off_M07",
+      "rc": 1,
+      "seconds": 2.0
+    },
+    {
+      "step": "off_M08",
+      "rc": 0,
+      "seconds": 1.1
+    },
+    {
+      "step": "off_M09",
+      "rc": 1,
+      "seconds": 1.7
+    },
+    {
+      "step": "off_M10",
+      "rc": 0,
+      "seconds": 1.1
+    },
+    {
+      "step": "off_M11",
+      "rc": 0,
+      "seconds": 2.0
+    },
+    {
+      "step": "off_M12",
+      "rc": 0,
+      "seconds": 1.1
+    },
+    {
+      "step": "off_M13",
+      "rc": 1,
+      "seconds": 1.1
+    },
+    {
+      "step": "off_M14",
+      "rc": 0,
+      "seconds": 1.7
+    },
+    {
+      "step": "off_M15",
+      "rc": 1,
+      "seconds": 1.1
+    },
+    {
+      "step": "C1",
+      "rc": 1,
+      "seconds": 2.3
+    }
+  ],
+  "void": false
+}

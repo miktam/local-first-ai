@@ -1,0 +1,183 @@
+{
+  "M01": {
+    "file": "M01.eml",
+    "channel": null,
+    "domains": [
+      "northgate-ledger.com"
+    ],
+    "excluded": [],
+    "purpose": "sender only, .com (RDAP)"
+  },
+  "M02": {
+    "file": "M02.eml",
+    "channel": null,
+    "domains": [
+      "calderon-suministros.es"
+    ],
+    "excluded": [],
+    "purpose": ".es (no RDAP: whois fallback)"
+  },
+  "M03": {
+    "file": "M03.eml",
+    "channel": null,
+    "domains": [
+      "brandtwerk-logistik.de"
+    ],
+    "excluded": [],
+    "purpose": ".de (no RDAP: whois fallback)"
+  },
+  "M04": {
+    "file": "M04.eml",
+    "channel": null,
+    "domains": [
+      "linkedln-verify.com"
+    ],
+    "excluded": [],
+    "purpose": "lookalike of a platform"
+  },
+  "M05": {
+    "file": "M05.eml",
+    "channel": null,
+    "domains": [
+      "vennholt-partners.example",
+      "vennholt-portal-access.xyz"
+    ],
+    "excluded": [
+      "vennholt-partners.example"
+    ],
+    "purpose": "link text shows the subject's own domain, href goes elsewhere"
+  },
+  "M06": {
+    "file": "M06.eml",
+    "channel": null,
+    "domains": [
+      "meridian-digest.net",
+      "alder-quay-supply.com",
+      "brisk-harbor-tools.net",
+      "cobalt-fennel.info",
+      "dunmore-atlas.online",
+      "ember-larch.top",
+      "fjord-pixel.xyz",
+      "granite-wren.io",
+      "halden-marsh.es",
+      "iverly-kontor.de",
+      "juniper-ostoja.pl",
+      "kestrel-maison.fr",
+      "larkspur-ledger.com",
+      "morrow-tide.net",
+      "nimbus-quill.info",
+      "oakhurst-vale.online",
+      "pebble-strand.top",
+      "quarry-finch.xyz",
+      "rowan-brook.io",
+      "sable-cove.es",
+      "tamsin-hof.de"
+    ],
+    "excluded": [],
+    "purpose": "21 domains: the cap of 12"
+  },
+  "M07": {
+    "file": "M07.eml",
+    "channel": null,
+    "domains": [
+      "linkedin.com",
+      "github.com",
+      "google.com",
+      "irisk.github.io",
+      "demo-site.pages.dev",
+      "vennholt-partners.example"
+    ],
+    "excluded": [
+      "linkedin.com",
+      "github.com",
+      "google.com",
+      "irisk.github.io",
+      "demo-site.pages.dev",
+      "vennholt-partners.example"
+    ],
+    "purpose": "only excluded classes: platforms, free hosting, the subject's own"
+  },
+  "M08": {
+    "file": "M08.eml",
+    "channel": null,
+    "domains": [
+      "corvid-secure.net"
+    ],
+    "excluded": [],
+    "purpose": "carries Authentication-Results"
+  },
+  "M09": {
+    "file": "M09.eml",
+    "channel": null,
+    "domains": [
+      "harrow-mailer.top",
+      "willowmere-final.online"
+    ],
+    "excluded": [],
+    "purpose": "redirect parameter"
+  },
+  "M10": {
+    "file": "M10.eml",
+    "channel": null,
+    "domains": [
+      "svetlov-trade.ru",
+      "alba-verde.it"
+    ],
+    "excluded": [],
+    "purpose": ".ru and .it (no RDAP)"
+  },
+  "M11": {
+    "file": "M11.eml",
+    "channel": null,
+    "domains": [
+      "wierzba-handel.pl",
+      "nordlys-kontor.se",
+      "alpenrand.ch"
+    ],
+    "excluded": [],
+    "purpose": ".pl (RDAP), .se and .ch (no RDAP)"
+  },
+  "M12": {
+    "file": "M12.txt",
+    "channel": "whatsapp",
+    "domains": [
+      "quick-share-docs.online"
+    ],
+    "excluded": [],
+    "purpose": "pasted chat message, not e-mail"
+  },
+  "M13": {
+    "file": "M13.eml",
+    "channel": null,
+    "domains": [
+      "verbena-news.com",
+      "t.co",
+      "lnkd.in"
+    ],
+    "excluded": [
+      "t.co",
+      "lnkd.in"
+    ],
+    "purpose": "shorteners of platforms"
+  },
+  "M14": {
+    "file": "M14.eml",
+    "channel": null,
+    "domains": [
+      "github.com"
+    ],
+    "excluded": [
+      "github.com"
+    ],
+    "purpose": "a platform, no links"
+  },
+  "M15": {
+    "file": "M15.eml",
+    "channel": null,
+    "domains": [
+      "northgate-ledger.com"
+    ],
+    "excluded": [],
+    "purpose": "repeats M01's domain (cache)"
+  }
+}

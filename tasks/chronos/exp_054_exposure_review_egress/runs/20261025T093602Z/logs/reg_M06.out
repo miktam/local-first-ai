@@ -1,0 +1,283 @@
+{
+  "verdict": {
+    "score": 45,
+    "deterministic_score": 30,
+    "persona_points": 15,
+    "persona_reasons": [
+      "approach = generic_lure"
+    ],
+    "persona_gated": null,
+    "persona_ungated": null,
+    "lookups_missing": true,
+    "band": "suspicious",
+    "families": [
+      "infrastructure",
+      "persona"
+    ],
+    "single_family_cap": false,
+    "indicators": [
+      {
+        "id": "lookalike_domain",
+        "tier": null,
+        "evidence": [
+          "larkspur-ledger.com looks like ledger.com (brand-plus-affix; Ledger)"
+        ],
+        "data": {},
+        "points": 30,
+        "family": "infrastructure"
+      }
+    ],
+    "must_not": [],
+    "why": "larkspur-ledger.com looks like ledger.com.",
+    "action": "verify out of band",
+    "action_detail": "Check the sender through a channel you already trust before you reply, click or move to another app.",
+    "notes": [
+      "domain age for halden-marsh.es: unavailable, the .es registry (Red.es) gives whois only to registered IP addresses and runs no RDAP, so no creation date is available (a registry limit, not a check that failed; not scored)",
+      "domain age for iverly-kontor.de: unavailable, the .de registry (DENIC) publishes no creation date (a registry limit, not a check that failed; not scored)"
+    ],
+    "unresolved": [
+      "domain age for larkspur-ledger.com: rdap (rdap.verisign.com): domain not found; whois: domain not found",
+      "domain age for alder-quay-supply.com: rdap (rdap.verisign.com): domain not found; whois: domain not found",
+      "domain age for brisk-harbor-tools.net: rdap (rdap.verisign.com): domain not found; whois: domain not found",
+      "domain age for cobalt-fennel.info: rdap (rdap.identitydigital.services): domain not found; whois: IANA lists no whois server for .info",
+      "domain age for dunmore-atlas.online: rdap (rdap.radix.host): domain not found; whois: registry publishes no creation date",
+      "domain age for ember-larch.top: rdap (rdap.zdnsgtld.com): domain not found; whois: domain not found",
+      "domain age for fjord-pixel.xyz: rdap (rdap.centralnic.com): domain not found; whois: domain not found",
+      "domain age for granite-wren.io: whois: domain not found",
+      "domain age for juniper-ostoja.pl: rdap (rdap.dns.pl): domain not found; whois: registry publishes no creation date",
+      "domain age for kestrel-maison.fr: rdap (rdap.nic.fr): domain not found; whois: registry publishes no creation date",
+      "domain age for morrow-tide.net: skipped (lookup cap)",
+      "domain age for nimbus-quill.info: skipped (lookup cap)",
+      "domain age for oakhurst-vale.online: skipped (lookup cap)",
+      "domain age for pebble-strand.top: skipped (lookup cap)",
+      "domain age for quarry-finch.xyz: skipped (lookup cap)",
+      "domain age for rowan-brook.io: skipped (lookup cap)",
+      "domain age for sable-cove.es: skipped (lookup cap)",
+      "domain age for tamsin-hof.de: skipped (lookup cap)",
+      "domain age for meridian-digest.net: skipped (lookup cap)",
+      "mail authentication: no headers in the paste (export the original .eml to check it)",
+      "SPF/DMARC for meridian-digest.net not read: that would query nameservers the sender may run (re-run with --net full)",
+      "SPF/DMARC for larkspur-ledger.com not read: that would query nameservers the sender may run (re-run with --net full)"
+    ],
+    "manual_checks": [],
+    "persona": {
+      "ok": true,
+      "output": {
+        "approach": "generic_lure",
+        "asks": [
+          "click_link"
+        ],
+        "confidence": "high"
+      },
+      "error": null,
+      "model": "gemma4:26b",
+      "digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+      "ollama_version": "0.40.2",
+      "quantization": "Q4_K_M",
+      "runner": "llamacpp",
+      "prompt_sha256": "af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1",
+      "options": {
+        "temperature": 0,
+        "seed": 7,
+        "num_ctx": 8192,
+        "think": false
+      },
+      "latency_s": 1.6,
+      "prompt_chars": 1642,
+      "note": null
+    },
+    "message": {
+      "input": "eml",
+      "channel": "email",
+      "sender_name": "Digest",
+      "sender_addr": "news@meridian-digest.net",
+      "claim": null,
+      "date": "2026-10-23T10:00:00+02:00",
+      "subject": "Twenty links",
+      "observed": []
+    },
+    "complete": false,
+    "lookups_contacted": [
+      "rdap.centralnic.com",
+      "rdap.dns.pl",
+      "rdap.identitydigital.services",
+      "rdap.nic.fr",
+      "rdap.radix.host",
+      "rdap.verisign.com",
+      "rdap.zdnsgtld.com",
+      "whois:com",
+      "whois:fr",
+      "whois:io",
+      "whois:net",
+      "whois:online",
+      "whois:pl",
+      "whois:top",
+      "whois:xyz"
+    ],
+    "network": [
+      {
+        "kind": "https",
+        "host": "rdap.verisign.com",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "whois",
+        "host": "com",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "https",
+        "host": "rdap.verisign.com",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "whois",
+        "host": "com",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "https",
+        "host": "rdap.verisign.com",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "whois",
+        "host": "net",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "https",
+        "host": "rdap.identitydigital.services",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "https",
+        "host": "rdap.radix.host",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "whois",
+        "host": "online",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "https",
+        "host": "rdap.zdnsgtld.com",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "whois",
+        "host": "top",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "https",
+        "host": "rdap.centralnic.com",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "whois",
+        "host": "xyz",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "whois",
+        "host": "io",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "https",
+        "host": "rdap.dns.pl",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "whois",
+        "host": "pl",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "https",
+        "host": "rdap.nic.fr",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "whois",
+        "host": "fr",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "model",
+        "host": "127.0.0.1",
+        "sent": "message text",
+        "operator": "local model (not measured: ledger off)",
+        "recorded_by": "pipeline"
+      }
+    ],
+    "links_opened": null,
+    "integrity_error": false,
+    "fingerprint": {
+      "tool_version": "0.2.0",
+      "weights_version": "47d6894886cd",
+      "code_version": "7db3945",
+      "registry_sha256": "6ed8a3a18324",
+      "prompt_sha256": "af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1",
+      "model": "gemma4:26b",
+      "model_digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+      "ollama_version": "0.40.2",
+      "quantization": "Q4_K_M",
+      "runner": "llamacpp",
+      "leaf_ran": true,
+      "net": "registry",
+      "profile_sha256": "a9720170ec57",
+      "copy_index_sha256": null,
+      "python": "3.14.8",
+      "macos": "26.5.1",
+      "machine": "arm64"
+    },
+    "run_dir": "runs/20261025T093602Z/subject/runs/20261025-103622-email"
+  },
+  "join": {
+    "schema": "exposure-join/1",
+    "generated": "2026-10-25T10:36:22+01:00",
+    "subject_id": "demo",
+    "run_id": "20261025-103622-email",
+    "inventory_sha256": "061de63c20e17e594a7b24ca1c31835f85602d1508fcfdf732b0108b5db25565",
+    "channel": "email",
+    "band": "suspicious",
+    "complete": false,
+    "reach": {
+      "status": "item",
+      "item_id": "C-526e13",
+      "gap_surface": null,
+      "platform": "email",
+      "evidence": "delivered to a published address on vennholt-partners.example"
+    },
+    "hooks": [],
+    "suppressed": [],
+    "themes": [],
+    "unexplained_themes": [],
+    "authority_claimed": [],
+    "proposed_gaps": []
+  },
+  "run_id": "20261025-103622-email"
+}
+
+--- stderr ---

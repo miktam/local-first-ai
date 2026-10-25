@@ -1,0 +1,159 @@
+{
+  "verdict": {
+    "score": 45,
+    "deterministic_score": 30,
+    "persona_points": 15,
+    "persona_reasons": [
+      "approach = generic_lure"
+    ],
+    "persona_gated": null,
+    "persona_ungated": null,
+    "lookups_missing": true,
+    "band": "suspicious",
+    "families": [
+      "infrastructure",
+      "persona"
+    ],
+    "single_family_cap": false,
+    "indicators": [
+      {
+        "id": "lookalike_domain",
+        "tier": null,
+        "evidence": [
+          "northgate-ledger.com looks like ledger.com (brand-plus-affix; Ledger)"
+        ],
+        "data": {},
+        "points": 30,
+        "family": "infrastructure"
+      }
+    ],
+    "must_not": [],
+    "why": "northgate-ledger.com looks like ledger.com.",
+    "action": "verify out of band",
+    "action_detail": "Check the sender through a channel you already trust before you reply, click or move to another app.",
+    "notes": [],
+    "unresolved": [
+      "domain age for northgate-ledger.com: rdap (rdap.verisign.com): domain not found; whois: domain not found",
+      "mail authentication: no headers in the paste (export the original .eml to check it)",
+      "SPF/DMARC for northgate-ledger.com not read: that would query nameservers the sender may run (re-run with --net full)"
+    ],
+    "manual_checks": [],
+    "persona": {
+      "ok": true,
+      "output": {
+        "approach": "generic_lure",
+        "asks": [
+          "none"
+        ],
+        "confidence": "low"
+      },
+      "error": null,
+      "model": "gemma4:26b",
+      "digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+      "ollama_version": "0.40.2",
+      "quantization": "Q4_K_M",
+      "runner": "llamacpp",
+      "prompt_sha256": "af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1",
+      "options": {
+        "temperature": 0,
+        "seed": 7,
+        "num_ctx": 8192,
+        "think": false
+      },
+      "latency_s": 1.4,
+      "prompt_chars": 1094,
+      "note": null
+    },
+    "message": {
+      "input": "eml",
+      "channel": "email",
+      "sender_name": "Billing",
+      "sender_addr": "billing@northgate-ledger.com",
+      "claim": null,
+      "date": "2026-10-23T10:00:00+02:00",
+      "subject": "Statement ready",
+      "observed": []
+    },
+    "complete": false,
+    "lookups_contacted": [
+      "data.iana.org",
+      "rdap.verisign.com",
+      "whois:com"
+    ],
+    "network": [
+      {
+        "kind": "https",
+        "host": "data.iana.org",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "https",
+        "host": "rdap.verisign.com",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "whois",
+        "host": "com",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "model",
+        "host": "127.0.0.1",
+        "sent": "message text",
+        "operator": "local model (not measured: ledger off)",
+        "recorded_by": "pipeline"
+      }
+    ],
+    "links_opened": null,
+    "integrity_error": false,
+    "fingerprint": {
+      "tool_version": "0.2.0",
+      "weights_version": "47d6894886cd",
+      "code_version": "7db3945",
+      "registry_sha256": "6ed8a3a18324",
+      "prompt_sha256": "af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1",
+      "model": "gemma4:26b",
+      "model_digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+      "ollama_version": "0.40.2",
+      "quantization": "Q4_K_M",
+      "runner": "llamacpp",
+      "leaf_ran": true,
+      "net": "registry",
+      "profile_sha256": "a9720170ec57",
+      "copy_index_sha256": null,
+      "python": "3.14.8",
+      "macos": "26.5.1",
+      "machine": "arm64"
+    },
+    "run_dir": "runs/20261025T093602Z/subject/runs/20261025-103605-email"
+  },
+  "join": {
+    "schema": "exposure-join/1",
+    "generated": "2026-10-25T10:36:05+01:00",
+    "subject_id": "demo",
+    "run_id": "20261025-103605-email",
+    "inventory_sha256": "061de63c20e17e594a7b24ca1c31835f85602d1508fcfdf732b0108b5db25565",
+    "channel": "email",
+    "band": "suspicious",
+    "complete": false,
+    "reach": {
+      "status": "item",
+      "item_id": "C-526e13",
+      "gap_surface": null,
+      "platform": "email",
+      "evidence": "delivered to a published address on vennholt-partners.example"
+    },
+    "hooks": [],
+    "suppressed": [],
+    "themes": [],
+    "unexplained_themes": [],
+    "authority_claimed": [],
+    "proposed_gaps": []
+  },
+  "run_id": "20261025-103605-email"
+}
+
+--- stderr ---

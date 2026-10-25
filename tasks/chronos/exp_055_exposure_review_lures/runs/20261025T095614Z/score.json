@@ -1,0 +1,683 @@
+{
+  "arms": {
+    "P": {
+      "lures": 110,
+      "benign": 110,
+      "caught": 83,
+      "catch_rate": 0.755,
+      "catch_ci": [
+        0.666,
+        0.825
+      ],
+      "false_alarms": 14,
+      "false_alarm_rate": 0.127,
+      "false_alarm_ci": [
+        0.077,
+        0.202
+      ],
+      "likely_scam_on_genuine": 0,
+      "balanced_accuracy": 0.814,
+      "unanswered": 0,
+      "attribution_lures_with_items": 104,
+      "attribution_named_one": 56,
+      "attribution_rate": 0.538,
+      "attribution_mean_recall": 0.409
+    },
+    "R": {
+      "lures": 110,
+      "benign": 110,
+      "caught": 68,
+      "catch_rate": 0.618,
+      "catch_ci": [
+        0.525,
+        0.704
+      ],
+      "false_alarms": 0,
+      "false_alarm_rate": 0.0,
+      "false_alarm_ci": [
+        0.0,
+        0.034
+      ],
+      "likely_scam_on_genuine": 0,
+      "balanced_accuracy": 0.809,
+      "unanswered": 0,
+      "attribution_lures_with_items": 104,
+      "attribution_named_one": 56,
+      "attribution_rate": 0.538,
+      "attribution_mean_recall": 0.409
+    },
+    "G": {
+      "lures": 110,
+      "benign": 110,
+      "caught": 92,
+      "catch_rate": 0.836,
+      "catch_ci": [
+        0.756,
+        0.894
+      ],
+      "false_alarms": 8,
+      "false_alarm_rate": 0.073,
+      "false_alarm_ci": [
+        0.037,
+        0.137
+      ],
+      "likely_scam_on_genuine": 1,
+      "balanced_accuracy": 0.882,
+      "unanswered": 22,
+      "attribution_lures_with_items": 104,
+      "attribution_named_one": 88,
+      "attribution_rate": 0.846,
+      "attribution_mean_recall": 0.809
+    },
+    "O": {
+      "lures": 110,
+      "benign": 110,
+      "caught": 105,
+      "catch_rate": 0.955,
+      "catch_ci": [
+        0.898,
+        0.98
+      ],
+      "false_alarms": 6,
+      "false_alarm_rate": 0.055,
+      "false_alarm_ci": [
+        0.025,
+        0.114
+      ],
+      "likely_scam_on_genuine": 1,
+      "balanced_accuracy": 0.95,
+      "unanswered": 0,
+      "attribution_lures_with_items": 104,
+      "attribution_named_one": 104,
+      "attribution_rate": 1.0,
+      "attribution_mean_recall": 0.982
+    }
+  },
+  "H1_parry_catches_lures": {
+    "catch": 0.755,
+    "false_alarms": 0.127,
+    "verdict": "fail"
+  },
+  "H2_parry_names_the_exploited_items": {
+    "rate": 0.538,
+    "verdict": "fail"
+  },
+  "H3_glue_not_worse_than_local_model_alone": {
+    "P": 0.814,
+    "G": 0.882,
+    "verdict": "fail"
+  },
+  "H4_sovereignty_costs_at_most_0.10": {
+    "O_minus_P": 0.136,
+    "verdict": "fail"
+  },
+  "H5_the_model_step_earns_its_place": {
+    "lures_caught_only_with_model": 15,
+    "only_without": 0,
+    "p_one_sided": 0.0,
+    "extra_false_alarms": 14,
+    "verdict": "fail"
+  },
+  "breakdowns": {
+    "P": {
+      "lure_by_tactic_group": {
+        "Harborlight": {
+          "n": 10,
+          "flagged": 8
+        },
+        "Thornbeck": {
+          "n": 9,
+          "flagged": 7
+        },
+        "analysts'": {
+          "n": 9,
+          "flagged": 7
+        },
+        "supplier": {
+          "n": 9,
+          "flagged": 9
+        },
+        "Caldermere": {
+          "n": 9,
+          "flagged": 7
+        },
+        "colleague": {
+          "n": 9,
+          "flagged": 7
+        },
+        "registry": {
+          "n": 8,
+          "flagged": 7
+        },
+        "sailing": {
+          "n": 8,
+          "flagged": 5
+        },
+        "board": {
+          "n": 8,
+          "flagged": 6
+        },
+        "new": {
+          "n": 8,
+          "flagged": 4
+        },
+        "booking-page": {
+          "n": 8,
+          "flagged": 6
+        },
+        "account": {
+          "n": 8,
+          "flagged": 5
+        },
+        "alumni": {
+          "n": 7,
+          "flagged": 5
+        }
+      },
+      "lure_by_ask": {
+        "credentials": {
+          "n": 19,
+          "flagged": 13
+        },
+        "click": {
+          "n": 27,
+          "flagged": 21
+        },
+        "pay": {
+          "n": 18,
+          "flagged": 16
+        },
+        "reply": {
+          "n": 14,
+          "flagged": 9
+        },
+        "code": {
+          "n": 10,
+          "flagged": 5
+        },
+        "attachment": {
+          "n": 13,
+          "flagged": 13
+        },
+        "call": {
+          "n": 9,
+          "flagged": 6
+        }
+      },
+      "lure_by_domain_age": {
+        "new": {
+          "n": 72,
+          "flagged": 72
+        },
+        "old": {
+          "n": 24,
+          "flagged": 10
+        },
+        "no domain": {
+          "n": 14,
+          "flagged": 1
+        }
+      },
+      "genuine_by_domain_age": {
+        "old": {
+          "n": 72,
+          "flagged": 10
+        },
+        "young": {
+          "n": 20,
+          "flagged": 4
+        },
+        "no domain": {
+          "n": 18,
+          "flagged": 0
+        }
+      },
+      "by_channel_and_kind": {
+        "email/benign": {
+          "n": 93,
+          "flagged": 14
+        },
+        "whatsapp/benign": {
+          "n": 13,
+          "flagged": 0
+        },
+        "sms/benign": {
+          "n": 4,
+          "flagged": 0
+        },
+        "email/lure": {
+          "n": 89,
+          "flagged": 75
+        },
+        "whatsapp/lure": {
+          "n": 12,
+          "flagged": 6
+        },
+        "sms/lure": {
+          "n": 9,
+          "flagged": 2
+        }
+      }
+    },
+    "R": {
+      "lure_by_tactic_group": {
+        "Harborlight": {
+          "n": 10,
+          "flagged": 8
+        },
+        "Thornbeck": {
+          "n": 9,
+          "flagged": 6
+        },
+        "analysts'": {
+          "n": 9,
+          "flagged": 6
+        },
+        "supplier": {
+          "n": 9,
+          "flagged": 6
+        },
+        "Caldermere": {
+          "n": 9,
+          "flagged": 6
+        },
+        "colleague": {
+          "n": 9,
+          "flagged": 7
+        },
+        "registry": {
+          "n": 8,
+          "flagged": 4
+        },
+        "sailing": {
+          "n": 8,
+          "flagged": 4
+        },
+        "board": {
+          "n": 8,
+          "flagged": 4
+        },
+        "new": {
+          "n": 8,
+          "flagged": 4
+        },
+        "booking-page": {
+          "n": 8,
+          "flagged": 6
+        },
+        "account": {
+          "n": 8,
+          "flagged": 3
+        },
+        "alumni": {
+          "n": 7,
+          "flagged": 4
+        }
+      },
+      "lure_by_ask": {
+        "credentials": {
+          "n": 19,
+          "flagged": 13
+        },
+        "click": {
+          "n": 27,
+          "flagged": 18
+        },
+        "pay": {
+          "n": 18,
+          "flagged": 12
+        },
+        "reply": {
+          "n": 14,
+          "flagged": 8
+        },
+        "code": {
+          "n": 10,
+          "flagged": 4
+        },
+        "attachment": {
+          "n": 13,
+          "flagged": 9
+        },
+        "call": {
+          "n": 9,
+          "flagged": 4
+        }
+      },
+      "lure_by_domain_age": {
+        "new": {
+          "n": 72,
+          "flagged": 64
+        },
+        "old": {
+          "n": 24,
+          "flagged": 3
+        },
+        "no domain": {
+          "n": 14,
+          "flagged": 1
+        }
+      },
+      "genuine_by_domain_age": {
+        "old": {
+          "n": 72,
+          "flagged": 0
+        },
+        "young": {
+          "n": 20,
+          "flagged": 0
+        },
+        "no domain": {
+          "n": 18,
+          "flagged": 0
+        }
+      },
+      "by_channel_and_kind": {
+        "email/benign": {
+          "n": 93,
+          "flagged": 0
+        },
+        "whatsapp/benign": {
+          "n": 13,
+          "flagged": 0
+        },
+        "sms/benign": {
+          "n": 4,
+          "flagged": 0
+        },
+        "email/lure": {
+          "n": 89,
+          "flagged": 60
+        },
+        "whatsapp/lure": {
+          "n": 12,
+          "flagged": 6
+        },
+        "sms/lure": {
+          "n": 9,
+          "flagged": 2
+        }
+      }
+    },
+    "G": {
+      "lure_by_tactic_group": {
+        "Harborlight": {
+          "n": 10,
+          "flagged": 8
+        },
+        "Thornbeck": {
+          "n": 9,
+          "flagged": 5
+        },
+        "analysts'": {
+          "n": 9,
+          "flagged": 9
+        },
+        "supplier": {
+          "n": 9,
+          "flagged": 7
+        },
+        "Caldermere": {
+          "n": 9,
+          "flagged": 6
+        },
+        "colleague": {
+          "n": 9,
+          "flagged": 9
+        },
+        "registry": {
+          "n": 8,
+          "flagged": 8
+        },
+        "sailing": {
+          "n": 8,
+          "flagged": 3
+        },
+        "board": {
+          "n": 8,
+          "flagged": 7
+        },
+        "new": {
+          "n": 8,
+          "flagged": 8
+        },
+        "booking-page": {
+          "n": 8,
+          "flagged": 8
+        },
+        "account": {
+          "n": 8,
+          "flagged": 8
+        },
+        "alumni": {
+          "n": 7,
+          "flagged": 6
+        }
+      },
+      "lure_by_ask": {
+        "credentials": {
+          "n": 19,
+          "flagged": 16
+        },
+        "click": {
+          "n": 27,
+          "flagged": 21
+        },
+        "pay": {
+          "n": 18,
+          "flagged": 15
+        },
+        "reply": {
+          "n": 14,
+          "flagged": 11
+        },
+        "code": {
+          "n": 10,
+          "flagged": 10
+        },
+        "attachment": {
+          "n": 13,
+          "flagged": 12
+        },
+        "call": {
+          "n": 9,
+          "flagged": 7
+        }
+      },
+      "lure_by_domain_age": {
+        "new": {
+          "n": 72,
+          "flagged": 66
+        },
+        "old": {
+          "n": 24,
+          "flagged": 14
+        },
+        "no domain": {
+          "n": 14,
+          "flagged": 12
+        }
+      },
+      "genuine_by_domain_age": {
+        "old": {
+          "n": 72,
+          "flagged": 4
+        },
+        "young": {
+          "n": 20,
+          "flagged": 4
+        },
+        "no domain": {
+          "n": 18,
+          "flagged": 0
+        }
+      },
+      "by_channel_and_kind": {
+        "email/benign": {
+          "n": 93,
+          "flagged": 7
+        },
+        "whatsapp/benign": {
+          "n": 13,
+          "flagged": 1
+        },
+        "sms/benign": {
+          "n": 4,
+          "flagged": 0
+        },
+        "email/lure": {
+          "n": 89,
+          "flagged": 73
+        },
+        "whatsapp/lure": {
+          "n": 12,
+          "flagged": 10
+        },
+        "sms/lure": {
+          "n": 9,
+          "flagged": 9
+        }
+      }
+    },
+    "O": {
+      "lure_by_tactic_group": {
+        "Harborlight": {
+          "n": 10,
+          "flagged": 9
+        },
+        "Thornbeck": {
+          "n": 9,
+          "flagged": 9
+        },
+        "analysts'": {
+          "n": 9,
+          "flagged": 9
+        },
+        "supplier": {
+          "n": 9,
+          "flagged": 9
+        },
+        "Caldermere": {
+          "n": 9,
+          "flagged": 9
+        },
+        "colleague": {
+          "n": 9,
+          "flagged": 9
+        },
+        "registry": {
+          "n": 8,
+          "flagged": 8
+        },
+        "sailing": {
+          "n": 8,
+          "flagged": 6
+        },
+        "board": {
+          "n": 8,
+          "flagged": 8
+        },
+        "new": {
+          "n": 8,
+          "flagged": 8
+        },
+        "booking-page": {
+          "n": 8,
+          "flagged": 7
+        },
+        "account": {
+          "n": 8,
+          "flagged": 8
+        },
+        "alumni": {
+          "n": 7,
+          "flagged": 6
+        }
+      },
+      "lure_by_ask": {
+        "credentials": {
+          "n": 19,
+          "flagged": 18
+        },
+        "click": {
+          "n": 27,
+          "flagged": 23
+        },
+        "pay": {
+          "n": 18,
+          "flagged": 18
+        },
+        "reply": {
+          "n": 14,
+          "flagged": 14
+        },
+        "code": {
+          "n": 10,
+          "flagged": 10
+        },
+        "attachment": {
+          "n": 13,
+          "flagged": 13
+        },
+        "call": {
+          "n": 9,
+          "flagged": 9
+        }
+      },
+      "lure_by_domain_age": {
+        "new": {
+          "n": 72,
+          "flagged": 72
+        },
+        "old": {
+          "n": 24,
+          "flagged": 19
+        },
+        "no domain": {
+          "n": 14,
+          "flagged": 14
+        }
+      },
+      "genuine_by_domain_age": {
+        "old": {
+          "n": 72,
+          "flagged": 1
+        },
+        "young": {
+          "n": 20,
+          "flagged": 3
+        },
+        "no domain": {
+          "n": 18,
+          "flagged": 2
+        }
+      },
+      "by_channel_and_kind": {
+        "email/benign": {
+          "n": 93,
+          "flagged": 3
+        },
+        "whatsapp/benign": {
+          "n": 13,
+          "flagged": 3
+        },
+        "sms/benign": {
+          "n": 4,
+          "flagged": 0
+        },
+        "email/lure": {
+          "n": 89,
+          "flagged": 84
+        },
+        "whatsapp/lure": {
+          "n": 12,
+          "flagged": 12
+        },
+        "sms/lure": {
+          "n": 9,
+          "flagged": 9
+        }
+      }
+    }
+  }
+}
