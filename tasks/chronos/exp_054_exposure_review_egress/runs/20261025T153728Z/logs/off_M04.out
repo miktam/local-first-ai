@@ -1,0 +1,148 @@
+{
+  "verdict": {
+    "score": 65,
+    "deterministic_score": 50,
+    "persona_points": 15,
+    "persona_reasons": [
+      "approach = generic_lure"
+    ],
+    "persona_gated": null,
+    "persona_ungated": null,
+    "lookups_missing": true,
+    "band": "likely-scam",
+    "families": [
+      "infrastructure",
+      "persona",
+      "steering"
+    ],
+    "single_family_cap": false,
+    "indicators": [
+      {
+        "id": "display_name_mismatch",
+        "tier": null,
+        "evidence": [
+          "display name 'LinkedIn Security' names LinkedIn, but the address is @linkedln-verify.com, not linkedin.com"
+        ],
+        "data": {},
+        "points": 25,
+        "family": "infrastructure"
+      },
+      {
+        "id": "brand_link_mismatch",
+        "tier": null,
+        "evidence": [
+          "the sender is 'LinkedIn Security', and the link https://linkedln-verify.com/login goes to linkedln-verify.com, not linkedin.com"
+        ],
+        "data": {},
+        "points": 25,
+        "family": "steering"
+      }
+    ],
+    "must_not": [],
+    "why": "The display name doesn't match the address; the sender is 'LinkedIn Security', but links elsewhere.",
+    "action": "block + report",
+    "action_detail": "Don't reply, don't click, don't open attachments. Block and report it on the platform it came from. If you ever need the organisation it names, go to its own site directly.",
+    "notes": [],
+    "unresolved": [
+      "domain age for linkedln-verify.com: offline and not cached",
+      "mail authentication: no headers in the paste (export the original .eml to check it)",
+      "DNS for linkedln-verify.com: offline and not cached"
+    ],
+    "manual_checks": [],
+    "persona": {
+      "ok": true,
+      "output": {
+        "approach": "generic_lure",
+        "asks": [
+          "click_link"
+        ],
+        "confidence": "high"
+      },
+      "error": null,
+      "model": "gemma4:26b",
+      "digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+      "ollama_version": "0.40.2",
+      "quantization": "Q4_K_M",
+      "runner": "llamacpp",
+      "prompt_sha256": "af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1",
+      "options": {
+        "temperature": 0,
+        "seed": 7,
+        "num_ctx": 8192,
+        "think": false
+      },
+      "latency_s": 0.8,
+      "prompt_chars": 1152,
+      "note": null
+    },
+    "message": {
+      "input": "eml",
+      "channel": "email",
+      "sender_name": "LinkedIn Security",
+      "sender_addr": "security@linkedln-verify.com",
+      "claim": null,
+      "date": "2026-10-23T10:00:00+02:00",
+      "subject": "Account check",
+      "observed": []
+    },
+    "complete": false,
+    "lookups_contacted": [],
+    "network": [
+      {
+        "kind": "model",
+        "host": "127.0.0.1",
+        "sent": "message text",
+        "operator": "local model (not measured: ledger off)",
+        "recorded_by": "pipeline"
+      }
+    ],
+    "links_opened": null,
+    "integrity_error": false,
+    "fingerprint": {
+      "tool_version": "0.2.0",
+      "weights_version": "e8b913e3089b",
+      "code_version": "9923148-dirty",
+      "registry_sha256": "6ed8a3a18324",
+      "prompt_sha256": "af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1",
+      "model": "gemma4:26b",
+      "model_digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+      "ollama_version": "0.40.2",
+      "quantization": "Q4_K_M",
+      "runner": "llamacpp",
+      "leaf_ran": true,
+      "net": "none",
+      "profile_sha256": "a9720170ec57",
+      "copy_index_sha256": null,
+      "python": "3.14.8",
+      "macos": "26.5.1",
+      "machine": "arm64"
+    },
+    "run_dir": "runs/20261025T153728Z/subject/runs/20261025-163815-email"
+  },
+  "join": {
+    "schema": "exposure-join/1",
+    "generated": "2026-10-25T16:38:15+01:00",
+    "subject_id": "demo",
+    "run_id": "20261025-163815-email",
+    "inventory_sha256": "2de427b114a3994c7a0e5108c4a47caef58502e790a823dad7217f31c11b798c",
+    "channel": "email",
+    "band": "likely-scam",
+    "complete": false,
+    "reach": {
+      "status": "item",
+      "item_id": "C-526e13",
+      "gap_surface": null,
+      "platform": "email",
+      "evidence": "delivered to a published address on vennholt-partners.example"
+    },
+    "hooks": [],
+    "suppressed": [],
+    "themes": [],
+    "unexplained_themes": [],
+    "authority_claimed": [],
+    "proposed_gaps": []
+  },
+  "run_id": "20261025-163815-email"
+}
+
+--- stderr ---

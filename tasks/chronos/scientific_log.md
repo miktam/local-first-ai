@@ -2307,3 +2307,4 @@ Finding while registering: exp_007's fixtures cycle the same 31 sentences, so th
 
 *Evidence: `exp_055_exposure_review_lures/` (five invented domains found registered were replaced by `.example` names in the published copy; the run used the originals, which are hashed). Status: Complete. Closed 2026-10-25.*
 
+**Exp 054, note 2026-10-25 (later the same day).** At Andrei's go, Parry stopped ageing platform link shorteners (`t.co`, `lnkd.in`). The registered audit, re-run unchanged against the fixed code (`runs/20261025T153728Z`), passes H1–H5 with both controls passing. The verdict above stands as registered for the code it tested.

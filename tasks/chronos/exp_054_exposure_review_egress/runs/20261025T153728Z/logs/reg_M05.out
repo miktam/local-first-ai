@@ -1,0 +1,164 @@
+{
+  "verdict": {
+    "score": 35,
+    "deterministic_score": 20,
+    "persona_points": 15,
+    "persona_reasons": [
+      "approach = generic_lure"
+    ],
+    "persona_gated": null,
+    "persona_ungated": "persona leaf (approach = generic_lure) counted although the rules scored 20: a domain-age or DNS check didn't run (see Checks not run), so the rules' own evidence is incomplete",
+    "lookups_missing": true,
+    "band": "suspicious",
+    "families": [
+      "persona",
+      "steering"
+    ],
+    "single_family_cap": false,
+    "indicators": [
+      {
+        "id": "link_text_mismatch",
+        "tier": null,
+        "evidence": [
+          "link shows vennholt-partners.example but goes to vennholt-portal-access.xyz"
+        ],
+        "data": {},
+        "points": 20,
+        "family": "steering"
+      }
+    ],
+    "must_not": [],
+    "why": "A link shows one domain and goes to another.",
+    "action": "verify out of band",
+    "action_detail": "Check the sender through a channel you already trust before you reply, click or move to another app.",
+    "notes": [
+      "cites your public footprint: vennholt-partners.example/portal (personalisation hook; not scored)",
+      "persona leaf (approach = generic_lure) counted although the rules scored 20: a domain-age or DNS check didn't run (see Checks not run), so the rules' own evidence is incomplete"
+    ],
+    "unresolved": [
+      "domain age for vennholt-portal-access.xyz: rdap (rdap.centralnic.com): domain not found; whois: domain not found",
+      "mail authentication: no headers in the paste (export the original .eml to check it)"
+    ],
+    "manual_checks": [],
+    "persona": {
+      "ok": true,
+      "output": {
+        "approach": "generic_lure",
+        "asks": [
+          "click_link"
+        ],
+        "confidence": "high"
+      },
+      "error": null,
+      "model": "gemma4:26b",
+      "digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+      "ollama_version": "0.40.2",
+      "quantization": "Q4_K_M",
+      "runner": "llamacpp",
+      "prompt_sha256": "af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1",
+      "options": {
+        "temperature": 0,
+        "seed": 7,
+        "num_ctx": 8192,
+        "think": false
+      },
+      "latency_s": 1.3,
+      "prompt_chars": 1112,
+      "note": null
+    },
+    "message": {
+      "input": "eml",
+      "channel": "email",
+      "sender_name": "Team",
+      "sender_addr": "team@vennholt-partners.example",
+      "claim": null,
+      "date": "2026-10-23T10:00:00+02:00",
+      "subject": "Portal",
+      "observed": []
+    },
+    "complete": false,
+    "lookups_contacted": [
+      "rdap.centralnic.com",
+      "whois:xyz"
+    ],
+    "network": [
+      {
+        "kind": "https",
+        "host": "rdap.centralnic.com",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "whois",
+        "host": "xyz",
+        "sent": "domain names",
+        "recorded_by": "lookups.network_log"
+      },
+      {
+        "kind": "model",
+        "host": "127.0.0.1",
+        "sent": "message text",
+        "operator": "local model (not measured: ledger off)",
+        "recorded_by": "pipeline"
+      }
+    ],
+    "links_opened": null,
+    "integrity_error": false,
+    "fingerprint": {
+      "tool_version": "0.2.0",
+      "weights_version": "e8b913e3089b",
+      "code_version": "9923148-dirty",
+      "registry_sha256": "6ed8a3a18324",
+      "prompt_sha256": "af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1",
+      "model": "gemma4:26b",
+      "model_digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+      "ollama_version": "0.40.2",
+      "quantization": "Q4_K_M",
+      "runner": "llamacpp",
+      "leaf_ran": true,
+      "net": "registry",
+      "profile_sha256": "a9720170ec57",
+      "copy_index_sha256": null,
+      "python": "3.14.8",
+      "macos": "26.5.1",
+      "machine": "arm64"
+    },
+    "run_dir": "runs/20261025T153728Z/subject/runs/20261025-163740-email"
+  },
+  "join": {
+    "schema": "exposure-join/1",
+    "generated": "2026-10-25T16:37:40+01:00",
+    "subject_id": "demo",
+    "run_id": "20261025-163740-email",
+    "inventory_sha256": "2de427b114a3994c7a0e5108c4a47caef58502e790a823dad7217f31c11b798c",
+    "channel": "email",
+    "band": "suspicious",
+    "complete": false,
+    "reach": {
+      "status": "item",
+      "item_id": "C-526e13",
+      "gap_surface": null,
+      "platform": "email",
+      "evidence": "delivered to a published address on vennholt-partners.example"
+    },
+    "hooks": [
+      {
+        "item_id": "A-cfcf47",
+        "group": "artifact",
+        "kind": "site",
+        "level": "strong",
+        "match": "link-domain",
+        "matched": "vennholt-partners.example",
+        "theme": null
+      }
+    ],
+    "suppressed": [],
+    "themes": [],
+    "unexplained_themes": [],
+    "authority_claimed": [],
+    "proposed_gaps": []
+  },
+  "run_id": "20261025-163740-email"
+}
+
+--- stderr ---

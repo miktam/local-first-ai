@@ -9,7 +9,7 @@ Aprimerose's Exposure Review tells each client, in writing, what leaves the mach
 - the client's DNS resolver never sees a domain from their messages;
 - offline sends nothing.
 
-One fails: X's and LinkedIn's link shorteners (`t.co`, `lnkd.in`) are sent to registries, although the documents say platforms are never looked up. Details: [RESULT.md](RESULT.md).
+One failed: X's and LinkedIn's link shorteners (`t.co`, `lnkd.in`) were sent to registries, although the documents say platforms are never looked up. Parry was fixed the same day, and the audit, re-run unchanged, passes all five (`runs/20261025T153728Z`). Details: [RESULT.md](RESULT.md).
 
 | File | What it is |
 |---|---|

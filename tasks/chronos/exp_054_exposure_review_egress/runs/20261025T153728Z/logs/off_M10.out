@@ -1,0 +1,128 @@
+{
+  "verdict": {
+    "score": 15,
+    "deterministic_score": 0,
+    "persona_points": 15,
+    "persona_reasons": [
+      "approach = generic_lure"
+    ],
+    "persona_gated": null,
+    "persona_ungated": "persona leaf (approach = generic_lure) counted although the rules scored 0: a domain-age or DNS check didn't run (see Checks not run), so the rules' own evidence is incomplete",
+    "lookups_missing": true,
+    "band": "benign",
+    "families": [
+      "persona"
+    ],
+    "single_family_cap": false,
+    "indicators": [],
+    "must_not": [],
+    "why": "No indicator fired: nothing in the headers, domains, links or wording matches a known approach.",
+    "action": "incomplete",
+    "action_detail": "Nothing fired, but 4 checks did not run (listed above). This is not a clearance until they run. To complete it: Re-run with --net registry (the default): 2 domain ages weren't looked up, because the run was offline and the cache didn't have them. Check the original .eml instead of a paste (Gmail: ⋮ → Show original → Download): a paste carries no authentication headers. Re-run with --net full: the DNS answers weren't in the cache.",
+    "notes": [
+      "persona leaf (approach = generic_lure) counted although the rules scored 0: a domain-age or DNS check didn't run (see Checks not run), so the rules' own evidence is incomplete"
+    ],
+    "unresolved": [
+      "domain age for alba-verde.it: offline and not cached",
+      "domain age for svetlov-trade.ru: offline and not cached",
+      "mail authentication: no headers in the paste (export the original .eml to check it)",
+      "DNS for svetlov-trade.ru: offline and not cached"
+    ],
+    "manual_checks": [],
+    "persona": {
+      "ok": true,
+      "output": {
+        "approach": "generic_lure",
+        "asks": [
+          "click_link"
+        ],
+        "confidence": "medium"
+      },
+      "error": null,
+      "model": "gemma4:26b",
+      "digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+      "ollama_version": "0.40.2",
+      "quantization": "Q4_K_M",
+      "runner": "llamacpp",
+      "prompt_sha256": "af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1",
+      "options": {
+        "temperature": 0,
+        "seed": 7,
+        "num_ctx": 8192,
+        "think": false
+      },
+      "latency_s": 0.9,
+      "prompt_chars": 1093,
+      "note": null
+    },
+    "message": {
+      "input": "eml",
+      "channel": "email",
+      "sender_name": "Konto",
+      "sender_addr": "konto@svetlov-trade.ru",
+      "claim": null,
+      "date": "2026-10-23T10:00:00+02:00",
+      "subject": "Dokument",
+      "observed": []
+    },
+    "complete": false,
+    "lookups_contacted": [],
+    "network": [
+      {
+        "kind": "model",
+        "host": "127.0.0.1",
+        "sent": "message text",
+        "operator": "local model (not measured: ledger off)",
+        "recorded_by": "pipeline"
+      }
+    ],
+    "links_opened": null,
+    "integrity_error": false,
+    "fingerprint": {
+      "tool_version": "0.2.0",
+      "weights_version": "e8b913e3089b",
+      "code_version": "9923148-dirty",
+      "registry_sha256": "6ed8a3a18324",
+      "prompt_sha256": "af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1",
+      "model": "gemma4:26b",
+      "model_digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+      "ollama_version": "0.40.2",
+      "quantization": "Q4_K_M",
+      "runner": "llamacpp",
+      "leaf_ran": true,
+      "net": "none",
+      "profile_sha256": "a9720170ec57",
+      "copy_index_sha256": null,
+      "python": "3.14.8",
+      "macos": "26.5.1",
+      "machine": "arm64"
+    },
+    "run_dir": "runs/20261025T153728Z/subject/runs/20261025-163824-email"
+  },
+  "join": {
+    "schema": "exposure-join/1",
+    "generated": "2026-10-25T16:38:24+01:00",
+    "subject_id": "demo",
+    "run_id": "20261025-163824-email",
+    "inventory_sha256": "2de427b114a3994c7a0e5108c4a47caef58502e790a823dad7217f31c11b798c",
+    "channel": "email",
+    "band": "benign",
+    "complete": false,
+    "reach": {
+      "status": "item",
+      "item_id": "C-526e13",
+      "gap_surface": null,
+      "platform": "email",
+      "evidence": "delivered to a published address on vennholt-partners.example"
+    },
+    "hooks": [],
+    "suppressed": [],
+    "themes": [],
+    "unexplained_themes": [],
+    "authority_claimed": [],
+    "proposed_gaps": []
+  },
+  "run_id": "20261025-163824-email"
+}
+
+--- stderr ---

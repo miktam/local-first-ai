@@ -45,3 +45,17 @@ Parry excludes a domain from lookups when it is trusted, meaning a platform, the
 - **For the product page.** It can say, with evidence: during a review, nothing leaves the machine but registry lookups for at most 12 domains per message the client brings. The model never leaves the machine, and the client's DNS resolver never sees the domains in their messages.
 - **A regression check.** `kit/run54.py` plus `kit/score54.py` run in about a minute. Run before every Exposure Review release, they keep these claims true.
 - **The M15 repeat** shows the lookup cache did not prevent a second disclosure of the same domain within a run. That is worth a look by Parry's owner (descriptive, no claim covers it).
+
+## Addendum, 2026-10-25: the fix, and the audit re-run
+
+At Andrei's go, Parry's `indicators.age_candidates` now skips platform link shorteners (`SHORTENERS_OFF_PLATFORM`: `t.co`, `lnkd.in`), as it already skipped free-hosting suffixes. A test pins it (`tests/test_indicator_fixes.py::test_platform_shorteners_never_aged`). Parry's suite passes 673/673, and Exposure Review's 599 (1 skipped).
+
+The registered audit, re-run unchanged against the fixed code (`runs/20261025T153728Z`):
+- **Controls:** both pass.
+- **H1–H5:** all pass.
+- **M13:** now discloses only its sender (`verbena-news.com`).
+- **M07:** still discloses nothing.
+- **M06:** still discloses 10 of 21.
+
+The written claim, *platforms are never looked up*, is now true as measured. The verdict above stays as registered: the code under test failed H4.
+

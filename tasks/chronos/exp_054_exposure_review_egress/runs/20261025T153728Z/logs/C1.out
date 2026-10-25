@@ -1,0 +1,173 @@
+{
+ "score": 45,
+ "deterministic_score": 30,
+ "persona_points": 15,
+ "persona_reasons": [
+  "approach = generic_lure"
+ ],
+ "persona_gated": null,
+ "persona_ungated": null,
+ "lookups_missing": true,
+ "band": "suspicious",
+ "families": [
+  "infrastructure",
+  "persona"
+ ],
+ "single_family_cap": false,
+ "indicators": [
+  {
+   "id": "lookalike_domain",
+   "tier": null,
+   "evidence": [
+    "northgate-ledger.com looks like ledger.com (brand-plus-affix; Ledger)"
+   ],
+   "data": {},
+   "points": 30,
+   "family": "infrastructure"
+  }
+ ],
+ "must_not": [],
+ "why": "northgate-ledger.com looks like ledger.com.",
+ "action": "verify out of band",
+ "action_detail": "Check the sender through a channel you already trust before you reply, click or move to another app.",
+ "notes": [
+  "copy-echo check off: no copy index for this profile yet (check.py --doctor says how to build it)"
+ ],
+ "unresolved": [
+  "domain age for northgate-ledger.com: rdap (rdap.verisign.com): domain not found; whois: domain not found",
+  "mail authentication: no headers in the paste (export the original .eml to check it)"
+ ],
+ "manual_checks": [],
+ "persona": {
+  "ok": true,
+  "output": {
+   "approach": "generic_lure",
+   "asks": [
+    "none"
+   ],
+   "confidence": "low"
+  },
+  "error": null,
+  "model": "gemma4:26b",
+  "digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+  "ollama_version": "0.40.2",
+  "quantization": "Q4_K_M",
+  "runner": "llamacpp",
+  "prompt_sha256": "af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1",
+  "options": {
+   "temperature": 0,
+   "seed": 7,
+   "num_ctx": 8192,
+   "think": false
+  },
+  "latency_s": 0.8,
+  "prompt_chars": 1094,
+  "note": null
+ },
+ "message": {
+  "input": "eml",
+  "channel": "email",
+  "sender_name": "Billing",
+  "sender_addr": "billing@northgate-ledger.com",
+  "claim": null,
+  "date": "2026-10-23T10:00:00+02:00",
+  "subject": "Statement ready",
+  "observed": []
+ },
+ "complete": false,
+ "lookups_contacted": [
+  "data.iana.org",
+  "rdap.verisign.com",
+  "whois.iana.org",
+  "whois.verisign-grs.com",
+  "system resolver 192.168.18.1",
+  "a.gtld-servers.net"
+ ],
+ "network": [
+  {
+   "kind": "https",
+   "host": "data.iana.org",
+   "sent": [],
+   "operator": "IANA (RDAP bootstrap file)",
+   "policy_tier": "full"
+  },
+  {
+   "kind": "https",
+   "host": "rdap.verisign.com",
+   "sent": [
+    "northgate-ledger.com"
+   ],
+   "operator": "registry for .com",
+   "policy_tier": "full"
+  },
+  {
+   "kind": "whois",
+   "host": "whois.iana.org",
+   "sent": [
+    ".com"
+   ],
+   "operator": "IANA: which whois server runs .com (plaintext whois)",
+   "policy_tier": "full"
+  },
+  {
+   "kind": "whois",
+   "host": "whois.verisign-grs.com",
+   "sent": [
+    "northgate-ledger.com"
+   ],
+   "operator": "registry for .com (plaintext whois)",
+   "policy_tier": "full"
+  },
+  {
+   "kind": "dns",
+   "host": "system resolver 192.168.18.1",
+   "sent": [
+    "com",
+    "northgate-ledger.com",
+    "_dmarc.northgate-ledger.com"
+   ],
+   "operator": "system resolver 192.168.18.1, then each name's own nameservers (the sender may run them)",
+   "policy_tier": "full"
+  },
+  {
+   "kind": "dns",
+   "host": "a.gtld-servers.net",
+   "sent": [
+    "northgate-ledger.com"
+   ],
+   "operator": "TLD nameserver (delegation only)",
+   "policy_tier": "full"
+  },
+  {
+   "kind": "model",
+   "host": "127.0.0.1",
+   "sent": "message text",
+   "operator": "local model gemma4:26b",
+   "policy_tier": "full"
+  }
+ ],
+ "links_opened": 0,
+ "integrity_error": false,
+ "fingerprint": {
+  "tool_version": "0.2.0",
+  "weights_version": "e8b913e3089b",
+  "code_version": "9923148-dirty",
+  "registry_sha256": "6ed8a3a18324",
+  "prompt_sha256": "af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1",
+  "model": "gemma4:26b",
+  "model_digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+  "ollama_version": "0.40.2",
+  "quantization": "Q4_K_M",
+  "runner": "llamacpp",
+  "leaf_ran": true,
+  "net": "full",
+  "profile_sha256": "99beb0d28bfa",
+  "copy_index_sha256": null,
+  "python": "3.14.8",
+  "macos": "26.5.1",
+  "machine": "arm64"
+ },
+ "run_dir": "/Users/miktam02/.openclaw/workspace/tools/parry/runs/20261025-163832-m01"
+}
+
+--- stderr ---
