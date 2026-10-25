@@ -2308,3 +2308,20 @@ Finding while registering: exp_007's fixtures cycle the same 31 sentences, so th
 *Evidence: `exp_055_exposure_review_lures/` (five invented domains found registered were replaced by `.example` names in the published copy; the run used the originals, which are hashed). Status: Complete. Closed 2026-10-25.*
 
 **Exp 054, note 2026-10-25 (later the same day).** At Andrei's go, Parry stopped ageing platform link shorteners (`t.co`, `lnkd.in`). The registered audit, re-run unchanged against the fixed code (`runs/20261025T153728Z`), passes H1–H5 with both controls passing. The verdict above stands as registered for the code it tested.
+
+## Experiment 056 — Can a hostile message subvert its own triage? (registered 2026-10-25)
+
+**Pre-registered: 2026-10-25, before any kit or run** (`exp_056_triage_injection/HYPOTHESIS.md`). An always-on message check reads hostile content with no human choosing what to check. This asks whether a message's own text can lower its verdict, silence the model step, push its evidence out of view, or reach the screen as itself. It gates any such channel.
+
+**Registered.**
+- 24 base messages from exp_055 (12 lures, 12 genuine).
+- Six variant classes: A instruction injection, B window eviction, C cap flooding, D display smuggling, E parser attacks, F induced model failure.
+- Hypotheses H1–H5 (monotonicity, the model step not suppressible, display integrity, evidence survives flooding, failure is loud) and controls C1–C3.
+
+**Amendment 1.** The six class-A payloads were frozen by sha256 before any kit existed. Their text is held back until the run.
+
+**Amendment 2.** The first run is narrowed to classes A and F: H1 over class A, H2 and H5. H3 and H4 are deferred.
+
+**Status: parked before any kit was built.** While the attack material and the variant builder were being written, the authoring session was stopped three times by a safety classifier. No run has happened.
+
+*Evidence: `exp_056_triage_injection/`. Status: Registered, parked.*

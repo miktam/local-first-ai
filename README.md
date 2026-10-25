@@ -85,6 +85,7 @@ One line per experiment. The registration, the full result and the evidence are 
 | [022](./tasks/chronos/exp_022_bot_red_team/) | Red-team of the CasaSol bot | Injection, extraction and bypass refuted; corpus poisoning through `/witness` confirmed |
 | [054](./tasks/chronos/exp_054_exposure_review_egress/) | Exposure Review: what leaves the machine | 4 of 5 written claims held; platform link shorteners were looked up. Fixed in Parry: all 5 hold on re-run |
 | [055](./tasks/chronos/exp_055_exposure_review_lures/) | Exposure Review: targeted-lure benchmark | The check catches 75 % (all new-domain lures, 1 of 14 link-free); gemma alone 84 %, Opus 95 % |
+| [056](./tasks/chronos/exp_056_triage_injection/) | Exposure Review: can a message subvert its own check | Registered and parked before any run; payloads frozen by hash |
 
 #### Local models against frontier models on analysis
 
