@@ -1,0 +1,40 @@
+{
+  "n_reached": 120,
+  "n_compared": 120,
+  "n_clean_for_time": 120,
+  "H1_mlx_10pct_faster": {
+    "median_wait_G": 27.267101049423218,
+    "median_wait_M": 30.013829350471497,
+    "ratio_M_over_G": 1.1007341519756602,
+    "p90_G": 45.0730218410492,
+    "p90_M": 55.324826669692996,
+    "M_faster_pairs": 45,
+    "verdict": "fail"
+  },
+  "H2_checks_not_worse": {
+    "flagged_G": 12,
+    "flagged_M": 13,
+    "only_G": 2,
+    "only_M": 3,
+    "mcnemar_p_two_sided": 1.0,
+    "verdict": "pass"
+  },
+  "violations_by_check": {
+    "G": {
+      "V2": 9,
+      "V3": 3,
+      "V5": 1
+    },
+    "M": {
+      "V2": 9,
+      "V3": 5
+    }
+  },
+  "gen_tokens_median": {
+    "G": 1224.0,
+    "M": 1253.5
+  },
+  "H3_read30_not_worse": {
+    "verdict": "waiting for READ30_marks.json"
+  }
+}

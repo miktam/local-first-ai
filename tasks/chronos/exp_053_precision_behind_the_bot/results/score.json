@@ -1,0 +1,72 @@
+{
+  "n": 118,
+  "arms": {
+    "G4": {
+      "median_wait_s": 32.59415543079376,
+      "p90_wait_s": 58.59931969642639,
+      "median_gen_tokens": 1439.5,
+      "flagged": 4,
+      "errors": 0,
+      "by_check": {
+        "V1": 3,
+        "V2": 0,
+        "V3": 0,
+        "V4": 0,
+        "V5": 1
+      }
+    },
+    "GQ": {
+      "median_wait_s": 29.198036432266235,
+      "p90_wait_s": 57.721597623825076,
+      "median_gen_tokens": 1376.0,
+      "flagged": 10,
+      "errors": 0,
+      "by_check": {
+        "V1": 4,
+        "V2": 0,
+        "V3": 4,
+        "V4": 0,
+        "V5": 2
+      },
+      "wait_ratio_to_G4": 0.8958058905456713,
+      "flags_only_G4": 1,
+      "flags_only_this": 7,
+      "mcnemar_p": 0.0703125
+    },
+    "G8": {
+      "median_wait_s": 38.05222296714783,
+      "p90_wait_s": 66.12303230762481,
+      "median_gen_tokens": 1305.5,
+      "flagged": 8,
+      "errors": 0,
+      "by_check": {
+        "V1": 4,
+        "V2": 0,
+        "V3": 4,
+        "V4": 0,
+        "V5": 0
+      },
+      "wait_ratio_to_G4": 1.1674554061676188,
+      "flags_only_G4": 1,
+      "flags_only_this": 5,
+      "mcnemar_p": 0.21875
+    }
+  },
+  "decision": {
+    "per_candidate": {
+      "G8": {
+        "H_quality": false,
+        "speed_ok": false,
+        "checks_ok": false,
+        "adopt": false
+      },
+      "GQ": {
+        "H_quality": false,
+        "speed_ok": true,
+        "checks_ok": false,
+        "adopt": false
+      }
+    },
+    "adopt": "keep G4"
+  }
+}

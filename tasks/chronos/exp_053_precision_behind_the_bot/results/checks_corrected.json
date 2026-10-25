@@ -1,0 +1,35 @@
+{
+  "note": "exp_053 correction after the run, descriptive: V1 ignores capitalised words (langcheck.detect_v2, 914/916 on the labelled enquiries against 913), V3 matches whole words only. The registered check stays in score.json.",
+  "arms": {
+    "G4": {
+      "flagged": 1,
+      "by_check": {
+        "V1": 0,
+        "V2": 0,
+        "V3": 0,
+        "V4": 0,
+        "V5": 1
+      }
+    },
+    "GQ": {
+      "flagged": 3,
+      "by_check": {
+        "V1": 1,
+        "V2": 0,
+        "V3": 0,
+        "V4": 0,
+        "V5": 2
+      }
+    },
+    "G8": {
+      "flagged": 0,
+      "by_check": {
+        "V1": 0,
+        "V2": 0,
+        "V3": 0,
+        "V4": 0,
+        "V5": 0
+      }
+    }
+  }
+}

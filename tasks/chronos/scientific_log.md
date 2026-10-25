@@ -2201,3 +2201,59 @@ Finding while registering: exp_007's fixtures cycle the same 31 sentences, so th
 *Evidence: `exp_051_mlx_same_text/` (HYPOTHESIS.md with Amendment 1, RESULT.md, kit/, natural/, runs/20261024T085524Z/, aborted/).*
 *Status: Complete. Closed 2026-10-24.*
 
+---
+
+## Experiment 052 — The live bot's answering model on MLX against Ollama (2026-10-24)
+
+**Pre-registered: 2026-10-24, before any measured answer** (`exp_052_bot_on_mlx/HYPOTHESIS.md`). This follows Exp 051, whose registered next step was a test on the bot itself.
+
+**Setup.**
+- **Questions.** 120 Fable-written messages in seven languages. Each was run once through the CasaSol bot's own code: router, retrieval, then the exact request `generate_response` builds. So both arms got identical input.
+- **Arms.**
+  - **G:** Ollama 0.40.2, `gemma4:26b` Q4_K_M, the bot's call (temperature 0.3, thinking on by Ollama's default, context 8192).
+  - **M:** an mlx-lm 0.32.2 server with the OptiQ build, thinking on.
+- **Kept from the bot:** its 120 s timeout and one retry.
+- **Integrity:** the Ollama log was checked for outside requests. 120 clean answers per arm.
+
+**Result.**
+- **H1 FAIL:** MLX's median wait was 30.0 s against 27.3 s, so 10 % slower (p90 55 against 45 s). Each answer generates about 1,200 thinking-and-answer tokens, and MLX generates slightly slower.
+- **H2 PASS:** flagged by code, 13 against 12.
+- **H3 (Amendment 1, blind Opus judges on all 120 pairs, by Andrei's choice):** MLX preferred 39 against 22, 59 ties (sign p 0.04). Answers wrong: MLX 7, Ollama 13. Four of Ollama's 13 presented a community report as its own visit.
+- **Decision (registered):** stay on Ollama.
+
+**Reading.** On the bot's workload, short prompts with long thinking, MLX's faster prompt reading does not pay. Its answers read better, which pointed at the weights; Exp 053 tests that.
+
+*Evidence: `exp_052_bot_on_mlx/` (code, registration, questions, aggregates; private files by sha256).*
+*Status: Complete. Closed 2026-10-24.*
+
+---
+
+## Experiment 053 — Higher-precision gemma builds behind the live bot (2026-10-24)
+
+**Pre-registered: 2026-10-24, before any measured answer** (`exp_053_precision_behind_the_bot/HYPOTHESIS.md`).
+
+**Setup.**
+- **The bot.** It ran as fixed that day (CasaSol f37b8a7): no "I saw" for community reports; a labelled general rule when retrieval has nothing; CasaSol's own fact-checked notes on non-resident tax and the rental deposit.
+- **Questions.** 120 fresh messages, none close to Exp 052's; 118 reach the model.
+- **Arms.** Three Ollama builds, each called as the bot calls it: the live Q4_K_M (G4), `26b-a4b-it-qat` (GQ, Q4_0 QAT) and `26b-a4b-it-q8_0` (G8).
+- **Judging.** Blind Opus judges on 236 pairs, comparing each candidate with G4.
+
+**Result.**
+- **H1 FAIL:** G8 was preferred 41 to 21 (p 0.015), but wrong 9 against 5, and 17 % slower. It is preferred mostly on legal and process questions, where it gives the general rule more often.
+- **H2 FAIL:** GQ was preferred 27 to 36 and wrong 10 against 5, though 10 % faster.
+- **Decision (registered):** keep Q4_K_M.
+- **The code checker** registered for Exp 052 and 053 had two bugs:
+  - V3 matched place names inside words ("coincida" read as Coín);
+  - V1 misread short French and German declines that named Spanish places.
+  
+  Both are corrected descriptively (`check_v2`, `detect_v2`: 914/916 on labelled enquiries). The decisions do not change.
+- **Errors every build made,** fixed in the bot afterwards (CasaSol 52311e4, ba813f1):
+  - a contributor's name carried over from the area guide;
+  - the course's sales-pitch figures presented as market data;
+  - four legal facts: the 7-year lease depends on the landlord; AJD in Andalusia is 1.2 %; no stressed zones are declared in Andalusia; the bank pays AJD and the costs on a mortgage deed.
+
+**Reading.** Precision is only part of Exp 052's MLX win: the 8-bit build writes more and is preferred, but is wrong more often. What still limits the bot's answers is content, shared by every build, not the weights.
+
+*Evidence: `exp_053_precision_behind_the_bot/` (code, registration, questions, aggregates; private files by sha256).*
+*Status: Complete. Closed 2026-10-24.*
+
