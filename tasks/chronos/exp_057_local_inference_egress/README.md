@@ -20,6 +20,8 @@ a **driven window**, and anything external that appears only while generating is
   directly (C_pos) and once from a grandchild spawned mid-window (C_tree).
 - `kit/hook/sitecustomize.py` — the exp_054 Python audit hook, for the driver's loopback ground truth (C_loop).
 - `kit/run57.py` — orchestrates the controls, then per model: load → idle (P0) → driven (P1), both samplers on.
+- `kit/idle57.py` — Amendment 2: after the flag and a restart, reads the daemon log, runs C_pos, watches the idle tree and the machine
+  for N seconds, reads the log again, writes `verdict.json`.
 - `kit/score57.py` — classifies every endpoint, evaluates the controls and H1–H4, lists what the rest of the machine
   did, and reads an optional packet capture as text (`--pcap-text`, experimental parser).
 
@@ -40,4 +42,4 @@ Optional full-capture arm, in a second pane, from an account with a sudo grant o
 The one connection, during `qwen3.5:35b`'s driven window, was the Ollama **daemon's** scheduled model-recommendations
 refresh to `ollama.com` (every 3.5–4.6 h, generating or not), pinned by the daemon's own log to 58 ms before the sampler
 saw it. H1 and H2 fail as registered, with the cause named beside them. Two background model upgrades at load made no
-network call. Run: `runs/20261028T050604Z/`. Follow-up to register: does `OLLAMA_NO_CLOUD=1` stop the refresh.
+network call. Run: `runs/20261028T050604Z/`. **Amendment 2, registered the same day, not yet run:** does `OLLAMA_NO_CLOUD` stop the refresh; runner `kit/idle57.py <run> 18000`, controls C_flag and C_pos, H5/H6 in the HYPOTHESIS.

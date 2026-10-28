@@ -97,3 +97,16 @@ A follow-up, numbered when it is registered, would wire a logged, sandboxed harn
 ## Amendment 1 (2026-10-28, after the run, before publication)
 
 The machine sampler's logs (`logs/*.machine.jsonl`) hold every process's remote addresses, including other accounts' sessions and the machine's tailnet address. They are held back from the public record and hashed in RESULT.md. `score57.py --public` writes the publication form of `score.json`: the tree's own flows verbatim, other processes' addresses replaced by counts. No measurement, control or verdict changes; re-scoring the published folder reproduces everything but the other-process section, which needs the held-back files.
+
+## Amendment 2 (registered 2026-10-28, after the main run, before its own run): does disabling cloud stop the refresh?
+
+The main run found the daemon's model-recommendations refresh (`GET https://ollama.com/api/experimental/model-recommendations?ts=<unix seconds>`, from the daemon's own failure lines) running every 3.5–4.6 hours and at every daemon start. Ollama's FAQ documents an off switch for cloud features (`OLLAMA_NO_CLOUD=1`, or `"disable_ollama_cloud": true` in `~/.ollama/server.json`) and does not say whether it covers this refresh. This arm measures it.
+
+- **Procedure.** Andrei sets the flag and restarts the production daemon. Then `kit/idle57.py <run> 18000` reads the daemon log for the new start and its cloud line, runs C_pos, watches the Ollama tree (lsof, 0.2 s) and the machine (nettop, 1 s) for five hours with no generation, then reads the log again. Five hours exceeds the longest interval observed (4h34m).
+- **Controls (void if either fails):** C_flag, the log line beside the new start reads `Ollama cloud disabled: true`; C_pos, the watcher catches the control's external connection.
+- **H5** No refresh line, success or failure, is logged from the restart to the end of the watch (the main run shows one at every start and one every 3.5–4.6 h).
+- **H6** The daemon tree opens no non-loopback endpoint during the five hours.
+- **Descriptive:** whether the scheduler logs anything at all with the flag on; other processes' external flows (held back as in Amendment 1).
+- **Limits:** one restart, one five-hour window; a refresh with a longer period under the flag would be missed; the samplers' resolution as before. Pass means "the flag stopped the refresh for five hours on 0.40.2", not "cloud off means no egress ever".
+
+**Dev before the run:** `idle57.py` was smoke-tested for 8 s with the flag still off: it read the current start (2026-10-22), reported the cloud line false and 40 refresh lines since, caught C_pos, and saw the tree open nothing. That run is not evidence.

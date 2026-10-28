@@ -2354,7 +2354,11 @@ Finding while registering: exp_007's fixtures cycle the same 31 sentences, so th
 - **Descriptive.** The two subjects with pre-0.40.2 manifests were upgraded in place at load ("local compat GGUF migration", 30 s and 25 s) with **no network connection** from the tree, and 47.8 GB of backups written. Twelve other processes on the machine (bots, editor server, Claude Code sessions, ssh, Tailscale, Apple services) had external flows during the run, none in the tree.
 - **SO WHAT.** "Nothing leaves the machine during local inference" is false for Ollama 0.40.2 as installed: the model sends nothing, the default runtime phones home on a timer. The report that prompted the experiment (a Qwen "searching the web") was not reproduced: no subject opened anything. The fix is `OLLAMA_NO_CLOUD=1` or `disable_ollama_cloud` in `server.json`, and whether it covers the recommendations refresh is **unmeasured**: a follow-up, registered before it runs, sets the flag and watches the idle tree for longer than the longest observed interval. Until then the Exposure Review annex lists the refresh as known egress of the review machine, and the egress dashboard's runtime baseline must outlast the longest timer.
 
-*Evidence: `exp_057_local_inference_egress/` (RESULT.md, `runs/20261028T050604Z/`). Status: Complete. Closed 2026-10-28.*
+**Later the same day.** The daemon's failure lines name the request: `GET https://ollama.com/api/experimental/model-recommendations?ts=<unix seconds>`; it also runs at every daemon start.
+
+**Amendment 2 (registered 2026-10-28, before its run): does disabling cloud stop the refresh?** Flag on (`OLLAMA_NO_CLOUD=1` or `disable_ollama_cloud` in `server.json`), daemon restarted, then `kit/idle57.py` watches the idle tree and the machine for five hours (longer than the longest observed interval) and reads the daemon log. Controls: C_flag (the log says `Ollama cloud disabled: true`) and C_pos. H5: no refresh line, success or failure, from the restart to the end; H6: the tree opens no non-loopback endpoint. One restart, one window; a pass means the flag stopped the refresh for five hours on 0.40.2, no more. Runner smoke-tested for 8 s with the flag off; not evidence.
+
+*Evidence: `exp_057_local_inference_egress/` (RESULT.md, `runs/20261028T050604Z/`). Status: Complete; Amendment 2 registered, not yet run.*
 
 ---
 
