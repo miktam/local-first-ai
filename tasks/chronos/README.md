@@ -114,6 +114,7 @@ months can be tested against the same on-disk evidence.
 | Exp 054 | What leaves the machine during an Exposure Review: an audit hook, controls, 15 test messages | Complete — 4 of 5 written claims held; platform shorteners were looked up. Fixed in Parry; all 5 hold on re-run | [`exp_054_exposure_review_egress/`](./exp_054_exposure_review_egress/) |
 | Exp 055 | Targeted lures built from a fictional client's footprint: Exposure Review's check, its rules, gemma4:26b alone, Opus | Complete — all five fail: check 75 % caught / 13 % false alarms (blind to aged-domain and link-free lures); gemma alone 84 % / 7 %; Opus 95 % / 5 % | [`exp_055_exposure_review_lures/`](./exp_055_exposure_review_lures/) |
 | Exp 056 | Can a hostile message subvert its own triage: instruction injection and an induced model failure first (classes A and F; B–E deferred) | Registered, parked before any kit — six payloads frozen by hash; no run | [`exp_056_triage_injection/`](./exp_056_triage_injection/) |
+| Exp 057 | Does local inference leave the machine: Ollama's runtime tree and the whole machine watched while nine Qwen/gemma subjects and the embedding model load, idle and generate | Registered 2026-10-28, kit smoke-tested on a non-subject; the run is Andrei's | [`exp_057_local_inference_egress/`](./exp_057_local_inference_egress/) |
 | Watcher Run 001 | Adversarial watcher — CasaSol gap analysis | Complete | [`watcher_run_001/`](./watcher_run_001/) |
 | Pre-Chronos benchmarks | Ad-hoc bench scripts (unnumbered) | Reference | [`experiments/`](./experiments/) |
 

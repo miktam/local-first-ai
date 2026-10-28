@@ -86,6 +86,7 @@ One line per experiment. The registration, the full result and the evidence are 
 | [054](./tasks/chronos/exp_054_exposure_review_egress/) | Exposure Review: what leaves the machine | 4 of 5 written claims held; platform link shorteners were looked up. Fixed in Parry: all 5 hold on re-run |
 | [055](./tasks/chronos/exp_055_exposure_review_lures/) | Exposure Review: targeted-lure benchmark | The check catches 75 % (all new-domain lures, 1 of 14 link-free); gemma alone 84 %, Opus 95 % |
 | [056](./tasks/chronos/exp_056_triage_injection/) | Exposure Review: can a message subvert its own check | Registered and parked before any run; payloads frozen by hash |
+| [057](./tasks/chronos/exp_057_local_inference_egress/) | Does local inference leave the machine (Ollama runtime, nine Qwen/gemma subjects, whole machine watched) | Registered 2026-10-28; not yet run |
 
 #### Local models against frontier models on analysis
 
