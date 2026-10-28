@@ -36,6 +36,8 @@ Optional full-capture arm, in a second pane, from an account with a sudo grant o
 `tcpdump -i pktap,all -P -n -s 128 -w <file>` (headers only, process metadata kept); then
 `tcpdump -n -k NP -r <file> > capture.txt` and `score57.py runs/<dir> --pcap-text capture.txt`.
 
-**Status: registered, not yet run.** The run is Andrei's to start (it drives the shared production Ollama and may
-evict the bot's resident models). See the HYPOTHESIS for the limits — most importantly that a clean result means
-"nothing left the machine under this workload," never "this model is safe."
+**Status: complete, 2026-10-28.** `RESULT.md`: nine of ten subjects opened nothing at load, idle or while generating.
+The one connection, during `qwen3.5:35b`'s driven window, was the Ollama **daemon's** scheduled model-recommendations
+refresh to `ollama.com` (every 3.5–4.6 h, generating or not), pinned by the daemon's own log to 58 ms before the sampler
+saw it. H1 and H2 fail as registered, with the cause named beside them. Two background model upgrades at load made no
+network call. Run: `runs/20261028T050604Z/`. Follow-up to register: does `OLLAMA_NO_CLOUD=1` stop the refresh.

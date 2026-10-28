@@ -4,8 +4,11 @@
 Reads <run>/logs and <run>/steps.json. Writes <run>/score.json and prints a summary. Descriptive where the
 hypothesis is descriptive; it never decides adoption.
 
-    python3.14 score57.py <run_dir> [--pcap-text FILE]
+    python3.14 score57.py <run_dir> [--pcap-text FILE] [--public]
 
+--public writes the publication form (Amendment 1): other processes' remote addresses are replaced by counts, in
+machine_wide_other_processes and in per_model.*.machine_wide.*.other, and "public": true is set. Nothing measured
+changes; the tree's own flows stay verbatim.
 --pcap-text is the optional full-capture arm as text: `tcpdump -n -k NP -r capture.pcapng > capture.txt`. The
 parser takes the standard `IP src > dst` line shape plus the `proc name:pid` metadata Apple's tcpdump prints from
 a pktap capture. It is marked experimental: it has not yet met a real capture. Endpoints the capture shows that
@@ -159,9 +162,15 @@ def pcap_text(path):
 def main():
     args = sys.argv[1:]
     run = Path(args.pop(0))
-    pcap = None
-    if args[:1] == ["--pcap-text"]:
-        pcap = args[1]
+    pcap, public = None, False
+    while args:
+        flag = args.pop(0)
+        if flag == "--pcap-text":
+            pcap = args.pop(0)
+        elif flag == "--public":
+            public = True
+        else:
+            sys.exit(f"unknown flag {flag}")
     logs = run / "logs"
     steps = json.loads((run / "steps.json").read_text())
     models = [s["model"] for s in steps if s["kind"] == "drive"]
@@ -253,6 +262,12 @@ def main():
                     for f in tree_machine} | {r for v in others.values() for r in v}
         score["pcap_arm"] = {"file": pcap, "endpoints": cap,
                              "unseen_by_samplers": sorted(k for k in cap if k not in sampled), "experimental": True}
+    if public:                                           # Amendment 1: addresses of other processes -> counts
+        score["public"] = True
+        score["machine_wide_other_processes"] = {p: len(v) for p, v in score["machine_wide_other_processes"].items()}
+        for pm in score["per_model"].values():
+            for w in pm["machine_wide"].values():
+                w["other"] = {p: len(items) for p, items in w["other"].items()}
     (run / "score.json").write_text(json.dumps(score, indent=2) + "\n")
 
     def mark(ok):
@@ -271,7 +286,7 @@ def main():
               f"new_in_drive={sorted(pm['new_during_drive'])}{flag}")
     print(f"  H2 no endpoint tracks a prompt               : {mark(h2_pass)}")
     print(f"  machine-wide, other processes with external flows: "
-          f"{ {p: len(v) for p, v in score['machine_wide_other_processes'].items()} or 'none'}")
+          f"{ {p: (v if isinstance(v, int) else len(v)) for p, v in score['machine_wide_other_processes'].items()} or 'none'}")
     if pcap:
         print(f"  pcap arm (experimental parse): {len(cap)} endpoints, unseen by samplers: "
               f"{score['pcap_arm']['unseen_by_samplers']}")

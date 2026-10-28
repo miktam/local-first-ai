@@ -93,3 +93,7 @@ The morning draft was read against the running machine before it was committed. 
 ## Next experiment (named, not run here)
 
 A follow-up, numbered when it is registered, would wire a logged, sandboxed harness and measure layer 2: given a model's tool-call output, does a representative local app execute it, and to where. That is where "it searches a search engine" is actually tested.
+
+## Amendment 1 (2026-10-28, after the run, before publication)
+
+The machine sampler's logs (`logs/*.machine.jsonl`) hold every process's remote addresses, including other accounts' sessions and the machine's tailnet address. They are held back from the public record and hashed in RESULT.md. `score57.py --public` writes the publication form of `score.json`: the tree's own flows verbatim, other processes' addresses replaced by counts. No measurement, control or verdict changes; re-scoring the published folder reproduces everything but the other-process section, which needs the held-back files.

@@ -1,0 +1,659 @@
+{
+  "controls": {
+    "C_pos": {
+      "pass": true,
+      "externals_seen": [
+        "TCP 104.20.23.154:80"
+      ]
+    },
+    "C_tree": {
+      "pass": true,
+      "externals_seen_from_descendant": [
+        "TCP 104.20.23.154:80"
+      ],
+      "pids_seen": [
+        "75707"
+      ],
+      "root_pid": "75696"
+    },
+    "C_loop": {
+      "pass": true,
+      "lsof_saw_loopback_11434": true,
+      "hook_saw_loopback_11434": true,
+      "driver_non_loopback_acts": {}
+    }
+  },
+  "H1_inference_stays_local": {
+    "pass": false,
+    "new_externals_by_model": {
+      "qwen3-4b-b11577:q4km": [],
+      "qwen3-4b-b11577:q8": [],
+      "qwen3-4b-b11577:q4km-imat": [],
+      "hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M": [],
+      "hf.co/unsloth/Qwen3-1.7B-GGUF:Q4_K_M": [],
+      "qwen3.8:27b": [],
+      "qwen3.6:35b": [],
+      "qwen3.5:35b": [
+        "TCP 34.36.133.15:443"
+      ],
+      "gemma4:26b": [],
+      "nomic-embed-text": []
+    }
+  },
+  "H2_no_endpoint_tracks_generation": {
+    "pass": false
+  },
+  "H3_idle_egress_enumerated": {
+    "qwen3-4b-b11577:q4km": [],
+    "qwen3-4b-b11577:q8": [],
+    "qwen3-4b-b11577:q4km-imat": [],
+    "hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M": [],
+    "hf.co/unsloth/Qwen3-1.7B-GGUF:Q4_K_M": [],
+    "qwen3.8:27b": [],
+    "qwen3.6:35b": [],
+    "qwen3.5:35b": [],
+    "gemma4:26b": [],
+    "nomic-embed-text": []
+  },
+  "H3_load_egress_enumerated": {
+    "qwen3-4b-b11577:q4km": [],
+    "qwen3-4b-b11577:q8": [],
+    "qwen3-4b-b11577:q4km-imat": [],
+    "hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M": [],
+    "hf.co/unsloth/Qwen3-1.7B-GGUF:Q4_K_M": [],
+    "qwen3.8:27b": [],
+    "qwen3.6:35b": [],
+    "qwen3.5:35b": [],
+    "gemma4:26b": [],
+    "nomic-embed-text": []
+  },
+  "H4_toolcall_output": {
+    "qwen3-4b-b11577:q4km": [],
+    "qwen3-4b-b11577:q8": [],
+    "qwen3-4b-b11577:q4km-imat": [],
+    "hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M": [],
+    "hf.co/unsloth/Qwen3-1.7B-GGUF:Q4_K_M": [],
+    "qwen3.8:27b": [],
+    "qwen3.6:35b": [],
+    "qwen3.5:35b": [],
+    "gemma4:26b": [],
+    "nomic-embed-text": []
+  },
+  "machine_wide_tree_flows": [
+    "tcp4 192.168.18.241:51636<->34.36.133.15:443"
+  ],
+  "machine_wide_other_processes": {
+    "Python": 1,
+    "apsd": 1,
+    "claude": 2,
+    "com.apple.geod": 1,
+    "mobileassetd": 2,
+    "node": 7,
+    "python3.14": 2,
+    "ssh": 2,
+    "sshd-session": 3,
+    "syspolicyd": 1,
+    "tailscaled": 2,
+    "trustd": 2
+  },
+  "per_model": {
+    "qwen3-4b-b11577:q4km": {
+      "load_externals": [],
+      "idle_externals": [],
+      "drive_externals": [],
+      "new_during_drive": {},
+      "tracked_to_prompt": {},
+      "toolish_answer_indices": [],
+      "prompt_errors": [],
+      "tree_pids": [
+        "51715",
+        "562",
+        "62856",
+        "75746"
+      ],
+      "machine_wide": {
+        "load": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 5,
+            "sshd-session": 3,
+            "python3.14": 3,
+            "tailscaled": 2,
+            "node": 2,
+            "claude": 22
+          }
+        },
+        "idle": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 7,
+            "sshd-session": 3,
+            "python3.14": 6,
+            "tailscaled": 2,
+            "node": 2,
+            "claude": 23,
+            "ssh": 7
+          }
+        },
+        "drive": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 9,
+            "sshd-session": 3,
+            "python3.14": 10,
+            "tailscaled": 2,
+            "node": 2,
+            "claude": 23
+          }
+        }
+      },
+      "driver_spawned": []
+    },
+    "qwen3-4b-b11577:q8": {
+      "load_externals": [],
+      "idle_externals": [],
+      "drive_externals": [],
+      "new_during_drive": {},
+      "tracked_to_prompt": {},
+      "toolish_answer_indices": [],
+      "prompt_errors": [],
+      "tree_pids": [
+        "51715",
+        "562",
+        "62856",
+        "80256"
+      ],
+      "machine_wide": {
+        "load": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 6,
+            "sshd-session": 3,
+            "python3.14": 2,
+            "tailscaled": 2,
+            "claude": 21
+          }
+        },
+        "idle": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 7,
+            "sshd-session": 3,
+            "python3.14": 5,
+            "tailscaled": 2,
+            "claude": 21
+          }
+        },
+        "drive": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 12,
+            "sshd-session": 3,
+            "python3.14": 14,
+            "tailscaled": 2,
+            "claude": 22,
+            "ssh": 7,
+            "node": 1
+          }
+        }
+      },
+      "driver_spawned": []
+    },
+    "qwen3-4b-b11577:q4km-imat": {
+      "load_externals": [],
+      "idle_externals": [],
+      "drive_externals": [],
+      "new_during_drive": {},
+      "tracked_to_prompt": {},
+      "toolish_answer_indices": [],
+      "prompt_errors": [],
+      "tree_pids": [
+        "51715",
+        "562",
+        "62856",
+        "87726"
+      ],
+      "machine_wide": {
+        "load": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 5,
+            "sshd-session": 3,
+            "python3.14": 3,
+            "tailscaled": 2,
+            "claude": 19
+          }
+        },
+        "idle": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 7,
+            "sshd-session": 3,
+            "python3.14": 6,
+            "tailscaled": 2,
+            "claude": 19
+          }
+        },
+        "drive": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 12,
+            "sshd-session": 3,
+            "python3.14": 14,
+            "tailscaled": 2,
+            "claude": 20,
+            "ssh": 7
+          }
+        }
+      },
+      "driver_spawned": []
+    },
+    "hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M": {
+      "load_externals": [],
+      "idle_externals": [],
+      "drive_externals": [],
+      "new_during_drive": {},
+      "tracked_to_prompt": {},
+      "toolish_answer_indices": [],
+      "prompt_errors": [],
+      "tree_pids": [
+        "562",
+        "62856",
+        "87726",
+        "93837"
+      ],
+      "machine_wide": {
+        "load": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 6,
+            "sshd-session": 3,
+            "python3.14": 2,
+            "tailscaled": 2,
+            "claude": 18
+          }
+        },
+        "idle": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 6,
+            "sshd-session": 3,
+            "python3.14": 5,
+            "tailscaled": 2,
+            "claude": 18
+          }
+        },
+        "drive": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 10,
+            "sshd-session": 3,
+            "python3.14": 12,
+            "tailscaled": 2,
+            "claude": 20
+          }
+        }
+      },
+      "driver_spawned": []
+    },
+    "hf.co/unsloth/Qwen3-1.7B-GGUF:Q4_K_M": {
+      "load_externals": [],
+      "idle_externals": [],
+      "drive_externals": [],
+      "new_during_drive": {},
+      "tracked_to_prompt": {},
+      "toolish_answer_indices": [],
+      "prompt_errors": [],
+      "tree_pids": [
+        "562",
+        "62856",
+        "93837",
+        "98676"
+      ],
+      "machine_wide": {
+        "load": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 5,
+            "sshd-session": 3,
+            "python3.14": 2,
+            "tailscaled": 2,
+            "claude": 18
+          }
+        },
+        "idle": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 6,
+            "sshd-session": 3,
+            "python3.14": 6,
+            "tailscaled": 2,
+            "claude": 19
+          }
+        },
+        "drive": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 8,
+            "sshd-session": 3,
+            "python3.14": 6,
+            "tailscaled": 2,
+            "claude": 19
+          }
+        }
+      },
+      "driver_spawned": []
+    },
+    "qwen3.8:27b": {
+      "load_externals": [],
+      "idle_externals": [],
+      "drive_externals": [],
+      "new_during_drive": {},
+      "tracked_to_prompt": {},
+      "toolish_answer_indices": [],
+      "prompt_errors": [],
+      "tree_pids": [
+        "1539",
+        "562",
+        "62856",
+        "93837"
+      ],
+      "machine_wide": {
+        "load": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 5,
+            "sshd-session": 3,
+            "python3.14": 3,
+            "tailscaled": 2,
+            "claude": 19
+          }
+        },
+        "idle": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 7,
+            "sshd-session": 3,
+            "python3.14": 5,
+            "tailscaled": 2,
+            "claude": 20
+          }
+        },
+        "drive": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 25,
+            "sshd-session": 3,
+            "python3.14": 37,
+            "tailscaled": 2,
+            "claude": 22,
+            "mobileassetd": 2,
+            "trustd": 2
+          }
+        }
+      },
+      "driver_spawned": []
+    },
+    "qwen3.6:35b": {
+      "load_externals": [],
+      "idle_externals": [],
+      "drive_externals": [],
+      "new_during_drive": {},
+      "tracked_to_prompt": {},
+      "toolish_answer_indices": [],
+      "prompt_errors": [],
+      "tree_pids": [
+        "1539",
+        "15912",
+        "17669",
+        "562",
+        "93837"
+      ],
+      "machine_wide": {
+        "load": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 7,
+            "sshd-session": 3,
+            "python3.14": 4,
+            "tailscaled": 2,
+            "claude": 14
+          }
+        },
+        "idle": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 7,
+            "sshd-session": 3,
+            "python3.14": 5,
+            "tailscaled": 2,
+            "claude": 15
+          }
+        },
+        "drive": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 12,
+            "sshd-session": 3,
+            "python3.14": 14,
+            "tailscaled": 2,
+            "claude": 17
+          }
+        }
+      },
+      "driver_spawned": []
+    },
+    "qwen3.5:35b": {
+      "load_externals": [],
+      "idle_externals": [],
+      "drive_externals": [
+        "TCP 34.36.133.15:443"
+      ],
+      "new_during_drive": {
+        "TCP 34.36.133.15:443": 1793165199.831562
+      },
+      "tracked_to_prompt": {
+        "TCP 34.36.133.15:443": 2
+      },
+      "toolish_answer_indices": [],
+      "prompt_errors": [],
+      "tree_pids": [
+        "20970",
+        "22284",
+        "562"
+      ],
+      "machine_wide": {
+        "load": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 6,
+            "sshd-session": 3,
+            "python3.14": 4,
+            "tailscaled": 2,
+            "claude": 16
+          }
+        },
+        "idle": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 7,
+            "sshd-session": 3,
+            "python3.14": 5,
+            "tailscaled": 2,
+            "claude": 16,
+            "node": 4
+          }
+        },
+        "drive": {
+          "tree": [
+            {
+              "flow": "tcp4 192.168.18.241:51636<->34.36.133.15:443",
+              "iface": "en1",
+              "state": "Established",
+              "t": 1793165200.394773,
+              "bytes_in": 7639,
+              "bytes_out": 2001,
+              "pid": "562"
+            }
+          ],
+          "other": {
+            "apsd": 1,
+            "Python": 30,
+            "sshd-session": 3,
+            "python3.14": 44,
+            "tailscaled": 2,
+            "node": 8,
+            "claude": 22,
+            "ssh": 15,
+            "com.apple.geod": 1,
+            "trustd": 1,
+            "syspolicyd": 2
+          }
+        }
+      },
+      "driver_spawned": []
+    },
+    "gemma4:26b": {
+      "load_externals": [],
+      "idle_externals": [],
+      "drive_externals": [],
+      "new_during_drive": {},
+      "tracked_to_prompt": {},
+      "toolish_answer_indices": [],
+      "prompt_errors": [],
+      "tree_pids": [
+        "34257",
+        "562"
+      ],
+      "machine_wide": {
+        "load": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "syspolicyd": 2,
+            "Python": 5,
+            "sshd-session": 3,
+            "python3.14": 4,
+            "tailscaled": 2,
+            "claude": 15,
+            "trustd": 1
+          }
+        },
+        "idle": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "syspolicyd": 2,
+            "Python": 7,
+            "sshd-session": 3,
+            "python3.14": 5,
+            "tailscaled": 2,
+            "claude": 15,
+            "trustd": 1,
+            "ssh": 8
+          }
+        },
+        "drive": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "syspolicyd": 2,
+            "Python": 14,
+            "sshd-session": 3,
+            "python3.14": 15,
+            "tailscaled": 2,
+            "claude": 19
+          }
+        }
+      },
+      "driver_spawned": []
+    },
+    "nomic-embed-text": {
+      "load_externals": [],
+      "idle_externals": [],
+      "drive_externals": [],
+      "new_during_drive": {},
+      "tracked_to_prompt": {},
+      "toolish_answer_indices": [],
+      "prompt_errors": [],
+      "tree_pids": [
+        "34257",
+        "39338",
+        "562"
+      ],
+      "machine_wide": {
+        "load": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 5,
+            "sshd-session": 3,
+            "python3.14": 2,
+            "tailscaled": 2,
+            "claude": 17
+          }
+        },
+        "idle": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 7,
+            "sshd-session": 3,
+            "python3.14": 5,
+            "tailscaled": 2,
+            "claude": 17
+          }
+        },
+        "drive": {
+          "tree": [],
+          "other": {
+            "apsd": 1,
+            "Python": 5,
+            "sshd-session": 3,
+            "python3.14": 2,
+            "tailscaled": 2,
+            "claude": 17
+          }
+        }
+      },
+      "driver_spawned": []
+    }
+  },
+  "models_run": [
+    "qwen3-4b-b11577:q4km",
+    "qwen3-4b-b11577:q8",
+    "qwen3-4b-b11577:q4km-imat",
+    "hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M",
+    "hf.co/unsloth/Qwen3-1.7B-GGUF:Q4_K_M",
+    "qwen3.8:27b",
+    "qwen3.6:35b",
+    "qwen3.5:35b",
+    "gemma4:26b",
+    "nomic-embed-text"
+  ],
+  "models_skipped": [],
+  "public": true
+}

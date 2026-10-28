@@ -1,0 +1,216 @@
+[
+  {
+    "kind": "control",
+    "step": "C_pos",
+    "rc": 0,
+    "root_pid": 75674,
+    "seconds": 1.6
+  },
+  {
+    "kind": "control",
+    "step": "C_tree",
+    "rc": 0,
+    "root_pid": 75696,
+    "seconds": 2.1
+  },
+  {
+    "kind": "load",
+    "step": "load_qwen3-4b-b11577:q4km",
+    "model": "qwen3-4b-b11577:q4km",
+    "error": null,
+    "seconds": 4.9
+  },
+  {
+    "kind": "idle",
+    "step": "idle_qwen3-4b-b11577:q4km",
+    "model": "qwen3-4b-b11577:q4km",
+    "seconds": 30.0
+  },
+  {
+    "kind": "drive",
+    "step": "drive_qwen3-4b-b11577:q4km",
+    "model": "qwen3-4b-b11577:q4km",
+    "rc": 0,
+    "seconds": 72.4
+  },
+  {
+    "kind": "load",
+    "step": "load_qwen3-4b-b11577:q8",
+    "model": "qwen3-4b-b11577:q8",
+    "error": null,
+    "seconds": 4.3
+  },
+  {
+    "kind": "idle",
+    "step": "idle_qwen3-4b-b11577:q8",
+    "model": "qwen3-4b-b11577:q8",
+    "seconds": 30.0
+  },
+  {
+    "kind": "drive",
+    "step": "drive_qwen3-4b-b11577:q8",
+    "model": "qwen3-4b-b11577:q8",
+    "rc": 0,
+    "seconds": 116.1
+  },
+  {
+    "kind": "load",
+    "step": "load_qwen3-4b-b11577:q4km-imat",
+    "model": "qwen3-4b-b11577:q4km-imat",
+    "error": null,
+    "seconds": 2.2
+  },
+  {
+    "kind": "idle",
+    "step": "idle_qwen3-4b-b11577:q4km-imat",
+    "model": "qwen3-4b-b11577:q4km-imat",
+    "seconds": 30.0
+  },
+  {
+    "kind": "drive",
+    "step": "drive_qwen3-4b-b11577:q4km-imat",
+    "model": "qwen3-4b-b11577:q4km-imat",
+    "rc": 0,
+    "seconds": 110.5
+  },
+  {
+    "kind": "load",
+    "step": "load_hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M",
+    "model": "hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M",
+    "error": null,
+    "seconds": 2.2
+  },
+  {
+    "kind": "idle",
+    "step": "idle_hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M",
+    "model": "hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M",
+    "seconds": 30.0
+  },
+  {
+    "kind": "drive",
+    "step": "drive_hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M",
+    "model": "hf.co/unsloth/Qwen3-4B-GGUF:Q4_K_M",
+    "rc": 0,
+    "seconds": 94.0
+  },
+  {
+    "kind": "load",
+    "step": "load_hf.co/unsloth/Qwen3-1.7B-GGUF:Q4_K_M",
+    "model": "hf.co/unsloth/Qwen3-1.7B-GGUF:Q4_K_M",
+    "error": null,
+    "seconds": 1.2
+  },
+  {
+    "kind": "idle",
+    "step": "idle_hf.co/unsloth/Qwen3-1.7B-GGUF:Q4_K_M",
+    "model": "hf.co/unsloth/Qwen3-1.7B-GGUF:Q4_K_M",
+    "seconds": 30.0
+  },
+  {
+    "kind": "drive",
+    "step": "drive_hf.co/unsloth/Qwen3-1.7B-GGUF:Q4_K_M",
+    "model": "hf.co/unsloth/Qwen3-1.7B-GGUF:Q4_K_M",
+    "rc": 0,
+    "seconds": 36.7
+  },
+  {
+    "kind": "load",
+    "step": "load_qwen3.8:27b",
+    "model": "qwen3.8:27b",
+    "error": null,
+    "seconds": 15.0
+  },
+  {
+    "kind": "idle",
+    "step": "idle_qwen3.8:27b",
+    "model": "qwen3.8:27b",
+    "seconds": 30.0
+  },
+  {
+    "kind": "drive",
+    "step": "drive_qwen3.8:27b",
+    "model": "qwen3.8:27b",
+    "rc": 0,
+    "seconds": 313.6
+  },
+  {
+    "kind": "load",
+    "step": "load_qwen3.6:35b",
+    "model": "qwen3.6:35b",
+    "error": null,
+    "seconds": 18.4
+  },
+  {
+    "kind": "idle",
+    "step": "idle_qwen3.6:35b",
+    "model": "qwen3.6:35b",
+    "seconds": 30.0
+  },
+  {
+    "kind": "drive",
+    "step": "drive_qwen3.6:35b",
+    "model": "qwen3.6:35b",
+    "rc": 0,
+    "seconds": 108.5
+  },
+  {
+    "kind": "load",
+    "step": "load_qwen3.5:35b",
+    "model": "qwen3.5:35b",
+    "error": null,
+    "seconds": 14.3
+  },
+  {
+    "kind": "idle",
+    "step": "idle_qwen3.5:35b",
+    "model": "qwen3.5:35b",
+    "seconds": 30.0
+  },
+  {
+    "kind": "drive",
+    "step": "drive_qwen3.5:35b",
+    "model": "qwen3.5:35b",
+    "rc": 0,
+    "seconds": 385.0
+  },
+  {
+    "kind": "load",
+    "step": "load_gemma4:26b",
+    "model": "gemma4:26b",
+    "error": null,
+    "seconds": 10.4
+  },
+  {
+    "kind": "idle",
+    "step": "idle_gemma4:26b",
+    "model": "gemma4:26b",
+    "seconds": 30.0
+  },
+  {
+    "kind": "drive",
+    "step": "drive_gemma4:26b",
+    "model": "gemma4:26b",
+    "rc": 0,
+    "seconds": 116.6
+  },
+  {
+    "kind": "load",
+    "step": "load_nomic-embed-text",
+    "model": "nomic-embed-text",
+    "error": null,
+    "seconds": 0.6
+  },
+  {
+    "kind": "idle",
+    "step": "idle_nomic-embed-text",
+    "model": "nomic-embed-text",
+    "seconds": 30.0
+  },
+  {
+    "kind": "drive",
+    "step": "drive_nomic-embed-text",
+    "model": "nomic-embed-text",
+    "rc": 0,
+    "seconds": 0.4
+  }
+]

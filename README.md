@@ -88,7 +88,7 @@ One line per experiment. The registration, the full result and the evidence are 
 | [054](./tasks/chronos/exp_054_exposure_review_egress/) | Exposure Review: what leaves the machine | 4 of 5 written claims held; platform link shorteners were looked up. Fixed in Parry: all 5 hold on re-run |
 | [055](./tasks/chronos/exp_055_exposure_review_lures/) | Exposure Review: targeted-lure benchmark | The check catches 75 % (all new-domain lures, 1 of 14 link-free); gemma alone 84 %, Opus 95 % |
 | [056](./tasks/chronos/exp_056_triage_injection/) | Exposure Review: can a message subvert its own check | Registered and parked before any run; payloads frozen by hash |
-| [057](./tasks/chronos/exp_057_local_inference_egress/) | Does local inference leave the machine (Ollama runtime, nine Qwen/gemma subjects, whole machine watched) | Registered 2026-10-28; not yet run |
+| [057](./tasks/chronos/exp_057_local_inference_egress/) | Does local inference leave the machine (Ollama runtime, nine Qwen/gemma subjects, whole machine watched) | The models sent nothing; the Ollama daemon phoned ollama.com on a ~4 h timer, so H1/H2 fail as registered with the cause named; the fix (`OLLAMA_NO_CLOUD`) is unmeasured |
 
 #### Local models against frontier models on analysis
 
@@ -213,6 +213,8 @@ Numbered in the order they were found; grouped by theme.
 - **(7)** **A fixed redaction prompt reliably produces GDPR-clean output.** 20 synthetic toxic real estate notes spanning 8 pre-registered GDPR categories — 0 true-positive leaks in any output. The local 26B model with `temperature=0.1` and a structured system prompt passes all four pre-registered criteria: zero leaks, full structural compliance (TAGS + DESCRIPTION), all 20 within 300s. (Exp 006)
 
 - **(16)** **Exposure Review's message check is a precise domain-age detector, not yet a lure detector.** In a benchmark of 110 targeted lures and 110 genuine messages built from a fictional client's public footprint, Parry's rules never flagged a genuine message but caught 62 % of lures; with its local model step, 75 % at 13 % false alarms. It caught every lure on a new domain, 10 of 24 on aged domains and 1 of 14 with no link at all. gemma4:26b alone, given the whole footprint, caught 84 % at 7 %; Opus 95 % at 5 %. What leaves the machine during a review is as documented; the one gap, platform link shorteners being looked up, is fixed and re-tested. (Exp 054, 055)
+
+- **(17)** **Local inference sent nothing; the default Ollama runtime phones home on a timer.** Ten subjects (eight Qwen builds, gemma4:26b and the embedding model) were watched at the OS level while loading, idling and generating: no model's runner opened a connection. The one external connection in 29 minutes came from the Ollama daemon itself, to ollama.com, 2 KB out and 7.6 KB in: a scheduled model-recommendations refresh that the daemon's log shows running every 3.5–4.6 hours since March, generating or not, with cloud features at their default. The registered claims fail because they measured appearance, not cause; the cause is named. Whether `OLLAMA_NO_CLOUD` stops it is not yet measured. Two background model upgrades at load made no network call and wrote 48 GB of backups. (Exp 057)
 
 
 ### Local models against frontier models
