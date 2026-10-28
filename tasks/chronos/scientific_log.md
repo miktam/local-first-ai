@@ -2395,4 +2395,6 @@ Finding while registering: exp_007's fixtures cycle the same 31 sentences, so th
 
 **Numbering.** exp_058 is reserved by exp_057 for the harness-layer egress test; exp_059 is registered; so 060. A1 takes the next free number at its registration (the roadmap's "exp_057" for it predates exp_057's registration as the egress test).
 
+**Kit, later the same day (after registration, before any run).** `kit/arms60.py` (the three arms, every counter and the thinking text, the daemon's state, the 8K restore after arm C), `kit/score60.py` (exp_055's metrics unchanged, C1–C4, H1–H4, the decision rule) and a unit test on a synthesized run. Smoke-tested once on a fictional dummy message through the driver and the audit hook: T 2.9 s; F's pass 1 and C gave the same band and the same 2,781 generated tokens in 53.8 s and 58.8 s; the daemon honoured `num_ctx 32768` (23.3 GB against 18.2 GB) and returned to 8,192 on the closing call; loopback only. The prompt equals exp_055's byte for byte on all 220 messages (asserted without a model call). No corpus message scored.
+
 *Evidence: `exp_060_reader_empty_answers/`. Status: Registered, not yet run.*

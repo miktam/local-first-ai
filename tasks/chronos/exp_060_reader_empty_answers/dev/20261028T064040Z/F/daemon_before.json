@@ -1,0 +1,51 @@
+{
+ "t": 1793169644.113119,
+ "utc": "2026-10-28T06:40:44Z",
+ "ollama_version": "ollama version is 0.40.2",
+ "ollama_ps": "NAME                       ID              SIZE      PROCESSOR    CONTEXT    RUNNER      UNTIL   \ngemma4:26b                 777b927e3b6b    18 GB     100% GPU     8192       llamacpp    Forever    \nnomic-embed-text:latest    0a109f422b47    535 MB    100% GPU     2048       llamacpp    Forever    \n",
+ "api_ps": {
+  "models": [
+   {
+    "name": "gemma4:26b",
+    "model": "gemma4:26b",
+    "size": 18163643185,
+    "digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+    "details": {
+     "parent_model": "",
+     "format": "gguf",
+     "family": "gemma4",
+     "families": [
+      "gemma4",
+      "clip"
+     ],
+     "parameter_size": "25.8B",
+     "quantization_level": "Q4_K_M"
+    },
+    "expires_at": "2319-02-07T07:28:00.832240807+01:00",
+    "size_vram": 18163643185,
+    "context_length": 8192,
+    "runner": "llamacpp"
+   },
+   {
+    "name": "nomic-embed-text:latest",
+    "model": "nomic-embed-text:latest",
+    "size": 535706992,
+    "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+    "details": {
+     "parent_model": "",
+     "format": "gguf",
+     "family": "nomic-bert",
+     "families": [
+      "nomic-bert"
+     ],
+     "parameter_size": "137M",
+     "quantization_level": "F16"
+    },
+    "expires_at": "2319-02-07T06:22:12.246352807+01:00",
+    "size_vram": 535706992,
+    "context_length": 2048,
+    "runner": "llamacpp"
+   }
+  ]
+ }
+}

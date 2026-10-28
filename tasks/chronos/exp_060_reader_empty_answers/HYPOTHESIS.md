@@ -113,3 +113,12 @@ Baseline: exp_055's `runs/20261025T095614Z/G/results.jsonl` and `score.json` (G:
 ## Numbering
 
 exp_057 named exp_058 for the harness-layer egress test, and exp_059 is registered, so this is **060**. The roadmap's "A1 (the seeded exp_057)" predates exp_057's registration as the local-inference egress test; A1 takes the next free number when it is registered.
+
+## Kit (2026-10-28, after registration, before any run)
+
+The kit was written the same day, after the registration above was committed, and smoke-tested once on `kit/dummy60.eml` through the driver (`dev/20261028T064040Z/`). The dummy is a fictional speaker-portal lure on a 5-day-old domain, not a corpus message. **No corpus message was sent to any model.**
+
+- `kit/arms60.py` builds exp_055's prompt byte for byte (asserted against exp_055's own builder for all 220 messages, without calling the model), runs one arm or all three in order under exp_054's audit hook, and records every counter and the daemon's state before, during and after each arm.
+- `kit/score60.py` scores a run with exp_055's metric functions imported unchanged, then C1–C4, H1–H4 and the decision rule. `kit/test_score60.py` checks it on a synthesized run built from the real manifest and G baseline (a clean run, a run with an external connection, an ignored `num_ctx`, flipped verdicts and empties, and a tie).
+- **Smoke result.** T answered in 2.9 s (76 tokens). F's pass 1 and C gave the same band, the same items and the same 2,781 generated tokens (9,043 characters of thinking) in 53.8 s and 58.8 s: an early sign that the context size does not change what the model generates, which is what H2 asks. The daemon honoured `num_ctx 32768` (`/api/ps`: 32,768; 23.3 GB against 18.2 GB at 8,192), and the closing call returned it to 8,192 (18.7 GB). The audit hook recorded only `127.0.0.1:11434`.
+- **One addition to the recorded values:** for arm F, a message's `seconds` in `results.jsonl` is the total of pass 1 and the retry, which is what H4 measures; `pass1_seconds` keeps the first pass alone.
