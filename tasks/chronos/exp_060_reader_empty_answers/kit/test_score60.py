@@ -37,7 +37,7 @@ def audit_lines(bad=False):
              {"kind": "audit", "event": "socket.connect", "args": ["<socket>", "('127.0.0.1', 11434)"]},
              {"kind": "audit", "event": "subprocess.Popen", "args": ["['ollama', 'ps']", "None", "None"]}]
     if bad:
-        lines.append({"kind": "audit", "event": "socket.connect", "args": ["<socket>", "('93.184.216.34', 443)"]})
+        lines.append({"kind": "audit", "event": "socket.connect", "args": ["<socket>", "('198.51.100.7', 443)"]})
     return lines
 
 
