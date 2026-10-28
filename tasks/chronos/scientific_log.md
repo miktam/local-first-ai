@@ -2345,7 +2345,16 @@ Finding while registering: exp_007's fixtures cycle the same 31 sentences, so th
 
 **Dev before registration.** Morning: a connection to `example.com:80` was caught and the daemon PID resolved; no model driven. Afternoon, after the changes: one smoke run of the whole kit with dev flags (3 s idle, 2 prompts) on `gemma4:e4b`, not a subject and already loaded: 14 s, all three controls passed, the tree opened no external endpoint, and the machine sampler named seven other processes with external flows, none in the tree.
 
-*Evidence: `exp_057_local_inference_egress/`. Status: Registered, not yet run.*
+**Result, 2026-10-28** (`runs/20261028T050604Z`, 29 minutes, Ollama 0.40.2, registered defaults; C_pos, C_tree and C_loop all passed; the capture arm did not run).
+
+- **H1 FAIL, H2 FAIL, as registered.** Nine of ten subjects opened no non-loopback endpoint at load, idle or while generating. During `qwen3.5:35b`'s driven window the Ollama **daemon** (not the runner) opened one TCP connection to the address `ollama.com` resolves to, first seen inside prompt 2's window ("the capital of Spain", answered plainly).
+- **H3 named it.** The daemon's log shows `model_recommendations.go: "model recommendations cache sleep scheduled"` at 05:26:39.773 UTC, 58 ms before the sampler's first sight, and `~/.ollama/cache/model-recommendations.json` rewritten the same second: a **scheduled refresh of model recommendations**, 2,001 bytes out, 7,639 in, due at that moment from the previous refresh's logged wait. The log holds 372 such refreshes since March, every 3.5–4.6 hours: about six contacts with `ollama.com` a day, generating or not, with cloud features at their default (`Ollama cloud disabled: false`). The timer fell in that window by arithmetic.
+- **Why the fails stand.** The registered criteria detect an appearance, not a cause; a 30 s idle baseline cannot see a four-hour timer, and one occurrence cannot separate "tracks a generation" from "coincided with one". The explanation is recorded beside the verdicts.
+- **H4:** no subject's answers matched the tool-call or search markers; nothing executed anything.
+- **Descriptive.** The two subjects with pre-0.40.2 manifests were upgraded in place at load ("local compat GGUF migration", 30 s and 25 s) with **no network connection** from the tree, and 47.8 GB of backups written. Twelve other processes on the machine (bots, editor server, Claude Code sessions, ssh, Tailscale, Apple services) had external flows during the run, none in the tree.
+- **SO WHAT.** "Nothing leaves the machine during local inference" is false for Ollama 0.40.2 as installed: the model sends nothing, the default runtime phones home on a timer. The report that prompted the experiment (a Qwen "searching the web") was not reproduced: no subject opened anything. The fix is `OLLAMA_NO_CLOUD=1` or `disable_ollama_cloud` in `server.json`, and whether it covers the recommendations refresh is **unmeasured**: a follow-up, registered before it runs, sets the flag and watches the idle tree for longer than the longest observed interval. Until then the Exposure Review annex lists the refresh as known egress of the review machine, and the egress dashboard's runtime baseline must outlast the longest timer.
+
+*Evidence: `exp_057_local_inference_egress/` (RESULT.md, `runs/20261028T050604Z/`). Status: Complete. Closed 2026-10-28.*
 
 ---
 
@@ -2363,3 +2372,27 @@ Finding while registering: exp_007's fixtures cycle the same 31 sentences, so th
 **Dev before registration.** The Mac path (`render59.py`, `run59_mac.py --limit 3`, `finish59.py`) was smoke-tested on three enquiries against the live gate; the finished rows reproduce exp_044's published decisions for those ids. No phone, no MacBook, no full pass. Input: the public copy of the test set (`514b6386…`; the as-run `bf54b4d0…` differs only in phone numbers moved to fiction ranges after the run), the same on every arm.
 
 *Evidence: `exp_059_same_weights_three_chips/`. Status: Registered, not yet run.*
+
+---
+
+## Experiment 060 — Which fix closes the local reader's empty answers? (registered 2026-10-28)
+
+**Pre-registered: 2026-10-28, before any kit or run** (`exp_060_reader_empty_answers/HYPOTHESIS.md`). Campaign A's mechanical precursor. In exp_055, gemma4:26b alone beat the engineered check (0.882 against 0.814) with 22 of 220 answers empty: it thought until the 8,192-token context was full and never answered. Every reader number carries that hole, so it is closed and measured before A1, the reader test.
+
+**What is at stake.** The 22 are 11 lures (6 new-domain, 4 aged, 1 link-free) and 11 genuine (9 established, 2 young domains). Prompt length is not the cause. The ceiling is a balanced accuracy of 0.932 if every recovered answer is right; the floor stays 0.882 if every one is flagged.
+
+**The runtime.** gemma4:26b on Ollama 0.40.2 has no thinking budget: `ollama show` lists levels `false, true`; a `think: "low"` request is accepted and ignored (probed on a dummy prompt). So a budget must be glue.
+
+**Registered.**
+- Arms, each one change to exp_055's G call (same prompt, temperature 0, seed 55): **T** `think: false`; **F** G's call unchanged, one retry with `think: false` on an empty answer; **C** `num_ctx 32768`, thinking on. Every call records `thinking`, `done_reason`, `prompt_eval_count` and `eval_count`, which exp_055 did not.
+- Controls: C1 F's pass 1 reproduces exp_055's G (≥ 95 % band agreement on the 193 unchanged answered messages, ≥ 18 of the 20 unchanged empties empty again); C2 every empty pass-1 answer shows `done_reason` length or ≥ 8,000 tokens; C3 the exp_054 audit hook sees only loopback; C4 `ollama ps` shows 32K during arm C.
+- Hypotheses, per arm: H1 ≥ 218 of 220 answered; H2 arm C agrees with G on ≥ 95 % of the 193; H3 balanced accuracy ≥ 0.882 and attribution ≥ 85 %; H4 median ≤ 45 s, p95 ≤ 180 s, no error.
+- Decision rule: A1's reader call inherits the arm passing H1, H3 and H4 with the highest balanced accuracy (within 0.01, the faster); C must also pass H2. No arm passing H1 → A1 is registered with the loss declared.
+- Descriptive: the fate of the 22 per arm; a budget curve from F's pass 1 (what a streaming budget at 2K, 4K, 6K or 7K tokens would have cut); where thinking changes the verdict.
+- Limits: measured on the reader-alone call, not A1's longer prompt; one model, build and runtime; seven published-copy messages differ from what the exp_055 run saw and are excluded from the agreement tests; arm C changes the shared daemon's context for its run and restores it.
+
+**Dev before registration.** The 22 characterised from exp_055's records; three dummy-prompt calls to establish the API shape. No corpus message sent; no kit yet.
+
+**Numbering.** exp_058 is reserved by exp_057 for the harness-layer egress test; exp_059 is registered; so 060. A1 takes the next free number at its registration (the roadmap's "exp_057" for it predates exp_057's registration as the egress test).
+
+*Evidence: `exp_060_reader_empty_answers/`. Status: Registered, not yet run.*
