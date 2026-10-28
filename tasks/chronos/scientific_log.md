@@ -2346,3 +2346,20 @@ Finding while registering: exp_007's fixtures cycle the same 31 sentences, so th
 **Dev before registration.** Morning: a connection to `example.com:80` was caught and the daemon PID resolved; no model driven. Afternoon, after the changes: one smoke run of the whole kit with dev flags (3 s idle, 2 prompts) on `gemma4:e4b`, not a subject and already loaded: 14 s, all three controls passed, the tree opened no external endpoint, and the machine sampler named seven other processes with external flows, none in the tree.
 
 *Evidence: `exp_057_local_inference_egress/`. Status: Registered, not yet run.*
+
+---
+
+## Experiment 059 — Same weights, three chips (registered 2026-10-28)
+
+**Pre-registered: 2026-10-28, before any measured run** (`exp_059_same_weights_three_chips/HYPOTHESIS.md`). An iPhone 18 Pro joined the setup on 2026-10-27 as the pocket end of the system. Before asking whether lead triage can run on it, the prior question: when one model file runs on a different chip, does it give the same answer?
+
+**Registered.**
+- One file, one engine, one prompt set: Kev-4B Q8_0 (sha256 `7c2ebed9…`), llama.cpp b11711 (`9d1e036`) on every arm, exp_044's 331 sealed enquiries rendered by the frozen rev 4 knife. Kev is a decision model: no token is generated, so there is no sampling; each option is scored by a dot product on a 512-wide head and a softmax at the model's calibrated temperature.
+- Arms: `mini-a` (the live gate, M4 Pro), `mini-b` (the same again — control C1, the run-to-run floor), `mbp` (`llama-server` b11711 on the M5 Max), `iphone` (A20 Pro: llama.cpp's own iOS example plus a readout that reproduces the server's `/v1/systemone` with the public API), `mbp-app` (the same app on the M5 Max — control C2, the readout against the server on one chip; without it the phone arm is void).
+- H1 the decision survives the chip (request type and next action agree on ≥ 0.98 of enquiries); H2 the probabilities survive it (max |Δp| ≤ 0.01 for ≥ 0.99 of the 331 × 12 answers); H3 the phone's median per enquiry ≤ 3 × the mini's; H4 the last 100 enquiries no more than 20 % slower than the first 100. Descriptive: prefill tokens per second per chip, energy where measurable, the phone's memory headroom, agreement per language, every flipped enquiry with its margin, the two Macs against each other.
+- Declared fallback: if iOS refuses the 4.48 GB file, a Q4_K_M build on both the phone and the mini, as a dated amendment.
+- Limits: synthetic enquiries test agreement, not accuracy; one model, one quantisation; the phone path is new code (C2 guards it, on an M5 Max rather than an A20 Pro); flash attention is resolved per device and logged; energy is descriptive.
+
+**Dev before registration.** The Mac path (`render59.py`, `run59_mac.py --limit 3`, `finish59.py`) was smoke-tested on three enquiries against the live gate; the finished rows reproduce exp_044's published decisions for those ids. No phone, no MacBook, no full pass. Input: the public copy of the test set (`514b6386…`; the as-run `bf54b4d0…` differs only in phone numbers moved to fiction ranges after the run), the same on every arm.
+
+*Evidence: `exp_059_same_weights_three_chips/`. Status: Registered, not yet run.*

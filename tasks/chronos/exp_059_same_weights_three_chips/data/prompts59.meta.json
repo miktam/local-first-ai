@@ -1,0 +1,14 @@
+{
+ "enquiries": 331,
+ "questions": 3972,
+ "questions_per_enquiry": 12,
+ "test_sha256": "514b6386dfba45464089a472d579097df58c3380964c1203aab9a39deddae808",
+ "test_sha256_as_run": "bf54b4d0cb017f266fa094afdd40802602878d0b259992b9c8cf6b4bba3ccd0b",
+ "knife_sha256": "2cdfbdf794ff50b52bffa88230645988b28da599783c19ba9e6a3983a43020f1",
+ "prompts_sha256": "6b8ada0b46b897076eda1a934797212c0c786902b2c637eb01374ed1ab14af81",
+ "temperature": 2.406049966812134,
+ "temperature_source": "qwen35.decision.temperature.* in Kev-4B-Q8_0.gguf 7c2ebed9",
+ "marker": "<|box_end|>",
+ "template": "<|fim_prefix|>{{ state }}<|fim_middle|>{{ instructions }}{% for o in options %}<|box_start|>{% if type == 'score' %}{% if o.description %}{{ o.description }}{% endif %}{% else %}{% if type != 'noul' %}{{ o.key }}{% elif o.key == 'true' %}yes{% else %}no{% endif %}{% if o.description %}: {{ o.description }}{% endif %}{% endif %}<|box_end|>{% endfor %}<|fim_suffix|>",
+ "engine": "llama.cpp b11711 (9d1e036), tools/server/server-decision.cpp kev type"
+}
