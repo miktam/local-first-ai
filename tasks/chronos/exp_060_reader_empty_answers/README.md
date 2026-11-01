@@ -24,14 +24,21 @@ Registered 2026-10-28, before any kit or run. Kit written and smoke-tested the s
 
 ## Run (Andrei, on the mini)
 
-Check first that nothing else is generating on the daemon (`ollama ps`, running experiments). Arm C reloads gemma4:26b at a 32K context for its duration and restores 8K at the end. Expect T in about 15 minutes, F about 3.3 hours, C 2 to 5.5 hours.
+Check first that nothing else is generating on the daemon (`ollama ps`, running experiments). Check too that `notifyutil -g com.apple.system.thermalpressurelevel` reads 0 (Amendment 1); the block records the level every 60 s in `runs/<ts>/thermal.log` and the macOS version in `runs/<ts>/macos.txt`. Arm C reloads gemma4:26b at a 32K context for its duration and restores 8K at the end. Expect T in about 15 minutes, F about 3.3 hours, C 2 to 5.5 hours.
 
 ```bash
-cd ~/REPOS/local-first-ai/tasks/chronos/exp_060_reader_empty_answers && TS=$(date -u +%Y%m%dT%H%M%SZ) && mkdir -p runs/$TS && echo $TS > runs/CURRENT && tmux new-session -d -s exp060 "caffeinate -i zsh -e -o pipefail -c 'python3.14 kit/arms60.py --all --run runs/$TS 2>&1 | tee runs/$TS/run.log && python3.14 kit/score60.py runs/$TS 2>&1 | tee -a runs/$TS/run.log'" && tmux attach -t exp060
+cd ~/REPOS/local-first-ai/tasks/chronos/exp_060_reader_empty_answers && TS=$(date -u +%Y%m%dT%H%M%SZ) && mkdir -p runs/$TS && echo $TS > runs/CURRENT && tmux new-session -d -s exp060 -c ~/REPOS/local-first-ai/tasks/chronos/exp_060_reader_empty_answers "caffeinate -i zsh -e -o pipefail -c '
+(while true; do echo \$(date -u +%FT%TZ) \$(notifyutil -g com.apple.system.thermalpressurelevel | cut -d\" \" -f2); sleep 60; done) >> runs/$TS/thermal.log &
+S=\$!; trap \"kill \$S\" EXIT
+sw_vers -productVersion > runs/$TS/macos.txt
+grep \"Ollama cloud disabled\" /opt/homebrew/var/log/ollama.log | tail -1 > runs/$TS/daemon_cloud.txt
+python3.14 kit/arms60.py --all --run runs/$TS 2>&1 | tee runs/$TS/run.log
+python3.14 kit/score60.py runs/$TS 2>&1 | tee -a runs/$TS/run.log
+'" && tmux attach -t exp060
 ```
 
 A run resumes: an arm skips the ids already in its `results.jsonl`. To score again: `python3.14 kit/score60.py runs/<ts>`.
 
-**Status: registered; kit smoke-tested; not run.** Numbering: exp_057 names exp_058 for the harness-layer egress test, exp_059 is registered, so this is 060.
+**Status: registered; kit smoke-tested; first attempt aborted 2026-11-01 under a firmware-caused thermal clamp (`aborted/20261101T062551Z/`, Amendment 1); measured run not started.** Numbering: exp_057 names exp_058 for the harness-layer egress test, exp_059 is registered, so this is 060.
 
 **Everything here is fictional:** the person, every organisation and domain. No message is operational.
