@@ -1,0 +1,45 @@
+{
+  "registered": "exp_057 Amendment 2",
+  "started": "2026-11-01T06:25:57+00:00",
+  "watched_seconds": 18000.1,
+  "daemon_start_line": "time=2026-11-01T07:25:51.286+01:00 level=INFO source=routes.go:2435 msg=\"Listening on 127.0.0.1:11434 (version 0.40.2)\"",
+  "C_flag_cloud_disabled": true,
+  "C_pos": {
+    "pass": true,
+    "externals_seen": [
+      "TCP 104.20.23.154:80"
+    ]
+  },
+  "H5_no_refresh_line_since_start": {
+    "pass": false,
+    "lines": [
+      "time=2026-11-01T07:25:51.287+01:00 level=INFO source=model_recommendations.go:177 msg=\"model recommendations cache sleep scheduled\" wait=3h54m57.096916559s consecutive_failures=0",
+      "time=2026-11-01T11:20:48.437+01:00 level=INFO source=model_recommendations.go:177 msg=\"model recommendations cache sleep scheduled\" wait=3h45m48.362994735s consecutive_failures=0"
+    ]
+  },
+  "H6_tree_opened_nothing": {
+    "pass": true,
+    "externals": []
+  },
+  "tree_pids": [
+    "5567"
+  ],
+  "machine_tree_flows": [],
+  "machine_other_processes": {
+    "apsd": 6,
+    "Python": 1181,
+    "python3.14": 1972,
+    "sshd-session": 8,
+    "node": 128,
+    "claude": 100,
+    "launchd": 2,
+    "sshd-auth": 1,
+    "copilot-runtime": 3,
+    "curl": 2,
+    "ssh": 46,
+    "rtcreportingd": 1,
+    "timed": 2,
+    "findmydeviced": 2,
+    "com.apple.geod": 1
+  }
+}

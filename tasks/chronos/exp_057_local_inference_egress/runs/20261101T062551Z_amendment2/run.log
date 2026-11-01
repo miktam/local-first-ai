@@ -1,0 +1,14 @@
+daemon start: time=2026-11-01T07:25:51.286+01:00 level=INFO source=routes.go:2435 msg="Listening on 127.0.0.1:11434 (version 0.40.2)"
+cloud disabled: True
+refresh lines since start: 1
+connected to example.com:80 (control)
+watching the Ollama tree and the machine for 18000 s with no generation…
+
+exp_057 Amendment 2  (exp_057_local_inference_egress/runs/20261101T062551Z_amendment2)
+  C_flag (log says cloud disabled)     : PASS  True
+  C_pos  (watcher sees an external)    : PASS  ['TCP 104.20.23.154:80']
+  H5 no refresh line since the start   : FAIL  2 line(s)
+  H6 tree opened nothing in 18000 s : PASS  []
+  other processes with external flows  : {'apsd': 6, 'Python': 1181, 'python3.14': 1972, 'sshd-session': 8, 'node': 128, 'claude': 100, 'launchd': 2, 'sshd-auth': 1, 'copilot-runtime': 3, 'curl': 2, 'ssh': 46, 'rtcreportingd': 1, 'timed': 2, 'findmydeviced': 2, 'com.apple.geod': 1}
+
+  wrote exp_057_local_inference_egress/runs/20261101T062551Z_amendment2/verdict.json

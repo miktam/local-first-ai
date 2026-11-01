@@ -42,4 +42,4 @@ Optional full-capture arm, in a second pane, from an account with a sudo grant o
 The one connection, during `qwen3.5:35b`'s driven window, was the Ollama **daemon's** scheduled model-recommendations
 refresh to `ollama.com` (every 3.5–4.6 h, generating or not), pinned by the daemon's own log to 58 ms before the sampler
 saw it. H1 and H2 fail as registered, with the cause named beside them. Two background model upgrades at load made no
-network call. Run: `runs/20261028T050604Z/`. **Amendment 2, registered the same day, not yet run:** does `OLLAMA_NO_CLOUD` stop the refresh; runner `kit/idle57.py <run> 18000`, controls C_flag and C_pos, H5/H6 in the HYPOTHESIS.
+network call. Run: `runs/20261028T050604Z/`. **Amendment 2, run 2026-11-01** (`runs/20261101T062551Z_amendment2/`): with cloud disabled the daemon made no call in five hours covering one due refresh (C_flag, C_pos and H6 pass). The scheduler still logs its timer, so H5 fails as registered, with the cause named; the cache file was not rewritten. The machine-wide log is held back and hashed.

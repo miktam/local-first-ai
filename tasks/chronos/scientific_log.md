@@ -2358,7 +2358,9 @@ Finding while registering: exp_007's fixtures cycle the same 31 sentences, so th
 
 **Amendment 2 (registered 2026-10-28, before its run): does disabling cloud stop the refresh?** Flag on (`OLLAMA_NO_CLOUD=1` or `disable_ollama_cloud` in `server.json`), daemon restarted, then `kit/idle57.py` watches the idle tree and the machine for five hours (longer than the longest observed interval) and reads the daemon log. Controls: C_flag (the log says `Ollama cloud disabled: true`) and C_pos. H5: no refresh line, success or failure, from the restart to the end; H6: the tree opens no non-loopback endpoint. One restart, one window; a pass means the flag stopped the refresh for five hours on 0.40.2, no more. Runner smoke-tested for 8 s with the flag off; not evidence.
 
-*Evidence: `exp_057_local_inference_egress/` (RESULT.md, `runs/20261028T050604Z/`). Status: Complete; Amendment 2 registered, not yet run.*
+**Amendment 2 result, 2026-11-01** (`runs/20261101T062551Z_amendment2/`, 07:25 to 12:26 CET, the production daemon restarted with `disable_ollama_cloud` in `~/.ollama/server.json`, nothing generating). C_flag and C_pos passed. **H6 PASS:** in 18,000 s the daemon's only socket was its loopback listener, including when the refresh came due at 11:20:48. **H5 FAIL as registered:** the scheduler still logged `cache sleep scheduled` at the start and at 11:20:48. Neither line was a call: the cache file kept its pre-flag 06:11:43 write, the start line came 1 ms after the daemon began listening, and no process on the machine reached the address `ollama.com` resolved to on 2026-10-28. With cloud disabled the timer runs and the request is skipped. **SO WHAT:** the flag is the fix on 0.40.2, to be re-measured after any upgrade; the mini's daemon has run with it since 2026-11-01, and keeping it is Andrei's call; a count of the scheduler's log line over-reports egress. The machine-wide log is held back and hashed in RESULT.md.
+
+*Evidence: `exp_057_local_inference_egress/` (RESULT.md, `runs/20261028T050604Z/`). Status: Complete, including Amendment 2 (2026-11-01, `runs/20261101T062551Z_amendment2/`).*
 
 ---
 

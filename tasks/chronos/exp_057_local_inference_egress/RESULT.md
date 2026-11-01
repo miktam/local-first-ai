@@ -107,6 +107,36 @@ This is the picture a review-machine dashboard has to show rather than assume qu
 
 - **"Nothing leaves the machine during local inference" is false for Ollama 0.40.2 as installed.** With cloud features on, the default, the daemon contacts `ollama.com` about six times a day, generating or not. It is the runtime, not the weights and not the prompt: layer 1 of the hypothesis. Every place we wrote that local inference sends nothing needs the qualifier: *the model sends nothing; the default runtime does.*
 - **The report that prompted this is not what we saw.** No Qwen subject, nor any subject, opened a connection. The harness layer, an app executing a model's search request, is still untested and is the follow-up experiment.
-- **The fix is a flag, and it is unmeasured: Amendment 2 is registered to measure it** (HYPOTHESIS.md; runner `kit/idle57.py`). `OLLAMA_NO_CLOUD=1` (or `"disable_ollama_cloud": true` in `~/.ollama/server.json`) plus a restart; the log must then read `Ollama cloud disabled: true`. The documentation does not say whether the recommendations refresh is covered by that flag. A follow-up, registered before it runs: set the flag, restart, watch the tree for longer than the longest observed interval (five hours) with no generation, and check the log for refresh lines. The production environment is Andrei's to change.
+- **The fix is a flag, and it is unmeasured: Amendment 2 is registered to measure it** (HYPOTHESIS.md; runner `kit/idle57.py`). `OLLAMA_NO_CLOUD=1` (or `"disable_ollama_cloud": true` in `~/.ollama/server.json`) plus a restart; the log must then read `Ollama cloud disabled: true`. The documentation does not say whether the recommendations refresh is covered by that flag. A follow-up, registered before it runs: set the flag, restart, watch the tree for longer than the longest observed interval (five hours) with no generation, and check the log for refresh lines. The production environment is Andrei's to change. *Measured 2026-11-01: the flag stops the call; see the Amendment 2 result below.*
 - **For the egress dashboard and the Exposure Review annex.** The runtime baseline must be longer than the longest timer; a 30 s idle window proves nothing about a four-hour one. Until the flag is set and measured, the annex lists the daemon's `ollama.com` refresh as known egress of the review machine.
 - **The background upgrade** made no network call but wrote 48 GB of backups. Worth knowing before the next large pull.
+
+## Amendment 2 result (2026-11-01): the flag stops the call, not the timer
+
+Run `runs/20261101T062551Z_amendment2/`, 07:25:51 to 12:25:57 CET. Ollama 0.40.2, the production daemon restarted with `{"disable_ollama_cloud": true}` in `~/.ollama/server.json`, nothing generating: the daemon's log shows one request in the window, the launch block's own `/api/version` readiness check at the start.
+
+| | Verdict | Evidence |
+|---|---|---|
+| **C_flag** | PASS | the log beside the new start reads `Ollama cloud disabled: true` |
+| **C_pos** | PASS | the watcher caught the control's connection to `example.com:80` |
+| **H5** no refresh line after the restart | **FAIL as registered** | two scheduler lines, `model recommendations cache sleep scheduled`: one at the start (07:25:51.287, next wait 3 h 54 m 57 s) and one when that wait ran out (11:20:48.437, next wait 3 h 45 m 48 s) |
+| **H6** the daemon tree opens no non-loopback endpoint | PASS | 18,000 s at 0.2 s: the daemon's only socket was its loopback listener, including at 11:20:48 |
+
+**Why H5's fail is not a call.** Without the flag, the same line is written after a successful fetch, and the fetch rewrites `~/.ollama/cache/model-recommendations.json` in the same second (main run). With the flag:
+
+- neither line came with a fetch error or any other line from the scheduler;
+- the cache file kept its 06:11:43 write, the last refresh before the flag, through both lines (2,041 bytes);
+- the start line came 1 ms after the daemon began listening, too soon for a TLS exchange with `ollama.com`;
+- the machine sampler (`nettop`, every process, 1 s) saw no flow from the daemon other than its listener, and no process reached `34.36.133.15`, the address `ollama.com` resolved to on 2026-10-28. It was recording throughout: new flows from other processes appeared every few minutes, 62 of them within two minutes of 11:20:48.
+
+H5 counted any scheduler line because the registration assumed a line meant an attempt. With cloud disabled, the scheduler keeps its timer and skips the request. The verdict stands as registered, with the cause beside it.
+
+**Held back, as in Amendment 1.** The machine sampler's log holds other processes' remote addresses. It is kept out of this repository: `idle.machine.jsonl` sha256 `dd4ce36eaf82f1765f346314b862a6aa5fb910098096a77514b8b21377f78b84`. `verdict.json` carries its public form, process names with flow counts.
+
+**Limits.** One restart and one due timer inside the window. The samplers' resolution is as before: a connection shorter than 0.2 s at the tree, or 1 s at the machine, could be missed; the cache file is the independent check. DNS and payload unseen. A pass means "with cloud disabled, the daemon made no call for five hours covering one due refresh, on 0.40.2". Another Ollama version needs its own check.
+
+### SO WHAT (Amendment 2)
+
+- **The fix works.** With cloud disabled, Ollama 0.40.2 keeps its recommendations timer but does not call `ollama.com`. The mini's production daemon has run with the flag since 2026-11-01 07:25. Keeping it is Andrei's call; reverting means deleting the file and restarting.
+- **The claim for this machine becomes:** the model sends nothing, and the runtime sends nothing once cloud is disabled, measured for five hours on 0.40.2. It is runtime behaviour, so it is re-measured after every Ollama upgrade.
+- **A log line is not a call.** A check that counts the scheduler's lines over-reports egress. The cache file's write time and the network are the evidence. The Exposure Review annex and the egress dashboard move the refresh from "known egress" to "disabled, measured", and a doctor check can read the cloud line beside the daemon's last start.
