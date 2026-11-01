@@ -43,7 +43,7 @@ A dated line for each change to the local tools: what changed, what prompted it 
 
 | | |
 |---|---|
-| Log | [log/](./log/) · [October 2026](./log/2026-10.md) |
+| Log | [log/](./log/) · [November 2026](./log/2026-11.md) · [October 2026](./log/2026-10.md) |
 | Model notes | [Kev-4B](./log/models/kev-4b.md) · [Jev](./log/models/jev.md) |
 
 ---
