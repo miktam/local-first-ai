@@ -8,17 +8,20 @@ In exp_055, gemma4:26b alone read 220 messages against a fictional person's publ
 
 Ollama 0.40.2 offers no thinking budget for this model (`think` levels are `false` and `true` only; a `"low"` request is accepted and ignored), so these are the three mechanisms there are.
 
-Registered 2026-10-28, before any kit or run. Kit written and smoke-tested the same day on a dummy message; **not run.**
+Registered 2026-10-28, before any kit or run. Kit written and smoke-tested the same day on a dummy message. **Run 2026-11-01 on macOS 27.2: F is chosen** (220 of 220 answered, balanced accuracy 0.914 against exp_055's 0.882, median 36.9 s). T flags 22 % of genuine messages. At 32K, 22 answers are still empty, but a different 22, and verdicts move. The empty answers are repetition loops ([RESULT.md](RESULT.md)).
 
 | File | What it is |
 |---|---|
-| [HYPOTHESIS.md](HYPOTHESIS.md) | the registration: what is at stake (the 22 by kind and class), the runtime's options, arms T/F/C, controls C1–C4, H1–H4, the decision rule for A1's reader call, limits, frozen inputs; the kit note at the end |
+| [RESULT.md](RESULT.md) | controls, verdicts, the decision (F), each arm's numbers, the loops behind the empty answers, what is held back, SO WHAT |
+| [HYPOTHESIS.md](HYPOTHESIS.md) | the registration: what is at stake (the 22 by kind and class), the runtime's options, arms T/F/C, controls C1–C4, H1–H4, the decision rule for A1's reader call, limits, frozen inputs; the kit note and Amendment 1 at the end |
 | `kit/arms60.py` | the three arms over exp_055's corpus, read in place; every counter and the thinking text recorded; the daemon's state before, during and after each arm; arm C restores the 8K context; `--all` runs T, F, C in order under exp_054's audit hook |
 | `kit/score60.py` | exp_055's metrics (imported unchanged) per arm, C1–C4, H1–H4, the decision rule, the fate of the 22, the budget curve, disagreements, breakdowns |
 | `kit/test_score60.py` | the scorer on a synthesized run built from the real manifest and G baseline; `python3.14 -I kit/test_score60.py` |
+| `kit/describe60.py` | written after scoring, descriptive only: the fallbacks' cost, arm C's moved empties, T against F, and the loop counts (these need the held-back thinking files); writes `runs/<ts>/describe.json` |
 | `kit/dummy60.eml` | the fictional smoke-test message (not in the corpus) |
 | `dev/20261028T064040Z/` | the smoke test: all three arms on the dummy, the daemon at 8K → 32K → 8K, the audit logs |
-| `runs/<ts>/` | written by the run: per arm `results.jsonl`, `thinking.jsonl`, `audit.jsonl`, `daemon_*.json`; arm F also `pass1.jsonl`, `retry.jsonl`; arm C also `restore_call.jsonl`; then `score.json` |
+| `runs/<ts>/` | written by the run: per arm `results.jsonl`, `thinking.jsonl`, `audit.jsonl`, `daemon_*.json`; arm F also `pass1.jsonl`, `retry.jsonl`; arm C also `restore_call.jsonl`; then `score.json`. In the published `runs/20261101T152955Z/` the thinking text of F and C is held back and hashed in RESULT.md; T's (all empty) is kept |
+| `aborted/20261101T062551Z/` | the first attempt, stopped under the thermal clamp, not scored (Amendment 1) |
 
 **Inputs** are exp_055's published corpus, prompt and footprint, read in place from `../exp_055_exposure_review_lures/` and hashed in the registration. Seven genuine messages differ from what the exp_055 run saw (five invented domains were replaced by `.example` names before publishing); they are scored but excluded from the agreement tests.
 
@@ -39,6 +42,6 @@ python3.14 kit/score60.py runs/$TS 2>&1 | tee -a runs/$TS/run.log
 
 A run resumes: an arm skips the ids already in its `results.jsonl`. To score again: `python3.14 kit/score60.py runs/<ts>`.
 
-**Status: registered; kit smoke-tested; first attempt aborted 2026-11-01 under a firmware-caused thermal clamp (`aborted/20261101T062551Z/`, Amendment 1); measured run not started.** Numbering: exp_057 names exp_058 for the harness-layer egress test, exp_059 is registered, so this is 060.
+**Status: complete.** The measured run `runs/20261101T152955Z/` went from 2026-11-01 15:29Z to 2026-11-02 02:22Z, at thermal level 0 throughout. F is chosen for A1's reader call. The first attempt was aborted under a firmware-caused thermal clamp (`aborted/20261101T062551Z/`, Amendment 1). Numbering: exp_057 names exp_058 for the harness-layer egress test, exp_059 is registered, so this is 060.
 
 **Everything here is fictional:** the person, every organisation and domain. No message is operational.

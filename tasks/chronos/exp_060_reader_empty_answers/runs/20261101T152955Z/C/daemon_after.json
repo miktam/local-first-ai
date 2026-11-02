@@ -1,0 +1,31 @@
+{
+ "t": 1793586145.921531,
+ "utc": "2026-11-02T02:22:25Z",
+ "ollama_version": "ollama version is 0.40.2",
+ "ollama_ps": "NAME          ID              SIZE     PROCESSOR    CONTEXT    RUNNER      UNTIL   \ngemma4:26b    777b927e3b6b    23 GB    100% GPU     32768      llamacpp    Forever    \n",
+ "api_ps": {
+  "models": [
+   {
+    "name": "gemma4:26b",
+    "model": "gemma4:26b",
+    "size": 23284919827,
+    "digest": "777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29",
+    "details": {
+     "parent_model": "",
+     "format": "gguf",
+     "family": "gemma4",
+     "families": [
+      "gemma4",
+      "clip"
+     ],
+     "parameter_size": "25.8B",
+     "quantization_level": "Q4_K_M"
+    },
+    "expires_at": "2319-02-12T03:09:42.771775807+01:00",
+    "size_vram": 23284919827,
+    "context_length": 32768,
+    "runner": "llamacpp"
+   }
+  ]
+ }
+}

@@ -89,6 +89,7 @@ One line per experiment. The registration, the full result and the evidence are 
 | [055](./tasks/chronos/exp_055_exposure_review_lures/) | Exposure Review: targeted-lure benchmark | The check catches 75 % (all new-domain lures, 1 of 14 link-free); gemma alone 84 %, Opus 95 % |
 | [056](./tasks/chronos/exp_056_triage_injection/) | Exposure Review: can a message subvert its own check | Registered and parked before any run; payloads frozen by hash |
 | [057](./tasks/chronos/exp_057_local_inference_egress/) | Does local inference leave the machine (Ollama runtime, nine Qwen/gemma subjects, whole machine watched) | The models sent nothing; the Ollama daemon phoned ollama.com on a ~4 h timer, so H1/H2 fail as registered with the cause named; with cloud disabled it made no call in five hours covering one due refresh (Amendment 2, 2026-11-01) |
+| [060](./tasks/chronos/exp_060_reader_empty_answers/) | Exposure Review: closing the local reader's empty answers (thinking off, a think-off retry, a 32K context) | The retry closes them: 220 of 220 answered, balanced accuracy 0.882 → 0.914. Thinking off flags 22 % of genuine messages; 32K leaves as many empty, a different set. The empties are repetition loops |
 
 #### Local models against frontier models on analysis
 

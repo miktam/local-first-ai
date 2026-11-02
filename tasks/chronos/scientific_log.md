@@ -2405,4 +2405,19 @@ Finding while registering: exp_007's fixtures cycle the same 31 sentences, so th
 
 **Amendment 1, 2026-11-01, before the measured run.** The first attempt (06:25Z) ran under a thermal clamp that was not heat: the staged macOS 27.2 had updated the mini's firmware (20457.41.3) while 26.5.1 (loader 18000.120.36) still booted, the thermal pressure level reached 4 and stayed there idle, and decoding fell from 56.5 to about 8.5 tokens a second. It was stopped in arm F at 41 of 220 and moved to `aborted/20261101T062551Z/`, not scored. The measured run is on macOS 27.2 (firmware and loader matched; level 0; five minutes of gemma4:26b held 58 to 60 tokens a second). Ollama, the model and the settings are unchanged; cloud features are off. C1 now also tests reproduction across the OS upgrade. The block records the thermal level every 60 s; a level of 2 or more during an arm makes H4 not separable for that arm.
 
-*Evidence: `exp_060_reader_empty_answers/`. Status: Registered; first attempt aborted (Amendment 1); measured run not started.*
+**Result, 2026-11-02** (`runs/20261101T152955Z`, 2026-11-01 15:29Z to 2026-11-02 02:22Z; macOS 27.2; thermal level 0 on all 653 samples; the daemon served only the run's 682 calls). C1–C4 pass. C1 matched exp_055's G on 193 of 193 bands and 20 of 20 empties across the OS upgrade.
+- **T** (thinking off) answers 220 in a median of 2.8 s but scores a balanced accuracy of 0.850, failing H3. It flags 24 of 110 genuine messages, 15 of the 20 from young domains.
+- **F** (think, retry without thinking on an empty answer) answers 220, catches 100 of 110 and flags 9 of 110, for a balanced accuracy of 0.914, attribution 95.2 %, median 36.9 s and p95 162.3 s. It passes every hypothesis and is chosen for A1's reader call. Its 21 fallbacks cost a median of 162 s each.
+- **C** (32K) leaves 22 empty, failing H1. It agrees with G on 88.6 % (H2 fails) and has a p95 of 884.8 s with one error, Ollama's repeat-limit abort (H4 fails). 11 of the original 22 finished, all right, in 1,026 to 5,304 tokens. 11 that had answered at 8K now looped to the 32K wall or were aborted. Changing only `num_ctx` changed the generated text on 115 of 188 messages.
+- **The empties are repetition loops.** At 32K, 19 of 21 runaways repeat earlier lines on 92 % or more of their last 200, and the other two loop too. The commonest loop checks the footprint for an id that does not exist (`C-0a9fbf` for `A-0a9fbf`). That id appears in 11 of F's 21 runaways against 14 of the 199 that finished.
+- **Budget curve:** every pass-1 answer that finished did so within 7,000 tokens. A 4,000-token budget would have cut 7.
+
+SO WHAT:
+- Thinking stays on, with the think-off retry.
+- The 8K cap stays.
+- A comparison between runs must fix and record the context size (exp_059).
+- Seeds: a loop detector on the stream, and attribution ids that are harder to garble.
+
+The thinking text of F and C is held back from the repository and hashed in RESULT.md. `kit/describe60.py`, written after scoring, gives the descriptive figures.
+
+*Evidence: `exp_060_reader_empty_answers/`. Status: Complete (2026-11-02); F chosen; first attempt aborted (Amendment 1).*

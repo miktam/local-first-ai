@@ -1,0 +1,1564 @@
+{
+  "run": "runs/20261101T152955Z",
+  "baseline": {
+    "G_answered": 198,
+    "G_empty": 22,
+    "unchanged_answered": 193,
+    "unchanged_empty": 20,
+    "balanced_accuracy": 0.882,
+    "attribution_rate": 0.85,
+    "answered": 198
+  },
+  "arms": {
+    "T": {
+      "lures": 110,
+      "benign": 110,
+      "caught": 101,
+      "catch_rate": 0.918,
+      "catch_ci": [
+        0.852,
+        0.956
+      ],
+      "false_alarms": 24,
+      "false_alarm_rate": 0.218,
+      "false_alarm_ci": [
+        0.151,
+        0.304
+      ],
+      "likely_scam_on_genuine": 0,
+      "balanced_accuracy": 0.85,
+      "unanswered": 0,
+      "attribution_lures_with_items": 104,
+      "attribution_named_one": 96,
+      "attribution_rate": 0.923,
+      "attribution_mean_recall": 0.87,
+      "answered": 220,
+      "timing": {
+        "n": 220,
+        "median_s": 2.8,
+        "p95_s": 3.4,
+        "max_s": 3.8,
+        "errors": 0,
+        "timeouts": 0,
+        "error_ids": []
+      },
+      "done_reason": {
+        "stop": 220
+      },
+      "eval_count": {
+        "n": 220,
+        "min": 52,
+        "p50": 74,
+        "p90": 91,
+        "max": 126
+      },
+      "agreement_with_G_on_unchanged_answered": {
+        "n": 193,
+        "same": 157,
+        "rate": 0.813,
+        "differ": [
+          "X008",
+          "X013",
+          "X018",
+          "X031",
+          "X038",
+          "X042",
+          "X044",
+          "X045",
+          "X046",
+          "X049",
+          "X054",
+          "X060",
+          "X061",
+          "X066",
+          "X068",
+          "X074",
+          "X078",
+          "X086",
+          "X092",
+          "X095",
+          "X097",
+          "X120",
+          "X123",
+          "X125",
+          "X133",
+          "X138",
+          "X147",
+          "X169",
+          "X181",
+          "X185",
+          "X189",
+          "X199",
+          "X202",
+          "X207",
+          "X213",
+          "X219"
+        ]
+      },
+      "opus_gap": 0.1
+    },
+    "F": {
+      "lures": 110,
+      "benign": 110,
+      "caught": 100,
+      "catch_rate": 0.909,
+      "catch_ci": [
+        0.841,
+        0.95
+      ],
+      "false_alarms": 9,
+      "false_alarm_rate": 0.082,
+      "false_alarm_ci": [
+        0.044,
+        0.148
+      ],
+      "likely_scam_on_genuine": 1,
+      "balanced_accuracy": 0.914,
+      "unanswered": 0,
+      "attribution_lures_with_items": 104,
+      "attribution_named_one": 99,
+      "attribution_rate": 0.952,
+      "attribution_mean_recall": 0.911,
+      "answered": 220,
+      "timing": {
+        "n": 220,
+        "median_s": 36.9,
+        "p95_s": 162.3,
+        "max_s": 165.6,
+        "errors": 0,
+        "timeouts": 0,
+        "error_ids": []
+      },
+      "done_reason": {
+        "stop": 220
+      },
+      "eval_count": {
+        "n": 220,
+        "min": 63,
+        "p50": 1570,
+        "p90": 2978,
+        "max": 6505
+      },
+      "agreement_with_G_on_unchanged_answered": {
+        "n": 193,
+        "same": 193,
+        "rate": 1.0,
+        "differ": []
+      },
+      "opus_gap": 0.036,
+      "fallbacks": 21
+    },
+    "C": {
+      "lures": 110,
+      "benign": 110,
+      "caught": 95,
+      "catch_rate": 0.864,
+      "catch_ci": [
+        0.787,
+        0.916
+      ],
+      "false_alarms": 6,
+      "false_alarm_rate": 0.055,
+      "false_alarm_ci": [
+        0.025,
+        0.114
+      ],
+      "likely_scam_on_genuine": 1,
+      "balanced_accuracy": 0.905,
+      "unanswered": 22,
+      "attribution_lures_with_items": 104,
+      "attribution_named_one": 92,
+      "attribution_rate": 0.885,
+      "attribution_mean_recall": 0.85,
+      "answered": 198,
+      "timing": {
+        "n": 220,
+        "median_s": 36.8,
+        "p95_s": 884.8,
+        "max_s": 893.9,
+        "errors": 1,
+        "timeouts": 0,
+        "error_ids": [
+          "X189"
+        ]
+      },
+      "done_reason": {
+        "None": 1,
+        "length": 21,
+        "stop": 198
+      },
+      "eval_count": {
+        "n": 198,
+        "min": 715,
+        "p50": 1652,
+        "p90": 3362,
+        "max": 6364
+      },
+      "agreement_with_G_on_unchanged_answered": {
+        "n": 193,
+        "same": 171,
+        "rate": 0.886,
+        "differ": [
+          "X027",
+          "X031",
+          "X042",
+          "X074",
+          "X110",
+          "X112",
+          "X117",
+          "X121",
+          "X131",
+          "X133",
+          "X134",
+          "X138",
+          "X147",
+          "X155",
+          "X189",
+          "X194",
+          "X203",
+          "X204",
+          "X207",
+          "X210",
+          "X211",
+          "X220"
+        ]
+      },
+      "opus_gap": 0.045
+    }
+  },
+  "controls": {
+    "C1_baseline_reproduces": {
+      "agreement": {
+        "n": 193,
+        "same": 193,
+        "rate": 1.0,
+        "differ": []
+      },
+      "unchanged_empties_empty_again": 20,
+      "of": 20,
+      "pass1_empty_ids": [
+        "X003",
+        "X005",
+        "X020",
+        "X030",
+        "X041",
+        "X052",
+        "X062",
+        "X063",
+        "X071",
+        "X088",
+        "X090",
+        "X100",
+        "X103",
+        "X109",
+        "X116",
+        "X141",
+        "X157",
+        "X161",
+        "X166",
+        "X175",
+        "X190"
+      ],
+      "pass": true
+    },
+    "C2_wall_is_the_cause": {
+      "empty_pass1": 21,
+      "at_wall": 21,
+      "not_at_wall": [],
+      "tokens": {
+        "X003": {
+          "done_reason": "length",
+          "prompt_eval_count": 1020,
+          "eval_count": 7172,
+          "error": null
+        },
+        "X005": {
+          "done_reason": "length",
+          "prompt_eval_count": 972,
+          "eval_count": 7220,
+          "error": null
+        },
+        "X020": {
+          "done_reason": "length",
+          "prompt_eval_count": 1016,
+          "eval_count": 7176,
+          "error": null
+        },
+        "X030": {
+          "done_reason": "length",
+          "prompt_eval_count": 1011,
+          "eval_count": 7181,
+          "error": null
+        },
+        "X041": {
+          "done_reason": "length",
+          "prompt_eval_count": 986,
+          "eval_count": 7206,
+          "error": null
+        },
+        "X052": {
+          "done_reason": "length",
+          "prompt_eval_count": 1034,
+          "eval_count": 7158,
+          "error": null
+        },
+        "X062": {
+          "done_reason": "length",
+          "prompt_eval_count": 998,
+          "eval_count": 7194,
+          "error": null
+        },
+        "X063": {
+          "done_reason": "length",
+          "prompt_eval_count": 1063,
+          "eval_count": 7129,
+          "error": null
+        },
+        "X071": {
+          "done_reason": "length",
+          "prompt_eval_count": 991,
+          "eval_count": 7201,
+          "error": null
+        },
+        "X088": {
+          "done_reason": "length",
+          "prompt_eval_count": 927,
+          "eval_count": 7265,
+          "error": null
+        },
+        "X090": {
+          "done_reason": "length",
+          "prompt_eval_count": 945,
+          "eval_count": 7247,
+          "error": null
+        },
+        "X100": {
+          "done_reason": "length",
+          "prompt_eval_count": 1010,
+          "eval_count": 7182,
+          "error": null
+        },
+        "X103": {
+          "done_reason": "length",
+          "prompt_eval_count": 943,
+          "eval_count": 7249,
+          "error": null
+        },
+        "X109": {
+          "done_reason": "length",
+          "prompt_eval_count": 1050,
+          "eval_count": 7142,
+          "error": null
+        },
+        "X116": {
+          "done_reason": "length",
+          "prompt_eval_count": 1009,
+          "eval_count": 7183,
+          "error": null
+        },
+        "X141": {
+          "done_reason": "length",
+          "prompt_eval_count": 981,
+          "eval_count": 7211,
+          "error": null
+        },
+        "X157": {
+          "done_reason": "length",
+          "prompt_eval_count": 823,
+          "eval_count": 7369,
+          "error": null
+        },
+        "X161": {
+          "done_reason": "length",
+          "prompt_eval_count": 962,
+          "eval_count": 7230,
+          "error": null
+        },
+        "X166": {
+          "done_reason": "length",
+          "prompt_eval_count": 958,
+          "eval_count": 7234,
+          "error": null
+        },
+        "X175": {
+          "done_reason": "length",
+          "prompt_eval_count": 966,
+          "eval_count": 7226,
+          "error": null
+        },
+        "X190": {
+          "done_reason": "length",
+          "prompt_eval_count": 1012,
+          "eval_count": 7180,
+          "error": null
+        }
+      },
+      "pass": true
+    },
+    "C3_loopback_only": {
+      "per_arm": {
+        "T": {
+          "present": true,
+          "connects": 223,
+          "resolutions": 223,
+          "spawns": 6,
+          "violations": [],
+          "pass": true
+        },
+        "F": {
+          "present": true,
+          "connects": 244,
+          "resolutions": 244,
+          "spawns": 6,
+          "violations": [],
+          "pass": true
+        },
+        "C": {
+          "present": true,
+          "connects": 225,
+          "resolutions": 225,
+          "spawns": 8,
+          "violations": [],
+          "pass": true
+        }
+      },
+      "pass": true
+    },
+    "C4_arm_C_at_32K": {
+      "context_during": 32768,
+      "context_restored": 8192,
+      "pass": true
+    }
+  },
+  "hypotheses": {
+    "T": {
+      "H1_loss_closed": {
+        "answered": 220,
+        "pass": true
+      },
+      "H3_no_worse_than_G": {
+        "balanced_accuracy": 0.85,
+        "attribution": 0.923,
+        "pass": false
+      },
+      "H4_affordable": {
+        "median_s": 2.8,
+        "p95_s": 3.4,
+        "errors": 0,
+        "pass": true
+      },
+      "H2_moves_nothing_it_did_not_have_to": {
+        "descriptive_only": true,
+        "agreement": 0.813
+      }
+    },
+    "F": {
+      "H1_loss_closed": {
+        "answered": 220,
+        "pass": true
+      },
+      "H3_no_worse_than_G": {
+        "balanced_accuracy": 0.914,
+        "attribution": 0.952,
+        "pass": true
+      },
+      "H4_affordable": {
+        "median_s": 36.9,
+        "p95_s": 162.3,
+        "errors": 0,
+        "pass": true
+      },
+      "H2_moves_nothing_it_did_not_have_to": {
+        "inherited_from": "C1",
+        "agreement": 1.0,
+        "pass": true
+      }
+    },
+    "C": {
+      "H1_loss_closed": {
+        "answered": 198,
+        "pass": false
+      },
+      "H3_no_worse_than_G": {
+        "balanced_accuracy": 0.905,
+        "attribution": 0.885,
+        "pass": true
+      },
+      "H4_affordable": {
+        "median_s": 36.8,
+        "p95_s": 884.8,
+        "errors": 1,
+        "pass": false
+      },
+      "H2_moves_nothing_it_did_not_have_to": {
+        "agreement": 0.886,
+        "differ": [
+          "X027",
+          "X031",
+          "X042",
+          "X074",
+          "X110",
+          "X112",
+          "X117",
+          "X121",
+          "X131",
+          "X133",
+          "X134",
+          "X138",
+          "X147",
+          "X155",
+          "X189",
+          "X194",
+          "X203",
+          "X204",
+          "X207",
+          "X210",
+          "X211",
+          "X220"
+        ],
+        "pass": false
+      }
+    }
+  },
+  "descriptive": {
+    "fate_of_the_22": {
+      "X003": {
+        "kind": "lure",
+        "age": "new",
+        "ask": "call",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "likely-scam",
+          "correct": true
+        },
+        "F": {
+          "band": "likely-scam",
+          "correct": true
+        },
+        "C": {
+          "band": null,
+          "correct": null
+        }
+      },
+      "X005": {
+        "kind": "benign",
+        "age": "old",
+        "ask": "click",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "benign",
+          "correct": true
+        },
+        "F": {
+          "band": "benign",
+          "correct": true
+        },
+        "C": {
+          "band": null,
+          "correct": null
+        }
+      },
+      "X011": {
+        "kind": "benign",
+        "age": "young",
+        "ask": "reply",
+        "changed_in_published_copy": true,
+        "T": {
+          "band": "suspicious",
+          "correct": false
+        },
+        "F": {
+          "band": "benign",
+          "correct": true
+        },
+        "C": {
+          "band": "benign",
+          "correct": true
+        }
+      },
+      "X020": {
+        "kind": "lure",
+        "age": "old",
+        "ask": "reply",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "suspicious",
+          "correct": true
+        },
+        "F": {
+          "band": "suspicious",
+          "correct": true
+        },
+        "C": {
+          "band": null,
+          "correct": null
+        }
+      },
+      "X030": {
+        "kind": "lure",
+        "age": "old",
+        "ask": "credentials",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "suspicious",
+          "correct": true
+        },
+        "F": {
+          "band": "suspicious",
+          "correct": true
+        },
+        "C": {
+          "band": "suspicious",
+          "correct": true
+        }
+      },
+      "X041": {
+        "kind": "benign",
+        "age": "young",
+        "ask": "reply",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "suspicious",
+          "correct": false
+        },
+        "F": {
+          "band": "suspicious",
+          "correct": false
+        },
+        "C": {
+          "band": null,
+          "correct": null
+        }
+      },
+      "X052": {
+        "kind": "benign",
+        "age": "old",
+        "ask": "click",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "benign",
+          "correct": true
+        },
+        "F": {
+          "band": "benign",
+          "correct": true
+        },
+        "C": {
+          "band": null,
+          "correct": null
+        }
+      },
+      "X062": {
+        "kind": "lure",
+        "age": "new",
+        "ask": "click",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "likely-scam",
+          "correct": true
+        },
+        "F": {
+          "band": "likely-scam",
+          "correct": true
+        },
+        "C": {
+          "band": "suspicious",
+          "correct": true
+        }
+      },
+      "X063": {
+        "kind": "lure",
+        "age": "new",
+        "ask": "reply",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "suspicious",
+          "correct": true
+        },
+        "F": {
+          "band": "suspicious",
+          "correct": true
+        },
+        "C": {
+          "band": null,
+          "correct": null
+        }
+      },
+      "X071": {
+        "kind": "lure",
+        "age": "new",
+        "ask": "click",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "benign",
+          "correct": false
+        },
+        "F": {
+          "band": "benign",
+          "correct": false
+        },
+        "C": {
+          "band": null,
+          "correct": null
+        }
+      },
+      "X088": {
+        "kind": "lure",
+        "age": "new",
+        "ask": "attachment",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "benign",
+          "correct": false
+        },
+        "F": {
+          "band": "benign",
+          "correct": false
+        },
+        "C": {
+          "band": "suspicious",
+          "correct": true
+        }
+      },
+      "X090": {
+        "kind": "benign",
+        "age": "old",
+        "ask": "none",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "benign",
+          "correct": true
+        },
+        "F": {
+          "band": "benign",
+          "correct": true
+        },
+        "C": {
+          "band": "benign",
+          "correct": true
+        }
+      },
+      "X100": {
+        "kind": "benign",
+        "age": "old",
+        "ask": "click",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "suspicious",
+          "correct": false
+        },
+        "F": {
+          "band": "suspicious",
+          "correct": false
+        },
+        "C": {
+          "band": "benign",
+          "correct": true
+        }
+      },
+      "X103": {
+        "kind": "benign",
+        "age": "old",
+        "ask": "click",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "suspicious",
+          "correct": false
+        },
+        "F": {
+          "band": "suspicious",
+          "correct": false
+        },
+        "C": {
+          "band": null,
+          "correct": null
+        }
+      },
+      "X109": {
+        "kind": "lure",
+        "age": "old",
+        "ask": "pay",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "suspicious",
+          "correct": true
+        },
+        "F": {
+          "band": "suspicious",
+          "correct": true
+        },
+        "C": {
+          "band": "suspicious",
+          "correct": true
+        }
+      },
+      "X116": {
+        "kind": "lure",
+        "age": "old",
+        "ask": "pay",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "suspicious",
+          "correct": true
+        },
+        "F": {
+          "band": "suspicious",
+          "correct": true
+        },
+        "C": {
+          "band": null,
+          "correct": null
+        }
+      },
+      "X141": {
+        "kind": "benign",
+        "age": "old",
+        "ask": "reply",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "benign",
+          "correct": true
+        },
+        "F": {
+          "band": "benign",
+          "correct": true
+        },
+        "C": {
+          "band": null,
+          "correct": null
+        }
+      },
+      "X157": {
+        "kind": "lure",
+        "age": "no domain",
+        "ask": "call",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "benign",
+          "correct": false
+        },
+        "F": {
+          "band": "benign",
+          "correct": false
+        },
+        "C": {
+          "band": "suspicious",
+          "correct": true
+        }
+      },
+      "X161": {
+        "kind": "benign",
+        "age": "old",
+        "ask": "none",
+        "changed_in_published_copy": true,
+        "T": {
+          "band": "benign",
+          "correct": true
+        },
+        "F": {
+          "band": "benign",
+          "correct": true
+        },
+        "C": {
+          "band": null,
+          "correct": null
+        }
+      },
+      "X166": {
+        "kind": "benign",
+        "age": "old",
+        "ask": "none",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "benign",
+          "correct": true
+        },
+        "F": {
+          "band": "benign",
+          "correct": true
+        },
+        "C": {
+          "band": "benign",
+          "correct": true
+        }
+      },
+      "X175": {
+        "kind": "benign",
+        "age": "old",
+        "ask": "pay",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "benign",
+          "correct": true
+        },
+        "F": {
+          "band": "benign",
+          "correct": true
+        },
+        "C": {
+          "band": "benign",
+          "correct": true
+        }
+      },
+      "X190": {
+        "kind": "lure",
+        "age": "new",
+        "ask": "click",
+        "changed_in_published_copy": false,
+        "T": {
+          "band": "suspicious",
+          "correct": true
+        },
+        "F": {
+          "band": "suspicious",
+          "correct": true
+        },
+        "C": {
+          "band": "likely-scam",
+          "correct": true
+        }
+      }
+    },
+    "recovered_summary": {
+      "T": {
+        "answered": 22,
+        "correct": 15,
+        "lures_caught": 8,
+        "genuine_flagged": 4
+      },
+      "F": {
+        "answered": 22,
+        "correct": 16,
+        "lures_caught": 8,
+        "genuine_flagged": 3
+      },
+      "C": {
+        "answered": 11,
+        "correct": 11,
+        "lures_caught": 6,
+        "genuine_flagged": 0
+      }
+    },
+    "budget_curve_from_F_pass1": {
+      "answered_with_counts": 199,
+      "within_2000": {
+        "share": 0.653,
+        "a_budget_here_would_have_cut": 69
+      },
+      "within_4000": {
+        "share": 0.965,
+        "a_budget_here_would_have_cut": 7
+      },
+      "within_6000": {
+        "share": 0.985,
+        "a_budget_here_would_have_cut": 3
+      },
+      "within_7000": {
+        "share": 1.0,
+        "a_budget_here_would_have_cut": 0
+      }
+    },
+    "C_former_empties": {
+      "X003": {
+        "band": null,
+        "done_reason": "length",
+        "prompt_eval_count": 1020,
+        "eval_count": 31748,
+        "seconds": 881.25,
+        "beyond_8192": true
+      },
+      "X005": {
+        "band": null,
+        "done_reason": "length",
+        "prompt_eval_count": 972,
+        "eval_count": 31796,
+        "seconds": 883.07,
+        "beyond_8192": true
+      },
+      "X011": {
+        "band": "benign",
+        "done_reason": "stop",
+        "prompt_eval_count": 1044,
+        "eval_count": 1556,
+        "seconds": 32.48,
+        "beyond_8192": false
+      },
+      "X020": {
+        "band": null,
+        "done_reason": "length",
+        "prompt_eval_count": 1016,
+        "eval_count": 31752,
+        "seconds": 884.23,
+        "beyond_8192": true
+      },
+      "X030": {
+        "band": "suspicious",
+        "done_reason": "stop",
+        "prompt_eval_count": 1011,
+        "eval_count": 3736,
+        "seconds": 78.71,
+        "beyond_8192": false
+      },
+      "X041": {
+        "band": null,
+        "done_reason": "length",
+        "prompt_eval_count": 986,
+        "eval_count": 31782,
+        "seconds": 887.36,
+        "beyond_8192": true
+      },
+      "X052": {
+        "band": null,
+        "done_reason": "length",
+        "prompt_eval_count": 1034,
+        "eval_count": 31734,
+        "seconds": 886.25,
+        "beyond_8192": true
+      },
+      "X062": {
+        "band": "suspicious",
+        "done_reason": "stop",
+        "prompt_eval_count": 998,
+        "eval_count": 3969,
+        "seconds": 83.6,
+        "beyond_8192": false
+      },
+      "X063": {
+        "band": null,
+        "done_reason": "length",
+        "prompt_eval_count": 1063,
+        "eval_count": 31705,
+        "seconds": 881.98,
+        "beyond_8192": true
+      },
+      "X071": {
+        "band": null,
+        "done_reason": "length",
+        "prompt_eval_count": 991,
+        "eval_count": 31777,
+        "seconds": 886.14,
+        "beyond_8192": true
+      },
+      "X088": {
+        "band": "suspicious",
+        "done_reason": "stop",
+        "prompt_eval_count": 927,
+        "eval_count": 5304,
+        "seconds": 112.63,
+        "beyond_8192": false
+      },
+      "X090": {
+        "band": "benign",
+        "done_reason": "stop",
+        "prompt_eval_count": 945,
+        "eval_count": 3362,
+        "seconds": 70.46,
+        "beyond_8192": false
+      },
+      "X100": {
+        "band": "benign",
+        "done_reason": "stop",
+        "prompt_eval_count": 1010,
+        "eval_count": 3680,
+        "seconds": 77.6,
+        "beyond_8192": false
+      },
+      "X103": {
+        "band": null,
+        "done_reason": "length",
+        "prompt_eval_count": 943,
+        "eval_count": 31825,
+        "seconds": 883.68,
+        "beyond_8192": true
+      },
+      "X109": {
+        "band": "suspicious",
+        "done_reason": "stop",
+        "prompt_eval_count": 1050,
+        "eval_count": 1127,
+        "seconds": 23.54,
+        "beyond_8192": false
+      },
+      "X116": {
+        "band": null,
+        "done_reason": "length",
+        "prompt_eval_count": 1009,
+        "eval_count": 31759,
+        "seconds": 884.8,
+        "beyond_8192": true
+      },
+      "X141": {
+        "band": null,
+        "done_reason": "length",
+        "prompt_eval_count": 981,
+        "eval_count": 31787,
+        "seconds": 884.16,
+        "beyond_8192": true
+      },
+      "X157": {
+        "band": "suspicious",
+        "done_reason": "stop",
+        "prompt_eval_count": 823,
+        "eval_count": 1894,
+        "seconds": 38.82,
+        "beyond_8192": false
+      },
+      "X161": {
+        "band": null,
+        "done_reason": "length",
+        "prompt_eval_count": 962,
+        "eval_count": 31806,
+        "seconds": 888.34,
+        "beyond_8192": true
+      },
+      "X166": {
+        "band": "benign",
+        "done_reason": "stop",
+        "prompt_eval_count": 958,
+        "eval_count": 1026,
+        "seconds": 21.31,
+        "beyond_8192": false
+      },
+      "X175": {
+        "band": "benign",
+        "done_reason": "stop",
+        "prompt_eval_count": 966,
+        "eval_count": 1268,
+        "seconds": 26.25,
+        "beyond_8192": false
+      },
+      "X190": {
+        "band": "likely-scam",
+        "done_reason": "stop",
+        "prompt_eval_count": 1012,
+        "eval_count": 1937,
+        "seconds": 40.17,
+        "beyond_8192": false
+      }
+    },
+    "memory_gemma4_26b": {
+      "before": {
+        "context": 8192,
+        "size_vram_gb": 18.73
+      },
+      "during_C": {
+        "context": 32768,
+        "size_vram_gb": 23.28
+      }
+    },
+    "disagreements": {
+      "T_vs_F": {
+        "compared": 220,
+        "differ": 38,
+        "by_kind": {
+          "benign": 20,
+          "lure": 18
+        },
+        "by_age": {
+          "new": 10,
+          "old": 10,
+          "young": 13,
+          "no domain": 5
+        },
+        "ids": [
+          "X189",
+          "X185",
+          "X008",
+          "X120",
+          "X011",
+          "X213",
+          "X219",
+          "X125",
+          "X049",
+          "X123",
+          "X092",
+          "X074",
+          "X066",
+          "X085",
+          "X045",
+          "X018",
+          "X068",
+          "X202",
+          "X078",
+          "X199",
+          "X038",
+          "X207",
+          "X042",
+          "X133",
+          "X086",
+          "X061",
+          "X138",
+          "X060",
+          "X054",
+          "X169",
+          "X031",
+          "X095",
+          "X044",
+          "X097",
+          "X046",
+          "X181",
+          "X013",
+          "X147"
+        ]
+      },
+      "T_vs_C": {
+        "compared": 198,
+        "differ": 42,
+        "by_kind": {
+          "benign": 21,
+          "lure": 21
+        },
+        "by_age": {
+          "new": 15,
+          "old": 9,
+          "young": 11,
+          "no domain": 7
+        },
+        "ids": [
+          "X185",
+          "X008",
+          "X211",
+          "X120",
+          "X011",
+          "X213",
+          "X219",
+          "X125",
+          "X100",
+          "X049",
+          "X123",
+          "X092",
+          "X066",
+          "X085",
+          "X045",
+          "X018",
+          "X204",
+          "X068",
+          "X202",
+          "X078",
+          "X199",
+          "X038",
+          "X062",
+          "X042",
+          "X203",
+          "X088",
+          "X086",
+          "X157",
+          "X061",
+          "X117",
+          "X112",
+          "X060",
+          "X054",
+          "X169",
+          "X190",
+          "X095",
+          "X044",
+          "X097",
+          "X046",
+          "X121",
+          "X181",
+          "X013"
+        ]
+      },
+      "F_vs_C": {
+        "compared": 198,
+        "differ": 16,
+        "by_kind": {
+          "benign": 3,
+          "lure": 13
+        },
+        "by_age": {
+          "new": 9,
+          "old": 5,
+          "young": 0,
+          "no domain": 2
+        },
+        "ids": [
+          "X211",
+          "X100",
+          "X204",
+          "X062",
+          "X207",
+          "X042",
+          "X133",
+          "X203",
+          "X088",
+          "X157",
+          "X117",
+          "X138",
+          "X112",
+          "X190",
+          "X121",
+          "X147"
+        ]
+      }
+    },
+    "breakdowns": {
+      "T": {
+        "lure_by_domain_age": {
+          "new": {
+            "n": 72,
+            "flagged": 68
+          },
+          "old": {
+            "n": 24,
+            "flagged": 21
+          },
+          "no domain": {
+            "n": 14,
+            "flagged": 12
+          }
+        },
+        "lure_by_ask": {
+          "credentials": {
+            "n": 19,
+            "flagged": 19
+          },
+          "click": {
+            "n": 27,
+            "flagged": 23
+          },
+          "pay": {
+            "n": 18,
+            "flagged": 17
+          },
+          "reply": {
+            "n": 14,
+            "flagged": 13
+          },
+          "code": {
+            "n": 10,
+            "flagged": 10
+          },
+          "attachment": {
+            "n": 13,
+            "flagged": 11
+          },
+          "call": {
+            "n": 9,
+            "flagged": 8
+          }
+        },
+        "genuine_by_domain_age": {
+          "old": {
+            "n": 72,
+            "flagged": 8
+          },
+          "young": {
+            "n": 20,
+            "flagged": 15
+          },
+          "no domain": {
+            "n": 18,
+            "flagged": 1
+          }
+        },
+        "by_channel_and_kind": {
+          "email/benign": {
+            "n": 93,
+            "flagged": 22
+          },
+          "whatsapp/benign": {
+            "n": 13,
+            "flagged": 2
+          },
+          "sms/benign": {
+            "n": 4,
+            "flagged": 0
+          },
+          "email/lure": {
+            "n": 89,
+            "flagged": 82
+          },
+          "whatsapp/lure": {
+            "n": 12,
+            "flagged": 10
+          },
+          "sms/lure": {
+            "n": 9,
+            "flagged": 9
+          }
+        }
+      },
+      "F": {
+        "lure_by_domain_age": {
+          "new": {
+            "n": 72,
+            "flagged": 70
+          },
+          "old": {
+            "n": 24,
+            "flagged": 18
+          },
+          "no domain": {
+            "n": 14,
+            "flagged": 12
+          }
+        },
+        "lure_by_ask": {
+          "credentials": {
+            "n": 19,
+            "flagged": 17
+          },
+          "click": {
+            "n": 27,
+            "flagged": 23
+          },
+          "pay": {
+            "n": 18,
+            "flagged": 17
+          },
+          "reply": {
+            "n": 14,
+            "flagged": 13
+          },
+          "code": {
+            "n": 10,
+            "flagged": 10
+          },
+          "attachment": {
+            "n": 13,
+            "flagged": 12
+          },
+          "call": {
+            "n": 9,
+            "flagged": 8
+          }
+        },
+        "genuine_by_domain_age": {
+          "old": {
+            "n": 72,
+            "flagged": 4
+          },
+          "young": {
+            "n": 20,
+            "flagged": 5
+          },
+          "no domain": {
+            "n": 18,
+            "flagged": 0
+          }
+        },
+        "by_channel_and_kind": {
+          "email/benign": {
+            "n": 93,
+            "flagged": 8
+          },
+          "whatsapp/benign": {
+            "n": 13,
+            "flagged": 1
+          },
+          "sms/benign": {
+            "n": 4,
+            "flagged": 0
+          },
+          "email/lure": {
+            "n": 89,
+            "flagged": 81
+          },
+          "whatsapp/lure": {
+            "n": 12,
+            "flagged": 10
+          },
+          "sms/lure": {
+            "n": 9,
+            "flagged": 9
+          }
+        }
+      },
+      "C": {
+        "lure_by_domain_age": {
+          "new": {
+            "n": 72,
+            "flagged": 65
+          },
+          "old": {
+            "n": 24,
+            "flagged": 17
+          },
+          "no domain": {
+            "n": 14,
+            "flagged": 13
+          }
+        },
+        "lure_by_ask": {
+          "credentials": {
+            "n": 19,
+            "flagged": 19
+          },
+          "click": {
+            "n": 27,
+            "flagged": 21
+          },
+          "pay": {
+            "n": 18,
+            "flagged": 14
+          },
+          "reply": {
+            "n": 14,
+            "flagged": 11
+          },
+          "code": {
+            "n": 10,
+            "flagged": 10
+          },
+          "attachment": {
+            "n": 13,
+            "flagged": 12
+          },
+          "call": {
+            "n": 9,
+            "flagged": 8
+          }
+        },
+        "genuine_by_domain_age": {
+          "old": {
+            "n": 72,
+            "flagged": 1
+          },
+          "young": {
+            "n": 20,
+            "flagged": 4
+          },
+          "no domain": {
+            "n": 18,
+            "flagged": 1
+          }
+        },
+        "by_channel_and_kind": {
+          "email/benign": {
+            "n": 93,
+            "flagged": 4
+          },
+          "whatsapp/benign": {
+            "n": 13,
+            "flagged": 2
+          },
+          "sms/benign": {
+            "n": 4,
+            "flagged": 0
+          },
+          "email/lure": {
+            "n": 89,
+            "flagged": 75
+          },
+          "whatsapp/lure": {
+            "n": 12,
+            "flagged": 11
+          },
+          "sms/lure": {
+            "n": 9,
+            "flagged": 9
+          }
+        }
+      }
+    }
+  },
+  "decision": {
+    "eligible": [
+      "F"
+    ],
+    "chosen": "F",
+    "why": "eligible ['F']; highest balanced accuracy",
+    "thinking_earned_its_place": true
+  }
+}
