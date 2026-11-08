@@ -2438,7 +2438,7 @@ The thinking text of F and C is held back from the repository and hashed in RESU
 **Amendment 1, 2026-11-08 12:23, before any draw, smoke test or run.** The vendor's `items.jsonl` (803 rows) gives each prompt one to three category labels, nine labels in all, and its `score.py` is a command-line script that counts an unanswered prompt as zero. Fixed before the draw: 10 prompts per registered label, each counted once under the label it was drawn for (`f320`, outside the seven, excluded); the H3 rule applies to the vendor's tally (every drawn prompt counted), with the kit's tally (answered only) beside it; `num_predict` stays 2,048 (the vendor allowed 32,768), and a cut answer is judged as it stands and counted.
 
 **Result, 2026-11-08** (`runs/20261108T123202Z`, 13:32 to 15:42 CET on the mini; macOS 27.2, Ollama 0.40.2; blobs Q `880a52af8317974f…` and A `6f186a1fe0c4f741…`, hashed from the bytes; `num_ctx` 8192, temperature 0, `think: false`; thermal level 0 at start and end; 260 rows, all answered, one H3 answer of A's cut at the 2,048-token cap; gemma4:26b reloaded). Graded blind by Fable, one session per corpus and one judge session with the vendor's judge prompt; scored by `kit/score61.py` with the vendor's `score.py` unchanged.
-- **H1 helps, at the threshold.** A passes all four dimensions on 36 of 40 units, Q on 32; Sense 38 each; paired +5/−1. Mamardashvili is at ceiling (Q 19/20, A 20/20); the gain is on Petukhov (Q 13/20, A 16/20). The prediction, no effect, failed.
+- **H1 helps, at the threshold.** A passes all four dimensions on 36 of 40 units, Q on 32; Sense 38 each; paired +5/−1. Mamardashvili is at ceiling (Q 19/20, A 20/20); most of the gain is on Petukhov (Q 13/20, A 16/20). The prediction, no effect, failed.
 - **H2 no effect.** Reframed 0/20 in each arm. All four: Mamardashvili 10/10 for both; Petukhov Q 3/10, A 4/10, mostly on names.
 - **H3 replicates.** Any propaganda Q 24.3 %, A 1.4 %, the vendor's tally (70/70 answered in each arm, so both tallies agree); fact mean Q 3.44, A 4.17. The vendor reports 22 % → 0.9 % (803 prompts, BF16, Grok 4.7, five runs). Q came out above the 22 % the prediction put it under.
 - **Speed.** Median 24.1 s per H1 unit in both arms; on H3 A 22.9 s and Q 34.5 s, A's answers being shorter (mean 1841 against 2330 characters).
@@ -2451,7 +2451,7 @@ The grading's reviewer (a separate Fable session that recomputed every number fr
 - No answer names a model. The reviewer read the graders' notes before its own re-grade, and says so.
 
 SO WHAT:
-- The fine-tune costs nothing measurable on our translation fidelity; the H1 gain is at the threshold and made of the base's slips, not a capability to plan on.
+- The fine-tune costs nothing measurable on our translation fidelity; the H1 gain is at the threshold and made mostly of the base's slips on Petukhov, not a capability to plan on.
 - The vendor's claim survives our serving stack (bartowski Q4_K_M, temperature 0) and our judge (Fable, not Grok 4.7) on 70 of the 803 prompts. It is not a check of the vendor's number.
 - Not measured: a value shift where translation does not look.
 - Nothing in our stack runs Qwen3.8, so no claim rests on this. The registered repeat on a conversion of the publisher's safetensors has not been run.
