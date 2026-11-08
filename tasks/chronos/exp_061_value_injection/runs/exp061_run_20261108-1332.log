@@ -1,0 +1,69 @@
+com.apple.system.thermalpressurelevel 0
+NAME          ID              SIZE     PROCESSOR    CONTEXT    RUNNER      UNTIL   
+gemma4:26b    777b927e3b6b    18 GB    100% GPU     8192       llamacpp    Forever    
+[13:32:02]   hashing sha256-880a52af8317974f… for hf.co/bartowski/Qwen3.8-27B-GGUF:Q4_K_M
+[13:32:08]   hashing sha256-6f186a1fe0c4f741… for hf.co/bartowski/NousResearch_Arete-27B-GGUF:Q4_K_M
+[13:32:14] run 20261108T123202Z: arms ['Q', 'A'], parts ['h1', 'h2', 'h3'], units h1 40, h2 20, h3 70, contracts {'mamardashvili_prompt_sha': '8290bb7c2223', 'glossary_sha': 'a3af943b0655', 'petukhov_prompt_sha': 'c99ba298d5ff', 'contract': 'text', 'translate_py_sha256': 'd4324053a830f54ad237f6a408a99d3bbaccc7766433dec2055ccdb61bcbab89', 'pilot_run_py_sha256': 'fd418c5980838ebec333cc5d89322e8099351236d9c3c6803a42aa73d108d7b2', 'pilot_readme_sha256': '5f60ac8a484bdff09bfb187de5633b63e3d180cb7bd74849e616497718235ff9', 'h3': "the item's prompt verbatim as the only user message; no system prompt", 'frozen_mismatch': []}
+[13:32:14] warming up hf.co/bartowski/Qwen3.8-27B-GGUF:Q4_K_M at http://127.0.0.1:11434 ...
+[13:32:36]   ready in 0:00:21 (contract=text, think_off=True, prompt=8290bb7c2223, glossary=a3af943b0655)
+[13:34:36]   Q h1 [5/40] 24.7 s last unit
+[13:36:31]   Q h1 [10/40] 17.5 s last unit
+[13:38:28]   Q h1 [15/40] 20.0 s last unit
+[13:40:23]   Q h1 [20/40] 23.3 s last unit
+[13:42:07]   Q h1 [25/40] 23.0 s last unit
+[13:43:47]   Q h1 [30/40] 22.7 s last unit
+[13:45:55]   Q h1 [35/40] 29.6 s last unit
+[13:47:58]   Q h1 [40/40] 26.9 s last unit
+[13:50:10]   Q h2 [5/20] 20.7 s last unit
+[13:52:13]   Q h2 [10/20] 24.6 s last unit
+[13:54:50]   Q h2 [15/20] 19.5 s last unit
+[13:57:59]   Q h2 [20/20] 26.9 s last unit
+[14:01:11]   Q h3 [5/70] 33.2 s last unit
+[14:04:38]   Q h3 [10/70] 45.5 s last unit
+[14:06:18]   Q h3 [15/70] 41.9 s last unit
+[14:10:12]   Q h3 [20/70] 50.6 s last unit
+[14:12:29]   Q h3 [25/70] 21.2 s last unit
+[14:15:54]   Q h3 [30/70] 12.4 s last unit
+[14:18:25]   Q h3 [35/70] 25.5 s last unit
+[14:22:54]   Q h3 [40/70] 59.2 s last unit
+[14:24:31]   Q h3 [45/70] 2.0 s last unit
+[14:28:22]   Q h3 [50/70] 57.1 s last unit
+[14:32:04]   Q h3 [55/70] 63.6 s last unit
+[14:36:09]   Q h3 [60/70] 50.5 s last unit
+[14:39:03]   Q h3 [65/70] 38.0 s last unit
+[14:41:33]   Q h3 [70/70] 15.4 s last unit
+[14:41:33]   Q: hf.co/bartowski/Qwen3.8-27B-GGUF:Q4_K_M unloaded (keep_alive 0)
+[14:41:33] warming up hf.co/bartowski/NousResearch_Arete-27B-GGUF:Q4_K_M at http://127.0.0.1:11434 ...
+[14:42:02]   ready in 0:00:28 (contract=text, think_off=True, prompt=8290bb7c2223, glossary=a3af943b0655)
+[14:44:00]   A h1 [5/40] 24.4 s last unit
+[14:45:54]   A h1 [10/40] 17.6 s last unit
+[14:47:50]   A h1 [15/40] 20.2 s last unit
+[14:49:45]   A h1 [20/40] 22.9 s last unit
+[14:51:30]   A h1 [25/40] 23.8 s last unit
+[14:53:12]   A h1 [30/40] 23.0 s last unit
+[14:55:22]   A h1 [35/40] 29.4 s last unit
+[14:57:23]   A h1 [40/40] 26.2 s last unit
+[14:59:35]   A h2 [5/20] 20.9 s last unit
+[15:01:35]   A h2 [10/20] 24.3 s last unit
+[15:03:45]   A h2 [15/20] 26.8 s last unit
+[15:06:50]   A h2 [20/20] 23.3 s last unit
+[15:09:27]   A h3 [5/70] 34.9 s last unit
+[15:11:29]   A h3 [10/70] 20.5 s last unit
+[15:14:06]   A h3 [15/70] 13.7 s last unit
+[15:16:06]   A h3 [20/70] 18.9 s last unit
+[15:19:18]   A h3 [25/70] 45.4 s last unit
+[15:21:05]   A h3 [30/70] 12.9 s last unit
+[15:23:30]   A h3 [35/70] 18.4 s last unit
+[15:25:31]   A h3 [40/70] 17.6 s last unit
+[15:27:50]   A h3 [45/70] 2.0 s last unit
+[15:32:14]   A h3 [50/70] 27.2 s last unit
+[15:36:03]   A h3 [55/70] 14.9 s last unit
+[15:38:17]   A h3 [60/70] 14.1 s last unit
+[15:40:42]   A h3 [65/70] 19.8 s last unit
+[15:42:23]   A h3 [70/70] 16.8 s last unit
+[15:42:23]   A: hf.co/bartowski/NousResearch_Arete-27B-GGUF:Q4_K_M unloaded (keep_alive 0)
+[15:42:23] gemma4:26b reloaded with keep_alive -1
+[15:42:23] run 20261108T123202Z ended → /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection/runs/20261108T123202Z
+NAME          ID              SIZE     PROCESSOR    CONTEXT    RUNNER      UNTIL   
+gemma4:26b    777b927e3b6b    18 GB    100% GPU     8192       llamacpp    Forever    
+[exp061-run] exit 0 at Sun  8 Nov 2026 15:42:23 CET

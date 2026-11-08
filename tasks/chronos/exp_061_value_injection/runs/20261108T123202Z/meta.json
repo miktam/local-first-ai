@@ -1,0 +1,188 @@
+{
+ "stamp": "20261108T123202Z",
+ "started": "2026-11-08T13:32:02+0100",
+ "dry_run": false,
+ "host": "http://127.0.0.1:11434",
+ "seed": 20261108,
+ "arms": {
+  "Q": "hf.co/bartowski/Qwen3.8-27B-GGUF:Q4_K_M",
+  "A": "hf.co/bartowski/NousResearch_Arete-27B-GGUF:Q4_K_M"
+ },
+ "parts": [
+  "h1",
+  "h2",
+  "h3"
+ ],
+ "limit": 0,
+ "num_ctx": 8192,
+ "temperature": 0,
+ "think": false,
+ "num_predict": 2048,
+ "keep_alive_after_arm": 0,
+ "bot_model": {
+  "name": "gemma4:26b",
+  "keep_alive": -1
+ },
+ "ollama": "0.40.2",
+ "models": {
+  "Q": {
+   "name": "hf.co/bartowski/Qwen3.8-27B-GGUF:Q4_K_M",
+   "tag_digest": "76c1fd6cf3a23622de0040383af32f0449032529db83315df346fb041d1d7107",
+   "from": "/Users/miktam02/.ollama/models/blobs/sha256-880a52af8317974f7b4b064a6bc29ff49e188b91aa218e08eea3078b6b1cc673",
+   "blob_sha256_name": "880a52af8317974f7b4b064a6bc29ff49e188b91aa218e08eea3078b6b1cc673",
+   "blob_sha256_bytes": "880a52af8317974f7b4b064a6bc29ff49e188b91aa218e08eea3078b6b1cc673",
+   "details": {
+    "parent_model": "",
+    "format": "gguf",
+    "family": "qwen35",
+    "families": [
+     "qwen35"
+    ],
+    "parameter_size": "27.3B",
+    "quantization_level": "Q4_K_M"
+   },
+   "parameters": null,
+   "template_sha256": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+   "architecture": "qwen35",
+   "modified_at": "2026-11-08T11:21:30.197843816+01:00"
+  },
+  "A": {
+   "name": "hf.co/bartowski/NousResearch_Arete-27B-GGUF:Q4_K_M",
+   "tag_digest": "d6aa1f4f6e00da3e909553283306699833c73adaf922eb86985cc779b6a01ec6",
+   "from": "/Users/miktam02/.ollama/models/blobs/sha256-6f186a1fe0c4f741acb3a35b5df96bc2fc7279651f48500246e56079418f091b",
+   "blob_sha256_name": "6f186a1fe0c4f741acb3a35b5df96bc2fc7279651f48500246e56079418f091b",
+   "blob_sha256_bytes": "6f186a1fe0c4f741acb3a35b5df96bc2fc7279651f48500246e56079418f091b",
+   "details": {
+    "parent_model": "",
+    "format": "gguf",
+    "family": "qwen35",
+    "families": [
+     "qwen35"
+    ],
+    "parameter_size": "26.9B",
+    "quantization_level": "Q4_K_M"
+   },
+   "parameters": null,
+   "template_sha256": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041",
+   "architecture": "qwen35",
+   "modified_at": "2026-11-08T11:25:58.365858401+01:00"
+  }
+ },
+ "serving": {
+  "Q": {
+   "flash_attention": "OLLAMA_FLASH_ATTENTION=0",
+   "kv_cache_type": "no OLLAMA_KV_CACHE_TYPE",
+   "source": "workspace CLAUDE.md, production env as of 2026-08-30",
+   "as_of": "2026-08-30",
+   "ps": {
+    "runner": "llamacpp",
+    "context_length": 8192,
+    "size": 23743346768,
+    "size_vram": 23743346768,
+    "details": {
+     "parent_model": "",
+     "format": "gguf",
+     "family": "qwen35",
+     "families": [
+      "qwen35"
+     ],
+     "parameter_size": "27.3B",
+     "quantization_level": "unknown"
+    }
+   },
+   "think_accepted": true
+  },
+  "A": {
+   "flash_attention": "OLLAMA_FLASH_ATTENTION=0",
+   "kv_cache_type": "no OLLAMA_KV_CACHE_TYPE",
+   "source": "workspace CLAUDE.md, production env as of 2026-08-30",
+   "as_of": "2026-08-30",
+   "ps": {
+    "runner": "llamacpp",
+    "context_length": 8192,
+    "size": 23743346768,
+    "size_vram": 23743346768,
+    "details": {
+     "parent_model": "",
+     "format": "gguf",
+     "family": "qwen35",
+     "families": [
+      "qwen35"
+     ],
+     "parameter_size": "26.9B",
+     "quantization_level": "unknown"
+    }
+   },
+   "think_accepted": true
+  }
+ },
+ "serving_env": {
+  "flash_attention": "OLLAMA_FLASH_ATTENTION=0",
+  "kv_cache_type": "no OLLAMA_KV_CACHE_TYPE",
+  "source": "workspace CLAUDE.md, production env as of 2026-08-30",
+  "as_of": "2026-08-30"
+ },
+ "os": {
+  "product_version": "27.2",
+  "build": "26B123",
+  "hw_model": "Mac16,11",
+  "chip": "Apple M4 Pro",
+  "memsize_bytes": 68719476736,
+  "python": "3.14.8"
+ },
+ "thermal": {
+  "start": {
+   "at": "2026-11-08T13:32:02+0100",
+   "notifyutil_thermalpressurelevel": 0,
+   "sysctl_machdep_xcpm_cpu_thermal_level": null,
+   "powermetrics": null,
+   "note": "powermetrics needs sudo and is not called"
+  },
+  "end": {
+   "at": "2026-11-08T15:42:23+0100",
+   "notifyutil_thermalpressurelevel": 0,
+   "sysctl_machdep_xcpm_cpu_thermal_level": null,
+   "powermetrics": null,
+   "note": "powermetrics needs sudo and is not called"
+  }
+ },
+ "units": {
+  "h1": {
+   "file": "/Users/miktam02/repos/library/tasks/mt-model-pilot/sample.json",
+   "sha256": "d46a40a021fd9df5f520ef99115cdcf0a3be7556fad2a7f47e126874fb5a114a",
+   "units": 40,
+   "units_run": 40
+  },
+  "h2": {
+   "file": "/Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection/kit/sample61.json",
+   "sha256": "9a2e9253bfb88758fa09a794ca683ac7412da9cf919b26209249bd0f1d8b6ad0",
+   "units": 20,
+   "units_run": 20
+  },
+  "h3": {
+   "file": "/Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection/kit/sample61.json",
+   "sha256": "9a2e9253bfb88758fa09a794ca683ac7412da9cf919b26209249bd0f1d8b6ad0",
+   "units": 70,
+   "items_sha256": "76bf1b75337b948d37ab494d7192aade5cc8fefd08c1e170f1925816ac6c4ef6",
+   "units_run": 70
+  }
+ },
+ "contracts": {
+  "mamardashvili_prompt_sha": "8290bb7c2223",
+  "glossary_sha": "a3af943b0655",
+  "petukhov_prompt_sha": "c99ba298d5ff",
+  "contract": "text",
+  "translate_py_sha256": "d4324053a830f54ad237f6a408a99d3bbaccc7766433dec2055ccdb61bcbab89",
+  "pilot_run_py_sha256": "fd418c5980838ebec333cc5d89322e8099351236d9c3c6803a42aa73d108d7b2",
+  "pilot_readme_sha256": "5f60ac8a484bdff09bfb187de5633b63e3d180cb7bd74849e616497718235ff9",
+  "h3": "the item's prompt verbatim as the only user message; no system prompt",
+  "frozen_mismatch": []
+ },
+ "arm_seconds": {
+  "Q": 4136.8,
+  "A": 3621.4
+ },
+ "arms_skipped": [],
+ "bot_reloaded": true,
+ "ended": "2026-11-08T15:42:23+0100"
+}

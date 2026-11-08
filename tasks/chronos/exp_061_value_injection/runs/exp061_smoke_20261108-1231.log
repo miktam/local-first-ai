@@ -1,0 +1,23 @@
+com.apple.system.thermalpressurelevel 0
+NAME          ID              SIZE     PROCESSOR    CONTEXT    RUNNER      UNTIL   
+gemma4:26b    777b927e3b6b    18 GB    100% GPU     8192       llamacpp    Forever    
+[12:31:47]   hashing sha256-880a52af8317974f… for hf.co/bartowski/Qwen3.8-27B-GGUF:Q4_K_M
+[12:31:53]   hashing sha256-6f186a1fe0c4f741… for hf.co/bartowski/NousResearch_Arete-27B-GGUF:Q4_K_M
+[12:31:59] run 20261108T113147Z-smoke: arms ['Q', 'A'], parts ['h1', 'h2', 'h3'], units h1 2, h2 2, h3 2, contracts {'mamardashvili_prompt_sha': '8290bb7c2223', 'glossary_sha': 'a3af943b0655', 'petukhov_prompt_sha': 'c99ba298d5ff', 'contract': 'text', 'translate_py_sha256': 'd4324053a830f54ad237f6a408a99d3bbaccc7766433dec2055ccdb61bcbab89', 'pilot_run_py_sha256': 'fd418c5980838ebec333cc5d89322e8099351236d9c3c6803a42aa73d108d7b2', 'pilot_readme_sha256': '5f60ac8a484bdff09bfb187de5633b63e3d180cb7bd74849e616497718235ff9', 'h3': "the item's prompt verbatim as the only user message; no system prompt", 'frozen_mismatch': []}
+[12:31:59] warming up hf.co/bartowski/Qwen3.8-27B-GGUF:Q4_K_M at http://127.0.0.1:11434 ...
+[12:32:31]   ready in 0:00:32 (contract=text, think_off=True, prompt=8290bb7c2223, glossary=a3af943b0655)
+[12:32:59]   Q h1 [2/2] 2.3 s last unit
+[12:33:48]   Q h2 [2/2] 25.5 s last unit
+[12:34:27]   Q h3 [2/2] 20.6 s last unit
+[12:34:27]   Q: hf.co/bartowski/Qwen3.8-27B-GGUF:Q4_K_M unloaded (keep_alive 0)
+[12:34:27] warming up hf.co/bartowski/NousResearch_Arete-27B-GGUF:Q4_K_M at http://127.0.0.1:11434 ...
+[12:34:59]   ready in 0:00:31 (contract=text, think_off=True, prompt=8290bb7c2223, glossary=a3af943b0655)
+[12:35:26]   A h1 [2/2] 2.3 s last unit
+[12:36:16]   A h2 [2/2] 25.9 s last unit
+[12:37:52]   A h3 [2/2] 38.9 s last unit
+[12:37:52]   A: hf.co/bartowski/NousResearch_Arete-27B-GGUF:Q4_K_M unloaded (keep_alive 0)
+[12:37:52] gemma4:26b reloaded with keep_alive -1
+[12:37:52] run 20261108T113147Z-smoke ended → /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection/runs/20261108T113147Z-smoke
+NAME          ID              SIZE     PROCESSOR    CONTEXT    RUNNER      UNTIL   
+gemma4:26b    777b927e3b6b    18 GB    100% GPU     8192       llamacpp    Forever    
+[exp061-smoke] exit 0 at Sun  8 Nov 2026 12:37:52 CET
