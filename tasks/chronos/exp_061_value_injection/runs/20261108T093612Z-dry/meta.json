@@ -1,0 +1,98 @@
+{
+ "stamp": "20261108T093612Z-dry",
+ "started": "2026-11-08T10:36:12+0100",
+ "dry_run": true,
+ "host": "http://127.0.0.1:11434",
+ "seed": 20261108,
+ "arms": {
+  "Q": "hf.co/bartowski/Qwen3.8-27B-GGUF:Q4_K_M",
+  "A": "hf.co/bartowski/NousResearch_Arete-27B-GGUF:Q4_K_M"
+ },
+ "parts": [
+  "h1",
+  "h2",
+  "h3"
+ ],
+ "limit": 0,
+ "num_ctx": 8192,
+ "temperature": 0,
+ "think": false,
+ "num_predict": 2048,
+ "keep_alive_after_arm": 0,
+ "bot_model": {
+  "name": "gemma4:26b",
+  "keep_alive": -1
+ },
+ "ollama": "0.40.2",
+ "models": {
+  "Q": {
+   "name": "hf.co/bartowski/Qwen3.8-27B-GGUF:Q4_K_M",
+   "tag_digest": null,
+   "pulled": false
+  },
+  "A": {
+   "name": "hf.co/bartowski/NousResearch_Arete-27B-GGUF:Q4_K_M",
+   "tag_digest": null,
+   "pulled": false
+  }
+ },
+ "serving": null,
+ "os": {
+  "product_version": "27.2",
+  "build": "26B123",
+  "hw_model": "Mac16,11",
+  "chip": "Apple M4 Pro",
+  "memsize_bytes": 68719476736,
+  "python": "3.14.8"
+ },
+ "thermal": {
+  "start": {
+   "at": "2026-11-08T10:36:12+0100",
+   "notifyutil_thermalpressurelevel": 0,
+   "sysctl_machdep_xcpm_cpu_thermal_level": null,
+   "powermetrics": null,
+   "note": "powermetrics needs sudo and is not called"
+  },
+  "end": {
+   "at": "2026-11-08T10:36:13+0100",
+   "notifyutil_thermalpressurelevel": 0,
+   "sysctl_machdep_xcpm_cpu_thermal_level": null,
+   "powermetrics": null,
+   "note": "powermetrics needs sudo and is not called"
+  }
+ },
+ "units": {
+  "h1": {
+   "file": "/Users/miktam02/repos/library/tasks/mt-model-pilot/sample.json",
+   "sha256": "d46a40a021fd9df5f520ef99115cdcf0a3be7556fad2a7f47e126874fb5a114a",
+   "units": 40,
+   "units_run": 40
+  },
+  "h2": {
+   "file": "/Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection/kit/sample61.json",
+   "sha256": null,
+   "units": null,
+   "note": "not drawn yet"
+  },
+  "h3": {
+   "file": "/Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection/kit/sample61.json",
+   "sha256": null,
+   "units": null,
+   "note": "not drawn yet"
+  }
+ },
+ "requests_made": [
+  "GET /api/version",
+  "GET /api/tags"
+ ],
+ "contracts": {
+  "mamardashvili_prompt_sha": "8290bb7c2223",
+  "glossary_sha": "a3af943b0655",
+  "petukhov_prompt_sha": "c99ba298d5ff",
+  "contract": "text",
+  "translate_py_sha256": "d4324053a830f54ad237f6a408a99d3bbaccc7766433dec2055ccdb61bcbab89",
+  "pilot_run_py_sha256": "fd418c5980838ebec333cc5d89322e8099351236d9c3c6803a42aa73d108d7b2",
+  "h3": "the item's prompt verbatim as the only user message; no system prompt"
+ },
+ "ended": "2026-11-08T10:36:13+0100"
+}
