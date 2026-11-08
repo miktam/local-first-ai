@@ -75,7 +75,7 @@ The sha256s: `items.jsonl` `76bf1b75337b948d…`, `JUDGE_PROMPT.md` `a391774a99c
 - **`data/items.jsonl`**: 803 rows with `id` (a string), `prompt`, `required_facts` (a list),
   `question_description`, `categories` (a **list** of one to three labels), `source_url`,
   `anchor`, `source_date` (536 rows) and `official_frame_markers` (516 rows). There is no
-  `category` field, so `sample61.py --part h3` stops at line 1 (see 3).
+  `category` field; the draw follows Amendment 1 (see 3).
 - **`judge/JUDGE_PROMPT.md`** is a template with six placeholders: `{prompt}`,
   `{required_facts}`, `{markers}`, `{censorship_note}`, `{propaganda_note}`, `{response}`. The
   vendor's `judge/grade.py` fills the notes with `none` (no such fields in items.jsonl) and the
@@ -88,12 +88,22 @@ The sha256s: `items.jsonl` `76bf1b75337b948d…`, `JUDGE_PROMPT.md` `a391774a99c
 python3.14 -B kit/sample61.py --part all --items ~/models/propaganda-eval/data/items.jsonl
 ```
 
-**The H3 draw is stopped (2026-11-08) for a registration decision.** The draw "10 per category"
-assumed one category per prompt. In the real file, 408 prompts carry two labels and 26 carry
-three. There are nine labels: the seven registered ones, at the vendor README's counts (272,
-212, 189, 170, 156, 133, 129), and on one item, `f320`, only `governance` and `expression`. How
-to draw 10 per category from overlapping labels, and what to do with `f320`, is Andrei's call.
-The H2 draw is not affected.
+**The H3 draw follows Amendment 1** (HYPOTHESIS.md, 2026-11-08 12:23, before any draw). The
+registration assumed one category per prompt. In the real file, 408 prompts carry two labels
+and 26 carry three. There are nine labels: the seven registered ones, at the vendor README's
+counts (272, 212, 189, 170, 156, 133, 129), and on one item, `f320`, only `governance` and
+`expression`. The draw works as follows:
+- It takes each registered label in sorted order and draws 10 prompts uniformly, with seed
+  20261108, from those that carry the label and are not yet drawn.
+- Each prompt is drawn once, under the label it was drawn for; the drawn entry carries that
+  label as `category`.
+- A prompt whose labels are all outside the seven is excluded and listed (`f320`).
+- The draw exits unless the seven registered labels are all present.
+
+Drawn and pinned on 2026-11-08: 70 distinct prompts, 10 per label; 16 of them carry one label,
+51 carry two and 3 carry three. `kit/sample61.ids.json` gained `h3` (id, category, line,
+prompt sha256), `items_sha256` and `judge_sha256` (JUDGE_PROMPT.md, score.py). Its H2 block
+is byte-identical to the one committed before the pulls.
 
 This writes two files:
 - `kit/sample61.json` carries corpus text, so it is gitignored.
@@ -102,13 +112,13 @@ This writes two files:
   sha256 of the full file. This is the file to commit. Its H2 part was drawn and committed on
   2026-11-08, before any pull.
 
-`sample61.py` stops unless items.jsonl has exactly seven categories. The H2 draw does not
-depend on the H3 file:
+The H2 draw does not depend on the H3 file:
 - On the corpora as of 2026-11-08, 85 Mamardashvili and 117 Petukhov units match the keywords
   after the exclusions, and 10 of each are drawn.
 - The match is literal and case-sensitive, as the keywords are written. A case-insensitive
   match would have found 95 and 128 before the exclusions, against 89 and 119.
-- H3 draws 10 per category, and the file's sha256 goes into `items_sha256`.
+- H3 draws 10 per label as above. The items file's sha256 goes into `items_sha256`, and the
+  judge files' sha256s into `judge_sha256`.
 
 ## 4. Smoke test (one unit per part per arm, as registered)
 

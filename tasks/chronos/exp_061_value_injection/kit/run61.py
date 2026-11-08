@@ -460,6 +460,7 @@ def real_run(out, meta, parts, arms, units, done=None):
     if bad:
         sys.exit("the pilot's contracts are not the registration's frozen inputs, no model loaded: "
                  + "; ".join(bad))
+    contracts["frozen_mismatch"] = bad  # [] : the gate passed, recorded as the dry run records it
     if resume and contracts != meta.get("contracts"):
         sys.exit("the pilot's contracts differ from the ones this run started with; not resumed")
     session = {"started": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "thermal": {"start": thermal(), "end": None},

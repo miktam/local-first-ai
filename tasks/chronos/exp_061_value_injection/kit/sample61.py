@@ -15,17 +15,23 @@ gives all of them. Each unit carries the pilot's fields (corpus, id, edition, fi
 Petukhov also `index`, and `edition` is null for it), with the pilot's id format, so the
 exclusion compares like with like.
 
-H3: 10 prompts per category from the Propaganda_Eval items.jsonl given with --items,
-uniform within category (one random.Random(20261108) consumed over the categories in sorted
-order, random.sample over each category's items in file order), with the file's sha256 under
-`items_sha256`. Every item is kept as the file has it, plus its 1-based `line`.
-
-H3 also requires exactly seven categories in the file (the registration's seven) and exits
-otherwise.
+H3 (HYPOTHESIS.md, Amendment 1): the Propaganda_Eval items.jsonl given with --items gives each
+prompt one to three labels under `categories`. For each registered label in sorted order, 10
+prompts are drawn uniformly from those carrying the label and not yet drawn (one
+random.Random(20261108) consumed over the labels in that order, random.sample over each pool in
+file order); each prompt is counted once, under the label it was drawn for, which the drawn
+entry carries as `category`. Every item is otherwise kept as the file has it, plus its 1-based
+`line`. A label outside the registered seven is stray: a prompt whose labels are all stray is
+excluded and listed under `excluded_all_stray` (f320 in the 2026-11-08 file), and the stray
+labels are counted under `stray_labels`. The draw exits unless the labels minus the stray ones
+are exactly the seven registered. The file's sha256 goes under `items_sha256`, and the sha256s
+of the judge's JUDGE_PROMPT.md and score.py (--judge, default the judge/ folder beside data/)
+under `judge_sha256`.
 
 The output object has `seed`, `parts`, and per part drawn: `h2`, `matches`, `excluded`,
 `keywords`, `sources_sha256` (every library file the H2 draw read or imported, by its path
-under the library); `h3`, `items_file`, `items_sha256`, `per_category`. Beside it goes
+under the library); `h3`, `items_file`, `items_sha256`, `judge_sha256`, `draw_h3`,
+`stray_labels`, `excluded_all_stray`, `per_category`. Beside it goes
 <out stem>.ids.json (kit/sample61.ids.json by default): the same draw without any text, ids
 and sha256s only (each unit's ru, each prompt), with the sha256 of the full file; it is the one
 to commit, since the full file carries corpus text. The same inputs give byte-identical output. H2 needs python3.14 (the pilot's translate.py); H3 runs under any
@@ -48,7 +54,15 @@ sys.dont_write_bytecode = True  # never leave __pycache__ in the pilot's folders
 HERE = Path(__file__).resolve().parent
 PILOT = Path("/Users/miktam02/repos/library/tasks/mt-model-pilot")
 LIB = PILOT.parents[1]
-SEED, PER_CORPUS, PER_CATEGORY, N_CATEGORIES = 20261108, 10, 10, 7
+SEED, PER_CORPUS, PER_CATEGORY = 20261108, 10, 10
+# The registration's seven categories as items.jsonl and the vendor's README name them; the
+# registration's shorter words in brackets where they differ.
+REGISTERED = ("data privacy and surveillance", "democracy and governance",   # [democracy]
+              "education policy",                                            # [education]
+              "environmental strategy",                                      # [environmental policy]
+              "freedom of expression", "state ideology",
+              "state vs free market capitalism")                             # [state vs free market]
+JUDGE_FILES = ("JUDGE_PROMPT.md", "score.py")
 KEYWORDS = ("Маркс", "Ленин", "Сталин", "парти", "советск", "коммунизм", "социализм", "буржуаз",
             "идеолог", "пролетар", "революц", "государств", "цензур", "диссидент", "капитализм")
 MATCH = re.compile("|".join(re.escape(k) for k in KEYWORDS))
@@ -141,37 +155,41 @@ def draw_h2():
 
 
 def draw_h3(items_path: Path):
+    """→ (drawn, per_category, items sha256, stray label counts, ids excluded as all-stray)."""
     raw = items_path.read_bytes()
     items = []
     for n, line in enumerate(raw.decode("utf-8").splitlines(), 1):
         if not line.strip():
             continue
         x = json.loads(line)
-        missing = [k for k in ("id", "category", "prompt") if k not in x]
-        if missing:
-            sys.exit(f"{items_path.name} line {n}: no {missing}; its fields are {sorted(x)}. "
-                     f"The kit expects id, category and prompt (assumed, not checked against the "
-                     f"real file before its download)")
+        missing = [k for k in ("id", "categories", "prompt") if k not in x]
+        if missing or not isinstance(x.get("categories"), list) or not x["categories"]:
+            sys.exit(f"{items_path.name} line {n}: no {missing or ['categories as a non-empty list']}; "
+                     f"its fields are {sorted(x)}")
+        if "category" in x:
+            sys.exit(f"{items_path.name} line {n}: a `category` field, which the draw writes itself")
         x = dict(x)
         x["line"] = n
         items.append(x)
     ids = [x["id"] for x in items]
     if len(set(ids)) != len(ids):
         sys.exit(f"{items_path.name}: ids are not unique")
+    labels = {c for x in items for c in x["categories"]}
+    stray = {c: sum(c in x["categories"] for x in items) for c in sorted(labels - set(REGISTERED))}
+    if labels - set(stray) != set(REGISTERED):
+        sys.exit(f"{items_path.name}: the labels other than the stray ones are {sorted(labels - set(stray))}; "
+                 f"the registration has {sorted(REGISTERED)}")
+    excluded = [x["id"] for x in items if not set(x["categories"]) & set(REGISTERED)]
     rng = random.Random(SEED)
-    by_cat = {}
-    for x in items:
-        by_cat.setdefault(x["category"], []).append(x)
-    if len(by_cat) != N_CATEGORIES:
-        sys.exit(f"{items_path.name}: {len(by_cat)} categories {sorted(by_cat)}; the registration has "
-                 f"{N_CATEGORIES}")
-    drawn, per_cat = [], {}
-    for cat in sorted(by_cat):
-        pool = by_cat[cat]
+    drawn, per_cat, taken = [], {}, set()
+    for cat in sorted(REGISTERED):
+        pool = [x for x in items if cat in x["categories"] and x["id"] not in taken]
         picks = sorted(rng.sample(range(len(pool)), min(PER_CATEGORY, len(pool))))
-        drawn += [pool[i] for i in picks]
-        per_cat[cat] = {"items": len(pool), "drawn": len(picks)}
-    return drawn, per_cat, hashlib.sha256(raw).hexdigest()
+        for i in picks:
+            drawn.append(dict(pool[i], category=cat))
+            taken.add(pool[i]["id"])
+        per_cat[cat] = {"items": sum(cat in x["categories"] for x in items), "pool": len(pool), "drawn": len(picks)}
+    return drawn, per_cat, hashlib.sha256(raw).hexdigest(), stray, excluded
 
 
 def text_free(out, full_sha):
@@ -191,6 +209,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--part", choices=("h2", "h3", "all"), required=True)
     ap.add_argument("--items", type=Path, help="Propaganda_Eval data/items.jsonl (needed for h3)")
+    ap.add_argument("--judge", type=Path, help="its judge/ folder, whose JUDGE_PROMPT.md and score.py are "
+                                               "hashed (default: judge/ beside data/)")
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
     args = ap.parse_args()
     parts = ("h2", "h3") if args.part == "all" else (args.part,)
@@ -207,8 +227,16 @@ def main():
             if n < PER_CORPUS:
                 notes.append(f"{c}: only {n} matching units, all taken (shortfall {PER_CORPUS - n})")
     if "h3" in parts:
-        h3, per_cat, digest = draw_h3(args.items)
+        h3, per_cat, digest, stray, excluded = draw_h3(args.items)
+        judge = args.judge or args.items.resolve().parents[1] / "judge"
+        missing = [f for f in JUDGE_FILES if not (judge / f).is_file()]
+        if missing:
+            sys.exit(f"{judge}: no {missing}; their sha256 is recorded with the draw (give --judge)")
         out.update({"items_file": args.items.name, "items_sha256": digest,
+                    "judge_sha256": {f: sha256_file(judge / f) for f in JUDGE_FILES},
+                    "draw_h3": "Amendment 1: 10 per registered label in sorted order, from the prompts "
+                               "carrying it and not yet drawn; each prompt once, under `category`",
+                    "stray_labels": stray, "excluded_all_stray": excluded,
                     "per_category": per_cat, "h3": h3})
         for c, v in per_cat.items():
             if v["drawn"] < PER_CATEGORY:
@@ -228,7 +256,8 @@ def main():
                                          for c, n in out["matches"].items()))
     if "h3" in out:
         summary.append(f"h3 {len(out['h3'])} prompts over {len(out['per_category'])} categories, "
-                       f"items sha256 {out['items_sha256'][:16]}")
+                       f"items sha256 {out['items_sha256'][:16]}, stray labels {out['stray_labels']}, "
+                       f"excluded {out['excluded_all_stray']}")
     print("; ".join(summary) + f" → {args.out} (text-free: {ids_path.name})")
     for n in notes:
         print("NOTE " + n, file=sys.stderr)

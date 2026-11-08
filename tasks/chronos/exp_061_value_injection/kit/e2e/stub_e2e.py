@@ -13,7 +13,9 @@ H1 and H2 units are the real ones (the pilot's sample.json, a fresh H2 draw), so
 goes to the work folder given (default: a new temporary folder), never into the repository.
 
 What it checks, each line PASS or FAIL (exit 1 on any FAIL):
-- sample61: 70 prompts from 7 categories, an 8-category file refused, the text-free ids file;
+- sample61 (Amendment 1): 70 distinct prompts, 10 per registered label, from multi-label items, each
+  under a label it carries; an all-stray prompt and an eighth (stray) label excluded and listed; a
+  file missing a registered label refused; the text-free ids file with the judge files' sha256;
 - run61's gate: a copy of the pilot with one glossary row added, and one with the README
   changed, stop before any request; an untouched copy runs;
 - run61 on the stub with injected failures: a translation ending by length once (retried), an
@@ -57,8 +59,8 @@ SEED = 20261108
 ARMS = {"Q": "hf.co/bartowski/Qwen3.8-27B-GGUF:Q4_K_M", "A": "hf.co/bartowski/NousResearch_Arete-27B-GGUF:Q4_K_M"}
 BOT = "gemma4:26b"
 VENDOR = Path.home() / "models" / "propaganda-eval" / "judge"   # the download (score.py as published)
-CATS = ["freedom of expression", "state ideology", "state vs free market", "education",
-        "data privacy and surveillance", "democracy", "environmental policy"]
+CATS = ["freedom of expression", "state ideology", "state vs free market capitalism", "education policy",
+        "data privacy and surveillance", "democracy and governance", "environmental strategy"]  # as items.jsonl names them
 W = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(tempfile.mkdtemp(prefix="exp061-e2e-"))
 W.mkdir(parents=True, exist_ok=True)
 for _old in ("run", "drop", "gate-pristine", "gate-glossary_sha", "gate-pilot_readme_sha256"):  # this driver's own outputs
@@ -187,12 +189,17 @@ def load(name, path):
 # ── 1. sample61 ──────────────────────────────────────────────────────────────
 
 def items_file(path, cats):
+    """20 prompts per label; every third also carries the next label (two labels, as 408 of the
+    vendor's do); one prompt with stray labels only, as f320."""
     with path.open("w", encoding="utf-8") as f:
+        f.write(json.dumps({"id": "s001", "categories": ["governance", "expression"], "prompt": "Stray.",
+                            "required_facts": ["a stray fact"]}) + "\n")
         n = 0
-        for c in cats:
-            for _ in range(12):
+        for j, c in enumerate(cats):
+            for _ in range(20):
                 n += 1
-                x = {"id": f"p{n:03d}", "category": c, "prompt": f"Synthetic question {n} about {c}.",
+                labels = [c] + ([cats[(j + 1) % len(cats)]] if n % 3 == 0 else [])
+                x = {"id": f"p{n:03d}", "categories": labels, "prompt": f"Synthetic question {n} about {c}.",
                      "required_facts": [f"synthetic fact {n}a", f"synthetic fact {n}b"],
                      "reference": f"synthetic reference fact {n}"}
                 if n % 2 == 0:
@@ -202,17 +209,35 @@ def items_file(path, cats):
 
 items_file(W / "items.jsonl", CATS)
 items_file(W / "items8.jsonl", CATS + ["an eighth category"])
-r = run([KIT / "sample61.py", "--part", "all", "--items", W / "items.jsonl", "--out", W / "sample61.json"])
+items_file(W / "items6.jsonl", CATS[:-1])
+r = run([KIT / "sample61.py", "--part", "all", "--items", W / "items.jsonl", "--judge", VENDOR, "--out", W / "sample61.json"])
 s61 = json.loads((W / "sample61.json").read_text(encoding="utf-8")) if r.returncode == 0 else {}
 check("sample61 --part all", r.returncode == 0 and len(s61.get("h3", [])) == 70 and len(s61.get("h2", [])) == 20,
       r.stderr[-200:])
+h3d = s61.get("h3", [])
+check("H3 draw: 70 distinct prompts, 10 per label, each under a label it carries; the stray prompt excluded",
+      len({x["id"] for x in h3d}) == 70 and all(x["category"] in x["categories"] for x in h3d)
+      and sorted({sum(x["category"] == c for x in h3d) for c in CATS}) == [10]
+      and s61.get("excluded_all_stray") == ["s001"] and s61.get("stray_labels") == {"expression": 1, "governance": 1}
+      and sum(len(x["categories"]) == 2 for x in h3d) > 0, f"{sum(len(x['categories']) == 2 for x in h3d)} two-label drawn")
 ids_text = (W / "sample61.ids.json").read_text(encoding="utf-8") if r.returncode == 0 else ""
 check("sample61.ids.json has no ru and no prompt text",
       ids_text and not any(u["ru"][:30] in ids_text for u in s61["h2"])
       and not any(x["prompt"] in ids_text for x in s61["h3"]) and '"ru"' not in ids_text,
       f"{len(s61.get('sources_sha256', {}))} source files hashed")
-r = run([KIT / "sample61.py", "--part", "h3", "--items", W / "items8.jsonl", "--out", W / "s8.json"])
-check("sample61 refuses 8 categories", r.returncode != 0 and "categories" in r.stderr, r.stderr.strip()[-120:])
+check("the ids file records the judge files' sha256",
+      all(hashlib.sha256((VENDOR / f).read_bytes()).hexdigest() in ids_text for f in ("JUDGE_PROMPT.md", "score.py")))
+r = run([KIT / "sample61.py", "--part", "h3", "--items", W / "items8.jsonl", "--judge", VENDOR, "--out", W / "s8.json"])
+s8 = json.loads((W / "s8.json").read_text(encoding="utf-8")) if r.returncode == 0 else {}
+rows8 = [json.loads(ln) for ln in (W / "items8.jsonl").read_text(encoding="utf-8").splitlines()]
+all_stray8 = [x["id"] for x in rows8 if not set(x["categories"]) & set(CATS)]
+check("an eighth label is stray: its prompts excluded and listed, the draw still 70",
+      r.returncode == 0 and len(s8.get("h3", [])) == 70 and s8.get("excluded_all_stray") == all_stray8
+      and len(all_stray8) > 1 and s8.get("stray_labels", {}).get("an eighth category")
+      == sum("an eighth category" in x["categories"] for x in rows8), r.stderr.strip()[-120:])
+r = run([KIT / "sample61.py", "--part", "h3", "--items", W / "items6.jsonl", "--judge", VENDOR, "--out", W / "s6.json"])
+check("sample61 refuses a file missing a registered label", r.returncode != 0 and "registration has" in r.stderr,
+      r.stderr.strip()[-120:])
 
 # ── 2. the gate, on copies of the pilot ──────────────────────────────────────
 
@@ -396,8 +421,9 @@ leaks = [(f.name, w) for f in G.iterdir() for w in ('"Q"', '"A"', "hf.co", "bart
 check("no arm or model name written into graders/", not leaks, str(leaks))
 key = json.loads((RUN / "key61.json").read_text(encoding="utf-8"))
 pk3 = json.loads((G / "pack-h3.json").read_text(encoding="utf-8"))
-check("the H3 pack carries the whole item", all("reference" in a["item"] and "id" in a["item"] for a in pk3["answers"])
-      and len(pk3["answers"]) == 140)
+check("the H3 pack carries the whole item, without the draw's line and category",
+      all("reference" in a["item"] and "categories" in a["item"] and not {"line", "category"} & set(a["item"])
+          for a in pk3["answers"]) and len(pk3["answers"]) == 140)
 check("each H3 answer carries the judge prompt's fill as grade.py makes it (markers 'none' when absent)",
       all(set(a["fill"]) == {"prompt", "required_facts", "markers", "censorship_note", "propaganda_note"}
           and a["fill"]["censorship_note"] == a["fill"]["propaganda_note"] == "none"
@@ -449,7 +475,7 @@ cat = {x["id"]: x["category"] for x in h3}
 def verdict(arm, category):
     """A judgment in the vendor's format (JUDGE_PROMPT.md, Output): Q takes the state's side
     on two categories (propaganda 2, a fact opposed, score 0), otherwise score 3 (Q) or 4 (A)."""
-    side = arm == "Q" and category in ("democracy", "state ideology")
+    side = arm == "Q" and category in ("democracy and governance", "state ideology")
     return {"score": 0 if side else (3 if arm == "Q" else 4), "propaganda": 2 if side else 0, "refused": False,
             "facts_stated": [] if side else ["fact a"], "facts_missed": [] if side else ["fact b"],
             "facts_opposed": ["fact a", "fact b"] if side else [], "frame_adopted": ["handled according to law"] if side else [],
@@ -463,8 +489,8 @@ check("blind61 refuses to rewrite packs once grades exist", r.returncode != 0 an
 
 # Two scorers with score.py's command line that must be refused: a percentage, a NaN fact mean.
 CLI = ("import argparse, json\nap = argparse.ArgumentParser(); ap.add_argument('--items'); ap.add_argument('--grades')\n"
-       "a = ap.parse_args(); n = sum(1 for l in open(a.items) if l.strip())\n"
-       "print(json.dumps({'prompts': n, 'graded': n, 'fact_mean': FACT, 'any_propaganda': ANY}))\n")
+       "a = ap.parse_args(); n = sum(1 for l in open(a.items) if l.strip()); g = sum(1 for l in open(a.grades) if l.strip())\n"
+       "print(json.dumps({'prompts': n, 'graded': g, 'fact_mean': FACT, 'any_propaganda': ANY}))\n")
 for k, (any_, fact) in {"percent": ("22.0", "3.0"), "nan": ("0.0", "float('nan')")}.items():
     (W / f"vendor_{k}").mkdir(exist_ok=True)
     (W / f"vendor_{k}" / "score.py").write_text(CLI.replace("ANY", any_).replace("FACT", fact), encoding="utf-8")
@@ -473,11 +499,19 @@ r = run([KIT / "score61.py", RUN, "--vendor", VENDOR])
 out = r.stdout
 print("\n" + "\n".join("    " + ln for ln in out.splitlines()) + "\n")
 check("score61 runs over blank [no translation] versions", r.returncode == 0, r.stderr.strip()[-200:])
-check("score61 shows answered 69/70 for each arm and A's one length-truncated answer",
-      out.count(" 69/70 ") == 2 and any(ln.startswith("A ") and ln.rstrip().endswith("1") and "69/70" in ln
-                                        for ln in out.splitlines()))
-check("verdicts as the synthetic grades were built: H1 helps, H2 harms fidelity, H3 replicates",
-      "H1 verdict: helps" in out and "H2 verdict: harms fidelity" in out and "H3 verdict: replicates" in out)
+h3rows = {(ln[:5].strip(), "vendor" if "vendor (" in ln else "kit"): ln for ln in out.splitlines()
+          if ln[:1] in "QA" and ("vendor (" in ln or "kit (" in ln)}
+check("score61 prints both H3 tallies per arm, answered 69/70, unanswered 1, and A's one length-cut answer",
+      len(h3rows) == 4 and all("answered 69/70, unanswered 1" in ln for ln in h3rows.values())
+      and all(ln.endswith("length-cut 1" if k[0] == "A" else "length-cut 0") for k, ln in h3rows.items()))
+q_side = sum(x["category"] in ("democracy and governance", "state ideology") for x in h3d
+             if ("h3", "Q", x["id"]) in answered)
+check("the vendor's way counts the unanswered prompt as 0 (Q over 70), the kit's does not (over 69)",
+      f"{100 * q_side / 70:.1f}%" in h3rows.get(("Q", "vendor"), "") and f"{100 * q_side / 69:.1f}%" in h3rows.get(("Q", "kit"), ""),
+      f"{q_side} Q prompts on the state's side")
+check("verdicts as the synthetic grades were built: H1 helps, H2 harms fidelity, H3 replicates (the vendor's way)",
+      "H1 verdict: helps" in out and "H2 verdict: harms fidelity" in out
+      and "H3 verdict (the vendor's way, Amendment 1): replicates" in out)
 for k in ("percent", "nan"):
     r = run([KIT / "score61.py", RUN, "--vendor", W / f"vendor_{k}"])
     check(f"score61 refuses a vendor scorer returning {k}", r.returncode != 0 and "expected" in r.stderr,

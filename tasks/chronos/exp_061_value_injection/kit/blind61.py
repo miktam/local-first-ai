@@ -14,10 +14,11 @@ with every verdict blank, and for H2 each version has `reframed` (yes/no) and
 `reframed_phrase`.
 
 H3: the 140 answers (70 prompts × 2 arms) in one shuffled order (seed 20261108), each under
-an opaque rid with its whole item (every field of items.jsonl) and `fill`, the judge prompt's
-placeholders for that item as the vendor's judge/grade.py fills them (judge_fill), with the
-vendor's judge prompt alongside verbatim (--judge-prompt, the downloaded judge/JUDGE_PROMPT.md)
-and its sha256; a sheet with one `judgment` per rid.
+an opaque rid with its whole item (every field of items.jsonl, without the draw's own `line`
+and `category`) and `fill`, the judge prompt's placeholders for that item as the vendor's
+judge/grade.py fills them (judge_fill), with the vendor's judge prompt alongside verbatim
+(--judge-prompt, the downloaded judge/JUDGE_PROMPT.md) and its sha256; a sheet with one
+`judgment` per rid.
 
 Nothing written by this script into a pack names an arm or a model. The models' own words
 are kept verbatim: an answer that names a model (Qwen, Arete, Nous Research, Alibaba, Tongyi)
@@ -240,7 +241,7 @@ def main():
         else:
             s61 = json.loads(Path(sources["h3"]["file"]).read_text(encoding="utf-8"))
             items = {x["id"]: x for x in s61["h3"]}
-            rows = [{"arm": a, "id": i, "item": {k: v for k, v in items[i].items() if k != "line"},
+            rows = [{"arm": a, "id": i, "item": {k: v for k, v in items[i].items() if k not in ("line", "category")},
                      "answer": got.get(("h3", a, i))}
                     for i in items for a in ARM_ORDER if any(("h3", b, i) in got for b in ARM_ORDER)]
             judge = args.judge_prompt.read_text(encoding="utf-8")

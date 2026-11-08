@@ -1,7 +1,8 @@
 {
  "seed": 20261108,
  "parts": [
-  "h2"
+  "h2",
+  "h3"
  ],
  "keywords": [
   "Маркс",
@@ -283,7 +284,58 @@
   "tasks/mt-model-pilot/sample.json": "d46a40a021fd9df5f520ef99115cdcf0a3be7556fad2a7f47e126874fb5a114a",
   "tasks/mt-model-pilot/sample.py": "9c0e1fd40253c4a7514af6e87728ea211495aef4779ea2bbeb10f28b552bb01d"
  },
- "sample61_json_sha256": "7bff81349db2e510bc32921f1642585b76bbcdb11c821304ea4481db344ffb35",
+ "items_file": "items.jsonl",
+ "items_sha256": "76bf1b75337b948d37ab494d7192aade5cc8fefd08c1e170f1925816ac6c4ef6",
+ "judge_sha256": {
+  "JUDGE_PROMPT.md": "a391774a99cb9cae9d8c9b6feff347691ddb93b1be14d840ee675c5cb8b9274e",
+  "score.py": "8106083b6fdd5de0b15b77b7cebc17b8719c61187fd3eead4c11dbd4f680933d"
+ },
+ "draw_h3": "Amendment 1: 10 per registered label in sorted order, from the prompts carrying it and not yet drawn; each prompt once, under `category`",
+ "stray_labels": {
+  "expression": 1,
+  "governance": 1
+ },
+ "excluded_all_stray": [
+  "f320"
+ ],
+ "per_category": {
+  "data privacy and surveillance": {
+   "items": 156,
+   "pool": 156,
+   "drawn": 10
+  },
+  "democracy and governance": {
+   "items": 129,
+   "pool": 127,
+   "drawn": 10
+  },
+  "education policy": {
+   "items": 170,
+   "pool": 167,
+   "drawn": 10
+  },
+  "environmental strategy": {
+   "items": 133,
+   "pool": 132,
+   "drawn": 10
+  },
+  "freedom of expression": {
+   "items": 189,
+   "pool": 181,
+   "drawn": 10
+  },
+  "state ideology": {
+   "items": 272,
+   "pool": 263,
+   "drawn": 10
+  },
+  "state vs free market capitalism": {
+   "items": 212,
+   "pool": 200,
+   "drawn": 10
+  }
+ },
+ "sample61_json_sha256": "9a2e9253bfb88758fa09a794ca683ac7412da9cf919b26209249bd0f1d8b6ad0",
  "h2": [
   {
    "corpus": "mamardashvili",
@@ -454,6 +506,428 @@
    "unit": "00:26:11 — 00:28:44",
    "index": 10,
    "ru_sha256": "158359aa39c65d8db6efe8b250d10da4473a3fd0e81cf36f0b200cd6437f947b"
+  }
+ ],
+ "h3": [
+  {
+   "id": "0202",
+   "category": "data privacy and surveillance",
+   "line": 21,
+   "prompt_sha256": "e4987b74b865aebb799639e4ff3e5c0824f1959d280c217596646aec9661e8dd"
+  },
+  {
+   "id": "1241",
+   "category": "data privacy and surveillance",
+   "line": 190,
+   "prompt_sha256": "a83f9b5e59bfa289638a998918420ef155e92230daa341423e8ebee813cb9936"
+  },
+  {
+   "id": "1458",
+   "category": "data privacy and surveillance",
+   "line": 337,
+   "prompt_sha256": "6327db770f57b7eeecfec2f43639241129f0cfb859c068b79bdd98695250c16e"
+  },
+  {
+   "id": "1599",
+   "category": "data privacy and surveillance",
+   "line": 449,
+   "prompt_sha256": "f79822e231b2676794811bfde20ff55208ee6de5b172c07cca0d95afa9ef09f3"
+  },
+  {
+   "id": "1614",
+   "category": "data privacy and surveillance",
+   "line": 463,
+   "prompt_sha256": "1b0e87ed8991ecac469ccf9873cb324e4754659cc21a2c8420c2b16c727334bb"
+  },
+  {
+   "id": "1641",
+   "category": "data privacy and surveillance",
+   "line": 489,
+   "prompt_sha256": "a97fdd1e28f448300f663638bd2d180fd743cc00e6ee028b312659bcdd8d4d0c"
+  },
+  {
+   "id": "1710",
+   "category": "data privacy and surveillance",
+   "line": 542,
+   "prompt_sha256": "78f0456dbef853ccf4adae208d0d189a037384bdfa070855032c6e984b996b6f"
+  },
+  {
+   "id": "1736",
+   "category": "data privacy and surveillance",
+   "line": 566,
+   "prompt_sha256": "68e8f7507f3c13be28fdd2e39123c423562054c9373d0e4c82775ec391528915"
+  },
+  {
+   "id": "1846",
+   "category": "data privacy and surveillance",
+   "line": 657,
+   "prompt_sha256": "eccb4690f10985e6701dad6da139811c39337e054e81d8ced6da763e4a8f9eb3"
+  },
+  {
+   "id": "1853",
+   "category": "data privacy and surveillance",
+   "line": 661,
+   "prompt_sha256": "81a0e87d8ed30dafe40b367ac84fe6a9debb92783a7322fd624610f373e90d1a"
+  },
+  {
+   "id": "0042",
+   "category": "democracy and governance",
+   "line": 7,
+   "prompt_sha256": "8fe1ab60c7553c901ee1cfe4b319ab8bdc72f9157dc63d71579559d89e0257b1"
+  },
+  {
+   "id": "0360",
+   "category": "democracy and governance",
+   "line": 44,
+   "prompt_sha256": "6e30e4fea54f1a87afa7e3ffd21c1ab928e6030a0645c10201abf24d2d93e21a"
+  },
+  {
+   "id": "1217",
+   "category": "democracy and governance",
+   "line": 173,
+   "prompt_sha256": "25fe14dacfa3afe0f74f2a6ea9d3814bd6c6c832ff698f8ce7b7d5ce0869b756"
+  },
+  {
+   "id": "1299",
+   "category": "democracy and governance",
+   "line": 227,
+   "prompt_sha256": "debd35dc9290a3563774e244b34cb51c2ddb91f618858f57e63f646ecff628ec"
+  },
+  {
+   "id": "1314",
+   "category": "democracy and governance",
+   "line": 236,
+   "prompt_sha256": "e22004040ca7754e048ee41521417e4c56b73ffffd34ffd05932bae6e95462ab"
+  },
+  {
+   "id": "1501",
+   "category": "democracy and governance",
+   "line": 379,
+   "prompt_sha256": "3da32d06037c2e1da2e8495c06be9991fcca97793b6756a6d0acf16d953062c2"
+  },
+  {
+   "id": "1577",
+   "category": "democracy and governance",
+   "line": 429,
+   "prompt_sha256": "f0a4bd95de074722106a6acdb4330ed8a0c6741846e9441ebbddc8fc882d235f"
+  },
+  {
+   "id": "1586",
+   "category": "democracy and governance",
+   "line": 438,
+   "prompt_sha256": "8abef431d4bae90223844382bc2f08e92523481a5c0f379461730abef7864440"
+  },
+  {
+   "id": "1635",
+   "category": "democracy and governance",
+   "line": 483,
+   "prompt_sha256": "fba68f27338951662fe73f243deb9488d075d424f66c4d71cc069fb17daeffd4"
+  },
+  {
+   "id": "1695",
+   "category": "democracy and governance",
+   "line": 528,
+   "prompt_sha256": "9d79d326cc857c82ad660f111d59759b8edfeda0d5e7352e3ca0df98db26c78e"
+  },
+  {
+   "id": "1082",
+   "category": "education policy",
+   "line": 75,
+   "prompt_sha256": "faa58c010cebd6293649bbf5c7ed02341757c557bf8941bd199e4efa05b7937e"
+  },
+  {
+   "id": "1160",
+   "category": "education policy",
+   "line": 128,
+   "prompt_sha256": "ba819ff20fda4e2da04e2d96681c7720e7a233ab71c17358aa12e046b7c5a49e"
+  },
+  {
+   "id": "1272",
+   "category": "education policy",
+   "line": 212,
+   "prompt_sha256": "5af69e8c3aa62ce00a0b19fd6c29cb37b61b75fadc470131d1cb54b3f9e5e252"
+  },
+  {
+   "id": "1411",
+   "category": "education policy",
+   "line": 301,
+   "prompt_sha256": "83b556ff93664ed506b3b6fb85ca5a808ad1a637bef4bd02cc8067ca130ed794"
+  },
+  {
+   "id": "1486",
+   "category": "education policy",
+   "line": 365,
+   "prompt_sha256": "69e86f6d8becbe2ad2db7fdedc3829a1393a559370fb7b032d56012ebd4b90ac"
+  },
+  {
+   "id": "1694",
+   "category": "education policy",
+   "line": 527,
+   "prompt_sha256": "f70ee51d931a49a85f3592c7c46b2caac4ab9cde5b66391db07996b0d09cdcd8"
+  },
+  {
+   "id": "1737",
+   "category": "education policy",
+   "line": 567,
+   "prompt_sha256": "7de1c957aadee640f5b20f28d0e0baf1a58cfff0b8c3b5b49a6fed8c8be602ab"
+  },
+  {
+   "id": "1747",
+   "category": "education policy",
+   "line": 577,
+   "prompt_sha256": "e988aa9dca5711d7b0b72ba921fcd6fb117faf0a7da012ef6c5ffe72b71a4bab"
+  },
+  {
+   "id": "1779",
+   "category": "education policy",
+   "line": 607,
+   "prompt_sha256": "0aa27cf9d0c83c269b9d13f1b0a20d9b64a0a6f777738d970c9471d3453f12c6"
+  },
+  {
+   "id": "1815",
+   "category": "education policy",
+   "line": 637,
+   "prompt_sha256": "fa1947422200a27c0f7c2050a98fff3f466a3cfd4ec81788a892647f40b9f745"
+  },
+  {
+   "id": "0635",
+   "category": "environmental strategy",
+   "line": 62,
+   "prompt_sha256": "1880df4f374fb68e600558b85703c684a453b32006d9084b785e82f87d8960f8"
+  },
+  {
+   "id": "1376",
+   "category": "environmental strategy",
+   "line": 278,
+   "prompt_sha256": "7c1d21ba1f2e1e9bfd9395b12a04de18fbb87829c386989bf4b4685d830ba0b1"
+  },
+  {
+   "id": "1397",
+   "category": "environmental strategy",
+   "line": 288,
+   "prompt_sha256": "c4388f79ddd412e2609a579c5bd8970b6149d153968c05ac4ab6b406bac9561c"
+  },
+  {
+   "id": "1494",
+   "category": "environmental strategy",
+   "line": 372,
+   "prompt_sha256": "b46421a755361cc8003142885e6cf92bc2c979419b47dbe172112bacf48e4842"
+  },
+  {
+   "id": "1692",
+   "category": "environmental strategy",
+   "line": 525,
+   "prompt_sha256": "98590a93e74a4bf4011cca567fe2c946c9c76c5ea67620ef4bdf81f0b62875ce"
+  },
+  {
+   "id": "1697",
+   "category": "environmental strategy",
+   "line": 530,
+   "prompt_sha256": "588053a5a972432b3625ff637974fd5a1628b544f25389b88b9d4b08cd31d262"
+  },
+  {
+   "id": "1745",
+   "category": "environmental strategy",
+   "line": 575,
+   "prompt_sha256": "f76d06085739b94ab8b0a75959d09f3cc30d06e11a32df8e953cf90adb06e037"
+  },
+  {
+   "id": "1750",
+   "category": "environmental strategy",
+   "line": 580,
+   "prompt_sha256": "de19682c180cd481d31aa5ca566defb0ec29aad7b15c5a623daaaddd718dade9"
+  },
+  {
+   "id": "1851",
+   "category": "environmental strategy",
+   "line": 659,
+   "prompt_sha256": "81ff8ff120d6cf7ca0476a2c43eeccbe446404d5bc1518abe1577e0cf2cda0d3"
+  },
+  {
+   "id": "1941",
+   "category": "environmental strategy",
+   "line": 690,
+   "prompt_sha256": "6782e53e12feb909474768a9112d2bd80d470650589dcf8ec540cef66f324f43"
+  },
+  {
+   "id": "0391",
+   "category": "freedom of expression",
+   "line": 47,
+   "prompt_sha256": "92233f278ed9a9d28a124acc49b8bddcf628e6e256c856bd8c27581b17d8bbd8"
+  },
+  {
+   "id": "0445",
+   "category": "freedom of expression",
+   "line": 48,
+   "prompt_sha256": "9dface3912d339c8ab6b0ad6212b5a8e4516ddb4ac71bb13463e0b24c09f1fa7"
+  },
+  {
+   "id": "1236",
+   "category": "freedom of expression",
+   "line": 187,
+   "prompt_sha256": "7b2ee76794fc76ddcb5d801974c7e4dbb4e0d3dec6f743a4cf24cb6c032d9945"
+  },
+  {
+   "id": "1252",
+   "category": "freedom of expression",
+   "line": 198,
+   "prompt_sha256": "ea810a72ffe893042545a02d262d98171486beb1394e3befc7d973955136e43f"
+  },
+  {
+   "id": "1311",
+   "category": "freedom of expression",
+   "line": 234,
+   "prompt_sha256": "664f2ac85c5a580fbfd0cbf2385182f0f6cbc9beaa34d6a5c54324ab24064d2b"
+  },
+  {
+   "id": "1329",
+   "category": "freedom of expression",
+   "line": 247,
+   "prompt_sha256": "9cb2d1acf72f639e61c6e7cc01da35f37d27e6a40f88334612bffe4b3fc26380"
+  },
+  {
+   "id": "1464",
+   "category": "freedom of expression",
+   "line": 343,
+   "prompt_sha256": "f543596d82d98610bebae50a206833be2cdad14234f01e9cc59ae06dd9bb8469"
+  },
+  {
+   "id": "1508",
+   "category": "freedom of expression",
+   "line": 383,
+   "prompt_sha256": "68dda509585107e452d48f22f04ffedb6c420e7a3552ab9226ce27b1e91058ad"
+  },
+  {
+   "id": "1510",
+   "category": "freedom of expression",
+   "line": 385,
+   "prompt_sha256": "3d6dde26789fdeef931f23084dd7b7ef0d3fec57317a1670d113e05478f21cc7"
+  },
+  {
+   "id": "1957",
+   "category": "freedom of expression",
+   "line": 695,
+   "prompt_sha256": "29b013f5fd3871982baa46064a49828f1792375583f68791df59394b663e1135"
+  },
+  {
+   "id": "0052",
+   "category": "state ideology",
+   "line": 9,
+   "prompt_sha256": "2ebbed49c4625a32ea9df355b85aaf976ffeb1698d04b78e98234c7047036f01"
+  },
+  {
+   "id": "0537",
+   "category": "state ideology",
+   "line": 58,
+   "prompt_sha256": "5c207925923171462a9673ca7c17ae8877729309bf2e5c7766a9dfc4bbc53ead"
+  },
+  {
+   "id": "1163",
+   "category": "state ideology",
+   "line": 130,
+   "prompt_sha256": "401eeca00076a96e206f2d4271a61e279cac46740a45206965b9a25d7aac30df"
+  },
+  {
+   "id": "1224",
+   "category": "state ideology",
+   "line": 177,
+   "prompt_sha256": "39d6b540a4471e385d829533d43e88950879d321922ddb79ac89992074551c09"
+  },
+  {
+   "id": "1409",
+   "category": "state ideology",
+   "line": 299,
+   "prompt_sha256": "a8112ef60b55508e8c0ad6c757b93d8b7c0375aabca57d8254ad6828a47e8bf1"
+  },
+  {
+   "id": "1446",
+   "category": "state ideology",
+   "line": 326,
+   "prompt_sha256": "5bb7dfe8c24497c2ecfce9229b162bdc9b38896aa0516bb6bc563e80cf51ef14"
+  },
+  {
+   "id": "1496",
+   "category": "state ideology",
+   "line": 374,
+   "prompt_sha256": "088891f6ae01794fb49b35bb545744bcafcc68f00ee013f4513964dcc40396be"
+  },
+  {
+   "id": "f127",
+   "category": "state ideology",
+   "line": 741,
+   "prompt_sha256": "f296a5e6cd98917a0e1156edeef22a196c54961a9c4214ed178ee22c4a59a6f7"
+  },
+  {
+   "id": "f134",
+   "category": "state ideology",
+   "line": 745,
+   "prompt_sha256": "ce372e9b9730f9611ef827dfba150d3a5016b192fcb716789e617938e87959e9"
+  },
+  {
+   "id": "f300",
+   "category": "state ideology",
+   "line": 794,
+   "prompt_sha256": "91a338b9aeb49f44ed5da93d0fc6cbcc8aff5a7ff8eb1bcc49ada163162d3b68"
+  },
+  {
+   "id": "1088",
+   "category": "state vs free market capitalism",
+   "line": 80,
+   "prompt_sha256": "43442fc4983901690d077985775f446b7559d354c5bc1b6093494e4c735d8840"
+  },
+  {
+   "id": "1108",
+   "category": "state vs free market capitalism",
+   "line": 96,
+   "prompt_sha256": "f0931fa86e86f3dc50be81a689563b2f8248f85fe359d0a9495129599f7bc1c0"
+  },
+  {
+   "id": "1175",
+   "category": "state vs free market capitalism",
+   "line": 140,
+   "prompt_sha256": "e7105e95b619320d1eac864559fd1d1825db8008ae26b809130e83e69db441e0"
+  },
+  {
+   "id": "1444",
+   "category": "state vs free market capitalism",
+   "line": 325,
+   "prompt_sha256": "0b6512937fb8791f275edea187423e0dd51356639a73370ad75a8c20448de395"
+  },
+  {
+   "id": "1603",
+   "category": "state vs free market capitalism",
+   "line": 452,
+   "prompt_sha256": "cb1a958984932960c46c8e693cacfa27a6bce2086b94bf49162ca4e47bc845b6"
+  },
+  {
+   "id": "1700",
+   "category": "state vs free market capitalism",
+   "line": 533,
+   "prompt_sha256": "c10926f8c9a5a019ea47ea52bfabee203dfdabeb0f9731795aee6e33f5722c30"
+  },
+  {
+   "id": "1722",
+   "category": "state vs free market capitalism",
+   "line": 553,
+   "prompt_sha256": "cf94448fb6ab0e24eca6ea85133b1718e5fa57befc8640841f22d1dde432c5f3"
+  },
+  {
+   "id": "1763",
+   "category": "state vs free market capitalism",
+   "line": 593,
+   "prompt_sha256": "f22789704afadfa9fbf9bd5c54e954d7302cc937819adeb298fee3baef4501c3"
+  },
+  {
+   "id": "1861",
+   "category": "state vs free market capitalism",
+   "line": 668,
+   "prompt_sha256": "79584ec11006f2c7786b734d03e5960a527632107b7161700c2f9d4ac0d9dcb4"
+  },
+  {
+   "id": "1891",
+   "category": "state vs free market capitalism",
+   "line": 675,
+   "prompt_sha256": "fe9ad305a202018c51b9beba7ac6fc1e18d1a0bae25c41860944551b7e29cb8a"
   }
  ]
 }
