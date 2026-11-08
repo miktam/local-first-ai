@@ -16,6 +16,14 @@ cd ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection
 | `kit/run61.py` | arms Q and A over h1, h2, h3 → `runs/<UTC stamp>/meta.json`, `results.jsonl` |
 | `kit/blind61.py` | the graders' packs and sheets, and the key, in the run folder |
 | `kit/score61.py` | the tables of "Measures and the decision", the three verdicts, speed |
+| `kit/e2e/stub_e2e.py` | the registration's dry run "with a stub in the model's place": the whole kit against a local stub of Ollama, synthetic items and grades, 31 checks |
+
+The stub run needs no model and sends no request to 11434. Its output goes to a temporary
+folder or to the folder you give it, never into the repository:
+
+```bash
+python3.14 -B kit/e2e/stub_e2e.py
+```
 
 ## 1. Dry run (no model; possible now)
 
@@ -27,8 +35,10 @@ This writes `runs/<stamp>-dry/meta.json` and an empty `results.jsonl`. It sends 
 at most `GET /api/version` and `GET /api/tags`, and only if the daemon answers; both are listed
 under `requests_made`. It shows that the pilot's contracts load: the prompt hashes should
 equal the pilot run's, `8290bb7c2223` (Mamardashvili), `c99ba298d5ff` (Petukhov) and glossary
-`a3af943b0655`. It also records the OS build and the thermal pressure level. Before the draw,
-h2 and h3 show as "not drawn yet".
+`a3af943b0655`. It also records the OS build and the thermal pressure level. Any difference from the
+registration's frozen contracts is listed under `contracts.frozen_mismatch`; the list should be
+empty. A real run checks the same hashes, plus the pilot README's sha256 `5f60ac8a…`, before it
+sends its first request, and exits if one differs. Until the draw, h3 shows as not drawn.
 
 ## 2. Andrei: the pulls and the vendor's files
 
@@ -64,8 +74,15 @@ Two things to do before the draw. Neither could be checked before the download:
 python3.14 -B kit/sample61.py --part all --items ~/models/exp061/Propaganda_Eval/data/items.jsonl
 ```
 
-This writes `kit/sample61.json`, which is gitignored because it carries corpus text. The H2 draw
-does not depend on the H3 file:
+This writes two files:
+- `kit/sample61.json` carries corpus text, so it is gitignored.
+- `kit/sample61.ids.json` holds the same draw without any text: ids, the sha256 of each unit's
+  Russian and of each prompt, the sha256 of the 246 library files the H2 draw read, and the
+  sha256 of the full file. This is the file to commit. Its H2 part was drawn and committed on
+  2026-11-08, before any pull.
+
+`sample61.py` stops unless items.jsonl has exactly seven categories. The H2 draw does not
+depend on the H3 file:
 - On the corpora as of 2026-11-08, 85 Mamardashvili and 117 Petukhov units match the keywords
   after the exclusions, and 10 of each are drawn.
 - The match is literal and case-sensitive, as the keywords are written. A case-insensitive
@@ -121,8 +138,21 @@ tmux new-session -d -s $EXP-$STEP -c ~/REPOS/local-first-ai/tasks/chronos/exp_06
 echo "attach: tmux attach -t $EXP-$STEP   (detach: Ctrl-b d)   log: tail -f ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection/$RUN.log"
 ```
 
-If the run stops early (an error or Ctrl-C), gemma4:26b is still reloaded with `keep_alive -1`.
-`meta.json` records whether the reload worked (`bot_reloaded`).
+Failures:
+- **H3 retries.** An H3 prompt gets three attempts, as a translation does. A connection error,
+  an HTTP 5xx or an empty answer is retried; a 4xx is not.
+- **Stopping.** If the daemon cannot be reached after the attempts, the run stops: the unit
+  gets no row, and the last line says how to resume. A Ctrl-C stops it the same way.
+- **The bots' model.** In every case gemma4:26b is reloaded with `keep_alive -1`, and
+  `bot_reloaded` in `meta.json` records whether that worked.
+- **Resuming.** `--resume` continues in the same folder. It appends to `results.jsonl` and
+  skips every (part, arm, id) already there. An arm with nothing left is not loaded again. It
+  first checks that the contracts, the Ollama version, the blobs and the sample files are
+  still the ones the run started with.
+
+```bash
+python3.14 -B kit/run61.py --resume runs/<stamp>
+```
 
 ## 6. Blind packs
 
@@ -130,19 +160,24 @@ If the run stops early (an error or Ctrl-C), gemma4:26b is still reloaded with `
 python3.14 -B kit/blind61.py runs/<stamp> --judge-prompt ~/models/exp061/Propaganda_Eval/judge/JUDGE_PROMPT.md
 ```
 
-This writes the following into the run folder:
+This writes the graders' files, and nothing else, into `runs/<stamp>/graders/`:
 - `pack-h1-<corpus>.json` and `pack-h2-<corpus>.json`: two English versions per unit,
-  labelled X and Y in an order shuffled per unit.
+  labelled X and Y. Each unit's order comes from its own seed (`20261108:<part>:<id>`), so
+  the h1 and h2 packs of a corpus never share a mapping by position.
 - `sheet-h1-<corpus>.json` and `sheet-h2-<corpus>.json`: blank grades in the pilot's format;
   H2 adds `reframed` and `reframed_phrase`.
-- `pack-h3.json`: 140 answers, shuffled, with the judge prompt verbatim; and `sheet-h3.json`.
-- `key61.json`.
+- `pack-h3.json`: 140 answers, shuffled, each with its whole eval item (every field of
+  items.jsonl), plus the judge prompt verbatim; and `sheet-h3.json`.
 
-The hand-off:
-- **H1 and H2:** one Fable session per corpus. It gets that corpus's packs and sheets and
-  returns them filled in as `grades-h1-<corpus>.json` and `grades-h2-<corpus>.json`.
-- **H3:** one Fable session gets `pack-h3.json` and returns `grades-h3.json`.
-- **The key:** `key61.json` never goes to a grader.
+`key61.json` and `results.jsonl` stay in the run folder, outside `graders/`.
+
+The hand-off: **give the graders `graders/` only**, never the run folder.
+- **H1 and H2:** one Fable session per corpus. It grades that corpus's packs and writes the
+  filled sheets into `graders/` as `grades-h1-<corpus>.json` and `grades-h2-<corpus>.json`.
+- **H3:** one Fable session grades `pack-h3.json` and writes `graders/grades-h3.json`.
+
+A version shown as `[no translation]` stays blank on the sheet, and the scorer counts it FAIL
+on all four. Once any grades file is in `graders/`, `blind61.py` refuses to rewrite the packs.
 
 Read any `NAME FLAG` lines first. They mark an answer whose own text names a model (for example
 "As Qwen, …"). Such text is kept verbatim, not masked; whether to mask it is your call.
@@ -156,7 +191,9 @@ python3.14 -B kit/score61.py runs/<stamp> --vendor-score ~/models/exp061/Propaga
 This prints, per corpus and arm, the four dimensions, Sense and all-four. It also prints:
 - H1's paired wins and losses (A vs Q);
 - H2's reframed units with the quoted phrases;
-- H3's any-propaganda rate and fact mean, overall and per category;
+- H3's any-propaganda rate and fact mean, overall and per category. The rates are over the
+  answered prompts; beside them stand answered/70 and the answers cut off by `length`, which
+  are kept and judged as given;
 - the median seconds per unit;
 - one verdict line per hypothesis.
 
@@ -167,7 +204,8 @@ A part with no graders' files yet is shown as not graded.
 This repository is public. The run folders hold corpus text: the Russian is in the packs and
 the English is in `results.jsonl`. `kit/sample61.json` holds the drawn Russian too, which is
 why `kit/.gitignore` keeps it out. What a run commits is Andrei's decision, made before the
-first run folder is committed. A dry run's `meta.json` holds no corpus text.
+first run folder is committed. A dry run's `meta.json` and `kit/sample61.ids.json` hold no
+corpus text.
 
 ## Readings the kit makes (for the reviewer)
 
@@ -180,6 +218,12 @@ first run folder is committed. A dry run's `meta.json` holds no corpus text.
   tokens should not bind.
 - **H3 prompts.** Each H3 prompt goes as the only user message, with no system prompt. This is
   assumed: the vendor's eval setup has not been read.
+- **Flash attention and KV cache.** The Ollama API reports neither, so the serving row
+  records them from workspace CLAUDE.md's production env as of 2026-08-30
+  (`OLLAMA_FLASH_ATTENTION=0`, no `OLLAMA_KV_CACHE_TYPE`), with that date. They are not read
+  from the plist or the daemon's environment.
+- **The vendor scorer.** `score61.py` refuses a scorer whose any-propaganda rate falls outside
+  [0, 1], or whose fact mean is not finite. Its interface is still assumed.
 - **H2's reading.** "Q has none on those units" is read literally: A reframes on two or more
   units and Q reframes on none of those same units. A reframed mark counts only on a version
   with a Sense or Terms FAIL.

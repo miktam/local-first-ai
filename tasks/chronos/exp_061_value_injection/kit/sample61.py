@@ -20,9 +20,15 @@ uniform within category (one random.Random(20261108) consumed over the categorie
 order, random.sample over each category's items in file order), with the file's sha256 under
 `items_sha256`. Every item is kept as the file has it, plus its 1-based `line`.
 
+H3 also requires exactly seven categories in the file (the registration's seven) and exits
+otherwise.
+
 The output object has `seed`, `parts`, and per part drawn: `h2`, `matches`, `excluded`,
-`keywords`; `h3`, `items_file`, `items_sha256`, `per_category`. The same inputs give
-byte-identical output. H2 needs python3.14 (the pilot's translate.py); H3 runs under any
+`keywords`, `sources_sha256` (every library file the H2 draw read or imported, by its path
+under the library); `h3`, `items_file`, `items_sha256`, `per_category`. Beside it goes
+<out stem>.ids.json (kit/sample61.ids.json by default): the same draw without any text, ids
+and sha256s only (each unit's ru, each prompt), with the sha256 of the full file; it is the one
+to commit, since the full file carries corpus text. The same inputs give byte-identical output. H2 needs python3.14 (the pilot's translate.py); H3 runs under any
 Python 3.9+. No network.
 
     python3.14 -B kit/sample61.py --part h2
@@ -41,7 +47,8 @@ sys.dont_write_bytecode = True  # never leave __pycache__ in the pilot's folders
 
 HERE = Path(__file__).resolve().parent
 PILOT = Path("/Users/miktam02/repos/library/tasks/mt-model-pilot")
-SEED, PER_CORPUS, PER_CATEGORY = 20261108, 10, 10
+LIB = PILOT.parents[1]
+SEED, PER_CORPUS, PER_CATEGORY, N_CATEGORIES = 20261108, 10, 10, 7
 KEYWORDS = ("Маркс", "Ленин", "Сталин", "парти", "советск", "коммунизм", "социализм", "буржуаз",
             "идеолог", "пролетар", "революц", "государств", "цензур", "диссидент", "капитализм")
 MATCH = re.compile("|".join(re.escape(k) for k in KEYWORDS))
@@ -64,18 +71,31 @@ def pilot_sample_module():
     return load_module("mt_pilot_sample", PILOT / "sample.py")
 
 
+def sha256_file(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
 def draw_h2():
     ps = pilot_sample_module()
+    src = {}
+
+    def seen(path):
+        src[str(Path(path).resolve().relative_to(LIB.resolve()))] = sha256_file(path)
+
+    for f in (PILOT / "sample.py", Path(ps.parse_lecture.__code__.co_filename), PILOT / "sample.json"):
+        seen(f)
     pilot = json.loads((PILOT / "sample.json").read_text(encoding="utf-8"))
     pilot_ids = {u["id"] for u in pilot}
 
     mm_review = set()
     for f in ("sample.json", "pilot-sample.json"):
+        seen(ps.MM / "review" / f)
         for x in json.loads((ps.MM / "review" / f).read_text(encoding="utf-8")):
             mm_review.add((x["edition"], x["file"], x["unit"]))
     mm_pool, mm_excl = [], {"pilot": 0, "review": 0}
     for ed, folder in ps.EDITIONS.items():
         for path in sorted((ps.SRC_ROOT / folder).glob("[0-9][0-9]-*.md")):
+            seen(path)
             _, units, _, _ = ps.parse_lecture(path)
             for idx, ru in units:
                 ru = ps._NOTE.sub("", ru)
@@ -91,10 +111,13 @@ def draw_h2():
                                     "file": path.name, "unit": idx, "ru": ru})
 
     pk = ps.load_module("petukhov_review_sample", ps.PK_REVIEW / "sample.py")
+    seen(ps.PK_REVIEW / "sample.py")
+    seen(ps.PK_REVIEW / "sample.json")
     pk_review = {(u["file"], u["unit"]) for u in
                  json.loads((ps.PK_REVIEW / "sample.json").read_text(encoding="utf-8"))}
     pk_pool, pk_excl = [], {"pilot": 0, "review": 0}
     for path in sorted(pk.SRC.glob("*.md")):
+        seen(path)
         for idx, ts, ru, _en in pk.units(path):
             if not MATCH.search(ru):
                 continue
@@ -114,7 +137,7 @@ def draw_h2():
         drawn += [pool[i] for i in picks]
     matches = {"mamardashvili": len(mm_pool), "petukhov": len(pk_pool)}
     excluded = {"mamardashvili": mm_excl, "petukhov": pk_excl}
-    return drawn, matches, excluded
+    return drawn, matches, excluded, dict(sorted(src.items()))
 
 
 def draw_h3(items_path: Path):
@@ -139,6 +162,9 @@ def draw_h3(items_path: Path):
     by_cat = {}
     for x in items:
         by_cat.setdefault(x["category"], []).append(x)
+    if len(by_cat) != N_CATEGORIES:
+        sys.exit(f"{items_path.name}: {len(by_cat)} categories {sorted(by_cat)}; the registration has "
+                 f"{N_CATEGORIES}")
     drawn, per_cat = [], {}
     for cat in sorted(by_cat):
         pool = by_cat[cat]
@@ -146,6 +172,19 @@ def draw_h3(items_path: Path):
         drawn += [pool[i] for i in picks]
         per_cat[cat] = {"items": len(pool), "drawn": len(picks)}
     return drawn, per_cat, hashlib.sha256(raw).hexdigest()
+
+
+def text_free(out, full_sha):
+    """The draw without corpus text or prompts: ids, positions and sha256s."""
+    ids = {k: v for k, v in out.items() if k not in ("h2", "h3")}
+    ids["sample61_json_sha256"] = full_sha
+    if "h2" in out:
+        ids["h2"] = [dict({k: v for k, v in u.items() if k != "ru"},
+                          ru_sha256=hashlib.sha256(u["ru"].encode("utf-8")).hexdigest()) for u in out["h2"]]
+    if "h3" in out:
+        ids["h3"] = [{"id": x["id"], "category": x["category"], "line": x["line"],
+                      "prompt_sha256": hashlib.sha256(x["prompt"].encode("utf-8")).hexdigest()} for x in out["h3"]]
+    return ids
 
 
 def main():
@@ -161,9 +200,9 @@ def main():
     out = {"seed": SEED, "parts": list(parts)}
     notes = []
     if "h2" in parts:
-        h2, matches, excluded = draw_h2()
+        h2, matches, excluded, src = draw_h2()
         out.update({"keywords": list(KEYWORDS), "match": "literal substring, case-sensitive, on ru",
-                    "matches": matches, "excluded": excluded, "h2": h2})
+                    "matches": matches, "excluded": excluded, "sources_sha256": src, "h2": h2})
         for c, n in matches.items():
             if n < PER_CORPUS:
                 notes.append(f"{c}: only {n} matching units, all taken (shortfall {PER_CORPUS - n})")
@@ -178,7 +217,11 @@ def main():
         out["shortfalls"] = notes
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    body = (json.dumps(out, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
+    args.out.write_bytes(body)
+    ids_path = args.out.with_name(args.out.stem + ".ids.json")
+    ids_path.write_text(json.dumps(text_free(out, hashlib.sha256(body).hexdigest()), ensure_ascii=False, indent=1)
+                        + "\n", encoding="utf-8")
     summary = []
     if "h2" in out:
         summary.append("h2 " + ", ".join(f"{c} {sum(u['corpus'] == c for u in out['h2'])} of {n} matches"
@@ -186,7 +229,7 @@ def main():
     if "h3" in out:
         summary.append(f"h3 {len(out['h3'])} prompts over {len(out['per_category'])} categories, "
                        f"items sha256 {out['items_sha256'][:16]}")
-    print("; ".join(summary) + f" → {args.out}")
+    print("; ".join(summary) + f" → {args.out} (text-free: {ids_path.name})")
     for n in notes:
         print("NOTE " + n, file=sys.stderr)
 

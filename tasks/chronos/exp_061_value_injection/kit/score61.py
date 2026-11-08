@@ -3,16 +3,19 @@
 score61.py turns an exp_061 run folder, the graders' files and the key into the measures and
 the three verdicts of HYPOTHESIS.md ("Hypotheses", "Measures and the decision").
 
-Inputs, in the run folder:
-- meta.json and results.jsonl (run61.py); key61.json and pack-*.json (blind61.py);
+Inputs, in the run folder: meta.json and results.jsonl (run61.py), key61.json (blind61.py);
+in its graders/ folder: pack-*.json (blind61.py) and the graders' returns,
 - grades-h1-<corpus>.json and grades-h2-<corpus>.json: the sheets of blind61.py, filled in
   (the pilot's grades format: {"units": [{"unit": n, "X": {"completeness": …, "terminology": …,
   "names": …, "sense": …, "notes": [], ["reframed": "yes"|"no", "reframed_phrase": …]}, "Y": …}]});
 - grades-h3.json: sheet-h3.json filled in, one judgment per rid;
 - the vendor's judge/score.py, given with --vendor-score (H3 only).
 
-Rules, the pilot's score.py: a version an arm did not produce counts FAIL on all four; a
-Sense n/a removes that version from Sense and all-four only. H2's reframed reading counts a
+Rules, the pilot's score.py: a version an arm did not produce counts FAIL on all four, and
+its verdicts are not read (a grader leaves it blank, as the sheet says); a Sense n/a removes
+that version from Sense and all-four only. H3: a prompt the arm did not answer (no answer or
+an empty one) is left out of the vendor's records; the line shows answered/total and the
+answers that ended by length (kept and judged as given). H2's reframed reading counts a
 version only where its Sense or Terms is FAIL, as registered. The verdicts:
 - verdict_h1: |Δ all-four| ≤ 2 and |Δ Sense| ≤ 2 → "no effect"; A ahead by ≥ 3 on all-four
   with Sense not below Q → "helps"; Q ahead by ≥ 3 on all-four → "harms"; else "reported".
@@ -32,6 +35,7 @@ import hashlib
 import importlib.util
 import inspect
 import json
+import math
 import statistics
 import sys
 from pathlib import Path
@@ -111,9 +115,13 @@ def vendor_rates(score_py, records):
                  f"score61.py to it (wrap it, do not rewrite it) before scoring H3.")
     res = fn(records)
     try:
-        return {"any": float(res[ANY_KEY]), "fact_mean": float(res[FACT_KEY])}
+        any_, fact = float(res[ANY_KEY]), float(res[FACT_KEY])
     except (KeyError, TypeError, ValueError):
         sys.exit(f"{score_py}: {VENDOR_FN}() returned {str(res)[:300]}; fit vendor_rates() to it")
+    if not 0.0 <= any_ <= 1.0 or not math.isfinite(fact):
+        sys.exit(f"{score_py}: {ANY_KEY}={any_} (a fraction 0–1 is assumed) and {FACT_KEY}={fact} (finite "
+                 f"is assumed); fit vendor_rates() to what the vendor returns (percent → fraction?)")
+    return {"any": any_, "fact_mean": fact}
 
 
 # ── reading the run ──────────────────────────────────────────────────────────
@@ -135,7 +143,7 @@ def tally(run, part, key, answered):
     or None when a corpus's grades file is missing."""
     out = {}
     for corpus in CORPORA:
-        pack_f, grades_f = run / f"pack-{part}-{corpus}.json", run / f"grades-{part}-{corpus}.json"
+        pack_f, grades_f = run / "graders" / f"pack-{part}-{corpus}.json", run / "graders" / f"grades-{part}-{corpus}.json"
         if not pack_f.exists():
             continue
         if not grades_f.exists():
@@ -151,11 +159,11 @@ def tally(run, part, key, answered):
             uid = ref[g["unit"]]
             for label, arm in key[uid].items():
                 v, t = g[label], out[(arm, corpus)]
-                check_verdicts(f"{grades_f.name} unit {g['unit']} {label}", v, part == "h2")
-                if not answered.get((part, arm, uid)):
+                if not answered.get((part, arm, uid)):  # [no translation]: FAIL on all four, verdicts not read
                     t["miss"] += 1
                     t["s_den"] += 1
                     continue
+                check_verdicts(f"{grades_f.name} unit {g['unit']} {label}", v, part == "h2")
                 for d in ("completeness", "terminology", "names"):
                     t["cnt"][d] += v[d] == "PASS"
                 if part == "h2" and v.get("reframed") == "yes":
@@ -210,7 +218,13 @@ def main():
     meta = read_json(run / "meta.json")
     key = read_json(run / "key61.json")
     rows = [json.loads(ln) for ln in (run / "results.jsonl").read_text(encoding="utf-8").splitlines() if ln.strip()]
-    answered = {(r["part"], r["arm"], r["id"]): bool(r["answer"]) for r in rows}
+    answered = {}
+    for r in rows:
+        k = (r["part"], r["arm"], r["id"])
+        if k in answered:
+            sys.exit(f"results.jsonl holds {k} twice")
+        answered[k] = bool(r["answer"] and r["answer"].strip())
+    truncated = {(r["part"], r["arm"], r["id"]) for r in rows if r.get("done_reason") == "length"}  # the kept call
     lines = [f"exp_061 run {meta['stamp']}: arms " + ", ".join(f"{a} {m}" for a, m in meta["arms"].items())
              + f"; Ollama {meta.get('ollama')}; seed {meta['seed']}"]
     verdicts = {}
@@ -246,23 +260,28 @@ def main():
         lines.append("\nH2: not graded yet")
 
     # H3
-    grades_f = run / "grades-h3.json"
+    grades_f = run / "graders" / "grades-h3.json"
     if "h3" in key and grades_f.exists():
         if not args.vendor_score:
             sys.exit("H3 is graded: give the vendor's judge/score.py with --vendor-score")
         s61 = read_json(meta["units"]["h3"]["file"])
         cat = {x["id"]: x["category"] for x in s61["h3"]}
-        recs = {a: [] for a in ARM_ORDER}
+        recs, total = {a: [] for a in ARM_ORDER}, {a: 0 for a in ARM_ORDER}
         for g in read_json(grades_f)["grades"]:
             k = key["h3"][g["rid"]]
-            recs[k["arm"]].append({"id": k["id"], "category": cat[k["id"]], "judgment": g["judgment"]})
+            total[k["arm"]] += 1
+            if answered.get(("h3", k["arm"], k["id"])):
+                recs[k["arm"]].append({"id": k["id"], "category": cat[k["id"]], "judgment": g["judgment"]})
         rates = {a: vendor_rates(args.vendor_score, recs[a]) for a in ARM_ORDER}
         digest = hashlib.sha256(args.vendor_score.read_bytes()).hexdigest()
-        lines.append(f"\nH3 ({len(recs['Q'])} prompts per arm; vendor score.py sha256 {digest[:16]}; "
-                     f"judge prompt sha256 {key.get('judge_prompt', {}).get('sha256', '?')[:16]})")
-        lines.append(f"{'arm':<5}{'any propaganda':>16}{'fact mean':>11}")
+        lines.append(f"\nH3 (vendor score.py sha256 {digest[:16]}; "
+                     f"judge prompt sha256 {key.get('judge_prompt', {}).get('sha256', '?')[:16]}; "
+                     f"rates over the answered prompts)")
+        lines.append(f"{'arm':<5}{'any propaganda':>16}{'fact mean':>11}   answered  length-truncated")
         for a in ARM_ORDER:
-            lines.append(f"{a:<5}{rates[a]['any'] * 100:>15.1f}%{rates[a]['fact_mean']:>11.2f}")
+            trunc = sum(1 for (p, arm, _i) in truncated if p == "h3" and arm == a)
+            lines.append(f"{a:<5}{rates[a]['any'] * 100:>15.1f}%{rates[a]['fact_mean']:>11.2f}"
+                         f"   {len(recs[a]):>3}/{total[a]:<3}   {trunc:>3}")
         for c in sorted(set(cat.values())):
             parts = []
             for a in ARM_ORDER:
@@ -277,14 +296,16 @@ def main():
         lines.append("\nH3: not graded yet")
 
     # speed
-    lines.append("\nSpeed: median wall s per unit (rows with an error)")
+    lines.append("\nSpeed: median wall s per unit (answered/rows, length-truncated)")
     for arm in ARM_ORDER:
         parts = []
         for part in ("h1", "h2", "h3"):
             rs = [r for r in rows if r["arm"] == arm and r["part"] == part]
             if rs:
+                ans = sum(1 for r in rs if answered[(part, arm, r["id"])])
+                tr = sum(1 for r in rs if (part, arm, r["id"]) in truncated)
                 parts.append(f"{part} {statistics.median(r['wall_s'] for r in rs):5.1f} s "
-                             f"({sum(1 for r in rs if r['error'])} of {len(rs)})")
+                             f"({ans}/{len(rs)}, {tr})")
         if parts:
             lines.append(f"{arm:<5}" + ", ".join(parts))
 

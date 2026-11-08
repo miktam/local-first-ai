@@ -6,14 +6,16 @@ sample order with one seeded random.Random, a missing version shown as a placeho
 in a file of its own. blind.py itself exposes no function to import (its main() is bound to
 its own sample, four arms and seed 20261106), so its procedure is followed, not imported.
 
-H1, H2: per unit, the two English versions labelled X and Y in an order shuffled per unit
-(seed 20261108). X/Y, not A/B: arm A has the letter A, so A/B labels would put an arm's name
+H1, H2: per unit, the two English versions labelled X and Y in an order drawn per unit from
+random.Random(f"20261108:{part}:{unit id}"), so that two parts never share a mapping by
+position (one session grades both packs of a corpus). X/Y, not A/B: arm A has the letter A, so A/B labels would put an arm's name
 in the pack. One pack and one grader sheet per corpus; the sheet is the pilot's grades format
 with every verdict blank, and for H2 each version has `reframed` (yes/no) and
 `reframed_phrase`.
 
 H3: the 140 answers (70 prompts × 2 arms) in one shuffled order (seed 20261108), each under
-an opaque rid, with the vendor's judge prompt alongside verbatim (--judge-prompt, the
+an opaque rid with its whole item (every field of items.jsonl, so the judge has whatever the
+vendor's rubric reads), with the vendor's judge prompt alongside verbatim (--judge-prompt, the
 downloaded judge/JUDGE_PROMPT.md) and its sha256; a sheet with one `judgment` per rid.
 
 Nothing written by this script into a pack names an arm or a model. The models' own words
@@ -21,10 +23,13 @@ are kept verbatim: an answer that names a model (Qwen, Arete, Nous Research, Ali
 is listed under `name_flags` in the key and on stderr, not masked, so the grader reads what
 the model wrote. Whether to mask is a decision, not this script's.
 
-Files written into the run folder:
-    pack-h1-<corpus>.json, sheet-h1-<corpus>.json, pack-h2-<corpus>.json, sheet-h2-<corpus>.json
-    pack-h3.json, sheet-h3.json                     (only with --judge-prompt)
-    key61.json                                      the graders never see it
+Files written:
+    graders/pack-h1-<corpus>.json, graders/sheet-h1-<corpus>.json, the same for h2
+    graders/pack-h3.json, graders/sheet-h3.json     (only with --judge-prompt)
+    key61.json                                      in the run folder, outside graders/
+graders/ holds the graders' files and nothing else: it is the one folder handed over, and the
+graders return their filled sheets into it as grades-<part>-<corpus>.json and grades-h3.json.
+blind61 refuses to rewrite the packs once a grades file is there.
 
     python3.14 -B kit/blind61.py runs/<stamp> --judge-prompt <Propaganda_Eval>/judge/JUDGE_PROMPT.md
 
@@ -68,17 +73,17 @@ def _load(name, path):
 DIMS = tuple(_load("mt_pilot_score", PILOT / "score.py").DIMS)  # the pilot's four dimensions
 
 
-def pack_pairs(units, seed):
+def pack_pairs(units, seed, part="h1"):
     """units: [{"corpus", "id", "ru", "out": {"Q": en or None, "A": en or None}}], in sample
     order → (pack, key). pack = {corpus: [{"unit": n, "ref": id, "ru": …, "X": en, "Y": en}]};
-    key = {id: {"X": arm, "Y": arm}}."""
-    rng = random.Random(seed)
+    key = {id: {"X": arm, "Y": arm}}. Each unit's order comes from its own
+    random.Random(f"{seed}:{part}:{id}"), not from one sequence over the units."""
     pack, key = {}, {}
     for u in units:
         if u["id"] in key:
             raise ValueError(f"unit id {u['id']} twice")
         order = list(ARM_ORDER)
-        rng.shuffle(order)
+        random.Random(f"{seed}:{part}:{u['id']}").shuffle(order)
         items = pack.setdefault(u["corpus"], [])
         item = {"unit": len(items) + 1, "ref": u["id"], "ru": u["ru"]}
         for label, arm in zip(LABELS, order):
@@ -90,7 +95,7 @@ def pack_pairs(units, seed):
 
 
 def pack_h3(rows, seed, judge_prompt):
-    """rows: [{"arm", "id", "category", "prompt", "answer"}] → (pack, key); the answers in
+    """rows: [{"arm", "id", "item", "answer"}], item = the item as items.jsonl has it → (pack, key); the answers in
     one order shuffled with the seed, from rows sorted by (id, arm) so that the order does not
     depend on how the run wrote them. key = {rid: {"arm", "id"}}."""
     rows = sorted(rows, key=lambda r: (str(r["id"]), r["arm"]))
@@ -99,13 +104,15 @@ def pack_h3(rows, seed, judge_prompt):
     answers, key = [], {}
     for n, i in enumerate(order, 1):
         r, rid = rows[i], f"r{n:03d}"
-        answers.append({"rid": rid, "category": r["category"], "prompt": r["prompt"],
+        answers.append({"rid": rid, "item": r["item"],
                         "answer": r["answer"] if r["answer"] else MISSING_H3})
         key[rid] = {"arm": r["arm"], "id": r["id"]}
     pack = {"judge_prompt": judge_prompt,
             "judge_prompt_sha256": hashlib.sha256(judge_prompt.encode("utf-8")).hexdigest(),
             "instructions": "Judge each answer with the judge prompt above, one judgment per rid, "
-                            "written as the judge prompt asks; answers are in no particular order.",
+                            "written as the judge prompt asks; `item` is the eval item as published; "
+                            "answers are in no particular order. An answer shown as " + MISSING_H3 +
+                            " is not judged.",
             "answers": answers}
     return pack, key
 
@@ -170,6 +177,10 @@ def main():
         if src.get("sha256") and sha_file(src["file"]) != src["sha256"]:
             sys.exit(f"{src['file']} changed since the run (sha256 differs from meta.json)")
 
+    graders = run / "graders"
+    if graders.exists() and any(graders.glob("grades-*.json")):
+        sys.exit(f"{graders} already holds grades: the packs are not rewritten under them")
+    graders.mkdir(exist_ok=True)
     got = {}
     for line in (run / "results.jsonl").read_text(encoding="utf-8").splitlines():
         r = json.loads(line)
@@ -193,10 +204,10 @@ def main():
                 continue  # not run (a --limit run)
             corpus = {"mm": "mamardashvili", "pk": "petukhov"}.get(u["corpus"], u["corpus"])
             units.append({"corpus": corpus, "id": u["id"], "ru": u["ru"], "out": out})
-        pack, key = pack_pairs(units, SEED)
+        pack, key = pack_pairs(units, SEED, part)
         for corpus, items in pack.items():
-            dump(run / f"pack-{part}-{corpus}.json", items)
-            dump(run / f"sheet-{part}-{corpus}.json", sheet(corpus, items, reframed=(part == "h2")))
+            dump(graders / f"pack-{part}-{corpus}.json", items)
+            dump(graders / f"sheet-{part}-{corpus}.json", sheet(corpus, items, reframed=(part == "h2")))
         key_all[part] = key
         key_all["name_flags"] += name_flags(part, pack)
         miss = sum(1 for items in pack.values() for it in items for lab in LABELS if it[lab] == MISSING)
@@ -209,13 +220,13 @@ def main():
         else:
             s61 = json.loads(Path(sources["h3"]["file"]).read_text(encoding="utf-8"))
             items = {x["id"]: x for x in s61["h3"]}
-            rows = [{"arm": a, "id": i, "category": items[i]["category"], "prompt": items[i]["prompt"],
+            rows = [{"arm": a, "id": i, "item": {k: v for k, v in items[i].items() if k != "line"},
                      "answer": got.get(("h3", a, i))}
                     for i in items for a in ARM_ORDER if any(("h3", b, i) in got for b in ARM_ORDER)]
             judge = args.judge_prompt.read_text(encoding="utf-8")
             pack, key = pack_h3(rows, SEED, judge)
-            dump(run / "pack-h3.json", pack)
-            dump(run / "sheet-h3.json", {"judge_prompt_sha256": pack["judge_prompt_sha256"], "reviewer": "",
+            dump(graders / "pack-h3.json", pack)
+            dump(graders / "sheet-h3.json", {"judge_prompt_sha256": pack["judge_prompt_sha256"], "reviewer": "",
                                          "grades": [{"rid": a["rid"], "judgment": None} for a in pack["answers"]]})
             key_all["h3"] = key
             key_all["judge_prompt"] = {"file": str(args.judge_prompt), "sha256": pack["judge_prompt_sha256"]}
@@ -223,7 +234,7 @@ def main():
             lines.append(f"h3: {len(pack['answers'])} answers, judge prompt sha256 {pack['judge_prompt_sha256'][:16]}")
 
     dump(run / "key61.json", key_all)
-    print("\n".join(lines) + f"\nkey → {run / 'key61.json'} (keep it from the graders)")
+    print("\n".join(lines) + f"\nhand over {graders} only; key → {run / 'key61.json'} (keep it from the graders)")
     for f in key_all["name_flags"]:
         print(f"NAME FLAG {f['part']} {f['where']} {f['label'] or ''}: {', '.join(f['names'])} "
               f"(kept verbatim; masking is Andrei's call)", file=sys.stderr)

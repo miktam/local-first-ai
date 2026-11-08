@@ -25,11 +25,25 @@ durations); translate.py is unchanged. Each arm is unloaded with keep_alive 0 af
 parts; the bots' gemma4:26b is reloaded with keep_alive -1 at the end, also on an error or
 Ctrl-C.
 
+The gate. Before any request, a real run exits unless the pilot's contracts are the
+registration's frozen inputs: prompt hashes 8290bb7c2223 (Mamardashvili) and c99ba298d5ff
+(Petukhov), glossary a3af943b0655, and the pilot README's sha256 5f60ac8a…. A dry run records
+any mismatch under contracts.frozen_mismatch.
+
+Failures. An H3 prompt gets three attempts, as translate_unit gives a unit: a connection
+error, an HTTP 5xx, an empty or broken answer is retried, a 4xx is not. When the daemon cannot
+be reached after the attempts (a translation's or an H3 prompt's), the unit gets no row and
+the run stops with the --resume line. `--resume <folder>` continues a stopped run: the
+folder's parts, arms, limit and units (their sha256 checked), the same contracts, Ollama
+version and blobs, results.jsonl appended, every (part, arm, id) it holds skipped, an arm with
+nothing left not loaded; the session goes under meta.json's `resumes`.
+
 Output, runs/<UTC stamp>[-smoke|-dry]/ (or --out):
 - meta.json: the serving-stack row (Ollama version; per arm the tag digest, /api/show's
   blob sha256 from the FROM line and from the blob's bytes, details, template sha256, and
   /api/ps's runner and context after warm-up; flash attention and KV cache type are not
-  exposed by the API and stay null), OS build, thermal pressure at start and end (notifyutil,
+  exposed by the API, so they are recorded from workspace CLAUDE.md's production env as of
+  2026-08-30, with that date), OS build, thermal pressure at start and end (notifyutil,
   readable without sudo; powermetrics needs sudo and is never called), seed, arms, settings,
   the units' sources with sha256, the contracts' prompt hashes, dry_run.
 - results.jsonl: one row per unit per arm per part: part, arm, model, corpus or category, id,
@@ -46,6 +60,7 @@ contracts cannot load; every other mode needs python3.14.
     python3.14 -B kit/run61.py --limit 1                 # smoke test, runs/<stamp>-smoke
     python3.14 -B kit/run61.py                           # full run: both arms, h1,h2,h3
     python3.14 -B kit/run61.py --parts h1 --arms A       # a subset
+    python3.14 -B kit/run61.py --resume runs/<stamp>     # continue a stopped run
 """
 import argparse
 import hashlib
@@ -68,6 +83,14 @@ HERE = Path(__file__).resolve().parent
 EXP = HERE.parent
 PILOT = Path("/Users/miktam02/repos/library/tasks/mt-model-pilot")
 PILOT_SAMPLE_SHA256 = "d46a40a021fd9df5f520ef99115cdcf0a3be7556fad2a7f47e126874fb5a114a"
+# The registration's frozen inputs: the pilot README (the contracts and rubric) and the prompt
+# hashes the pilot's Q27 row was made under (pilot run 20261105T054758Z, meta.json).
+PILOT_README_SHA256 = "5f60ac8a484bdff09bfb187de5633b63e3d180cb7bd74849e616497718235ff9"
+FROZEN_CONTRACTS = {"mamardashvili_prompt_sha": "8290bb7c2223", "petukhov_prompt_sha": "c99ba298d5ff",
+                    "glossary_sha": "a3af943b0655", "pilot_readme_sha256": PILOT_README_SHA256}
+# Not exposed by the Ollama API; the daemon's plist and environment are Andrei's and not read.
+SERVING_ENV = {"flash_attention": "OLLAMA_FLASH_ATTENTION=0", "kv_cache_type": "no OLLAMA_KV_CACHE_TYPE",
+               "source": "workspace CLAUDE.md, production env as of 2026-08-30", "as_of": "2026-08-30"}
 SAMPLE61 = HERE / "sample61.json"
 
 SEED = 20261108
@@ -173,7 +196,18 @@ def contracts_row(pr):
             "petukhov_prompt_sha": probe["pk"].prompt_sha, "contract": pr.T.CONTRACT,
             "translate_py_sha256": sha256_bytes(tr.read_bytes()),
             "pilot_run_py_sha256": sha256_bytes((PILOT / "run.py").read_bytes()),
+            "pilot_readme_sha256": sha256_bytes((PILOT / "README.md").read_bytes()),
             "h3": "the item's prompt verbatim as the only user message; no system prompt"}
+
+
+def frozen_mismatch(contracts):
+    """The registration's frozen contracts that this library no longer has, as 'key: got ≠ frozen'."""
+    return [f"{k}: {contracts.get(k)} ≠ {v}" for k, v in FROZEN_CONTRACTS.items() if contracts.get(k) != v]
+
+
+class RunAborted(Exception):
+    """The daemon could not be reached after the retries: the unit gets no row, the run stops,
+    and --resume picks it up."""
 
 
 # ── units ────────────────────────────────────────────────────────────────────
@@ -302,6 +336,8 @@ def translate_row(pr, ctx, capture, part, arm, model, u):
     capture.calls.clear()
     t0 = time.time()
     en, err, attempts, elapsed = pr.T.translate_unit(ctx, u["ru"])
+    if err and err.startswith("connection:"):  # translate_unit's three attempts could not reach the daemon
+        raise RunAborted(f"{arm} {part} {u['id']}: {err}")
     calls = [dict(c) for c in capture.calls]
     last = calls[-1] if calls else {}
     return {"part": part, "arm": arm, "model": model, "corpus": u["corpus"], "id": u["id"],
@@ -313,27 +349,43 @@ def translate_row(pr, ctx, capture, part, arm, model, u):
 
 
 def h3_row(capture, think_ok, arm, model, item):
+    """One H3 prompt, three attempts as translate_unit makes them: a connection error (after a
+    2·n s pause), an HTTP 5xx, a broken or empty answer is retried; an HTTP 4xx is not. A
+    connection error on the last attempt stops the run (RunAborted); any other failure is the
+    row's `error`. A truncated answer (done_reason "length") is kept as the model gave it."""
     capture.calls.clear()
     payload = {"model": model, "messages": [{"role": "user", "content": item["prompt"]}],
                "stream": False, "options": dict(OPTIONS)}
     if think_ok:
         payload["think"] = THINK
     t0 = time.time()
-    answer, err = None, None
-    try:
-        d = post("/api/chat", payload, timeout=1800)
-        answer = d["message"]["content"]
-    except urllib.error.HTTPError as e:
-        err = f"HTTP {e.code}: {e.read().decode('utf-8', 'replace')[:200]}"
-    except urllib.error.URLError as e:
-        err = f"connection: {e.reason}"
-    except (ValueError, KeyError) as e:
-        err = f"contract: {e}"
+    answer, err, attempts = None, None, 0
+    for attempt in range(3):
+        attempts = attempt + 1
+        try:
+            d = post("/api/chat", payload, timeout=1800)
+            answer = d["message"]["content"]
+            if not answer.strip():
+                err = "contract: empty answer"
+                continue
+            err = None
+            break
+        except urllib.error.HTTPError as e:
+            err = f"HTTP {e.code}: {e.read().decode('utf-8', 'replace')[:200]}"
+            if e.code < 500:
+                break
+        except urllib.error.URLError as e:
+            err = f"connection: {e.reason}"
+            time.sleep(2 * (attempt + 1))
+        except (ValueError, KeyError) as e:
+            err = f"contract: {e}"
+    if err and err.startswith("connection:"):
+        raise RunAborted(f"{arm} h3 {item['id']}: {err}")
     calls = [dict(c) for c in capture.calls]
     last = calls[-1] if calls else {}
     return {"part": "h3", "arm": arm, "model": model, "category": item["category"], "id": item["id"],
             "options": last.get("options"), "think": last.get("think"), "answer": answer, "error": err,
-            "attempts": 1, "prompt_eval_count": last.get("prompt_eval_count"),
+            "attempts": attempts, "prompt_eval_count": last.get("prompt_eval_count"),
             "eval_count": last.get("eval_count"), "done_reason": last.get("done_reason"),
             "wall_s": round(time.time() - t0, 1), "calls": calls}
 
@@ -357,6 +409,7 @@ def dry_run(out, meta, parts):
     meta["requests_made"] = made
     try:
         meta["contracts"] = contracts_row(pilot_run())
+        meta["contracts"]["frozen_mismatch"] = frozen_mismatch(meta["contracts"])
     except Exception as e:  # recorded: the dry run proves what loads, not that everything does
         meta["contracts"] = {"error": f"{type(e).__name__}: {e}"}
     meta["thermal"]["end"] = thermal()
@@ -367,40 +420,85 @@ def dry_run(out, meta, parts):
     log(f"dry run → {out}: no model request; requests made: {made or 'none'}; units {counts}")
 
 
-def real_run(out, meta, parts, arms, units):
+def read_done(out):
+    """--resume: the (part, arm, id) of every row results.jsonl already holds. A torn last line
+    or a key twice stops the resume: the record is not edited by this script."""
+    f = out / "results.jsonl"
+    done = set()
+    if not f.exists():
+        return done
+    text = f.read_text(encoding="utf-8")
+    if text and not text.endswith("\n"):
+        sys.exit(f"{f}: the last line is torn (no newline); look at it before resuming")
+    for n, line in enumerate(text.splitlines(), 1):
+        try:
+            r = json.loads(line)
+        except ValueError:
+            sys.exit(f"{f} line {n} is not JSON; look at it before resuming")
+        k = (r["part"], r["arm"], r["id"])
+        if k in done:
+            sys.exit(f"{f}: {k} twice")
+        done.add(k)
+    return done
+
+
+def real_run(out, meta, parts, arms, units, done=None):
+    """A fresh run (done is None) fills meta itself; a resumed one appends a session record to
+    meta["resumes"] and skips the rows results.jsonl holds, loading only arms with work left.
+    Before any request: the pilot's contracts must be the registration's frozen ones."""
+    resume = done is not None
+    done = done or set()
     pr = pilot_run()
-    meta["contracts"] = contracts_row(pr)
+    contracts = contracts_row(pr)
+    bad = frozen_mismatch(contracts)
+    if bad:
+        sys.exit("the pilot's contracts are not the registration's frozen inputs, no model loaded: "
+                 + "; ".join(bad))
+    if resume and contracts != meta.get("contracts"):
+        sys.exit("the pilot's contracts differ from the ones this run started with; not resumed")
+    session = {"started": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "thermal": {"start": thermal(), "end": None},
+               "skipped_rows": len(done)} if resume else meta
+    session["contracts"] = contracts
     pk_system = pr.petukhov_system()
     capture = Capture()
     urllib.request.install_opener(urllib.request.build_opener(capture))
-    meta["ollama"] = get("/api/version")["version"]
+    session["ollama"] = get("/api/version")["version"]
+    if resume and session["ollama"] != meta.get("ollama"):
+        sys.exit(f"Ollama is {session['ollama']}, the run started on {meta.get('ollama')}; not resumed")
     tags = {m["name"]: m.get("digest") for m in get("/api/tags")["models"]}
     missing = [ARMS[a] for a in arms if ARMS[a] not in tags]
     if missing:
         sys.exit(f"not pulled: {missing}; the pull commands are in kit/README.md")
-    meta["models"] = {a: model_row(ARMS[a], tags[ARMS[a]]) for a in arms}
-    (out / "ps_before.json").write_text(json.dumps(get("/api/ps"), indent=1) + "\n", encoding="utf-8")
-    meta["serving"], meta["arm_seconds"], meta["arms_skipped"] = {}, {}, []
+    todo_arms = [a for a in arms if any((p, a, u["id"]) not in done for p in parts for u in units[p])]
+    session["models"] = {a: model_row(ARMS[a], tags[ARMS[a]]) for a in todo_arms}
+    if resume:
+        for a in todo_arms:
+            was = (meta.get("models") or {}).get(a, {}).get("blob_sha256_name")
+            if session["models"][a]["blob_sha256_name"] != was:
+                sys.exit(f"{a}: the blob is {session['models'][a]['blob_sha256_name']}, the run started "
+                         f"with {was}; not resumed")
+        meta.setdefault("resumes", []).append(session)
+    suffix = f"-r{len(meta['resumes'])}" if resume else ""
+    (out / f"ps_before{suffix}.json").write_text(json.dumps(get("/api/ps"), indent=1) + "\n", encoding="utf-8")
+    session["serving"], session["arm_seconds"], session["arms_skipped"] = {}, {}, []
     write_meta(out, meta)
-    log(f"run {out.name}: arms {arms}, parts {parts}, units "
-        + ", ".join(f"{p} {len(units[p])}" for p in parts) + f", contracts {meta['contracts']}")
+    log(f"run {out.name}{' (resumed, ' + str(len(done)) + ' rows kept)' if resume else ''}: arms {todo_arms}, "
+        f"parts {parts}, units " + ", ".join(f"{p} {len(units[p])}" for p in parts) + f", contracts {contracts}")
     try:
-        with (out / "results.jsonl").open("w", encoding="utf-8") as fh:
-            for arm in arms:
+        with (out / "results.jsonl").open("a" if resume else "w", encoding="utf-8") as fh:
+            for arm in todo_arms:
                 model = ARMS[arm]
                 ctxs = pr.contexts(model, pk_system)
                 for c in ctxs.values():
                     c.host = HOST
                 if not pr.T.warmup(ctxs["mm"]):
                     warn(f"{arm}: {model} not usable; arm skipped")
-                    meta["arms_skipped"].append(arm)
+                    session["arms_skipped"].append(arm)
                     continue
-                meta["serving"][arm] = {"ps": ps_row(model), "think_accepted": ctxs["mm"].caps["think"],
-                                        "flash_attention": None, "kv_cache_type": None,
-                                        "note": "the Ollama API does not report flash attention or the KV cache type"}
+                session["serving"][arm] = dict(SERVING_ENV, ps=ps_row(model), think_accepted=ctxs["mm"].caps["think"])
                 t_arm = time.time()
                 for part in parts:
-                    todo = units[part]
+                    todo = [u for u in units[part] if (part, arm, u["id"]) not in done]
                     for n, u in enumerate(todo, 1):
                         if part == "h3":
                             row = h3_row(capture, ctxs["mm"].caps["think"], arm, model, u)
@@ -412,25 +510,25 @@ def real_run(out, meta, parts, arms, units):
                             warn(f"{arm} {part} {u['id']}: {row['error']}")
                         if n % 5 == 0 or n == len(todo):
                             log(f"  {arm} {part} [{n}/{len(todo)}] {row['wall_s']} s last unit")
-                meta["arm_seconds"][arm] = round(time.time() - t_arm, 1)
+                session["arm_seconds"][arm] = round(time.time() - t_arm, 1)
                 post("/api/generate", {"model": model, "keep_alive": 0}, timeout=120)
                 log(f"  {arm}: {model} unloaded (keep_alive 0)")
     finally:
         try:
             post("/api/generate", {"model": BOT_MODEL, "keep_alive": -1}, timeout=600)
-            meta["bot_reloaded"] = True
+            session["bot_reloaded"] = True
             log(f"{BOT_MODEL} reloaded with keep_alive -1")
         except Exception as e:  # the record says so; the operator restores it by hand
-            meta["bot_reloaded"] = f"failed: {e}"
+            session["bot_reloaded"] = f"failed: {e}"
             warn(f"could not reload {BOT_MODEL}: {e}")
         try:
-            (out / "ps_after.json").write_text(json.dumps(get("/api/ps"), indent=1) + "\n", encoding="utf-8")
+            (out / f"ps_after{suffix}.json").write_text(json.dumps(get("/api/ps"), indent=1) + "\n", encoding="utf-8")
         except Exception as e:
             warn(f"ps_after not written: {e}")
-        meta["thermal"]["end"] = thermal()
-        meta["ended"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+        session["thermal"]["end"] = thermal()
+        session["ended"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
         write_meta(out, meta)
-        log(f"run {out.name} done → {out}")
+        log(f"run {out.name} ended → {out}")
 
 
 def main():
@@ -441,36 +539,59 @@ def main():
     ap.add_argument("--dry-run", action="store_true", help="meta.json and an empty results.jsonl; no model request")
     ap.add_argument("--sample61", type=Path, default=SAMPLE61)
     ap.add_argument("--out", type=Path, help="run folder (default runs/<UTC stamp>[-smoke|-dry])")
+    ap.add_argument("--resume", type=Path, help="a stopped run's folder: its parts, arms, limit and units, "
+                                                "results.jsonl appended, rows it holds skipped")
     args = ap.parse_args()
-    parts = [p.strip() for p in args.parts.split(",") if p.strip()]
-    arms = [a.strip() for a in args.arms.split(",") if a.strip()]
-    if not parts or any(p not in PARTS for p in parts) or not arms or any(a not in ARMS for a in arms):
-        ap.error(f"parts from {PARTS}, arms from {tuple(ARMS)}")
 
-    stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
-    tag = "-dry" if args.dry_run else ("-smoke" if args.limit else "")
-    out = args.out or EXP / "runs" / (stamp + tag)
-    if (out / "meta.json").exists():
-        sys.exit(f"{out} already holds a run")
-    out.mkdir(parents=True, exist_ok=True)
-
-    units, sources = load_units(parts, args.sample61, strict=not args.dry_run)
-    for p in units:
-        units[p] = take(units[p], args.limit, "category" if p == "h3" else "corpus")
-    for p in sources:
-        if p in units:
-            sources[p]["units_run"] = len(units[p])
-    meta = {"stamp": out.name, "started": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "dry_run": bool(args.dry_run),
-            "host": HOST, "seed": SEED, "arms": {a: ARMS[a] for a in arms}, "parts": parts, "limit": args.limit,
-            "num_ctx": NUM_CTX, "temperature": TEMPERATURE, "think": THINK, "num_predict": NUM_PREDICT,
-            "keep_alive_after_arm": 0, "bot_model": {"name": BOT_MODEL, "keep_alive": -1},
-            "ollama": None, "models": None, "serving": None, "os": os_row(),
-            "thermal": {"start": thermal(), "end": None},
-            "units": sources}
-    if args.dry_run:
-        dry_run(out, meta, parts)
+    if args.resume:
+        if args.out or args.dry_run or args.parts != "h1,h2,h3" or args.arms != "Q,A" or args.limit \
+                or args.sample61 != SAMPLE61:
+            ap.error("--resume takes the folder's own parts, arms, limit and sample; give it alone")
+        out = args.resume if args.resume.is_absolute() else Path.cwd() / args.resume
+        meta = json.loads((out / "meta.json").read_text(encoding="utf-8"))
+        if meta.get("dry_run"):
+            sys.exit(f"{out} is a dry run: nothing to resume")
+        parts, arms, limit = meta["parts"], list(meta["arms"]), meta["limit"]
+        s61 = next((Path(meta["units"][p]["file"]) for p in ("h2", "h3") if p in meta["units"]), SAMPLE61)
+        units, sources = load_units(parts, s61, strict=True)
+        for p in parts:
+            if sources[p]["sha256"] != meta["units"][p]["sha256"]:
+                sys.exit(f"{sources[p]['file']} changed since the run started; not resumed")
+            units[p] = take(units[p], limit, "category" if p == "h3" else "corpus")
+        done = read_done(out)
     else:
-        real_run(out, meta, parts, arms, units)
+        parts = [p.strip() for p in args.parts.split(",") if p.strip()]
+        arms = [a.strip() for a in args.arms.split(",") if a.strip()]
+        if not parts or any(p not in PARTS for p in parts) or not arms or any(a not in ARMS for a in arms):
+            ap.error(f"parts from {PARTS}, arms from {tuple(ARMS)}")
+        stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+        tag = "-dry" if args.dry_run else ("-smoke" if args.limit else "")
+        out = args.out or EXP / "runs" / (stamp + tag)
+        if (out / "meta.json").exists():
+            sys.exit(f"{out} already holds a run (to continue a stopped one: --resume {out})")
+        out.mkdir(parents=True, exist_ok=True)
+        units, sources = load_units(parts, args.sample61, strict=not args.dry_run)
+        for p in units:
+            units[p] = take(units[p], args.limit, "category" if p == "h3" else "corpus")
+        for p in sources:
+            if p in units:
+                sources[p]["units_run"] = len(units[p])
+        meta = {"stamp": out.name, "started": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "dry_run": bool(args.dry_run),
+                "host": HOST, "seed": SEED, "arms": {a: ARMS[a] for a in arms}, "parts": parts,
+                "limit": args.limit, "num_ctx": NUM_CTX, "temperature": TEMPERATURE, "think": THINK,
+                "num_predict": NUM_PREDICT, "keep_alive_after_arm": 0,
+                "bot_model": {"name": BOT_MODEL, "keep_alive": -1}, "ollama": None, "models": None,
+                "serving": None, "serving_env": SERVING_ENV, "os": os_row(),
+                "thermal": {"start": thermal(), "end": None}, "units": sources}
+        done = None
+        if args.dry_run:
+            return dry_run(out, meta, parts)
+    try:
+        real_run(out, meta, parts, arms, units, done)
+    except RunAborted as e:
+        sys.exit(f"stopped: {e}. The unit has no row; continue with: python3.14 -B kit/run61.py --resume {out}")
+    except KeyboardInterrupt:
+        sys.exit(f"interrupted; continue with: python3.14 -B kit/run61.py --resume {out}")
 
 
 if __name__ == "__main__":
