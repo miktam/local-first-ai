@@ -126,7 +126,7 @@ The smoke test loads both models in turn and hashes both blobs. It translates on
 and one for h2, answers one h3 prompt, unloads each arm and reloads gemma4:26b. While a
 candidate is loaded, the bots' model is out of memory and bot replies wait longer, as in the
 pilot. `--limit` counts per part, round-robin over the corpora, so `--limit 1` exercises only
-the Mamardashvili contract; `--limit 2` exercises both.
+the Mamardashvili contract. `--limit 2` exercises both, and it is what the smoke test runs.
 
 ```bash
 EXP=exp061 STEP=smoke; cd ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection && mkdir -p runs && RUN=runs/${EXP}_${STEP}_$(date +%Y%m%d-%H%M)
@@ -134,35 +134,72 @@ cat > $RUN.sh <<'EOF'
 cd ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection
 notifyutil -g com.apple.system.thermalpressurelevel
 ollama ps
-/opt/homebrew/bin/python3.14 -B kit/run61.py --limit 1
+/opt/homebrew/bin/python3.14 -B kit/run61.py --limit 2
 ollama ps
 EOF
 tmux new-session -d -s $EXP-$STEP -c ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection "caffeinate -is zsh -e $RUN.sh 2>&1 | tee $RUN.log; echo \"[$EXP-$STEP] exit \${pipestatus[1]} at \$(date)\" | tee -a $RUN.log; exec zsh" && \
 echo "attach: tmux attach -t $EXP-$STEP   (detach: Ctrl-b d)   log: tail -f ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection/$RUN.log"
 ```
 
-The output goes to `runs/<stamp>-smoke/`. Its h3 row's `eval_count` and `wall_s` are the first
-real reading of H3's answer length.
+The output goes to `runs/<stamp>-smoke/`.
 
-## 5. Full run
+**Run 2026-11-08 12:31–12:37, `runs/20261108T113147Z-smoke/` (exit 0).**
+- Rows and calls: 12 rows, 2 per part per arm, all answered, `done_reason` stop; one call per
+  unit, no retry.
+- Settings and the gate: `num_ctx` 8192 on every request, `think` false; the gate passed
+  (`frozen_mismatch` []).
+- Blobs: both hashed and equal to their names, Q `880a52af8317974f…`, A `6f186a1fe0c4f741…`.
+- Serving: runner llamacpp; thermal level 0 at start and end; gemma4:26b reloaded.
+- Translations: decode about 12.9 tokens/s on both arms; prefill about 700 tokens/s.
+- Wall seconds per translation: Q 24.9 and 23.6 (Mamardashvili), 2.3 and 25.5 (Petukhov;
+  the 2.3 s unit is nine tokens long); A 25.1, 24.1, 2.3, 25.9.
+- Wall seconds per H3 answer: Q 18.9 and 20.6 (235 and 253 tokens); A 56.8 and 38.9 (726 and
+  493 tokens).
+- Arm time with warm-up: Q 116 s, A 173 s.
 
-Duration:
-- **H1 and H2:** about 40 minutes per arm for the 60 translations. This is a guess from the
-  pilot's qwen3.8:27b, Ollama's own Q4_K_M, which took 35.5–38.3 s per unit (median, run
-  20261105T054758Z).
-- **H3:** unknown until the smoke test. At the pilot's dev reading of 8.9 tokens/s, a
-  2,048-token answer takes about 4 minutes, so H3 lies between about 20 minutes and about
-  4.5 hours per arm.
+`blind61.py` on the folder wrote 10 files into `graders/`, none naming an arm or a model.
+`score61.py` showed the speed table, and every part as not graded.
 
-The run checks that both models are pulled before it loads anything.
+## 5. The full run (Andrei's block; not run by the kit's workers)
+
+Duration, extrapolated from the smoke run's two units per part per arm (a thin basis):
+- **H1 and H2:** 60 translations at about 25 s each, about 25 minutes per arm.
+- **H3:** 70 answers at the smoke run's mean, about 23 minutes for Q (19.8 s each) and about
+  56 minutes for A (47.8 s each). A's answers ran two to three times longer than Q's.
+- **Overhead:** about 2 minutes per arm (warm-up, blob hashing, unload) and the reload of
+  gemma4:26b at the end.
+- **Total:** about **2.2 hours** for both arms. The bound: if every H3 answer ran to the
+  2,048-token cap (about 160 s at 12.9 tokens/s), H3 would take 3.1 hours per arm, about 7
+  hours in all.
+
+While a candidate is loaded, the bots' gemma4:26b stays loaded beside it (18 GB plus 18–23
+GB). The run checks that both models are pulled and that the pilot's contracts are the
+frozen ones before it loads anything.
 
 ```bash
-EXP=exp061 STEP=full; cd ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection && mkdir -p runs && RUN=runs/${EXP}_${STEP}_$(date +%Y%m%d-%H%M)
+EXP=exp061 STEP=run; cd ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection && mkdir -p runs && RUN=runs/${EXP}_${STEP}_$(date +%Y%m%d-%H%M)
 cat > $RUN.sh <<'EOF'
 cd ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection
 notifyutil -g com.apple.system.thermalpressurelevel
 ollama ps
 /opt/homebrew/bin/python3.14 -B kit/run61.py
+ollama ps
+EOF
+tmux new-session -d -s $EXP-$STEP -c ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection "caffeinate -is zsh -e $RUN.sh 2>&1 | tee $RUN.log; echo \"[$EXP-$STEP] exit \${pipestatus[1]} at \$(date)\" | tee -a $RUN.log; exec zsh" && \
+echo "attach: tmux attach -t $EXP-$STEP   (detach: Ctrl-b d)   log: tail -f ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection/$RUN.log"
+```
+
+If the run stops (its last line says `continue with: … --resume <folder>`), continue it in
+the same folder with this block. It picks the newest full-run folder, `runs/<stamp>Z`, never
+a `-smoke` or `-dry` one, and it prints which one it took:
+
+```bash
+EXP=exp061 STEP=resume; cd ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection && R=$(ls -d runs/20*Z | tail -1) && echo "resuming $R" && RUN=runs/${EXP}_${STEP}_$(date +%Y%m%d-%H%M)
+cat > $RUN.sh <<EOF
+cd ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection
+notifyutil -g com.apple.system.thermalpressurelevel
+ollama ps
+/opt/homebrew/bin/python3.14 -B kit/run61.py --resume $R
 ollama ps
 EOF
 tmux new-session -d -s $EXP-$STEP -c ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection "caffeinate -is zsh -e $RUN.sh 2>&1 | tee $RUN.log; echo \"[$EXP-$STEP] exit \${pipestatus[1]} at \$(date)\" | tee -a $RUN.log; exec zsh" && \
