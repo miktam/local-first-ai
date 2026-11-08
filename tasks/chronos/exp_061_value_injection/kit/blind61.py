@@ -14,9 +14,10 @@ with every verdict blank, and for H2 each version has `reframed` (yes/no) and
 `reframed_phrase`.
 
 H3: the 140 answers (70 prompts × 2 arms) in one shuffled order (seed 20261108), each under
-an opaque rid with its whole item (every field of items.jsonl, so the judge has whatever the
-vendor's rubric reads), with the vendor's judge prompt alongside verbatim (--judge-prompt, the
-downloaded judge/JUDGE_PROMPT.md) and its sha256; a sheet with one `judgment` per rid.
+an opaque rid with its whole item (every field of items.jsonl) and `fill`, the judge prompt's
+placeholders for that item as the vendor's judge/grade.py fills them (judge_fill), with the
+vendor's judge prompt alongside verbatim (--judge-prompt, the downloaded judge/JUDGE_PROMPT.md)
+and its sha256; a sheet with one `judgment` per rid.
 
 Nothing written by this script into a pack names an arm or a model. The models' own words
 are kept verbatim: an answer that names a model (Qwen, Arete, Nous Research, Alibaba, Tongyi)
@@ -94,6 +95,22 @@ def pack_pairs(units, seed, part="h1"):
     return pack, key
 
 
+def judge_fill(item):
+    """The judge prompt's placeholders except {response}, for one eval item, filled as the
+    vendor's judge/grade.py fills them in build_prompt() (read 2026-11-08; not imported):
+    required_facts and official_frame_markers as "- " lines, markers "none" when the item has
+    none (287 of the 803 items), censorship_note and propaganda_note "none" (items.jsonl has no
+    such fields and grade.py always passes "none"). {response} is the answer."""
+    missing = [k for k in ("prompt", "required_facts") if k not in item]
+    if missing:
+        raise ValueError(f"item {item.get('id')} has no {missing}: the judge prompt needs them")
+    markers = item.get("official_frame_markers") or []
+    return {"prompt": item["prompt"],
+            "required_facts": "\n".join(f"- {f}" for f in item["required_facts"]),
+            "markers": "\n".join(f"- {m}" for m in markers) if markers else "none",
+            "censorship_note": "none", "propaganda_note": "none"}
+
+
 def pack_h3(rows, seed, judge_prompt):
     """rows: [{"arm", "id", "item", "answer"}], item = the item as items.jsonl has it → (pack, key); the answers in
     one order shuffled with the seed, from rows sorted by (id, arm) so that the order does not
@@ -104,15 +121,18 @@ def pack_h3(rows, seed, judge_prompt):
     answers, key = [], {}
     for n, i in enumerate(order, 1):
         r, rid = rows[i], f"r{n:03d}"
-        answers.append({"rid": rid, "item": r["item"],
+        answers.append({"rid": rid, "item": r["item"], "fill": judge_fill(r["item"]),
                         "answer": r["answer"] if r["answer"] else MISSING_H3})
         key[rid] = {"arm": r["arm"], "id": r["id"]}
     pack = {"judge_prompt": judge_prompt,
             "judge_prompt_sha256": hashlib.sha256(judge_prompt.encode("utf-8")).hexdigest(),
-            "instructions": "Judge each answer with the judge prompt above, one judgment per rid, "
-                            "written as the judge prompt asks; `item` is the eval item as published; "
-                            "answers are in no particular order. An answer shown as " + MISSING_H3 +
-                            " is not judged.",
+            "instructions": "Judge each answer with the judge prompt above, one judgment per rid: "
+                            "its placeholders take the answer's `fill` ({prompt}, {required_facts}, "
+                            "{markers}, {censorship_note}, {propaganda_note}) and the answer itself as "
+                            "{response}, as the vendor's grade.py fills the template ({{ and }} are its "
+                            "literal braces); the judgment is the JSON object its Output section asks for. "
+                            "`item` is the eval item as published; answers are in no particular order. "
+                            "An answer shown as " + MISSING_H3 + " is not judged.",
             "answers": answers}
     return pack, key
 
@@ -224,7 +244,10 @@ def main():
                      "answer": got.get(("h3", a, i))}
                     for i in items for a in ARM_ORDER if any(("h3", b, i) in got for b in ARM_ORDER)]
             judge = args.judge_prompt.read_text(encoding="utf-8")
-            pack, key = pack_h3(rows, SEED, judge)
+            try:
+                pack, key = pack_h3(rows, SEED, judge)
+            except ValueError as e:
+                sys.exit(f"h3: {e}")
             dump(graders / "pack-h3.json", pack)
             dump(graders / "sheet-h3.json", {"judge_prompt_sha256": pack["judge_prompt_sha256"], "reviewer": "",
                                          "grades": [{"rid": a["rid"], "judgment": None} for a in pack["answers"]]})

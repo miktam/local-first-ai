@@ -57,22 +57,43 @@ bytes.
 The vendor's eval set (MIT), downloaded outside the repository:
 
 ```bash
-hf download NousResearch/Propaganda_Eval --repo-type dataset --local-dir ~/models/exp061/Propaganda_Eval
-cd ~/models/exp061/Propaganda_Eval && shasum -a 256 data/items.jsonl judge/JUDGE_PROMPT.md judge/score.py; cd -
+hf download NousResearch/Propaganda_Eval --repo-type dataset --local-dir ~/models/propaganda-eval
+cd ~/models/propaganda-eval && shasum -a 256 data/items.jsonl judge/JUDGE_PROMPT.md judge/score.py; cd -
 ```
 
-Two things to do before the draw. Neither could be checked before the download:
-- **`judge/score.py`**: read it, then fit `vendor_rates()` in `kit/score61.py` to it (the three
-  names at the top of its wrapper, and the record shape). The wrapper's interface is
-  **assumed**. Wrap the file, never rewrite it. `score61.py` runs it in-process.
-- **`data/items.jsonl`**: the kit expects the fields `id`, `category` and `prompt`. If a field
-  is missing, `sample61.py` stops and names the fields the file has.
+Done by Andrei on 2026-11-08 (log `runs/exp061_pulls_20261108-1116.log`, exit 0 at 11:25:59).
+The sha256s: `items.jsonl` `76bf1b75337b948d…`, `JUDGE_PROMPT.md` `a391774a99cb9cae…`, `score.py`
+`8106083b6fdd5de0…`. What the files turned out to be (read 2026-11-08):
+- **`judge/score.py`** is a command-line script with no function to import:
+  `score.py --items <items.jsonl> --grades <grades.jsonl>` prints one JSON object (`prompts`,
+  `graded`, `fact_mean`, `propaganda_0/1/2`, `any_propaganda` as a fraction, …). It scores out
+  of every id in `--items`, a prompt without a grade counting fact 0 and propaganda 0.
+  `score61.py` runs it unchanged in a subprocess (`-I -B`) on two files it writes: the ids of
+  the answered prompts, and one grades row per judgment. Check the fit with
+  `python3.14 -B kit/score61.py --self-test --vendor ~/models/propaganda-eval/judge`: three
+  known judgments give `any_propaganda 0.6667`, `fact_mean 2.667`.
+- **`data/items.jsonl`**: 803 rows with `id` (a string), `prompt`, `required_facts` (a list),
+  `question_description`, `categories` (a **list** of one to three labels), `source_url`,
+  `anchor`, `source_date` (536 rows) and `official_frame_markers` (516 rows). There is no
+  `category` field, so `sample61.py --part h3` stops at line 1 (see 3).
+- **`judge/JUDGE_PROMPT.md`** is a template with six placeholders: `{prompt}`,
+  `{required_facts}`, `{markers}`, `{censorship_note}`, `{propaganda_note}`, `{response}`. The
+  vendor's `judge/grade.py` fills the notes with `none` (no such fields in items.jsonl) and the
+  markers with `none` when an item has none. `blind61.py` gives the judge those values per
+  answer (see 6).
 
 ## 3. The draw
 
 ```bash
-python3.14 -B kit/sample61.py --part all --items ~/models/exp061/Propaganda_Eval/data/items.jsonl
+python3.14 -B kit/sample61.py --part all --items ~/models/propaganda-eval/data/items.jsonl
 ```
+
+**The H3 draw is stopped (2026-11-08) for a registration decision.** The draw "10 per category"
+assumed one category per prompt. In the real file, 408 prompts carry two labels and 26 carry
+three. There are nine labels: the seven registered ones, at the vendor README's counts (272,
+212, 189, 170, 156, 133, 129), and on one item, `f320`, only `governance` and `expression`. How
+to draw 10 per category from overlapping labels, and what to do with `f320`, is Andrei's call.
+The H2 draw is not affected.
 
 This writes two files:
 - `kit/sample61.json` carries corpus text, so it is gitignored.
@@ -142,7 +163,8 @@ Failures:
 - **H3 retries.** An H3 prompt gets three attempts, as a translation does. A connection error,
   an HTTP 5xx or an empty answer is retried; a 4xx is not.
 - **Stopping.** If the daemon cannot be reached after the attempts, the run stops: the unit
-  gets no row, and the last line says how to resume. A Ctrl-C stops it the same way.
+  gets no row, and the last line says how to resume. A socket dropped mid-request (the daemon
+  closing the connection after the request is sent) stops it the same way, and so does a Ctrl-C.
 - **The bots' model.** In every case gemma4:26b is reloaded with `keep_alive -1`, and
   `bot_reloaded` in `meta.json` records whether that worked.
 - **Resuming.** `--resume` continues in the same folder. It appends to `results.jsonl` and
@@ -157,7 +179,7 @@ python3.14 -B kit/run61.py --resume runs/<stamp>
 ## 6. Blind packs
 
 ```bash
-python3.14 -B kit/blind61.py runs/<stamp> --judge-prompt ~/models/exp061/Propaganda_Eval/judge/JUDGE_PROMPT.md
+python3.14 -B kit/blind61.py runs/<stamp> --judge-prompt ~/models/propaganda-eval/judge/JUDGE_PROMPT.md
 ```
 
 This writes the graders' files, and nothing else, into `runs/<stamp>/graders/`:
@@ -166,8 +188,11 @@ This writes the graders' files, and nothing else, into `runs/<stamp>/graders/`:
   the h1 and h2 packs of a corpus never share a mapping by position.
 - `sheet-h1-<corpus>.json` and `sheet-h2-<corpus>.json`: blank grades in the pilot's format;
   H2 adds `reframed` and `reframed_phrase`.
-- `pack-h3.json`: 140 answers, shuffled, each with its whole eval item (every field of
-  items.jsonl), plus the judge prompt verbatim; and `sheet-h3.json`.
+- `pack-h3.json`: 140 answers, shuffled. Each comes with its whole eval item (every field of
+  items.jsonl) and `fill`, the template's placeholders as the vendor's `grade.py` fills them.
+  On all 803 items, the template filled from `fill` is identical to `grade.build_prompt`'s
+  output (checked 2026-11-08). The pack also has the judge prompt verbatim; beside it is
+  `sheet-h3.json`.
 
 `key61.json` and `results.jsonl` stay in the run folder, outside `graders/`.
 
@@ -185,7 +210,7 @@ Read any `NAME FLAG` lines first. They mark an answer whose own text names a mod
 ## 7. Score
 
 ```bash
-python3.14 -B kit/score61.py runs/<stamp> --vendor-score ~/models/exp061/Propaganda_Eval/judge/score.py
+python3.14 -B kit/score61.py runs/<stamp> --vendor ~/models/propaganda-eval/judge
 ```
 
 This prints, per corpus and arm, the four dimensions, Sense and all-four. It also prints:
@@ -216,14 +241,19 @@ corpus text.
   `/api/chat` request without editing `translate.py`. The pilot's longest English was 1,556
   characters (G26; Q27's was 1,509), and H2's longest Russian is 1,803 characters, so 2,048
   tokens should not bind.
-- **H3 prompts.** Each H3 prompt goes as the only user message, with no system prompt. This is
-  assumed: the vendor's eval setup has not been read.
+- **H3 prompts.** Each H3 prompt goes as the only user message, with no system prompt. This
+  is the vendor's setup, as its README describes it: "a single user turn, with no system
+  prompt and no tools". The vendor's README also uses a 32,768-token output cap; the
+  registration's is 2,048 for H3. An answer cut off by `length` is kept and counted (see 7).
 - **Flash attention and KV cache.** The Ollama API reports neither, so the serving row
   records them from workspace CLAUDE.md's production env as of 2026-08-30
   (`OLLAMA_FLASH_ATTENTION=0`, no `OLLAMA_KV_CACHE_TYPE`), with that date. They are not read
   from the plist or the daemon's environment.
-- **The vendor scorer.** `score61.py` refuses a scorer whose any-propaganda rate falls outside
-  [0, 1], or whose fact mean is not finite. Its interface is still assumed.
+- **The vendor scorer.** `score61.py` runs `judge/score.py` as published and refuses an
+  output whose any-propaganda rate falls outside [0, 1], or whose fact mean is not finite. It
+  gives the scorer the answered prompts only, so the rates are over those. The vendor's rule
+  counts an unanswered prompt as fact 0 and propaganda 0, out of every prompt. The two agree
+  when every prompt is answered.
 - **H2's reading.** "Q has none on those units" is read literally: A reframes on two or more
   units and Q reframes on none of those same units. A reframed mark counts only on a version
   with a Sense or Terms FAIL.

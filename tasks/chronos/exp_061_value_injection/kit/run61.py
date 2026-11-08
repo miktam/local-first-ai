@@ -31,12 +31,14 @@ registration's frozen inputs: prompt hashes 8290bb7c2223 (Mamardashvili) and c99
 any mismatch under contracts.frozen_mismatch.
 
 Failures. An H3 prompt gets three attempts, as translate_unit gives a unit: a connection
-error, an HTTP 5xx, an empty or broken answer is retried, a 4xx is not. When the daemon cannot
-be reached after the attempts (a translation's or an H3 prompt's), the unit gets no row and
-the run stops with the --resume line. `--resume <folder>` continues a stopped run: the
-folder's parts, arms, limit and units (their sha256 checked), the same contracts, Ollama
-version and blobs, results.jsonl appended, every (part, arm, id) it holds skipped, an arm with
-nothing left not loaded; the session goes under meta.json's `resumes`.
+error (a socket dropped mid-request included), an HTTP 5xx, an empty or broken answer is
+retried, a 4xx is not. When the daemon cannot be reached after the attempts (a translation's
+or an H3 prompt's), the unit gets no row and the run stops with the --resume line; so does a
+socket dropped inside the pilot's translate_unit, which retries URLError only.
+`--resume <folder>` continues a stopped run: the folder's parts, arms, limit and units (their
+sha256 checked), the same contracts, Ollama version and blobs, results.jsonl appended, every
+(part, arm, id) it holds skipped, an arm with nothing left not loaded; the session goes under
+meta.json's `resumes`.
 
 Output, runs/<UTC stamp>[-smoke|-dry]/ (or --out):
 - meta.json: the serving-stack row (Ollama version; per arm the tag digest, /api/show's
@@ -64,6 +66,7 @@ contracts cannot load; every other mode needs python3.14.
 """
 import argparse
 import hashlib
+import http.client
 import importlib.util
 import io
 import json
@@ -377,6 +380,9 @@ def h3_row(capture, think_ok, arm, model, item):
         except urllib.error.URLError as e:
             err = f"connection: {e.reason}"
             time.sleep(2 * (attempt + 1))
+        except (OSError, http.client.HTTPException) as e:  # dropped mid-request: RemoteDisconnected, reset, read timeout
+            err = f"connection: {type(e).__name__}: {e}"
+            time.sleep(2 * (attempt + 1))
         except (ValueError, KeyError) as e:
             err = f"contract: {e}"
     if err and err.startswith("connection:"):
@@ -590,6 +596,9 @@ def main():
         real_run(out, meta, parts, arms, units, done)
     except RunAborted as e:
         sys.exit(f"stopped: {e}. The unit has no row; continue with: python3.14 -B kit/run61.py --resume {out}")
+    except (OSError, http.client.HTTPException) as e:  # a socket dropped inside translate_unit, which retries URLError only
+        sys.exit(f"stopped: {type(e).__name__}: {e}. The unit has no row; continue with: "
+                 f"python3.14 -B kit/run61.py --resume {out}")
     except KeyboardInterrupt:
         sys.exit(f"interrupted; continue with: python3.14 -B kit/run61.py --resume {out}")
 

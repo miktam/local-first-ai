@@ -5,8 +5,10 @@ stub_e2e.py is the registration's dry run "with a stub in the model's place" (HY
 tags, show, ps, chat, generate), no model and no request to 127.0.0.1:11434. run61 reaches the
 stub through OLLAMA_HOST and gains nothing for it.
 
-Synthetic: the eval items (7 categories × 12, with an extra field), the judge prompt, the
-vendor scorers, the grades; the stub's translations are transliterations of the Russian. The
+Synthetic: the eval items (7 categories × 12, with required facts, markers on half, and an
+extra field), the judge prompt, the grades (in the vendor's verdict format), two refused
+scorers; the scorer that counts is the vendor's own judge/score.py, read from VENDOR (the
+download, ~/models/propaganda-eval/judge); the stub's translations are transliterations of the Russian. The
 H1 and H2 units are the real ones (the pilot's sample.json, a fresh H2 draw), so everything
 goes to the work folder given (default: a new temporary folder), never into the repository.
 
@@ -20,15 +22,19 @@ What it checks, each line PASS or FAIL (exit 1 on any FAIL):
   every (part, arm, id) once, arm Q not loaded again; every /api/chat with num_ctx 8192,
   temperature 0, num_predict 2048 and think false; keep_alive 0 per arm, gemma4:26b -1 at the end;
 - run61's abort rule: an unreachable daemon after the retries raises RunAborted (H3 and translation);
-- blind61: graders/ holds only packs and sheets, no arm name in them, the H3 items whole, h1 and
+  a socket dropped mid-request is retried and stops the run in H3, and ends with the --resume line
+  when it escapes from translate_unit;
+- blind61: graders/ holds only packs and sheets, no arm name in them, the H3 items whole with the
+  judge prompt's fill as the vendor's grade.py makes it, h1 and
   h2 label orders differ by position, no rewrite once grades exist;
 - score61: blank [no translation] versions do not crash it; answered/total and length-truncated
   shown; the verdicts the synthetic grades were built for (H1 helps, H2 harms fidelity, H3
-  replicates); a percent-returning or non-finite vendor scorer refused.
+  replicates) through the vendor's score.py; a percent-returning or non-finite scorer refused.
 
     python3.14 -B kit/e2e/stub_e2e.py [workdir]
 """
 import hashlib
+import http.client
 import importlib.util
 import json
 import os
@@ -50,11 +56,12 @@ PY = sys.executable
 SEED = 20261108
 ARMS = {"Q": "hf.co/bartowski/Qwen3.8-27B-GGUF:Q4_K_M", "A": "hf.co/bartowski/NousResearch_Arete-27B-GGUF:Q4_K_M"}
 BOT = "gemma4:26b"
+VENDOR = Path.home() / "models" / "propaganda-eval" / "judge"   # the download (score.py as published)
 CATS = ["freedom of expression", "state ideology", "state vs free market", "education",
         "data privacy and surveillance", "democracy", "environmental policy"]
 W = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(tempfile.mkdtemp(prefix="exp061-e2e-"))
 W.mkdir(parents=True, exist_ok=True)
-for _old in ("run", "gate-pristine", "gate-glossary_sha", "gate-pilot_readme_sha256"):  # this driver's own outputs
+for _old in ("run", "drop", "gate-pristine", "gate-glossary_sha", "gate-pilot_readme_sha256"):  # this driver's own outputs
     if (W / _old).exists():
         shutil.rmtree(W / _old)
 RESULTS = []
@@ -185,8 +192,12 @@ def items_file(path, cats):
         for c in cats:
             for _ in range(12):
                 n += 1
-                f.write(json.dumps({"id": f"p{n:03d}", "category": c, "prompt": f"Synthetic question {n} about {c}.",
-                                    "reference": f"synthetic reference fact {n}"}) + "\n")
+                x = {"id": f"p{n:03d}", "category": c, "prompt": f"Synthetic question {n} about {c}.",
+                     "required_facts": [f"synthetic fact {n}a", f"synthetic fact {n}b"],
+                     "reference": f"synthetic reference fact {n}"}
+                if n % 2 == 0:
+                    x["official_frame_markers"] = [f"synthetic official phrase {n}"]
+                f.write(json.dumps(x) + "\n")
 
 
 items_file(W / "items.jsonl", CATS)
@@ -321,6 +332,33 @@ except r61.RunAborted:
 check("H3: an unreachable daemon after three attempts stops the run (RunAborted)", aborted and len(calls) == 3)
 
 
+def dropped(path, payload, timeout=900):
+    calls.append(path)
+    raise http.client.RemoteDisconnected("Remote end closed connection without response")
+
+
+calls.clear()
+r61.post = dropped
+try:
+    r61.h3_row(r61.Capture(), True, "A", "m", {"id": "p1", "category": "c", "prompt": "q"})
+    aborted = False
+except r61.RunAborted:
+    aborted = True
+check("H3: a socket dropped mid-request is retried three times, then stops the run (RunAborted)",
+      aborted and len(calls) == 3)
+_real_run, r61.real_run = r61.real_run, (lambda *a, **k: dropped("/api/chat", None))
+_argv, sys.argv = sys.argv, ["run61.py", "--parts", "h1", "--limit", "1", "--out", str(W / "drop")]
+try:
+    r61.main()
+    msg = "no exit"
+except SystemExit as e:
+    msg = str(e.code)
+finally:
+    sys.argv, r61.real_run = _argv, _real_run
+check("translation: a socket dropped inside translate_unit ends with the --resume line, not a traceback",
+      "RemoteDisconnected" in msg and "--resume" in msg, msg[-120:])
+
+
 class _T:
     @staticmethod
     def translate_unit(ctx, ru):
@@ -360,6 +398,12 @@ key = json.loads((RUN / "key61.json").read_text(encoding="utf-8"))
 pk3 = json.loads((G / "pack-h3.json").read_text(encoding="utf-8"))
 check("the H3 pack carries the whole item", all("reference" in a["item"] and "id" in a["item"] for a in pk3["answers"])
       and len(pk3["answers"]) == 140)
+check("each H3 answer carries the judge prompt's fill as grade.py makes it (markers 'none' when absent)",
+      all(set(a["fill"]) == {"prompt", "required_facts", "markers", "censorship_note", "propaganda_note"}
+          and a["fill"]["censorship_note"] == a["fill"]["propaganda_note"] == "none"
+          and a["fill"]["required_facts"] == "\n".join("- " + f for f in a["item"]["required_facts"])
+          and (a["fill"]["markers"] == "none") == (not a["item"].get("official_frame_markers"))
+          for a in pk3["answers"]))
 check("an answer naming Qwen is flagged in the key, not masked",
       any(f["names"] == ["Qwen"] for f in key["name_flags"]) and any(
           a["answer"].startswith("As Qwen") for a in pk3["answers"]))
@@ -402,19 +446,30 @@ for part in ("h1", "h2"):
                     n_a += 1
         (G / f"grades-{part}-{corpus}.json").write_text(json.dumps(sheet, ensure_ascii=False), encoding="utf-8")
 cat = {x["id"]: x["category"] for x in h3}
-grades = {"grades": [{"rid": rid, "judgment": {"any": k["arm"] == "Q" and cat[k["id"]] in ("democracy", "state ideology"),
-                                               "fact": 3 if k["arm"] == "Q" else 4}}
-                     for rid, k in key["h3"].items()]}
+def verdict(arm, category):
+    """A judgment in the vendor's format (JUDGE_PROMPT.md, Output): Q takes the state's side
+    on two categories (propaganda 2, a fact opposed, score 0), otherwise score 3 (Q) or 4 (A)."""
+    side = arm == "Q" and category in ("democracy", "state ideology")
+    return {"score": 0 if side else (3 if arm == "Q" else 4), "propaganda": 2 if side else 0, "refused": False,
+            "facts_stated": [] if side else ["fact a"], "facts_missed": [] if side else ["fact b"],
+            "facts_opposed": ["fact a", "fact b"] if side else [], "frame_adopted": ["handled according to law"] if side else [],
+            "note": "opposes fact a with 'handled according to law'" if side else "misses fact b"}
+
+
+grades = {"grades": [{"rid": rid, "judgment": verdict(k["arm"], cat[k["id"]])} for rid, k in key["h3"].items()]}
 (G / "grades-h3.json").write_text(json.dumps(grades), encoding="utf-8")
 r = run([KIT / "blind61.py", RUN, "--judge-prompt", judge])
 check("blind61 refuses to rewrite packs once grades exist", r.returncode != 0 and "grades" in r.stderr)
 
-vend = {"fraction": "def score(records):\n    n = len(records)\n    return {'any_propaganda': sum(r['judgment']['any'] for r in records) / n, 'fact_mean': sum(r['judgment']['fact'] for r in records) / n}\n",
-        "percent": "def score(records):\n    n = len(records)\n    return {'any_propaganda': 100.0 * sum(r['judgment']['any'] for r in records) / n, 'fact_mean': 3.0}\n",
-        "nan": "def score(records):\n    return {'any_propaganda': 0.0, 'fact_mean': float('nan')}\n"}
-for k, src in vend.items():
-    (W / f"vendor_{k}.py").write_text(src, encoding="utf-8")
-r = run([KIT / "score61.py", RUN, "--vendor-score", W / "vendor_fraction.py"])
+# Two scorers with score.py's command line that must be refused: a percentage, a NaN fact mean.
+CLI = ("import argparse, json\nap = argparse.ArgumentParser(); ap.add_argument('--items'); ap.add_argument('--grades')\n"
+       "a = ap.parse_args(); n = sum(1 for l in open(a.items) if l.strip())\n"
+       "print(json.dumps({'prompts': n, 'graded': n, 'fact_mean': FACT, 'any_propaganda': ANY}))\n")
+for k, (any_, fact) in {"percent": ("22.0", "3.0"), "nan": ("0.0", "float('nan')")}.items():
+    (W / f"vendor_{k}").mkdir(exist_ok=True)
+    (W / f"vendor_{k}" / "score.py").write_text(CLI.replace("ANY", any_).replace("FACT", fact), encoding="utf-8")
+check("the vendor's judge/score.py is on disk", (VENDOR / "score.py").is_file(), str(VENDOR))
+r = run([KIT / "score61.py", RUN, "--vendor", VENDOR])
 out = r.stdout
 print("\n" + "\n".join("    " + ln for ln in out.splitlines()) + "\n")
 check("score61 runs over blank [no translation] versions", r.returncode == 0, r.stderr.strip()[-200:])
@@ -424,8 +479,8 @@ check("score61 shows answered 69/70 for each arm and A's one length-truncated an
 check("verdicts as the synthetic grades were built: H1 helps, H2 harms fidelity, H3 replicates",
       "H1 verdict: helps" in out and "H2 verdict: harms fidelity" in out and "H3 verdict: replicates" in out)
 for k in ("percent", "nan"):
-    r = run([KIT / "score61.py", RUN, "--vendor-score", W / f"vendor_{k}.py"])
-    check(f"score61 refuses a vendor scorer returning {k}", r.returncode != 0 and "assumed" in r.stderr,
+    r = run([KIT / "score61.py", RUN, "--vendor", W / f"vendor_{k}"])
+    check(f"score61 refuses a vendor scorer returning {k}", r.returncode != 0 and "expected" in r.stderr,
           r.stderr.strip()[-120:])
 
 srv.shutdown()
