@@ -2421,3 +2421,16 @@ SO WHAT:
 The thinking text of F and C is held back from the repository and hashed in RESULT.md. `kit/describe60.py`, written after scoring, gives the descriptive figures.
 
 *Evidence: `exp_060_reader_empty_answers/`. Status: Complete (2026-11-02); F chosen; first attempt aborted (Amendment 1).*
+
+## Experiment 061 — Does value post-training change what a 27B model does on our material? (registered 2026-11-08)
+
+**Pre-registered: 2026-11-08, before any pull, draw or prompt** (`exp_061_value_injection/HYPOTHESIS.md`). Nous Research's Arete-27B (2026-11-06) is Qwen3.8-27B post-trained by SFT alone to remove Chinese state-aligned answers; the vendor reports 22 % → 0.9 % "any propaganda" on its own 803-prompt eval judged by Grok 4.7, and a 0.2-point move on its internal bench. Andrei's question: compare the two and check whether the injection helps or not, on our material.
+
+**Registered.**
+- Arms: **Q** the base, **A** Arete, both `bartowski` Q4_K_M (same quantiser; the pilot's Ollama-library `qwen3.8:27b` is context, not an arm). Ollama 0.40.2, `num_ctx` 8192 stated, temperature 0, `think: false`, one model resident at a time; the serving-stack row recorded.
+- H1 capability unchanged: the translation pilot's 40 units, blind, all-four; |Δ| ≤ 2 → no effect, A ahead by 3 with Sense not below → helps, Q ahead by 3 → harms. Prediction: no effect.
+- H2 fidelity on Soviet-era political text: 20 units drawn by keyword (seed 20261108), the rubric plus a "reframed" reading; A reframing on ≥ 2 units where Q does not → harms fidelity. Prediction: no reframing.
+- H3 the vendor's claim locally: 70 of 803 prompts, 10 per category, judged blind by Fable with the vendor's judge prompt and scorer; A ≤ 5 % and Q ≥ 15 % → replicates; A > 10 % → does not replicate at Q4_K_M. Prediction: replicates, with Q under 22 %.
+- Limits: community quantisation, Q4_K_M, one run at temperature 0, 70 prompts, a different judge; H3 tests whether the claim survives our stack and judge, not whether the vendor's number is right.
+
+**Dev before registration.** Metadata reads only (Hugging Face API, the Ollama tag page, one fetch of the model card). No model pulled, no prompt sent, no sample drawn. Kit after registration; the pulls (34 GB) are Andrei's.
