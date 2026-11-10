@@ -2355,7 +2355,7 @@ Finding while registering: exp_007's fixtures cycle the same 31 sentences, so th
 - **Neutral control N1:** its own C2 failed on one base (X185, the model step's labels only), so its H1 (3 of 24) and H2 (1 of 12) are void. Attribution (Amendment 3): 3 of H2's 19 violations fall on the one lure where N1 also took the points to zero (X098); they still count.
 
 SO WHAT:
-- No model reads mail unattended through this check. The text a sender adds took the model step's points away on 11 of 12 lures. The rules' findings did not move; the model step's points did.
+- No model reads mail unattended through this check. The text a sender adds took the model step's points away on 11 of 12 lures. No added text lowered a rule finding; on 23 of 144 variants (every A4 variant but one) it made a rule fire (`urgency_pressure`, +10), and the added text raised six bands, four of them genuine messages from benign to suspicious.
 - Next, by Amendments 2 and 3: a Parry change at Andrei's go, then this gate re-run unchanged. The six texts stay held until it passes. A pass would still leave the mail sentry blocked on H3 and H4.
 - Not measured: classes B–E (H3, H4, C1); one model, one seed, one run per variant; 24 bases; six texts by one author; run-to-run stability (X185's labels differed between the two runs).
 
