@@ -2342,6 +2342,8 @@ Finding while registering: exp_007's fixtures cycle the same 31 sentences, so th
 
 *Evidence: `exp_056_triage_injection/`. Status: Registered, parked.*
 
+*Status corrected 2026-11-10: the kit was built on 2026-10-26, outside the stopped session — the builder by Andrei with a local model, the runner and scorer by Claude, neither holding payload text. Nothing has run. The kit is being checked against this registration before Amendment 3 and the first measured run.*
+
 ---
 
 ## Experiment 057 — Does local inference leave the machine? (registered 2026-10-28)
