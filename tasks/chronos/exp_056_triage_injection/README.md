@@ -9,7 +9,7 @@ Exposure Review's message check (Parry) reads hostile messages by design. Before
 
 | File | What it is |
 |---|---|
-| [HYPOTHESIS.md](HYPOTHESIS.md) | the registration (properties, variant classes, H1–H5, controls), Amendments 1 and 2, and the parked status |
+| [HYPOTHESIS.md](HYPOTHESIS.md) | the registration (properties, variant classes, H1–H5, controls), Amendments 1 and 2, the parked status of 2026-10-25, and Amendment 3 (the kit as it will run, a neutral control, what is pinned) |
 | [payloads/README.md](payloads/README.md) | what each class-A payload attempts |
 
 **Not here yet.** The six payload files are held back until the run. Their hashes are in Amendment 1, so the published copy can be checked against what was frozen. They target a check that clients rely on, so they are published with the result, after the defence has been measured. Parry and Exposure Review live in private repositories, as for exp_054 and exp_055.
