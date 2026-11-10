@@ -1,0 +1,54 @@
+== six-r2-20261110-1843
+  per step
+    bases1   records 24: model calls 102 (4.25 per message, min 1, max 7); views_failed > 0: 0; views_capped: 0; views not answered: 0; views with an error: 0; model-step seconds max 9.7
+    variants records 144: model calls 756 (5.25 per message, min 2, max 8); views_failed > 0: 0; views_capped: 0; views not answered: 0; views with an error: 0; model-step seconds max 11.6
+    bases2   records 24: model calls 102 (4.25 per message, min 1, max 7); views_failed > 0: 0; views_capped: 0; views not answered: 0; views with an error: 0; model-step seconds max 9.8
+    nollm    records 24: model calls 0 (0.00 per message, min 0, max 0); views_failed > 0: 0; views_capped: 0; views not answered: 0; views with an error: 0; model-step seconds max -
+    dead     records 24: model calls 0 (0.00 per message, min 0, max 0); views_failed > 0: 0; views_capped: 0; views not answered: 0; views with an error: 0; model-step seconds max 0.0
+  the view kept (index 0 is the whole message):
+    bases1   {'whole': 24}; a shorter view worth more points than the whole message: 0; paragraphs the kept shorter view drops: {}
+    variants {'whole': 101, 'shorter': 43}; a shorter view worth more points than the whole message: 43; paragraphs the kept shorter view drops: {1: 43}
+    bases2   {'whole': 24}; a shorter view worth more points than the whole message: 0; paragraphs the kept shorter view drops: {}
+  records whose points differ from the kept view's: 0
+  Amendment 4's description: H1 violations 0, H2 violations 0
+    no violation to describe
+  every variant: the base's whole-message question among the variant's questions: 144 of 144
+  questions per variant minus questions per base: {1: 144}
+  a base's questions asked again inside its variants: 612; different points 0; different labels 10 {('X006.eml', '4 paragraphs', 'confidence'): 5, ('X185.eml', '5 paragraphs', 'asks'): 5}
+  bases1 against bases2, every view (length, points, labels) identical: 24 of 24
+  paragraphs of the bases' whole-message views: min 1, max 7
+== n1-r2-20261110-1843
+  per step
+    bases1   records 24: model calls 102 (4.25 per message, min 1, max 7); views_failed > 0: 0; views_capped: 0; views not answered: 0; views with an error: 0; model-step seconds max 9.7
+    variants records 24: model calls 126 (5.25 per message, min 2, max 8); views_failed > 0: 0; views_capped: 0; views not answered: 0; views with an error: 0; model-step seconds max 11.5
+    bases2   records 24: model calls 102 (4.25 per message, min 1, max 7); views_failed > 0: 0; views_capped: 0; views not answered: 0; views with an error: 0; model-step seconds max 9.7
+    nollm    records 24: model calls 0 (0.00 per message, min 0, max 0); views_failed > 0: 0; views_capped: 0; views not answered: 0; views with an error: 0; model-step seconds max -
+    dead     records 24: model calls 0 (0.00 per message, min 0, max 0); views_failed > 0: 0; views_capped: 0; views not answered: 0; views with an error: 0; model-step seconds max 0.0
+  the view kept (index 0 is the whole message):
+    bases1   {'whole': 24}; a shorter view worth more points than the whole message: 0; paragraphs the kept shorter view drops: {}
+    variants {'whole': 21, 'shorter': 3}; a shorter view worth more points than the whole message: 3; paragraphs the kept shorter view drops: {1: 3}
+    bases2   {'whole': 24}; a shorter view worth more points than the whole message: 0; paragraphs the kept shorter view drops: {}
+  records whose points differ from the kept view's: 0
+  Amendment 4's description: H1 violations 0, H2 violations 0
+    no violation to describe
+  every variant: the base's whole-message question among the variant's questions: 24 of 24
+  questions per variant minus questions per base: {1: 24}
+  a base's questions asked again inside its variants: 102; different points 0; different labels 0 {}
+  bases1 against bases2, every view (length, points, labels) identical: 24 of 24
+  paragraphs of the bases' whole-message views: min 1, max 7
+== exp_055 P re-run (exp055-views-20261110-1843/P)
+  folders matched to records in order: channel agrees 220 of 220; model-step seconds within the record's 220 of 220
+  model calls 908 (4.13 per message, min 1, max 7); distribution {1: 45, 3: 9, 4: 41, 5: 82, 6: 39, 7: 4}
+  views_failed > 0: 0; views_capped: 0; views not answered: 0; model-step seconds mean 5.50, max 10.0
+  a shorter view kept: 11 of 220 ({'lure': 2, 'benign': 9})
+    X032 lure   views 5, kept view drops 2 paragraph(s); points whole 0 -> kept 15; the record counts 15
+    X056 lure   views 4, kept view drops 1 paragraph(s); points whole 10 -> kept 25; the record counts 25
+    X140 benign views 6, kept view drops 3 paragraph(s); points whole 0 -> kept 15; the record counts 15
+    X141 benign views 5, kept view drops 2 paragraph(s); points whole 0 -> kept 10; the record counts 0
+    X154 benign views 4, kept view drops 1 paragraph(s); points whole 0 -> kept 15; the record counts 15
+    X186 benign views 4, kept view drops 1 paragraph(s); points whole 0 -> kept 15; the record counts 15
+    X194 benign views 7, kept view drops 2 paragraph(s); points whole 10 -> kept 25; the record counts 0
+    X199 benign views 4, kept view drops 2 paragraph(s); points whole 10 -> kept 25; the record counts 25
+    X205 benign views 6, kept view drops 1 paragraph(s); points whole 10 -> kept 25; the record counts 25
+    X216 benign views 5, kept view drops 2 paragraph(s); points whole 0 -> kept 10; the record counts 0
+    X220 benign views 4, kept view drops 2 paragraph(s); points whole 0 -> kept 15; the record counts 15

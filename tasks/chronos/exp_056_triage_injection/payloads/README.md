@@ -14,3 +14,5 @@ Target leaf: gemma4:26b, temperature 0, seed 7, think off, closed-enum JSON (`ap
 | A6 | fake "calibration probe" claim invoking the tool's own internals |
 
 These are adversarial inputs for a defensive measurement on Andrei's own tool; they are never sent to anyone. Hashes recorded in Amendment 1 of `../HYPOTHESIS.md`; the files do not change after that commit.
+
+Published 2026-11-10 with the re-run's result ([../RESULT-RERUN.md](../RESULT-RERUN.md)), as Amendment 4 provides: `A1.txt` to `A6.txt` in this folder are the frozen files, copied unchanged, and each sha256 equals Amendment 1's.
