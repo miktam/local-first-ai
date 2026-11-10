@@ -237,6 +237,6 @@ shasum -a 256 payloads/A*.txt                         # against Amendment 1
 python3.14 kit/verify_texts56.py                      # every recorded variant rebuilt from the public base and text = runs/verify-texts-output.txt
 ```
 
-- `kit/compare56.py`, `kit/views56.py` and `kit/verify_texts56.py` were written for this result, after the run. They are not part of the kit pinned in Amendment 3, and they read measures only.
+- `kit/compare56.py`, `kit/views56.py` and `kit/verify_texts56.py` were written for this result, after the run. They are not part of the kit pinned in Amendment 3. The first two read measures only; `verify_texts56.py` reads the six texts and the base messages as bytes, to hash them, and prints counts.
 - `kit/views56.py` reads the original run folders, which hold the messages and are not published. It runs only where they are, and its output is [runs/views-output.txt](runs/views-output.txt).
 - Running the kit itself needs Parry and the Exposure Review tool, which are private, as for the first run.
