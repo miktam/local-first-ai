@@ -117,7 +117,7 @@ Andrei's decision ("run smaller exp 56 now"). While the class B–E variants wer
 
 Nothing has run. This amendment records what changed between the parking of 2026-10-25 and the first measured run, so that the run can be read against it.
 
-**Who wrote what.** The six payloads were written by Fable on 2026-10-25 and frozen in Amendment 1. The builder (`build56.py`) was written by Andrei with a local Qwen model on 2026-10-26, outside the stopped session. The runner and scorer were written by Claude on 2026-10-26 and rewritten on 2026-11-10, after a check of the kit against Amendment 2 found that it did not yet measure what is registered. The Claude sessions that wrote and reviewed them did not open the builder or the payload files; both are checked by hash. The kit stays in a private repository until the result.
+**Who wrote what.** The six payloads were written by Fable on 2026-10-25 and frozen in Amendment 1. The builder (`build56.py`) was written by Andrei with a local Qwen model on 2026-10-26, outside the stopped session, and rewritten by him the same way on 2026-11-10, after its first build failed the byte check described below. The runner and scorer were written by Claude on 2026-10-26 and rewritten on 2026-11-10, after a check of the kit against Amendment 2 found that it did not yet measure what is registered. The Claude sessions that wrote and reviewed them did not open the builder or the payload files; both are checked by hash. The kit stays in a private repository until the result.
 
 **Bases.** Amendment 2 says the 24 bases are chosen by `build56.py`. They are chosen by a separate script, `select56.py`; the builder only attaches. Amendment 2 left the draw's procedure open; it is: one `random.Random(56)`; the eight categories in Amendment 2's order, lures first; for each, `rng.sample(sorted(pool), k)` over the ids that meet it, without the seven excluded ids and those already drawn. A category reads exp_055's P and R results: "only the leaf lifted" is P suspicious with R benign. Pool sizes: 15, 44, 5, 7, 13, 23, 50, 17. The draw:
 
@@ -166,12 +166,14 @@ The verdict rules do not change, and N1 is not part of H1 or H2. Beside them the
 | `run56.py` | sha256 `a83fb897fa5f046555fa7ace9da913602a800c1b332a574c60934edace15375a` |
 | `score56.py` | sha256 `6516be116169f17bf392ca7bd27aba17fb53d19a339089af0450bf64c4deb540` |
 | `select56.py` | sha256 `d1059f58fa6d50582a8dcde4d73607d40cedcc53f5558dd0edddc6d005f0dba7` |
-| `build56.py` | sha256 `0e3cf1e7a84a3a7b472137f3a9451707be0aaa1900b20f05a81b835d3dc132c2` |
+| `build56.py` | sha256 `32847ec0015c74c39db8c18a070fb3d3b1b8a291f6f06ee4ff316fd8e515c809` (the rewritten builder; the first was `0e3cf1e7a84a3a7b472137f3a9451707be0aaa1900b20f05a81b835d3dc132c2`) |
 | The audit hook | exp_054's `kit/hook/sitecustomize.py`, sha256 `c55a554a771a28908e1b99ffff58a2ba766ba89ecf7902c58f3b0d04617d2087` |
 
 Every record carries the model's digest; the result compares them with the one above. A change to any pinned file before the run is a further amendment.
 
 **The build is checked before it is run.** A script compares the variants with the bases and the payloads by bytes and prints counts and yes or no, never content: 144 variants (24 for N1), all different, none equal to its base, each one its base, a blank line, then the payload, as Amendment 2 says. A build that fails is rebuilt, not run. The script and its output are published with the result.
+
+The first build, on 2026-11-10, failed: 7 variants where 144 are registered, the added text before the message instead of after it, e-mail variants under a `.txt` name, and a README in the payload folder taken as a seventh text. Nothing was run on it. The builder was rewritten to a specification that holds no payload text: every base with every `.txt` file of the folder, the base's bytes without their trailing line breaks, a blank line, the text's bytes, the base's file suffix kept. The second build passes: 144 of 144 variants in the registered form, and 24 of 24 for N1. The runner's own pre-flight accepts both: 240 and 120 expected records. None of the 24 bases is a multi-part e-mail, so text added at the end of the file is text at the end of the body.
 
 **Publishing the payloads.** The result, the records, the hashes and the kit are published either way. The payload texts are published with the result only if H1, H2 and H5 all hold. If one fails, they are held until the fix has passed this gate again.
 
