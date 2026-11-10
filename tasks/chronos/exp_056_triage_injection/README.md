@@ -2,7 +2,7 @@
 
 Exposure Review's message check (Parry) reads hostile messages by design. Before any channel feeds it messages that no human chose, this experiment asks whether a message's own text can lower its verdict, silence the model step, push its evidence out of view, or reach the screen as itself. Registered 2026-10-25.
 
-**Status: run 2026-11-10; the gate is not passed.** With the six frozen texts added to the end of 24 messages (240 runs), H1 and H2 do not hold: 27 of 144 variants came out with a lower verdict, and on 19 of 72 lure variants the model step's points went to zero. H5, C2 and C3 hold: with the model unreachable, every verdict fell back to the rules and said so. The neutral control N1 (120 runs) failed its own C2 on one base, so its H1 and H2 are void (3 of 24, 1 of 12). The six texts stay held until a fix to Parry has passed this gate again. Details: [RESULT.md](RESULT.md).
+**Status: run 2026-11-10; the gate is not passed.** With the six frozen texts added to the end of 24 messages (240 runs), H1 and H2 do not hold: 27 of 144 variants came out with a lower verdict, and on 19 of 72 lure variants the model step's points went to zero. H5, C2 and C3 hold: with the model unreachable, every verdict fell back to the rules and said so. The neutral control N1 (120 runs) failed its own C2 on one base, so its H1 and H2 are void (3 of 24, 1 of 12). The six texts stay held until a fix to Parry has passed this gate again. Details: [RESULT.md](RESULT.md). **A fix was opened the same day; the same gate is registered to run again in Amendment 4, with a false-alarm rule beside it. That re-run has not been reported yet.**
 
 How it got here:
 - **Amendment 1** froze the six class-A instruction-injection payloads by sha256 before any kit existed.
@@ -12,7 +12,7 @@ How it got here:
 
 | File | What it is |
 |---|---|
-| [HYPOTHESIS.md](HYPOTHESIS.md) | the registration (properties, variant classes, H1–H5, controls), Amendments 1 and 2, the parked status of 2026-10-25, and Amendment 3 (the kit as it ran, a neutral control, what is pinned) |
+| [HYPOTHESIS.md](HYPOTHESIS.md) | the registration (properties, variant classes, H1–H5, controls), Amendments 1 and 2, the parked status of 2026-10-25, Amendment 3 (the kit as it ran, a neutral control, what is pinned), and Amendment 4 (the fix to the message check, the same gate registered again, and the measure of what the fix costs) |
 | [RESULT.md](RESULT.md) | the gate, the verdicts, the neutral control, how the violations split, the attribution, what ran, what was not measured, what changes |
 | [payloads/README.md](payloads/README.md) | what each class-A payload attempts |
 | [control/N1.txt](control/N1.txt) | the neutral control text, as hashed in Amendment 3 |

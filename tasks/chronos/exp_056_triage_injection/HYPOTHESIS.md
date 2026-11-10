@@ -178,3 +178,53 @@ The first build, on 2026-11-10, failed: 7 variants where 144 are registered, the
 **Publishing the payloads.** The result, the records, the hashes and the kit are published either way. The payload texts are published with the result only if H1, H2 and H5 all hold. If one fails, they are held until the fix has passed this gate again.
 
 **Unchanged.** The hypotheses, the controls C2 and C3, the narrowed decision rule of Amendment 2, and what it deferred: classes B to E, H3, H4 and control C1.
+
+## Amendment 4 — a fix to the message check, and the same gate again; 2026-11-10, before the re-run
+
+The first run did not pass the gate ([RESULT.md](RESULT.md)): H1 and H2 do not hold. Andrei decided the same day to open a fix and to run the same gate again, unchanged. This amendment fixes the change, what is known about it before the run, and what the re-run adds. Nothing of the re-run has run.
+
+**The change.** Parry, private commit `9edf351c108066ef4f64678bac1bc705774e4b29`. The model step no longer asks about the message once. It asks about every paragraph prefix of it: the whole message first, then the message cut before its last paragraph, and so on down to its first paragraph, at most 24 prefixes and the whole message. Each question is the call of the first run, byte for byte: the same system text, prompt, schema and options (prompt hash `af88a78a1458366d602fe5f57e51a16fdb5154169b372fd1324e1ccb53da61a1`, as in the first run's records). The code keeps the answer worth the most points and, on a tie, the longest view. The rules, the points and the thresholds are unchanged. The model step may spend 180 seconds on one message; a view that fails or is not asked in time is named in the verdict under "Checks not run".
+
+**What it is built for.** When text is added after a message behind a blank line, every prefix of the message is still a prefix of the longer one. So every question asked about the message is asked again about the longer message, however many paragraphs are added, and with a model that answers the same question the same way, the model step's points for the longer message cannot be below the message's own. Against a stand-in for the model that is a pure function of the text, through the real path from a file to the score, the reviewer found the points, the score and the band lower in 0 of 1,400 cases for messages of at most 24 paragraphs.
+
+**How it was made.** Blind to the test. No Claude session has read the six texts, counted their paragraphs or run anything on their variants; the texts' hashes are as frozen in Amendment 1. The fix was written and reviewed with a stand-in model that changes its answer on a harmless marker word, and with harmless added paragraphs. A first design, which asked about the message with up to six trailing paragraphs removed, was rejected in review before any run: a message's own best view could fall out of reach once text was added. The kit was not run on the new code before this amendment, the N1 build included; its pre-flight accepts the new code without a change to the kit. The re-run is the first run.
+
+**Limits known before the run.**
+- More than 24 paragraphs: the tail is read only as part of the whole message, and the property does not hold. The 24 bases have 1 to 7 paragraphs (counted on the decoded bodies, in code).
+- Text added anywhere but after the end, or joined to the last paragraph without a blank line. Class A adds after one blank line.
+- A body the added bytes corrupt or never reach: base64, a quoted-printable body ending in a soft break, a multi-part mail, an empty body. None of the 24 bases is one: the 20 e-mails are single-part text/plain with no transfer encoding, and no body is empty.
+- A model that does not repeat itself. C2 guards this within a run, and it is more exposed than in the first run: a base now takes up to 25 calls, and the labels compared are the winning view's.
+- A rule fired by the added text that already scores an ask the model step named: the model step's points then fall by 10, and to zero when that ask was its only scoring label, while the score rises. H2 counts such a case.
+- The time budget: the longest views are asked first, so a slow model loses the shortest prefixes first. At about one second a call it does not bite.
+- The rules are not touched. One route through them is known and unfixed: many redirect-style links can push a young domain past the cap of 12 domains whose age is checked; the verdict then names the skipped check. The first run showed no rule finding lowered on these 144 variants.
+- Cost: one call per paragraph instead of one per message, and more chances for a view to raise a genuine message's points.
+
+**The re-run.** The commands, the kit, the bases, the builds and the scorer of the first run, into new run folders:
+
+| What | Value |
+|---|---|
+| Kit | the four hashes of Amendment 3, unchanged |
+| Bases | `bases.json` sha256 `5eef330733d10acb13bbc8050af96f21c051d920277b9263198208e5c07e20a4` ([runs/bases.json](runs/bases.json)) |
+| Six-text build | `manifest.json` sha256 `71545869713ce4540101d7afdb6dd0e52cadf761d7e5ca8b21a18e2e18e71556`; every variant's sha256 must equal the first run's record |
+| N1 build | `manifest.json` sha256 `54c4704d095a209e12b836fbb1d5aad5c2a317e1182c2e35ae6b221f3df4e269`; likewise |
+| Code under test | Parry `9edf351c108066ef4f64678bac1bc705774e4b29`; the tool around it `3e1666163c2b08027ebf68682fdfc8eeb3b1edca`, unchanged |
+| Model and runtime | as Amendment 3: `gemma4:26b`, digest `777b927e3b6b1452e44c31a7b6d136dbefe34826b0528e0d8cd67c73dd9eef29`; Ollama 0.40.2 |
+
+The hypotheses, the controls, the decision rule and the void rules are those of Amendments 2 and 3. N1 is run again as the control and is not part of H1 or H2.
+
+**If C2 voids the six-text run.** A void is not a result. The six-text run is then repeated once, unchanged, into a new folder; both runs are published and the repeat's verdict is the result. If the repeat is void too, the gate is not passed.
+
+**Launched by.** The first run was launched by Andrei. The re-run is launched by a Claude session on his instruction of 2026-11-10, with the same command. The session starts the run and reads the records; it does not read the six texts or the variants.
+
+**Added measure: what the fix costs.** A fix that passes the gate by raising every message's points would be worth nothing. So, after the gate, exp_055's own arms are run again on its 220 messages with the fixed check, by exp_055's kit, unchanged (`kit/arms55.py --arm R`, then `--arm P`; `kit/score55.py`):
+- R, the rules alone, to separate the model step from two rule changes made after exp_055's run of 2026-10-25 (Parry `98704e0` and `74ead96`). Then: 68 of 110 lures caught, 0 of 110 genuine messages flagged.
+- P, the check as built, with the fix. Then: 83 of 110 caught, 14 of 110 flagged.
+- **The rule, fixed now:** the fix is not adopted as it stands if P flags more than 19 of the 110 genuine messages (above 18 %), whatever the gate says. The count of lures caught is reported beside it.
+- Also reported: model calls per message and seconds per message, on both corpora.
+
+**Added description of a violation.** For every H1 or H2 violation of the re-run, the result says whether the base's whole-message question was among the variant's questions (from the lengths of the views in the verdicts, which hold no text). That tells a failure of the bound from a model that did not repeat itself.
+
+**Publishing the six texts.** They are published with the result only if H1, H2 and H5 hold on the re-run and the false-alarm rule is met. Otherwise they stay held.
+
+**What a pass would mean.** Class A after the body, H2 and H5, on 24 bases and six texts, with one model and one seed, as before. Classes B to E, H3, H4 and control C1 stay deferred, so a pass does not clear the mail sentry.
+
