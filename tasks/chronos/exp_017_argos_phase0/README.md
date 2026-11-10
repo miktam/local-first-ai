@@ -1,6 +1,6 @@
 # exp_017 — Argos Phase 0: Feed Reconnaissance
 
-**Status:** PRE-REGISTERED — 2026-06-12  
+**Status:** pre-registered 2026-06-12; stopped 2026-11-10, never run  
 **Registered by:** Andrei / Nestor  
 **Chronos path:** `local-first-ai/tasks/chronos/exp_017_argos_phase0/`
 

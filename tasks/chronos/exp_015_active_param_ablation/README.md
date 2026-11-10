@@ -1,7 +1,7 @@
 # Exp 015 — Active-Parameter Ablation: Dense vs MoE on the Audit Rubric
 
 *Pre-registered: 2026-06-09*  
-*Status: PRE-REGISTERED — awaiting execution*  
+*Status: pre-registered 2026-06-09; attempted 2026-08-29; closed 2026-11-10, not testable as registered (see the log entry)*  
 *Full log entry: [`scientific_log.md` § Exp 015](../scientific_log.md)*
 
 ---

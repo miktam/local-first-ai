@@ -1697,6 +1697,8 @@ If H1 is falsified: the local/cloud step function is real at every tested local 
 *Evidence: `exp_012_cost_capability/results/gemma4_26b_20260828T195348Z.json`, `qwen3_8_27b_20260829T051441Z.json` (final, complete run — supersedes the earlier `qwen3_8_27b_20260828T194236Z.json` and `_195640Z.json`, both partially timed out from an unrelated resource-contention collision, kept per append-only convention).*
 *Status: Attempted 2026-08-29. Not resolved as pre-registered — commit unrecoverable. Superseded by the contemporaneous comparison above. Re-opening exp_015 properly would need a dense model with a confirmed architecture and a rubric re-frozen against the current codebase.*
 
+*Closed 2026-11-10. The registered comparison cannot be run: the rubric pins a CasaSol commit that no longer exists, and the baseline's model tag was re-pulled with no digest recorded, so the 0/8 it would be compared against is not citable. The same-day comparison of 2026-08-29 stands as an observation only. Not re-registered.*
+
 ---
 
 ## Exp 023 — Generation Efficiency Across the Local Model Family
@@ -1739,6 +1741,8 @@ If H1 is falsified: the local/cloud step function is real at every tested local 
 
 *Evidence: `exp_024_vision_model_comparison/results/run_20260829T055307Z.json`.*
 *Status: Inconclusive 2026-08-29. `qwen3.8:27b` was deleted by Andrei directly (resolved, not a bug) and re-pulled 2026-08-30 — the blocker is gone, but the clean re-run itself hasn't happened yet. `gemma4:26b`'s repetition-loop finding stands regardless and is worth flagging to Pharos directly.*
+
+*Stopped 2026-11-10. The qwen arm never ran (the model was absent that day) and was not repeated. One observation stands: `gemma4:26b` returned valid JSON on 1 of 5 photos on Pharos's production vision call, looping at temperature 0.*
 
 ---
 
@@ -1905,6 +1909,18 @@ operator post-experiment: `casasol` commit `6e8b8c9`, 7/7 tests.
 
 *Evidence: `exp_016_two_mac_orchestration/measurements/phase_c_tiered_pipeline.json` + `phase_c_plan.json`*  
 *Status: ALL PHASES COMPLETE 2026-06-13.*
+
+*Index corrected 2026-11-10: it read "Phase B in progress" since June. All phases were complete on 2026-06-13, as this entry already says.*
+
+---
+
+## Exp 017 — Argos Phase 0: Feed Reconnaissance
+
+*Pre-registered: 2026-06-12. Subdirectory: `tasks/chronos/exp_017_argos_phase0/`*
+
+Registered 2026-06-12, never started: the folder holds the registration and nothing else. No feed was pulled, so none of its five success criteria was measured.
+
+*Status: Stopped 2026-11-10; not on the plan.*
 
 ---
 

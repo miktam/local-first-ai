@@ -81,16 +81,16 @@ months can be tested against the same on-disk evidence.
 | Exp 012 | Cost vs capability curve | Complete | [`exp_012_cost_capability/`](./exp_012_cost_capability/) |
 | Exp 013 | Local audit loop scaffolding | Complete | [`exp_013_local_audit_loop/`](./exp_013_local_audit_loop/) |
 | Exp 014 | Capability variance floor | Complete | [`exp_014_capability_variance/`](./exp_014_capability_variance/) |
-| Exp 015 | Active-parameter ablation (dense vs MoE) | Attempted, not resolved | [`exp_015_active_param_ablation/`](./exp_015_active_param_ablation/) |
-| Exp 016 | Two-mac orchestration | Phase B in progress | [`exp_016_two_mac_orchestration/`](./exp_016_two_mac_orchestration/) |
-| Exp 017 | Argos Phase 0 — feed reconnaissance | Pre-registered | [`exp_017_argos_phase0/`](./exp_017_argos_phase0/) |
+| Exp 015 | Active-parameter ablation (dense vs MoE) | Closed 2026-11-10 — not testable as registered; H1 and H2 neither confirmed nor falsified | [`exp_015_active_param_ablation/`](./exp_015_active_param_ablation/) |
+| Exp 016 | Two-mac orchestration | Complete 2026-06-13 — H1 and H2 confirmed, H4 inconclusive (1,141 ms median overhead, the model's, not the network's), H5 falsified (the single model beat the tiered pipeline) | [`exp_016_two_mac_orchestration/`](./exp_016_two_mac_orchestration/) |
+| Exp 017 | Argos Phase 0 — feed reconnaissance | Stopped 2026-11-10 — never run; no feed was pulled | [`exp_017_argos_phase0/`](./exp_017_argos_phase0/) |
 | Exp 018 | Sovereignty resilience (3 failure modes) | Complete | [`exp_018_sovereignty_resilience/`](./exp_018_sovereignty_resilience/) |
 | Exp 019 | Adversarial legal review pipeline | Complete | [`exp_019_adversarial_legal_review/`](./exp_019_adversarial_legal_review/) |
 | Exp 020 | Hardening and red-teaming the inference node | Complete | [`exp_020_miktam_mini_hardening/`](./exp_020_miktam_mini_hardening/) |
 | Exp 021 | Independent red-team pass (zero-escalation credential reachability) | H3 confirmed; published as accepted risk | [`exp_021_independent_red_team/`](./exp_021_independent_red_team/) |
 | Exp 022 | Adversarial red-team of the CasaSol Guide bot | Complete | [`exp_022_bot_red_team/`](./exp_022_bot_red_team/) |
 | Exp 023 | Generation efficiency across the local model family | Complete | [`exp_023_local_model_efficiency/`](./exp_023_local_model_efficiency/) |
-| Exp 024 | Vision capability: gemma4:26b vs qwen3.8:27b | Inconclusive | [`exp_024_vision_model_comparison/`](./exp_024_vision_model_comparison/) |
+| Exp 024 | Vision capability: gemma4:26b vs qwen3.8:27b | Stopped 2026-11-10 — inconclusive; the re-run was never made | [`exp_024_vision_model_comparison/`](./exp_024_vision_model_comparison/) |
 | Exp 025 | Context-allocation isolation (gemma4:31b's slowdown) | H1+H2 confirmed, H3 superseded — fixed directly | [`exp_025_context_config_isolation/`](./exp_025_context_config_isolation/) |
 | Exp 026 | Contextual retrieval on the COAPI corpus, fully local | Complete (pilot scale) | [`exp_026_contextual_retrieval/`](./exp_026_contextual_retrieval/) |
 | Exp 036 | Kolibri on a MacBook: fit, speed, scorecard, EN/DE vs local peers (own MLX port) | Gate failed — K8 (G2, G3, G4, G5); stopped and published | [`exp_036_kolibri_local_eval/`](./exp_036_kolibri_local_eval/) |
