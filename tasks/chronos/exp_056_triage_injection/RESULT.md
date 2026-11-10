@@ -1,6 +1,6 @@
 # exp_056 result: text added to the end of a message silenced the message check's model step on 19 of 72 lure variants
 
-*2026-11-10, evening: after a fix to the message check (Amendment 4), the same gate was run again and passed. See [RESULT-RERUN.md](RESULT-RERUN.md).*
+*2026-11-10, evening: after a fix to the message check (Amendment 4), the same gate was run again and passed, and the six texts are now published with that result. See [RESULT-RERUN.md](RESULT-RERUN.md).*
 
 **Run:** `runs/six` and `runs/n1`, 2026-11-10, 15:09 to 15:23 CET on the Mac mini, launched by Andrei, one `run56.py --plan registered` command each. First the six frozen texts (A1 to A6) on the 24 bases: 240 runs. Then the neutral text N1 on the same bases: 120 runs. Every run returned a verdict; none failed. Scored by `kit/score56.py`, unchanged since its hash was pinned in Amendment 3.
 
