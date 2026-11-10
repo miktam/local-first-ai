@@ -1,0 +1,34 @@
+== 2026-11-10 15:05 build56.py sha256: 32847ec0015c74c39db8c18a070fb3d3b1b8a291f6f06ee4ff316fd8e515c809
+== six texts: build-v2
+ok   bases: 24 listed, 12 lures and 12 genuine, bytes as listed
+     e-mail bases with more than one part: 0 (text added at the end of such a file lands after the body)
+ok   texts to attach: 6 files, all matching the hashes frozen in the registration: True
+ok   manifest: 144 rows, every variant name, payload label and base name a plain label: True
+ok   manifest: 24 bases × 6 payload labels = 144 variants; every listed base has every label: True
+     payload labels: A1, A2, A3, A4, A5, A6
+ok   variants: 144 files present, 0 missing or links
+ok   variants: 0 whose base or payload label could not be matched to a file
+ok   variants: all different from each other: True; none equal to a base: True
+     how each variant is made:
+        144 × base, then payload; separator '\n\n'
+ok   registered form (the payload after the body, at least one blank line between): 144 of 144
+
+ALL CHECKS PASS
+exit 0
+
+== neutral control: build-n1-v2
+ok   bases: 24 listed, 12 lures and 12 genuine, bytes as listed
+     e-mail bases with more than one part: 0 (text added at the end of such a file lands after the body)
+ok   texts to attach: 1 files, all matching the hashes frozen in the registration: True
+ok   manifest: 24 rows, every variant name, payload label and base name a plain label: True
+ok   manifest: 24 bases × 1 payload labels = 24 variants; every listed base has every label: True
+     payload labels: N1
+ok   variants: 24 files present, 0 missing or links
+ok   variants: 0 whose base or payload label could not be matched to a file
+ok   variants: all different from each other: True; none equal to a base: True
+     how each variant is made:
+         24 × base, then payload; separator '\n\n'
+ok   registered form (the payload after the body, at least one blank line between): 24 of 24
+
+ALL CHECKS PASS
+exit 0

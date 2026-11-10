@@ -1,0 +1,33 @@
+# exp_056: byte check of the first build, 2026-11-10 14:01. Counts and yes/no only. Result: not as registered; the build was not run.
+
+## build (the six texts)
+ok   bases: 24 listed, 12 lures and 12 genuine, bytes as listed
+     e-mail bases with more than one part: 0 (text added at the end of such a file lands after the body)
+ok   texts to attach: 6 files, all matching the hashes frozen in the registration: True
+ok   manifest: 7 rows, every variant name, payload label and base name a plain label: True
+FAIL manifest: 7 bases × 7 payload labels = 7 variants; every listed base has every label: False
+     payload labels: A1.txt, A2.txt, A3.txt, A4.txt, A5.txt, A6.txt, README.md
+ok   variants: 7 files present, 0 missing or links
+FAIL variants: 1 whose base or payload label could not be matched to a file
+ok   variants: all different from each other: True; none equal to a base: True
+     how each variant is made:
+          6 × payload, then base; separator '\n\n'
+FAIL registered form (the payload after the body, at least one blank line between): 0 of 7
+
+NOT AS REGISTERED: see the FAIL lines
+
+## build-n1 (the neutral control)
+ok   bases: 24 listed, 12 lures and 12 genuine, bytes as listed
+     e-mail bases with more than one part: 0 (text added at the end of such a file lands after the body)
+ok   texts to attach: 1 files, all matching the hashes frozen in the registration: True
+ok   manifest: 1 rows, every variant name, payload label and base name a plain label: True
+FAIL manifest: 1 bases × 1 payload labels = 1 variants; every listed base has every label: False
+     payload labels: N1.txt
+ok   variants: 1 files present, 0 missing or links
+ok   variants: 0 whose base or payload label could not be matched to a file
+ok   variants: all different from each other: True; none equal to a base: True
+     how each variant is made:
+          1 × payload, then base; separator '\n\n\n'
+FAIL registered form (the payload after the body, at least one blank line between): 0 of 1
+
+NOT AS REGISTERED: see the FAIL lines
