@@ -37,6 +37,8 @@ All 11 answerable v3 rows that G4 newly blocked had **lost their source chunk in
 - Retrieval missed the source on 22 of the 112 answerable v3 rows, mostly Spanish. Spanish questions are matched against the English index, the same weakness exp_040 found in training (53 % of ES bank rows lost their source).
 - The dev set's answerable rows were drawn only from prompts whose source *was* retrieved. So dev measured false abstention on easy rows, and v3 on realistic ones.
 
+**Correction (2026-11-11, after publication):** "newly blocked" above is loose. G4 blocked 11 answerable rows, and B0i had already abstained on 2 of them, so 9 were newly blocked (B0i's 3 + 9 = the 12 false abstentions). Recounted from `results/v3/probs_G4.jsonl` (`p` against G4's `tau` in `results/v3/score.json`) and exp_040's `results/v3/verdicts_B0i.jsonl` (`kind`, `abstained`). The verdict is unchanged.
+
 So the gate is right about the **material** on all 11. The H2 label "answerable" is about the guide, not about what retrieval returned.
 
 **What this means:**
