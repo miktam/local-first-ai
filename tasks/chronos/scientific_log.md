@@ -2722,7 +2722,7 @@ SO WHAT:
 - A pass clears H1 (class A), H2 and H5 only. H3 and H4 (classes B–E) and C1 are unmeasured, so the mail sentry stays blocked. The six texts are published, as Amendment 4 provides.
 - Not measured: messages over 24 paragraphs, text placed anywhere but after the end, encoded or multi-part bodies, a model slow enough for the 180 s budget to bite, an attacker who knows the fix; one model, one seed, one run per arm.
 
-*Evidence: `exp_056_triage_injection/RESULT-RERUN.md`, `runs/six-r2`, `runs/n1-r2`, `runs/exp055-views` (audit logs cut to 160 characters as before), `runs/views-output.txt`. Status: Re-run complete (2026-11-10); gate passed: H1, H2, H5, C2, C3 hold; false-alarm rule met; adoption of the fix open.*
+*Evidence: `exp_056_triage_injection/RESULT-RERUN.md`, `runs/six-r2`, `runs/n1-r2`, `runs/exp055-views` (audit logs cut to 160 characters as before), `runs/views-output.txt`. Status: Re-run complete (2026-11-10); gate passed: H1, H2, H5, C2, C3 hold; false-alarm rule met; the fix adopted by Andrei on 2026-11-10.*
 
 ---
 
