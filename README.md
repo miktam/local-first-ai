@@ -14,7 +14,7 @@ This repo accompanies the blog at [localfirstai.eu](https://localfirstai.eu) and
 |---|---|
 | Primary machine | Mac Mini M4 Pro (`miktam02`), 64 GB unified memory |
 | Secondary machine | MacBook Pro M5 Max (`miktam-mbp`) — smart inference tier (Exp 016) |
-| Phone | iPhone 18 Pro (`miktam-iphone`), A20 Pro, ~12 GB reported — the pocket end of the setup since 2026-10-27; first used as an experimental arm in Exp 059 |
+| Phone | iPhone 18 Pro (`miktam-iphone`), A20 Pro, ~12 GB reported — the pocket end of the setup since 2026-10-27; registered as an arm of Exp 059, which was stopped on 2026-11-11 before any run |
 | Primary model | `gemma4:26b` (MoE A4B, 25.8B total params / ~4B active per forward pass, Q4_K_M); the CasaSol bot's answering model, kept after MLX, QAT and Q8_0 were tested against it (Exp 052, 053) |
 | Router model | `gemma4:e4b` (fast routing layer) |
 | Decision models | Kev-4B, Clef-Flash 9B, Clef 27B: closed-question categorizers for gates and lead triage (Exp 041–050) |
@@ -68,7 +68,7 @@ One line per experiment. The registration, the full result and the evidence are 
 | [008](./tasks/chronos/exp_008_flash_attention/) | Flash attention + q8_0 KV cache | The flags caused the cliff: with both off, no cliff through 40K |
 | [010](./tasks/chronos/exp_010_fa_isolation/) | Flash attention vs q8_0, factorial | Flash attention alone causes the cliff; q8_0 alone is benign |
 | [011](./tasks/chronos/exp_011_mlx_runtime/) | MLX runtime vs Ollama | No MLX cliff, but its runs read a repeated sentence instead of the fixtures; re-run in 051 |
-| [016](./tasks/chronos/exp_016_two_mac_orchestration/) | Two-Mac orchestration | In progress: the LAN path from the mini to the MacBook works; timing pending |
+| [016](./tasks/chronos/exp_016_two_mac_orchestration/) | Two-Mac orchestration | Complete 2026-06-13: H1 and H2 confirmed, H4 inconclusive (1,141 ms median overhead, the model's, not the network's), H5 falsified (the single model beat the tiered pipeline) |
 | [023](./tasks/chronos/exp_023_local_model_efficiency/) | Generation efficiency across local models | gemma4:26b has the best wall-clock of four; qwen3.8:27b finds more but takes 6.7× longer |
 | [025](./tasks/chronos/exp_025_context_config_isolation/) | Context-allocation isolation | An unset `OLLAMA_CONTEXT_LENGTH` made gemma4:31b ~100× slower; one config line fixed it |
 | [051](./tasks/chronos/exp_051_mlx_same_text/) | MLX vs Ollama on the same text | MLX reads prompts 12–24 % faster and generates no faster; neither has a cliff |
@@ -87,7 +87,7 @@ One line per experiment. The registration, the full result and the evidence are 
 | [022](./tasks/chronos/exp_022_bot_red_team/) | Red-team of the CasaSol bot | Injection, extraction and bypass refuted; corpus poisoning through `/witness` confirmed |
 | [054](./tasks/chronos/exp_054_exposure_review_egress/) | Exposure Review: what leaves the machine | 4 of 5 written claims held; platform link shorteners were looked up. Fixed in Parry: all 5 hold on re-run |
 | [055](./tasks/chronos/exp_055_exposure_review_lures/) | Exposure Review: targeted-lure benchmark | The check catches 75 % (all new-domain lures, 1 of 14 link-free); gemma alone 84 %, Opus 95 % |
-| [056](./tasks/chronos/exp_056_triage_injection/) | Exposure Review: can a message subvert its own check | Gate not passed on the first run (2026-11-10): text added to the end of a message took the model step's points to zero on 19 of 72 lure variants (11 of 12 lures) and lowered 27 of 144 verdicts. The re-run the same evening, with a fix to the message check, passed: 0 of 144 lowered, 0 of 72 silenced; on exp_055's corpus 16 of 110 genuine messages flagged (14 before, limit 19), at 4.13 model calls per message there (5.00 on the gate's runs). Adoption is Andrei's; the six texts are published; H3 and H4 are not measured, so no model reads mail unattended yet |
+| [056](./tasks/chronos/exp_056_triage_injection/) | Exposure Review: can a message subvert its own check | Gate not passed on the first run (2026-11-10): text added to the end of a message took the model step's points to zero on 19 of 72 lure variants (11 of 12 lures) and lowered 27 of 144 verdicts. The re-run the same evening, with a fix to the message check, passed: 0 of 144 lowered, 0 of 72 silenced; on exp_055's corpus 16 of 110 genuine messages flagged (14 before, limit 19), at 4.13 model calls per message there (5.00 on the gate's runs). Andrei adopted the fix on 2026-11-10; the six texts are published; H3 and H4 are not measured, so no model reads mail unattended yet |
 | [057](./tasks/chronos/exp_057_local_inference_egress/) | Does local inference leave the machine (Ollama runtime, nine Qwen/gemma subjects, whole machine watched) | The models sent nothing; the Ollama daemon phoned ollama.com on a ~4 h timer, so H1/H2 fail as registered with the cause named; with cloud disabled it made no call in five hours covering one due refresh (Amendment 2, 2026-11-01) |
 | [060](./tasks/chronos/exp_060_reader_empty_answers/) | Exposure Review: closing the local reader's empty answers (thinking off, a think-off retry, a 32K context) | The retry closes them: 220 of 220 answered, balanced accuracy 0.882 → 0.914. Thinking off flags 22 % of genuine messages; 32K leaves as many empty, a different set. The empties are repetition loops |
 | [061](./tasks/chronos/exp_061_value_injection/) | Does a values fine-tune change what a 27B model does on our material: Nous's Arete-27B against its base Qwen3.8-27B, same Q4_K_M, on 40 blind-graded translation units, 20 Soviet-era political units and 70 of the vendor's eval prompts with the vendor's judge prompt | H3 replicates: any propaganda 24.3 % → 1.4 % (the vendor: 22 % → 0.9 %). H2 no effect: neither arm reframed a political term, 0 of 20 each. H1 helps at the threshold: all four dimensions on 36 of 40 against 32, one unit from no effect. The fact-mean gain is fewer denials, not more knowledge |
@@ -100,7 +100,7 @@ One line per experiment. The registration, the full result and the evidence are 
 | [012](./tasks/chronos/exp_012_cost_capability/) | Cost vs capability | gemma4:26b 0/8, frontier 5/8; Haiku's 5/8 did not replicate (014) |
 | [013](./tasks/chronos/exp_013_local_audit_loop/) | Local audit loop | Decomposition recovered 2 of 3 findable items for gemma4:26b |
 | [014](./tasks/chronos/exp_014_capability_variance/) | Capability variance floor | gemma4:26b never above 0/8; Haiku 1–4/8 over five runs |
-| [015](./tasks/chronos/exp_015_active_param_ablation/) | Active-parameter ablation | Registered: dense 12–32B against MoE A4B on the audit rubric |
+| [015](./tasks/chronos/exp_015_active_param_ablation/) | Active-parameter ablation | Closed 2026-11-10: not testable as registered; H1 and H2 neither confirmed nor falsified |
 
 #### Property-law answers: training against glue
 
@@ -149,7 +149,7 @@ One line per experiment. The registration, the full result and the evidence are 
 | [001](./tasks/chronos/exp_001_verification_of_veracity/) | Verification of veracity | The Chronos framework, activated |
 | [004](./tasks/chronos/exp_004_bootstrap_diet/) | Bootstrap diet | Agent session hygiene |
 | [005](./tasks/chronos/exp_005_dicer_describer/) | Router / Reducer cascade | A two-model cascade over an 8-year Apple Watch corpus |
-| [017](./tasks/chronos/exp_017_argos_phase0/) | Argos phase 0 | Registered: EV-corridor feed reconnaissance |
+| [017](./tasks/chronos/exp_017_argos_phase0/) | Argos phase 0 | Stopped 2026-11-10: never run; no feed was pulled |
 
 ### Watcher Runs
 
