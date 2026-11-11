@@ -144,3 +144,33 @@ Each per-category rate is over the 10 prompts drawn for that label. A's one flag
 - **What this does not say:** whether a value shift exists where a translation does not look. A model told to translate a sentence did not show one here; what the model volunteers was measured only on the vendor's own prompts.
 - **A judge prompt's wording is part of the measure.** Five of 140 judgments turn on reading "opposed" literally; the fact means move (3.44 → 3.53, 4.17 → 4.24) and no verdict does. A comparison with another judge has to state the reading it applied.
 - **Two prompts are not a rate.** The smoke test had Arete slower on H3; over 70 prompts it was faster, with shorter answers.
+
+## Re-derive the numbers
+
+From this folder, with Python 3.14 and nothing else (no model, no network):
+
+```
+python3.14 -B kit/rederive61.py     # exit 0: 34 lines, each "ok"; a figure that does not follow prints DIFFERS and exits 1
+```
+
+It reads only files this repository holds, and prints each figure with its source:
+- that the four blocks under "The numbers" are `runs/20261108T123202Z/score61.txt` line for line;
+- the run as the first paragraph states it, from `meta.json`, the tmux log (`runs/exp061_run_20261108-1332.log`) and the two `ollama ps` snapshots: times, hardware and versions, blob and template hashes, settings, thermal level, 260 rows, the warm-ups and the arm times;
+- the draw and the key, from `kit/sample61.ids.json` and `key61.json`: 70 prompts at 10 per label, 140 judged answers, the hashes of the vendor's judge prompt and scorer, H2's 85 and 117 matches, no answer naming a model;
+- what follows from `score61.txt` by arithmetic and by the rules of HYPOTHESIS.md: the H1 and H2 totals, A's wins split 1 and 4 between the corpora, Δ 4 and its verdict (and that Δ 3 gives the same), the ceiling, 17 and 1 flags of 70, the fact means from the category rows, the margins, the counts under the reviewer's points (53, 69, 18, 16, 16/70), the three verdicts;
+- the smoke test's H3 times that the Speed paragraph cites from the kit's README, from the smoke log: the second answer of each arm as logged, the first to the log's one-second clock.
+
+The command under "The numbers" does not run from a public clone. `kit/score61.py` loads the translation pilot's `score.py` from a fixed path in the library checkout as it starts, so elsewhere it stops there, `--self-test` included. Past that it needs `results.jsonl` and `graders/`, which this repository leaves out. With H3 graded it also needs `--vendor` and the vendor's `judge/` folder (`NousResearch/Propaganda_Eval`, sha256s above), which the command under "The numbers" leaves out.
+
+What the public folder cannot re-derive, because its input is withheld, and what it holds instead:
+- **The H1 and H2 tables, the paired +5 / −1 and reframed 0/20** need the graders' filled sheets (`graders/grades-h1-*.json`, `grades-h2-*.json`) and `results.jsonl`; the folder holds the scorer's saved output (`score61.txt`), the key to which arm each label was (`key61.json`) and H2's unit ids with the sha256 of each unit's Russian (`kit/sample61.ids.json`).
+- **Any propaganda (24.3 %, 1.4 %), the fact means (3.44, 4.17), the per-category rows and the one length-cut answer** need the judge's 140 judgments (`graders/grades-h3.json`) and `results.jsonl`; the folder holds `score61.txt`, the key from each judged record to its arm and prompt, the draw with each prompt's sha256, and the sha256 of the vendor's scorer and judge prompt.
+- **The speed medians (Q 24.1, 26.1, 34.5 s; A 24.1, 24.9, 22.9 s)** need each row's `wall_s` in `results.jsonl`; the tmux log holds the time of every fifth row and the timestamps, which give a mean per part, not a median.
+- **Which answer was cut (A, id 1464), its score 4 and propaganda 0, and the 81-character refusal** need `results.jsonl` and `grades-h3.json`; the folder holds the count (length-cut 1) and the draw.
+- **The reviewer's H3 figures** (fact means 4.38 and 4.16 without propaganda; 15 of Q's 19 zero scores; A's 7, 3, 3 and 4 on Q's 17; the five "opposed" judgments, 3 on A and 2 on Q, and the fact means 3.53 and 4.24; A's flag at propaganda 1; the 18 quoted phrases; the mechanical rules on 140/140; prompt 1082) need `grades-h3.json` and `results.jsonl`; the script checks the counts they rest on.
+- **The reviewer's re-grade (Δ 3, Q 33 of 40, A wins 4 and loses 1) and its 12 seeded judgments (agreement on 10)** rest on the reviewer's own notes, which are not in this repository; the script checks only that Δ 3 still gives "helps" by the rule.
+- **The unit numbers under H1 and H2** (Petukhov 4, 8, 11, 12 and 14; Mamardashvili 14; Petukhov H2 units 5 and 10) and what each arm wrote there need the packs and grades in `graders/`; the folder holds the label key per unit.
+- **"Also seen"** (mean lengths 1197 and 1195, 1326 and 1318, 1841 and 2330 characters; medians 1448 and 2154; paragraph breaks on 4 of 20; bullets 5.7 and 8.0; headers on 24 and 37 of 70) needs the answers in `results.jsonl`; the folder holds nothing in their place, except blind61.py's empty name-flag list for "no answer names a model".
+- **The vendor's figures** (22 % → 0.9 %, 803 prompts, BF16, Grok 4.7, five runs, the 0.2-point capability claim, the 32,768-token cap) are the vendor's own, as HYPOTHESIS.md and Amendment 1 record them; the items file's sha256 (`76bf1b75…`, in `meta.json` and `kit/sample61.ids.json`) pins the 803-row file a reader can download.
+
+No figure the public folder can reach differs from what this result states (checked 2026-11-11).

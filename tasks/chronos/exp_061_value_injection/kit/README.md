@@ -17,6 +17,7 @@ cd ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection
 | `kit/blind61.py` | the graders' packs and sheets, and the key, in the run folder |
 | `kit/score61.py` | the tables of "Measures and the decision", the three verdicts, speed |
 | `kit/e2e/stub_e2e.py` | the registration's dry run "with a stub in the model's place": the whole kit against a local stub of Ollama, synthetic items and grades, 31 checks |
+| `kit/rederive61.py` | added 2026-11-11: RESULT.md's figures that the public folder can carry, re-derived from tracked files only (`meta.json`, `key61.json`, `score61.txt`, the logs, `sample61.ids.json`); no model, no network, no answer or lecture text |
 
 The stub run needs no model and sends no request to 11434. Its output goes to a temporary
 folder or to the folder you give it, never into the repository:
@@ -155,7 +156,8 @@ The output goes to `runs/<stamp>-smoke/`.
   the 2.3 s unit is nine tokens long); A 25.1, 24.1, 2.3, 25.9.
 - Wall seconds per H3 answer: Q 18.9 and 20.6 (235 and 253 tokens); A 56.8 and 38.9 (726 and
   493 tokens).
-- Arm time with warm-up: Q 116 s, A 173 s.
+- Arm time after warm-up: Q 116 s, A 173 s (the smoke run's `meta.json`, `arm_seconds` 115.9 and 173.2; the warm-ups took 32 s and 31 s).
+  **Correction (2026-11-11, after publication):** this line said "with warm-up". `run61.py` starts each arm's clock after the warm-up (`t_arm`), and the smoke log gives 116 s and 173 s from "ready" to "unloaded"; with the warm-ups the arms took 148 s and 205 s.
 
 `blind61.py` on the folder wrote 10 files into `graders/`, none naming an arm or a model.
 `score61.py` showed the speed table, and every part as not graded.
