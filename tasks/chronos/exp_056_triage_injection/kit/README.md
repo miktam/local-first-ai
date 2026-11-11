@@ -7,6 +7,9 @@ H2, H5; controls C2 and C3.
 
 **The split.** `build56.py` (the harness that attaches the frozen payloads to the base messages), its review notes
 `review.html` and everything in `../payloads/` are Andrei's: written on his side, never opened by Claude.
+
+**Correction (2026-11-11, after publication):** the six texts in `../payloads/` were not written on Andrei's side. Amendments 1 and 3 of [../HYPOTHESIS.md](../HYPOTHESIS.md) say Fable wrote them on 2026-10-25 and they were frozen by hash; what Andrei wrote is the builder, `build56.py`, and the Claude sessions that wrote and reviewed the runner and the scorer did not open the builder or the payload files (Amendment 3). [../RESULT.md](../RESULT.md) says so under "What it did not measure".
+
 `select56.py`, `run56.py`, `score56.py`, the tests and this README are Claude's: they measure, and contain no payload
 or message text. They pass file paths to `exposure.py triage`, keep measures only, and touch the builder and the
 payloads only to hash their bytes. The build manifest is treated as untrusted input. Every test fixture is a
@@ -151,6 +154,7 @@ checked against the records only.
   leaf points: N of M".
 - **H5**: every `dead` record has the same band as that base's `nollm` record, `leaf_failure_named` and
   `card_leaf_failure_shown`. (`complete` is not used: it is false in every step for unrelated reasons.)
+  **Correction (2026-11-11, after publication):** `complete` is not false in every step. In the records it is true for the two chat bases, X097 and X144, in the model steps (`bases1`, `variants`, `bases2`): 16 records in the six-text run and 6 in the n1 run, as [../RESULT.md](../RESULT.md) gives under "What it did not measure"; `../runs/six-r2` and `../runs/n1-r2` show the same counts. No item uses it.
 - **C2**: `bases1` and `bases2` agree per base on band, score, leaf points, `leaf_output` and `indicators`.
 - **C3**, in four parts:
   - `audit/canary.jsonl` shows a resolution of example.com, an HTTP request to it and a spawned `dig`.
