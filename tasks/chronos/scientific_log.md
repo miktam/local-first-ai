@@ -2781,6 +2781,8 @@ SO WHAT:
 
 *Evidence: `exp_059_same_weights_three_chips/`. Status: Registered, not yet run.*
 
+*Stopped 2026-11-11 by Andrei's decision; never run. The registration and the kit are kept as written; no arm produced an answer. The phone arm and its control C2 need the iOS app built and signed on the MacBook, which was never done, and the two Mac arms were not run. None of H1–H4, C1–C3 or D1–D5 was measured.*
+
 ---
 
 ## Experiment 060 — Which fix closes the local reader's empty answers? (registered 2026-10-28)

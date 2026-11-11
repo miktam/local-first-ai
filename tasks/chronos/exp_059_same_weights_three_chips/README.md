@@ -21,7 +21,7 @@ number counts.
 | `data/prompts59.jsonl` | the rendered prompts, hashed in `data/prompts59.sha256` |
 | `raw/`, `pred/`, `results/` | per arm: raw answers, finished rows, the score (written by the runs) |
 
-**Status: registered, not yet run.** Numbering: exp_057 names exp_058 for the harness-layer egress test, so this is 059.
+**Status:** registered 2026-10-28; stopped 2026-11-11 by Andrei's decision, never run. What exists is the registration and the kit (`kit/`, with the iOS sources and their build notes, and `data/prompts59.jsonl`); no arm produced an answer. The phone arm and its control C2 need the iOS app built and signed on the MacBook, which was never done, and the two Mac arms were not run. The registration is kept as written. Numbering: exp_057 names exp_058 for the harness-layer egress test, so this is 059.
 
 **To reproduce the comparison** from published raw files (no model needed): lay out `raw/<arm>.jsonl` for the arms you have,
 run `python3 kit/finish59.py <arm>` for each, then `python3 kit/score59.py`. `finish59.py` needs exp_044's

@@ -72,7 +72,7 @@ One line per experiment. The registration, the full result and the evidence are 
 | [023](./tasks/chronos/exp_023_local_model_efficiency/) | Generation efficiency across local models | gemma4:26b has the best wall-clock of four; qwen3.8:27b finds more but takes 6.7× longer |
 | [025](./tasks/chronos/exp_025_context_config_isolation/) | Context-allocation isolation | An unset `OLLAMA_CONTEXT_LENGTH` made gemma4:31b ~100× slower; one config line fixed it |
 | [051](./tasks/chronos/exp_051_mlx_same_text/) | MLX vs Ollama on the same text | MLX reads prompts 12–24 % faster and generates no faster; neither has a cliff |
-| [059](./tasks/chronos/exp_059_same_weights_three_chips/) | Same weights, three chips: Kev-4B on M4 Pro, M5 Max and the iPhone's A20 Pro | Registered 2026-10-28; not yet run |
+| [059](./tasks/chronos/exp_059_same_weights_three_chips/) | Same weights, three chips: Kev-4B on M4 Pro, M5 Max and the iPhone's A20 Pro | Stopped 2026-11-11, never run: the phone arm's app was not built, the Mac arms were not run |
 
 #### Security, privacy and sovereignty
 
