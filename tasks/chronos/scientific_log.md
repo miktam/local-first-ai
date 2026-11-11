@@ -2507,7 +2507,7 @@ SO WHAT:
 - The 6 holiday lets M answered itself count against it by the agency's rule; counted as right, M would be level with G (9 against 9, corrected). G and M never sent a wrong reply on the same lead.
 - G's main cost is the unsure hand-off: 28 of the 157 should-be-ready leads held as unsure. Kev's reading was right on 83 % of the 53 leads below 0.5 (ECE 0.268, underconfident).
 - M+audit sent 14 wrong; the audit cannot catch a wrong next step or a home that does not fit. Median time per enquiry: G 11.4 s, M 70 s.
-- The blind Opus judge (reported, it decides nothing; the judge was not truly blind: G's fixed format is recognisable): send as is, G 0.310, M 0.433. G's two largest defects are bugs in its own fixed text (a callback promised twice, a plural closing after a single home).
+- The Opus judge (reported, it decides nothing; the judge was not truly blind: G's fixed format is recognisable): send as is, G 0.310, M 0.433. G's two largest defects are bugs in its own fixed text (a callback promised twice, a plural closing after a single home).
 
 SO WHAT:
 - Nothing in production: CasaSol's triage stays rev 5.1, and no reply drafter goes into the bot from this experiment.
