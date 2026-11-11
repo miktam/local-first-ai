@@ -2172,6 +2172,8 @@ The disclosures are in HYPOTHESIS.
 
 ---
 
+*Entries for exp_040 to exp_050 back-filled 2026-11-11 from each experiment's files.*
+
 ## Experiment 040 — COAPI Voice: make correctness checkable (registered 2026-10-16)
 
 **Pre-registered: 2026-10-16, signed by Andrei at 21:31 CEST, before any training step and before any v3 answer** (`exp_040_coapi_voice_checkable/HYPOTHESIS.md`, frozen at `4004235`). exp_039's reward measured form. This asks whether GRPO on Qwen3-4B, against a code reward that checks the answer line itself, gains correctness.
@@ -2182,7 +2184,7 @@ The disclosures are in HYPOTHESIS.
 - H1 exact match R3 − B0i: shown iff the stratified paired bootstrap 95 % lower bound is > 0 and the exact one-sided McNemar p < 0.05; the same must hold for R3q8 − B0q8, else "not robust". H2 judged substance, non-inferiority at −0.10. H3 contrast pairs with both twins right, ≥ +0.10. H4 abstention on the 38 abstention rows up ≥ 0.20, false abstention ≤ 0.05. H5, before any v3 answer: more than 4 of 40 top-reward answers gamed by either of two blind readers (Fable, Opus) → Stopped — verifier.
 - Verdict map, the first that fires: H5 fails → Stopped — verifier; H1 shown at Q4 but not at Q8 → Not robust; H1 not shown → No gain; H2 fails → Right labels, worse prose; otherwise → Correctness from a checkable reward.
 
-**Result, 2026-10-17** (`results/v3/`, one `measure40.sh` call for all six arms, 06:01–07:10 on the mini).
+**Result, 2026-10-17** (`results/v3/`, one `measure40.sh` call for all six arms, 06:01–07:10 UTC on the mini).
 - **Verdict: Not robust** (verdict map rule 2).
 - **H5 PASS:** Fable judged 0 of 40 top-reward answers gamed, Opus 1 of 40.
 - **H1 shown at Q4, not at Q8:** R3 − B0i +0.067, CI [+0.013, +0.120], McNemar p 0.015; R3q8 − B0q8 +0.013, CI [−0.027, +0.053], p 0.38.
@@ -2258,7 +2260,7 @@ SO WHAT:
 - **The 11 source-lost rows:** G4 refused 8; S0 had 5 of those 8 right, from memory.
 - Descriptive, against exp_041 (different retrieval and labels, not a registered comparison): the retrieval fix alone moved the untrained voice from 0.707 to 0.753 exact on the same 150 questions; source-lost answerable rows 22 → 11 of 112.
 
-**After adoption, 2026-10-18** (configuration, not a new measurement). Kev-4B is wired into `glue.answer`, served by `ai.casasol.gate-kev4b`; if the gate is unreachable, the glue answers as before. Per-language thresholds on this experiment's dev probabilities, EN 0.600, PL 0.448, ES 0.576, each resting on 80 answerable rows, so provisional. A replay of 60 guide-answerable questions through CasaSol Guide's own retrieval: at the glue's thresholds the gate would refuse 29 of 60.
+**After adoption, 2026-10-18.** Configuration, not a new measurement: Kev-4B is wired into `glue.answer`, served by `ai.casasol.gate-kev4b`; if the gate is unreachable, the glue answers as before. Per-language thresholds on this experiment's dev probabilities, EN 0.600, PL 0.448, ES 0.576, each resting on 80 answerable rows, so provisional. A shadow-mode check later the same day replayed 60 guide-answerable questions through CasaSol Guide's own retrieval: at the glue's thresholds the gate would refuse 29 of 60.
 
 SO WHAT:
 - Adopted: the COAPI Voice glue runs the Kev-4B gate with per-language thresholds, and the retrieval fixes this experiment depended on.
@@ -2291,7 +2293,7 @@ SO WHAT:
 - Intent by language: SV 1.00, ES 0.97, DE 0.90, FR 0.89, EN 0.87, RU 0.87, PL 0.77. Median 1.6 s per lead.
 - All 3 false spams came from the "business pitching the agency" rule, at 0.60–0.63 against a cut of 0.6: a developer looking for building plots, a company booking a villa for a team retreat, and an owner listing a €1.9M villa. Buy read as holiday rental made 10 of the 25 intent errors.
 
-**Addendum, 2026-10-24.** With the majority baseline for every field, a constant guess meets the bars for foreign buyer (0.800) and urgency within ±1 (always 1: 0.934). The verdict rests on H1–H3 and does not change.
+**Addendum, 2026-10-24.** A constant guess meets the bars for foreign buyer (0.800) and urgency within ±1 (always 1: 0.934), so those passes say little on their own. The verdict rests on H1–H3 and does not change.
 
 SO WHAT:
 - Nothing adopted in production. The verdict licenses agent assist, fields shown as suggestions, not automatic discarding: 1.5 % false spam is within the bar, but each one is a lost client, and one of them was a seller.
@@ -2304,7 +2306,7 @@ SO WHAT:
 
 ## Experiment 044 — Lead triage rev 4 on a fresh synthetic set (registered 2026-10-19)
 
-**Pre-registered: 2026-10-19, signed by Andrei at 17:36 CEST, before any test call** (`exp_044_kev_lead_triage_rev4/HYPOTHESIS.md`). Can four changes fix what exp_043 found without making anything else worse: a safer spam rule (the business-pitch rule overrides Kev only when Kev's own spam probability agrees), a "buy or rent?" question, budgets written as words read by code, and an honest confidence label? Both versions run on the same fresh enquiries.
+**Pre-registered: 2026-10-19, signed by Andrei at 17:36 CEST, before any test call** (`exp_044_kev_lead_triage_rev4/HYPOTHESIS.md`, signed at `bbacce9`). Can four changes fix what exp_043 found without making anything else worse: a safer spam rule (the business-pitch rule overrides Kev only when Kev's own spam probability agrees), a "buy or rent?" question, budgets written as words read by code, and an honest confidence label? Both versions run on the same fresh enquiries.
 
 **Registered.**
 - Versions: **rev 3.1**, the decisions exp_043 measured, frozen by sha256; **rev 4**, tuned on dev only, then frozen by sha256.
@@ -2321,7 +2323,7 @@ SO WHAT:
 - **H4 PASS:** budgets in words 0.00 → 1.00 (29).
 - **H5 PASS:** Sure 1.00 (147), Fairly sure 0.889 (90), Unsure 0.798 (94). The raw confidence is not calibrated (ECE 0.262).
 - **Replication:** rev 3.1's standard-stratum request on fresh messages 0.896, against exp_043's 0.894.
-- Descriptive: rev 3.1's five false spams were four businesses acting for clients and a buyer Kev itself called spam; rev 4 keeps two (the law firm X3-57 and the buyer X1-38), at the cost of one more missed spam (X4-15, a pitch Kev read as "sell"). Across all 331, buy → holiday-rent confusions fell from 11 to 4; valuation read as sell, 9 times in both versions; Polish, 0.833, is again the weakest. Median 1.59 s → 1.67 s per lead.
+- Descriptive: rev 3.1's five false spams were four businesses acting for clients and a buyer Kev itself called spam; rev 4 keeps two (the law firm X3-57 and the buyer X1-38), at the cost of one more missed spam (X4-15, a pitch Kev read as "sell"). Across all 331, buy → holiday-rent confusions fell from 11 to 4, and valuation was read as sell 9 times in both versions. Polish, 0.833 in the standard stratum, is again the weakest. Median 1.59 s → 1.67 s per lead.
 
 SO WHAT:
 - Adopted (code path checked): rev 4 is the lead triage, and the CasaSol Guide `/triage` demo switches from the pinned rev 3.1 to it. Budgets written as words are read in seven languages; a bare "m" is no longer read as millions above 50.
@@ -2356,7 +2358,7 @@ SO WHAT:
 
 SO WHAT:
 - Adopted (code path checked): the phone joiner is in the bot's voice triage, live with the next bot deploy; for voice, Whisper's language stays the one shown.
-- Voice triage can be shown to agencies as equal to typed triage, never without "synthetic" and "computer voices": "on 331 synthetic enquiries read aloud by computer voices, triage from a WhatsApp-quality voice note matched typed text within about one point, with budgets the exception".
+- On 331 synthetic enquiries read aloud by computer voices, triage from a WhatsApp-quality voice note matched typed text within about one point on request and next step, with budgets the exception.
 - Seeds: the budget reader (a currency symbol before full digits, bare amounts after a budget cue); amounts grouped in thousands taken for phone numbers; the text language detector (8 of 331 missed); the business-pitch cut; real voice notes.
 
 *Evidence: `exp_045_voice_triage/` (HYPOTHESIS.md, RESULT.md, `kit/`, `results/test/` with every transcript, `results/dev/`; the audio is not published, the kit regenerates it). Status: Complete (2026-10-20); Voice notes keep the triage: H1–H5 pass.*
@@ -2505,7 +2507,7 @@ SO WHAT:
 - The 6 holiday lets M answered itself count against it by the agency's rule; counted as right, M would be level with G (9 against 9, corrected). G and M never sent a wrong reply on the same lead.
 - G's main cost is the unsure hand-off: 28 of the 157 should-be-ready leads held as unsure. Kev's reading was right on 83 % of the 53 leads below 0.5 (ECE 0.268, underconfident).
 - M+audit sent 14 wrong; the audit cannot catch a wrong next step or a home that does not fit. Median time per enquiry: G 11.4 s, M 70 s.
-- The blind Opus judge (reported, it decides nothing): send as is, G 0.310, M 0.433. G's two largest defects are bugs in its own fixed text (a callback promised twice, a plural closing after a single home).
+- The blind Opus judge (reported, it decides nothing; the judge was not truly blind: G's fixed format is recognisable): send as is, G 0.310, M 0.433. G's two largest defects are bugs in its own fixed text (a callback promised twice, a plural closing after a single home).
 
 SO WHAT:
 - Nothing in production: CasaSol's triage stays rev 5.1, and no reply drafter goes into the bot from this experiment.
@@ -2724,7 +2726,7 @@ SO WHAT:
 - A pass clears H1 (class A), H2 and H5 only. H3 and H4 (classes B–E) and C1 are unmeasured, so the mail sentry stays blocked. The six texts are published, as Amendment 4 provides.
 - Not measured: messages over 24 paragraphs, text placed anywhere but after the end, encoded or multi-part bodies, a model slow enough for the 180 s budget to bite, an attacker who knows the fix; one model, one seed, one run per arm.
 
-*Evidence: `exp_056_triage_injection/RESULT-RERUN.md`, `runs/six-r2`, `runs/n1-r2`, `runs/exp055-views` (audit logs cut to 160 characters as before), `runs/views-output.txt`. Status: Re-run complete (2026-11-10); gate passed: H1, H2, H5, C2, C3 hold; false-alarm rule met; the fix adopted by Andrei on 2026-11-10.*
+*Evidence: `exp_056_triage_injection/RESULT-RERUN.md`, `README.md` (status line: the adoption), `runs/six-r2`, `runs/n1-r2`, `runs/exp055-views` (audit logs cut to 160 characters as before), `runs/views-output.txt`. Status: Re-run complete (2026-11-10); gate passed: H1, H2, H5, C2, C3 hold; false-alarm rule met; the fix adopted by Andrei on 2026-11-10.*
 
 ---
 
