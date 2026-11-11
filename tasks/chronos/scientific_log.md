@@ -2170,6 +2170,350 @@ The disclosures are in HYPOTHESIS.
 
 ---
 
+## Experiment 040 — COAPI Voice: make correctness checkable (registered 2026-10-16)
+
+**Pre-registered: 2026-10-16, signed by Andrei at 21:31 CEST, before any training step and before any v3 answer** (`exp_040_coapi_voice_checkable/HYPOTHESIS.md`, frozen at `4004235`). exp_039's reward measured form. This asks whether GRPO on Qwen3-4B, against a code reward that checks the answer line itself, gains correctness.
+
+**Registered.**
+- Training on the mbp with exp_039's configuration (LoRA r16 on q/k/v/o, 11,796,480 parameters, β 0.02, group 6): one pass of 78 steps over 622 rows, filtered from 2,267 prompts. Options are shown after categorical and yes/no questions.
+- Arms, all on the Ollama 0.33.0 side server: **B0i** the untrained 4B (imatrix Q4_K_M), **R3** the trained 4B (same recipe), **B0q8** and **R3q8** the same two at Q8_0, **A13** Unsloth Q4_K_M + glue + final-line sentence, **R3G** R3 + the same glue. One pass per arm on v3, 150 rows sealed in a separate session.
+- H1 exact match R3 − B0i: shown iff the stratified paired bootstrap 95 % lower bound is > 0 and the exact one-sided McNemar p < 0.05; the same must hold for R3q8 − B0q8, else "not robust". H2 judged substance, non-inferiority at −0.10. H3 contrast pairs with both twins right, ≥ +0.10. H4 abstention on the 38 abstention rows up ≥ 0.20, false abstention ≤ 0.05. H5, before any v3 answer: more than 4 of 40 top-reward answers gamed by either of two blind readers (Fable, Opus) → Stopped — verifier.
+- Verdict map, the first that fires: H5 fails → Stopped — verifier; H1 shown at Q4 but not at Q8 → Not robust; H1 not shown → No gain; H2 fails → Right labels, worse prose; otherwise → Correctness from a checkable reward.
+
+**Result, 2026-10-17** (`results/v3/`, one `measure40.sh` call for all six arms, 06:01–07:10 on the mini).
+- **Verdict: Not robust** (verdict map rule 2).
+- **H5 PASS:** Fable judged 0 of 40 top-reward answers gamed, Opus 1 of 40.
+- **H1 shown at Q4, not at Q8:** R3 − B0i +0.067, CI [+0.013, +0.120], McNemar p 0.015; R3q8 − B0q8 +0.013, CI [−0.027, +0.053], p 0.38.
+- **Quantisation churn** (descriptive): training at Q4 flipped 14 and 4 answers; the same base weights flip 8 and 11 between Q4 and Q8, the trained weights 11 and 6. On 150 rows the experiment cannot separate a training effect of about 0.05 from the quantiser.
+- **H3 shown at Q4 only:** contrast pairs with both twins right 0.50 → 0.70 (+0.20, CI [+0.03, +0.37], p 0.035); at Q8 +0.00.
+- **H4 FAIL:** abstaining on the 38 abstention rows 0.447 → 0.579 (+0.13, against ≥ 0.20); false abstention 0.027 in both arms; at Q8 +0.03.
+- **H2 not run:** no verdict branch depends on it once rule 2 fires.
+- **D1:** R3G and A13 both reach 0.733 exact, with 9 rows flipping each way.
+- Exact match by arm: B0i 0.707, R3 0.773, B0q8 0.727, R3q8 0.740, A13 0.733, R3G 0.733.
+
+**Addendum, 2026-10-17.** The result's first point ("the correctness reward is not gamed") is restated: in one audit of 40 top-reward training answers per experiment, a reward that checks the answer was not gamed, and exp_039's form reward was. The reward reads only the final line; the one answer Opus flagged argued "no" and then answered "yes". The explanations were not judged (H2 not run), and a confident guess among 3–4 options is still paid when it lands.
+
+SO WHAT:
+- Deployment does not change: A13 (Unsloth Q4 + glue) equals R3G, and the deployed reference stays glue over the untrained base.
+- The training signal was thin: 622 rows / 78 steps, a base already 6/6 right on 71 % of the labelled categorical rows, and selection on a validation set where the base was already 78/79. What gain there is (PL +0.16 and pairs +0.10 at Q4) does not survive Q8.
+- The measurement floor is quantisation: Q4↔Q8 of the same weights moves 17–19 answers on 150 rows. A future training cell needs a larger test set, or one quantisation chosen in advance with the other reported as robustness.
+
+*Evidence: `exp_040_coapi_voice_checkable/` (HYPOTHESIS.md, RESULT.md with the addendum, RESULT_H5.md, `results/v3/`, `results/h5_ckpt50/`). Status: Complete (2026-10-17); Not robust: H1 shown at Q4, not at Q8; H5 passes; H3 shown at Q4 only; H4 fails; H2 not run.*
+
+---
+
+## Experiment 041 — An answerability gate (registered 2026-10-17)
+
+**Pre-registered: 2026-10-17, signed by Andrei at 16:09 CEST, before any gate saw a v3 row** (`exp_041_answerability_gate/HYPOTHESIS.md`, frozen at `d4e7778`). Can a separate local model, asked "can this material answer this question?", make the system say "not in the material" when the rule is missing, without blocking answerable questions?
+
+**Registered.**
+- Gates, all on llama.cpp b11711, one at a time on the mini: **G1** Qwen3-4B imatrix Q4 (exp_040's B0i weights, prompted, P(yes) from the first token), **G2** Kev-4B, **G3** Clef-Flash 9B, **G4** Clef 27B (the last three at Q8_0 through `/v1/systemone`).
+- Dev: 615 rows (288 exp_040 abstention variants labelled by a blind Fable reader, 87 off-topic prompts, 240 bank prompts whose source was retrieved). A gate blocks a row iff P(answerable) < τ, τ the largest value with dev false abstention ≤ 0.03; the primary gate has the highest dev abstention at its τ. Thresholds committed before any v3 call.
+- v3: one pass per gate over exp_040's 150 rows. A blocked row becomes "not in the material"; every other row keeps B0i's verdict.
+- H1 abstention on the 38 abstention rows up ≥ 0.20 over B0i, McNemar p < 0.05; H2 false abstention on the 112 answerable rows ≤ 0.05; H3 exact match, gated − B0i, 95 % lower bound > −0.02; H4 dev calibration error ≤ 0.10.
+- Verdict map: H1 or H2 fails → No gate earns its place; H3 fails → Abstains, but costs answers; otherwise → Gate adopted for the glue.
+
+**Result, 2026-10-17** (`results/v3/`, `results/dev/`; thresholds frozen from dev before any v3 call).
+- **Verdict: No gate earns its place** (H2 fails).
+- Primary gate G4, Clef 27B, τ 0.487, over B0i:
+  - **H1 PASS:** abstention 0.447 → 0.947 (+0.50, CI [+0.34, +0.66], p < 0.001).
+  - **H2 FAIL:** false abstention 0.027 (3) → 0.107 (12).
+  - **H3 PASS:** exact 0.707 → 0.820 (+0.113, CI [+0.073, +0.153]).
+  - **H4 PASS:** dev ECE 0.065.
+- The other gates, over B0i: G1 abstention 0.632, false abstention 0.054 (6), exact 0.747; G2 0.895, 0.125 (14), 0.800; G3 0.763, 0.098 (11), 0.773. Every gate raises exact match; none holds false abstention at 0.05.
+- **D1:** over A13, the deployed glue (0.733), exact is 0.753, 0.780, 0.773 and 0.800 for G1 to G4.
+- **Why false abstention rose from dev (2.7 %) to v3 (10.7 %)** (descriptive, after the verdict): all 11 answerable v3 rows that G4 newly blocked had lost their source chunk in retrieval. B0i had 9 of those 11 wrong; the 2 right answers lost were Spanish, answered from memory. Retrieval missed the source on 22 of the 112 answerable rows, mostly Spanish, which is matched against the English index. Dev's answerable rows were drawn only where the source was retrieved.
+
+**Follow-up, 2026-10-17, before any new experiment.** At Andrei's word, Spanish retrieval was fixed: a Spanish question is translated to English by the deployed Qwen3-4B, and the English index is searched with the translation. On training-side data only, the source chunk is retrieved 0.703 of the time on the bank (734) against 0.489 before, and 0.931 on validation (29) against 0.621, at about 0.8 s per Spanish question.
+
+SO WHAT:
+- No gate was adopted. As a component the gate works on the material it is given (Clef 27B, dev AUROC 0.990); the failure H2 counts sits upstream, in retrieval.
+- The diagnosis cascaded: retrieval fixed in the COAPI glue (Spanish via translation, two chunks from the leading tema, budget 1,350) and a `glue.clean()` bug that cut complete answers fixed.
+- It seeded exp_042: the same gates, with answerability defined by the material the model saw. v3 has now had a pass from every gate, so a clean claim needs a fresh test set.
+
+*Evidence: `exp_041_answerability_gate/` (HYPOTHESIS.md, DESIGN.md, SMOKE.md, RESULT.md, `results/v3/`, `results/dev/`). Status: Complete (2026-10-17); No gate earns its place: H2 fails; H1, H3 and H4 pass.*
+
+---
+
+## Experiment 042 — The answerability gate with fixed retrieval (registered 2026-10-18)
+
+**Pre-registered: 2026-10-18, signed by Andrei at 04:31 CEST, before any exp_042 run** (`exp_042_answerability_gate_retrieval/HYPOTHESIS.md`, frozen at `c142c76`). With today's retrieval, does a gate make the system say "not in the material" when the rule is missing, without blocking questions whose rule is in the material?
+
+**Registered.**
+- Retrieval as fixed after exp_041: k 5, budget 1,350, Spanish searched with its English translation.
+- Labels by code only: a row is answerable iff it is not an abstention row and its source chunk is in the material. v3 as rendered: 101 answerable, 49 not (the 38 abstention and out-of-scope rows, and 11 whose source retrieval lost: 10 ES, 1 PL). Dev: 610 rows.
+- Voice **S0**, the untrained Qwen3-4B (imatrix Q4) on the Ollama 0.33.0 side server. Gates, with no selection: **G4** Clef 27B (primary) and **G2** Kev-4B, on llama.cpp b11711 with exp_041's prompts; τ set from dev as in exp_041 and committed before any v3 gate call.
+- H1 abstention on the 38 rows up ≥ 0.20 over S0, McNemar p < 0.05; H2 false abstention on the 101 answerable rows ≤ 0.05; H3 exact, gated − S0, 95 % lower bound > −0.02; H4 dev ECE ≤ 0.10. Verdict map as exp_041's, its last row "Gate adopted for the glue (on the mini)".
+- Known limit, written before the run: v3 is reused (Andrei's decision); every exp_041 gate had a pass on it.
+
+**Result, 2026-10-18** (`results/v3/`, `results/dev/`; thresholds frozen before any v3 gate call).
+- **Verdict: Gate adopted for the glue (on the mini).** H1, H2 and H3 pass for G4 (Clef 27B, τ 0.602).
+- **H1 PASS:** abstention 0.474 → 0.921 (+0.447, CI [+0.29, +0.61], p < 0.001).
+- **H2 PASS:** false abstention 0 of 101.
+- **H3 PASS:** exact 0.753 → 0.833 (+0.080, CI [+0.033, +0.120]).
+- **H4 FAIL** (reported; not part of the verdict map): dev ECE 0.174. The threshold works; the raw probability should not be read as a confidence.
+- **G2 Kev-4B** (reported): abstention 0.921, false abstention 1 of 101, exact 0.820 (+0.067, CI [+0.020, +0.113]), dev ECE 0.193, about 2 s per question against about 12 s for Clef 27B.
+- **The 11 source-lost rows:** G4 refused 8; S0 had 5 of those 8 right, from memory.
+- Descriptive, against exp_041 (different retrieval and labels, not a registered comparison): the retrieval fix alone moved the untrained voice from 0.707 to 0.753 exact on the same 150 questions; source-lost answerable rows 22 → 11 of 112.
+
+**After adoption, 2026-10-18** (configuration, not a new measurement). Kev-4B is wired into `glue.answer`, served by `ai.casasol.gate-kev4b`; if the gate is unreachable, the glue answers as before. Per-language thresholds on this experiment's dev probabilities, EN 0.600, PL 0.448, ES 0.576, each resting on 80 answerable rows, so provisional. A replay of 60 guide-answerable questions through CasaSol Guide's own retrieval: at the glue's thresholds the gate would refuse 29 of 60.
+
+SO WHAT:
+- Adopted: the COAPI Voice glue runs the Kev-4B gate with per-language thresholds, and the retrieval fixes this experiment depended on.
+- Not adopted: CasaSol Guide. The live bot does not use the glue, and the thresholds were measured on the glue's material. Since 2026-10-18 the bot runs the gate in shadow mode: it logs P(answerable) and blocks nothing. Whether it adds anything in front of gemma4:26b, and at what threshold, is the next experiment.
+- The gate judges whether the material can answer. Whether the 4B voice answers correctly is a separate, still-open weakness (ITP 7 % answered as AJD 1.2 %).
+
+*Evidence: `exp_042_answerability_gate_retrieval/` (HYPOTHESIS.md, DESIGN.md, RETRIEVAL_FIXES.md, RESULT.md, `results/v3/`, `results/dev/`). Status: Complete (2026-10-18); Gate adopted for the glue (on the mini): H1, H2 and H3 pass for Clef 27B, H4 fails; Kev-4B wired, the live bot in shadow mode.*
+
+---
+
+## Experiment 043 — Kev-4B lead triage (registered 2026-10-18)
+
+**Pre-registered: 2026-10-18, signed by Andrei at 12:01 CEST, before any Kev call on these leads** (`exp_043_kev_lead_triage/HYPOTHESIS.md`, frozen at `13e3fd1`). Can one local decision model, Kev-4B, with no generative model, triage inbound agency leads well enough to be used: the intent, whether the sender is qualified, and what to do next?
+
+**Registered.**
+- Data, synthetic only: 440 leads by 8 Fable writers in 7 languages. A blind Fable checker labels each from the text; a lead is dropped on intent disagreement or the checker's doubt. 355 kept (85 dropped on doubt); dev 120, test 235. Andrei read 30 test leads and rejected none before the seal.
+- Code: `kev_knife.py` rev 3, tuned on dev only, then frozen. Kev answers the questions; code derives urgency and the next action. One test pass.
+- Bars: H1 intent ≥ 0.85; H2 spam recall ≥ 0.90 and false spam ≤ 0.02; H3 next action ≥ 0.75; H4 qualified ≥ 0.80; H5 property type ≥ 0.80, timeline ≥ 0.75; H6 financing and foreign buyer ≥ 0.80 where labelled; H7 urgency within ±1 ≥ 0.85.
+- Verdict map: H1, H2 and H3 pass → Blade usable for triage (as a suggestion to an agent); H1 passes, H2 or H3 fails → Classifies, but can't act yet; H1 fails → Not usable as is.
+
+**Result, 2026-10-18** (`results/test/`, one pass on the 235 test leads).
+- **Verdict: Blade usable for triage** (H1, H2, H3 pass).
+- **H1 PASS:** intent 0.894 (majority baseline 0.243).
+- **H2 PASS, narrowly on both:** spam recall 0.906 (29/32), false spam 0.015 (3/203).
+- **H3 PASS:** next action 0.898 (baseline 0.379).
+- **H4 FAIL:** qualified 0.783 (baseline 0.574).
+- **H5:** property type 0.885, pass; timeline 0.732, **fail** (baseline 0.451).
+- **H6 PASS:** financing 1.00 (n 50), foreign buyer 0.887 (n 80).
+- **H7 PASS:** urgency within ±1 0.930 (exact 0.759).
+- Intent by language: SV 1.00, ES 0.97, DE 0.90, FR 0.89, EN 0.87, RU 0.87, PL 0.77. Median 1.6 s per lead.
+- All 3 false spams came from the "business pitching the agency" rule, at 0.60–0.63 against a cut of 0.6: a developer looking for building plots, a company booking a villa for a team retreat, and an owner listing a €1.9M villa. Buy read as holiday rental made 10 of the 25 intent errors.
+
+**Addendum, 2026-10-24.** With the majority baseline for every field, a constant guess meets the bars for foreign buyer (0.800) and urgency within ±1 (always 1: 0.934). The verdict rests on H1–H3 and does not change.
+
+SO WHAT:
+- Nothing adopted in production. The verdict licenses agent assist, fields shown as suggestions, not automatic discarding: 1.5 % false spam is within the bar, but each one is a lost client, and one of them was a seller.
+- After the result (Andrei): spam is never discarded; its action is `review`, a human review folder. Only the fields that passed are shown. The tool runs as an admin-only demo in CasaSol Guide and reads no real inbound leads.
+- Seeds: a safer spam cut, which needs a fresh test; holiday home against holiday rental; real leads; Polish is the weakest language (0.77).
+
+*Evidence: `exp_043_kev_lead_triage/` (HYPOTHESIS.md, LABELS.md, RESULT.md with the addendum, `data/`, `kit/`, `results/test/`, `results/dev_runs/`). Status: Complete (2026-10-18); Blade usable for triage: H1–H3 pass, qualified and timeline fail; spam goes to review, never discarded.*
+
+---
+
+## Experiment 044 — Lead triage rev 4 on a fresh synthetic set (registered 2026-10-19)
+
+**Pre-registered: 2026-10-19, signed by Andrei at 17:36 CEST, before any test call** (`exp_044_kev_lead_triage_rev4/HYPOTHESIS.md`). Can four changes fix what exp_043 found without making anything else worse: a safer spam rule (the business-pitch rule overrides Kev only when Kev's own spam probability agrees), a "buy or rent?" question, budgets written as words read by code, and an honest confidence label? Both versions run on the same fresh enquiries.
+
+**Registered.**
+- Versions: **rev 3.1**, the decisions exp_043 measured, frozen by sha256; **rev 4**, tuned on dev only, then frozen by sha256.
+- Data: 584 leads by eight Fable writers in seven languages, a standard stratum with exp_043's quotas and three hard strata (business look-alikes, holiday home against holiday rent, budgets in words). A blind Fable checker and exp_043's agreement rule: 486 kept, 98 dropped on doubt; dev 155, test 331. Andrei read 30 test leads and rejected none.
+- Dev tuning: no candidate reached zero dev false spam; the cuts kept were `B2B_CUT` 0.60, `SPAM_AGREE` 0.15 and `OWN_CUT` 0.65.
+- Bars (test, paired): H1 standard-stratum request and next step, rev 4 − rev 3.1 ≥ −0.02 each; H2 false spam ≤ 0.01 and ≤ rev 3.1's, spam caught ≥ 0.85; H3 holiday-stratum request ≥ +0.10 with one-sided McNemar p < 0.05; H4 budgets in words within 1 % ≥ 0.90; H5 request accuracy by confidence band, Sure ≥ 0.90 and Sure > Fairly sure > Unsure.
+- Verdict map: H1 and H2 pass → adopt rev 4; H1 fails → keep rev 3.1; H2 fails but H1 passes → rev 4 without the new spam rule.
+
+**Result, 2026-10-19** (`results/test/`, one pass per version on the 331 test leads).
+- **Verdict: adopt rev 4** (H1 and H2 pass; H4 and H5 pass; H3 fails).
+- **H1 PASS:** standard request 0.896 → 0.909 (+0.013); next step 0.938 → 0.938.
+- **H2 PASS:** genuine leads flagged as spam 5 (0.018) → 2 (0.007) of 282; spam caught 47 → 46 of 49 (0.959 → 0.939).
+- **H3 FAIL:** holiday stratum 0.871 → 0.935 (+0.064; 2 against 0 discordant, one-sided p 0.25).
+- **H4 PASS:** budgets in words 0.00 → 1.00 (29).
+- **H5 PASS:** Sure 1.00 (147), Fairly sure 0.889 (90), Unsure 0.798 (94). The raw confidence is not calibrated (ECE 0.262).
+- **Replication:** rev 3.1's standard-stratum request on fresh messages 0.896, against exp_043's 0.894.
+- Descriptive: rev 3.1's five false spams were four businesses acting for clients and a buyer Kev itself called spam; rev 4 keeps two (the law firm X3-57 and the buyer X1-38), at the cost of one more missed spam (X4-15, a pitch Kev read as "sell"). Across all 331, buy → holiday-rent confusions fell from 11 to 4; valuation read as sell, 9 times in both versions; Polish, 0.833, is again the weakest. Median 1.59 s → 1.67 s per lead.
+
+SO WHAT:
+- Adopted (code path checked): rev 4 is the lead triage, and the CasaSol Guide `/triage` demo switches from the pinned rev 3.1 to it. Budgets written as words are read in seven languages; a bare "m" is no longer read as millions above 50.
+- Seeds: valuation against sell (9 errors); a minimum probability before Kev's own spam pick stands; a pitch-specific question for pitches Kev reads as sellers; Polish; real leads.
+
+*Evidence: `exp_044_kev_lead_triage_rev4/` (HYPOTHESIS.md, LABELS.md, RESULT.md, `data/`, `kit/`, `results/test/`, `results/dev_runs/`). Status: Complete (2026-10-19); adopt rev 4: H1, H2, H4 and H5 pass, H3 fails.*
+
+---
+
+## Experiment 045 — Lead triage from voice notes (registered 2026-10-20)
+
+**Pre-registered: 2026-10-20, signed by Andrei at 06:08 CEST, written the night before, before any call on the test set** (`exp_045_voice_triage/HYPOTHESIS.md`, text as in `1cfc602`). Does an enquiry keep its triage when it arrives as a voice note instead of text? The same messages and the same frozen rev 4 on two paths, with no cloud model anywhere.
+
+**Registered.**
+- Messages: exp_044's sealed test set, public copy, 331 synthetic enquiries in seven languages, reused for a different question with nothing tuned on it.
+- The voice path, as in the bot: one macOS voice per writer batch reads the enquiry; mono, 16 kHz, Opus at 16 kbit/s, the format of a WhatsApp voice note; transcribed on the mini by the bot's own code (mlx-whisper large-v3-turbo, offline); spoken phone numbers joined; rev 4 triages the transcript.
+- Arms: **text** (rev 4 on the public-copy text), **whatsapp** (the registered arm), **noisy** (pink noise at 10 dB SNR, descriptive). The phone joiner was added on the 155 dev enquiries, before registration.
+- Bars (voice against text, paired): H1 request ≥ −0.03; H2 next step ≥ −0.03; H3 false spam ≤ text + 1 and spam caught ≥ 0.85; H4 budgets written in words within 1 % ≥ 0.90; H5 language shown = language written ≥ 0.95.
+- Verdict map: H1, H2 and H3 pass → "Voice notes keep the triage"; H1 or H2 fails → "The voice path costs accuracy"; H3 fails alone → "Voice adds false spam".
+
+**Result, 2026-10-20** (`results/test/`; Andrei ran the pass, 06:10–06:58, one pass per arm).
+- **Verdict: Voice notes keep the triage** (H1–H5 pass; computer voices reading written enquiries).
+- **H1 PASS:** request 0.912 → 0.900 (−0.012; 9 against 5 discordant, p 0.42).
+- **H2 PASS:** next step 0.931 → 0.921 (−0.010; 9 against 6, p 0.61).
+- **H3 PASS:** false spam 2 → 3 of 282; spam caught 46 → 48 of 49.
+- **H4 PASS:** budgets in words 1.00 → 0.966 (28 of 29).
+- **H5 PASS:** language 0.976 → 1.00; Whisper heard the right language on 331 of 331.
+- A departure recorded before the write-up: the scorer prints H4 as failing, because its check kept a dev-draft condition (all stated budgets within 0.05 of text) that the signed text moved to "reported, with no bar". The verdict follows the signed text.
+- Kev is deterministic: the text arm repeats exp_044's recorded test decisions on all 331.
+- **Budgets are where voice loses:** of the 211 enquiries that state a budget, 0.763 right by text and 0.701 by voice, 15 lost and 2 gained. 10 of the 15 come from the computer voice (7 abbreviations, 3 European amounts read by an English voice), 5 from Whisper and the reader, one of them a gap typed text has too ("€350,000", the currency symbol first).
+- Request flips: 16 of 331. With pink noise: request 0.909, next step 0.924, spam caught 49 of 49 with 3 false spam. About 3 s from voice note to triage on the mini (Whisper 1.1 s, Kev 1.7 s).
+
+SO WHAT:
+- Adopted (code path checked): the phone joiner is in the bot's voice triage, live with the next bot deploy; for voice, Whisper's language stays the one shown.
+- Voice triage can be shown to agencies as equal to typed triage, never without "synthetic" and "computer voices": "on 331 synthetic enquiries read aloud by computer voices, triage from a WhatsApp-quality voice note matched typed text within about one point, with budgets the exception".
+- Seeds: the budget reader (a currency symbol before full digits, bare amounts after a budget cue); amounts grouped in thousands taken for phone numbers; the text language detector (8 of 331 missed); the business-pitch cut; real voice notes.
+
+*Evidence: `exp_045_voice_triage/` (HYPOTHESIS.md, RESULT.md, `kit/`, `results/test/` with every transcript, `results/dev/`; the audio is not published, the kit regenerates it). Status: Complete (2026-10-20); Voice notes keep the triage: H1–H5 pass.*
+
+---
+
+## Experiment 046 — Translate before triage (registered 2026-10-20)
+
+**Pre-registered: 2026-10-20, signed by Andrei at 17:47 CEST, before any call on the test set** (`exp_046_translate_first/HYPOTHESIS.md`, text as in `12b259b`). Kev-4B's model card says English only, and Polish is its weakest language. If a local model translates a non-English enquiry into English first, does Kev triage it better?
+
+**Registered.**
+- Enquiries: the 425 non-English ones in exp_043's and exp_044's test sets, public copies, 68 of them Polish; reused, with nothing tuned on them.
+- Arms: **native**, rev 4 on the original text; **translated**, rev 4 masks the contacts, gemma4:26b translates into English (thinking off, temperature 0, seed 46) and Kev answers on the English, while the code facts and the rules still come from the original. No cloud model.
+- Invariant 1 of the deterministic-glue rules is broken by design, since Kev reads another model's prose; Andrei chose to measure it. Every translation is written to disk, numbers and contact markers are checked by code, and on any failure Kev reads the original.
+- Bars: H1 request, translated − native ≥ +0.02 and one-sided McNemar p < 0.05; H2 next step ≥ −0.01; H3 false spam ≤ native + 1 and spam caught ≥ 0.85; H4 Polish request ≥ +0.05.
+- Verdict map: H1, H2 and H3 pass → "Translate first helps"; H1 fails, H2 and H3 pass → "No gain: Kev reads the original"; H2 or H3 fails → "Translation hurts".
+
+**Result, 2026-10-20** (`results/test/`; Andrei ran the pass in tmux, 18:43–19:28).
+- **Verdict: No gain. Kev reads the original** (H1 fails; H2 and H3 pass).
+- **H1 FAIL:** request 0.927 native, 0.925 translated (−0.002; 12 against 13 discordant, one-sided p 0.66).
+- **H2 PASS:** next step 0.873 → 0.868 as scored (−0.005). Corrected the same day to 0.922 → 0.920 (−0.002): the scorer counted exp_043's spam label "discard" as wrong against the code's "review" in both arms. The verdict is unchanged, and `score.json` is kept as computed.
+- **H3 PASS:** false spam 1 → 2 of 365; spam caught 55 → 58 of 60.
+- **H4 FAIL:** Polish request 0.853 → 0.868 (+0.015), so no Polish-only seed.
+- Translation trades errors rather than removing them: 25 enquiries change their request, 12 right only when translated and 13 only natively. It fixed 4 valuation → sell errors and caught 5 more pitches; it cost buyers read as holiday renters, questions read as transactions, and one genuine buyer read as spam.
+- The translations were sound: 423 of 425 passed every code check, at a median of 1.7 s each.
+
+SO WHAT:
+- No translation layer in triage: Kev keeps reading the original text, no exception to invariant 1 is needed, and gemma4:26b need not stay loaded for triage.
+- Claim wording: "On 425 synthetic enquiries in six languages, translating into English first did not improve a local decision model's triage (0.927 native, 0.925 translated)."
+- In the same run, not part of this experiment: rev 4.1's regression gate passed on exp_044's sealed test, identical to rev 4, and rev 4.1 was deployed in the bot (Andrei, 2026-10-20).
+- Seeds: valuation against sell as a closed question; the business-pitch question; Polish is still the weakest language (0.853).
+
+*Evidence: `exp_046_translate_first/` (HYPOTHESIS.md, RESULT.md with the correction, `kit/`, `results/test/` with every translation, the run script and log, `results/dev/`). Status: Complete (2026-10-20); No gain, Kev reads the original: H1 and H4 fail, H2 and H3 pass; next-step numbers corrected 2026-10-20.*
+
+---
+
+## Experiment 047 — A bigger decision model behind the same rules (registered 2026-10-20)
+
+**Pre-registered: 2026-10-20, signed by Andrei at 21:22 CEST, before any call on the test set** (`exp_047_clef_triage/HYPOTHESIS.md`, text as in `ee2cb65`). Is Kev-4B the ceiling, or are the rules? Clef 27B answers exactly the questions Kev answers under rev 4.1, and the same code turns its answers into an urgency and a next step, with the same cuts.
+
+**Registered.**
+- Enquiries: all 566 of exp_043's and exp_044's test sets, public copies, every language; nothing tuned on them.
+- Arms: **kev**, rev 4.1 calling Kev-4B, as live in the bot; **clef**, the same file calling Clef 27B on llama.cpp b11711. Only the decision server changes; the cuts stay as tuned for Kev. Scoring reads exp_043's "discard" as "review". No cloud model.
+- Bars (paired): H1 qualified, Clef ≥ 0.80 and ≥ Kev + 0.05; H2 timeline, Clef ≥ 0.75 and ≥ Kev + 0.05; H3 request and next step, Clef − Kev ≥ −0.02 each; H4 false spam ≤ Kev + 1 and spam caught ≥ 0.85.
+- Verdict map: H1 or H2 passes, with H3 and H4 → "The bigger model lifts the weak fields"; H1 and H2 fail → "Kev is enough"; H3 or H4 fails → "Clef does worse under Kev's rules".
+
+**Result, 2026-10-21** (`results/test/`, scored at 00:05; Andrei started the pass in tmux at 21:23 the evening before).
+- **Verdict: The bigger model lifts the weak fields** (H1–H4 pass). Adopting it is Andrei's decision.
+- **H1 PASS:** qualified 0.821 → 0.936 (+0.115; 76 against 11), on 565.
+- **H2 PASS:** timeline 0.712 → 0.833 (+0.121; 99 against 35), on 532.
+- **H3 PASS:** request 0.919 → 0.991, next step 0.924 → 0.973.
+- **H4 PASS:** false spam 2 → 0 of 485; spam caught 75 → 81 of 81.
+- All four discordant splits favour Clef with one-sided McNemar p < 0.001.
+- One field got worse: financing where stated, 1.00 → 0.923. All 10 errors are enquiries whose mortgage is already approved; the question asks "will the sender need a mortgage?", and the labels mean "uses a mortgage". A question-wording problem, not a misreading.
+- Kev's known confusions largely disappear (valuation read as sell 10 → 1, buyers read as holiday renters 9 → 1), and Polish request goes from 0.853 to 0.985.
+- The cost: a median 13.5 s per enquiry against 1.66 s (8.1×), and about 29 GB loaded against Kev's 4.5 GB.
+- **Incident:** the first attempt stopped on enquiry 36 of Clef's arm when the GPU ran out of memory; the resume continued from 36, as the plan allows. Addendum 2026-10-21: the cause was another Claude session in the workspace, whose test agents loaded gemma4:26b through Ollama during the run. No effect on the scores; the 13.5 s is at most slightly inflated (13.2 s on enquiries 1–35).
+
+SO WHAT:
+- Nothing changes on its own: the bot still runs rev 4.1 on Kev-4B. Clef becomes an adoption candidate, for all triage (13.5 s, 29 GB) or in a hybrid that would need its own measurement.
+- Claim wording: "On 566 synthetic enquiries in seven languages, a 27B local decision model behind the same code rules read the request right 99.1 % of the time against 91.9 % for the 4B, and made 'qualified' (0.94) and timeline (0.83) good enough to show."
+- A session checks `ollama ps` and running experiments before a live-model test pass.
+- Seeds: Clef-Flash 9B; the financing question's wording; rev 5 measured against Clef as well as Kev; labels from a different model family.
+
+*Evidence: `exp_047_clef_triage/` (HYPOTHESIS.md, RESULT.md with the addendum, `kit/`, `results/test/` with both run scripts, their logs and the server logs, `results/dev/`). Status: Complete (2026-10-21); The bigger model lifts the weak fields: H1–H4 pass; adoption Andrei's.*
+
+---
+
+## Experiment 048 — The middle-sized decision model (registered 2026-10-21)
+
+**Pre-registered: 2026-10-21, signed by Andrei at 06:19 CEST, before any call on the test set** (`exp_048_flash_hybrid/HYPOTHESIS.md`, text as in `20cdc55`). Does Clef-Flash 9B, about a third of Clef 27B's size, keep most of exp_047's gain? And if not on its own, does a split work: Kev reads the request, Flash the facts?
+
+**Registered.**
+- Enquiries: exp_047's 566. Arms: **flash**, rev 4.1 calling Clef-Flash 9B, with questions, code facts, rules and cuts unchanged; **kev** and **clef27b**, exp_047's recorded passes; **hybrid**, computed offline from the kev and flash answers (Kev answers the request side, Flash every other question, rev 4.1's `policy()` combines them). The hybrid was defined from the dev diagnosis, before the test.
+- Bars: H1 Flash qualified ≥ 0.80; H2 Flash timeline ≥ 0.75; H3 Flash − Kev, request and next step ≥ −0.02 each; H4 Flash false spam ≤ Kev + 1, spam caught ≥ 0.85; H5 Flash's share of Clef 27B's gain over Kev on request, qualified and timeline ≥ 0.5 each; H6 hybrid − Kev, request and next step ≥ −0.02 each, false spam ≤ Kev + 1.
+- Verdict map: H1–H5 pass → "The middle-sized model is enough"; otherwise, H1, H2 and H6 pass → "Split the work: Kev reads the request, Flash the facts"; otherwise, H1 or H2 fails → "Only the 27B lifts the weak fields"; otherwise → "Neither Flash alone nor the split holds up".
+
+**Result, 2026-10-21** (`results/test/`; Andrei ran the pass in tmux, 06:19–06:55, with no server errors).
+- **Verdict: Split the work: Kev reads the request, Flash the facts** (verdict map rule 2). Adoption is Andrei's decision.
+- **H1 PASS:** Flash qualified 0.901 (Kev 0.821, Clef 27B 0.936).
+- **H2 PASS:** Flash timeline 0.773 (Kev 0.712, Clef 27B 0.833).
+- **H3 PASS:** Flash request 0.965, next step 0.943 (Kev 0.919, 0.924).
+- **H4 FAIL:** Flash flagged 9 genuine clients as spam (Kev 2); spam caught 81 of 81.
+- **H5 PASS:** Flash's share of Clef 27B's gain 0.64 on request, 0.70 on qualified, 0.50 on timeline.
+- **H6 PASS:** hybrid request 0.919 (±0), next step 0.933 (+0.009), false spam 2.
+- Flash's 9 false spams are genuine clients writing through an intermediary (lawyers, relocation firms, a developer buying land, two other buyers): 7 are Flash's own spam reading, 2 the business-pitch rule firing at 0.82–0.89 against a cut tuned for Kev at 0.60.
+- Flash alone reads the request better than Kev on test (39 against 13 discordant, p 0.0002); dev's 60 enquiries said the opposite.
+- Speed and memory: Flash a median 3.8 s, about 10 GB; the hybrid about 14 GB, its time not measured (about 3.8 s with the two calls at once, 5.5 s one after the other).
+
+SO WHAT:
+- Adopted (2026-10-21, Andrei: "let's use combination"): the hybrid is rev 4.2 in casasol `kev_knife.py`, with a Clef-Flash service installed. Its regression gate on exp_044's sealed test passed (request 0.912 = rev 4, next step 0.945, false spam 2), and the bot was deployed the same day; live, the two calls take about 5.5 s, because both servers share one GPU. Rev 5.1 (exp_049) superseded it later that day.
+- Seeds: a closed question on whether the sender writes on behalf of a buyer or tenant, a yes blocking the spam reading, for rev 5; the business-pitch cut re-tuned for Flash; Flash alone with that question.
+
+*Evidence: `exp_048_flash_hybrid/` (HYPOTHESIS.md, RESULT.md, `kit/`, `results/test/`, `results/dev/`). Status: Complete (2026-10-21); Split the work: H1, H2, H3, H5 and H6 pass, H4 fails; adopted as rev 4.2, superseded by rev 5.1 the same day.*
+
+---
+
+## Experiment 049 — Lead triage rev 5 against rev 4.2, on a fresh set (registered 2026-10-21)
+
+**Pre-registered: 2026-10-21, signed by Andrei at 12:53 CEST, before any call on the test set** (`exp_049_kev_rev5/HYPOTHESIS.md`, text as in `e273857`). Rev 4.2's recorded errors fall into four patterns: timing given as a bare month, owners who only want a price read as sellers, genuine clients writing through an intermediary read as spam, and pitches read as clients. Do rev 5's targeted fixes remove the first three, without making anything else worse, on fresh enquiries written to contain them?
+
+**Registered.**
+- Rev 5 = rev 4.2 plus four changes, each answered by Flash and tuned on dev only: **F1** an `on_behalf` question, at ≥ 0.8 overturning a spam reading; **F2** a `price_only` question, at ≥ 0.7 turning a "sell" reading into valuation; **F3** today's date in the timeline question; **F4** financing asked as "use a mortgage or loan, already approved or not?".
+- Data: eight Fable writers, 70 each (560): 40 standard enquiries and three hard strata of 10 per writer, written from rev 4.2's error patterns (intermediary, valuation, timing). A blind Opus checker, a different model from the writers': 513 kept, 47 dropped on doubt; dev 163, test 350 (188 standard, 54 in each hard stratum). gemma4:26b labels every kept lead as a third reader, reported only.
+- Bars (paired): H1 standard request and next step, rev 5 − rev 4.2 ≥ −0.02 each; H2 intermediary-stratum false spam at most half of rev 4.2's, all false spam ≤ rev 4.2's, spam recall ≥ 0.85 and ≥ rev 4.2's − 0.05; H3 valuation-stratum request ≥ +0.10 with one-sided McNemar p < 0.05; H4 timing-stratum timeline ≥ +0.10 with p < 0.05, standard timeline ≥ −0.02.
+- Verdict map: each fix is adopted if its own hypothesis and H1 pass (F1 ↔ H2, F2 ↔ H3, F3 ↔ H4); F4 comes with F3 if financing is no worse; if H1 fails, rev 5 is not adopted.
+
+**Result, 2026-10-21** (`results/test/`; Andrei ran the pass in tmux, 12:53–14:21; no model outside the mini was called during it).
+- **Verdict: adopt F1 (intermediaries), F3 (dated timeline) and F4 (financing wording); F2 (price only) stays off.**
+- **H1 PASS:** standard request 0.931 → 0.941 (+0.010), next step 0.931 → 0.936 (+0.005).
+- **H2 PASS, F1 adopted:** genuine clients flagged as spam 2 → 0, in the intermediary stratum and overall; spam recall 0.963 in both.
+- **H3 FAIL, F2 off:** valuation stratum 0.852 → 0.926 (+0.074; 4 against 0 discordant, one-sided p 0.0625).
+- **H4 PASS, F3 adopted:** timing stratum 0.444 → 0.870 (+0.426; 23 against 0, p < 0.001); standard timeline 0.737 → 0.817.
+- **F4:** financing where stated 0.985 → 1.000, no worse.
+- The adopted set, rev 5.1 (rev 5 with F2's cut off), computed exactly from rev 5's recorded answers: request on all 350, 0.923 → 0.929; genuine flagged as spam 2 → 0; spam recall 0.963.
+- The third reader: gemma4:26b agreed with the kept request labels on 0.963 of all 513 leads; on the 335 test enquiries where it agrees too, rev 5 reads 0.946 against rev 4.2's 0.922.
+
+SO WHAT:
+- Adopted (2026-10-21): rev 5.1 is casasol `kev_knife.py`, with rev 4.2 frozen as `kev_knife_rev42.py`. Its regression gate on exp_044's sealed test passed (request 0.912 = rev 4, next step 0.952, false spam 0, spam recall 0.918); the one pitch lost there, X2-02, is an advance-fee scam that claims a client, which the on-behalf rule overturned. Andrei deployed the bot the same day.
+- In the bot: the timeline question carries the real date; a client writing through a lawyer, relocation firm or relative is no longer sent to spam; financing asks "use".
+- Seeds: F2 re-tested with power, on a valuation set of about 150 after a reader agreement study; Andrei's call-request rule; Russian is now the weakest language (0.886).
+
+*Evidence: `exp_049_kev_rev5/` (HYPOTHESIS.md, LABELS.md, RESULT.md, the writer and checker prompts, `data/`, `kit/`, `results/test/` with gemma4:26b's labels, `results/dev/`). Status: Complete (2026-10-21); F1, F3 and F4 adopted, F2 off; live as rev 5.1.*
+
+---
+
+## Experiment 050 — The front desk as a society of small models, against one model doing it all (registered 2026-10-23)
+
+**Pre-registered: 2026-10-23, signed by Andrei at 10:23 CEST after reading the 30-lead sample with no notes** (`exp_050_society_vs_one_model/HYPOTHESIS.md`, text as in `3940ad4`). An estate agency's front desk answers an enquiry: what the sender wants, what to do next, which of the agency's homes to offer, and a reply in the sender's language. On the same enquiries, does a society of small models with code between them send fewer wrong replies, without handing so much to a person that it stops being useful? And does its decision stay put when the run is repeated and the inventory changes?
+
+**Registered.**
+- Arms: **G**, the society (code masks contacts; Kev-4B and Clef-Flash 9B answer closed questions under triage rev 5.1; code applies the agency's rules; Flash answers what the sender needs; code joins with the inventory under a fit rule; gemma4:26b writes 1–3 sentences with no numbers; code renders the listing cards and the closing line, then audits the model's sentences). **M**, gemma4:26b alone, one call with the enquiry, the agency's rules and the whole inventory. **G-small** and **M-small** on gemma4:e4b. **M+audit**, M's run 1 through G's audit, offline. M-31 was cut (Andrei).
+- Data: a fictional agency's 60 listings generated by code (seed 50); 360 enquiries by eight Fable writers, a blind Opus checker, 321 kept; dev 74, test 247.
+- A reply is wrong if its next step differs from the label's (E1), it offers a home outside the fitting set or none when one fits (E2), it states a number that is in neither the enquiry nor an offered listing (E3; "grounded" means in the record, not "true"), or it is not in the sender's language (E4).
+- Bars (G against M, run 1 unless stated): H1 safety, the wrong-sent rate G ≤ half of M's, one-sided exact McNemar p < 0.05; H2 usefulness, should-be-ready leads sent right, G ≥ 0.60 and ≥ M − 0.10; H3 stability, decisions identical across 3 runs with the inventory shuffled and two listings that fit nothing added in run 3, G ≥ 0.95 and G − M ≥ +0.10; H4, G-small against G, wrong sent up at most 0.02 and H2's share down at most 0.10; H5 privacy, labelled contacts in any prompt G sends to any model: 0.
+- Changed on dev before signing, each by a rule written before its run: M thinks, with a 16K context; G's unsure cut stays 0.5 (Andrei). The bars are unchanged.
+
+**Result, 2026-10-24** (`test_run/`, scored at 05:40 CEST; the test ran from 10:46 the day before, in tmux, started from the session at Andrei's request; a restart, the first pass aborted after 12 leads).
+- **H1 FAIL:** wrong replies sent, G 0.040 (10 of 247) against M 0.065 (16 of 247), p 0.16.
+- **H2 FAIL:** should-be-ready leads sent right, G 0.758 against M 0.943.
+- **H3 PASS:** decisions identical across the three runs, G 1.000 against M 0.773; M changed decisions on 56 leads.
+- **H4 PASS:** G-small against G, wrong sent −0.004, sent right 0.000. M on the same e4b sent 56 wrong (0.227).
+- **H5 PASS:** 0 labelled contacts in 988 prompt logs of G and G-small.
+- **Verdict map, applied:** the society was not shown to be safer than one model that thinks, and it hands too much to a person; it made the same decision on every lead in every run; a 4B writer runs this desk.
+- A scorer correction after the test (two classes of E3 false positive, one against each desk): H1 0.036 against 0.061 (p 0.15), H2 0.764 against 0.949. No verdict changes.
+- The 6 holiday lets M answered itself count against it by the agency's rule; counted as right, M would be level with G (9 against 9, corrected). G and M never sent a wrong reply on the same lead.
+- G's main cost is the unsure hand-off: 28 of the 157 should-be-ready leads held as unsure. Kev's reading was right on 83 % of the 53 leads below 0.5 (ECE 0.268, underconfident).
+- M+audit sent 14 wrong; the audit cannot catch a wrong next step or a home that does not fit. Median time per enquiry: G 11.4 s, M 70 s.
+- The blind Opus judge (reported, it decides nothing): send as is, G 0.310, M 0.433. G's two largest defects are bugs in its own fixed text (a callback promised twice, a plural closing after a single home).
+
+SO WHAT:
+- Nothing in production: CasaSol's triage stays rev 5.1, and no reply drafter goes into the bot from this experiment.
+- "It's safer" is not shown against one model that thinks for a minute. What is shown: the same decision every time, errors that can be found and fixed, 6× the speed, a 4B writer, and no phone number or e-mail reaching any model.
+- Opened: an agreement gate (exploratory, computed after the test: G's reply sent only when M is also ready with the same next step; run 1 would have sent 120 replies with 2 wrong); calibrating Kev's unsure cut on a fresh dev set; G's fixed text corrected, then re-judged; a rule that lets the desk decline holiday lets.
+
+*Evidence: `exp_050_society_vs_one_model/` (HYPOTHESIS.md, LABELS.md, inventory.md, the writer, checker and judge prompts, RESULT.md, `data/`, `dev_runs/`, `test_run/` with every prompt and prediction, `aborted/`). Status: Complete (2026-10-24); H1 and H2 fail, H3, H4 and H5 pass; first test pass aborted after 12 leads.*
+
+---
+
 ## Corrections audit, 2026-10-24: the published posts against this log
 
 Nine posts on localfirstai.eu, checked against the evidence files, got dated correction boxes. Where this log carries the same error, it is noted here; the entries above are left as written.
