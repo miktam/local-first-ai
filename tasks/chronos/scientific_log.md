@@ -2718,7 +2718,7 @@ SO WHAT:
 - **The model did not always repeat itself:** of 612 base questions asked again inside the variants, the points were the same every time and the labels differed 10 times, all in the A2–A6 variants of X006 (`confidence`) and X185 (`asks`, the label that broke N1's C2 in the first run); the A1 and N1 variants and the base passes repeated exactly.
 
 SO WHAT:
-- The fix closes what the first run found for text added after the end behind a blank line, on these 24 bases and six texts. It meets its registered rules; adopting it is Andrei's decision. It costs 5.00 calls per message instead of one on the gate's runs (4.13 on exp_055's messages), about 3.2 times the wall time per run, process start-up included (4.2 times on the N1 run), and two more genuine messages flagged in 110.
+- The fix closes what the first run found for text added after the end behind a blank line, on these 24 bases and six texts. It meets its registered rules; Andrei adopted it on 2026-11-10. It costs 5.00 calls per message instead of one on the gate's runs (4.13 on exp_055's messages), about 3.2 times the wall time per run, process start-up included (4.2 times on the N1 run), and two more genuine messages flagged in 110.
 - A pass clears H1 (class A), H2 and H5 only. H3 and H4 (classes B–E) and C1 are unmeasured, so the mail sentry stays blocked. The six texts are published, as Amendment 4 provides.
 - Not measured: messages over 24 paragraphs, text placed anywhere but after the end, encoded or multi-part bodies, a model slow enough for the 180 s budget to bite, an attacker who knows the fix; one model, one seed, one run per arm.
 
