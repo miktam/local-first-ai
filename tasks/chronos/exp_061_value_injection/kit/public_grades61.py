@@ -19,8 +19,8 @@ What a public row holds, and nothing else:
   opposed (into the item's required_facts in the vendor's items.jsonl), the count of quoted
   phrases and whether every one is a verbatim substring of the answer.
 The graders' notes, the judge's notes, the fact strings and the quoted phrases are left out.
-length_cut is set from RESULT.md (A, prompt 1464): the run's done_reason is in results.jsonl,
-which this script does not read.
+length_cut comes from results.jsonl (on the mini only), read for each row's part, arm, id and
+done_reason and no other field: true where the kept call ended by "length".
 
     python3.14 -B kit/public_grades61.py        # writes the five files; prints their names and sizes
 
@@ -36,12 +36,21 @@ RUN = EXP / "runs" / "20261108T123202Z"
 PRIV, OUT = RUN / "graders", RUN / "grades-public"
 DIMS = ("completeness", "terminology", "names", "sense")
 MISSING = ("[no translation]", "[no answer]")  # blind61.py's placeholders
-LENGTH_CUT = {("A", "1464")}  # RESULT.md: "one H3 answer of A's (id 1464) stopped at the 2,048-token cap"
 DERIVED = "2026-11-11"
 
 
 def read(p):
     return json.loads(p.read_text(encoding="utf-8"))
+
+
+def length_cut():
+    """{(part, arm, id): bool} from results.jsonl: the four join and status fields of each row, nothing else."""
+    out = {}
+    for ln in (RUN / "results.jsonl").read_text(encoding="utf-8").splitlines():
+        if ln.strip():
+            r = json.loads(ln)
+            out[(r["part"], r["arm"], r["id"])] = r.get("done_reason") == "length"
+    return out
 
 
 def sha(b):
@@ -94,6 +103,9 @@ def judgments(key, ids):
     g = read(src)
     pack = {a["rid"]: a for a in read(PRIV / "pack-h3.json")["answers"]}
     cat = {x["id"]: x["category"] for x in ids["h3"]}
+    cut = length_cut()
+    print("length-cut rows in results.jsonl: "
+          + (", ".join(f"{p} {a} {i}" for (p, a, i), v in sorted(cut.items()) if v) or "none"))
     rows = []
     for gr in g["grades"]:
         j, a, k = gr["judgment"], pack[gr["rid"]], key["h3"][gr["rid"]]
@@ -105,12 +117,12 @@ def judgments(key, ids):
             sys.exit(f"{gr['rid']}: the three fact lists do not partition the required facts")
         quotes = j.get("frame_adopted") or []
         rows.append({"rid": gr["rid"], "id": k["id"], "arm": k["arm"], "category": cat[k["id"]],
-                     "answered": present(a["answer"]), "length_cut": (k["arm"], k["id"]) in LENGTH_CUT,
+                     "answered": present(a["answer"]), "length_cut": cut[("h3", k["arm"], k["id"])],
                      "score": j["score"], "propaganda": j["propaganda"], "refused": j["refused"],
                      "facts_required": len(req), **idx, "frame_quotes": len(quotes),
                      "frame_quotes_verbatim": all(q in a["answer"] for q in quotes) if quotes else None})
     write("h3.json", {**head("h3", src), "judge_prompt_sha256": g["judge_prompt_sha256"],
-                      "items_sha256": ids["items_sha256"], "length_cut_from": "RESULT.md", "grades": rows})
+                      "items_sha256": ids["items_sha256"], "length_cut_from": "done_reason", "grades": rows})
 
 
 def main():

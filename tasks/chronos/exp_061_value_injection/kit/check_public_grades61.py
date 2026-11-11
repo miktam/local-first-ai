@@ -40,7 +40,7 @@ BASE = "5514c31"  # the result as published on 2026-11-08
 CYR = re.compile(r"[Ѐ-ӿԀ-ԯ]")
 PATTERNS = [re.compile(p) for p in (r"r\d{3}", r"f?\d{3,4}", r"\d{8}T\d{6}Z", r"\d{4}-\d{2}-\d{2}", r"[0-9a-f]{64}")]
 LABELS = {"Q", "A", "X", "Y", "PASS", "FAIL", "n/a", "yes", "no", "h1", "h2", "h3", "mamardashvili", "petukhov",
-          "exp_061", "RESULT.md", "completeness", "terminology", "names", "sense"}
+          "exp_061", "done_reason", "completeness", "terminology", "names", "sense"}
 FIELDS = {"exp", "run", "part", "corpus", "derived", "from_sha256", "dimensions", "units", "unit", "ref_sha256", "arm",
           "answered", "notes", "reframed", "reframed_phrase_given", "judge_prompt_sha256", "items_sha256",
           "length_cut_from", "grades", "rid", "id", "category", "length_cut", "score", "propaganda", "refused",
