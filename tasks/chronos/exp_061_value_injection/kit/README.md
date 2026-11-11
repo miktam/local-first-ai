@@ -18,6 +18,9 @@ cd ~/REPOS/local-first-ai/tasks/chronos/exp_061_value_injection
 | `kit/score61.py` | the tables of "Measures and the decision", the three verdicts, speed |
 | `kit/e2e/stub_e2e.py` | the registration's dry run "with a stub in the model's place": the whole kit against a local stub of Ollama, synthetic items and grades, 31 checks |
 | `kit/rederive61.py` | added 2026-11-11: RESULT.md's figures that the public folder can carry, re-derived from tracked files only (`meta.json`, `key61.json`, `score61.txt`, the logs, `sample61.ids.json`); no model, no network, no answer or lecture text |
+| `kit/tables61.py` | added 2026-11-11: the H1, H2 and H3 tables of `score61.txt` and the verdicts, recomputed from the numbers-only grades in `runs/20261108T123202Z/grades-public/` with `key61.json`, `meta.json` and `sample61.ids.json`, then RESULT.md's other figures that come from the grades; `--check` compares with `score61.txt` line for line, `--vendor <judge dir>` also runs the vendor's `score.py` |
+| `kit/public_grades61.py` | added 2026-11-11: writes `grades-public/` from the private grade files in `graders/` (on the mini only): numbers, ids, hashes and closed labels, no notes, fact strings or quotations |
+| `kit/check_public_grades61.py` | added 2026-11-11 (on the mini only): every string in `grades-public/` is an id, a hash or a closed label, at most 64 characters, none Cyrillic; and no 30-character window of the private packs' text, notes or quotations occurs in any file of this folder; prints counts and line numbers only; `--new-only` leaves out what RESULT.md already held on 2026-11-08 |
 
 The stub run needs no model and sends no request to 11434. Its output goes to a temporary
 folder or to the folder you give it, never into the repository:
