@@ -1,0 +1,12 @@
+measure	value	of	note
+tests written, one per finding that a second agent could not refute	90		17-18 Nov
+of those, tests the two workers fixed against	63	90	the other 27 set aside for a later run or the owner's decision
+assertions failing on the unchanged code	756		before any fix
+finder's frozen tests passing after the fix	253	254	before and after the fix round
+bot's frozen tests passing after the fix	330	451	before and after the fix round; 90 passed before any fix; 103 failed, 8 errors, 10 skipped
+deploy gate tests passing after the fix round	303		
+whole suite passing after the fix round	3502	3506	4 skipped
+everyday searches with one extra detail that lost their list of homes, new code against old	49	72	at the review; none gained one; with the finder's tests at 253 of 254
+everyday searches with one extra detail that lost their list of homes, new code against old	5	72	after the one fix round, the dispatcher's re-run of the reviewer's comparison; each of the five matches nothing or names a place no listing holds
+plain single-filter searches that lost their list of homes	4	107	at the review; 3 gained one
+follow-up conversations equal to or better than the old code	8	8	after the fix round, five languages

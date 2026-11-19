@@ -104,6 +104,14 @@ Two smaller rules were added the same afternoon: how a brief words what the work
 
 The first run under the changed rules closed on 13 November. It is one case and not a rate. The dispatcher proved its check against one broken form per case, each of its own choosing, and the proof passed 14 of 14. The reviewer then took twelve other rules out of the same reference, and the check still passed 14 of 14. The check was rewritten to 28 cases, 26 of them proved against 35 broken forms, before any work started. The worker then passed it whole on the first round, and the review of the result had no blocking finding. That reviewer did not read the fix round. A proof built from the author's own wrong forms measured the author's imagination.
 
+## A later run: a fix that passed its tests by stepping aside
+
+On 17 and 18 November the loop was pointed at a public chat bot that answers property searches from a set of listings. Twelve reviewing agents, one per angle, read and ran the code on a copy. Each finding rated high or medium went to a second agent told to refute it, and 90 stood, each with a test that failed on the unchanged code. Those 90 tests were written by the agents that found the faults, and were frozen. Two workers fixed the code against 63 of them; the other 27 were set aside for a later run or for the owner's decision. The numbers are in [`night_run.tsv`](./night_run.tsv).
+
+One part of the bot answers a search in code and steps aside when it cannot read the question, which then goes to the language model without the list of homes. After the fix, the frozen tests for that part stood at 253 of 254. The reviewer was shown the diff and not the workers' reports. It ran the old code and the new side by side on 72 everyday wordings of a search, each with one extra detail, and on 49 of them the new code no longer gave the list of homes the old code gave. On 107 plain searches with a single filter, 4 lost the list and 3 gained one. The reviewer's estimate was that a quarter to a third of real searches would get no list. Many of the frozen tests had been written to return early when that part of the bot gave no answer, so a fix that stepped aside on any doubt passed them. After the one fix round the dispatcher re-ran the reviewer's comparison: 5 of 72, and each of the five either matches nothing or names a place no listing holds. The frozen tests read 253 of 254 before and after.
+
+Limits of this run: the reviewer was Opus, not Fable as the rules name, because Fable had reached its usage limit. The reviewer did not read the fix round, and three of its should-fix points rest on the workers' own tests. No review of the frozen tests before the work is on record: they went to the workers a minute after they were frozen. Two workers ran at once, where the rules say one. The other frozen set the workers fixed against stood at 330 of 451 after the fix; some of the rest fail because the fix replaced the code they were anchored on, and the others cover work left for later runs, not listed here.
+
 ## What this record cannot show
 
 - **An error all three roles share.** Dispatcher, worker and reviewer are models from one vendor, and the dispatcher writes both the contract and its check. Every row above was seen by at least one role. An error all three hold leaves no row, and nothing here measures that class. No second critic from another vendor was added.
@@ -115,7 +123,7 @@ The first run under the changed rules closed on 13 November. It is one case and 
 
 ## What is withheld
 
-The briefs, checks, reviews and verdicts stay in a private repository: they quote private code and working notes. Three runs (03, 08, 09) built a package in a repository with no remote, and runs 01 and 02 changed code outside this repository. Their rows are described, not linked. Run 12 changed the message check, also private; exp_056's Amendment 4 pins its commit. Run 10's kit was built and corrected in a private repository and entered this one in run 11. The rows from runs 04 to 07, 11 and 13 are about files in this repository; the corrections they led to can be read in the history of the two experiment folders, the Chronos log and the front page.
+The briefs, checks, reviews and verdicts stay in a private repository: they quote private code and working notes. So do the 90 findings of the later run and their tests. Three runs (03, 08, 09) built a package in a repository with no remote, and runs 01 and 02 changed code outside this repository. Their rows are described, not linked. Run 12 changed the message check, also private; exp_056's Amendment 4 pins its commit. Run 10's kit was built and corrected in a private repository and entered this one in run 11. The rows from runs 04 to 07, 11 and 13 are about files in this repository; the corrections they led to can be read in the history of the two experiment folders, the Chronos log and the front page.
 
 ## Reproduce the counts
 
@@ -123,4 +131,4 @@ The briefs, checks, reviews and verdicts stay in a private repository: they quot
 python3 count.py
 ```
 
-Standard library only. It reads the three `.tsv` files and prints every count that comes from them.
+Standard library only. It reads the trial's three `.tsv` files and prints every count that comes from them. `night_run.tsv` holds the later run's figures as they are quoted above.
