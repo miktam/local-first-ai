@@ -1,0 +1,14 @@
+run	date	kind	what	started_by	check_cases	check_pass_final	check_note	reviewer_first_answer	blocks	should	fix_round	owner_stepped_in	minutes
+01	2026-11-06	code	a size check that refuses a document too long for the served context	cycle	5	5	1 of 5 passed before the work	no	1	7	yes	0	566
+02	2026-11-07	code	leftovers of run 01: unreadable files, encodings, a log failure	cycle	10	10	5 of 10 passed before	yes	0	5	yes	0	59
+03	2026-11-08	code	a new package that stores incoming mail and searches it (private repository)	cycle	6	6	0 of 6 before	no	1	7	yes	0	42
+04	2026-11-08	experiment kit	exp_061: samplers, runner, blind packs, scorer	owner's stream	6	5	one case wrong in the check itself; 6 of 6 on an amended copy	no	1	9	yes	0	72
+05	2026-11-08	experiment kit	exp_061: the vendor scorer fitted, smoke test, run block	owner's stream	5	5	1 of 5 at the worker's stop; 5 of 5 after an amendment to the registration	yes	0	0	no	0	81
+06	2026-11-08	grading	exp_061: the finished run graded blind and scored	owner's stream	11	11	0 of 7 state cases before	yes on conditions	0	4	no	0	37
+07	2026-11-08	text	exp_061: the result and its log entries written from the record	owner's stream	10	10	0 of 7 state cases before	yes on conditions	0	5	yes	0	20
+08	2026-11-09	code	the mail package: leftovers from run 03's reviews	cycle	8	8	6 state cases failed before	no	2	2	yes	0	41
+09	2026-11-10	code	the mail package: what its first real mail asked for	cycle	17	17	7 state cases failed before	yes	0	3	yes	0	69
+10	2026-11-10	experiment kit	exp_056: the runner and scorer made to match the registration	owner's word	21	21	15 state cases failed before	no	3	5	yes	0	79
+11	2026-11-10	text	exp_056: the result written from the records	owner's word	17	17	13 state cases failed before; frozen before any score existed	no	1	6	yes	0	114
+12	2026-11-10	code	the fix to the message check that exp_056's re-run measured	owner's word	21	21	the first check passed 16 of 16 and was wrong; the second is counted here	no	2	4	yes	0	89
+13	2026-11-10	text	exp_056: the re-run's result written from the records	owner's word	16	15	the failing case is the check's own error	no	3	9	yes	0	93

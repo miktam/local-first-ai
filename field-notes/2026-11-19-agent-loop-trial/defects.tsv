@@ -1,0 +1,52 @@
+run	kind	caught_by	if_missed	defect
+01	code	reviewer	recipient	The refusal note told the sender of a 5,000-character Spanish text to split it into 5,577-character parts
+01	code	reviewer	recipient	The refusal repeated for ever when its own log could not be written
+01	check	reviewer	none	A check case sat 24 times over the limit, and another passed under any rule
+01	other	worker	recipient	The reviewer's own formula gave parts one token over the limit
+02	contract	reviewer	recipient	A later file with the same name stem deleted a finished result (run 01's naming)
+02	code	reviewer	none	With the output folder unwritable, the model was called every 10 seconds, for ever
+02	contract	both	recipient	The decoding order turned cp1251 text, or one stray byte, into mojibake that was processed as if readable
+02	contract	both	recipient	The brief carried a false premise: that a PDF is refused as unreadable
+03	code	reviewer	none	A malformed Message-ID made a different mail count as a duplicate; its bytes were never stored
+03	contract	both	none	The attachment's charset was ignored, as the contract had said to
+03	code	reviewer	none	Stored files were never verified; permissions were changed on any folder named; an attachment's link to its mail was lost
+03	check	reviewer	none	The check named three invariants and exercised none
+03	code	worker	none	The first fix broke two adds running at once
+03	code	reviewer	none	The fix round broke ISO-8859-1 (the euro sign was lost)
+03	process	dispatcher	none	The README named a person (caught by the privacy check)
+04	code	reviewer	public	The pilot's contract hashes were recorded and never enforced
+04	code	reviewer	public	The answer key lay beside the blind packs; label order was shared across parts; failed prompts were counted; a percent was read as a fraction
+04	check	both	none	One check case's fixtures held the words it banned; another could never fire
+04	contract	worker	public	Slips in the registration: the output-length setting and the smoke test
+05	contract	worker	none	The registration assumed one category per prompt; the data has one to three
+05	code	frozen check	none	A real run did not record that a frozen file differed (the check case was run by the worker)
+06	contract	reviewer	none	The reviewer was handed the grade sheets, so its re-grade was not blind (it said so; stated as a limit in the result)
+06	process	worker	none	Parallel graders shared a scratch folder; one saw the other corpus
+07	fact	reviewer	public (reached it)	A duration labelled 'with warm-up' for a timer that starts after the warm-up; wrong at its source, a kit note that was pushed as it stood
+07	fact	reviewer	public	Four slips of scope and attribution
+07	contract	worker	public	The brief named one failed prediction; two had failed
+08	contract	reviewer	none	A point of the contract itself took a file's words out of search
+08	code	both	none	A link to a folder was skipped silently; an attachment was not repaired; a body without a charset was misread
+08	check	worker	none	A 'control' case in the check was already false before the change
+08	code	reviewer	none	The fix round read a UTF-8 text cut mid-character as cp1252 (fixed in run 09)
+09	code	both	none	Copies of one mail were three search hits; a mail first seen inside a forward became a duplicate of an attachment
+09	code	reviewer	none	The fix for the cut text missed a body ending in a line break
+09	code	reviewer	none	An empty folder option fell through to the real store
+09	check	dispatcher	none	A draft check case used two attachments with the same bytes (caught by running the baseline before freezing)
+09	process	reviewer	none	A reviewer's probe tried to write at the filesystem root (refused by the system; the reviewer said so)
+10	contract	reviewer	public	Chat messages were run without their channel, by the brief's own command (40 of 240 runs)
+10	code	reviewer	public	Text from the manifest could reach the published records
+10	code	both	public	The scorer did not see missing records; 12 of 19 deliberately broken rules passed the kit's tests
+10	other	dispatcher	public	Andrei's first build of the test set held 7 variants instead of 144, with the text before the message (caught by a byte check)
+10	fact	reviewer	public (reached it)	A kit note said the six test texts were never opened by Claude; Fable wrote them (caught in run 11)
+10	fact	worker	public (reached it)	A kit note said a field was false in every step; it is true on 22 records (caught in run 11)
+11	fact	reviewer	public	A summary sentence false against the records ('the rules did not move'), also in the canonical log
+11	fact	reviewer	public	A cause drawn from a void control; a stale front-page row; two sentences that overreached
+11	check	both	public	A case looked only at top-level values while every long string sat one level down; two cases matched by substring, so '1 of 12' passed on '11 of 12'
+12	contract	reviewer	public	The brief's design could not give the property it claimed
+12	check	reviewer	public	The first check passed 16 of 16 while the property was false
+12	code	reviewer	none	Model text was kept in a view's error
+13	fact	reviewer	public	A cost figure carried onto the wrong corpus, in three summaries
+13	fact	reviewer	public	'The base's answer' written where only the points repeat; also in a commit subject
+13	check	both	none	A case matched a row by a prefix taken from a shortened quotation, so it could never pass
+13	fact	dispatcher	public (reached it)	After the fix was adopted, the public log still said its adoption was open (caught after the push)
