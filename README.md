@@ -34,6 +34,7 @@ Some posts describe operational work rather than experiments: what we observed, 
 | Date | Field note | Post |
 |---|---|---|
 | 2026-10-18 | [Website hygiene: aprimerose.com](./field-notes/2026-10-18-website-hygiene/) | 80% of Our Web Traffic Was a Dead Subdomain Redirecting to Itself |
+| 2026-11-19 | [Thirteen runs of an agent loop: who caught the defects](./field-notes/2026-11-19-agent-loop-trial/) | Tests One AI Agent Wrote for Another Were Wrong in 7 of 13 Runs |
 
 ---
 
@@ -246,6 +247,7 @@ Published at [localfirstai.eu](https://localfirstai.eu):
 
 **Technical — benchmarks, experiments, architecture**
 
+- [Tests One AI Agent Wrote for Another Were Wrong in 7 of 13 Runs](https://localfirstai.eu/posts/2026-11-19-tests-one-agent-wrote-for-another/) — Thirteen runs of a loop where one agent writes the task and its test, a second does the work and a third reviews the result. 51 defect rows: the reviewer alone caught 29, 19 were the task-writer's own, and one fix passed its tests by stepping aside. Data and limits in the [field note](./field-notes/2026-11-19-agent-loop-trial/).
 - [We Measured a Values Fine-Tune. It Removes the Behaviour, Adds No Knowledge, and Costs Nothing on Our Translations.](https://localfirstai.eu/posts/2026-11-08-we-measured-a-values-fine-tune/) — Exp 061: Nous's Arete-27B against its base Qwen3.8-27B on the Mac mini, both Q4_K_M, graded blind. The vendor's propaganda drop replicates (24.3 % → 1.4 % on 70 of their prompts, their judge prompt); 60 Soviet-era translation units lose nothing; the higher fact score is a denial template removed, not facts added.
 - [Ollama No Longer Calls Home From Our Mini, and Our Local Reader Answers Every Message: the Week of 27 October](https://localfirstai.eu/posts/2026-11-02-week-of-27-october/) — The first weekly post. Exp 057: Ollama's daemon called ollama.com every ~4 hours while the models sent nothing; with its cloud features disabled, five watched hours and no call. Exp 060: the local reader's 22 empty answers were repetition loops; a 32K context moved them, a retry without thinking closed them (220 of 220, balanced accuracy 0.882 → 0.914).
 - [Europe's Data-Centre Hubs Wait 7–10 Years for a Grid Connection](https://localfirstai.eu/posts/2026-10-31-grid-connection-7-10-years/) — An investor forum in Marbella, under the Chatham House Rule: the money for European data centres is there, the grid is not. Figures from Ember and EUDCA; our own energy number is not measured yet.
