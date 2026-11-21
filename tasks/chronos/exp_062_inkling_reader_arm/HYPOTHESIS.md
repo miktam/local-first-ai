@@ -124,3 +124,18 @@ Two things the dummy message could not exercise were checked and fixed before an
 - **What the reader should discount:** the arm has one pass and no setting to tune, so the look cannot change an answer. It can change a decision to stop, which is why the line above is written first.
 
 The counts seen are appended below after the look.
+
+**The counts seen, 20:32 UTC, over the 133 messages with a row** (73 lures, 60 genuine; the same messages for every row of the table):
+
+| | Answered | Lures caught | Genuine flagged | Item named |
+|---|---|---|---|---|
+| I, Inkling 2 Mini | 118 | 71/73 | 41/60 | 91.5 % |
+| F, gemma4:26b with the retry | 133 | 66/73 | 7/60 | 95.8 % |
+| G, gemma4:26b alone | 117 | 59/73 | 5/60 | — |
+
+- **Bands on the 60 genuine messages:** `suspicious` 35, `likely-scam` 6, `benign` 6, no answer 13. F on the same 60: `benign` 53.
+- **The 15 rows without a band** (13 genuine, 2 lures) all ended with `finish_reason` `length` and an empty `content`: the reasoning ran into the 8,192 context, each in about 490 s.
+- **Paired on these 133:** against F, only I right 8, only F right 37; against G, only I right 15, only G right 39.
+- **Time:** median 151 s a message, mean 199 s; thermal level 0 before every call.
+- **What is already settled by arithmetic, whatever the remaining 87 show:** H1 (15 unanswered against a bar of 2) and H3 (41 genuine flagged against a bar of 11) cannot pass. With 41 of 110 genuine already flagged, balanced accuracy cannot exceed 0.805, which is below G's 0.882. The verdict is written from the complete run, not from this look.
+- **Read from:** a script outside the repository that printed counts only; no message, answer or reasoning text was opened, and nothing was written into the run folder.
