@@ -1,0 +1,48 @@
+{
+ "started_utc": "2026-11-21T12:35:44Z",
+ "argv": [
+  "kit/arm62.py",
+  "--all",
+  "--run",
+  "dev/20261121T123544Z",
+  "--private",
+  "/Users/miktam02/.openclaw/workspace/tasks/exp062-private/dev/20261121T123544Z",
+  "--dummy"
+ ],
+ "python": "3.14.8 (main, Sep 30 2026, 17:55:09) [Clang 21.0.0 (clang-2100.3.34.2)]",
+ "macos": "27.2.1",
+ "macos_build": "26B131",
+ "dummy": true,
+ "server_args": [
+  "-c",
+  "8192",
+  "-np",
+  "1",
+  "-ngl",
+  "99",
+  "--host",
+  "127.0.0.1",
+  "--port",
+  "18450"
+ ],
+ "ollama_ps_before": "NAME          ID              SIZE     PROCESSOR    CONTEXT    RUNNER      UNTIL   \ngemma4:26b    777b927e3b6b    18 GB    100% GPU     8192       llamacpp    Forever",
+ "thermal_start": "0",
+ "frozen_inputs": {
+  "pass": true,
+  "mismatch": []
+ },
+ "server_commit": "42fd370cf9bc758f02f39d5cdfa15822f86f23a3",
+ "model_bytes": 16610544608,
+ "model_sha256": "78fcedcf93c5d1bfe83e225513b71392bb52259be0eaa5f8899c856a2e5834ae",
+ "pinned": {
+  "frozen_inputs": true,
+  "server_commit": true,
+  "model_file": true
+ },
+ "server_ready": true,
+ "arm_rc": 0,
+ "arm_seconds": 117.6,
+ "ollama_ps_after": "NAME          ID              SIZE     PROCESSOR    CONTEXT    RUNNER      UNTIL   \ngemma4:26b    777b927e3b6b    18 GB    100% GPU     8192       llamacpp    Forever",
+ "thermal_end": "0",
+ "finished_utc": "2026-11-21T12:37:50Z"
+}

@@ -96,6 +96,11 @@ exp_055's published copy, read in place from `../exp_055_exposure_review_lures/`
 
 exp_061 is the latest registered folder, so this is **062**. It takes this fortnight's slot for a new experiment folder.
 
-## Kit
+## Kit (2026-11-21, after registration, before any run)
 
-Written after this registration is committed: `kit/arm62.py` (the arm, the recording, the checks for C1 and C3) and `kit/score62.py` (exp_055's metrics, C1–C4, H1–H3, the paired tables, the decision rule). It is smoke-tested on the dummy message through the driver, and the run goes to Andrei as one tmux block.
+Written the same day, after the registration above was committed (`b6c48cc`), and smoke-tested once on exp_060's dummy message through the driver (`dev/20261121T123544Z/`). **No corpus message was sent to any model.**
+
+- `kit/arm62.py` checks the five frozen-input hashes, the server's commit and the model file's hash, and stops if any differs. It then starts the side server, runs the arm in a child process under exp_054's audit hook, and stops the server. The prompt is asserted byte for byte against exp_055's builder by exp_060's own function. The reasoning text goes to a private folder; its sha256 is written to the run folder.
+- `kit/score62.py` scores a run with exp_055's metric functions imported unchanged, then C1–C4, H1–H3, the paired tables against F and G, and the decision rule. Checked without a model call: fed the published F results it returns 100/110, 9/110, 0.914 and 95.2 %; fed the published G results, 198 answered, 92/110, 8/110 and 0.882.
+- **Smoke result.** The dummy came back `likely-scam` with two items in 117.5 s: 919 prompt tokens, 1,637 generated, `finish_reason` `stop`, 5,387 characters of reasoning. The three pinned checks passed. The audit hook recorded one connection, to `127.0.0.1:18450`, and one subprocess, the thermal reading. The server log shows one slot with a context of 8,192. The thermal level read 0 before and after.
+- **Present on the machine during the smoke, and expected during the run:** the production Ollama with gemma4:26b resident, and the bot's two standing llama.cpp servers (Kev on 18442, Clef-Flash on 18448). None is called by this kit. If the bot answers a message during the run, the timing of the calls it overlaps is affected; the verdicts are not.
