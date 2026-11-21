@@ -115,3 +115,12 @@ Two things the dummy message could not exercise were checked and fixed before an
 - **The driver refuses to start if anything already answers on port 18450**, so a stale server cannot be used by mistake, and it keeps one `meta-<start>.json` per invocation, so a resumed run shows its history.
 - **Tested without a model:** a call against a closed port stops the arm with exit 4, one row in `errors.jsonl` and none in `results.jsonl`; a start with the port taken stops with exit 6; the scorer voids a 200-row run.
 
+## Amendment 2 (2026-11-21, during the run): a look at the partial counts
+
+**A deviation from the registration, recorded before the look.** *Limits* says the per-message results of this arm are not opened before the run is complete. At about 20:31 UTC on 2026-11-21, with 132 of 220 messages answered and the run still going, Andrei asked for the partial results. Written and committed before anything was read:
+
+- **What is read:** counts only, over the messages that already have a row: how many have a band, lures caught, genuine messages flagged, `finish_reason` of the rows without a band, and the same counts for F and G on the same messages. No message text, no answer text and no reasoning text is opened. The scorer is not run on the live folder, and nothing is written into it.
+- **What does not change:** the arm, the bars, the decision rule. The run continues to its end whatever the counts show. Stopping it early on these counts would make it an aborted run with no verdict.
+- **What the reader should discount:** the arm has one pass and no setting to tune, so the look cannot change an answer. It can change a decision to stop, which is why the line above is written first.
+
+The counts seen are appended below after the look.
