@@ -106,8 +106,13 @@ def main():
                 "completion_tokens": res.get(i, {}).get("completion_tokens"), "kind": man[i]["kind"]}
                for i in sorted(man) if res.get(i, {}).get("band") is None]
 
+    errors = rows(run / "I" / "errors.jsonl")
+    invocations = sorted(p.name for p in run.glob("meta-*.json"))
+    complete = set(res) == set(man) and not any(r.get("error") for r in res.values())
     controls = {
-        "C1": {"pass": bool(meta.get("pinned", {}).get("frozen_inputs")) and len(res) == len(man),
+        "C1": {"pass": bool(meta.get("pinned", {}).get("frozen_inputs")) and complete,
+               "every_message_has_an_answer_row": complete, "failed_calls_asked_again": sorted(errors),
+               "driver_invocations": invocations,
                "frozen_inputs": meta.get("frozen_inputs"), "messages_run": len(res),
                "note": "the prompt is asserted byte for byte by the runner on every corpus message"},
         "C2": audit_check(run / "I" / "audit.jsonl"),
@@ -124,7 +129,7 @@ def main():
     h3 = m["false_alarms"] <= BARS["false_alarms"] and (m["attribution_rate"] or 0) >= BARS["attribution_rate"]
     void = not (controls["C1"]["pass"] and controls["C2"]["pass"] and controls["C3"]["pass"])
     if void:
-        decision = "void: a control failed (C1, C2 or C3)"
+        decision = "void: a control failed (C1, C2 or C3), or the run is incomplete"
     elif m["balanced_accuracy"] < G_BA:
         decision = "the line stops: balanced accuracy below G's 0.882"
     elif h1 and h2 and h3:

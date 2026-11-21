@@ -135,10 +135,19 @@ def run_arm(out: Path, private: Path, dummy: bool):
             continue
         prompt = arms60.prompt_for(manifest[mid], dummy)  # asserts equality with exp_055's builder on corpus messages
         rec, reasoning = call(prompt)
+        if rec["error"]:
+            # Amendment 1: an error is not an answer. It is kept apart, the arm stops, and a resume asks again.
+            append(out / "errors.jsonl", {"id": mid, "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), **rec})
+            print("STOP: call failed on", mid, rec["error"], "- nothing was scored for it; resume with the same --run",
+                  flush=True)
+            sys.exit(4)
         append(private / "reasoning.jsonl", {"id": mid, "reasoning": reasoning})
         append(res_path, {"id": mid, **rec})
         print("I", mid, rec["band"], rec["seconds"], rec.get("finish_reason"), rec.get("completion_tokens"),
               "thermal", rec["thermal_before"], rec["error"] or "", flush=True)
+    if dummy is False and len({json.loads(l)["id"] for l in open(res_path)}) != len(manifest):
+        print("STOP: not every message has an answer row", flush=True)
+        sys.exit(5)
     (out / "reasoning.sha256").write_text(sha256_file(private / "reasoning.jsonl") + "  reasoning.jsonl (private)\n")
     print("done I", out, flush=True)
 
@@ -168,6 +177,7 @@ def run_all(run: Path, private: Path, dummy: bool):
 
     def save():
         (run / "meta.json").write_text(json.dumps(meta, indent=1) + "\n")
+        (run / f"meta-{meta['started_utc'].replace(':', '')}.json").write_text(json.dumps(meta, indent=1) + "\n")
 
     meta["frozen_inputs"] = frozen_check()
     meta["server_commit"] = _run("git", "-C", str(SERVER_REPO), "rev-parse", "HEAD")
@@ -182,6 +192,18 @@ def run_all(run: Path, private: Path, dummy: bool):
         print("STOP: a pinned input does not match:", meta["pinned"], meta["frozen_inputs"], flush=True)
         sys.exit(2)
 
+    try:
+        urllib.request.urlopen(HOST + "/health", timeout=3).read()
+        busy = True
+    except urllib.error.HTTPError:
+        busy = True          # something answered, even if not with a health page
+    except (urllib.error.URLError, OSError):
+        busy = False
+    meta["port_was_free"] = not busy
+    if busy:
+        print(f"STOP: something already answers on 127.0.0.1:{PORT}; this run starts its own server", flush=True)
+        save()
+        sys.exit(6)
     log = open(out / "server.log", "ab")
     server = subprocess.Popen([str(SERVER), "-m", str(MODEL), *SERVER_ARGS], stdout=log, stderr=subprocess.STDOUT)
     try:
@@ -208,8 +230,8 @@ def run_all(run: Path, private: Path, dummy: bool):
     meta.update({"ollama_ps_after": _run("ollama", "ps"), "thermal_end": thermal(),
                  "finished_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())})
     save()
-    print("all done", run, {k: meta.get(k) for k in ("arm_rc", "arm_seconds", "thermal_start", "thermal_end")},
-          flush=True)
+    print("all done" if meta.get("arm_rc") == 0 else "STOPPED EARLY, see above; resume with the same --run", run,
+          {k: meta.get(k) for k in ("arm_rc", "arm_seconds", "thermal_start", "thermal_end")}, flush=True)
 
 
 def main():
