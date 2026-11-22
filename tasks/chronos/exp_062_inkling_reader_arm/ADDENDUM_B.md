@@ -146,6 +146,30 @@ Round 3 met the target (neither model above 85 % or below 30 % on tier 3) and wa
 
 **One descriptive measure declared during the run, before any research arm had started.** The maker's announcement, read in full that afternoon, reports a fourth legibility figure beside the two HB4 uses: "uncertainty indicators" such as "wait", "actually" and "hmm", at 9.7, 3.9 and 3.6 an answer for 1, 3 and 5 passes. `kit/describe62b_hesitation.py` counts those three words in each arm's reasoning, per decision. It is reported beside HB3 and HB4 and decides nothing. When it was declared, the run had stopped in arm G after 17 decisions and no other arm had run. The script was tried once on the plumbing check's traces to see that it runs.
 
+**The second stop: a fault in the kit, found at 15:27 UTC. The 1-pass arm's 72 decisions are aborted and the arm is rerun whole.** Arms G and I had finished (96 decisions each, at 14:11 and 14:36 UTC). Arm V1 had recorded its 60 single jobs and the first stream when the second stream failed three times with the same message: "request (8260 tokens) exceeds the available context size (8192 tokens)". At temperature 0 the failure repeats, so a resume would have stopped again.
+
+- **The cause is the kit's.** For the research arms the kit parses the tool calls itself and gives each one an id. It numbered them per turn, and these jobs make one call a turn, so every call in a conversation had the id `call_1`. The looped models' chat template labels a tool result with the name of every call that shares its id. With five calls on one id, each result reads `<|message_tool|>lookup_contactdomain_infosearch_loglookup_contactdomain_info` where it should read `<|message_tool|>lookup_contact` (`kit/probe62b_callids.py`, output in `dev_b/callid-probe-20261122.txt`). A conversation of n calls cost 3n(n−1) more tokens: 60 at five calls, about 2,600 at thirty.
+- **A repeated id is invalid input.** This is not a fault of the model, the file or the runtime, and nothing about it goes to either upstream report. The reproduction filed there makes one call.
+- **What it spoils.** Every research-model conversation with two or more calls, so far, showed the model mislabelled tool results:
+  - arm V1's 72 decisions in this run;
+  - the plumbing check (`dev_b/20261122T121255Z-v3check`, "32 of 32 right", "the largest prompt was 5,495 tokens");
+  - the research model's smoke ("18 of 18" and "17 of 18").
+
+  Those files stay as written. Their figures describe the faulty kit, not the model. The kit note's "5,495 … with the 2,048 cap stays inside the 8,192 context" was also the wrong test: whatever a turn adds stays in every later prompt of a stream.
+- **Arms G and I are not affected.** Ollama returns a different id for each call (one made-up two-call request to gemma4:26b: two ids). For arm I, on the 17 single jobs where I and V1 made the same calls in the same order, the first prompts are equal (median 1,555 tokens) and V1's later ones are larger by exactly 3n(n−1) tokens, so llama-server's own ids were distinct.
+- **What had been seen.** The run window prints right or WRONG for each decision as it is recorded, so V1's marks for its 72 decisions were on screen and the last 21 were read; those rows are aborted. From G and I, only how each decision ended and its token counts were read (G: 94 ended normally, 2 at the token cap; I: 96 ended normally). Neither arm has been scored.
+
+Changed before the resume:
+
+- **Ids count on through the whole conversation**, for the kit's own ids and for the fallback when a server returns none. Each row now records its calls' ids.
+- **A guard** stops the arm at once (exit 5, no retry) if an id is ever repeated or a tool result names no call.
+- **The context wall is an outcome, not a failed call.** The context stays 8,192 for every arm, as registered. If a conversation no longer fits, the event is recorded as ended at the context wall, and so is every later event of that stream. They are scored wrong and are not asked again. The scorer counts them per arm.
+- **HB3, HB4 and the hesitation count leave out decisions that ended at the context wall,** and report how many per arm. HB2 still counts every call made before the wall. HB5 counts them wrong. Declared before any research-arm result exists under the corrected kit.
+
+Tested without a model: ids run `call_1` to `call_24` through a 12-event stream; the guard stops on a repeated id; a wall in the middle of a stream gives 14 rows once each, seven of them walled and judged wrong, no retry and no error file, and the monitor leaves the seven out. Checked with the model on the corrected kit (`dev_b/20261122T160307Z-idfix-check`: two tier-3 jobs and the first stream of round 3's dev file, at 1 pass): all 28 tool results in the largest prompt carry one name each, and the stream's largest prompt is 4,565 tokens after 28 calls, where this run's first stream had reached 7,268 after 30. It took 264 seconds. Its 11 of 14 right is a dev figure on rule 4's earlier wording and is compared with nothing.
+
+The aborted rows are in `runs_b/20261122T132000Z/aborted/V1-repeated-call-ids/` with their audit log and server log; the reasoning text is in the private folder under the same name, with its hash beside the rows. Arms G and I are kept. The run resumes in the same folder with V1 from its first decision.
+
 ## To run (Andrei, on the mini)
 
 Check first that nothing else is generating on Ollama (`ollama ps`, running experiments) and that the thermal level reads 0. Starting the run signs the bars above.

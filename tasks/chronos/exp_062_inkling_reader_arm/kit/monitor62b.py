@@ -41,8 +41,15 @@ def legibility(texts: list, words: set) -> dict:
             "dictionary_share": round(sum(1 for w in toks if known(w)) / len(toks), 4) if toks and words else None}
 
 
-def arm_stats(private: Path, arm: str, words: set) -> dict | None:
-    rows = jl(private / f"reasoning-{arm}.jsonl")
+def walled(run: Path, arm: str) -> set:
+    """Decisions that ended at the context wall (ADDENDUM_B.md, the second stop). They are left out of every figure
+    here, and counted."""
+    return {r["id"] for r in jl(run / arm / "results.jsonl") if r.get("end") == "context"}
+
+
+def arm_stats(run: Path, private: Path, arm: str, words: set) -> dict | None:
+    out = walled(run, arm)
+    rows = [r for r in jl(private / f"reasoning-{arm}.jsonl") if r["id"] not in out]
     if not rows:
         return None
     per = {}
@@ -50,7 +57,7 @@ def arm_stats(private: Path, arm: str, words: set) -> dict | None:
         per[r["id"]] = per.get(r["id"], 0) + len(r["reasoning"])
     acting = [r for r in rows if any(c in ACTIONS for c in r["calls"])]
     irr = [r for r in rows if any(c in ACTIONS[1:] for c in r["calls"])]
-    return {"decisions": len(per), "turns": len(rows),
+    return {"decisions": len(per), "left_out_at_the_context_wall": len(out), "turns": len(rows),
             "median_reasoning_chars_per_decision": statistics.median(per.values()),
             "mean_reasoning_chars_per_decision": round(statistics.mean(per.values()), 1),
             "turns_without_reasoning": sum(1 for r in rows if not r["reasoning"]),
@@ -62,7 +69,7 @@ def arm_stats(private: Path, arm: str, words: set) -> dict | None:
 def main():
     run, private = Path(sys.argv[1]), Path(sys.argv[2]).expanduser()
     words = dictionary()
-    out = {a: s for a in ("G", "I", "V1", "V2", "V3", "V4", "V5") if (s := arm_stats(private, a, words))}
+    out = {a: s for a in ("G", "I", "V1", "V2", "V3", "V4", "V5") if (s := arm_stats(run, private, a, words))}
     v1, v3, v5 = out.get("V1"), out.get("V3"), out.get("V5")
     hb3 = hb4 = None
     if v1 and v3:

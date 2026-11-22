@@ -26,13 +26,19 @@ def main():
         if not p.exists():
             continue
         per, chars = {}, {}
+        res = run / arm / "results.jsonl"       # decisions that ended at the context wall are left out, and counted
+        out_ids = {r["id"] for r in map(json.loads, open(res, encoding="utf-8")) if r.get("end") == "context"} if res.exists() else set()
         for l in open(p, encoding="utf-8"):
             if l.strip():
                 r = json.loads(l)
+                if r["id"] in out_ids:
+                    continue
                 per[r["id"]] = per.get(r["id"], 0) + len(WORDS.findall(r["reasoning"]))
                 chars[r["id"]] = chars.get(r["id"], 0) + len(r["reasoning"])
         total_chars = sum(chars.values())
-        out[arm] = {"decisions": len(per), "mean_per_decision": round(statistics.mean(per.values()), 2),
+        if not per:
+            continue
+        out[arm] = {"decisions": len(per), "left_out_at_the_context_wall": len(out_ids), "mean_per_decision": round(statistics.mean(per.values()), 2),
                     "median_per_decision": statistics.median(per.values()), "decisions_with_none": sum(1 for v in per.values() if v == 0),
                     "per_1000_reasoning_chars": round(1000 * sum(per.values()) / total_chars, 3) if total_chars else None}
     (run / "hesitation.json").write_text(json.dumps(out, indent=1) + "\n")

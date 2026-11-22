@@ -103,14 +103,27 @@ def parse_raw(raw: str) -> dict:
     return out
 
 
+def check_ids(messages: list):
+    """Every tool call in a conversation has an id of its own, and every tool result names one of them. The looped
+    models' template labels a tool result with the name of every call that shares its id (ADDENDUM_B.md, the second
+    stop), so a repeated id is a fault of the kit and stops the arm at once: it is not asked again."""
+    ids = [c["id"] for m in messages for c in (m.get("tool_calls") or [])]
+    answers = [m["tool_call_id"] for m in messages if m.get("role") == "tool"]
+    if len(set(ids)) != len(ids) or any(a not in ids for a in answers):
+        print("STOP: a tool-call id is repeated or unanswered in the conversation; this is a fault of the kit", flush=True)
+        sys.exit(5)
+
+
 def turn(arm: str, messages: list) -> dict:
     """One model turn. Returns reasoning, content, calls [{id, name, args}], finish, tokens, seconds, tokens a second."""
+    check_ids(messages)
+    base = sum(len(m.get("tool_calls") or []) for m in messages)     # ids count on through the whole conversation
     if arm.startswith("V"):
         prompt = post(HOST + "/apply-template", {"messages": messages, "tools": TOOLS})[0]["prompt"]
         d, secs = post(HOST + "/completion", {"prompt": prompt, "n_predict": MAX_TOKENS, "temperature": 0, "seed": SEED})
         p = parse_raw(d.get("content", ""))
         t = d.get("timings") or {}
-        return {**p, "calls": [{"id": f"call_{n}", **c} for n, c in enumerate(p["calls"], 1)],
+        return {**p, "calls": [{"id": f"call_{base + n}", **c} for n, c in enumerate(p["calls"], 1)],
                 "finish": "length" if d.get("stop_type") == "limit" else "stop", "seconds": secs,
                 "prompt_tokens": d.get("tokens_evaluated"), "completion_tokens": d.get("tokens_predicted"),
                 "tps": t.get("predicted_per_second")}
@@ -127,7 +140,7 @@ def turn(arm: str, messages: list) -> dict:
             args = raw if isinstance(raw, dict) else json.loads(raw or "{}")
         except Exception:
             args = {"_unparsed": str(raw)[:200]}
-        calls.append({"id": c.get("id") or f"call_{n}", "name": c["function"]["name"],
+        calls.append({"id": c.get("id") or f"call_{base + n}", "name": c["function"]["name"],
                       "args": args if isinstance(args, dict) else {"_unparsed": str(args)[:200]}})
     usage, t = d.get("usage") or {}, d.get("timings") or {}
     tps = t.get("predicted_per_second") or (usage.get("completion_tokens") / secs if usage.get("completion_tokens") and secs else None)
@@ -144,7 +157,16 @@ def decide(arm: str, world: dict, job: dict, messages: list) -> tuple[dict, list
            "final": None, "thermal_before": arm62.thermal()}
     private, t0 = [], time.time()
     for n in range(1, MAX_TURNS + 1):
-        r = turn(arm, messages)
+        try:
+            r = turn(arm, messages)
+        except RuntimeError as e:
+            if "exceed_context_size" not in str(e):
+                raise
+            # The conversation no longer fits the 8,192 context. That is this arm's outcome for the event, and for
+            # every later event of the same stream; it is recorded, scored wrong and not asked again.
+            row["end"], row["context_error"] = "context", str(e)[:300]
+            messages.append({"role": "assistant", "content": "(no reply)"})
+            break
         row["turns"].append({"turn": n, "seconds": round(r["seconds"], 2), "finish_reason": r["finish"],
                              "prompt_tokens": r["prompt_tokens"], "completion_tokens": r["completion_tokens"],
                              "tps": round(r["tps"], 1) if r["tps"] else None, "reasoning_chars": len(r["reasoning"]),
@@ -159,7 +181,7 @@ def decide(arm: str, world: dict, job: dict, messages: list) -> tuple[dict, list
             {"id": c["id"], "type": "function", "function": {"name": c["name"], "arguments": json.dumps(c["args"])}} for c in r["calls"]]})
         for c in r["calls"]:
             result = gen62b.tool(world, job["event"], c["name"], c["args"])
-            row["calls"].append({"turn": n, "name": c["name"], "args": c["args"], "result": result})
+            row["calls"].append({"turn": n, "id": c["id"], "name": c["name"], "args": c["args"], "result": result})
             messages.append({"role": "tool", "tool_call_id": c["id"], "content": json.dumps(result)})
     else:
         row["end"] = "turns"

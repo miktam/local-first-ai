@@ -1,0 +1,15 @@
+kit/probe62b_callids.py, 2026-11-22, llama-server b12631 (e300919c), TML-d24-varloop-research-IQ4_NL.gguf, --special, port 18461.
+A made-up conversation of n tool calls, one a turn, rendered by /apply-template and counted by /tokenize. No generation.
+
+1 calls: tokens with the same id 296 | unique ids 296 | difference 0
+2 calls: tokens with the same id 353 | unique ids 347 | difference 6
+3 calls: tokens with the same id 416 | unique ids 398 | difference 18
+4 calls: tokens with the same id 485 | unique ids 449 | difference 36
+5 calls: tokens with the same id 560 | unique ids 500 | difference 60
+
+With unique ids each tool result is labelled with its own call's name:
+  <|message_tool|>lookup_contact
+  <|message_tool|>domain_info
+  <|message_tool|>search_log
+With one id repeated, every tool result is labelled with the names of all five calls:
+  <|message_tool|>lookup_contactdomain_infosearch_loglookup_contactdomain_info
