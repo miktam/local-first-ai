@@ -43,7 +43,7 @@ By kind, median seconds a job (`describe.json`, written after the run):
 - **The two models made the same tool calls in the same order on 35 of the 40 jobs.**
 - **The other five are the block proposals, where Inkling did more than the rules asked.** Before asking the owner it ran the new-sender procedure on the sender named in the proposal: all 12 of its extra lookups are there, and on three of the five, where the sender was unknown and the domain young, it also sent an alert. Then it asked, and blocked only on a yes. That is why those jobs are its slowest (longest 89.4 s). gemma asked at once, with no extra call.
 - **The scorer did not check alerts on the irreversible jobs, and the kit note's wording said it would.** Under the note's strict wording ("`alert_owner` called exactly when the facts call for it") those three jobs are wrong and Inkling's count is 37 of 40. No verdict changes: HA1 and HA2 cover the other 30 jobs, and HA3 counts irreversible calls.
-- **Inkling wrote less and still took longer.** It generated 12,656 tokens against gemma's 17,539; on the lookup jobs about half as many. It is slower because it writes at about 13 to 17 tokens a second.
+- **Inkling wrote fewer tokens and still took longer.** It generated 12,656 tokens against gemma's 17,539; on the lookup jobs about half as many. It is slower because it writes at about 15 tokens a second on this machine (15.5 in the dev probe).
 - **No turn came near the cap.** The longest turn was 491 tokens for Inkling and 817 for gemma, against a cap of 2,048.
 - **On the 30 lookup and no-tool jobs neither model cried wolf.** Both stayed quiet on all 16 jobs whose facts call for it, and neither asked the owner a question there. Inkling's three unrequested alerts are all on block proposals.
 
@@ -53,9 +53,9 @@ The same 12 jobs on one server with four slots of 8,192:
 
 | Watchers at once | Jobs a minute | Median job | Server memory | Right |
 |---|---|---|---|---|
-| 1 | 2.9 | 18.6 s | 20.1 GB | 12 of 12 |
-| 2 | 3.3 | 29.7 s | 22.5 GB | 12 of 12 |
-| 4 | 4.1 | 47.3 s | 26.1 GB | 12 of 12 |
+| 1 | 2.9 | 18.6 s | 20.6 GB | 12 of 12 |
+| 2 | 3.3 | 29.7 s | 23.1 GB | 12 of 12 |
+| 4 | 4.1 | 47.3 s | 26.7 GB | 12 of 12 |
 
 Four at once do 1.4 times the work of one, and each job takes 2.5 times as long. On one Mac mini, several watchers of this model are a queue with a small gain, not a swarm.
 
@@ -78,7 +78,7 @@ Four at once do 1.4 times the work of one, and each job takes 2.5 times as long.
 
 - **Nothing here is a reason to move the tool-using seat off gemma4:26b.** It did the same 40 jobs right in half the time, with no extra call and no unrequested alert.
 - **Inkling 2 Mini can do this kind of work.** Given a short procedure and tools to check facts, it stayed quiet on all 16 quiet jobs and asked before every irreversible action. Its habit of doing more than asked showed again, as three alerts and twelve lookups nobody requested. In the reader's seat, judging a message with nothing to check, it flagged two genuine messages in three. A reading, not a measurement: what it lacked there was a way to verify, not the ability to stay quiet. gemma needed no such help.
-- **"Thinks more, writes less" held on these jobs** (a quarter fewer tokens than gemma overall, half on the lookups), and did not make it faster on this machine.
+- **It wrote a quarter fewer tokens than gemma overall, half as many on the lookups, and was not faster for it on this machine.** That is not a test of the maker's "reason longer without writing it down": that claim compares looping with not looping in one model.
 - **Several watchers on one mini are a queue.** Four slots give 1.4 times the throughput for 6 GB more memory.
-- **For monitoring, the one difference worth keeping:** Inkling's turns almost always carry reasoning text and gemma's acting turns never did. A guard that is to be audited by its reasoning needs that text to exist at the moment it acts.
+- **For monitoring, the one difference worth keeping:** Inkling's turns almost always carry reasoning text and gemma's acting turns never did. A guard that is to be audited by its reasoning needs that text to exist at the moment it acts. This rests on five calls an arm and on two different runtimes, so it is an observation to test, not a trait of either model.
 - **Open, Andrei's:** whether to write the full experiment the rule nominates. It would need jobs hard enough for gemma to fail some (longer chains, conflicting facts, an independent writer), a tagged llama.cpp build, and its own folder.
