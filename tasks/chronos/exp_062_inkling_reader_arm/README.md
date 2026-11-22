@@ -10,6 +10,7 @@ Registered 2026-11-21 before any kit and before any corpus message was sent to t
 | File | What it is |
 |---|---|
 | [RESULT.md](RESULT.md) | controls, verdicts, the decision, the numbers, the bands by class, the empty answers, time, the deviations from the registration, what is held back, limits, the open question, SO WHAT |
+| [ADDENDUM_B.md](ADDENDUM_B.md) | registered 2026-11-22, unsigned, no kit yet: harder watcher jobs from a generator, Inkling 2 Mini against gemma4:26b, and the maker's variable-loop research model at one to five passes on the same jobs; llama.cpp at tag `b12631`; the dev probes of the day; a correction to Addendum A |
 | [ADDENDUM_A_RESULT.md](ADDENDUM_A_RESULT.md) | Addendum A's result, 2026-11-22: both models right on all 40 watcher jobs as scored, neither acted irreversibly without a yes; Inkling median 19.8 s a job against gemma4:26b's 9.3 s, with 12 lookups and 3 alerts nobody asked for; four watchers at once give 1.4 times the throughput. A tie at the ceiling: the jobs were too easy to separate the models |
 | [ADDENDUM_A.md](ADDENDUM_A.md) | registered 2026-11-22 and run the same day: a screen of the model as a persistent watcher with tools, reasoning on, against gemma4:26b on 40 made-up jobs; how many watchers the machine carries; whether a monitor can read its reasoning. Sends no exp_055 message; the reader verdict stands |
 | [HYPOTHESIS.md](HYPOTHESIS.md) | the registration: the arm, the pinned runtime, controls C1–C4, H1–H3, the decision rule, limits, frozen inputs; the kit note; Amendment 1 (an error is not an answer, before the run); Amendment 2 (a look at the partial counts during the run) |
@@ -36,6 +37,6 @@ tmux new -s exp062 'cd ~/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_read
 
 A run resumes with the same run folder. To score: `python3.14 -I kit/score62.py runs/<ts>`, then `python3.14 -I kit/describe62.py runs/<ts>`.
 
-**Status: the main run and Addendum A are complete.** `runs/20261121T131040Z/` went from 2026-11-21 13:10Z to 2026-11-22 01:39Z, at thermal level 0 before every call. Every figure is from one build of the merged fix's commit; the repeat on a tagged llama.cpp build has not been run.
+**Status: the main run and Addendum A are complete; Addendum B is registered, unsigned and not run.** `runs/20261121T131040Z/` went from 2026-11-21 13:10Z to 2026-11-22 01:39Z, at thermal level 0 before every call. Every figure is from one build of the merged fix's commit; the repeat on a tagged llama.cpp build has not been run.
 
 **Everything here is fictional:** the person, every organisation and domain. No message is operational.
