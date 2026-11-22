@@ -135,6 +135,17 @@ Round 3 met the target (neither model above 85 % or below 30 % on tier 3) and wa
 
 **Time, from the tuning rounds and that check:** G about 45 minutes, I about 30, the research arms from about 45 minutes at 1 pass to about 100 at 5. About seven hours.
 
+## During the run (2026-11-22)
+
+**The run stopped after eight minutes, and the kit now asks a failed decision again by itself.** Run `runs_b/20261122T132000Z` started at 13:20 UTC. At 13:28, on its 18th decision (T3-14, arm G), Ollama answered one request with HTTP 500 after about seven seconds of generation, and the arm stopped as designed: a failed call is not an answer. The kit had not kept the server's message. Changed before the resume, with no result of any arm opened for scoring:
+
+- **A decision whose call fails is asked again from its start, up to three times,** and a stream is rerun whole. Each failed attempt is logged with the server's message in `errors.jsonl` and is never scored. After three failures the arm stops as before. Tested without a model: a dead server gives three logged attempts and exit 4 with nothing scored; a call that fails once and then works gives one error row and one answer row for that decision.
+- **The scorer no longer calls an arm incomplete because a failed call was asked again.** It lists those calls per arm.
+- **One diagnostic replay.** T3-14 was sent through gemma4:26b once by hand to capture the error; it ran to its end in seven turns with no error, so the cause of the 500 is not known and it is not deterministic. That replay showed this one decision's outcome for arm G before the arm had finished. Nothing was changed because of it.
+- The 17 decisions arm G had completed are kept; the run resumes in the same folder.
+
+**One descriptive measure declared during the run, before any research arm had started.** The maker's announcement, read in full that afternoon, reports a fourth legibility figure beside the two HB4 uses: "uncertainty indicators" such as "wait", "actually" and "hmm", at 9.7, 3.9 and 3.6 an answer for 1, 3 and 5 passes. `kit/describe62b_hesitation.py` counts those three words in each arm's reasoning, per decision. It is reported beside HB3 and HB4 and decides nothing. When it was declared, the run had stopped in arm G after 17 decisions and no other arm had run. The script was tried once on the plumbing check's traces to see that it runs.
+
 ## To run (Andrei, on the mini)
 
 Check first that nothing else is generating on Ollama (`ollama ps`, running experiments) and that the thermal level reads 0. Starting the run signs the bars above.

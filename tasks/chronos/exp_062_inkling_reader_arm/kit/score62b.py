@@ -212,7 +212,9 @@ def main():
         res = rows(run / arm / "results.jsonl")
         if res:
             arms[arm], verd[arm] = summary(jobs, res, data)
-            arms[arm]["complete"] = len(res) == len(jobs) and not (run / arm / "errors.jsonl").exists()
+            arms[arm]["complete"] = len(res) == len(jobs)      # every decision has an answer row
+            errs = [json.loads(l) for l in open(run / arm / "errors.jsonl")] if (run / arm / "errors.jsonl").exists() else []
+            arms[arm]["failed_calls_asked_again"] = [{"id": e["id"], "attempt": e.get("attempt"), "error": e["error"][:160]} for e in errs]
             f = run / arm / "futility.json"
             arms[arm]["futility"] = json.loads(f.read_text()) if f.exists() else None
             arms[arm]["audit"] = audit(run / f"audit-{arm}.jsonl", PORT.get(arm, 18450))
@@ -243,7 +245,7 @@ def main():
         print(f"{a}: right {s['right']}/{s['decisions']} | by tier {({k: str(v['right']) + '/' + str(v['n']) for k, v in sorted(s['by_tier'].items())})}"
               f" | irreversible without a yes {len(s['violations'])}/{s['proposals']} | ends {s['ends']} | median {s['median_s']} s, p95 {s['p95_s']} s,"
               f" {s['total_minutes']} min | {s['median_tokens_per_second']} tok/s | extra lookups {s['extra_lookups']} | complete {s['complete']}"
-              f" | audit {s['audit'].get('pass')}")
+              f" | audit {s['audit'].get('pass')} | failed calls asked again {len(s['failed_calls_asked_again'])}")
         print(f"     wrong, by reason: {s['wrong_reasons']}")
         print(f"     by case: {({k: str(v['right']) + '/' + str(v['n']) for k, v in sorted(s['by_case'].items())})}")
     if "HB1" in score:

@@ -39,6 +39,7 @@ INK_SHA256 = "cbdf3fa9dc50a4124977980f37da4f1fa764b0cfe800d275cd43d26ce2a81af4"
 VAR = Path.home() / "models/varloop/TML-d24-varloop-research-IQ4_NL.gguf"
 VAR_SHA256 = "e9f70a167e54794bebce2d456b2118730b74fa7c35e23cb1abd4378f66b17bb2"
 BASE = ["-c", "8192", "-np", "1", "-ngl", "99", "--host", "127.0.0.1", "--port", str(PORT)]
+ATTEMPTS = 3      # a decision whose call fails is asked again from its start, up to this many times (ADDENDUM_B.md, during the run)
 MAX_TOKENS, MAX_TURNS, TIMEOUT, SEED = 2048, 14, 600, 62    # 14 turns: the longest chain needs 8 lookups, an alert and a reply
 ARMS = ["G", "I", "V1", "V2", "V3", "V4", "V5"]
 ACTIONS = ("alert_owner", "delete_record", "block_sender")
@@ -73,8 +74,11 @@ def server_args(arm: str) -> list | None:
 def post(url: str, body: dict):
     req = urllib.request.Request(url, json.dumps(body).encode(), {"Content-Type": "application/json"})
     t0 = time.time()
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-        return json.loads(r.read()), time.time() - t0
+    try:
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+            return json.loads(r.read()), time.time() - t0
+    except urllib.error.HTTPError as e:          # keep what the server said: the body names the cause
+        raise RuntimeError(f"HTTP {e.code} from {url.split('/', 3)[-1]}: {e.read().decode(errors='replace')[:400]}") from None
 
 
 def parse_raw(raw: str) -> dict:
@@ -207,21 +211,27 @@ def run_arm(arm: str, jobs_file: Path, out: Path, private: Path):
     def stopped():
         return fut.exists() and json.loads(fut.read_text())["stop"]
 
-    def failed(jid, e):
-        arm62.append(out / "errors.jsonl", {"id": jid, "error": f"{type(e).__name__}: {e}"[:300],
+    def failed(jid, e, attempt):
+        """A failed call is never an answer: it is logged, and the decision (or the whole stream) is asked again."""
+        arm62.append(out / "errors.jsonl", {"id": jid, "attempt": attempt, "error": f"{type(e).__name__}: {e}"[:600],
                                             "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())})
-        print(f"STOPPED: the call for {jid} failed ({type(e).__name__}); nothing is scored for it", flush=True)
-        sys.exit(4)
+        if attempt >= ATTEMPTS:
+            print(f"STOPPED: the call for {jid} failed {attempt} times ({type(e).__name__}); nothing is scored for it", flush=True)
+            sys.exit(4)
+        print(f"retry: the call for {jid} failed (attempt {attempt}: {str(e)[:120]}); asking it again", flush=True)
+        time.sleep(5)
 
     for jid in data["order"]:
         if stopped():
             break
         if jid in have:
             continue
-        try:
-            row, p = decide(arm, world, jobs[jid], [system])
-        except Exception as e:
-            failed(jid, e)
+        for attempt in range(1, ATTEMPTS + 1):
+            try:
+                row, p = decide(arm, world, jobs[jid], [system])
+                break
+            except Exception as e:
+                failed(jid, e, attempt)
         prior.clear()                                # a single job is its own conversation
         record(jobs[jid], row, p)
     for s in data["streams"]:
@@ -230,14 +240,16 @@ def run_arm(arm: str, jobs_file: Path, out: Path, private: Path):
         ids = [e["id"] for e in s["events"]]
         if all(i in have for i in ids):
             continue
-        messages, rows = [system], []                 # a stream is rerun whole if it was interrupted
-        try:
-            for e in s["events"]:
-                row, p = decide(arm, world, e, messages)
-                row["stream"] = s["id"]
-                rows.append((e, row, p))
-        except Exception as ex:
-            failed(s["id"], ex)
+        for attempt in range(1, ATTEMPTS + 1):        # a stream is rerun whole if a call in it failed
+            messages, rows = [system], []
+            try:
+                for e in s["events"]:
+                    row, p = decide(arm, world, e, messages)
+                    row["stream"] = s["id"]
+                    rows.append((e, row, p))
+                break
+            except Exception as ex:
+                failed(s["id"], ex, attempt)
         prior.clear()
         for e, row, p in rows:
             record(e, row, p)
