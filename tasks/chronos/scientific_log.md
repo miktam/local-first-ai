@@ -2861,3 +2861,45 @@ SO WHAT:
 - Nothing in our stack runs Qwen3.8, so no claim rests on this. The registered repeat on a conversion of the publisher's safetensors has not been run.
 
 *Evidence: `exp_061_value_injection/`. Status: Complete (2026-11-08); H1 helps at the threshold, H2 no effect, H3 replicates; Amendment 1.*
+
+## Experiment 062 — Inkling 2 Mini in the local reader's seat, reasoning on (registered 2026-11-21)
+
+**Pre-registered: 2026-11-21, before any kit and before any corpus message was sent to the model** (`exp_062_inkling_reader_arm/HYPOTHESIS.md`). Thinking Machines released Inkling 2 Mini on 2026-11-20 (26.4B parameters, 3.4B active, a looped transformer, Apache 2.0), and a public leaderboard put it level with a frontier model on finding and patching security bugs in code. Andrei's question: use it for cyber defence. The seat it could take is the local message reader's, held by gemma4:26b with exp_060's fix F (0.914 on exp_055's 220 messages; Opus 0.950).
+
+**Registered.**
+- Arm **I**: Inkling 2 Mini, Unsloth UD-Q4_K_M (sha256 `78fcedcf…e5834ae`), llama.cpp built from pull request #32704 at `42fd370c`, one slot, context 8,192; exp_055's prompt as the single user message, temperature 0, seed 55, no reasoning parameter (reasoning on), no output cap, timeout 900 s, no fallback. An empty answer counts as not flagged.
+- Compared with the published G (gemma4:26b alone, 198 answered, 0.882) and F (with the retry, 220 answered, 0.914). Nothing re-run.
+- C1 frozen inputs and the prompt byte for byte; C2 the runner connects to `127.0.0.1:18450` only (the server's own network behaviour not measured); C3 model hash, server commit, one slot at 8,192; C4 thermal level 0 before every call.
+- H1 a valid band on ≥ 218 of 220. H2 balanced accuracy ≥ 0.914 and, where exactly one of I and F is right, I right at least as often. H3 genuine flagged ≤ 11 of 110 and attribution ≥ 85 %. Time descriptive.
+- Decision rule: the seat changes only if H1–H3 pass here and again on a tagged llama.cpp release that carries #32704; the line stops if balanced accuracy is below 0.882; otherwise gemma4:26b with F keeps the seat.
+
+**Dev before registration.** One probe on exp_060's dummy message (not a corpus message): 919 prompt tokens, 1,637 generated, 117.6 s, a parsable answer. A translation smoke test the same day established about 16 tokens a second and that only a zero reasoning budget on the server removes the reasoning. No corpus message sent.
+
+**Amendment 1, 2026-11-21, before the run.** An error is not an answer: a failed call stops the arm, is written to `errors.jsonl` and is asked again on resume; the scorer voids an incomplete run. The context wall and a client timeout were probed with a made-up prompt. The driver refuses a port that already answers.
+
+**Amendment 2, 2026-11-21, during the run. A deviation.** At 133 of 220 messages Andrei asked for the partial results; the registration's limit says they are not opened before the run is complete. The amendment was committed before the look: counts only, no text opened, the scorer not run on the live folder, the arm, bars and decision rule unchanged, the run to continue to its end. Counts seen: 71/73 lures, 41/60 genuine flagged, 15 empty.
+
+**Result, 2026-11-22** (`runs/20261121T131040Z`, 2026-11-21 13:10Z to 2026-11-22 01:39Z on the mini; macOS 27.2.1; one driver invocation, 220 calls, no failed call; thermal level 0 before every call; scored by `kit/score62.py` with exp_055's metric functions unchanged; descriptive tables by `kit/describe62.py`, written after the run). C1, C2 and C3 pass. C4 passes on the thermal half; its `ollama ps` half shows gemma4:26b resident and cannot show generation.
+- **H1 fail.** 194 of 220 answered. 26 answers (22 genuine, 4 lures) ran to prompt + generation = 8,192 tokens with an empty content, a median of 488 s each. One of the 26 is among gemma's 22 empties.
+- **H2 fail.** Balanced accuracy **0.645** (G 0.882, F 0.914, Opus 0.950). Where one of I and F is right: only I 11 (10 lures, 1 genuine), only F 70 (66 genuine, 4 lures).
+- **H3 fail.** 74 of 110 genuine messages flagged (F: 9); attribution 91.3 %, which passes its half.
+- **It flags what it answers.** 180 of 194: every answered lure (106 of 106) and 74 of 88 answered genuine messages; `benign` given 14 times. Its four missed lures are empty answers. 22 of the 36 genuine messages counted as not flagged are empty answers, so 0.645 is flattered.
+- **Not a young-domain effect.** Genuine flagged: 44 of 72 from established domains, 19 of 20 from young ones, 11 of 18 with no domain (F: 4, 5, 0).
+- **Its stated reasons,** counted by phrase over the 74 (post hoc, wording not cause): 65 restate the prompt's definition of `suspicious`, 39 say the sender or a detail is absent from the footprint, 28 say something cannot be verified.
+- **Time.** Median 152.3 s a message (F 36.9 s), 95th percentile 488.5 s, 12.48 hours; 15.3 tokens a second; 667,481 tokens generated, 97 % of the characters reasoning.
+
+**Decision, by the registered rule: the line stops.** No further Inkling arm is registered for this seat; gemma4:26b with F keeps it.
+
+**Deviations.** Amendment 2. The order was by message id (as F's and G's runs), not the manifest's key order as written. The run took 12.5 hours against the seven expected. The registration calls #32704 open and unmerged with a moved head; GitHub's API on 2026-11-22 shows it merged on 2026-11-21 at 11:10 UTC, 83 minutes before the registration was committed, with one commit, `42fd370c`, the one built. The latest tagged release on that date (`v1.0.0`, 2026-11-13) predates the merge.
+
+**Held back.** The reasoning text: `I/reasoning.jsonl`, sha256 `f0eab5fc73e1e34c426f9fbad1cb7d942dd34597245b11ef4ac62362dcbfdf06`. No script reads it.
+
+SO WHAT:
+- Nothing changes in the guard: gemma4:26b with the think-then-retry call keeps the local reader's seat.
+- Inkling 2 Mini, at this quantisation and with this prompt, is not usable as a message reader: two genuine messages in three flagged, about one answer in eight missing, four times the time.
+- Its caught-lure figure (106 of 110) is the catch rate of a reader that flags almost everything, and is not to be quoted alone.
+- The security leaderboard that prompted the test did not transfer to this seat. Each seat is measured on its own task.
+- Not measured: a prompt written for this model, a zero reasoning budget, a tagged release, any task other than this one. Whether the repeat on a tagged release is still owed, now that the stop rule has fired, is Andrei's decision.
+
+*Evidence: `exp_062_inkling_reader_arm/`. Status: Complete (2026-11-22); the line stops (0.645 against 0.882); H1, H2, H3 fail; Amendments 1 and 2.*
+

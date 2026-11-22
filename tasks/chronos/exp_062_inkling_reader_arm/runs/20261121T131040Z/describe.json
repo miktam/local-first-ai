@@ -1,0 +1,276 @@
+{
+ "run": "runs/20261121T131040Z",
+ "written": "after the run and after the score was read; descriptive only",
+ "order": {
+  "same_as_F": true,
+  "same_as_G": true,
+  "sorted_by_id": true,
+  "manifest_key_order": false
+ },
+ "bands_by_class": {
+  "I": {
+   "benign/None": 22,
+   "benign/benign": 14,
+   "benign/likely-scam": 8,
+   "benign/suspicious": 66,
+   "lure/None": 4,
+   "lure/likely-scam": 89,
+   "lure/suspicious": 17
+  },
+  "F": {
+   "benign/benign": 101,
+   "benign/likely-scam": 1,
+   "benign/suspicious": 8,
+   "lure/benign": 10,
+   "lure/likely-scam": 66,
+   "lure/suspicious": 34
+  },
+  "G": {
+   "benign/None": 11,
+   "benign/benign": 91,
+   "benign/likely-scam": 1,
+   "benign/suspicious": 7,
+   "lure/None": 11,
+   "lure/benign": 7,
+   "lure/likely-scam": 64,
+   "lure/suspicious": 28
+  }
+ },
+ "answered_only": {
+  "answered": 194,
+  "flagged": 180,
+  "lures_answered": 106,
+  "lures_flagged": 106,
+  "genuine_answered": 88,
+  "genuine_flagged": 74,
+  "genuine_called_benign": 14,
+  "genuine_not_flagged_because_no_answer": 22
+ },
+ "domain_age": {
+  "I": {
+   "lure": {
+    "new": {
+     "n": 72,
+     "flagged": 71
+    },
+    "old": {
+     "n": 24,
+     "flagged": 23
+    },
+    "no domain": {
+     "n": 14,
+     "flagged": 12
+    }
+   },
+   "genuine": {
+    "old": {
+     "n": 72,
+     "flagged": 44
+    },
+    "young": {
+     "n": 20,
+     "flagged": 19
+    },
+    "no domain": {
+     "n": 18,
+     "flagged": 11
+    }
+   }
+  },
+  "F": {
+   "lure": {
+    "new": {
+     "n": 72,
+     "flagged": 70
+    },
+    "old": {
+     "n": 24,
+     "flagged": 18
+    },
+    "no domain": {
+     "n": 14,
+     "flagged": 12
+    }
+   },
+   "genuine": {
+    "old": {
+     "n": 72,
+     "flagged": 4
+    },
+    "young": {
+     "n": 20,
+     "flagged": 5
+    },
+    "no domain": {
+     "n": 18,
+     "flagged": 0
+    }
+   }
+  }
+ },
+ "empties": {
+  "n": 26,
+  "by_kind": {
+   "benign": 22,
+   "lure": 4
+  },
+  "finish_reason": {
+   "length": 26
+  },
+  "prompt_plus_completion_tokens": {
+   "8192": 26
+  },
+  "completion_tokens_min_max": [
+   7152,
+   7449
+  ],
+  "content_chars": {
+   "0": 26
+  },
+  "median_seconds": 487.8,
+  "ids": {
+   "X008": "benign",
+   "X033": "benign",
+   "X034": "benign",
+   "X048": "lure",
+   "X053": "benign",
+   "X067": "benign",
+   "X076": "benign",
+   "X079": "benign",
+   "X093": "benign",
+   "X095": "lure",
+   "X096": "benign",
+   "X105": "benign",
+   "X106": "benign",
+   "X118": "benign",
+   "X124": "benign",
+   "X139": "benign",
+   "X141": "benign",
+   "X145": "benign",
+   "X147": "lure",
+   "X159": "benign",
+   "X168": "benign",
+   "X171": "benign",
+   "X184": "benign",
+   "X193": "lure",
+   "X205": "benign",
+   "X215": "benign"
+  },
+  "G_empties": 22,
+  "shared_with_G": [
+   "X141"
+  ],
+  "F_band_on_the_same": {
+   "benign/suspicious": 1,
+   "benign/benign": 21,
+   "lure/likely-scam": 2,
+   "lure/suspicious": 2
+  }
+ },
+ "paired_by_kind": {
+  "vs_F": {
+   "only_I/benign": 1,
+   "only_I/lure": 10,
+   "only_other/benign": 66,
+   "only_other/lure": 4
+  },
+  "vs_G": {
+   "only_I/benign": 1,
+   "only_I/lure": 18,
+   "only_other/benign": 67,
+   "only_other/lure": 4
+  }
+ },
+ "lures_missed": {
+  "X048": {
+   "band": null,
+   "finish_reason": "length"
+  },
+  "X095": {
+   "band": null,
+   "finish_reason": "length"
+  },
+  "X147": {
+   "band": null,
+   "finish_reason": "length"
+  },
+  "X193": {
+   "band": null,
+   "finish_reason": "length"
+  }
+ },
+ "genuine_at_likely_scam": [
+  "X021",
+  "X045",
+  "X049",
+  "X064",
+  "X068",
+  "X078",
+  "X148",
+  "X202"
+ ],
+ "genuine_called_benign": [
+  "X005",
+  "X039",
+  "X052",
+  "X077",
+  "X104",
+  "X129",
+  "X152",
+  "X161",
+  "X170",
+  "X186",
+  "X192",
+  "X196",
+  "X216",
+  "X218"
+ ],
+ "flagged_genuine_reasons": {
+  "n": 74,
+  "phrases_counted_in_why": {
+   "restates_the_band_definition": "(?:separate|another|independent)[, ]+(?:and )?(?:known |trusted )?channel|known channel",
+   "says_something_cannot_be_verified": "unverif|not verifi|(?:cannot|can't|could not|can not|not) be (?:verified|confirmed)|unable to (?:verify|confirm)|no way to (?:verify|confirm)",
+   "says_sender_or_detail_is_not_in_her_footprint": "footprint|appears nowhere|absent from|not (?:listed|present|found) in",
+   "cites_a_domain_date": "\\b20\\d\\d-\\d\\d-\\d\\d\\b|registered|created|weeks old|days old|newly",
+   "says_unsolicited_or_unknown_sender": "unsolicited|unknown sender|sender is unknown|unfamiliar"
+  },
+  "messages_matching": {
+   "restates_the_band_definition": 65,
+   "says_something_cannot_be_verified": 28,
+   "says_sender_or_detail_is_not_in_her_footprint": 39,
+   "cites_a_domain_date": 19,
+   "says_unsolicited_or_unknown_sender": 15,
+   "none_of_the_four_after_the_first": 7
+  },
+  "F_flagged_genuine": 9,
+  "flagged_by_both_I_and_F": 8,
+  "note": "regex counts over the model's one-sentence reason; a message can match several; they describe the wording, not the cause"
+ },
+ "time": {
+  "answered": {
+   "n": 194,
+   "median_s": 139.9,
+   "p95_s": 349.5,
+   "max_s": 420.2
+  },
+  "median_tokens_per_second": 15.3,
+  "median_prompt_tokens": 944.0,
+  "median_completion_tokens": {
+   "answered": 2064.0,
+   "lure": 1698.5,
+   "genuine": 3460.0
+  },
+  "total_completion_tokens": 667481,
+  "hours_spent_on_empties": 3.53
+ },
+ "reasoning": {
+  "note": "by characters, not tokens: the server reports one completion-token count for reasoning and answer together",
+  "reasoning_chars": 2310812,
+  "answer_chars": 67165,
+  "share_by_chars": 0.972,
+  "median_reasoning_chars": {
+   "all": 7735.5,
+   "answered": 6713.0
+  }
+ }
+}
