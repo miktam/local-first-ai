@@ -2890,7 +2890,7 @@ SO WHAT:
 
 **Decision, by the registered rule: the line stops.** No further Inkling arm is registered for this seat; gemma4:26b with F keeps it.
 
-**Deviations.** Amendment 2. The order was by message id (as F's and G's runs), not the manifest's key order as written. The run took 12.5 hours against the seven expected. The registration calls #32704 open and unmerged with a moved head; GitHub's API on 2026-11-22 shows it merged on 2026-11-21 at 11:10 UTC, 83 minutes before the registration was committed, with one commit, `42fd370c`, the one built. The latest tagged release on that date (`v1.0.0`, 2026-11-13) predates the merge.
+**Deviations.** Amendment 2. The order was by message id (as F's and G's runs), not the manifest's key order as written. The run took 12.5 hours against the seven expected. The registration calls #32704 open and unmerged with a moved head; GitHub's API on 2026-11-22 shows it merged on 2026-11-21 at 11:10 UTC, 83 minutes before the registration was committed, with one commit, `42fd370c`, the one built. On 2026-11-22 the latest stable release (`v1.0.0`, 2026-11-13) predates the merge; the pre-release build tags do not (`b12627` is 16 commits ahead of the merge commit and none behind).
 
 **Held back.** The reasoning text: `I/reasoning.jsonl`, sha256 `f0eab5fc73e1e34c426f9fbad1cb7d942dd34597245b11ef4ac62362dcbfdf06`. No script reads it.
 
@@ -2898,8 +2898,8 @@ SO WHAT:
 - Nothing changes in the guard: gemma4:26b with the think-then-retry call keeps the local reader's seat.
 - Inkling 2 Mini, at this quantisation and with this prompt, is not usable as a message reader: two genuine messages in three flagged, about one answer in eight missing, four times the time.
 - Its caught-lure figure (106 of 110) is the catch rate of a reader that flags almost everything, and is not to be quoted alone.
-- The security leaderboard that prompted the test did not transfer to this seat. Each seat is measured on its own task.
-- Not measured: a prompt written for this model, a zero reasoning budget, a tagged release, any task other than this one. Whether the repeat on a tagged release is still owed, now that the stop rule has fired, is Andrei's decision.
+- The security leaderboard that prompted the test did not transfer to this seat.
+- Not measured: a prompt written for this model, a zero reasoning budget, a tagged release, any task other than this one. Whether the repeat on a tagged release is still owed, now that the stop rule has fired, is Andrei's decision; it is possible today on a pre-release build tag.
 
 *Evidence: `exp_062_inkling_reader_arm/`. Status: Complete (2026-11-22); the line stops (0.645 against 0.882); H1, H2, H3 fail; Amendments 1 and 2.*
 

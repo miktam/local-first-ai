@@ -29,6 +29,6 @@ tmux new -s exp062 'cd ~/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_read
 
 A run resumes with the same run folder. To score: `python3.14 -I kit/score62.py runs/<ts>`, then `python3.14 -I kit/describe62.py runs/<ts>`.
 
-**Status: complete.** `runs/20261121T131040Z/` went from 2026-11-21 13:10Z to 2026-11-22 01:39Z, at thermal level 0 before every call. Every figure is from one build of the merged fix's commit, before any tagged release carried it; the repeat on a tagged release has not been run.
+**Status: complete.** `runs/20261121T131040Z/` went from 2026-11-21 13:10Z to 2026-11-22 01:39Z, at thermal level 0 before every call. Every figure is from one build of the merged fix's commit; the repeat on a tagged llama.cpp build has not been run.
 
 **Everything here is fictional:** the person, every organisation and domain. No message is operational.

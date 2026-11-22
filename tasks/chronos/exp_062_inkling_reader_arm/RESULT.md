@@ -54,12 +54,12 @@ Intervals are Wilson 95 %. An empty answer counts as not flagged, as registered.
 |---|---|---|
 | genuine, established domain | 44/72 | 4/72 |
 | genuine, young domain | 19/20 | 5/20 |
-| genuine, no domain (SMS, WhatsApp) | 11/18 | 0/18 |
+| genuine, no domain | 11/18 | 0/18 |
 | lure, new domain | 71/72 | 70/72 |
 | lure, old domain | 23/24 | 18/24 |
 | lure, no domain | 12/14 | 12/14 |
 
-The false alarms are not a young-domain effect: it flags six in ten genuine messages from domains registered years ago, and six in ten with no domain at all.
+The false alarms are not a young-domain effect: it flags six in ten genuine messages whose domains were all registered before June 2026, and six in ten with no domain at all.
 
 **What its one-sentence reasons say**, counted by phrase over the 74 flagged genuine messages (regex counts, chosen after reading eight of them; they describe the wording, not the cause):
 
@@ -89,7 +89,7 @@ A typical one, on a WhatsApp message from a club mate who moved her sail (X144, 
 - **The partial counts were looked at during the run** (Amendment 2, at 133 of 220, at Andrei's request). The registration's limit, that per-message results are not opened before the run is complete, is therefore not met. The amendment was committed before the look, the run went to its end, and the arm has no setting the look could have tuned. The counts seen then (71/73 lures, 41/60 genuine flagged) agree with the final ones.
 - **The order was by message id,** the same order as F's and G's runs, not "the manifest's order" as the registration says; the manifest's keys are not sorted. No verdict depends on the order.
 - **The run took 12.5 hours, not the seven expected.** The dummy probe's 118 s was below the median of the answered messages (140 s), and the estimate did not allow for the 26 answers that ran to the context.
-- **The pull request had already merged.** The registration calls #32704 open and unmerged, and says its head had moved. GitHub's API, read on 2026-11-22, shows it merged on 2026-11-21 at 11:10 UTC, 83 minutes before the registration was committed, with a single commit, `42fd370c`, the one this build uses. The registration's statement was out of date when written. The latest tagged release on that date (`v1.0.0`, 2026-11-13) predates the merge, so no tagged release carries the fix yet.
+- **The pull request had already merged.** The registration calls #32704 open and unmerged, and says its head had moved. GitHub's API, read on 2026-11-22, shows it merged on 2026-11-21 at 11:10 UTC, 83 minutes before the registration was committed, with a single commit, `42fd370c`, the one this build uses. The registration's statement was out of date when written. On 2026-11-22 llama.cpp's latest stable release (`v1.0.0`, 2026-11-13) predates the merge, and its pre-release build tags do not: `b12627` (2026-11-22) is 16 commits ahead of the merge commit `690b87d` and none behind.
 - **C4's `ollama ps` half** is recorded but shows nothing about generation (above). Time is descriptive here, so no verdict rests on it.
 
 ## Held back
@@ -100,19 +100,19 @@ The reasoning text is kept out of this repository, as exp_060 kept the thinking 
 
 - **The reader's seat only, with gemma's prompt.** exp_055's prompt was written for gemma4:26b, and F was chosen on this corpus. A prompt that tells the model what an unverifiable detail should count for was not tried, and by the stop rule is not registered. This says nothing about Inkling 2 Mini on translation, on code, or on the security benchmark that prompted the test.
 - **Reasoning on only.** A zero reasoning budget on the server is a different reader and was not an arm.
-- **One quantisation, one build, one machine, one pass at temperature 0.** The build is the merged fix's own commit, not a tagged release.
+- **One quantisation, one build, one machine, one pass at temperature 0.** The build is the merged fix's own commit, not a tagged build.
 - **Synthetic messages from one family of writers,** used for the third time. Andrei's real incidents remain the regression floor for anything that reaches the guard.
 - **The reason counts are post hoc** and count phrases, not causes.
 - **The frontier figure is exp_055's,** from October, and is not re-measured.
 
 ## Open
 
-**Whether the repeat on a tagged release is still owed.** The registration says two things: every figure is provisional until the run is repeated on a tagged llama.cpp release that carries #32704, and the line stops below 0.882. The stop rule fired, and the figures stay provisional: this build is the commit that was merged, and no tagged release carried it on 2026-11-22. The repeat would take about 12.5 hours. It is Andrei's decision; it is not scheduled.
+**Whether the repeat on a tagged release is still owed.** The registration says two things: every figure is provisional until the run is repeated on a tagged llama.cpp release that carries #32704, and the line stops below 0.882. The stop rule fired, and the figures stay provisional. The repeat is possible today on a pre-release build tag that carries the fix; whether such a tag is the "tagged release" the registration meant, or only a stable version is, was not said. It would take about 12.5 hours. It is Andrei's decision; it is not scheduled.
 
 ## SO WHAT
 
 - **Nothing changes in the guard.** gemma4:26b with the think-then-retry call keeps the local reader's seat, at 0.914 against Inkling's 0.645 on the same 220 messages.
 - **Inkling 2 Mini, at this quantisation and with this prompt, is not usable as a message reader.** It flags two genuine messages in three, about one in eight answers never comes, and it takes four times as long. A guard that flags most of the real mail is switched off by the person it guards.
 - **Its caught-lure figure should not be quoted alone.** 106 of 110 is the catch rate of a reader that says "verify first" to almost everything.
-- **The leaderboard told us nothing about this seat,** as the registration expected. A model that a public leaderboard puts level with a frontier model at finding bugs in code read messages worse than the one already on the disk. A benchmark for one security task does not transfer to another; each seat is measured on its own task.
-- **A reading, not a measurement: the prompt leaves room for this.** The band `suspicious` is defined as "she should verify it through a separate, known channel", and a cautious reader can attach that to any message it cannot confirm. gemma does not; another model may. Any future challenger for this seat runs on this corpus before anything else, and its genuine-message count is read first.
+- **The leaderboard told us nothing about this seat,** as the registration expected. A model that a public leaderboard puts level with a frontier model at finding bugs in code read messages worse than the one already on the disk. That benchmark did not transfer to this task.
+- **A reading, not a measurement: the prompt leaves room for this.** The band `suspicious` is defined as "she should verify it through a separate, known channel", and a cautious reader can attach that to any message it cannot confirm. gemma does not; another model may. A proposal, not a rule: read a future challenger's genuine-message count before its catch rate.
