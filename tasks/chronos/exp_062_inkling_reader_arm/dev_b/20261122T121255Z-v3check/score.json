@@ -1,0 +1,180 @@
+{
+ "run": "dev_b/20261122T121255Z-v3check",
+ "jobs_file": "dev62b-r3.json",
+ "pinned": {
+  "jobs_file": true,
+  "server_commit": true,
+  "inkling_file": true,
+  "research_file": true
+ },
+ "arms": {
+  "V3": {
+   "decisions": 32,
+   "right": 32,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 12,
+     "right": 12
+    }
+   },
+   "by_case": {
+    "proposal_stale_yes": {
+     "n": 1,
+     "right": 1
+    },
+    "flags_many_alert": {
+     "n": 2,
+     "right": 2
+    },
+    "hop1_unknown_threshold_young": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown_flags_quiet": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown_flags_alert": {
+     "n": 2,
+     "right": 2
+    },
+    "hop2_known": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_young": {
+     "n": 1,
+     "right": 1
+    },
+    "flags_many_quiet": {
+     "n": 2,
+     "right": 2
+    },
+    "hop1_unknown_threshold_old": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_young_registry_old": {
+     "n": 1,
+     "right": 1
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "hop3_unknown": {
+     "n": 2,
+     "right": 2
+    },
+    "rep1": {
+     "n": 1,
+     "right": 1
+    },
+    "again1": {
+     "n": 1,
+     "right": 1
+    },
+    "window30": {
+     "n": 1,
+     "right": 1
+    },
+    "mid1": {
+     "n": 1,
+     "right": 1
+    },
+    "allow_remove": {
+     "n": 1,
+     "right": 1
+    },
+    "removed": {
+     "n": 1,
+     "right": 1
+    },
+    "rep2": {
+     "n": 1,
+     "right": 1
+    },
+    "again2": {
+     "n": 1,
+     "right": 1
+    },
+    "window120": {
+     "n": 1,
+     "right": 1
+    },
+    "mid2": {
+     "n": 1,
+     "right": 1
+    },
+    "rep3": {
+     "n": 1,
+     "right": 1
+    },
+    "block": {
+     "n": 1,
+     "right": 1
+    }
+   },
+   "violations": [],
+   "proposals": 3,
+   "wrong_reasons": {},
+   "ends": {
+    "final": 32,
+    "capped": 0,
+    "turns": 0
+   },
+   "capped_turns": 0,
+   "extra_lookups": 0,
+   "median_s": 60.0,
+   "p95_s": 137.6,
+   "total_minutes": 34.5,
+   "median_tokens_per_second": 26.6,
+   "completion_tokens": 43941,
+   "reasoning_chars": 130447,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "futility": {
+    "after": 15,
+    "right": 15,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 346,
+    "violations": [],
+    "pass": true
+   }
+  }
+ },
+ "HB2": {
+  "V3": {
+   "violations": 0,
+   "proposals": 3,
+   "pass": true
+  }
+ },
+ "HB5": {
+  "V3": {
+   "right": 32,
+   "of": 32,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 12,
+     "right": 12
+    }
+   },
+   "median_tokens_per_second": 26.6,
+   "median_s": 60.0
+  }
+ }
+}

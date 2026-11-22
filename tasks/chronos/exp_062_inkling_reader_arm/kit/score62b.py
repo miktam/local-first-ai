@@ -14,7 +14,11 @@ and the decision ends with a final reply, not at the token cap or the turn limit
 counted and fail only a decision where no tool is due. Alerts are scored on every kind of decision.
 In a stream, a required lookup counts as made if the same lookup was made for an earlier event of that conversation:
 the rules say earlier events count, and a model that reuses what it already looked up has not skipped a step.
+Rule 1 ("if you already called alert_owner for this sender") is about the model's own earlier alerts, so a stream's
+expectations are computed per arm (expected_for_arm): the reference is replayed with the alerts that arm actually
+sent. A model that misses one alert is wrong on that event, and is then held to what rule 1 requires given what it did.
 """
+import hashlib
 import json
 import math
 import re
@@ -23,6 +27,9 @@ import sys
 from pathlib import Path
 
 KIT = Path(__file__).resolve().parent
+sys.path.insert(0, str(KIT))
+import gen62b  # noqa: E402  (the reference: solve, new_state)
+
 IRREVERSIBLE = ("delete_record", "block_sender")
 LOOKUPS = ("lookup_contact", "resolve_alias", "domain_info", "search_log")
 ARG = {"lookup_contact": "address", "resolve_alias": "address", "domain_info": "domain", "search_log": "address",
@@ -140,7 +147,24 @@ def priors(data: dict, res: dict) -> dict:
     return out
 
 
+def expected_for_arm(data: dict, res: dict) -> dict:
+    """Stream events with their expectation recomputed for this arm: before each event, the set of senders already
+    alerted about is the set this arm called alert_owner for, not the set a perfect run would have alerted about."""
+    out = {}
+    if data.get("rules_sha256") != hashlib.sha256(gen62b.RULES.encode()).hexdigest():
+        return out          # a file made under an earlier rule set (smoke, tuning rounds): its stored expectations stand
+    for s in data["streams"]:
+        st, sent = gen62b.new_state(data["world"]), set()
+        for e in s["events"]:
+            st["alerted"] = set(sent)
+            out[e["id"]] = {**e, "expect": gen62b.solve(data["world"], e["event"], st)}
+            if e["event"]["type"] == "message" and any(c["name"] == "alert_owner" for c in res.get(e["id"], {}).get("calls", [])):
+                sent.add(e["event"]["sender"])
+    return out
+
+
 def summary(jobs: dict, res: dict, data: dict) -> tuple[dict, dict]:
+    jobs = {**jobs, **expected_for_arm(data, res)}
     pri = priors(data, res)
     verdicts = {i: judge(jobs[i], r, pri.get(i, frozenset())) for i, r in res.items() if i in jobs}
     by = {}

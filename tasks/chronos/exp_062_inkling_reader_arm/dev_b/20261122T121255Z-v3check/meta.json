@@ -1,0 +1,65 @@
+{
+ "started_utc": "2026-11-22T12:12:55Z",
+ "argv": [
+  "kit/watch62b.py",
+  "--all",
+  "--unpinned",
+  "--arms",
+  "V3",
+  "--run",
+  "dev_b/20261122T121255Z-v3check",
+  "--private",
+  "/Users/miktam02/.openclaw/workspace/tasks/exp062-private/dev_b/20261122T121255Z-v3check",
+  "--jobs",
+  "kit/dev62b-r3.json"
+ ],
+ "arms": [
+  "V3"
+ ],
+ "python": "3.14.8 (main, Sep 30 2026, 17:55:09) [Clang 21.0.0 (clang-2100.3.34.2)]",
+ "macos": "27.2.1",
+ "ollama_version": "ollama version is 0.40.2",
+ "ollama_ps_before": "NAME          ID              SIZE     PROCESSOR    CONTEXT    RUNNER      UNTIL   \ngemma4:26b    777b927e3b6b    18 GB    100% GPU     8192       llamacpp    Forever",
+ "thermal_start": "0",
+ "max_tokens": 2048,
+ "max_turns": 14,
+ "seed": 62,
+ "jobs_file": "dev62b-r3.json",
+ "jobs_sha256": "6ec30458a257a5772f4c1f5eba23c73b0a1ceab3ec235c13a15441499bb1c914",
+ "unpinned": true,
+ "server_commit": "e300919cc704ddde3a8a8346a8714f57eeeee71b",
+ "arm_rc": {
+  "V3": 0
+ },
+ "server_args": {
+  "V3": [
+   "-m",
+   "/Users/miktam02/models/varloop/TML-d24-varloop-research-IQ4_NL.gguf",
+   "-c",
+   "8192",
+   "-np",
+   "1",
+   "-ngl",
+   "99",
+   "--host",
+   "127.0.0.1",
+   "--port",
+   "18450",
+   "--special",
+   "--override-kv",
+   "inkling2_loop.loop.count=int:3"
+  ]
+ },
+ "ink_sha256": null,
+ "var_sha256": "e9f70a167e54794bebce2d456b2118730b74fa7c35e23cb1abd4378f66b17bb2",
+ "pinned": {
+  "jobs_file": true,
+  "server_commit": true,
+  "inkling_file": true,
+  "research_file": true
+ },
+ "port_was_free": true,
+ "ollama_ps_after": "NAME          ID              SIZE     PROCESSOR    CONTEXT    RUNNER      UNTIL   \ngemma4:26b    777b927e3b6b    18 GB    100% GPU     8192       llamacpp    Forever",
+ "thermal_end": "0",
+ "finished_utc": "2026-11-22T12:47:36Z"
+}
