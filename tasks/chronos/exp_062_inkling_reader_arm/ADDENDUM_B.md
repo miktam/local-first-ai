@@ -15,6 +15,8 @@ Addendum A's 40 jobs were too easy: both models were right on all of them. Two q
 
 Addendum A lists the variable-loop model as not used, "The announcement states no licence for it, and there is no local build." Both points were wrong. Its model cards state Apache 2.0, a 4-bit GGUF exists (`ggml-org/TML-d24-varloop-research-GGUF`), and the llama.cpp build already used here carries its architecture. Addendum A's file is left as written; this note is the correction.
 
+**A second correction, 2026-11-22, during the run.** Addendum A says of the maker's demo of 20 agents on one offline laptop: "The hardware is not stated." It is stated: the announcement captions the demo "MacBook Pro (M5 Pro, 48GB) Airplane mode". The earlier reading came from a summary of the page; the page itself was read on 2026-11-22.
+
 ## Runtime, pinned
 
 - **llama.cpp at tag `b12631`** (commit `e300919cc704ddde3a8a8346a8714f57eeeee71b`), built on the mini on 2026-11-22, in `~/models/llama.cpp-b12631`. It postdates the merge of pull request #32704. Used for Inkling 2 Mini and for the research model.
