@@ -10,6 +10,7 @@ Registered 2026-11-21 before any kit and before any corpus message was sent to t
 | File | What it is |
 |---|---|
 | [RESULT.md](RESULT.md) | controls, verdicts, the decision, the numbers, the bands by class, the empty answers, time, the deviations from the registration, what is held back, limits, the open question, SO WHAT |
+| [ADDENDUM_A.md](ADDENDUM_A.md) | registered 2026-11-22, unsigned, no kit yet: a screen of the model as a persistent watcher with tools, reasoning on, against gemma4:26b on 40 made-up jobs; how many watchers the machine carries; whether a monitor can read its reasoning. Sends no exp_055 message; the reader verdict stands |
 | [HYPOTHESIS.md](HYPOTHESIS.md) | the registration: the arm, the pinned runtime, controls C1–C4, H1–H3, the decision rule, limits, frozen inputs; the kit note; Amendment 1 (an error is not an answer, before the run); Amendment 2 (a look at the partial counts during the run) |
 | `kit/arm62.py` | checks the frozen inputs, the server's commit and the model file's hash; starts the side server; runs the arm under exp_054's audit hook; a failed call stops the arm and is asked again on resume; the reasoning text goes to a private folder and is hashed |
 | `kit/score62.py` | exp_055's metrics (imported unchanged), C1–C4, H1–H3, the paired tables against F and G, the decision rule; voids an incomplete run |
@@ -29,6 +30,6 @@ tmux new -s exp062 'cd ~/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_read
 
 A run resumes with the same run folder. To score: `python3.14 -I kit/score62.py runs/<ts>`, then `python3.14 -I kit/describe62.py runs/<ts>`.
 
-**Status: complete.** `runs/20261121T131040Z/` went from 2026-11-21 13:10Z to 2026-11-22 01:39Z, at thermal level 0 before every call. Every figure is from one build of the merged fix's commit; the repeat on a tagged llama.cpp build has not been run.
+**Status: the main run is complete; Addendum A is registered, unsigned and not run.** `runs/20261121T131040Z/` went from 2026-11-21 13:10Z to 2026-11-22 01:39Z, at thermal level 0 before every call. Every figure is from one build of the merged fix's commit; the repeat on a tagged llama.cpp build has not been run.
 
 **Everything here is fictional:** the person, every organisation and domain. No message is operational.
