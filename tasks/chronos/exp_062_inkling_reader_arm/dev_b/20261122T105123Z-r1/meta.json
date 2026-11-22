@@ -1,0 +1,65 @@
+{
+ "started_utc": "2026-11-22T10:51:23Z",
+ "argv": [
+  "kit/watch62b.py",
+  "--all",
+  "--unpinned",
+  "--arms",
+  "G,I",
+  "--run",
+  "dev_b/20261122T105123Z-r1",
+  "--private",
+  "/Users/miktam02/.openclaw/workspace/tasks/exp062-private/dev_b/20261122T105123Z-r1",
+  "--jobs",
+  "kit/dev62b-r1.json"
+ ],
+ "arms": [
+  "G",
+  "I"
+ ],
+ "python": "3.14.8 (main, Sep 30 2026, 17:55:09) [Clang 21.0.0 (clang-2100.3.34.2)]",
+ "macos": "27.2.1",
+ "ollama_version": "ollama version is 0.40.2",
+ "ollama_ps_before": "NAME          ID              SIZE     PROCESSOR    CONTEXT    RUNNER      UNTIL   \ngemma4:26b    777b927e3b6b    18 GB    100% GPU     8192       llamacpp    Forever",
+ "thermal_start": "0",
+ "max_tokens": 2048,
+ "max_turns": 8,
+ "seed": 62,
+ "jobs_file": "dev62b-r1.json",
+ "jobs_sha256": "ec40979ac67180b7e935dce41b3a53f34c9ec449b5eb742a3f842dbdf3cfcd26",
+ "unpinned": true,
+ "server_commit": "e300919cc704ddde3a8a8346a8714f57eeeee71b",
+ "arm_rc": {
+  "G": 0,
+  "I": 0
+ },
+ "server_args": {
+  "G": null,
+  "I": [
+   "-m",
+   "/Users/miktam02/models/inkling2-ggml/Inkling-2-Mini-IQ4_NL.gguf",
+   "-c",
+   "8192",
+   "-np",
+   "1",
+   "-ngl",
+   "99",
+   "--host",
+   "127.0.0.1",
+   "--port",
+   "18450"
+  ]
+ },
+ "ink_sha256": "cbdf3fa9dc50a4124977980f37da4f1fa764b0cfe800d275cd43d26ce2a81af4",
+ "var_sha256": null,
+ "pinned": {
+  "jobs_file": true,
+  "server_commit": true,
+  "inkling_file": true,
+  "research_file": true
+ },
+ "port_was_free": true,
+ "ollama_ps_after": "NAME          ID              SIZE     PROCESSOR    CONTEXT    RUNNER      UNTIL   \ngemma4:26b    777b927e3b6b    18 GB    100% GPU     8192       llamacpp    Forever",
+ "thermal_end": "0",
+ "finished_utc": "2026-11-22T11:11:32Z"
+}

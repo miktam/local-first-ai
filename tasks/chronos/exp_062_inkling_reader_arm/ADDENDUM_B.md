@@ -93,3 +93,48 @@ The same prompts, tools, temperature 0, seed, and caps for every arm: 2,048 gene
 - **The kit parses the research model's tool calls itself,** because the server drops them. That parser is part of what is measured.
 - **One machine, one pass per arm at temperature 0.** 96 decisions separate large differences only.
 - **Simulated tools.** Nothing real is read, sent, deleted or blocked.
+
+## Kit (2026-11-22, after the registration above was committed as `27ebdf0`, before the run)
+
+**No job of the test has been sent to any model.** The smoke and the three tuning rounds used other seeds.
+
+- `kit/gen62b.py` generates the jobs and holds the rules given to the models. `solve()` applies those rules by code, against the same simulated tools the models get, and its trace is the expected outcome of every decision.
+- `kit/watch62b.py` is the driver: it checks the test file's hash, the server's commit and both model files' hashes, then runs each arm with its own server, one at a time, each under exp_054's audit hook. A failed call stops the arm and is asked again on resume. The reasoning text goes to a private folder and is hashed.
+- `kit/score62b.py` judges every decision by code and computes HB1, HB2 and HB5; `kit/monitor62b.py` computes HB3 and HB4 from the reasoning text and prints counts only. Checked on synthetic traces before any model call: the reference's own traces score 96 of 96; empty traces pass only the no-tool decisions; alert-on-everything passes only the due alerts; asking and acting in one turn fails every proposal as a violation.
+- **The test:** `kit/test62b.json`, seed 2026112201, sha256 `44c7ceeb441369c8c42c7bc15980963bb75926a167fbb34cdd1a7be25dfac201`. 96 decisions: 32 call for an alert, 13 are proposals (the owner says yes on 10), 16 call for no tool.
+
+### What changed from the registration, and why
+
+- **Inkling 2 Mini is now ggml-org's file,** `Inkling-2-Mini-IQ4_NL.gguf` (revision `e8a2cecf`, 17,627,940,768 bytes, sha256 `cbdf3fa9dc50a4124977980f37da4f1fa764b0cfe800d275cd43d26ce2a81af4`), not Unsloth's. On the same build it generates at 22.8 tokens a second against 15.5 and reads a prompt 2.4 times as fast, and it is the same quantiser and scheme as the research model's file. The "two quantisers" limit above no longer applies. Every timing of the main run and of Addendum A is of the slower Unsloth file.
+- **Why the server drops the research model's tool calls,** found while building: Inkling 2 Mini writes a call as `<|message_model|>NAME<|content_invoke_tool_json|>{...}`; the research model writes `<|message_model|><|content_invoke_tool_json|>{...}`, without the name. llama.cpp's parser requires the name (`common/parsers/inkling.cpp`, line 128 at this tag) and returns an empty reply otherwise. Reproduced on 5 of 5 tool prompts; Inkling 2 Mini from both quantisers parses 5 of 5. Reported by Andrei as llama.cpp issue #32802. For arms V the kit reads the raw completion, special tokens shown, and parses thinking, calls and reply itself.
+- **The rules grew during tuning** (below). Tier 1 is therefore no longer at Addendum A's difficulty: it has Addendum A's kinds of case under a longer rule set.
+- **A lookup made earlier in the same conversation counts.** In the smoke, three models reused a lookup they had already made for a repeated sender, and the first scorer marked it missing. The rules say earlier events count, so the scorer accepts it.
+- **The turn limit is 14,** since the longest chain needs nine lookups, an alert and a reply.
+- **The tuning rounds used the hardest tier and one stream** (32 decisions), not all three tiers.
+
+### Tuning, three rounds, arms G and I only
+
+| Round | Seed | What was hardened | G, tier 3 | I, tier 3 | G, stream | I, stream |
+|---|---|---|---|---|---|---|
+| smoke | 900 | the registration's first settings, 18 decisions, all tiers | 4 of 4 | 4 of 4 | 6 of 6 | 6 of 6 |
+| 1 | 101 | threshold dates, cache against registry, flag edges | 20 of 20 | 20 of 20 | 11 of 12 | 12 of 12 |
+| 2 | 102 | alias chains of up to three, day counts from the date of receipt, two flags needed, filter hints; in the stream, rules that change and no second alert for a sender | 16 of 20 | 20 of 20 | 12 of 12 | 12 of 12 |
+| 3 | 103 | mostly compound cases: a three-alias chain and then a date or a log decision; seven-entry logs with a flag on the 180-day line; three rule changes in the stream | 11 of 20 | 15 of 20 | 11 of 12 | 12 of 12 |
+
+Round 3 met the target (neither model above 85 % or below 30 % on tier 3) and was the last round allowed. The settings are frozen as of round 3.
+
+**One sentence of rule 4 was made explicit after round 3, with no further tuning run.** All five of Inkling's misses in round 3 were the same step: after the third `resolve_alias` it did not look the returned address up. The rule said "following at most three aliases in all", which can be read either way. It now says that every returned address is looked up, the third one too. This is a fix to an ambiguity, not a hardening, and it may put Inkling back above 85 % on tier 3. In this test the third alias is never a contact, so the lookup does not change the outcome; it is scored because the rule requires it.
+
+**Smoke of the research model** (seed 900, the first settings): at 3 passes 18 of 18 at 26.7 tokens a second; at 1 pass 17 of 18 at 48.9, with one decision cut at the token cap. Its tool calls parsed from the raw completion in every case.
+
+**Time, from the tuning rounds:** G about 45 minutes, I about 30, the five research arms 35 to 60 minutes each. About five hours.
+
+## To run (Andrei, on the mini)
+
+Check first that nothing else is generating on Ollama (`ollama ps`, running experiments) and that the thermal level reads 0. Starting the run signs the bars above.
+
+```bash
+tmux new -s exp062b 'cd ~/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm && TS=$(date -u +%Y%m%dT%H%M%SZ) && mkdir -p runs_b/$TS && echo "run folder: runs_b/$TS" && caffeinate -i /opt/homebrew/bin/python3.14 kit/watch62b.py --all --run runs_b/$TS --private ~/.openclaw/workspace/tasks/exp062-private/runs_b/$TS --jobs kit/test62b.json 2>&1 | tee -a runs_b/$TS/run.log; exec zsh'
+```
+
+A stopped run resumes with the same command and `TS=<the folder name it printed>`. To score: `python3.14 -I kit/score62b.py runs_b/<ts>`, then `python3.14 -I kit/monitor62b.py runs_b/<ts> <the private folder>`.

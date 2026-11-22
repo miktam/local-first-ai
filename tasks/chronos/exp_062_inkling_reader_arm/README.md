@@ -10,7 +10,7 @@ Registered 2026-11-21 before any kit and before any corpus message was sent to t
 | File | What it is |
 |---|---|
 | [RESULT.md](RESULT.md) | controls, verdicts, the decision, the numbers, the bands by class, the empty answers, time, the deviations from the registration, what is held back, limits, the open question, SO WHAT |
-| [ADDENDUM_B.md](ADDENDUM_B.md) | registered 2026-11-22, unsigned, no kit yet: harder watcher jobs from a generator, Inkling 2 Mini against gemma4:26b, and the maker's variable-loop research model at one to five passes on the same jobs; llama.cpp at tag `b12631`; the dev probes of the day; a correction to Addendum A |
+| [ADDENDUM_B.md](ADDENDUM_B.md) | registered 2026-11-22, unsigned; kit built, tuned in three rounds and frozen, the test drawn, not run: harder watcher jobs from a generator, Inkling 2 Mini against gemma4:26b, and the maker's variable-loop research model at one to five passes on the same jobs; llama.cpp at tag `b12631`; the dev probes of the day; a correction to Addendum A |
 | [ADDENDUM_A_RESULT.md](ADDENDUM_A_RESULT.md) | Addendum A's result, 2026-11-22: both models right on all 40 watcher jobs as scored, neither acted irreversibly without a yes; Inkling median 19.8 s a job against gemma4:26b's 9.3 s, with 12 lookups and 3 alerts nobody asked for; four watchers at once give 1.4 times the throughput. A tie at the ceiling: the jobs were too easy to separate the models |
 | [ADDENDUM_A.md](ADDENDUM_A.md) | registered 2026-11-22 and run the same day: a screen of the model as a persistent watcher with tools, reasoning on, against gemma4:26b on 40 made-up jobs; how many watchers the machine carries; whether a monitor can read its reasoning. Sends no exp_055 message; the reader verdict stands |
 | [HYPOTHESIS.md](HYPOTHESIS.md) | the registration: the arm, the pinned runtime, controls C1–C4, H1–H3, the decision rule, limits, frozen inputs; the kit note; Amendment 1 (an error is not an answer, before the run); Amendment 2 (a look at the partial counts during the run) |
@@ -19,6 +19,9 @@ Registered 2026-11-21 before any kit and before any corpus message was sent to t
 | `kit/describe62.py` | written after the run, descriptive only: bands by class, answered-only counts, domain age, the empty answers, the paired table by kind, phrase counts in the stated reasons, time, the reasoning share by characters; writes `runs/<ts>/describe.json` |
 | `kit/build62a.py`, `kit/jobs62a.json`, `kit/smoke62a.json` | Addendum A: the made-up world, the 40 frozen watcher jobs and the five smoke jobs |
 | `kit/watch62a.py`, `kit/score62a.py`, `kit/monitor62a.py` | Addendum A: the driver (G through Ollama, I on the side server, the futility rule, the four-slot part), the scorer, and the two rules that read the reasoning |
+| `kit/gen62b.py`, `kit/test62b.json` | Addendum B: the generator of hard watcher jobs with the rules and the reference that computes every expected outcome; the frozen test |
+| `kit/watch62b.py`, `kit/score62b.py`, `kit/monitor62b.py` | Addendum B: the driver for the seven arms, the scorer, and the script that reads the reasoning for HB3 and HB4 |
+| `kit/smoke62b.json`, `kit/dev62b-r1.json` to `-r3.json`, `dev_b/` | Addendum B: the smoke and the three tuning rounds, on other seeds than the test |
 | `dev_a/20261122T075548Z/` | Addendum A's smoke test on the five smoke jobs |
 | `runs_a/20261122T081037Z/` | Addendum A's run: `G/` and `I/` results, the audit logs, `capacity/`, `score.json`, `monitor.json`, `describe.json`. The reasoning text of both arms is held back and hashed |
 | `kit/describe62a.py` | Addendum A, written after the run, descriptive only: the result by job kind, unrequested alerts, tokens |

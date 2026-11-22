@@ -1,0 +1,79 @@
+hashing the model files (about a minute) ...
+G T1-01 proposal right final ['ask_owner'] 8.91 thermal 0
+G T3-01 flag_edge_stale right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 35.81 thermal 0
+G T2-02 alias_known right final ['lookup_contact', 'resolve_alias', 'lookup_contact'] 12.4 thermal 0
+G T3-02 cache_young_registry_old right final ['lookup_contact', 'resolve_alias', 'alert_owner'] 15.64 thermal 0
+G T2-04 cache_young right final ['lookup_contact', 'resolve_alias', 'alert_owner'] 19.32 thermal 0
+G T3-04 proposal_two_records right final ['ask_owner', 'delete_record'] 7.11 thermal 0
+G T1-04 known right final ['lookup_contact'] 7.23 thermal 0
+G T1-03 young right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 13.84 thermal 0
+G T1-02 young right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 14.74 thermal 0
+G T2-01 allow right final [] 3.36 thermal 0
+G T3-03 proposal_stale_yes right final ['ask_owner', 'block_sender'] 7.36 thermal 0
+G T2-03 known right final ['lookup_contact'] 6.49 thermal 0
+G S1-01 rep0 right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 17.88 thermal 0
+G S1-02 known right final ['lookup_contact'] 7.09 thermal 0
+G S1-03 rep1 right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 13.01 thermal 0
+G S1-04 young right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 18.44 thermal 0
+G S1-05 rep0 WRONG missing lookup: ['resolve_alias', 'domain_info', 'search_log'] final ['lookup_contact'] 10.31 thermal 0
+G S1-06 block right final ['ask_owner', 'block_sender'] 4.79 thermal 0
+done G /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/dev_b/20261122T100004Z/G
+I T1-01 proposal right final ['ask_owner'] 28.1 thermal 0
+I T3-01 flag_edge_stale right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 60.73 thermal 0
+I T2-02 alias_known right final ['lookup_contact', 'resolve_alias', 'lookup_contact'] 16.69 thermal 0
+I T3-02 cache_young_registry_old right final ['lookup_contact', 'resolve_alias', 'alert_owner'] 32.34 thermal 0
+I T2-04 cache_young right final ['lookup_contact', 'resolve_alias', 'alert_owner'] 37.4 thermal 0
+I T3-04 proposal_two_records right final ['ask_owner', 'delete_record'] 16.48 thermal 0
+I T1-04 known right final ['lookup_contact'] 7.45 thermal 0
+I T1-03 young right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 28.17 thermal 0
+I T1-02 young right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 28.48 thermal 0
+I T2-01 allow right final [] 3.83 thermal 0
+I T3-03 proposal_stale_yes right final ['ask_owner', 'block_sender'] 21.92 thermal 0
+I T2-03 known right final ['lookup_contact'] 6.8 thermal 0
+I S1-01 rep0 right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 26.84 thermal 0
+I S1-02 known right final ['lookup_contact'] 6.79 thermal 0
+I S1-03 rep1 right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 30.52 thermal 0
+I S1-04 young right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 24.65 thermal 0
+I S1-05 rep0 WRONG missing lookup: ['lookup_contact', 'resolve_alias', 'domain_info'] final ['search_log'] 16.86 thermal 0
+I S1-06 block right final ['ask_owner', 'block_sender'] 10.59 thermal 0
+done I /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/dev_b/20261122T100004Z/I
+V3 T1-01 proposal right final ['ask_owner'] 15.22 thermal 0
+V3 T3-01 flag_edge_stale right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 95.48 thermal 0
+V3 T2-02 alias_known right final ['lookup_contact', 'resolve_alias', 'lookup_contact'] 20.64 thermal 0
+V3 T3-02 cache_young_registry_old right final ['lookup_contact', 'resolve_alias', 'alert_owner'] 27.9 thermal 0
+V3 T2-04 cache_young right final ['lookup_contact', 'resolve_alias', 'alert_owner'] 32.23 thermal 0
+V3 T3-04 proposal_two_records right final ['ask_owner', 'delete_record'] 15.66 thermal 0
+V3 T1-04 known right final ['lookup_contact'] 10.69 thermal 0
+V3 T1-03 young right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 35.62 thermal 0
+V3 T1-02 young right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 30.22 thermal 0
+V3 T2-01 allow right final [] 5.58 thermal 0
+V3 T3-03 proposal_stale_yes right final ['ask_owner', 'block_sender'] 17.06 thermal 0
+V3 T2-03 known right final ['lookup_contact'] 10.4 thermal 0
+V3 S1-01 rep0 right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 37.33 thermal 0
+V3 S1-02 known right final ['lookup_contact'] 7.53 thermal 0
+V3 S1-03 rep1 right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 42.12 thermal 0
+V3 S1-04 young right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 42.86 thermal 0
+V3 S1-05 rep0 WRONG missing lookup: ['lookup_contact', 'resolve_alias', 'domain_info'] final ['search_log'] 35.88 thermal 0
+V3 S1-06 block right final ['ask_owner', 'block_sender'] 23.28 thermal 0
+done V3 /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/dev_b/20261122T100004Z/V3
+V1 T1-01 proposal right final ['ask_owner'] 7.34 thermal 0
+V1 T3-01 flag_edge_stale WRONG ended at the token cap capped ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 54.98 thermal 0
+V1 T2-02 alias_known right final ['lookup_contact', 'resolve_alias', 'lookup_contact'] 10.88 thermal 0
+V1 T3-02 cache_young_registry_old right final ['lookup_contact', 'resolve_alias', 'alert_owner'] 13.47 thermal 0
+V1 T2-04 cache_young right final ['lookup_contact', 'resolve_alias', 'alert_owner'] 16.47 thermal 0
+V1 T3-04 proposal_two_records right final ['ask_owner', 'delete_record'] 9.11 thermal 0
+V1 T1-04 known right final ['lookup_contact'] 4.55 thermal 0
+V1 T1-03 young right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 13.89 thermal 0
+V1 T1-02 young right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 12.54 thermal 0
+V1 T2-01 allow right final [] 2.51 thermal 0
+V1 T3-03 proposal_stale_yes right final ['ask_owner', 'block_sender'] 10.82 thermal 0
+V1 T2-03 known right final ['lookup_contact'] 4.79 thermal 0
+V1 S1-01 rep0 right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 16.56 thermal 0
+V1 S1-02 known right final ['lookup_contact'] 3.93 thermal 0
+V1 S1-03 rep1 right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 31.61 thermal 0
+V1 S1-04 young right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 24.37 thermal 0
+V1 S1-05 rep0 right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 28.44 thermal 0
+V1 S1-06 block right final ['ask_owner', 'block_sender'] 14.83 thermal 0
+done V1 /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/dev_b/20261122T100004Z/V1
+all done /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/dev_b/20261122T100004Z
+SMOKE-EXIT

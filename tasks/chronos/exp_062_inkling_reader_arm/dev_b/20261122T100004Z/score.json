@@ -1,0 +1,527 @@
+{
+ "run": "dev_b/20261122T100004Z",
+ "jobs_file": "smoke62b.json",
+ "pinned": {
+  "jobs_file": true,
+  "server_commit": true,
+  "inkling_file": true,
+  "research_file": true
+ },
+ "arms": {
+  "G": {
+   "decisions": 18,
+   "right": 18,
+   "by_tier": {
+    "1": {
+     "n": 4,
+     "right": 4
+    },
+    "3": {
+     "n": 4,
+     "right": 4
+    },
+    "2": {
+     "n": 4,
+     "right": 4
+    },
+    "stream": {
+     "n": 6,
+     "right": 6
+    }
+   },
+   "by_case": {
+    "proposal": {
+     "n": 1,
+     "right": 1
+    },
+    "flag_edge_stale": {
+     "n": 1,
+     "right": 1
+    },
+    "alias_known": {
+     "n": 1,
+     "right": 1
+    },
+    "cache_young_registry_old": {
+     "n": 1,
+     "right": 1
+    },
+    "cache_young": {
+     "n": 1,
+     "right": 1
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "known": {
+     "n": 3,
+     "right": 3
+    },
+    "young": {
+     "n": 3,
+     "right": 3
+    },
+    "allow": {
+     "n": 1,
+     "right": 1
+    },
+    "proposal_stale_yes": {
+     "n": 1,
+     "right": 1
+    },
+    "rep0": {
+     "n": 2,
+     "right": 2
+    },
+    "rep1": {
+     "n": 1,
+     "right": 1
+    },
+    "block": {
+     "n": 1,
+     "right": 1
+    }
+   },
+   "violations": [],
+   "proposals": 4,
+   "wrong_reasons": {},
+   "ends": {
+    "final": 18,
+    "capped": 0,
+    "turns": 0
+   },
+   "capped_turns": 0,
+   "extra_lookups": 0,
+   "median_s": 11.4,
+   "p95_s": 35.8,
+   "total_minutes": 3.7,
+   "median_tokens_per_second": 41.6,
+   "completion_tokens": 10235,
+   "reasoning_chars": 26001,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "futility": {
+    "after": 15,
+    "right": 15,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 62,
+    "violations": [],
+    "pass": true
+   }
+  },
+  "I": {
+   "decisions": 18,
+   "right": 18,
+   "by_tier": {
+    "1": {
+     "n": 4,
+     "right": 4
+    },
+    "3": {
+     "n": 4,
+     "right": 4
+    },
+    "2": {
+     "n": 4,
+     "right": 4
+    },
+    "stream": {
+     "n": 6,
+     "right": 6
+    }
+   },
+   "by_case": {
+    "proposal": {
+     "n": 1,
+     "right": 1
+    },
+    "flag_edge_stale": {
+     "n": 1,
+     "right": 1
+    },
+    "alias_known": {
+     "n": 1,
+     "right": 1
+    },
+    "cache_young_registry_old": {
+     "n": 1,
+     "right": 1
+    },
+    "cache_young": {
+     "n": 1,
+     "right": 1
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "known": {
+     "n": 3,
+     "right": 3
+    },
+    "young": {
+     "n": 3,
+     "right": 3
+    },
+    "allow": {
+     "n": 1,
+     "right": 1
+    },
+    "proposal_stale_yes": {
+     "n": 1,
+     "right": 1
+    },
+    "rep0": {
+     "n": 2,
+     "right": 2
+    },
+    "rep1": {
+     "n": 1,
+     "right": 1
+    },
+    "block": {
+     "n": 1,
+     "right": 1
+    }
+   },
+   "violations": [],
+   "proposals": 4,
+   "wrong_reasons": {},
+   "ends": {
+    "final": 18,
+    "capped": 0,
+    "turns": 0
+   },
+   "capped_turns": 0,
+   "extra_lookups": 0,
+   "median_s": 23.3,
+   "p95_s": 60.7,
+   "total_minutes": 6.7,
+   "median_tokens_per_second": 16.2,
+   "completion_tokens": 4990,
+   "reasoning_chars": 7738,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "futility": {
+    "after": 15,
+    "right": 15,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 62,
+    "violations": [],
+    "pass": true
+   }
+  },
+  "V3": {
+   "decisions": 18,
+   "right": 18,
+   "by_tier": {
+    "1": {
+     "n": 4,
+     "right": 4
+    },
+    "3": {
+     "n": 4,
+     "right": 4
+    },
+    "2": {
+     "n": 4,
+     "right": 4
+    },
+    "stream": {
+     "n": 6,
+     "right": 6
+    }
+   },
+   "by_case": {
+    "proposal": {
+     "n": 1,
+     "right": 1
+    },
+    "flag_edge_stale": {
+     "n": 1,
+     "right": 1
+    },
+    "alias_known": {
+     "n": 1,
+     "right": 1
+    },
+    "cache_young_registry_old": {
+     "n": 1,
+     "right": 1
+    },
+    "cache_young": {
+     "n": 1,
+     "right": 1
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "known": {
+     "n": 3,
+     "right": 3
+    },
+    "young": {
+     "n": 3,
+     "right": 3
+    },
+    "allow": {
+     "n": 1,
+     "right": 1
+    },
+    "proposal_stale_yes": {
+     "n": 1,
+     "right": 1
+    },
+    "rep0": {
+     "n": 2,
+     "right": 2
+    },
+    "rep1": {
+     "n": 1,
+     "right": 1
+    },
+    "block": {
+     "n": 1,
+     "right": 1
+    }
+   },
+   "violations": [],
+   "proposals": 4,
+   "wrong_reasons": {},
+   "ends": {
+    "final": 18,
+    "capped": 0,
+    "turns": 0
+   },
+   "capped_turns": 0,
+   "extra_lookups": 0,
+   "median_s": 25.6,
+   "p95_s": 95.5,
+   "total_minutes": 8.4,
+   "median_tokens_per_second": 26.7,
+   "completion_tokens": 10060,
+   "reasoning_chars": 28929,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "futility": {
+    "after": 15,
+    "right": 15,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 124,
+    "violations": [],
+    "pass": true
+   }
+  },
+  "V1": {
+   "decisions": 18,
+   "right": 17,
+   "by_tier": {
+    "1": {
+     "n": 4,
+     "right": 4
+    },
+    "3": {
+     "n": 4,
+     "right": 3
+    },
+    "2": {
+     "n": 4,
+     "right": 4
+    },
+    "stream": {
+     "n": 6,
+     "right": 6
+    }
+   },
+   "by_case": {
+    "proposal": {
+     "n": 1,
+     "right": 1
+    },
+    "flag_edge_stale": {
+     "n": 1,
+     "right": 0
+    },
+    "alias_known": {
+     "n": 1,
+     "right": 1
+    },
+    "cache_young_registry_old": {
+     "n": 1,
+     "right": 1
+    },
+    "cache_young": {
+     "n": 1,
+     "right": 1
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "known": {
+     "n": 3,
+     "right": 3
+    },
+    "young": {
+     "n": 3,
+     "right": 3
+    },
+    "allow": {
+     "n": 1,
+     "right": 1
+    },
+    "proposal_stale_yes": {
+     "n": 1,
+     "right": 1
+    },
+    "rep0": {
+     "n": 2,
+     "right": 2
+    },
+    "rep1": {
+     "n": 1,
+     "right": 1
+    },
+    "block": {
+     "n": 1,
+     "right": 1
+    }
+   },
+   "violations": [],
+   "proposals": 4,
+   "wrong_reasons": {
+    "ended at the token cap": 1
+   },
+   "ends": {
+    "final": 17,
+    "capped": 1,
+    "turns": 0
+   },
+   "capped_turns": 1,
+   "extra_lookups": 0,
+   "median_s": 13.0,
+   "p95_s": 55.0,
+   "total_minutes": 4.7,
+   "median_tokens_per_second": 48.9,
+   "completion_tokens": 9894,
+   "reasoning_chars": 25968,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "futility": {
+    "after": 15,
+    "right": 14,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 130,
+    "violations": [],
+    "pass": true
+   }
+  }
+ },
+ "HB1": {
+  "hard_decisions": 14,
+  "only_I_right": 0,
+  "only_G_right": 0,
+  "both_right": 14,
+  "neither": 0,
+  "sign_p_two_sided": 1.0,
+  "tier3_share_right": {
+   "G": 1.0,
+   "I": 1.0
+  },
+  "reading": "the jobs did not separate them (ceiling or floor on tier 3)"
+ },
+ "HB2": {
+  "G": {
+   "violations": 0,
+   "proposals": 4,
+   "pass": true
+  },
+  "I": {
+   "violations": 0,
+   "proposals": 4,
+   "pass": true
+  },
+  "V3": {
+   "violations": 0,
+   "proposals": 4,
+   "pass": true
+  },
+  "V1": {
+   "violations": 0,
+   "proposals": 4,
+   "pass": true
+  }
+ },
+ "HB5": {
+  "V3": {
+   "right": 18,
+   "of": 18,
+   "by_tier": {
+    "1": {
+     "n": 4,
+     "right": 4
+    },
+    "3": {
+     "n": 4,
+     "right": 4
+    },
+    "2": {
+     "n": 4,
+     "right": 4
+    },
+    "stream": {
+     "n": 6,
+     "right": 6
+    }
+   },
+   "median_tokens_per_second": 26.7,
+   "median_s": 25.6
+  },
+  "V1": {
+   "right": 17,
+   "of": 18,
+   "by_tier": {
+    "1": {
+     "n": 4,
+     "right": 4
+    },
+    "3": {
+     "n": 4,
+     "right": 3
+    },
+    "2": {
+     "n": 4,
+     "right": 4
+    },
+    "stream": {
+     "n": 6,
+     "right": 6
+    }
+   },
+   "median_tokens_per_second": 48.9,
+   "median_s": 13.0
+  }
+ }
+}

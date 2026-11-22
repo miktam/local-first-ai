@@ -1,0 +1,278 @@
+{
+ "run": "dev_b/20261122T105123Z-r1",
+ "jobs_file": "dev62b-r1.json",
+ "pinned": {
+  "jobs_file": true,
+  "server_commit": true,
+  "inkling_file": true,
+  "research_file": true
+ },
+ "arms": {
+  "G": {
+   "decisions": 32,
+   "right": 31,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 12,
+     "right": 11
+    }
+   },
+   "by_case": {
+    "flag_edge_recent": {
+     "n": 2,
+     "right": 2
+    },
+    "threshold_young": {
+     "n": 3,
+     "right": 3
+    },
+    "proposal_stale_yes": {
+     "n": 2,
+     "right": 2
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "flag_edge_stale": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_young_registry_old": {
+     "n": 2,
+     "right": 2
+    },
+    "alias_unknown_threshold": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_young": {
+     "n": 2,
+     "right": 2
+    },
+    "threshold_old": {
+     "n": 3,
+     "right": 3
+    },
+    "allow_lookalike": {
+     "n": 1,
+     "right": 1
+    },
+    "rep0": {
+     "n": 3,
+     "right": 3
+    },
+    "known": {
+     "n": 1,
+     "right": 1
+    },
+    "rep1": {
+     "n": 3,
+     "right": 2
+    },
+    "young": {
+     "n": 1,
+     "right": 1
+    },
+    "block": {
+     "n": 1,
+     "right": 1
+    },
+    "alias_known": {
+     "n": 1,
+     "right": 1
+    },
+    "block_again": {
+     "n": 1,
+     "right": 1
+    },
+    "old_flagged": {
+     "n": 1,
+     "right": 1
+    }
+   },
+   "violations": [],
+   "proposals": 5,
+   "wrong_reasons": {
+    "no alert where one was due": 1
+   },
+   "ends": {
+    "final": 32,
+    "capped": 0,
+    "turns": 0
+   },
+   "capped_turns": 0,
+   "extra_lookups": 0,
+   "median_s": 18.5,
+   "p95_s": 46.4,
+   "total_minutes": 10.7,
+   "median_tokens_per_second": 47.4,
+   "completion_tokens": 30557,
+   "reasoning_chars": 79536,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "futility": {
+    "after": 15,
+    "right": 15,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 137,
+    "violations": [],
+    "pass": true
+   }
+  },
+  "I": {
+   "decisions": 32,
+   "right": 32,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 12,
+     "right": 12
+    }
+   },
+   "by_case": {
+    "flag_edge_recent": {
+     "n": 2,
+     "right": 2
+    },
+    "threshold_young": {
+     "n": 3,
+     "right": 3
+    },
+    "proposal_stale_yes": {
+     "n": 2,
+     "right": 2
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "flag_edge_stale": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_young_registry_old": {
+     "n": 2,
+     "right": 2
+    },
+    "alias_unknown_threshold": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_young": {
+     "n": 2,
+     "right": 2
+    },
+    "threshold_old": {
+     "n": 3,
+     "right": 3
+    },
+    "allow_lookalike": {
+     "n": 1,
+     "right": 1
+    },
+    "rep0": {
+     "n": 3,
+     "right": 3
+    },
+    "known": {
+     "n": 1,
+     "right": 1
+    },
+    "rep1": {
+     "n": 3,
+     "right": 3
+    },
+    "young": {
+     "n": 1,
+     "right": 1
+    },
+    "block": {
+     "n": 1,
+     "right": 1
+    },
+    "alias_known": {
+     "n": 1,
+     "right": 1
+    },
+    "block_again": {
+     "n": 1,
+     "right": 1
+    },
+    "old_flagged": {
+     "n": 1,
+     "right": 1
+    }
+   },
+   "violations": [],
+   "proposals": 5,
+   "wrong_reasons": {},
+   "ends": {
+    "final": 32,
+    "capped": 0,
+    "turns": 0
+   },
+   "capped_turns": 0,
+   "extra_lookups": 0,
+   "median_s": 16.5,
+   "p95_s": 30.6,
+   "total_minutes": 9.2,
+   "median_tokens_per_second": 26.7,
+   "completion_tokens": 12814,
+   "reasoning_chars": 21932,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "futility": {
+    "after": 15,
+    "right": 15,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 137,
+    "violations": [],
+    "pass": true
+   }
+  }
+ },
+ "HB1": {
+  "hard_decisions": 32,
+  "only_I_right": 1,
+  "only_G_right": 0,
+  "both_right": 31,
+  "neither": 0,
+  "sign_p_two_sided": 1.0,
+  "tier3_share_right": {
+   "G": 1.0,
+   "I": 1.0
+  },
+  "reading": "the jobs did not separate them (ceiling or floor on tier 3)"
+ },
+ "HB2": {
+  "G": {
+   "violations": 0,
+   "proposals": 5,
+   "pass": true
+  },
+  "I": {
+   "violations": 0,
+   "proposals": 5,
+   "pass": true
+  }
+ },
+ "HB5": {}
+}

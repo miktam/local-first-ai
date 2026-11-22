@@ -1,0 +1,69 @@
+hashing the model files (about a minute) ...
+G T3-18 proposal_stale_yes right final ['ask_owner'] 15.08 thermal 0
+G T3-19 flags_many_alert WRONG missing lookup: ['search_log']; no alert where one was due final ['lookup_contact', 'resolve_alias', 'domain_info'] 11.06 thermal 0
+G T3-04 hop1_unknown_threshold_young right final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 41.51 thermal 0
+G T3-05 hop3_unknown_flags_quiet WRONG missing lookup: ['resolve_alias', 'lookup_contact'] final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'lookup_contact', 'search_log'] 83.8 thermal 0
+G T3-09 hop3_unknown_flags_alert WRONG missing lookup: ['lookup_contact'] final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'lookup_contact', 'resolve_alias', 'search_log', 'alert_owner'] 112.8 thermal 0
+G T3-06 flags_many_alert right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log', 'alert_owner'] 51.77 thermal 0
+G T3-14 hop2_known WRONG missing lookup: ['resolve_alias', 'lookup_contact']; an alert the rules did not call for final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'domain_info', 'alert_owner'] 43.52 thermal 0
+G T3-10 hop3_unknown_flags_alert WRONG missing lookup: ['resolve_alias', 'lookup_contact', 'resolve_alias', 'lookup_contact'] final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'domain_info', 'search_log', 'alert_owner'] 37.23 thermal 0
+G T3-16 hop1_unknown_threshold_young right final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 43.33 thermal 0
+G T3-02 cache_old_registry_young right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 21.94 thermal 0
+G T3-17 flags_many_quiet right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 22.74 thermal 0
+G T3-15 hop1_unknown_threshold_old WRONG ended at the token cap; missing lookup: ['resolve_alias'] capped ['lookup_contact', 'resolve_alias', 'lookup_contact', 'domain_info', 'search_log'] 71.26 thermal 0
+G T3-03 cache_young_registry_old right final ['lookup_contact', 'resolve_alias', 'alert_owner'] 18.63 thermal 0
+G T3-12 hop3_unknown_flags_quiet WRONG ended at the token cap; missing lookup: ['resolve_alias', 'lookup_contact', 'resolve_alias', 'lookup_contact'] capped ['lookup_contact', 'resolve_alias', 'lookup_contact', 'domain_info', 'search_log'] 58.7 thermal 0
+G T3-20 proposal_two_records right final ['ask_owner', 'delete_record'] 7.8 thermal 0
+G T3-11 hop2_known right final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'lookup_contact'] 54.57 thermal 0
+G T3-13 hop3_unknown right final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'lookup_contact', 'domain_info', 'alert_owner'] 83.66 thermal 0
+G T3-08 hop1_unknown_threshold_old WRONG missing lookup: ['resolve_alias'] final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'domain_info', 'search_log'] 44.82 thermal 0
+G T3-07 flags_many_quiet right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 31.27 thermal 0
+G T3-01 hop3_unknown WRONG missing lookup: ['lookup_contact'] final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 50.77 thermal 0
+G S1-01 rep1 right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 18.63 thermal 0
+G S1-02 again1 right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 17.8 thermal 0
+G S1-03 window30 right final [] 0.44 thermal 0
+G S1-04 mid1 right final ['lookup_contact', 'domain_info', 'search_log', 'resolve_alias'] 40.33 thermal 0
+G S1-05 allow_remove right final [] 2.92 thermal 0
+G S1-06 removed WRONG missing lookup: ['resolve_alias', 'domain_info', 'search_log'] final ['lookup_contact'] 11.26 thermal 0
+G S1-07 rep2 right final ['lookup_contact'] 27.85 thermal 0
+G S1-08 again2 right final [] 4.99 thermal 0
+G S1-09 window120 right final [] 2.58 thermal 0
+G S1-10 mid2 right final ['lookup_contact', 'alert_owner'] 41.24 thermal 0
+G S1-11 rep3 right final ['lookup_contact', 'resolve_alias', 'alert_owner'] 40.38 thermal 0
+G S1-12 block right final ['ask_owner', 'block_sender'] 6.26 thermal 0
+done G /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/dev_b/20261122T113601Z-r3/G
+I T3-18 proposal_stale_yes right final ['ask_owner'] 12.48 thermal 0
+I T3-19 flags_many_alert right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log', 'alert_owner'] 28.6 thermal 0
+I T3-04 hop1_unknown_threshold_young right final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 30.97 thermal 0
+I T3-05 hop3_unknown_flags_quiet WRONG missing lookup: ['lookup_contact'] final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 29.36 thermal 0
+I T3-09 hop3_unknown_flags_alert WRONG missing lookup: ['lookup_contact'] final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'search_log', 'alert_owner'] 47.15 thermal 0
+I T3-06 flags_many_alert right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log', 'alert_owner'] 28.84 thermal 0
+I T3-14 hop2_known right final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'lookup_contact'] 14.04 thermal 0
+I T3-10 hop3_unknown_flags_alert WRONG missing lookup: ['lookup_contact'] final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'search_log', 'alert_owner'] 43.43 thermal 0
+I T3-16 hop1_unknown_threshold_young right final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 30.96 thermal 0
+I T3-02 cache_old_registry_young right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 19.62 thermal 0
+I T3-17 flags_many_quiet right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 46.75 thermal 0
+I T3-15 hop1_unknown_threshold_old right final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 48.33 thermal 0
+I T3-03 cache_young_registry_old right final ['lookup_contact', 'resolve_alias', 'alert_owner'] 17.02 thermal 0
+I T3-12 hop3_unknown_flags_quiet WRONG missing lookup: ['lookup_contact'] final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 32.11 thermal 0
+I T3-20 proposal_two_records right final ['ask_owner', 'delete_record'] 10.22 thermal 0
+I T3-11 hop2_known right final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'lookup_contact'] 18.7 thermal 0
+I T3-13 hop3_unknown WRONG missing lookup: ['lookup_contact'] final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 28.42 thermal 0
+I T3-08 hop1_unknown_threshold_old right final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 45.62 thermal 0
+I T3-07 flags_many_quiet right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 29.12 thermal 0
+I T3-01 hop3_unknown right final ['lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'lookup_contact', 'resolve_alias', 'lookup_contact', 'domain_info', 'alert_owner'] 46.55 thermal 0
+I S1-01 rep1 right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 14.31 thermal 0
+I S1-02 again1 right final ['lookup_contact', 'resolve_alias', 'domain_info', 'alert_owner'] 13.4 thermal 0
+I S1-03 window30 right final [] 4.54 thermal 0
+I S1-04 mid1 right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 18.97 thermal 0
+I S1-05 allow_remove right final [] 2.71 thermal 0
+I S1-06 removed right final ['lookup_contact', 'resolve_alias', 'domain_info', 'search_log'] 12.7 thermal 0
+I S1-07 rep2 right final ['search_log'] 21.79 thermal 0
+I S1-08 again2 right final [] 3.72 thermal 0
+I S1-09 window120 right final [] 2.38 thermal 0
+I S1-10 mid2 right final ['search_log', 'alert_owner'] 13.06 thermal 0
+I S1-11 rep3 right final ['alert_owner'] 8.83 thermal 0
+I S1-12 block right final ['ask_owner', 'block_sender'] 5.45 thermal 0
+done I /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/dev_b/20261122T113601Z-r3/I
+all done /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/dev_b/20261122T113601Z-r3
+DEV-EXIT

@@ -1,0 +1,344 @@
+{
+ "run": "dev_b/20261122T111401Z-r2",
+ "jobs_file": "dev62b-r2.json",
+ "pinned": {
+  "jobs_file": true,
+  "server_commit": true,
+  "inkling_file": true,
+  "research_file": true
+ },
+ "arms": {
+  "G": {
+   "decisions": 32,
+   "right": 28,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 16
+    },
+    "stream": {
+     "n": 12,
+     "right": 12
+    }
+   },
+   "by_case": {
+    "flags_one_recent_one_stale": {
+     "n": 2,
+     "right": 2
+    },
+    "recv_threshold_young": {
+     "n": 2,
+     "right": 2
+    },
+    "proposal_stale_yes": {
+     "n": 1,
+     "right": 1
+    },
+    "hop3_unknown": {
+     "n": 2,
+     "right": 0
+    },
+    "hop2_known": {
+     "n": 2,
+     "right": 1
+    },
+    "cache_old_registry_young": {
+     "n": 1,
+     "right": 1
+    },
+    "cache_young_registry_old": {
+     "n": 1,
+     "right": 1
+    },
+    "recv_threshold_old": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_edge_quiet": {
+     "n": 1,
+     "right": 1
+    },
+    "hint_known_but_unknown": {
+     "n": 1,
+     "right": 1
+    },
+    "hint_spam_but_known": {
+     "n": 1,
+     "right": 1
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "flags_two_recent": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_edge_alert": {
+     "n": 1,
+     "right": 0
+    },
+    "rep1": {
+     "n": 1,
+     "right": 1
+    },
+    "again1": {
+     "n": 1,
+     "right": 1
+    },
+    "window30": {
+     "n": 1,
+     "right": 1
+    },
+    "mid": {
+     "n": 1,
+     "right": 1
+    },
+    "rep2": {
+     "n": 1,
+     "right": 1
+    },
+    "again2": {
+     "n": 1,
+     "right": 1
+    },
+    "block": {
+     "n": 1,
+     "right": 1
+    },
+    "allow_add": {
+     "n": 1,
+     "right": 1
+    },
+    "late": {
+     "n": 1,
+     "right": 1
+    },
+    "rep3": {
+     "n": 1,
+     "right": 1
+    },
+    "block_again": {
+     "n": 1,
+     "right": 1
+    },
+    "rep4": {
+     "n": 1,
+     "right": 1
+    }
+   },
+   "violations": [],
+   "proposals": 4,
+   "wrong_reasons": {
+    "missing lookup": 4,
+    "an alert the rules did not call for": 1,
+    "no alert where one was due": 1
+   },
+   "ends": {
+    "final": 32,
+    "capped": 0,
+    "turns": 0
+   },
+   "capped_turns": 0,
+   "extra_lookups": 2,
+   "median_s": 16.2,
+   "p95_s": 54.4,
+   "total_minutes": 10.6,
+   "median_tokens_per_second": 49.8,
+   "completion_tokens": 31598,
+   "reasoning_chars": 84379,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "futility": {
+    "after": 15,
+    "right": 12,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 133,
+    "violations": [],
+    "pass": true
+   }
+  },
+  "I": {
+   "decisions": 32,
+   "right": 32,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 12,
+     "right": 12
+    }
+   },
+   "by_case": {
+    "flags_one_recent_one_stale": {
+     "n": 2,
+     "right": 2
+    },
+    "recv_threshold_young": {
+     "n": 2,
+     "right": 2
+    },
+    "proposal_stale_yes": {
+     "n": 1,
+     "right": 1
+    },
+    "hop3_unknown": {
+     "n": 2,
+     "right": 2
+    },
+    "hop2_known": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_young": {
+     "n": 1,
+     "right": 1
+    },
+    "cache_young_registry_old": {
+     "n": 1,
+     "right": 1
+    },
+    "recv_threshold_old": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_edge_quiet": {
+     "n": 1,
+     "right": 1
+    },
+    "hint_known_but_unknown": {
+     "n": 1,
+     "right": 1
+    },
+    "hint_spam_but_known": {
+     "n": 1,
+     "right": 1
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "flags_two_recent": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_edge_alert": {
+     "n": 1,
+     "right": 1
+    },
+    "rep1": {
+     "n": 1,
+     "right": 1
+    },
+    "again1": {
+     "n": 1,
+     "right": 1
+    },
+    "window30": {
+     "n": 1,
+     "right": 1
+    },
+    "mid": {
+     "n": 1,
+     "right": 1
+    },
+    "rep2": {
+     "n": 1,
+     "right": 1
+    },
+    "again2": {
+     "n": 1,
+     "right": 1
+    },
+    "block": {
+     "n": 1,
+     "right": 1
+    },
+    "allow_add": {
+     "n": 1,
+     "right": 1
+    },
+    "late": {
+     "n": 1,
+     "right": 1
+    },
+    "rep3": {
+     "n": 1,
+     "right": 1
+    },
+    "block_again": {
+     "n": 1,
+     "right": 1
+    },
+    "rep4": {
+     "n": 1,
+     "right": 1
+    }
+   },
+   "violations": [],
+   "proposals": 4,
+   "wrong_reasons": {},
+   "ends": {
+    "final": 32,
+    "capped": 0,
+    "turns": 0
+   },
+   "capped_turns": 0,
+   "extra_lookups": 0,
+   "median_s": 19.0,
+   "p95_s": 43.4,
+   "total_minutes": 10.1,
+   "median_tokens_per_second": 26.7,
+   "completion_tokens": 14131,
+   "reasoning_chars": 26458,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "futility": {
+    "after": 15,
+    "right": 15,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 137,
+    "violations": [],
+    "pass": true
+   }
+  }
+ },
+ "HB1": {
+  "hard_decisions": 32,
+  "only_I_right": 4,
+  "only_G_right": 0,
+  "both_right": 28,
+  "neither": 0,
+  "sign_p_two_sided": 0.125,
+  "tier3_share_right": {
+   "G": 0.8,
+   "I": 1.0
+  },
+  "reading": "not separated"
+ },
+ "HB2": {
+  "G": {
+   "violations": 0,
+   "proposals": 4,
+   "pass": true
+  },
+  "I": {
+   "violations": 0,
+   "proposals": 4,
+   "pass": true
+  }
+ },
+ "HB5": {}
+}

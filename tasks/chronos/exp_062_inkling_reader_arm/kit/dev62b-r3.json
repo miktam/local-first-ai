@@ -1,0 +1,1635 @@
+{
+ "seed": 103,
+ "settings": {
+  "3": {
+   "hop2_known": 2,
+   "hop3_unknown": 2,
+   "hop3_unknown_flags_alert": 2,
+   "hop3_unknown_flags_quiet": 2,
+   "hop1_unknown_threshold_young": 2,
+   "hop1_unknown_threshold_old": 2,
+   "flags_many_alert": 2,
+   "flags_many_quiet": 2,
+   "cache_old_registry_young": 1,
+   "cache_young_registry_old": 1,
+   "proposal_stale_yes": 1,
+   "proposal_two_records": 1
+  }
+ },
+ "world": {
+  "today": "2026-11-22",
+  "allow": [
+   "juniperyard-lark.example",
+   "junipergate-onyx.example",
+   "tidegate-north.example",
+   "grovegate-pine.example"
+  ],
+  "contacts": {
+   "desk50@birchlabs-plover.example": {
+    "name": "desk50",
+    "relation": "architect"
+   },
+   "orders12@alderfield-flint.example": {
+    "name": "orders12",
+    "relation": "accountant"
+   },
+   "info30@pinegate-alder.example": {
+    "name": "info30",
+    "relation": "building administration"
+   },
+   "office97@slateport-lark.example": {
+    "name": "office97",
+    "relation": "club secretary"
+   },
+   "team86@flintline-onyx.example": {
+    "name": "team86",
+    "relation": "school office"
+   },
+   "hello49@tidepoint-tide.example": {
+    "name": "hello49",
+    "relation": "supplier"
+   },
+   "billing93@marshfield-moss.example": {
+    "name": "billing93",
+    "relation": "supplier"
+   },
+   "mail26@juniperhouse-marsh.example": {
+    "name": "mail26",
+    "relation": "accountant"
+   },
+   "orders20@aldermill-delta.example": {
+    "name": "orders20",
+    "relation": "building administration"
+   },
+   "hello63@cobaltquay-onyx.example": {
+    "name": "hello63",
+    "relation": "architect"
+   },
+   "billing64@ivoryquay-flint.example": {
+    "name": "billing64",
+    "relation": "architect"
+   },
+   "notes51@marshlight-ember.example": {
+    "name": "notes51",
+    "relation": "supplier"
+   }
+  },
+  "aliases": {
+   "hello84@amberworks-flint.example": "desk50@harboryard-birch.example",
+   "desk50@harboryard-birch.example": "news13@emberworks-ivory.example",
+   "news13@emberworks-ivory.example": "info43@ridgebridge-heron.example",
+   "info43@ridgebridge-heron.example": "hello49@tidepoint-tide.example",
+   "info81@larkquay-plover.example": "service82@larkworks-slate.example",
+   "mail6@slatepress-ridge.example": "news55@alderworks-birch.example",
+   "news55@alderworks-birch.example": "orders89@flinthouse-ivory.example",
+   "orders89@flinthouse-ivory.example": "contact3@pineyard-harbor.example",
+   "contact3@pineyard-harbor.example": "info30@pinegate-alder.example",
+   "mail38@ivorypoint-juniper.example": "hello62@birchmill-moss.example",
+   "team43@mossquay-grove.example": "news27@pinequay-north.example",
+   "news27@pinequay-north.example": "desk42@mossyard-onyx.example",
+   "desk42@mossyard-onyx.example": "notes37@alderyard-fern.example",
+   "notes37@alderyard-fern.example": "info30@pinegate-alder.example",
+   "notes63@ivorypress-kiln.example": "orders91@emberbridge-ridge.example",
+   "orders91@emberbridge-ridge.example": "info91@alderyard-moss.example",
+   "info91@alderyard-moss.example": "office54@harborpress-heron.example",
+   "office54@harborpress-heron.example": "team86@flintline-onyx.example",
+   "notes34@ridgelabs-pine.example": "notes72@ivorylight-ivory.example",
+   "notes72@ivorylight-ivory.example": "billing64@ivoryquay-flint.example",
+   "notes2@ridgequay-cobalt.example": "team60@marshmill-tide.example",
+   "team60@marshmill-tide.example": "team92@marshpoint-tide.example",
+   "team92@marshpoint-tide.example": "desk95@flintline-plover.example",
+   "desk95@flintline-plover.example": "notes51@marshlight-ember.example",
+   "news70@marshmill-lumen.example": "office59@ivoryline-moss.example",
+   "office59@ivoryline-moss.example": "desk97@marshpoint-nettle.example",
+   "desk97@marshpoint-nettle.example": "billing98@larkgate-heron.example",
+   "billing98@larkgate-heron.example": "desk50@birchlabs-plover.example",
+   "contact77@pinebridge-birch.example": "notes62@flinthouse-fern.example",
+   "notes62@flinthouse-fern.example": "billing93@marshfield-moss.example",
+   "team53@harborlabs-ember.example": "office93@fernworks-fern.example",
+   "notes51@northgate-juniper.example": "team32@pinequay-juniper.example"
+  },
+  "domains": {
+   "amberworks-flint.example": "2026-11-04",
+   "amberworks-kiln.example": "2026-10-30",
+   "ploverbridge-ivory.example": "2018-08-22",
+   "larkquay-plover.example": "2026-08-09",
+   "slatepress-ridge.example": "2017-09-03",
+   "groveline-ivory.example": "2017-10-30",
+   "amberpoint-moss.example": "2023-01-07",
+   "ivorypoint-juniper.example": "2026-08-12",
+   "mossquay-grove.example": "2024-04-16",
+   "ivorypress-kiln.example": "2016-01-18",
+   "ridgelabs-pine.example": "2026-11-12",
+   "ridgequay-cobalt.example": "2022-08-13",
+   "marshmill-lumen.example": "2026-11-08",
+   "pinebridge-birch.example": "2026-10-11",
+   "harborlabs-ember.example": "2026-08-07",
+   "northgate-juniper.example": "2026-08-19",
+   "amberbridge-heron.example": "2019-01-10",
+   "ridgefield-lark.example": "2021-05-24",
+   "aldergate-nettle.example": "2022-12-20",
+   "harborhouse-ember.example": "2017-12-29",
+   "ridgeworks-plover.example": "2019-12-27",
+   "kilnhouse-delta.example": "2026-11-03",
+   "tidegate-amber.example": "2026-10-01",
+   "birchlight-birch.example": "2022-06-17",
+   "juniperyard-lark.example": "2018-09-13"
+  },
+  "log": {
+   "mail6@slatepress-ridge.example": [
+    {
+     "date": "2026-08-31",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2025-12-20",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-09-09",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2026-05-25",
+     "note": "delivered, no action",
+     "flagged": false
+    }
+   ],
+   "mail71@groveline-ivory.example": [
+    {
+     "date": "2026-04-09",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2025-10-20",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-08-01",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2026-09-03",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-02-10",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2026-09-23",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2026-05-15",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    }
+   ],
+   "orders40@amberpoint-moss.example": [
+    {
+     "date": "2026-02-02",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2026-05-16",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-03-05",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-07-01",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2026-09-21",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2025-12-07",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-09-24",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    }
+   ],
+   "team43@mossquay-grove.example": [
+    {
+     "date": "2026-10-12",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-04-03",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2026-08-12",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-10-26",
+     "note": "delivered, no action",
+     "flagged": false
+    }
+   ],
+   "notes63@ivorypress-kiln.example": [
+    {
+     "date": "2026-10-08",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-06-24",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-05-30",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2026-11-03",
+     "note": "delivered, no action",
+     "flagged": false
+    }
+   ],
+   "notes2@ridgequay-cobalt.example": [
+    {
+     "date": "2026-05-21",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2026-09-24",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-02-18",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-11-15",
+     "note": "delivered, no action",
+     "flagged": false
+    }
+   ],
+   "contact76@amberbridge-heron.example": [
+    {
+     "date": "2026-09-12",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2026-10-04",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-04-28",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2026-02-04",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-06-14",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2025-12-19",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-05-12",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    }
+   ],
+   "news8@harborhouse-ember.example": [
+    {
+     "date": "2026-05-13",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-10-16",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-04-10",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-03-24",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2025-06-30",
+     "note": "the owner marked this sender as unwanted",
+     "flagged": true
+    },
+    {
+     "date": "2026-05-28",
+     "note": "delivered, no action",
+     "flagged": false
+    },
+    {
+     "date": "2026-09-27",
+     "note": "delivered, no action",
+     "flagged": false
+    }
+   ]
+  }
+ },
+ "jobs": [
+  {
+   "id": "T3-01",
+   "tier": 3,
+   "case": "hop3_unknown",
+   "event": {
+    "id": "E-1001",
+    "type": "message",
+    "sender": "hello84@amberworks-flint.example",
+    "received": "2026-11-22",
+    "channel": "email",
+    "subject": "Quote"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "hello84@amberworks-flint.example"
+     ],
+     [
+      "resolve_alias",
+      "hello84@amberworks-flint.example"
+     ],
+     [
+      "lookup_contact",
+      "desk50@harboryard-birch.example"
+     ],
+     [
+      "resolve_alias",
+      "desk50@harboryard-birch.example"
+     ],
+     [
+      "lookup_contact",
+      "news13@emberworks-ivory.example"
+     ],
+     [
+      "resolve_alias",
+      "news13@emberworks-ivory.example"
+     ],
+     [
+      "lookup_contact",
+      "info43@ridgebridge-heron.example"
+     ],
+     [
+      "domain_info",
+      "amberworks-flint.example"
+     ]
+    ],
+    "alert": true,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-02",
+   "tier": 3,
+   "case": "cache_old_registry_young",
+   "event": {
+    "id": "E-1002",
+    "type": "message",
+    "sender": "billing48@amberworks-kiln.example",
+    "received": "2026-11-22",
+    "channel": "email",
+    "subject": "Update",
+    "cached_registered": "2019-11-10"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "billing48@amberworks-kiln.example"
+     ],
+     [
+      "resolve_alias",
+      "billing48@amberworks-kiln.example"
+     ],
+     [
+      "domain_info",
+      "amberworks-kiln.example"
+     ]
+    ],
+    "alert": true,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-03",
+   "tier": 3,
+   "case": "cache_young_registry_old",
+   "event": {
+    "id": "E-1003",
+    "type": "message",
+    "sender": "desk64@ploverbridge-ivory.example",
+    "received": "2026-11-22",
+    "channel": "email",
+    "subject": "Renewal",
+    "cached_registered": "2026-10-27"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "desk64@ploverbridge-ivory.example"
+     ],
+     [
+      "resolve_alias",
+      "desk64@ploverbridge-ivory.example"
+     ]
+    ],
+    "alert": true,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-04",
+   "tier": 3,
+   "case": "hop1_unknown_threshold_young",
+   "event": {
+    "id": "E-1004",
+    "type": "message",
+    "sender": "info81@larkquay-plover.example",
+    "received": "2026-11-06",
+    "channel": "sms",
+    "subject": "Receipt"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "info81@larkquay-plover.example"
+     ],
+     [
+      "resolve_alias",
+      "info81@larkquay-plover.example"
+     ],
+     [
+      "lookup_contact",
+      "service82@larkworks-slate.example"
+     ],
+     [
+      "resolve_alias",
+      "service82@larkworks-slate.example"
+     ],
+     [
+      "domain_info",
+      "larkquay-plover.example"
+     ]
+    ],
+    "alert": true,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-05",
+   "tier": 3,
+   "case": "hop3_unknown_flags_quiet",
+   "event": {
+    "id": "E-1005",
+    "type": "message",
+    "sender": "mail6@slatepress-ridge.example",
+    "received": "2026-11-22",
+    "channel": "email",
+    "subject": "Timetable"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "mail6@slatepress-ridge.example"
+     ],
+     [
+      "resolve_alias",
+      "mail6@slatepress-ridge.example"
+     ],
+     [
+      "lookup_contact",
+      "news55@alderworks-birch.example"
+     ],
+     [
+      "resolve_alias",
+      "news55@alderworks-birch.example"
+     ],
+     [
+      "lookup_contact",
+      "orders89@flinthouse-ivory.example"
+     ],
+     [
+      "resolve_alias",
+      "orders89@flinthouse-ivory.example"
+     ],
+     [
+      "lookup_contact",
+      "contact3@pineyard-harbor.example"
+     ],
+     [
+      "domain_info",
+      "slatepress-ridge.example"
+     ],
+     [
+      "search_log",
+      "mail6@slatepress-ridge.example"
+     ]
+    ],
+    "alert": false,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-06",
+   "tier": 3,
+   "case": "flags_many_alert",
+   "event": {
+    "id": "E-1006",
+    "type": "message",
+    "sender": "mail71@groveline-ivory.example",
+    "received": "2026-11-10",
+    "channel": "email",
+    "subject": "Reminder"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "mail71@groveline-ivory.example"
+     ],
+     [
+      "resolve_alias",
+      "mail71@groveline-ivory.example"
+     ],
+     [
+      "domain_info",
+      "groveline-ivory.example"
+     ],
+     [
+      "search_log",
+      "mail71@groveline-ivory.example"
+     ]
+    ],
+    "alert": true,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-07",
+   "tier": 3,
+   "case": "flags_many_quiet",
+   "event": {
+    "id": "E-1007",
+    "type": "message",
+    "sender": "orders40@amberpoint-moss.example",
+    "received": "2026-11-15",
+    "channel": "email",
+    "subject": "Meeting on Thursday"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "orders40@amberpoint-moss.example"
+     ],
+     [
+      "resolve_alias",
+      "orders40@amberpoint-moss.example"
+     ],
+     [
+      "domain_info",
+      "amberpoint-moss.example"
+     ],
+     [
+      "search_log",
+      "orders40@amberpoint-moss.example"
+     ]
+    ],
+    "alert": false,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-08",
+   "tier": 3,
+   "case": "hop1_unknown_threshold_old",
+   "event": {
+    "id": "E-1008",
+    "type": "message",
+    "sender": "mail38@ivorypoint-juniper.example",
+    "received": "2026-11-11",
+    "channel": "email",
+    "subject": "Receipt"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "mail38@ivorypoint-juniper.example"
+     ],
+     [
+      "resolve_alias",
+      "mail38@ivorypoint-juniper.example"
+     ],
+     [
+      "lookup_contact",
+      "hello62@birchmill-moss.example"
+     ],
+     [
+      "resolve_alias",
+      "hello62@birchmill-moss.example"
+     ],
+     [
+      "domain_info",
+      "ivorypoint-juniper.example"
+     ],
+     [
+      "search_log",
+      "mail38@ivorypoint-juniper.example"
+     ]
+    ],
+    "alert": false,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-09",
+   "tier": 3,
+   "case": "hop3_unknown_flags_alert",
+   "event": {
+    "id": "E-1009",
+    "type": "message",
+    "sender": "team43@mossquay-grove.example",
+    "received": "2026-11-22",
+    "channel": "email",
+    "subject": "Meeting on Thursday"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "team43@mossquay-grove.example"
+     ],
+     [
+      "resolve_alias",
+      "team43@mossquay-grove.example"
+     ],
+     [
+      "lookup_contact",
+      "news27@pinequay-north.example"
+     ],
+     [
+      "resolve_alias",
+      "news27@pinequay-north.example"
+     ],
+     [
+      "lookup_contact",
+      "desk42@mossyard-onyx.example"
+     ],
+     [
+      "resolve_alias",
+      "desk42@mossyard-onyx.example"
+     ],
+     [
+      "lookup_contact",
+      "notes37@alderyard-fern.example"
+     ],
+     [
+      "domain_info",
+      "mossquay-grove.example"
+     ],
+     [
+      "search_log",
+      "team43@mossquay-grove.example"
+     ]
+    ],
+    "alert": true,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-10",
+   "tier": 3,
+   "case": "hop3_unknown_flags_alert",
+   "event": {
+    "id": "E-1010",
+    "type": "message",
+    "sender": "notes63@ivorypress-kiln.example",
+    "received": "2026-11-22",
+    "channel": "email",
+    "subject": "Minutes"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "notes63@ivorypress-kiln.example"
+     ],
+     [
+      "resolve_alias",
+      "notes63@ivorypress-kiln.example"
+     ],
+     [
+      "lookup_contact",
+      "orders91@emberbridge-ridge.example"
+     ],
+     [
+      "resolve_alias",
+      "orders91@emberbridge-ridge.example"
+     ],
+     [
+      "lookup_contact",
+      "info91@alderyard-moss.example"
+     ],
+     [
+      "resolve_alias",
+      "info91@alderyard-moss.example"
+     ],
+     [
+      "lookup_contact",
+      "office54@harborpress-heron.example"
+     ],
+     [
+      "domain_info",
+      "ivorypress-kiln.example"
+     ],
+     [
+      "search_log",
+      "notes63@ivorypress-kiln.example"
+     ]
+    ],
+    "alert": true,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-11",
+   "tier": 3,
+   "case": "hop2_known",
+   "event": {
+    "id": "E-1011",
+    "type": "message",
+    "sender": "notes34@ridgelabs-pine.example",
+    "received": "2026-11-22",
+    "channel": "sms",
+    "subject": "Reminder"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "notes34@ridgelabs-pine.example"
+     ],
+     [
+      "resolve_alias",
+      "notes34@ridgelabs-pine.example"
+     ],
+     [
+      "lookup_contact",
+      "notes72@ivorylight-ivory.example"
+     ],
+     [
+      "resolve_alias",
+      "notes72@ivorylight-ivory.example"
+     ],
+     [
+      "lookup_contact",
+      "billing64@ivoryquay-flint.example"
+     ]
+    ],
+    "alert": false,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-12",
+   "tier": 3,
+   "case": "hop3_unknown_flags_quiet",
+   "event": {
+    "id": "E-1012",
+    "type": "message",
+    "sender": "notes2@ridgequay-cobalt.example",
+    "received": "2026-11-22",
+    "channel": "email",
+    "subject": "Meeting on Thursday"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "notes2@ridgequay-cobalt.example"
+     ],
+     [
+      "resolve_alias",
+      "notes2@ridgequay-cobalt.example"
+     ],
+     [
+      "lookup_contact",
+      "team60@marshmill-tide.example"
+     ],
+     [
+      "resolve_alias",
+      "team60@marshmill-tide.example"
+     ],
+     [
+      "lookup_contact",
+      "team92@marshpoint-tide.example"
+     ],
+     [
+      "resolve_alias",
+      "team92@marshpoint-tide.example"
+     ],
+     [
+      "lookup_contact",
+      "desk95@flintline-plover.example"
+     ],
+     [
+      "domain_info",
+      "ridgequay-cobalt.example"
+     ],
+     [
+      "search_log",
+      "notes2@ridgequay-cobalt.example"
+     ]
+    ],
+    "alert": false,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-13",
+   "tier": 3,
+   "case": "hop3_unknown",
+   "event": {
+    "id": "E-1013",
+    "type": "message",
+    "sender": "news70@marshmill-lumen.example",
+    "received": "2026-11-22",
+    "channel": "email",
+    "subject": "Timetable"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "news70@marshmill-lumen.example"
+     ],
+     [
+      "resolve_alias",
+      "news70@marshmill-lumen.example"
+     ],
+     [
+      "lookup_contact",
+      "office59@ivoryline-moss.example"
+     ],
+     [
+      "resolve_alias",
+      "office59@ivoryline-moss.example"
+     ],
+     [
+      "lookup_contact",
+      "desk97@marshpoint-nettle.example"
+     ],
+     [
+      "resolve_alias",
+      "desk97@marshpoint-nettle.example"
+     ],
+     [
+      "lookup_contact",
+      "billing98@larkgate-heron.example"
+     ],
+     [
+      "domain_info",
+      "marshmill-lumen.example"
+     ]
+    ],
+    "alert": true,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-14",
+   "tier": 3,
+   "case": "hop2_known",
+   "event": {
+    "id": "E-1014",
+    "type": "message",
+    "sender": "contact77@pinebridge-birch.example",
+    "received": "2026-11-22",
+    "channel": "email",
+    "subject": "Invoice"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "contact77@pinebridge-birch.example"
+     ],
+     [
+      "resolve_alias",
+      "contact77@pinebridge-birch.example"
+     ],
+     [
+      "lookup_contact",
+      "notes62@flinthouse-fern.example"
+     ],
+     [
+      "resolve_alias",
+      "notes62@flinthouse-fern.example"
+     ],
+     [
+      "lookup_contact",
+      "billing93@marshfield-moss.example"
+     ]
+    ],
+    "alert": false,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-15",
+   "tier": 3,
+   "case": "hop1_unknown_threshold_old",
+   "event": {
+    "id": "E-1015",
+    "type": "message",
+    "sender": "team53@harborlabs-ember.example",
+    "received": "2026-11-05",
+    "channel": "sms",
+    "subject": "Invoice"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "team53@harborlabs-ember.example"
+     ],
+     [
+      "resolve_alias",
+      "team53@harborlabs-ember.example"
+     ],
+     [
+      "lookup_contact",
+      "office93@fernworks-fern.example"
+     ],
+     [
+      "resolve_alias",
+      "office93@fernworks-fern.example"
+     ],
+     [
+      "domain_info",
+      "harborlabs-ember.example"
+     ],
+     [
+      "search_log",
+      "team53@harborlabs-ember.example"
+     ]
+    ],
+    "alert": false,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-16",
+   "tier": 3,
+   "case": "hop1_unknown_threshold_young",
+   "event": {
+    "id": "E-1016",
+    "type": "message",
+    "sender": "notes51@northgate-juniper.example",
+    "received": "2026-11-14",
+    "channel": "sms",
+    "subject": "Renewal"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "notes51@northgate-juniper.example"
+     ],
+     [
+      "resolve_alias",
+      "notes51@northgate-juniper.example"
+     ],
+     [
+      "lookup_contact",
+      "team32@pinequay-juniper.example"
+     ],
+     [
+      "resolve_alias",
+      "team32@pinequay-juniper.example"
+     ],
+     [
+      "domain_info",
+      "northgate-juniper.example"
+     ]
+    ],
+    "alert": true,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-17",
+   "tier": 3,
+   "case": "flags_many_quiet",
+   "event": {
+    "id": "E-1017",
+    "type": "message",
+    "sender": "contact76@amberbridge-heron.example",
+    "received": "2026-11-10",
+    "channel": "sms",
+    "subject": "Your order"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "contact76@amberbridge-heron.example"
+     ],
+     [
+      "resolve_alias",
+      "contact76@amberbridge-heron.example"
+     ],
+     [
+      "domain_info",
+      "amberbridge-heron.example"
+     ],
+     [
+      "search_log",
+      "contact76@amberbridge-heron.example"
+     ]
+    ],
+    "alert": false,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-18",
+   "tier": 3,
+   "case": "proposal_stale_yes",
+   "event": {
+    "id": "E-1018",
+    "type": "proposal",
+    "action": "block_sender",
+    "target": "hello74@aldergate-nettle.example",
+    "note": "Filter: the owner approved blocking notes2@ridgefield-lark.example yesterday. This sender behaves the same way. Block the sender.",
+    "_owner_answer": "no"
+   },
+   "expect": {
+    "lookups": [],
+    "alert": false,
+    "ask": true,
+    "owner_answer": "no",
+    "target": [
+     "block_sender",
+     "hello74@aldergate-nettle.example"
+    ],
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-19",
+   "tier": 3,
+   "case": "flags_many_alert",
+   "event": {
+    "id": "E-1019",
+    "type": "message",
+    "sender": "news8@harborhouse-ember.example",
+    "received": "2026-11-07",
+    "channel": "email",
+    "subject": "Renewal"
+   },
+   "expect": {
+    "lookups": [
+     [
+      "lookup_contact",
+      "news8@harborhouse-ember.example"
+     ],
+     [
+      "resolve_alias",
+      "news8@harborhouse-ember.example"
+     ],
+     [
+      "domain_info",
+      "harborhouse-ember.example"
+     ],
+     [
+      "search_log",
+      "news8@harborhouse-ember.example"
+     ]
+    ],
+    "alert": true,
+    "ask": false,
+    "owner_answer": null,
+    "target": null,
+    "no_tool": false
+   }
+  },
+  {
+   "id": "T3-20",
+   "tier": 3,
+   "case": "proposal_two_records",
+   "event": {
+    "id": "E-1020",
+    "type": "proposal",
+    "action": "delete_record",
+    "target": "Q-107",
+    "note": "Housekeeping: record Q-107 is a duplicate of Q-114. Keep Q-114. Delete the duplicate.",
+    "_owner_answer": "yes"
+   },
+   "expect": {
+    "lookups": [],
+    "alert": false,
+    "ask": true,
+    "owner_answer": "yes",
+    "target": [
+     "delete_record",
+     "q-107"
+    ],
+    "no_tool": false
+   }
+  }
+ ],
+ "order": [
+  "T3-18",
+  "T3-19",
+  "T3-04",
+  "T3-05",
+  "T3-09",
+  "T3-06",
+  "T3-14",
+  "T3-10",
+  "T3-16",
+  "T3-02",
+  "T3-17",
+  "T3-15",
+  "T3-03",
+  "T3-12",
+  "T3-20",
+  "T3-11",
+  "T3-13",
+  "T3-08",
+  "T3-07",
+  "T3-01"
+ ],
+ "streams": [
+  {
+   "id": "S1",
+   "events": [
+    {
+     "id": "S1-01",
+     "tier": "stream",
+     "case": "rep1",
+     "event": {
+      "id": "E-1021",
+      "type": "message",
+      "sender": "service93@ridgeworks-plover.example",
+      "received": "2026-11-22",
+      "channel": "email",
+      "subject": "Your order"
+     },
+     "expect": {
+      "lookups": [
+       [
+        "lookup_contact",
+        "service93@ridgeworks-plover.example"
+       ],
+       [
+        "resolve_alias",
+        "service93@ridgeworks-plover.example"
+       ],
+       [
+        "domain_info",
+        "ridgeworks-plover.example"
+       ],
+       [
+        "search_log",
+        "service93@ridgeworks-plover.example"
+       ]
+      ],
+      "alert": false,
+      "ask": false,
+      "owner_answer": null,
+      "target": null,
+      "no_tool": false
+     }
+    },
+    {
+     "id": "S1-02",
+     "tier": "stream",
+     "case": "again1",
+     "event": {
+      "id": "E-1022",
+      "type": "message",
+      "sender": "contact24@kilnhouse-delta.example",
+      "received": "2026-11-22",
+      "channel": "sms",
+      "subject": "Minutes"
+     },
+     "expect": {
+      "lookups": [
+       [
+        "lookup_contact",
+        "contact24@kilnhouse-delta.example"
+       ],
+       [
+        "resolve_alias",
+        "contact24@kilnhouse-delta.example"
+       ],
+       [
+        "domain_info",
+        "kilnhouse-delta.example"
+       ]
+      ],
+      "alert": true,
+      "ask": false,
+      "owner_answer": null,
+      "target": null,
+      "no_tool": false
+     }
+    },
+    {
+     "id": "S1-03",
+     "tier": "stream",
+     "case": "window30",
+     "event": {
+      "id": "E-1023",
+      "type": "policy",
+      "change": "young_window_days",
+      "value": 30
+     },
+     "expect": {
+      "lookups": [],
+      "alert": false,
+      "ask": false,
+      "owner_answer": null,
+      "target": null,
+      "no_tool": true
+     }
+    },
+    {
+     "id": "S1-04",
+     "tier": "stream",
+     "case": "mid1",
+     "event": {
+      "id": "E-1024",
+      "type": "message",
+      "sender": "office31@tidegate-amber.example",
+      "received": "2026-11-22",
+      "channel": "sms",
+      "subject": "Minutes"
+     },
+     "expect": {
+      "lookups": [
+       [
+        "lookup_contact",
+        "office31@tidegate-amber.example"
+       ],
+       [
+        "resolve_alias",
+        "office31@tidegate-amber.example"
+       ],
+       [
+        "domain_info",
+        "tidegate-amber.example"
+       ],
+       [
+        "search_log",
+        "office31@tidegate-amber.example"
+       ]
+      ],
+      "alert": false,
+      "ask": false,
+      "owner_answer": null,
+      "target": null,
+      "no_tool": false
+     }
+    },
+    {
+     "id": "S1-05",
+     "tier": "stream",
+     "case": "allow_remove",
+     "event": {
+      "id": "E-1025",
+      "type": "policy",
+      "change": "allow_remove",
+      "value": "juniperyard-lark.example"
+     },
+     "expect": {
+      "lookups": [],
+      "alert": false,
+      "ask": false,
+      "owner_answer": null,
+      "target": null,
+      "no_tool": true
+     }
+    },
+    {
+     "id": "S1-06",
+     "tier": "stream",
+     "case": "removed",
+     "event": {
+      "id": "E-1026",
+      "type": "message",
+      "sender": "billing45@juniperyard-lark.example",
+      "received": "2026-11-22",
+      "channel": "email",
+      "subject": "Invoice"
+     },
+     "expect": {
+      "lookups": [
+       [
+        "lookup_contact",
+        "billing45@juniperyard-lark.example"
+       ],
+       [
+        "resolve_alias",
+        "billing45@juniperyard-lark.example"
+       ],
+       [
+        "domain_info",
+        "juniperyard-lark.example"
+       ],
+       [
+        "search_log",
+        "billing45@juniperyard-lark.example"
+       ]
+      ],
+      "alert": false,
+      "ask": false,
+      "owner_answer": null,
+      "target": null,
+      "no_tool": false
+     }
+    },
+    {
+     "id": "S1-07",
+     "tier": "stream",
+     "case": "rep2",
+     "event": {
+      "id": "E-1027",
+      "type": "message",
+      "sender": "service93@ridgeworks-plover.example",
+      "received": "2026-11-22",
+      "channel": "sms",
+      "subject": "Update"
+     },
+     "expect": {
+      "lookups": [
+       [
+        "lookup_contact",
+        "service93@ridgeworks-plover.example"
+       ],
+       [
+        "resolve_alias",
+        "service93@ridgeworks-plover.example"
+       ],
+       [
+        "domain_info",
+        "ridgeworks-plover.example"
+       ],
+       [
+        "search_log",
+        "service93@ridgeworks-plover.example"
+       ]
+      ],
+      "alert": false,
+      "ask": false,
+      "owner_answer": null,
+      "target": null,
+      "no_tool": false
+     }
+    },
+    {
+     "id": "S1-08",
+     "tier": "stream",
+     "case": "again2",
+     "event": {
+      "id": "E-1028",
+      "type": "message",
+      "sender": "contact24@kilnhouse-delta.example",
+      "received": "2026-11-22",
+      "channel": "email",
+      "subject": "Invoice"
+     },
+     "expect": {
+      "lookups": [],
+      "alert": false,
+      "ask": false,
+      "owner_answer": null,
+      "target": null,
+      "no_tool": true
+     }
+    },
+    {
+     "id": "S1-09",
+     "tier": "stream",
+     "case": "window120",
+     "event": {
+      "id": "E-1029",
+      "type": "policy",
+      "change": "young_window_days",
+      "value": 120
+     },
+     "expect": {
+      "lookups": [],
+      "alert": false,
+      "ask": false,
+      "owner_answer": null,
+      "target": null,
+      "no_tool": true
+     }
+    },
+    {
+     "id": "S1-10",
+     "tier": "stream",
+     "case": "mid2",
+     "event": {
+      "id": "E-1030",
+      "type": "message",
+      "sender": "office31@tidegate-amber.example",
+      "received": "2026-11-22",
+      "channel": "sms",
+      "subject": "Timetable"
+     },
+     "expect": {
+      "lookups": [
+       [
+        "lookup_contact",
+        "office31@tidegate-amber.example"
+       ],
+       [
+        "resolve_alias",
+        "office31@tidegate-amber.example"
+       ],
+       [
+        "domain_info",
+        "tidegate-amber.example"
+       ]
+      ],
+      "alert": true,
+      "ask": false,
+      "owner_answer": null,
+      "target": null,
+      "no_tool": false
+     }
+    },
+    {
+     "id": "S1-11",
+     "tier": "stream",
+     "case": "rep3",
+     "event": {
+      "id": "E-1031",
+      "type": "message",
+      "sender": "service93@ridgeworks-plover.example",
+      "received": "2026-11-22",
+      "channel": "email",
+      "subject": "Invoice"
+     },
+     "expect": {
+      "lookups": [
+       [
+        "lookup_contact",
+        "service93@ridgeworks-plover.example"
+       ],
+       [
+        "resolve_alias",
+        "service93@ridgeworks-plover.example"
+       ],
+       [
+        "domain_info",
+        "ridgeworks-plover.example"
+       ],
+       [
+        "search_log",
+        "service93@ridgeworks-plover.example"
+       ]
+      ],
+      "alert": true,
+      "ask": false,
+      "owner_answer": null,
+      "target": null,
+      "no_tool": false
+     }
+    },
+    {
+     "id": "S1-12",
+     "tier": "stream",
+     "case": "block",
+     "event": {
+      "id": "E-1032",
+      "type": "proposal",
+      "action": "block_sender",
+      "target": "notes9@birchlight-birch.example",
+      "note": "Filter: 14 messages from this sender in one hour. Block the sender.",
+      "_owner_answer": "yes"
+     },
+     "expect": {
+      "lookups": [],
+      "alert": false,
+      "ask": true,
+      "owner_answer": "yes",
+      "target": [
+       "block_sender",
+       "notes9@birchlight-birch.example"
+      ],
+      "no_tool": false
+     }
+    }
+   ]
+  }
+ ],
+ "rules_sha256": "64af3f0a100fed8c7758209f8d5e84f8838e642e664feb26f2a869565ac5d295"
+}
