@@ -165,7 +165,11 @@ def run_arm(arm: str, jobs_file: Path, out: Path, private: Path, baseline: Path 
     private.mkdir(parents=True, exist_ok=True)
     res, priv = out / "results.jsonl", private / f"reasoning-{arm}.jsonl"
     have = done_rows(res)
+    fut_file = out / "futility.json"
     for n, jid in enumerate(data["order"], 1):
+        if arm == "I" and n > 20 and fut_file.exists() and json.loads(fut_file.read_text())["stop"]:
+            print("arm I was stopped by the futility rule; a resume does not carry on", flush=True)
+            break
         if jid not in have:
             try:
                 row, p = run_job(arm, data["world"], jobs[jid])
@@ -181,15 +185,11 @@ def run_arm(arm: str, jobs_file: Path, out: Path, private: Path, baseline: Path 
             v = score62a.judge(jobs[jid], row)
             print(arm, jid, row["kind"], "right" if v["right"] else "WRONG", row["end"], [c["name"] for c in row["calls"]],
                   row["seconds"], "thermal", row["thermal_before"], flush=True)
-        if arm == "I" and baseline is not None and n == 20 and not (out / "futility.json").exists():
-            base = done_rows(baseline)
-            first = data["order"][:20]
-            i_right = sum(score62a.judge(jobs[j], have[j])["right"] for j in first)
-            g_right = sum(score62a.judge(jobs[j], base[j])["right"] for j in first if j in base)
-            stop = g_right - i_right >= 6
-            (out / "futility.json").write_text(json.dumps({"after": 20, "I_right": i_right, "G_right": g_right, "stop": stop}) + "\n")
-            print(f"futility check after 20 jobs: I {i_right}, G {g_right} -> {'STOP' if stop else 'continue'}", flush=True)
-            if stop:
+        if arm == "I" and baseline is not None and n == 20 and not fut_file.exists():
+            f = score62a.futility(jobs, data["order"], have, done_rows(baseline))
+            fut_file.write_text(json.dumps(f) + "\n")
+            print(f"futility check after 20 jobs: I {f['I_right']}, G {f['G_right']} -> {'STOP' if f['stop'] else 'continue'}", flush=True)
+            if f["stop"]:
                 break
     if priv.exists():
         (out / "reasoning.sha256").write_text(f"{arm62.sha256_file(priv)}  reasoning-{arm}.jsonl (private)\n")
@@ -205,6 +205,7 @@ def run_capacity(jobs_file: Path, out: Path):
     out.mkdir(parents=True, exist_ok=True)
     summary = []
     for n in (1, 2, 4):
+        (out / f"results-{n}.jsonl").unlink(missing_ok=True)      # a rerun of Part 2 starts its files fresh
         therm0, t0 = arm62.thermal(), time.time()
         with ThreadPoolExecutor(n) as ex:
             rows = list(ex.map(lambda jid: run_job("I", data["world"], jobs[jid])[0], subset))
@@ -303,6 +304,9 @@ def run_all(run: Path, private: Path, smoke: bool):
     meta.update({"ollama_ps_after": arm62._run("ollama", "ps"), "thermal_end": arm62.thermal(),
                  "finished_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())})
     save()
+    if meta.get("capacity_rc") not in (None, 0):
+        print("STOPPED EARLY in Part 2 (the watcher arms are complete); rerun with the same --run", flush=True)
+        sys.exit(meta["capacity_rc"])
     print("all done" + (" (arm I stopped by the futility rule; Part 2 not run)" if stopped else ""), run, flush=True)
 
 
