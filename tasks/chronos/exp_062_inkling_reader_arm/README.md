@@ -10,7 +10,8 @@ Registered 2026-11-21 before any kit and before any corpus message was sent to t
 | File | What it is |
 |---|---|
 | [RESULT.md](RESULT.md) | controls, verdicts, the decision, the numbers, the bands by class, the empty answers, time, the deviations from the registration, what is held back, limits, the open question, SO WHAT |
-| [ADDENDUM_A.md](ADDENDUM_A.md) | registered 2026-11-22, unsigned; kit built and smoke-tested, not run: a screen of the model as a persistent watcher with tools, reasoning on, against gemma4:26b on 40 made-up jobs; how many watchers the machine carries; whether a monitor can read its reasoning. Sends no exp_055 message; the reader verdict stands |
+| [ADDENDUM_A_RESULT.md](ADDENDUM_A_RESULT.md) | Addendum A's result, 2026-11-22: both models right on all 40 watcher jobs as scored, neither acted irreversibly without a yes; Inkling median 19.8 s a job against gemma4:26b's 9.3 s, with 12 lookups and 3 alerts nobody asked for; four watchers at once give 1.4 times the throughput. A tie at the ceiling: the jobs were too easy to separate the models |
+| [ADDENDUM_A.md](ADDENDUM_A.md) | registered 2026-11-22 and run the same day: a screen of the model as a persistent watcher with tools, reasoning on, against gemma4:26b on 40 made-up jobs; how many watchers the machine carries; whether a monitor can read its reasoning. Sends no exp_055 message; the reader verdict stands |
 | [HYPOTHESIS.md](HYPOTHESIS.md) | the registration: the arm, the pinned runtime, controls C1–C4, H1–H3, the decision rule, limits, frozen inputs; the kit note; Amendment 1 (an error is not an answer, before the run); Amendment 2 (a look at the partial counts during the run) |
 | `kit/arm62.py` | checks the frozen inputs, the server's commit and the model file's hash; starts the side server; runs the arm under exp_054's audit hook; a failed call stops the arm and is asked again on resume; the reasoning text goes to a private folder and is hashed |
 | `kit/score62.py` | exp_055's metrics (imported unchanged), C1–C4, H1–H3, the paired tables against F and G, the decision rule; voids an incomplete run |
@@ -18,6 +19,8 @@ Registered 2026-11-21 before any kit and before any corpus message was sent to t
 | `kit/build62a.py`, `kit/jobs62a.json`, `kit/smoke62a.json` | Addendum A: the made-up world, the 40 frozen watcher jobs and the five smoke jobs |
 | `kit/watch62a.py`, `kit/score62a.py`, `kit/monitor62a.py` | Addendum A: the driver (G through Ollama, I on the side server, the futility rule, the four-slot part), the scorer, and the two rules that read the reasoning |
 | `dev_a/20261122T075548Z/` | Addendum A's smoke test on the five smoke jobs |
+| `runs_a/20261122T081037Z/` | Addendum A's run: `G/` and `I/` results, the audit logs, `capacity/`, `score.json`, `monitor.json`, `describe.json`. The reasoning text of both arms is held back and hashed |
+| `kit/describe62a.py` | Addendum A, written after the run, descriptive only: the result by job kind, unrequested alerts, tokens |
 | `dev/20261121T123544Z/` | the smoke test on exp_060's dummy message (not a corpus message) |
 | `runs/20261121T131040Z/` | the run: `I/results.jsonl`, `I/audit.jsonl`, `I/server.log`, `I/reasoning.sha256`, `meta.json`, `run.log`, `score.json`, `describe.json`. The reasoning text is held back and hashed |
 
@@ -33,6 +36,6 @@ tmux new -s exp062 'cd ~/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_read
 
 A run resumes with the same run folder. To score: `python3.14 -I kit/score62.py runs/<ts>`, then `python3.14 -I kit/describe62.py runs/<ts>`.
 
-**Status: the main run is complete; Addendum A is registered, unsigned and not run.** `runs/20261121T131040Z/` went from 2026-11-21 13:10Z to 2026-11-22 01:39Z, at thermal level 0 before every call. Every figure is from one build of the merged fix's commit; the repeat on a tagged llama.cpp build has not been run.
+**Status: the main run and Addendum A are complete.** `runs/20261121T131040Z/` went from 2026-11-21 13:10Z to 2026-11-22 01:39Z, at thermal level 0 before every call. Every figure is from one build of the merged fix's commit; the repeat on a tagged llama.cpp build has not been run.
 
 **Everything here is fictional:** the person, every organisation and domain. No message is operational.

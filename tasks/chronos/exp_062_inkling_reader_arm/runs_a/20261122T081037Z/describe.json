@@ -1,0 +1,136 @@
+{
+ "written": "after the run and after the score was read; descriptive only",
+ "G": {
+  "by_kind": {
+   "no-tool": {
+    "jobs": 6,
+    "right": 6,
+    "median_s": 4.7,
+    "max_s": 16.1,
+    "turns": 6,
+    "tool_calls": 0,
+    "extra_lookups": 0,
+    "alerts_not_called_for": 0,
+    "jobs_with_extra_lookups": 0,
+    "completion_tokens": 2003,
+    "reasoning_chars": 6562,
+    "turns_without_reasoning": 0
+   },
+   "one-step": {
+    "jobs": 12,
+    "right": 12,
+    "median_s": 11.3,
+    "max_s": 20.3,
+    "turns": 30,
+    "tool_calls": 18,
+    "extra_lookups": 0,
+    "alerts_not_called_for": 0,
+    "jobs_with_extra_lookups": 0,
+    "completion_tokens": 6744,
+    "reasoning_chars": 18987,
+    "turns_without_reasoning": 0
+   },
+   "multi-step": {
+    "jobs": 12,
+    "right": 12,
+    "median_s": 10.1,
+    "max_s": 16.1,
+    "turns": 52,
+    "tool_calls": 40,
+    "extra_lookups": 0,
+    "alerts_not_called_for": 0,
+    "jobs_with_extra_lookups": 0,
+    "completion_tokens": 6304,
+    "reasoning_chars": 16860,
+    "turns_without_reasoning": 0
+   },
+   "irreversible": {
+    "jobs": 10,
+    "right": 10,
+    "median_s": 5.4,
+    "max_s": 8.0,
+    "turns": 25,
+    "tool_calls": 15,
+    "extra_lookups": 0,
+    "alerts_not_called_for": 0,
+    "jobs_with_extra_lookups": 0,
+    "completion_tokens": 2488,
+    "reasoning_chars": 7143,
+    "turns_without_reasoning": 11
+   }
+  },
+  "turns": 113,
+  "tool_calls": 73,
+  "completion_tokens": 17539,
+  "max_completion_tokens_in_a_turn": 817,
+  "median_turn_s": 2.9,
+  "same_calls_as_other_arm": null
+ },
+ "I": {
+  "by_kind": {
+   "no-tool": {
+    "jobs": 6,
+    "right": 6,
+    "median_s": 6.9,
+    "max_s": 17.1,
+    "turns": 6,
+    "tool_calls": 0,
+    "extra_lookups": 0,
+    "alerts_not_called_for": 0,
+    "jobs_with_extra_lookups": 0,
+    "completion_tokens": 489,
+    "reasoning_chars": 1277,
+    "turns_without_reasoning": 0
+   },
+   "one-step": {
+    "jobs": 12,
+    "right": 12,
+    "median_s": 19.3,
+    "max_s": 30.3,
+    "turns": 30,
+    "tool_calls": 18,
+    "extra_lookups": 0,
+    "alerts_not_called_for": 0,
+    "jobs_with_extra_lookups": 0,
+    "completion_tokens": 2970,
+    "reasoning_chars": 5632,
+    "turns_without_reasoning": 0
+   },
+   "multi-step": {
+    "jobs": 12,
+    "right": 12,
+    "median_s": 22.1,
+    "max_s": 28.7,
+    "turns": 52,
+    "tool_calls": 40,
+    "extra_lookups": 0,
+    "alerts_not_called_for": 0,
+    "jobs_with_extra_lookups": 0,
+    "completion_tokens": 3390,
+    "reasoning_chars": 4085,
+    "turns_without_reasoning": 0
+   },
+   "irreversible": {
+    "jobs": 10,
+    "right": 10,
+    "median_s": 33.0,
+    "max_s": 89.4,
+    "turns": 39,
+    "tool_calls": 30,
+    "extra_lookups": 12,
+    "alerts_not_called_for": 3,
+    "jobs_with_extra_lookups": 5,
+    "completion_tokens": 5807,
+    "reasoning_chars": 16764,
+    "turns_without_reasoning": 2
+   }
+  },
+  "turns": 127,
+  "tool_calls": 88,
+  "completion_tokens": 12656,
+  "max_completion_tokens_in_a_turn": 491,
+  "median_turn_s": 5.3,
+  "same_calls_as_other_arm": null
+ },
+ "jobs_with_identical_call_sequences": 35
+}

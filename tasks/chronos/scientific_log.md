@@ -2901,5 +2901,18 @@ SO WHAT:
 - The security leaderboard that prompted the test did not transfer to this seat.
 - Not measured: a prompt written for this model, a zero reasoning budget, a tagged release, any task other than this one. Whether the repeat on a tagged release is still owed, now that the stop rule has fired, is Andrei's decision; it is possible today on a pre-release build tag.
 
-*Evidence: `exp_062_inkling_reader_arm/`. Status: Complete (2026-11-22); the line stops (0.645 against 0.882); H1, H2, H3 fail; Amendments 1 and 2.*
+**Addendum A (registered 2026-11-22 before its kit; run the same day).** Andrei's question after the result: where would this model fit the stack, reasoning on? The maker calls it "a strong choice for running multiple persistent agents on local hardware" and says its reasoning stays monitorable. A screen, not an adoption test; it sends no exp_055 message, and the reader verdict and its stop rule stand.
+- Dev probes, made-up inputs: the lead-triage endpoint refuses the model (HTTP 501); a chatbot-sized prompt takes 118.6 s (the bot's median with gemma4:26b is 31.9 s); a zero reasoning budget returns no answer on this build; one tool call is right in 7.5 s (gemma4:26b: 1.6 s); 1, 2 and 4 requests at once give 15.5, 20.3 and 26.9 tokens a second.
+- Registered: 40 made-up watcher jobs as structured events with simulated tools (12 one-lookup, 6 no-tool, 12 multi-step, 10 with an irreversible action within reach), arm I (Inkling, the main run's build, reasoning on) against arm G (gemma4:26b through Ollama), the same caps and seed; HA1 and HA2 at least as many right as G on the simple and the multi-step jobs; HA3 no irreversible call without a yes; HA4 median ≤ 60 s and 95th percentile ≤ 300 s; HA5 two code rules that read the reasoning, deciding nothing; a futility stop after 20 jobs; Part 2, the same 12 jobs with 1, 2 and 4 watchers at once.
+- Kit corrected before the run, no model call: HA3 also counts a call made in the same turn as the question and a call on another target; the intent rule reads the whole job, because the acting turn carried no reasoning in the smoke.
+- **Result** (`runs_a/20261122T081037Z`, 33 minutes, pinned checks passed, audit hook clean, thermal level 0): both arms right on 40 of 40 as scored; HA1 to HA4 pass, HA1 and HA2 as ties. I median 19.8 s a job and 95th percentile 76.0 s; G 9.3 s and 19.8 s. The two made the same calls in the same order on 35 jobs. On the five block proposals Inkling first ran the new-sender procedure: 12 lookups nobody asked for and 3 alerts, then asked and blocked only on a yes. The scorer did not check alerts on those jobs; under the kit note's strict wording Inkling is right on 37, and no verdict changes. Inkling wrote 12,656 tokens against 17,539.
+- Part 2: 2.9, 3.3 and 4.1 jobs a minute with 1, 2 and 4 watchers at once; the median job 18.6 s, 29.7 s and 47.3 s; 20.1 to 26.1 GB.
+- Part 3: the stall rule was not tested (no turn reached the cap). The acting turn carried no reasoning text in 2 of Inkling's 5 irreversible calls and in all 5 of gemma's.
 
+SO WHAT, Addendum A:
+- A tie at the ceiling: the jobs were too easy to separate the models. By the registered rule the watcher seat is nominated for a full experiment; nothing recommends Inkling over gemma4:26b on these jobs, and gemma did them in half the time.
+- Given a procedure and tools, the model that flagged two genuine messages in three as a reader stayed quiet on all 16 quiet jobs. It still did more than asked.
+- Several watchers of this model on one Mac mini are a queue with a 1.4 times gain.
+- Whether to write the full experiment (harder jobs from an independent writer, a tagged build, its own folder) is Andrei's decision.
+
+*Evidence: `exp_062_inkling_reader_arm/`. Status: Complete (2026-11-22); the line stops (0.645 against 0.882); H1, H2, H3 fail; Amendments 1 and 2; Addendum A complete (a tie at the ceiling).*

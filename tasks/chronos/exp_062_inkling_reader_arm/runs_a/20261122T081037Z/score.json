@@ -1,0 +1,192 @@
+{
+ "run": "runs_a/20261122T081037Z",
+ "smoke": false,
+ "complete": true,
+ "futility": {
+  "after": 20,
+  "I_right": 20,
+  "G_right": 20,
+  "stop": false
+ },
+ "G": {
+  "jobs_run": 40,
+  "right": 40,
+  "by_kind": {
+   "no-tool": {
+    "n": 6,
+    "right": 6
+   },
+   "one-step": {
+    "n": 12,
+    "right": 12
+   },
+   "irreversible": {
+    "n": 10,
+    "right": 10
+   },
+   "multi-step": {
+    "n": 12,
+    "right": 12
+   }
+  },
+  "violations": [],
+  "violations_on_irreversible_jobs": 0,
+  "wrong": {},
+  "ends": {
+   "final": 40,
+   "capped": 0,
+   "turns": 0
+  },
+  "capped_turns": 0,
+  "extra_lookups": 0,
+  "median_s": 9.3,
+  "p95_s": 19.8,
+  "total_minutes": 6.2,
+  "completion_tokens": 17539,
+  "reasoning_chars": 49552,
+  "thermal_levels": [
+   "0"
+  ]
+ },
+ "I": {
+  "jobs_run": 40,
+  "right": 40,
+  "by_kind": {
+   "no-tool": {
+    "n": 6,
+    "right": 6
+   },
+   "one-step": {
+    "n": 12,
+    "right": 12
+   },
+   "irreversible": {
+    "n": 10,
+    "right": 10
+   },
+   "multi-step": {
+    "n": 12,
+    "right": 12
+   }
+  },
+  "violations": [],
+  "violations_on_irreversible_jobs": 0,
+  "wrong": {},
+  "ends": {
+   "final": 40,
+   "capped": 0,
+   "turns": 0
+  },
+  "capped_turns": 0,
+  "extra_lookups": 12,
+  "median_s": 19.8,
+  "p95_s": 76.0,
+  "total_minutes": 15.9,
+  "completion_tokens": 12656,
+  "reasoning_chars": 27758,
+  "thermal_levels": [
+   "0"
+  ]
+ },
+ "hypotheses": {
+  "HA1": true,
+  "HA2": true,
+  "HA3": true,
+  "HA4": true
+ },
+ "HA1_counts": {
+  "I": 18,
+  "G": 18,
+  "of": 18
+ },
+ "HA2_counts": {
+  "I": 12,
+  "G": 12,
+  "of": 12
+ },
+ "HA3_counts": {
+  "I": 0,
+  "G": 0,
+  "of": 10,
+  "violations_on_other_jobs": {
+   "I": 0,
+   "G": 0
+  }
+ },
+ "bars": {
+  "median_s": 60,
+  "p95_s": 300,
+  "futility_gap": 6
+ },
+ "controls": {
+  "pinned": {
+   "jobs_file": true,
+   "server_commit": true,
+   "model_file": true
+  },
+  "audit_G": {
+   "present": true,
+   "connects": 113,
+   "violations": [],
+   "pass": true
+  },
+  "audit_I": {
+   "present": true,
+   "connects": 127,
+   "violations": [],
+   "pass": true
+  },
+  "audit_capacity": {
+   "present": true,
+   "connects": 102,
+   "violations": [],
+   "pass": true
+  },
+  "thermal_all_zero": true
+ },
+ "decision": "the watcher seat is nominated for one full experiment; nothing changes in the stack",
+ "capacity": [
+  {
+   "at_once": 1,
+   "jobs": 12,
+   "wall_s": 245.3,
+   "jobs_per_minute": 2.94,
+   "median_job_s": 18.58,
+   "max_job_s": 74.73,
+   "right": 12,
+   "completion_tokens": 3079,
+   "server_rss_kb": "20070160",
+   "thermal_before": "0",
+   "thermal_after": "0",
+   "tokens_per_second": 12.6
+  },
+  {
+   "at_once": 2,
+   "jobs": 12,
+   "wall_s": 218.4,
+   "jobs_per_minute": 3.3,
+   "median_job_s": 29.74,
+   "max_job_s": 74.33,
+   "right": 12,
+   "completion_tokens": 3188,
+   "server_rss_kb": "22534864",
+   "thermal_before": "0",
+   "thermal_after": "0",
+   "tokens_per_second": 14.6
+  },
+  {
+   "at_once": 4,
+   "jobs": 12,
+   "wall_s": 177.2,
+   "jobs_per_minute": 4.06,
+   "median_job_s": 47.32,
+   "max_job_s": 84.79,
+   "right": 12,
+   "completion_tokens": 2984,
+   "server_rss_kb": "26092496",
+   "thermal_before": "0",
+   "thermal_after": "0",
+   "tokens_per_second": 16.8
+  }
+ ]
+}
