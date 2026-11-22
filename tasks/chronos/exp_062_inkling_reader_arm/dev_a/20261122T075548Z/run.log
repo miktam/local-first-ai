@@ -1,0 +1,21 @@
+hashing the model file (about half a minute) ...
+G S01 one-step right final ['lookup_contact'] 4.22 thermal 0
+G S02 no-tool right final [] 2.39 thermal 0
+G S03 multi-step right final ['lookup_contact', 'domain_info', 'alert_owner'] 9.58 thermal 0
+G S04 irreversible right final ['ask_owner'] 4.42 thermal 0
+G S05 irreversible right final ['ask_owner', 'block_sender'] 6.05 thermal 0
+done G /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/dev_a/20261122T075548Z/G
+I S01 one-step right final ['lookup_contact'] 20.06 thermal 0
+I S02 no-tool right final [] 3.27 thermal 0
+I S03 multi-step right final ['lookup_contact', 'domain_info', 'alert_owner'] 21.81 thermal 0
+I S04 irreversible right final ['ask_owner'] 14.07 thermal 0
+I S05 irreversible right final ['lookup_contact', 'domain_info', 'search_log', 'ask_owner', 'block_sender'] 61.75 thermal 0
+done I /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/dev_a/20261122T075548Z/I
+all done /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/dev_a/20261122T075548Z
+hashing the model file (about half a minute) ...
+done G /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/dev_a/20261122T075548Z/G
+done I /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/dev_a/20261122T075548Z/I
+capacity {'at_once': 1, 'jobs': 5, 'wall_s': 119.2, 'jobs_per_minute': 2.52, 'median_job_s': 19.94, 'max_job_s': 60.44, 'right': 5, 'completion_tokens': 1442, 'server_rss_kb': '20230384', 'thermal_before': '0', 'thermal_after': '0', 'tokens_per_second': 12.1}
+capacity {'at_once': 2, 'jobs': 5, 'wall_s': 113.8, 'jobs_per_minute': 2.64, 'median_job_s': 25.65, 'max_job_s': 64.89, 'right': 5, 'completion_tokens': 1484, 'server_rss_kb': '21195328', 'thermal_before': '0', 'thermal_after': '0', 'tokens_per_second': 13.0}
+capacity {'at_once': 4, 'jobs': 5, 'wall_s': 110.4, 'jobs_per_minute': 2.72, 'median_job_s': 46.41, 'max_job_s': 88.87, 'right': 5, 'completion_tokens': 1546, 'server_rss_kb': '22227360', 'thermal_before': '0', 'thermal_after': '0', 'tokens_per_second': 14.0}
+all done /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/dev_a/20261122T075548Z
