@@ -14,7 +14,8 @@ public rows and the scorer's own verdicts.
                    generated per decision, and the reasoning of the turns cut at the cap
   v2_speed         arm V2's generation speed for its first 15 decisions (before the power cut) and the rest
   pass_pairs       each pass count against 1 pass and against the count before it: decisions only one of the two got
-                   right, with the two-sided sign test
+                   right, with the two-sided sign test; pass_pairs_single_jobs is the same against 1 pass on the 60
+                   single jobs alone
   cut_turns        (only with the private folder as a second argument) for every turn cut at the cap: how many
                    sentences its reasoning has and how many of them are distinct. A low share of distinct sentences
                    means the turn was repeating itself. No text is printed.
@@ -107,6 +108,13 @@ def main():
         b = sum(1 for i in jobs if verd[x][i]["right"] and not verd[y][i]["right"])
         pairs[f"{y}_against_{x}"] = {f"only_{y}_right": a, f"only_{x}_right": b, "sign_p_two_sided": round(S.sign_p(a, b), 4)}
     out["pass_pairs"] = pairs
+    single = [i for i in jobs if str(jobs[i]["tier"]) != "stream"]      # added 2026-11-23: the 60 jobs that are their own conversation
+    alone = {}
+    for x, y in (("V1", "V2"), ("V1", "V3"), ("V1", "V4"), ("V1", "V5")):
+        a = sum(1 for i in single if verd[y][i]["right"] and not verd[x][i]["right"])
+        b = sum(1 for i in single if verd[x][i]["right"] and not verd[y][i]["right"])
+        alone[f"{y}_against_{x}"] = {f"only_{y}_right": a, f"only_{x}_right": b, "sign_p_two_sided": round(S.sign_p(a, b), 4)}
+    out["pass_pairs_single_jobs"] = {"jobs": len(single), **alone}
 
     if len(sys.argv) > 2:
         private, sent = Path(sys.argv[2]).expanduser(), re.compile(r"[.!?]+(?:\s|$)|\n+")
