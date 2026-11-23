@@ -142,3 +142,41 @@ The four bars Andrei approved were: HC1 (22.8 or more on the head, against about
 - **U0 is run twice,** first and last.
 - **No separate tool-call or prose prompt in Part 1:** both workloads are prose continuations, and the tool-call turns are Part 2's jobs.
 - **A thermal rule and the resume rule** are written down.
+
+## Kit (2026-11-23, after the registration above was committed as `e24e4d0`, before the run)
+
+**No request of the test has been sent to any model.** The smoke used another text, two other openings and Addendum A's five smoke jobs.
+
+- `kit/build62c.py` writes the made-up texts, with no model call: `kit/text62c.txt` (seed 62, sha256 `3ffb77ad…c769df`; 8,959 tokens, of which the driver uses the first 2,048 and the first 128), `kit/prompts62c.json` (the eight openings of Part 3 and two for the smoke, sha256 `692326ba…e7f98c`) and `kit/smoke62c.txt` (seed 900). An invented harbour town, no person's name, no address.
+- `kit/speed62c.py` is the driver. It checks the three builds' commits, both files' sizes and hashes and the kit files' hashes, then runs the six cells, the three placement loads and the three runs of Part 2, one side server at a time. Each child runs under exp_054's audit hook. Every timed request is checked (whole prompt evaluated, nothing from a cache, full count generated). A step's file is written when the step is complete, and a resume skips complete steps.
+- `kit/score62c.py` computes HC1 to HC4 as registered, HC3 first. A missing cell makes a bar "not run", never a pass. Run on the smoke folder, where only one cell exists, it reports every bar as not run.
+
+### What differs from the registration, and why
+
+- **Part 2's loop is this kit's, around Addendum A's job runner.** The registration says "its driver … unchanged". `watch62a.run_job`, its tools, its system prompt and its jobs are used unchanged. The loop over 1, 2 and 4 watchers is rewritten so that the thermal rule applies before each level and each level is kept when complete; Addendum A's own loop deletes its files on entry and has no wait.
+- **No text a model wrote is kept in the run folder,** so no private folder is needed. Parts 1 and 3 keep token ids. Part 2 keeps tool names, lookup arguments, counts and whether the job was right; the final sentence and the text of alerts and questions are replaced by their lengths.
+- **The scheduler's raw output stays outside the repository** (`~/models/exp062c/`, about 33 MB a load). The run folder gets the counts: the pieces the last graph was cut into, by backend, and its `MUL_MAT` and `MUL_MAT_ID` nodes by backend.
+- **Part 3 ignores the end-of-stream token too,** so that every text is 256 tokens in every cell.
+
+### Smoke result (`dev_c/20261123T091411Z/`, 2026-11-23 09:14 to 09:18 UTC, smoke inputs only)
+
+The head build with file U, one request of each workload, two openings, the five smoke jobs at 1, 2 and 4 watchers, and two placement loads.
+
+- **It loads and runs.** Long workload: 240.9 tokens a second prefill, 25.2 generation. Short: 26.1 generation. All checks on the timed requests passed.
+- **All five smoke jobs right at 1, 2 and 4 watchers** (15 of 15 job-runs). Five jobs cannot fill four slots, so the smoke says nothing about HC4.
+- **The scheduler's output can be read.** File U on `b12631`: the last graph is cut into 90 pieces, 45 for the CPU and 45 for the GPU, and 88 of its 96 `MUL_MAT_ID` nodes are given to the CPU. File U on the head: 2 pieces, and all 96 on the GPU. All 977 `MUL_MAT` nodes are on the GPU in both.
+- The audit logs show connections to the side port on the loopback address only. The thermal level read 0 throughout.
+
+**Disclosed:** the smoke's speeds were seen before the run. The bars were committed before the smoke (`e24e4d0`), and the registered figures come from the run, on the test text.
+
+**Time, from the smoke:** about 6 minutes a cell on the faster combinations and about 10 on the slowest, about 8 to 12 minutes for each run of Part 2. About 75 minutes in all.
+
+## To run (on the mini)
+
+Andrei asked on 2026-11-23 for the run to be started for him in tmux while he was away. `ollama ps` was empty and the thermal level read 0.
+
+```bash
+cd ~/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm && TS=$(date -u +%Y%m%dT%H%M%SZ) && mkdir -p runs_c/$TS && tmux new-session -d -s exp062c -c "$PWD" "caffeinate -is /opt/homebrew/bin/python3.14 kit/speed62c.py --all --run runs_c/$TS 2>&1 | tee -a runs_c/$TS/run.log; echo \"[exp062c] exit \${pipestatus[1]} at \$(date)\" | tee -a runs_c/$TS/run.log; exec zsh" && echo "run folder: runs_c/$TS   attach: tmux attach -t exp062c"
+```
+
+A stopped run resumes with the same command and `TS=<the folder name it printed>`. To score: `python3.14 -I kit/score62c.py runs_c/<ts>`.

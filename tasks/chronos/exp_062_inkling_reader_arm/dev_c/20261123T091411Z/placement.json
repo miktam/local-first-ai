@@ -1,0 +1,45 @@
+[
+ {
+  "name": "P-U0",
+  "build": "b12631",
+  "file": "U",
+  "raw_log": "~/models/exp062c/20261123T091411Z-P-U0.log",
+  "log_bytes": 33399329,
+  "graphs_printed": 19,
+  "splits_in_last_graph": 90,
+  "splits_by_backend_last_graph": {
+   "CPU": 45,
+   "MTL0": 45
+  },
+  "mul_mat_nodes_by_op_and_backend_last_graph": {
+   "MUL_MAT": {
+    "MTL0": 977
+   },
+   "MUL_MAT_ID": {
+    "CPU": 88,
+    "MTL0": 8
+   }
+  }
+ },
+ {
+  "name": "P-U2",
+  "build": "head",
+  "file": "U",
+  "raw_log": "~/models/exp062c/20261123T091411Z-P-U2.log",
+  "log_bytes": 33103311,
+  "graphs_printed": 19,
+  "splits_in_last_graph": 2,
+  "splits_by_backend_last_graph": {
+   "CPU": 1,
+   "MTL0": 1
+  },
+  "mul_mat_nodes_by_op_and_backend_last_graph": {
+   "MUL_MAT": {
+    "MTL0": 977
+   },
+   "MUL_MAT_ID": {
+    "MTL0": 96
+   }
+  }
+ }
+]

@@ -1,0 +1,98 @@
+{
+ "starts": [
+  {
+   "started_utc": "2026-11-23T09:14:11Z",
+   "argv": [
+    "kit/speed62c.py",
+    "--all",
+    "--smoke",
+    "--run",
+    "dev_c/20261123T091411Z"
+   ],
+   "smoke": true,
+   "python": "3.14.8 (main, Sep 30 2026, 17:55:09) [Clang 21.0.0 (clang-2100.3.34.2)]",
+   "macos": "27.2.1",
+   "ollama_version": "ollama version is 0.40.2",
+   "ollama_ps_before": "NAME    ID    SIZE    PROCESSOR    CONTEXT    RUNNER    UNTIL",
+   "other_llama_servers": "699 /Users/miktam02/models/llama.cpp-b11711/build/bin/llama-server\n701 /Users/miktam02/models/llama.cpp-b11711/build/bin/llama-server",
+   "thermal_start": "0",
+   "repeats": 6,
+   "seed": 62,
+   "long": [
+    2048,
+    256
+   ],
+   "short": [
+    128,
+    512
+   ],
+   "pinned": {
+    "builds": {
+     "b12631": {
+      "commit": "e300919cc704ddde3a8a8346a8714f57eeeee71b",
+      "ok": true
+     },
+     "parent": {
+      "commit": "1834cc254c77e536930d9bebaf7f85d701a034b6",
+      "ok": true
+     },
+     "head": {
+      "commit": "7b43c7730485cc77429485d8232c9643e8aab1f2",
+      "ok": true
+     }
+    },
+    "files": {
+     "U": {
+      "sha256": "78fcedcf93c5d1bfe83e225513b71392bb52259be0eaa5f8899c856a2e5834ae",
+      "bytes": 16610544608,
+      "ok": true
+     },
+     "N": {
+      "sha256": "cbdf3fa9dc50a4124977980f37da4f1fa764b0cfe800d275cd43d26ce2a81af4",
+      "bytes": 17627940768,
+      "ok": true
+     }
+    },
+    "kit": {
+     "text62c.txt": {
+      "sha256": "3ffb77ad1f94963fa986021bff7be7aa2ab3f52f50d96be6f30686ea22c769df",
+      "ok": true
+     },
+     "prompts62c.json": {
+      "sha256": "692326baabe02efa8b7d9c4928ca45205c1fbfe3c64ddfb49ee60f79aae7f98c",
+      "ok": true
+     },
+     "jobs62a.json": {
+      "sha256": "68b66f99270d63e79a4cff71c5ad8b45a45aecf9ba6bbfc007295c331eda17b9",
+      "ok": true
+     }
+    },
+    "ok": true
+   }
+  }
+ ],
+ "steps": {
+  "U2": {
+   "rc": 0,
+   "thermal": {
+    "level": "0",
+    "waited_s": 0,
+    "flagged": false
+   },
+   "build": "head",
+   "file": "U",
+   "utc": "2026-11-23T09:15:31Z"
+  },
+  "C-U2": {
+   "rc": 0,
+   "build": "head",
+   "file": "U",
+   "utc": "2026-11-23T09:18:39Z"
+  }
+ },
+ "finished": {
+  "utc": "2026-11-23T09:18:39Z",
+  "ollama_ps_after": "NAME    ID    SIZE    PROCESSOR    CONTEXT    RUNNER    UNTIL",
+  "thermal_end": "0"
+ }
+}

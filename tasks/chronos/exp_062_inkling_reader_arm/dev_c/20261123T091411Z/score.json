@@ -1,0 +1,145 @@
+{
+ "run": "20261123T091411Z",
+ "cells_complete": [
+  "U2"
+ ],
+ "capacity_complete": [
+  "C-U2"
+ ],
+ "speed": {
+  "U2": {
+   "long_prefill": 240.88,
+   "long_gen": 25.22,
+   "short_prefill": 201.37,
+   "short_gen": 26.06,
+   "long_gen_all": [
+    25.22
+   ],
+   "short_gen_all": [
+    26.06
+   ],
+   "long_prefill_all": [
+    240.9
+   ],
+   "thermal_levels": [
+    "0"
+   ]
+  }
+ },
+ "capacity": {
+  "C-U0": null,
+  "C-N0": null,
+  "C-U2": {
+   "jobs_per_minute": {
+    "1": 4.79,
+    "2": 5.45,
+    "4": 5.29
+   },
+   "right": {
+    "1": 5,
+    "2": 5,
+    "4": 5
+   },
+   "jobs": 5,
+   "median_job_s": {
+    "1": 8.22,
+    "2": 12.6,
+    "4": 25.65
+   },
+   "tokens_per_second": {
+    "1": 20.9,
+    "2": 23.5,
+    "4": 23.1
+   },
+   "server_rss_gb": {
+    "1": 20.1,
+    "2": 21.1,
+    "4": 22.6
+   },
+   "ratio_4_to_1": 1.1,
+   "ratio_2_to_1": 1.14,
+   "thermal_flagged": false
+  }
+ },
+ "placement": [
+  {
+   "name": "P-U0",
+   "build": "b12631",
+   "file": "U",
+   "raw_log": "~/models/exp062c/20261123T091411Z-P-U0.log",
+   "log_bytes": 33399329,
+   "graphs_printed": 19,
+   "splits_in_last_graph": 90,
+   "splits_by_backend_last_graph": {
+    "CPU": 45,
+    "MTL0": 45
+   },
+   "mul_mat_nodes_by_op_and_backend_last_graph": {
+    "MUL_MAT": {
+     "MTL0": 977
+    },
+    "MUL_MAT_ID": {
+     "CPU": 88,
+     "MTL0": 8
+    }
+   }
+  },
+  {
+   "name": "P-U2",
+   "build": "head",
+   "file": "U",
+   "raw_log": "~/models/exp062c/20261123T091411Z-P-U2.log",
+   "log_bytes": 33103311,
+   "graphs_printed": 19,
+   "splits_in_last_graph": 2,
+   "splits_by_backend_last_graph": {
+    "CPU": 1,
+    "MTL0": 1
+   },
+   "mul_mat_nodes_by_op_and_backend_last_graph": {
+    "MUL_MAT": {
+     "MTL0": 977
+    },
+    "MUL_MAT_ID": {
+     "MTL0": 96
+    }
+   }
+  }
+ ],
+ "same_text": {},
+ "repeats_identical": {
+  "U2": {
+   "long": true,
+   "short": true
+  }
+ },
+ "verdicts": {
+  "HC3": {
+   "pass": null,
+   "why": "not run: needs cells U0 and U2 and Part 2 on the head"
+  },
+  "HC1": {
+   "U2_short_gen": 26.06,
+   "bar": 22.8,
+   "U0_short_gen": null,
+   "U1_short_gen": null,
+   "U2_long_gen": 25.22,
+   "pass": null
+  },
+  "HC1b": {
+   "pass": null,
+   "why": "needs cells U2 and N2"
+  },
+  "HC2": {
+   "pass": null,
+   "why": "not run: needs cells N0 and N2"
+  },
+  "HC4": {
+   "ratio_4_to_1": 1.1,
+   "bar": 1.4,
+   "baseline_C-U0": null,
+   "control_C-N0": null,
+   "pass": null
+  }
+ }
+}
