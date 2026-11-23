@@ -172,6 +172,8 @@ The aborted rows are in `runs_b/20261122T132000Z/aborted/V1-repeated-call-ids/` 
 
 **The third stop: the mini lost power at about 17:06 UTC.** Arm V1 had finished on the corrected kit (96 decisions; none ended at the context wall) and arm V2 had recorded 15 single jobs. Checked after the restart, before the resume, by counts only: every results file, reasoning file and audit log of the run reads to its last line; no decision is recorded twice; every recorded turn has its reasoning row and no reasoning row lacks a decision; no stream is half recorded. Nothing was scored. The 15 decisions of V2 are kept and the arm continues from its 16th; each single job is its own conversation, so nothing carries over the restart. The driver checks the hashes of the test file and both model files again when it starts. The machine was indexing after the restart (load average above 80 at eleven minutes). The run was resumed at 17:20 UTC, thirteen minutes after the restart, with the load average still between 10 and 20. So the speeds and waits recorded for V2 from its 16th decision on were taken on a busier machine: the median generation speed over turns of 100 tokens or more was 36.1 tokens a second for the first 15 decisions and 32.5 for the next five (speeds only were read). The answers are not affected by this; the times for V2 are, and the result will say so.
 
+**The run ended at 22:17 UTC** with all seven arms at 96 decisions. The raw files were committed before anything was scored. The result is in [ADDENDUM_B_RESULT.md](ADDENDUM_B_RESULT.md).
+
 ## To run (Andrei, on the mini)
 
 Check first that nothing else is generating on Ollama (`ollama ps`, running experiments) and that the thermal level reads 0. Starting the run signs the bars above.

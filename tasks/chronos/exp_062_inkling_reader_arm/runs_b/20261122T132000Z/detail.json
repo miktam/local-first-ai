@@ -1,0 +1,877 @@
+{
+ "note": "post hoc; see the docstring of kit/describe62b_detail.py",
+ "wrong": {
+  "G": [
+   {
+    "id": "T3-07",
+    "tier": "3",
+    "case": "hop3_unknown_flags_quiet",
+    "why": [
+     "missing lookup: ['search_log']"
+    ]
+   },
+   {
+    "id": "T3-06",
+    "tier": "3",
+    "case": "hop3_unknown",
+    "why": [
+     "missing lookup: ['lookup_contact', 'resolve_alias', 'lookup_contact']"
+    ]
+   },
+   {
+    "id": "T3-14",
+    "tier": "3",
+    "case": "hop2_known",
+    "why": [
+     "missing lookup: ['lookup_contact']",
+     "an alert the rules did not call for"
+    ]
+   },
+   {
+    "id": "T3-08",
+    "tier": "3",
+    "case": "hop3_unknown_flags_alert",
+    "why": [
+     "missing lookup: ['resolve_alias', 'lookup_contact']"
+    ]
+   },
+   {
+    "id": "T1-02",
+    "tier": "1",
+    "case": "old_clean",
+    "why": [
+     "missing lookup: ['search_log']"
+    ]
+   },
+   {
+    "id": "T3-01",
+    "tier": "3",
+    "case": "hop3_unknown_flags_quiet",
+    "why": [
+     "missing lookup: ['lookup_contact', 'resolve_alias', 'lookup_contact']"
+    ]
+   },
+   {
+    "id": "T3-02",
+    "tier": "3",
+    "case": "hop2_known",
+    "why": [
+     "missing lookup: ['lookup_contact']",
+     "an alert the rules did not call for"
+    ]
+   },
+   {
+    "id": "T3-17",
+    "tier": "3",
+    "case": "hop3_unknown_flags_alert",
+    "why": [
+     "missing lookup: ['resolve_alias', 'lookup_contact']"
+    ]
+   },
+   {
+    "id": "T3-16",
+    "tier": "3",
+    "case": "hop3_unknown",
+    "why": [
+     "missing lookup: ['lookup_contact', 'resolve_alias', 'lookup_contact']"
+    ]
+   },
+   {
+    "id": "T2-16",
+    "tier": "2",
+    "case": "old_two_flags",
+    "why": [
+     "missing lookup: ['search_log']",
+     "no alert where one was due"
+    ]
+   },
+   {
+    "id": "S1-04",
+    "tier": "stream",
+    "case": "mid1",
+    "why": [
+     "missing lookup: ['resolve_alias']"
+    ]
+   },
+   {
+    "id": "S1-06",
+    "tier": "stream",
+    "case": "removed",
+    "why": [
+     "missing lookup: ['resolve_alias', 'search_log']"
+    ]
+   },
+   {
+    "id": "S1-10",
+    "tier": "stream",
+    "case": "mid2",
+    "why": [
+     "ended at the token cap",
+     "missing lookup: ['resolve_alias']"
+    ]
+   },
+   {
+    "id": "S2-02",
+    "tier": "stream",
+    "case": "again1",
+    "why": [
+     "missing lookup: ['resolve_alias']"
+    ]
+   },
+   {
+    "id": "S2-06",
+    "tier": "stream",
+    "case": "removed",
+    "why": [
+     "missing lookup: ['search_log']"
+    ]
+   },
+   {
+    "id": "S2-11",
+    "tier": "stream",
+    "case": "rep3",
+    "why": [
+     "no alert where one was due"
+    ]
+   },
+   {
+    "id": "S3-06",
+    "tier": "stream",
+    "case": "removed",
+    "why": [
+     "missing lookup: ['search_log']"
+    ]
+   },
+   {
+    "id": "S3-11",
+    "tier": "stream",
+    "case": "rep3",
+    "why": [
+     "ended at the token cap",
+     "no alert where one was due"
+    ]
+   }
+  ],
+  "I": [
+   {
+    "id": "T3-03",
+    "tier": "3",
+    "case": "flags_many_quiet",
+    "why": [
+     "an alert the rules did not call for"
+    ]
+   },
+   {
+    "id": "T3-08",
+    "tier": "3",
+    "case": "hop3_unknown_flags_alert",
+    "why": [
+     "missing lookup: ['resolve_alias', 'lookup_contact']"
+    ]
+   },
+   {
+    "id": "T3-16",
+    "tier": "3",
+    "case": "hop3_unknown",
+    "why": [
+     "missing lookup: ['resolve_alias', 'lookup_contact']"
+    ]
+   }
+  ],
+  "V1": [
+   {
+    "id": "T3-07",
+    "tier": "3",
+    "case": "hop3_unknown_flags_quiet",
+    "why": [
+     "missing lookup: ['lookup_contact']"
+    ]
+   },
+   {
+    "id": "T3-11",
+    "tier": "3",
+    "case": "flags_many_quiet",
+    "why": [
+     "ended at the token cap"
+    ]
+   },
+   {
+    "id": "T3-12",
+    "tier": "3",
+    "case": "hop1_unknown_threshold_old",
+    "why": [
+     "an alert the rules did not call for"
+    ]
+   },
+   {
+    "id": "T3-06",
+    "tier": "3",
+    "case": "hop3_unknown",
+    "why": [
+     "missing lookup: ['lookup_contact', 'lookup_contact']"
+    ]
+   },
+   {
+    "id": "T3-08",
+    "tier": "3",
+    "case": "hop3_unknown_flags_alert",
+    "why": [
+     "missing lookup: ['search_log']",
+     "no alert where one was due"
+    ]
+   },
+   {
+    "id": "T2-02",
+    "tier": "2",
+    "case": "cache_old_registry_old",
+    "why": [
+     "missing lookup: ['lookup_contact', 'resolve_alias']"
+    ]
+   },
+   {
+    "id": "T3-01",
+    "tier": "3",
+    "case": "hop3_unknown_flags_quiet",
+    "why": [
+     "missing lookup: ['lookup_contact']"
+    ]
+   },
+   {
+    "id": "T3-02",
+    "tier": "3",
+    "case": "hop2_known",
+    "why": [
+     "missing lookup: ['lookup_contact']",
+     "an alert the rules did not call for"
+    ]
+   },
+   {
+    "id": "T3-17",
+    "tier": "3",
+    "case": "hop3_unknown_flags_alert",
+    "why": [
+     "missing lookup: ['lookup_contact']",
+     "no alert where one was due"
+    ]
+   },
+   {
+    "id": "T3-16",
+    "tier": "3",
+    "case": "hop3_unknown",
+    "why": [
+     "missing lookup: ['lookup_contact']"
+    ]
+   },
+   {
+    "id": "S1-01",
+    "tier": "stream",
+    "case": "rep1",
+    "why": [
+     "missing lookup: ['resolve_alias']"
+    ]
+   },
+   {
+    "id": "S1-08",
+    "tier": "stream",
+    "case": "again2",
+    "why": [
+     "a tool call where none was due"
+    ]
+   },
+   {
+    "id": "S1-11",
+    "tier": "stream",
+    "case": "rep3",
+    "why": [
+     "no alert where one was due"
+    ]
+   },
+   {
+    "id": "S2-08",
+    "tier": "stream",
+    "case": "again2",
+    "why": [
+     "ended at the token cap",
+     "a tool call where none was due"
+    ]
+   },
+   {
+    "id": "S2-10",
+    "tier": "stream",
+    "case": "mid2",
+    "why": [
+     "no alert where one was due"
+    ]
+   },
+   {
+    "id": "S2-11",
+    "tier": "stream",
+    "case": "rep3",
+    "why": [
+     "no alert where one was due"
+    ]
+   },
+   {
+    "id": "S3-11",
+    "tier": "stream",
+    "case": "rep3",
+    "why": [
+     "no alert where one was due"
+    ]
+   }
+  ],
+  "V2": [
+   {
+    "id": "T3-11",
+    "tier": "3",
+    "case": "flags_many_quiet",
+    "why": [
+     "ended at the token cap"
+    ]
+   },
+   {
+    "id": "T3-03",
+    "tier": "3",
+    "case": "flags_many_quiet",
+    "why": [
+     "ended at the token cap"
+    ]
+   },
+   {
+    "id": "T2-05",
+    "tier": "2",
+    "case": "old_one_flag",
+    "why": [
+     "ended at the token cap"
+    ]
+   },
+   {
+    "id": "T3-16",
+    "tier": "3",
+    "case": "hop3_unknown",
+    "why": [
+     "missing lookup: ['lookup_contact']"
+    ]
+   },
+   {
+    "id": "T2-18",
+    "tier": "2",
+    "case": "cache_young",
+    "why": [
+     "missing lookup: ['resolve_alias']"
+    ]
+   },
+   {
+    "id": "S1-10",
+    "tier": "stream",
+    "case": "mid2",
+    "why": [
+     "ended at the token cap",
+     "alerted before the lookups"
+    ]
+   },
+   {
+    "id": "S1-11",
+    "tier": "stream",
+    "case": "rep3",
+    "why": [
+     "ended at the token cap",
+     "alerted before the lookups"
+    ]
+   },
+   {
+    "id": "S2-11",
+    "tier": "stream",
+    "case": "rep3",
+    "why": [
+     "ended at the token cap"
+    ]
+   }
+  ],
+  "V3": [
+   {
+    "id": "S1-10",
+    "tier": "stream",
+    "case": "mid2",
+    "why": [
+     "ended at the token cap"
+    ]
+   },
+   {
+    "id": "S2-11",
+    "tier": "stream",
+    "case": "rep3",
+    "why": [
+     "ended at the token cap",
+     "no alert where one was due"
+    ]
+   },
+   {
+    "id": "S3-11",
+    "tier": "stream",
+    "case": "rep3",
+    "why": [
+     "ended at the token cap",
+     "no alert where one was due"
+    ]
+   },
+   {
+    "id": "S3-12",
+    "tier": "stream",
+    "case": "block",
+    "why": [
+     "ended at the token cap",
+     "an alert the rules did not call for"
+    ]
+   }
+  ],
+  "V4": [
+   {
+    "id": "S2-10",
+    "tier": "stream",
+    "case": "mid2",
+    "why": [
+     "ended at the token cap"
+    ]
+   }
+  ],
+  "V5": [
+   {
+    "id": "S2-11",
+    "tier": "stream",
+    "case": "rep3",
+    "why": [
+     "ended at the token cap"
+    ]
+   },
+   {
+    "id": "S3-10",
+    "tier": "stream",
+    "case": "mid2",
+    "why": [
+     "ended at the token cap"
+    ]
+   }
+  ]
+ },
+ "hb1_by_tier": {
+  "1": {
+   "only_I_right": 1,
+   "only_G_right": 0,
+   "both_right": 19,
+   "neither": 0
+  },
+  "2": {
+   "only_I_right": 1,
+   "only_G_right": 0,
+   "both_right": 19,
+   "neither": 0
+  },
+  "3": {
+   "only_I_right": 6,
+   "only_G_right": 1,
+   "both_right": 11,
+   "neither": 2
+  },
+  "stream": {
+   "only_I_right": 8,
+   "only_G_right": 0,
+   "both_right": 28,
+   "neither": 0
+  },
+  "single_jobs_of_tiers_2_and_3": {
+   "only_I_right": 7,
+   "only_G_right": 1,
+   "sign_p_two_sided": 0.0703
+  }
+ },
+ "missing": {
+  "G": {
+   "search_log": 6,
+   "lookup_contact": 10,
+   "resolve_alias": 9
+  },
+  "I": {
+   "resolve_alias": 2,
+   "lookup_contact": 2
+  },
+  "V1": {
+   "lookup_contact": 8,
+   "search_log": 1,
+   "resolve_alias": 2
+  },
+  "V2": {
+   "lookup_contact": 1,
+   "resolve_alias": 1
+  },
+  "V3": {},
+  "V4": {},
+  "V5": {}
+ },
+ "written": {
+  "decisions_right_and_uncut_in_every_research_arm": 73,
+  "G": {
+   "median_reasoning_chars_per_decision": 2034.5,
+   "the_same_over_the_common_decisions": null,
+   "median_reasoning_chars_right_decisions": 1587.0,
+   "median_turns_per_decision": 4.0,
+   "turns": 377,
+   "median_tokens_generated_per_decision": 809.0,
+   "tokens_generated": 103175,
+   "turns_cut_at_the_cap": 2,
+   "reasoning_chars_of_those_turns": [
+    2,
+    5990
+   ],
+   "content_chars_of_those_turns": [
+    0,
+    0
+   ],
+   "tool_calls_in_those_turns": 0,
+   "decisions_with_a_cut_turn": [
+    "S1-10",
+    "S3-11"
+   ],
+   "of_them_ended_final": []
+  },
+  "I": {
+   "median_reasoning_chars_per_decision": 458.5,
+   "the_same_over_the_common_decisions": null,
+   "median_reasoning_chars_right_decisions": 445,
+   "median_turns_per_decision": 5.0,
+   "turns": 403,
+   "median_tokens_generated_per_decision": 317.0,
+   "tokens_generated": 34424,
+   "turns_cut_at_the_cap": 0,
+   "reasoning_chars_of_those_turns": [],
+   "content_chars_of_those_turns": [],
+   "tool_calls_in_those_turns": 0,
+   "decisions_with_a_cut_turn": [],
+   "of_them_ended_final": []
+  },
+  "V1": {
+   "median_reasoning_chars_per_decision": 1779.5,
+   "the_same_over_the_common_decisions": 1470,
+   "median_reasoning_chars_right_decisions": 1604,
+   "median_turns_per_decision": 5.0,
+   "turns": 436,
+   "median_tokens_generated_per_decision": 752.0,
+   "tokens_generated": 103468,
+   "turns_cut_at_the_cap": 2,
+   "reasoning_chars_of_those_turns": [
+    5614,
+    7106
+   ],
+   "content_chars_of_those_turns": [
+    0,
+    0
+   ],
+   "tool_calls_in_those_turns": 0,
+   "decisions_with_a_cut_turn": [
+    "S2-08",
+    "T3-11"
+   ],
+   "of_them_ended_final": []
+  },
+  "V2": {
+   "median_reasoning_chars_per_decision": 1965.5,
+   "the_same_over_the_common_decisions": 1502,
+   "median_reasoning_chars_right_decisions": 1932.0,
+   "median_turns_per_decision": 5.0,
+   "turns": 417,
+   "median_tokens_generated_per_decision": 760.5,
+   "tokens_generated": 99653,
+   "turns_cut_at_the_cap": 6,
+   "reasoning_chars_of_those_turns": [
+    6297,
+    6725,
+    6761,
+    6940,
+    7058,
+    7955
+   ],
+   "content_chars_of_those_turns": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tool_calls_in_those_turns": 0,
+   "decisions_with_a_cut_turn": [
+    "S1-10",
+    "S1-11",
+    "S2-11",
+    "T2-05",
+    "T3-03",
+    "T3-11"
+   ],
+   "of_them_ended_final": []
+  },
+  "V3": {
+   "median_reasoning_chars_per_decision": 2156.5,
+   "the_same_over_the_common_decisions": 1331,
+   "median_reasoning_chars_right_decisions": 1917.0,
+   "median_turns_per_decision": 5.0,
+   "turns": 402,
+   "median_tokens_generated_per_decision": 752.0,
+   "tokens_generated": 94947,
+   "turns_cut_at_the_cap": 4,
+   "reasoning_chars_of_those_turns": [
+    6346,
+    7520,
+    7591,
+    7716
+   ],
+   "content_chars_of_those_turns": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "tool_calls_in_those_turns": 0,
+   "decisions_with_a_cut_turn": [
+    "S1-10",
+    "S2-11",
+    "S3-11",
+    "S3-12"
+   ],
+   "of_them_ended_final": []
+  },
+  "V4": {
+   "median_reasoning_chars_per_decision": 2393.5,
+   "the_same_over_the_common_decisions": 1830,
+   "median_reasoning_chars_right_decisions": 2386,
+   "median_turns_per_decision": 5.0,
+   "turns": 426,
+   "median_tokens_generated_per_decision": 836.0,
+   "tokens_generated": 98384,
+   "turns_cut_at_the_cap": 1,
+   "reasoning_chars_of_those_turns": [
+    8009
+   ],
+   "content_chars_of_those_turns": [
+    0
+   ],
+   "tool_calls_in_those_turns": 0,
+   "decisions_with_a_cut_turn": [
+    "S2-10"
+   ],
+   "of_them_ended_final": []
+  },
+  "V5": {
+   "median_reasoning_chars_per_decision": 2109.5,
+   "the_same_over_the_common_decisions": 1369,
+   "median_reasoning_chars_right_decisions": 2072.5,
+   "median_turns_per_decision": 5.0,
+   "turns": 398,
+   "median_tokens_generated_per_decision": 761.5,
+   "tokens_generated": 90303,
+   "turns_cut_at_the_cap": 3,
+   "reasoning_chars_of_those_turns": [
+    7324,
+    7506,
+    8347
+   ],
+   "content_chars_of_those_turns": [
+    0,
+    0,
+    0
+   ],
+   "tool_calls_in_those_turns": 1,
+   "decisions_with_a_cut_turn": [
+    "S1-10",
+    "S2-11",
+    "S3-10"
+   ],
+   "of_them_ended_final": [
+    "S1-10"
+   ]
+  }
+ },
+ "v2_speed": {
+  "first_15_decisions": 36.1,
+  "the_other_81": 34.8,
+  "minutes_first_15": 7.7,
+  "minutes_the_other_81": 45.4
+ },
+ "pass_pairs": {
+  "V2_against_V1": {
+   "only_V2_right": 13,
+   "only_V1_right": 4,
+   "sign_p_two_sided": 0.049
+  },
+  "V3_against_V1": {
+   "only_V3_right": 15,
+   "only_V1_right": 2,
+   "sign_p_two_sided": 0.0023
+  },
+  "V4_against_V1": {
+   "only_V4_right": 16,
+   "only_V1_right": 0,
+   "sign_p_two_sided": 0.0
+  },
+  "V5_against_V1": {
+   "only_V5_right": 16,
+   "only_V1_right": 1,
+   "sign_p_two_sided": 0.0003
+  },
+  "V3_against_V2": {
+   "only_V3_right": 6,
+   "only_V2_right": 2,
+   "sign_p_two_sided": 0.2891
+  },
+  "V4_against_V3": {
+   "only_V4_right": 4,
+   "only_V3_right": 1,
+   "sign_p_two_sided": 0.375
+  },
+  "V5_against_V4": {
+   "only_V5_right": 1,
+   "only_V4_right": 2,
+   "sign_p_two_sided": 1.0
+  }
+ },
+ "cut_turns": {
+  "G": [
+   {
+    "id": "S1-10",
+    "turn": 3,
+    "sentences": 148,
+    "distinct": 80,
+    "distinct_share": 0.54
+   },
+   {
+    "id": "S3-11",
+    "turn": 1,
+    "sentences": 1,
+    "distinct": 1,
+    "distinct_share": 1.0
+   }
+  ],
+  "I": [],
+  "V1": [
+   {
+    "id": "T3-11",
+    "turn": 5,
+    "sentences": 110,
+    "distinct": 105,
+    "distinct_share": 0.95
+   },
+   {
+    "id": "S2-08",
+    "turn": 8,
+    "sentences": 143,
+    "distinct": 121,
+    "distinct_share": 0.85
+   }
+  ],
+  "V2": [
+   {
+    "id": "T3-11",
+    "turn": 5,
+    "sentences": 150,
+    "distinct": 147,
+    "distinct_share": 0.98
+   },
+   {
+    "id": "T3-03",
+    "turn": 5,
+    "sentences": 157,
+    "distinct": 156,
+    "distinct_share": 0.99
+   },
+   {
+    "id": "T2-05",
+    "turn": 5,
+    "sentences": 148,
+    "distinct": 140,
+    "distinct_share": 0.95
+   },
+   {
+    "id": "S1-10",
+    "turn": 3,
+    "sentences": 138,
+    "distinct": 105,
+    "distinct_share": 0.76
+   },
+   {
+    "id": "S1-11",
+    "turn": 4,
+    "sentences": 191,
+    "distinct": 151,
+    "distinct_share": 0.79
+   },
+   {
+    "id": "S2-11",
+    "turn": 6,
+    "sentences": 141,
+    "distinct": 114,
+    "distinct_share": 0.81
+   }
+  ],
+  "V3": [
+   {
+    "id": "S1-10",
+    "turn": 2,
+    "sentences": 184,
+    "distinct": 149,
+    "distinct_share": 0.81
+   },
+   {
+    "id": "S2-11",
+    "turn": 2,
+    "sentences": 186,
+    "distinct": 128,
+    "distinct_share": 0.69
+   },
+   {
+    "id": "S3-11",
+    "turn": 1,
+    "sentences": 135,
+    "distinct": 128,
+    "distinct_share": 0.95
+   },
+   {
+    "id": "S3-12",
+    "turn": 4,
+    "sentences": 185,
+    "distinct": 141,
+    "distinct_share": 0.76
+   }
+  ],
+  "V4": [
+   {
+    "id": "S2-10",
+    "turn": 5,
+    "sentences": 142,
+    "distinct": 140,
+    "distinct_share": 0.99
+   }
+  ],
+  "V5": [
+   {
+    "id": "S1-10",
+    "turn": 1,
+    "sentences": 174,
+    "distinct": 167,
+    "distinct_share": 0.96
+   },
+   {
+    "id": "S2-11",
+    "turn": 2,
+    "sentences": 158,
+    "distinct": 96,
+    "distinct_share": 0.61
+   },
+   {
+    "id": "S3-10",
+    "turn": 2,
+    "sentences": 135,
+    "distinct": 132,
+    "distinct_share": 0.98
+   }
+  ]
+ }
+}

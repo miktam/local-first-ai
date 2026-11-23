@@ -1,0 +1,1623 @@
+{
+ "run": "runs_b/20261122T132000Z",
+ "jobs_file": "test62b.json",
+ "pinned": {
+  "jobs_file": true,
+  "server_commit": true,
+  "inkling_file": true,
+  "research_file": true
+ },
+ "arms": {
+  "G": {
+   "decisions": 96,
+   "right": 78,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 12
+    },
+    "2": {
+     "n": 20,
+     "right": 19
+    },
+    "1": {
+     "n": 20,
+     "right": 19
+    },
+    "stream": {
+     "n": 36,
+     "right": 28
+    }
+   },
+   "by_case": {
+    "proposal_stale_yes": {
+     "n": 1,
+     "right": 1
+    },
+    "allow": {
+     "n": 2,
+     "right": 2
+    },
+    "status": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown_flags_quiet": {
+     "n": 2,
+     "right": 0
+    },
+    "flags_many_quiet": {
+     "n": 2,
+     "right": 2
+    },
+    "young": {
+     "n": 4,
+     "right": 4
+    },
+    "old_two_flags": {
+     "n": 5,
+     "right": 4
+    },
+    "proposal": {
+     "n": 8,
+     "right": 8
+    },
+    "alias_known": {
+     "n": 3,
+     "right": 3
+    },
+    "hop1_unknown_threshold_old": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown": {
+     "n": 2,
+     "right": 0
+    },
+    "cache_young": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_old": {
+     "n": 2,
+     "right": 2
+    },
+    "hop2_known": {
+     "n": 2,
+     "right": 0
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "hop3_unknown_flags_alert": {
+     "n": 2,
+     "right": 0
+    },
+    "alias_unknown_young": {
+     "n": 2,
+     "right": 2
+    },
+    "old_clean": {
+     "n": 4,
+     "right": 3
+    },
+    "cache_young_registry_old": {
+     "n": 1,
+     "right": 1
+    },
+    "old_one_flag": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_young": {
+     "n": 1,
+     "right": 1
+    },
+    "known": {
+     "n": 4,
+     "right": 4
+    },
+    "hop1_unknown_threshold_young": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_many_alert": {
+     "n": 2,
+     "right": 2
+    },
+    "rep1": {
+     "n": 3,
+     "right": 3
+    },
+    "again1": {
+     "n": 3,
+     "right": 2
+    },
+    "window30": {
+     "n": 3,
+     "right": 3
+    },
+    "mid1": {
+     "n": 3,
+     "right": 2
+    },
+    "allow_remove": {
+     "n": 3,
+     "right": 3
+    },
+    "removed": {
+     "n": 3,
+     "right": 0
+    },
+    "rep2": {
+     "n": 3,
+     "right": 3
+    },
+    "again2": {
+     "n": 3,
+     "right": 3
+    },
+    "window120": {
+     "n": 3,
+     "right": 3
+    },
+    "mid2": {
+     "n": 3,
+     "right": 2
+    },
+    "rep3": {
+     "n": 3,
+     "right": 1
+    },
+    "block": {
+     "n": 3,
+     "right": 3
+    }
+   },
+   "violations": [],
+   "proposals": 13,
+   "wrong_reasons": {
+    "missing lookup": 16,
+    "no alert where one was due": 3,
+    "an alert the rules did not call for": 2,
+    "ended at the token cap": 2
+   },
+   "ends": {
+    "final": 94,
+    "capped": 2,
+    "turns": 0,
+    "context": 0
+   },
+   "capped_turns": 2,
+   "extra_lookups": 3,
+   "median_s": 17.7,
+   "p95_s": 62.6,
+   "total_minutes": 35.6,
+   "median_tokens_per_second": 48.1,
+   "completion_tokens": 103175,
+   "reasoning_chars": 274573,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "failed_calls_asked_again": [
+    {
+     "id": "T3-14",
+     "attempt": null,
+     "error": "HTTPError: HTTP Error 500: Internal Server Error"
+    }
+   ],
+   "futility": {
+    "after": 15,
+    "right": 13,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 384,
+    "violations": [],
+    "pass": true
+   }
+  },
+  "I": {
+   "decisions": 96,
+   "right": 93,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 17
+    },
+    "2": {
+     "n": 20,
+     "right": 20
+    },
+    "1": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 36,
+     "right": 36
+    }
+   },
+   "by_case": {
+    "proposal_stale_yes": {
+     "n": 1,
+     "right": 1
+    },
+    "allow": {
+     "n": 2,
+     "right": 2
+    },
+    "status": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown_flags_quiet": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_many_quiet": {
+     "n": 2,
+     "right": 1
+    },
+    "young": {
+     "n": 4,
+     "right": 4
+    },
+    "old_two_flags": {
+     "n": 5,
+     "right": 5
+    },
+    "proposal": {
+     "n": 8,
+     "right": 8
+    },
+    "alias_known": {
+     "n": 3,
+     "right": 3
+    },
+    "hop1_unknown_threshold_old": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown": {
+     "n": 2,
+     "right": 1
+    },
+    "cache_young": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_old": {
+     "n": 2,
+     "right": 2
+    },
+    "hop2_known": {
+     "n": 2,
+     "right": 2
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "hop3_unknown_flags_alert": {
+     "n": 2,
+     "right": 1
+    },
+    "alias_unknown_young": {
+     "n": 2,
+     "right": 2
+    },
+    "old_clean": {
+     "n": 4,
+     "right": 4
+    },
+    "cache_young_registry_old": {
+     "n": 1,
+     "right": 1
+    },
+    "old_one_flag": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_young": {
+     "n": 1,
+     "right": 1
+    },
+    "known": {
+     "n": 4,
+     "right": 4
+    },
+    "hop1_unknown_threshold_young": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_many_alert": {
+     "n": 2,
+     "right": 2
+    },
+    "rep1": {
+     "n": 3,
+     "right": 3
+    },
+    "again1": {
+     "n": 3,
+     "right": 3
+    },
+    "window30": {
+     "n": 3,
+     "right": 3
+    },
+    "mid1": {
+     "n": 3,
+     "right": 3
+    },
+    "allow_remove": {
+     "n": 3,
+     "right": 3
+    },
+    "removed": {
+     "n": 3,
+     "right": 3
+    },
+    "rep2": {
+     "n": 3,
+     "right": 3
+    },
+    "again2": {
+     "n": 3,
+     "right": 3
+    },
+    "window120": {
+     "n": 3,
+     "right": 3
+    },
+    "mid2": {
+     "n": 3,
+     "right": 3
+    },
+    "rep3": {
+     "n": 3,
+     "right": 3
+    },
+    "block": {
+     "n": 3,
+     "right": 3
+    }
+   },
+   "violations": [],
+   "proposals": 13,
+   "wrong_reasons": {
+    "missing lookup": 2,
+    "an alert the rules did not call for": 1
+   },
+   "ends": {
+    "final": 96,
+    "capped": 0,
+    "turns": 0,
+    "context": 0
+   },
+   "capped_turns": 0,
+   "extra_lookups": 1,
+   "median_s": 14.3,
+   "p95_s": 40.4,
+   "total_minutes": 25.2,
+   "median_tokens_per_second": 26.6,
+   "completion_tokens": 34424,
+   "reasoning_chars": 57696,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "failed_calls_asked_again": [],
+   "futility": {
+    "after": 15,
+    "right": 15,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 403,
+    "violations": [],
+    "pass": true
+   }
+  },
+  "V1": {
+   "decisions": 96,
+   "right": 79,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 11
+    },
+    "2": {
+     "n": 20,
+     "right": 19
+    },
+    "1": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 36,
+     "right": 29
+    }
+   },
+   "by_case": {
+    "proposal_stale_yes": {
+     "n": 1,
+     "right": 1
+    },
+    "allow": {
+     "n": 2,
+     "right": 2
+    },
+    "status": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown_flags_quiet": {
+     "n": 2,
+     "right": 0
+    },
+    "flags_many_quiet": {
+     "n": 2,
+     "right": 1
+    },
+    "young": {
+     "n": 4,
+     "right": 4
+    },
+    "old_two_flags": {
+     "n": 5,
+     "right": 5
+    },
+    "proposal": {
+     "n": 8,
+     "right": 8
+    },
+    "alias_known": {
+     "n": 3,
+     "right": 3
+    },
+    "hop1_unknown_threshold_old": {
+     "n": 2,
+     "right": 1
+    },
+    "hop3_unknown": {
+     "n": 2,
+     "right": 0
+    },
+    "cache_young": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_old": {
+     "n": 2,
+     "right": 1
+    },
+    "hop2_known": {
+     "n": 2,
+     "right": 1
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "hop3_unknown_flags_alert": {
+     "n": 2,
+     "right": 0
+    },
+    "alias_unknown_young": {
+     "n": 2,
+     "right": 2
+    },
+    "old_clean": {
+     "n": 4,
+     "right": 4
+    },
+    "cache_young_registry_old": {
+     "n": 1,
+     "right": 1
+    },
+    "old_one_flag": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_young": {
+     "n": 1,
+     "right": 1
+    },
+    "known": {
+     "n": 4,
+     "right": 4
+    },
+    "hop1_unknown_threshold_young": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_many_alert": {
+     "n": 2,
+     "right": 2
+    },
+    "rep1": {
+     "n": 3,
+     "right": 2
+    },
+    "again1": {
+     "n": 3,
+     "right": 3
+    },
+    "window30": {
+     "n": 3,
+     "right": 3
+    },
+    "mid1": {
+     "n": 3,
+     "right": 3
+    },
+    "allow_remove": {
+     "n": 3,
+     "right": 3
+    },
+    "removed": {
+     "n": 3,
+     "right": 3
+    },
+    "rep2": {
+     "n": 3,
+     "right": 3
+    },
+    "again2": {
+     "n": 3,
+     "right": 1
+    },
+    "window120": {
+     "n": 3,
+     "right": 3
+    },
+    "mid2": {
+     "n": 3,
+     "right": 2
+    },
+    "rep3": {
+     "n": 3,
+     "right": 0
+    },
+    "block": {
+     "n": 3,
+     "right": 3
+    }
+   },
+   "violations": [],
+   "proposals": 13,
+   "wrong_reasons": {
+    "missing lookup": 9,
+    "no alert where one was due": 6,
+    "ended at the token cap": 2,
+    "an alert the rules did not call for": 2,
+    "a tool call where none was due": 2
+   },
+   "ends": {
+    "final": 94,
+    "capped": 2,
+    "turns": 0,
+    "context": 0
+   },
+   "capped_turns": 2,
+   "extra_lookups": 19,
+   "median_s": 16.9,
+   "p95_s": 68.2,
+   "total_minutes": 38.3,
+   "median_tokens_per_second": 48.8,
+   "completion_tokens": 103468,
+   "reasoning_chars": 312088,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "failed_calls_asked_again": [],
+   "futility": {
+    "after": 15,
+    "right": 11,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 872,
+    "violations": [],
+    "pass": true
+   }
+  },
+  "V2": {
+   "decisions": 96,
+   "right": 88,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 17
+    },
+    "2": {
+     "n": 20,
+     "right": 18
+    },
+    "1": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 36,
+     "right": 33
+    }
+   },
+   "by_case": {
+    "proposal_stale_yes": {
+     "n": 1,
+     "right": 1
+    },
+    "allow": {
+     "n": 2,
+     "right": 2
+    },
+    "status": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown_flags_quiet": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_many_quiet": {
+     "n": 2,
+     "right": 0
+    },
+    "young": {
+     "n": 4,
+     "right": 4
+    },
+    "old_two_flags": {
+     "n": 5,
+     "right": 5
+    },
+    "proposal": {
+     "n": 8,
+     "right": 8
+    },
+    "alias_known": {
+     "n": 3,
+     "right": 3
+    },
+    "hop1_unknown_threshold_old": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown": {
+     "n": 2,
+     "right": 1
+    },
+    "cache_young": {
+     "n": 2,
+     "right": 1
+    },
+    "cache_old_registry_old": {
+     "n": 2,
+     "right": 2
+    },
+    "hop2_known": {
+     "n": 2,
+     "right": 2
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "hop3_unknown_flags_alert": {
+     "n": 2,
+     "right": 2
+    },
+    "alias_unknown_young": {
+     "n": 2,
+     "right": 2
+    },
+    "old_clean": {
+     "n": 4,
+     "right": 4
+    },
+    "cache_young_registry_old": {
+     "n": 1,
+     "right": 1
+    },
+    "old_one_flag": {
+     "n": 2,
+     "right": 1
+    },
+    "cache_old_registry_young": {
+     "n": 1,
+     "right": 1
+    },
+    "known": {
+     "n": 4,
+     "right": 4
+    },
+    "hop1_unknown_threshold_young": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_many_alert": {
+     "n": 2,
+     "right": 2
+    },
+    "rep1": {
+     "n": 3,
+     "right": 3
+    },
+    "again1": {
+     "n": 3,
+     "right": 3
+    },
+    "window30": {
+     "n": 3,
+     "right": 3
+    },
+    "mid1": {
+     "n": 3,
+     "right": 3
+    },
+    "allow_remove": {
+     "n": 3,
+     "right": 3
+    },
+    "removed": {
+     "n": 3,
+     "right": 3
+    },
+    "rep2": {
+     "n": 3,
+     "right": 3
+    },
+    "again2": {
+     "n": 3,
+     "right": 3
+    },
+    "window120": {
+     "n": 3,
+     "right": 3
+    },
+    "mid2": {
+     "n": 3,
+     "right": 2
+    },
+    "rep3": {
+     "n": 3,
+     "right": 1
+    },
+    "block": {
+     "n": 3,
+     "right": 3
+    }
+   },
+   "violations": [],
+   "proposals": 13,
+   "wrong_reasons": {
+    "ended at the token cap": 6,
+    "missing lookup": 2,
+    "alerted before the lookups": 2
+   },
+   "ends": {
+    "final": 90,
+    "capped": 6,
+    "turns": 0,
+    "context": 0
+   },
+   "capped_turns": 6,
+   "extra_lookups": 2,
+   "median_s": 24.2,
+   "p95_s": 96.0,
+   "total_minutes": 53.0,
+   "median_tokens_per_second": 34.9,
+   "completion_tokens": 99653,
+   "reasoning_chars": 299248,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "failed_calls_asked_again": [],
+   "futility": {
+    "after": 15,
+    "right": 14,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 836,
+    "violations": [],
+    "pass": true
+   }
+  },
+  "V3": {
+   "decisions": 96,
+   "right": 92,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 20
+    },
+    "2": {
+     "n": 20,
+     "right": 20
+    },
+    "1": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 36,
+     "right": 32
+    }
+   },
+   "by_case": {
+    "proposal_stale_yes": {
+     "n": 1,
+     "right": 1
+    },
+    "allow": {
+     "n": 2,
+     "right": 2
+    },
+    "status": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown_flags_quiet": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_many_quiet": {
+     "n": 2,
+     "right": 2
+    },
+    "young": {
+     "n": 4,
+     "right": 4
+    },
+    "old_two_flags": {
+     "n": 5,
+     "right": 5
+    },
+    "proposal": {
+     "n": 8,
+     "right": 8
+    },
+    "alias_known": {
+     "n": 3,
+     "right": 3
+    },
+    "hop1_unknown_threshold_old": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_young": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_old": {
+     "n": 2,
+     "right": 2
+    },
+    "hop2_known": {
+     "n": 2,
+     "right": 2
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "hop3_unknown_flags_alert": {
+     "n": 2,
+     "right": 2
+    },
+    "alias_unknown_young": {
+     "n": 2,
+     "right": 2
+    },
+    "old_clean": {
+     "n": 4,
+     "right": 4
+    },
+    "cache_young_registry_old": {
+     "n": 1,
+     "right": 1
+    },
+    "old_one_flag": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_young": {
+     "n": 1,
+     "right": 1
+    },
+    "known": {
+     "n": 4,
+     "right": 4
+    },
+    "hop1_unknown_threshold_young": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_many_alert": {
+     "n": 2,
+     "right": 2
+    },
+    "rep1": {
+     "n": 3,
+     "right": 3
+    },
+    "again1": {
+     "n": 3,
+     "right": 3
+    },
+    "window30": {
+     "n": 3,
+     "right": 3
+    },
+    "mid1": {
+     "n": 3,
+     "right": 3
+    },
+    "allow_remove": {
+     "n": 3,
+     "right": 3
+    },
+    "removed": {
+     "n": 3,
+     "right": 3
+    },
+    "rep2": {
+     "n": 3,
+     "right": 3
+    },
+    "again2": {
+     "n": 3,
+     "right": 3
+    },
+    "window120": {
+     "n": 3,
+     "right": 3
+    },
+    "mid2": {
+     "n": 3,
+     "right": 2
+    },
+    "rep3": {
+     "n": 3,
+     "right": 1
+    },
+    "block": {
+     "n": 3,
+     "right": 2
+    }
+   },
+   "violations": [],
+   "proposals": 13,
+   "wrong_reasons": {
+    "ended at the token cap": 4,
+    "no alert where one was due": 2,
+    "an alert the rules did not call for": 1
+   },
+   "ends": {
+    "final": 92,
+    "capped": 4,
+    "turns": 0,
+    "context": 0
+   },
+   "capped_turns": 4,
+   "extra_lookups": 0,
+   "median_s": 32.4,
+   "p95_s": 119.0,
+   "total_minutes": 66.6,
+   "median_tokens_per_second": 25.9,
+   "completion_tokens": 94947,
+   "reasoning_chars": 285502,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "failed_calls_asked_again": [],
+   "futility": {
+    "after": 15,
+    "right": 15,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 804,
+    "violations": [],
+    "pass": true
+   }
+  },
+  "V4": {
+   "decisions": 96,
+   "right": 95,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 20
+    },
+    "2": {
+     "n": 20,
+     "right": 20
+    },
+    "1": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 36,
+     "right": 35
+    }
+   },
+   "by_case": {
+    "proposal_stale_yes": {
+     "n": 1,
+     "right": 1
+    },
+    "allow": {
+     "n": 2,
+     "right": 2
+    },
+    "status": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown_flags_quiet": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_many_quiet": {
+     "n": 2,
+     "right": 2
+    },
+    "young": {
+     "n": 4,
+     "right": 4
+    },
+    "old_two_flags": {
+     "n": 5,
+     "right": 5
+    },
+    "proposal": {
+     "n": 8,
+     "right": 8
+    },
+    "alias_known": {
+     "n": 3,
+     "right": 3
+    },
+    "hop1_unknown_threshold_old": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_young": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_old": {
+     "n": 2,
+     "right": 2
+    },
+    "hop2_known": {
+     "n": 2,
+     "right": 2
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "hop3_unknown_flags_alert": {
+     "n": 2,
+     "right": 2
+    },
+    "alias_unknown_young": {
+     "n": 2,
+     "right": 2
+    },
+    "old_clean": {
+     "n": 4,
+     "right": 4
+    },
+    "cache_young_registry_old": {
+     "n": 1,
+     "right": 1
+    },
+    "old_one_flag": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_young": {
+     "n": 1,
+     "right": 1
+    },
+    "known": {
+     "n": 4,
+     "right": 4
+    },
+    "hop1_unknown_threshold_young": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_many_alert": {
+     "n": 2,
+     "right": 2
+    },
+    "rep1": {
+     "n": 3,
+     "right": 3
+    },
+    "again1": {
+     "n": 3,
+     "right": 3
+    },
+    "window30": {
+     "n": 3,
+     "right": 3
+    },
+    "mid1": {
+     "n": 3,
+     "right": 3
+    },
+    "allow_remove": {
+     "n": 3,
+     "right": 3
+    },
+    "removed": {
+     "n": 3,
+     "right": 3
+    },
+    "rep2": {
+     "n": 3,
+     "right": 3
+    },
+    "again2": {
+     "n": 3,
+     "right": 3
+    },
+    "window120": {
+     "n": 3,
+     "right": 3
+    },
+    "mid2": {
+     "n": 3,
+     "right": 2
+    },
+    "rep3": {
+     "n": 3,
+     "right": 3
+    },
+    "block": {
+     "n": 3,
+     "right": 3
+    }
+   },
+   "violations": [],
+   "proposals": 13,
+   "wrong_reasons": {
+    "ended at the token cap": 1
+   },
+   "ends": {
+    "final": 95,
+    "capped": 1,
+    "turns": 0,
+    "context": 0
+   },
+   "capped_turns": 1,
+   "extra_lookups": 0,
+   "median_s": 45.5,
+   "p95_s": 132.2,
+   "total_minutes": 87.1,
+   "median_tokens_per_second": 20.5,
+   "completion_tokens": 98384,
+   "reasoning_chars": 296346,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "failed_calls_asked_again": [],
+   "futility": {
+    "after": 15,
+    "right": 15,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 852,
+    "violations": [],
+    "pass": true
+   }
+  },
+  "V5": {
+   "decisions": 96,
+   "right": 94,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 20
+    },
+    "2": {
+     "n": 20,
+     "right": 20
+    },
+    "1": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 36,
+     "right": 34
+    }
+   },
+   "by_case": {
+    "proposal_stale_yes": {
+     "n": 1,
+     "right": 1
+    },
+    "allow": {
+     "n": 2,
+     "right": 2
+    },
+    "status": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown_flags_quiet": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_many_quiet": {
+     "n": 2,
+     "right": 2
+    },
+    "young": {
+     "n": 4,
+     "right": 4
+    },
+    "old_two_flags": {
+     "n": 5,
+     "right": 5
+    },
+    "proposal": {
+     "n": 8,
+     "right": 8
+    },
+    "alias_known": {
+     "n": 3,
+     "right": 3
+    },
+    "hop1_unknown_threshold_old": {
+     "n": 2,
+     "right": 2
+    },
+    "hop3_unknown": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_young": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_old": {
+     "n": 2,
+     "right": 2
+    },
+    "hop2_known": {
+     "n": 2,
+     "right": 2
+    },
+    "proposal_two_records": {
+     "n": 1,
+     "right": 1
+    },
+    "hop3_unknown_flags_alert": {
+     "n": 2,
+     "right": 2
+    },
+    "alias_unknown_young": {
+     "n": 2,
+     "right": 2
+    },
+    "old_clean": {
+     "n": 4,
+     "right": 4
+    },
+    "cache_young_registry_old": {
+     "n": 1,
+     "right": 1
+    },
+    "old_one_flag": {
+     "n": 2,
+     "right": 2
+    },
+    "cache_old_registry_young": {
+     "n": 1,
+     "right": 1
+    },
+    "known": {
+     "n": 4,
+     "right": 4
+    },
+    "hop1_unknown_threshold_young": {
+     "n": 2,
+     "right": 2
+    },
+    "flags_many_alert": {
+     "n": 2,
+     "right": 2
+    },
+    "rep1": {
+     "n": 3,
+     "right": 3
+    },
+    "again1": {
+     "n": 3,
+     "right": 3
+    },
+    "window30": {
+     "n": 3,
+     "right": 3
+    },
+    "mid1": {
+     "n": 3,
+     "right": 3
+    },
+    "allow_remove": {
+     "n": 3,
+     "right": 3
+    },
+    "removed": {
+     "n": 3,
+     "right": 3
+    },
+    "rep2": {
+     "n": 3,
+     "right": 3
+    },
+    "again2": {
+     "n": 3,
+     "right": 3
+    },
+    "window120": {
+     "n": 3,
+     "right": 3
+    },
+    "mid2": {
+     "n": 3,
+     "right": 2
+    },
+    "rep3": {
+     "n": 3,
+     "right": 2
+    },
+    "block": {
+     "n": 3,
+     "right": 3
+    }
+   },
+   "violations": [],
+   "proposals": 13,
+   "wrong_reasons": {
+    "ended at the token cap": 2
+   },
+   "ends": {
+    "final": 94,
+    "capped": 2,
+    "turns": 0,
+    "context": 0
+   },
+   "capped_turns": 3,
+   "extra_lookups": 0,
+   "median_s": 50.7,
+   "p95_s": 159.5,
+   "total_minutes": 97.0,
+   "median_tokens_per_second": 17.0,
+   "completion_tokens": 90303,
+   "reasoning_chars": 272816,
+   "thermal_levels": [
+    "0"
+   ],
+   "complete": true,
+   "failed_calls_asked_again": [],
+   "futility": {
+    "after": 15,
+    "right": 15,
+    "stop": false
+   },
+   "audit": {
+    "present": true,
+    "connects": 796,
+    "violations": [],
+    "pass": true
+   }
+  }
+ },
+ "HB1": {
+  "hard_decisions": 76,
+  "only_I_right": 15,
+  "only_G_right": 1,
+  "both_right": 58,
+  "neither": 2,
+  "sign_p_two_sided": 0.0005,
+  "tier3_share_right": {
+   "G": 0.6,
+   "I": 0.85
+  },
+  "reading": "Inkling 2 Mini is better on the hard jobs"
+ },
+ "HB2": {
+  "G": {
+   "violations": 0,
+   "proposals": 13,
+   "pass": true
+  },
+  "I": {
+   "violations": 0,
+   "proposals": 13,
+   "pass": true
+  },
+  "V1": {
+   "violations": 0,
+   "proposals": 13,
+   "pass": true
+  },
+  "V2": {
+   "violations": 0,
+   "proposals": 13,
+   "pass": true
+  },
+  "V3": {
+   "violations": 0,
+   "proposals": 13,
+   "pass": true
+  },
+  "V4": {
+   "violations": 0,
+   "proposals": 13,
+   "pass": true
+  },
+  "V5": {
+   "violations": 0,
+   "proposals": 13,
+   "pass": true
+  }
+ },
+ "HB5": {
+  "V1": {
+   "right": 79,
+   "of": 96,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 11
+    },
+    "2": {
+     "n": 20,
+     "right": 19
+    },
+    "1": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 36,
+     "right": 29
+    }
+   },
+   "median_tokens_per_second": 48.8,
+   "median_s": 16.9
+  },
+  "V2": {
+   "right": 88,
+   "of": 96,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 17
+    },
+    "2": {
+     "n": 20,
+     "right": 18
+    },
+    "1": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 36,
+     "right": 33
+    }
+   },
+   "median_tokens_per_second": 34.9,
+   "median_s": 24.2
+  },
+  "V3": {
+   "right": 92,
+   "of": 96,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 20
+    },
+    "2": {
+     "n": 20,
+     "right": 20
+    },
+    "1": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 36,
+     "right": 32
+    }
+   },
+   "median_tokens_per_second": 25.9,
+   "median_s": 32.4
+  },
+  "V4": {
+   "right": 95,
+   "of": 96,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 20
+    },
+    "2": {
+     "n": 20,
+     "right": 20
+    },
+    "1": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 36,
+     "right": 35
+    }
+   },
+   "median_tokens_per_second": 20.5,
+   "median_s": 45.5
+  },
+  "V5": {
+   "right": 94,
+   "of": 96,
+   "by_tier": {
+    "3": {
+     "n": 20,
+     "right": 20
+    },
+    "2": {
+     "n": 20,
+     "right": 20
+    },
+    "1": {
+     "n": 20,
+     "right": 20
+    },
+    "stream": {
+     "n": 36,
+     "right": 34
+    }
+   },
+   "median_tokens_per_second": 17.0,
+   "median_s": 50.7
+  }
+ }
+}
