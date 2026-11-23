@@ -1,0 +1,26 @@
+cells complete: ['N0', 'N2', 'U0', 'U0r', 'U1', 'U2']  Part 2 complete: ['C-N0', 'C-U0', 'C-U2']
+cell   long prefill  long gen  short prefill  short gen   thermal
+U0             70.5     15.29           69.4      15.86   ['0']
+N0            254.5     25.92          202.7      26.75   ['0']
+U1             70.2     15.38           69.0      15.88   ['0']
+U2            248.5     25.11          202.2      25.84   ['0']
+N2            254.3     25.79          209.7      26.65   ['0']
+U0r            70.6     15.29           69.3      15.87   ['0']
+C-U0 jobs a minute {1: 2.83, 2: 3.22, 4: 4.52} right {1: 12, 2: 12, 4: 12} 4:1 1.6 GB {1: 20.2, 2: 22.5, 4: 25.8}
+C-N0 jobs a minute {1: 5.44, 2: 6.83, 4: 7.24} right {1: 12, 2: 12, 4: 12} 4:1 1.33 GB {1: 21.0, 2: 22.5, 4: 26.3}
+C-U2 jobs a minute {1: 5.71, 2: 5.81, 4: 7.64} right {1: 12, 2: 12, 4: 12} 4:1 1.34 GB {1: 19.8, 2: 20.7, 4: 23.6}
+U0_vs_U0r first token equal 8 of 8 | identical to the end 8 | median agreed prefix 256.0
+U0_vs_U2 first token equal 8 of 8 | identical to the end 1 | median agreed prefix 16.5
+U0_vs_U1 first token equal 8 of 8 | identical to the end 8 | median agreed prefix 256.0
+N0_vs_N2 first token equal 8 of 8 | identical to the end 8 | median agreed prefix 256.0
+U2_vs_N2 first token equal 8 of 8 | identical to the end 1 | median agreed prefix 12.0
+repeats identical: {'U0': {'long': True, 'short': True}, 'N0': {'long': True, 'short': True}, 'U1': {'long': True, 'short': True}, 'U2': {'long': True, 'short': True}, 'N2': {'long': True, 'short': True}, 'U0r': {'long': True, 'short': True}}
+placement P-U0 {'CPU': 45, 'MTL0': 45} {'MUL_MAT': {'MTL0': 977}, 'MUL_MAT_ID': {'CPU': 88, 'MTL0': 8}} 
+placement P-U2 {'CPU': 1, 'MTL0': 1} {'MUL_MAT': {'MTL0': 977}, 'MUL_MAT_ID': {'MTL0': 96}} 
+placement P-N0 {'CPU': 1, 'MTL0': 1} {'MUL_MAT': {'MTL0': 977}, 'MUL_MAT_ID': {'MTL0': 96}} 
+HC3 {"first_token_equal": "8 of 8", "one_watcher_right": "12 of 12", "pass": true}
+HC1 {"U2_short_gen": 25.84, "bar": 22.8, "U0_short_gen": 15.86, "U1_short_gen": 15.88, "U2_long_gen": 25.11, "pass": true}
+HC1b {"short_ratio": 0.97, "long_ratio": 0.974, "bar": 0.9, "prefill_long_ratio": 0.977, "pass": true}
+HC2 {"change": {"long_prefill": -0.001, "long_gen": -0.005, "short_prefill": 0.035, "short_gen": -0.004}, "bar": 0.1, "pass": true, "noise_floor_U0_to_U0r": {"long_prefill": 0.001, "long_gen": 0.0, "short_prefill": -0.001, "short_gen": 0.001}}
+HC4 {"ratio_4_to_1": 1.34, "bar": 1.4, "baseline_C-U0": 1.6, "control_C-N0": 1.33, "pass": false}
+same tool calls, one watcher, U0 against U2: 12 of 12
