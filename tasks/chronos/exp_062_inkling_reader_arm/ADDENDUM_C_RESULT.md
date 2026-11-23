@@ -33,10 +33,11 @@ The scheduler's own debug output, one short load each:
 | U on `b12631` | 90 (45 CPU, 45 GPU) | 88 | 8 |
 | U on the head | 2 | 0 | 96 |
 | N on `b12631` | 2 | 0 | 96 |
+| U on `42fd370c`, the main run's and Addendum A's build (added after the run, 10:34Z) | 90 (45 CPU, 45 GPU) | 88 | 8 |
 
 - 96 is 48 layer applications (12 plain layers and 12 looped layers three times) with two expert tensors each. The 88 are the 20 layers whose expert weights are NVFP4. The 8 that stayed on the GPU are the last four layers, which this file holds as Q5_K and Q8_0.
 - All 977 plain `MUL_MAT` nodes are on the GPU in all three.
-- So on `b12631` the graph for one token is cut into 90 pieces that alternate between the CPU and the GPU. The main run's build (`42fd370c`) was not loaded here; its Metal source has the same gate.
+- So on `b12631` the graph for one token is cut into 90 pieces that alternate between the CPU and the GPU. The registration did not include the main run's own build, `42fd370c`; it was loaded once after the run and shows the same split (`placement-42fd370c-added.json`).
 
 ## Part 1: speed
 
@@ -86,7 +87,7 @@ Eight openings, 256 tokens each, temperature 0. "Gap" is the difference in the l
 | U2 against N2: the two files on the head | 8 of 8 | 1 | 12 | 0.028 | 0.136 |
 
 - **The draft changes nothing it should not.** File N's text is identical across the builds, and so is file U's on the parent.
-- **On file U the new GPU path and the old CPU path part ways after a median of 16.5 tokens.** A difference was expected: the arithmetic is ordered differently. Its size is that of the difference between the two 4-bit files on one build (0.015 against 0.016 at the median). Whether that is rounding or a difference in precision between the two paths was not examined, and nothing here says which path is nearer the full-precision model.
+- **On file U the new GPU path and the old CPU path part ways after a median of 16.5 tokens.** A difference was expected: the arithmetic is ordered differently. Its size is that of the difference between the two 4-bit files on one build (0.015 against 0.016 at the median). Whether that is rounding or a difference in precision between the two paths was not examined, and nothing here says which path is nearer the full-precision model. There is also no baseline here for an ordinary CPU-against-GPU difference on a tensor type both paths support, so the size cannot be called large or small.
 - The draft's one commenter reported "the same PPL/KLD as the CPU at every batch size" for a dense model on an M5 Pro. This is a mixture-of-experts model on an M4 Pro, and eight prompts.
 
 ## What this corrects in the record
@@ -95,7 +96,7 @@ Eight openings, 256 tokens each, temperature 0. "Gap" is the difference in the l
 - **Every timing of the main run and of Addendum A is of that configuration.** The counts and verdicts do not depend on it: the reader line stopped on accuracy.
 - **[ADDENDUM_A_RESULT.md](ADDENDUM_A_RESULT.md): "gemma4:26b does it in half the time."** On the 12 jobs of Part 2, Addendum A's two arms took 250 s (Inkling) and 96 s (gemma4:26b, through Ollama). File U on the head took 126 s. gemma is still the faster on these jobs, by about a quarter of the time, not by more than half. gemma was not run again today.
 - **Addendum A's chatbot probe (118.6 s on a 2,543-token prompt) was not repeated.** At 70 tokens a second the prompt alone took about 36 s; at 250 it would take about 10. That is arithmetic from Part 1, not a measurement.
-- **"Several watchers on one mini are a queue" stands,** and now on better ground: 1.3 times with the experts on the GPU, on llama.cpp with four slots.
+- **"Several watchers on one mini are a queue" is not overturned.** With the experts on the GPU, four watchers gave 1.34 times the jobs a minute of one and 1.51 times the tokens a second, on llama.cpp with four slots, one pass a level. One pass is coarse: the same file with CPU experts gave 1.38 in Addendum A and 1.60 here.
 
 ## Limits
 
@@ -103,7 +104,7 @@ Eight openings, 256 tokens each, temperature 0. "Gap" is the difference in the l
 - **Raw completion with the end-of-stream token ignored** for Parts 1 and 3. Part 2 is the real work, and it is 12 easy jobs, one pass a level.
 - **HC1b compares two 4-bit recipes on different kernels.** That they land within 3 % of each other says nothing about which answers better. Addendum B measured answers, with file N only.
 - **Part 3 is eight prompts.** It can show that two paths differ, not which is right.
-- **Two columns were added after the run** and are marked: tokens a second in Part 2, and U0 against N0 in Part 3.
+- **Three things were added after the run** and are marked: tokens a second in Part 2, U0 against N0 in Part 3, and the placement load on `42fd370c`.
 - **What differs from the registration** is listed in the kit note: Part 2's loop is the kit's own around Addendum A's job runner, no model-written text is kept, and the scheduler's raw output stays outside the repository.
 
 ## SO WHAT
@@ -111,8 +112,8 @@ Eight openings, 256 tokens each, temperature 0. "Gap" is the difference in the l
 - **exp_062's slow Inkling was a file meeting a missing kernel, not the model and not the machine.** With the kernel, the same file reads a prompt 3.5 times as fast and writes 1.6 times as fast.
 - **Until llama.cpp #32825 is merged and released, check the tensor types of a GGUF before timing it on a Mac.** A file labelled Q4_K_M can hold NVFP4. On this mini that cost 40 % of the writing speed and 70 % of the reading speed.
 - **A slower-than-expected local model is a reason to look at where its graph runs before concluding anything about it.** `GGML_SCHED_DEBUG=2` showed the split in one short load.
-- **Four watchers on one mini remain a queue with a 1.3 to 1.5 times gain,** on this runtime. The fallback was not the reason.
-- **The faster path does not compute the same numbers as the slower one.** Tool calls matched on 12 of 12 jobs; free text diverged within about 16 tokens. Anyone who pins a reference output for this model has to pin the build too.
+- **Four watchers on one mini still gave 1.34 times the jobs of one (1.51 by tokens), under the 1.4 bar,** on this runtime, one pass a level. Moving the experts to the GPU doubled what one watcher does and did not make four watchers scale better.
+- **The faster path does not compute the same numbers as the slower one.** Tool calls matched on 12 of 12 jobs; free text diverged within about 16 tokens, with no baseline to say whether that is ordinary. Anyone who pins a reference output for this model has to pin the build too.
 - **Nothing changes in the stack.** No seat depends on this model's speed.
 
 **Open, Andrei's:**
