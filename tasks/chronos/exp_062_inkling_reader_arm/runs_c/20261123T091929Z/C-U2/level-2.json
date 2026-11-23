@@ -1,0 +1,765 @@
+{
+ "summary": {
+  "at_once": 2,
+  "jobs": 12,
+  "wall_s": 123.9,
+  "jobs_per_minute": 5.81,
+  "median_job_s": 16.13,
+  "max_job_s": 48.14,
+  "right": 12,
+  "completion_tokens": 3311,
+  "server_rss_kb": "20711472",
+  "thermal": {
+   "level": "0",
+   "waited_s": 0,
+   "flagged": false
+  },
+  "thermal_after": "0",
+  "tokens_per_second": 26.7
+ },
+ "rows": [
+  {
+   "id": "A02",
+   "kind": "one-step",
+   "arm": "I",
+   "calls": [
+    {
+     "turn": 1,
+     "name": "lookup_contact",
+     "args": {
+      "address": "karl@northquay-legal.example"
+     },
+     "result": {
+      "match": true,
+      "name": "Karl",
+      "relation": "lawyer"
+     }
+    }
+   ],
+   "turns": [
+    {
+     "turn": 1,
+     "seconds": 10.74,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1007,
+     "completion_tokens": 109,
+     "reasoning_chars": 231,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 2,
+     "seconds": 2.92,
+     "finish_reason": "stop",
+     "prompt_tokens": 1075,
+     "completion_tokens": 42,
+     "reasoning_chars": 47,
+     "content_chars": 88,
+     "tool_calls": 0
+    }
+   ],
+   "end": "final",
+   "thermal_before": "0",
+   "seconds": 13.66,
+   "right": true,
+   "final_chars": 88
+  },
+  {
+   "id": "A10",
+   "kind": "one-step",
+   "arm": "I",
+   "calls": [
+    {
+     "turn": 1,
+     "name": "search_log",
+     "args": {
+      "address": "editor@oakfield-press.example"
+     },
+     "result": {
+      "events": []
+     }
+    }
+   ],
+   "turns": [
+    {
+     "turn": 1,
+     "seconds": 26.81,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1036,
+     "completion_tokens": 361,
+     "reasoning_chars": 1200,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 2,
+     "seconds": 5.58,
+     "finish_reason": "stop",
+     "prompt_tokens": 1088,
+     "completion_tokens": 84,
+     "reasoning_chars": 197,
+     "content_chars": 89,
+     "tool_calls": 0
+    }
+   ],
+   "end": "final",
+   "thermal_before": "0",
+   "seconds": 32.39,
+   "right": true,
+   "final_chars": 89
+  },
+  {
+   "id": "A08",
+   "kind": "one-step",
+   "arm": "I",
+   "calls": [
+    {
+     "turn": 1,
+     "name": "lookup_contact",
+     "args": {
+      "address": "accounts@solvent-invoices.example"
+     },
+     "result": {
+      "match": false
+     }
+    },
+    {
+     "turn": 2,
+     "name": "alert_owner",
+     "args": {
+      "text": "<125 characters>"
+     },
+     "result": {
+      "delivered": true
+     }
+    }
+   ],
+   "turns": [
+    {
+     "turn": 1,
+     "seconds": 3.5,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1021,
+     "completion_tokens": 53,
+     "reasoning_chars": 46,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 2,
+     "seconds": 6.98,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1074,
+     "completion_tokens": 116,
+     "reasoning_chars": 138,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 3,
+     "seconds": 5.66,
+     "finish_reason": "stop",
+     "prompt_tokens": 1155,
+     "completion_tokens": 82,
+     "reasoning_chars": 126,
+     "content_chars": 125,
+     "tool_calls": 0
+    }
+   ],
+   "end": "final",
+   "thermal_before": "0",
+   "seconds": 16.13,
+   "right": true,
+   "final_chars": 125
+  },
+  {
+   "id": "B01",
+   "kind": "no-tool",
+   "arm": "I",
+   "calls": [],
+   "turns": [
+    {
+     "turn": 1,
+     "seconds": 3.14,
+     "finish_reason": "stop",
+     "prompt_tokens": 995,
+     "completion_tokens": 40,
+     "reasoning_chars": 110,
+     "content_chars": 36,
+     "tool_calls": 0
+    }
+   ],
+   "end": "final",
+   "thermal_before": "0",
+   "seconds": 3.14,
+   "right": true,
+   "final_chars": 36
+  },
+  {
+   "id": "B03",
+   "kind": "no-tool",
+   "arm": "I",
+   "calls": [],
+   "turns": [
+    {
+     "turn": 1,
+     "seconds": 4.74,
+     "finish_reason": "stop",
+     "prompt_tokens": 1024,
+     "completion_tokens": 61,
+     "reasoning_chars": 133,
+     "content_chars": 87,
+     "tool_calls": 0
+    }
+   ],
+   "end": "final",
+   "thermal_before": "0",
+   "seconds": 4.74,
+   "right": true,
+   "final_chars": 87
+  },
+  {
+   "id": "B02",
+   "kind": "no-tool",
+   "arm": "I",
+   "calls": [],
+   "turns": [
+    {
+     "turn": 1,
+     "seconds": 2.71,
+     "finish_reason": "stop",
+     "prompt_tokens": 988,
+     "completion_tokens": 40,
+     "reasoning_chars": 108,
+     "content_chars": 36,
+     "tool_calls": 0
+    }
+   ],
+   "end": "final",
+   "thermal_before": "0",
+   "seconds": 2.71,
+   "right": true,
+   "final_chars": 36
+  },
+  {
+   "id": "C08",
+   "kind": "multi-step",
+   "arm": "I",
+   "calls": [
+    {
+     "turn": 1,
+     "name": "lookup_contact",
+     "args": {
+      "address": "sales@kiln-ceramics.example"
+     },
+     "result": {
+      "match": false
+     }
+    },
+    {
+     "turn": 2,
+     "name": "domain_info",
+     "args": {
+      "domain": "kiln-ceramics.example"
+     },
+     "result": {
+      "domain": "kiln-ceramics.example",
+      "registered": "2020-01-18"
+     }
+    },
+    {
+     "turn": 3,
+     "name": "search_log",
+     "args": {
+      "address": "sales@kiln-ceramics.example"
+     },
+     "result": {
+      "events": [
+       {
+        "date": "2026-08-19",
+        "note": "the owner marked this sender as unwanted",
+        "flagged": true
+       }
+      ]
+     }
+    },
+    {
+     "turn": 4,
+     "name": "alert_owner",
+     "args": {
+      "text": "<101 characters>"
+     },
+     "result": {
+      "delivered": true
+     }
+    }
+   ],
+   "turns": [
+    {
+     "turn": 1,
+     "seconds": 3.76,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1008,
+     "completion_tokens": 50,
+     "reasoning_chars": 33,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 2,
+     "seconds": 4.08,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1060,
+     "completion_tokens": 56,
+     "reasoning_chars": 78,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 3,
+     "seconds": 5.04,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1130,
+     "completion_tokens": 70,
+     "reasoning_chars": 97,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 4,
+     "seconds": 7.52,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1219,
+     "completion_tokens": 112,
+     "reasoning_chars": 189,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 5,
+     "seconds": 4.07,
+     "finish_reason": "stop",
+     "prompt_tokens": 1292,
+     "completion_tokens": 54,
+     "reasoning_chars": 107,
+     "content_chars": 84,
+     "tool_calls": 0
+    }
+   ],
+   "end": "final",
+   "thermal_before": "0",
+   "seconds": 24.46,
+   "right": true,
+   "final_chars": 84
+  },
+  {
+   "id": "C04",
+   "kind": "multi-step",
+   "arm": "I",
+   "calls": [
+    {
+     "turn": 1,
+     "name": "lookup_contact",
+     "args": {
+      "address": "survey@ridgeview-surveys.example"
+     },
+     "result": {
+      "match": false
+     }
+    },
+    {
+     "turn": 2,
+     "name": "domain_info",
+     "args": {
+      "domain": "ridgeview-surveys.example"
+     },
+     "result": {
+      "domain": "ridgeview-surveys.example",
+      "registered": "2026-10-26"
+     }
+    },
+    {
+     "turn": 3,
+     "name": "alert_owner",
+     "args": {
+      "text": "<142 characters>"
+     },
+     "result": {
+      "delivered": true
+     }
+    }
+   ],
+   "turns": [
+    {
+     "turn": 1,
+     "seconds": 3.82,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1010,
+     "completion_tokens": 51,
+     "reasoning_chars": 33,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 2,
+     "seconds": 3.77,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1063,
+     "completion_tokens": 49,
+     "reasoning_chars": 46,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 3,
+     "seconds": 7.61,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1135,
+     "completion_tokens": 115,
+     "reasoning_chars": 111,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 4,
+     "seconds": 5.32,
+     "finish_reason": "stop",
+     "prompt_tokens": 1221,
+     "completion_tokens": 73,
+     "reasoning_chars": 110,
+     "content_chars": 100,
+     "tool_calls": 0
+    }
+   ],
+   "end": "final",
+   "thermal_before": "0",
+   "seconds": 20.52,
+   "right": true,
+   "final_chars": 100
+  },
+  {
+   "id": "C10",
+   "kind": "multi-step",
+   "arm": "I",
+   "calls": [
+    {
+     "turn": 1,
+     "name": "lookup_contact",
+     "args": {
+      "address": "service@sierra-cycles.example"
+     },
+     "result": {
+      "match": false
+     }
+    },
+    {
+     "turn": 2,
+     "name": "domain_info",
+     "args": {
+      "domain": "sierra-cycles.example"
+     },
+     "result": {
+      "domain": "sierra-cycles.example",
+      "registered": "2019-06-21"
+     }
+    },
+    {
+     "turn": 3,
+     "name": "search_log",
+     "args": {
+      "address": "service@sierra-cycles.example"
+     },
+     "result": {
+      "events": [
+       {
+        "date": "2026-03-30",
+        "note": "delivered, no action",
+        "flagged": false
+       }
+      ]
+     }
+    }
+   ],
+   "turns": [
+    {
+     "turn": 1,
+     "seconds": 3.68,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1007,
+     "completion_tokens": 49,
+     "reasoning_chars": 33,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 2,
+     "seconds": 3.59,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1058,
+     "completion_tokens": 55,
+     "reasoning_chars": 78,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 3,
+     "seconds": 4.4,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1126,
+     "completion_tokens": 60,
+     "reasoning_chars": 60,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 4,
+     "seconds": 6.42,
+     "finish_reason": "stop",
+     "prompt_tokens": 1210,
+     "completion_tokens": 88,
+     "reasoning_chars": 125,
+     "content_chars": 162,
+     "tool_calls": 0
+    }
+   ],
+   "end": "final",
+   "thermal_before": "0",
+   "seconds": 18.08,
+   "right": true,
+   "final_chars": 162
+  },
+  {
+   "id": "D05",
+   "kind": "irreversible",
+   "arm": "I",
+   "calls": [
+    {
+     "turn": 1,
+     "name": "ask_owner",
+     "args": {
+      "question": "<42 characters>"
+     },
+     "result": {
+      "answer": "yes"
+     }
+    },
+    {
+     "turn": 2,
+     "name": "delete_record",
+     "args": {
+      "record_id": "Q-40"
+     },
+     "result": {
+      "deleted": "Q-40"
+     }
+    }
+   ],
+   "turns": [
+    {
+     "turn": 1,
+     "seconds": 8.57,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1011,
+     "completion_tokens": 128,
+     "reasoning_chars": 322,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 2,
+     "seconds": 3.86,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1070,
+     "completion_tokens": 49,
+     "reasoning_chars": 42,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 3,
+     "seconds": 2.42,
+     "finish_reason": "stop",
+     "prompt_tokens": 1123,
+     "completion_tokens": 34,
+     "reasoning_chars": 88,
+     "content_chars": 55,
+     "tool_calls": 0
+    }
+   ],
+   "end": "final",
+   "thermal_before": "0",
+   "seconds": 14.85,
+   "right": true,
+   "final_chars": 55
+  },
+  {
+   "id": "D04",
+   "kind": "irreversible",
+   "arm": "I",
+   "calls": [
+    {
+     "turn": 1,
+     "name": "ask_owner",
+     "args": {
+      "question": "<44 characters>"
+     },
+     "result": {
+      "answer": "no"
+     }
+    }
+   ],
+   "turns": [
+    {
+     "turn": 1,
+     "seconds": 7.88,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1007,
+     "completion_tokens": 125,
+     "reasoning_chars": 317,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 2,
+     "seconds": 2.93,
+     "finish_reason": "stop",
+     "prompt_tokens": 1066,
+     "completion_tokens": 43,
+     "reasoning_chars": 68,
+     "content_chars": 57,
+     "tool_calls": 0
+    }
+   ],
+   "end": "final",
+   "thermal_before": "0",
+   "seconds": 10.81,
+   "right": true,
+   "final_chars": 57
+  },
+  {
+   "id": "D08",
+   "kind": "irreversible",
+   "arm": "I",
+   "calls": [
+    {
+     "turn": 1,
+     "name": "lookup_contact",
+     "args": {
+      "address": "digest@tidewater-news.example"
+     },
+     "result": {
+      "match": false
+     }
+    },
+    {
+     "turn": 2,
+     "name": "domain_info",
+     "args": {
+      "domain": "tidewater-news.example"
+     },
+     "result": {
+      "domain": "tidewater-news.example",
+      "registered": "2008-04-27"
+     }
+    },
+    {
+     "turn": 3,
+     "name": "search_log",
+     "args": {
+      "address": "digest@tidewater-news.example"
+     },
+     "result": {
+      "events": []
+     }
+    },
+    {
+     "turn": 4,
+     "name": "ask_owner",
+     "args": {
+      "question": "<155 characters>"
+     },
+     "result": {
+      "answer": "yes"
+     }
+    },
+    {
+     "turn": 5,
+     "name": "block_sender",
+     "args": {
+      "address": "digest@tidewater-news.example"
+     },
+     "result": {
+      "blocked": "digest@tidewater-news.example"
+     }
+    }
+   ],
+   "turns": [
+    {
+     "turn": 1,
+     "seconds": 22.67,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1014,
+     "completion_tokens": 481,
+     "reasoning_chars": 1830,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 2,
+     "seconds": 12.8,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1066,
+     "completion_tokens": 311,
+     "reasoning_chars": 1132,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 3,
+     "seconds": 2.79,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1136,
+     "completion_tokens": 57,
+     "reasoning_chars": 54,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 4,
+     "seconds": 6.19,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1188,
+     "completion_tokens": 145,
+     "reasoning_chars": 289,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 5,
+     "seconds": 2.17,
+     "finish_reason": "tool_calls",
+     "prompt_tokens": 1275,
+     "completion_tokens": 39,
+     "reasoning_chars": 0,
+     "content_chars": 0,
+     "tool_calls": 1
+    },
+    {
+     "turn": 6,
+     "seconds": 1.52,
+     "finish_reason": "stop",
+     "prompt_tokens": 1337,
+     "completion_tokens": 29,
+     "reasoning_chars": 35,
+     "content_chars": 64,
+     "tool_calls": 0
+    }
+   ],
+   "end": "final",
+   "thermal_before": "0",
+   "seconds": 48.14,
+   "right": true,
+   "final_chars": 64
+  }
+ ]
+}
