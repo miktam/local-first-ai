@@ -49,6 +49,10 @@ CELLS = [("U0", "b12631", "U"), ("N0", "b12631", "N"), ("U1", "parent", "U"), ("
 PLACEMENT = [("P-U0", "b12631", "U"), ("P-U2", "head", "U"), ("P-N0", "b12631", "N")]
 CAPACITY = [("C-U0", "b12631", "U"), ("C-N0", "b12631", "N"), ("C-U2", "head", "U")]
 SMOKE_CELLS, SMOKE_PLACEMENT, SMOKE_CAPACITY = [("U2", "head", "U")], [("P-U0", "b12631", "U"), ("P-U2", "head", "U")], [("C-U2", "head", "U")]
+# Amendment 1 (2026-11-24, ADDENDUM_C_AMENDMENT_1.md): the merged release b12676, which holds #32825 (merged as
+# 51831d47) and #32833; run with --tag into runs_c2/, compared there with Addendum C's U0 and U2 by score62c2.py
+BUILDS["tag"] = (MODELS / "llama.cpp-b12676", "d35dc4d9e6827db8e08426a2340d8a71ea863cd9")
+TAG_CELLS, TAG_PLACEMENT, TAG_CAPACITY = [("U3", "tag", "U"), ("N3", "tag", "N")], [("P-U3", "tag", "U")], [("C-U3", "tag", "U")]
 KIT_SHA256 = {  # frozen with the kit, 2026-11-23
     "text62c.txt": "3ffb77ad1f94963fa986021bff7be7aa2ab3f52f50d96be6f30686ea22c769df",
     "prompts62c.json": "692326baabe02efa8b7d9c4928ca45205c1fbfe3c64ddfb49ee60f79aae7f98c",
@@ -340,7 +344,10 @@ def main():
     ap.add_argument("--cell")
     ap.add_argument("--capacity")
     ap.add_argument("--run", required=True)
+    ap.add_argument("--tag", action="store_true", help="Amendment 1: the cells on the release b12676 only")
     a = ap.parse_args()
+    if a.tag:
+        CELLS[:], PLACEMENT[:], CAPACITY[:] = TAG_CELLS, TAG_PLACEMENT, TAG_CAPACITY
     run = Path(a.run).resolve()
     if a.all:
         run_all(run, a.smoke)

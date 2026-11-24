@@ -4,6 +4,7 @@ writes one (llama.cpp issue #32802). Also times the two Inkling 2 Mini files on 
 Made-up prompts. For each model file: N tool-requiring prompts through /v1/chat/completions (what a client sees),
 and the same prompts as raw completions with special tokens shown (what the model wrote)."""
 import json
+import os
 import re
 import subprocess
 import sys
@@ -11,7 +12,8 @@ import time
 import urllib.request
 from pathlib import Path
 
-SERVER = Path.home() / "models/llama.cpp-b12631/build/bin/llama-server"
+# REPRO62_SERVER (Amendment 1 of Addendum C, 2026-11-24) runs the same prompts on another build; default unchanged
+SERVER = Path(os.environ.get("REPRO62_SERVER") or Path.home() / "models/llama.cpp-b12631/build/bin/llama-server")
 FILES = {
     "research (ggml-org IQ4_NL, default 3 passes)": Path.home() / "models/varloop/TML-d24-varloop-research-IQ4_NL.gguf",
     "Inkling 2 Mini (Unsloth UD-Q4_K_M)": Path.home() / "models/inkling2/Inkling-2-Mini-UD-Q4_K_M.gguf",
