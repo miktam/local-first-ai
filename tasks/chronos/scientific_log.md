@@ -2945,4 +2945,14 @@ SO WHAT, Addendum C:
 - The faster path does not compute the same numbers as the slower one: tool calls matched, free text diverged within about 16 tokens; there is no baseline to say whether that is ordinary.
 - Provisional: a draft pull request, one commit of it, one chip. Nothing changes in the stack. The push, the blog post's line and any figures for the pull request are Andrei's.
 
-*Evidence: `exp_062_inkling_reader_arm/`. Status: Complete (2026-11-22); the line stops (0.645 against 0.882); H1, H2, H3 fail; Amendments 1 and 2; Addendum A complete (a tie at the ceiling); Addendum B complete (HB1 and HB2 pass, HB3 and HB4 fail); Addendum C complete, 2026-11-23 (HC3, HC1, HC1b and HC2 pass, HC4 fails; provisional on a draft pull request).*
+**Addendum C, Amendment 1 (registered and run 2026-11-24, on Andrei's go).** Both pull requests are merged: #32825 as `51831d47` and the Inkling parser #32833 as `dd53f70d`. Both are in llama.cpp release `b12676`, so Addendum C's checks were run again on the release, with one added for the tool calls.
+- HD3 pass: the first token matches `b12631`'s on 8 of 8, and one watcher is right on 12 of 12. The release's tokens are identical to the draft head's on all 8 texts.
+- HD1 pass: 25.90 tokens a second, Short workload.
+- HD1b pass: 97.2 % and 96.3 % of the ggml-org file's speed.
+- HD4 fail: four watchers give 1.20 times one; 1.49 by tokens a second.
+- HD5 pass: llama-server returns the research model's tool calls on 5 of 5 prompts, against 0 of 5 on `b12631`. The model still writes them without the tool's name.
+- All 96 expert products run on the GPU.
+
+SO WHAT, Amendment 1: Addendum C is no longer provisional. On a release, the Unsloth file is as fast as the ggml-org file, and the server parses the research model's calls. Several watchers on one mini are still a queue. Nothing changes in the stack. The blog line, and the comment or the closing on #32802, are Andrei's.
+
+*Evidence: `exp_062_inkling_reader_arm/`. Status: Complete (2026-11-22); the line stops (0.645 against 0.882); H1, H2, H3 fail; Amendments 1 and 2; Addendum A complete (a tie at the ceiling); Addendum B complete (HB1 and HB2 pass, HB3 and HB4 fail); Addendum C complete, 2026-11-23 (HC3, HC1, HC1b and HC2 pass, HC4 fails); Amendment 1, 2026-11-24, on release `b12676` (HD3, HD1, HD1b, HD5 pass, HD4 fails): no longer provisional.*

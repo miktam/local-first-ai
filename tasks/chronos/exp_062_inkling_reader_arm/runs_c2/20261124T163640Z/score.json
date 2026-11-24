@@ -1,0 +1,208 @@
+{
+ "verdicts": {
+  "HD3": {
+   "first_token_equal": "8 of 8",
+   "one_watcher_right": "12 of 12",
+   "pass": true
+  },
+  "HD1": {
+   "U3_short_gen": 25.9,
+   "bar": 22.8,
+   "U2_short_gen_draft_head": 25.84,
+   "U0_short_gen_b12631": 15.86,
+   "U3_long_gen": 24.86,
+   "pass": true
+  },
+  "HD1b": {
+   "short_ratio": 0.972,
+   "long_ratio": 0.963,
+   "bar": 0.9,
+   "prefill_long_ratio": 0.984,
+   "pass": true
+  },
+  "HD4": {
+   "ratio_4_to_1": 1.2,
+   "bar": 1.4,
+   "draft_head_C-U2": 1.34,
+   "pass": false
+  },
+  "HD5": {
+   "rows": {
+    "research (ggml-org IQ4_NL, default 3 passes)": {
+     "got": 5,
+     "of": 5,
+     "marker": 5,
+     "named": 0
+    },
+    "Inkling 2 Mini (Unsloth UD-Q4_K_M)": {
+     "got": 5,
+     "of": 5,
+     "marker": 5,
+     "named": 5
+    },
+    "Inkling 2 Mini (ggml-org IQ4_NL)": {
+     "got": 5,
+     "of": 5,
+     "marker": 5,
+     "named": 5
+    }
+   },
+   "bar": "research >= 4 of 5 returned; both Mini files 5 of 5",
+   "pass": true
+  }
+ },
+ "speed": {
+  "U0": {
+   "long_prefill": 70.48,
+   "long_gen": 15.29,
+   "short_prefill": 69.41,
+   "short_gen": 15.86,
+   "thermal_levels": [
+    "0"
+   ]
+  },
+  "U2": {
+   "long_prefill": 248.49,
+   "long_gen": 25.11,
+   "short_prefill": 202.25,
+   "short_gen": 25.84,
+   "thermal_levels": [
+    "0"
+   ]
+  },
+  "N2": {
+   "long_prefill": 254.31,
+   "long_gen": 25.79,
+   "short_prefill": 209.74,
+   "short_gen": 26.65,
+   "thermal_levels": [
+    "0"
+   ]
+  },
+  "U3": {
+   "long_prefill": 249.3,
+   "long_gen": 24.86,
+   "short_prefill": 208.63,
+   "short_gen": 25.9,
+   "thermal_levels": [
+    "0"
+   ]
+  },
+  "N3": {
+   "long_prefill": 253.42,
+   "long_gen": 25.82,
+   "short_prefill": 211.54,
+   "short_gen": 26.65,
+   "thermal_levels": [
+    "0"
+   ]
+  }
+ },
+ "same_text": {
+  "U0_vs_U3": {
+   "first_token_equal": 8,
+   "texts": 8,
+   "identical_to_the_end": 1,
+   "median_agreed_prefix": 16.5
+  },
+  "U2_vs_U3": {
+   "first_token_equal": 8,
+   "texts": 8,
+   "identical_to_the_end": 8,
+   "median_agreed_prefix": 256.0
+  },
+  "U0_vs_U2": {
+   "first_token_equal": 8,
+   "texts": 8,
+   "identical_to_the_end": 1,
+   "median_agreed_prefix": 16.5
+  }
+ },
+ "capacity": {
+  "C-U0": {
+   "jobs_per_minute": {
+    "1": 2.83,
+    "2": 3.22,
+    "4": 4.52
+   },
+   "right": {
+    "1": 12,
+    "2": 12,
+    "4": 12
+   },
+   "ratio_4_to_1": 1.6,
+   "ratio_2_to_1": 1.14,
+   "tokens_per_second": {
+    "1": 12.1,
+    "2": 14.2,
+    "4": 16.7
+   },
+   "thermal_flagged": false
+  },
+  "C-U2": {
+   "jobs_per_minute": {
+    "1": 5.71,
+    "2": 5.81,
+    "4": 7.64
+   },
+   "right": {
+    "1": 12,
+    "2": 12,
+    "4": 12
+   },
+   "ratio_4_to_1": 1.34,
+   "ratio_2_to_1": 1.02,
+   "tokens_per_second": {
+    "1": 21.2,
+    "2": 26.7,
+    "4": 32.1
+   },
+   "thermal_flagged": false
+  },
+  "C-U3": {
+   "jobs_per_minute": {
+    "1": 5.73,
+    "2": 5.81,
+    "4": 6.86
+   },
+   "right": {
+    "1": 12,
+    "2": 12,
+    "4": 12
+   },
+   "ratio_4_to_1": 1.2,
+   "ratio_2_to_1": 1.01,
+   "tokens_per_second": {
+    "1": 21.2,
+    "2": 26.7,
+    "4": 31.6
+   },
+   "thermal_flagged": false
+  }
+ },
+ "placement": [
+  {
+   "name": "P-U3",
+   "build": "tag",
+   "file": "U",
+   "raw_log": "~/models/exp062c/20261124T163640Z-P-U3.log",
+   "log_bytes": 33106130,
+   "graphs_printed": 19,
+   "splits_in_last_graph": 2,
+   "splits_by_backend_last_graph": {
+    "CPU": 1,
+    "MTL0": 1
+   },
+   "mul_mat_nodes_by_op_and_backend_last_graph": {
+    "MUL_MAT": {
+     "MTL0": 977
+    },
+    "MUL_MAT_ID": {
+     "MTL0": 96
+    }
+   }
+  }
+ ],
+ "base_run": "runs_c/20261123T091929Z",
+ "same_calls_one_watcher_U0_vs_U3": "12 of 12"
+}

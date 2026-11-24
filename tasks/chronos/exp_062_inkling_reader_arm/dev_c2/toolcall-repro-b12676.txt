@@ -1,0 +1,33 @@
+[research (ggml-org IQ4_NL, default 3 passes)] case 1: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: False
+      raw tail: '<|message_model|><|content_invoke_tool_json|>{"name":"read_file","args":{"path":"notes/todo.md"}}<|end_message|><|content_model_end_sampling|>'
+[research (ggml-org IQ4_NL, default 3 passes)] case 2: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: False
+      raw tail: '<|message_model|><|content_invoke_tool_json|>{"name":"get_weather","args":{"city":"Lisbon"}}<|end_message|><|content_model_end_sampling|>'
+[research (ggml-org IQ4_NL, default 3 passes)] case 3: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: False
+      raw tail: '<|message_model|><|content_invoke_tool_json|>{"name":"lookup_contact","args":{"address":"marta@harborlight.example"}}<|end_message|><|content_model_end_sampling|>'
+[research (ggml-org IQ4_NL, default 3 passes)] case 4: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: False
+      raw tail: '<|message_model|><|content_invoke_tool_json|>{"name":"calculator","args":{"expression":"326 - 236"}}<|end_message|><|content_model_end_sampling|>'
+[research (ggml-org IQ4_NL, default 3 passes)] case 5: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: False
+      raw tail: '<|message_model|><|content_invoke_tool_json|>{"name":"add_task","args":{"title":"buy stamps"}}<|end_message|><|content_model_end_sampling|>'
+[research (ggml-org IQ4_NL, default 3 passes)] SUMMARY: tool calls returned by the chat endpoint 5/5; raw output has a call marker 5/5, with the tool's name before it 0/5 | puzzle: 1428 tokens at 26.3 tok/s, prompt at 122 tok/s
+[Inkling 2 Mini (Unsloth UD-Q4_K_M)] case 1: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: True
+      raw tail: '<|message_model|>read_file<|content_invoke_tool_json|>{"name":"read_file","args":{"path":"notes/todo.md"}}<|end_message|><|content_model_end_sampling|>'
+[Inkling 2 Mini (Unsloth UD-Q4_K_M)] case 2: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: True
+      raw tail: '<|message_model|>get_weather<|content_invoke_tool_json|>{"name":"get_weather","args":{"city":"Lisbon"}}<|end_message|><|content_model_end_sampling|>'
+[Inkling 2 Mini (Unsloth UD-Q4_K_M)] case 3: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: True
+      raw tail: '<|message_model|>lookup_contact<|content_invoke_tool_json|>{"name":"lookup_contact","args":{"address":"marta@harborlight.example"}}<|end_message|><|content_model_end_samp'
+[Inkling 2 Mini (Unsloth UD-Q4_K_M)] case 4: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: True
+      raw tail: '<|message_model|>calculator<|content_invoke_tool_json|>{"name":"calculator","args":{"expression":"(304+22) - (212+24)"}}<|end_message|><|content_model_end_sampling|>'
+[Inkling 2 Mini (Unsloth UD-Q4_K_M)] case 5: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: True
+      raw tail: '<|message_model|>add_task<|content_invoke_tool_json|>{"name":"add_task","args":{"title":"buy stamps"}}<|end_message|><|content_model_end_sampling|>'
+[Inkling 2 Mini (Unsloth UD-Q4_K_M)] SUMMARY: tool calls returned by the chat endpoint 5/5; raw output has a call marker 5/5, with the tool's name before it 5/5 | puzzle: 2048 tokens at 25.4 tok/s, prompt at 123 tok/s
+[Inkling 2 Mini (ggml-org IQ4_NL)] case 1: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: True
+      raw tail: '<|message_model|>read_file<|content_invoke_tool_json|>{"name":"read_file","args":{"path":"notes/todo.md"}}<|end_message|><|content_model_end_sampling|>'
+[Inkling 2 Mini (ggml-org IQ4_NL)] case 2: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: True
+      raw tail: '<|message_model|>get_weather<|content_invoke_tool_json|>{"name":"get_weather","args":{"city":"Lisbon"}}<|end_message|><|content_model_end_sampling|>'
+[Inkling 2 Mini (ggml-org IQ4_NL)] case 3: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: True
+      raw tail: '<|message_model|>lookup_contact<|content_invoke_tool_json|>{"name":"lookup_contact","args":{"address":"marta@harborlight.example"}}<|end_message|><|content_model_end_samp'
+[Inkling 2 Mini (ggml-org IQ4_NL)] case 4: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: True
+      raw tail: '<|message_model|>calculator<|content_invoke_tool_json|>{"name":"calculator","args":{"expression":"(304+22)-(212+24)"}}<|end_message|><|content_model_end_sampling|>'
+[Inkling 2 Mini (ggml-org IQ4_NL)] case 5: chat endpoint -> tool_calls 1, content 0 chars, finish tool_calls | raw has the call marker: True, the name before it: True
+      raw tail: '<|message_model|>add_task<|content_invoke_tool_json|>{"name":"add_task","args":{"title":"buy stamps"}}<|end_message|><|content_model_end_sampling|>'
+[Inkling 2 Mini (ggml-org IQ4_NL)] SUMMARY: tool calls returned by the chat endpoint 5/5; raw output has a call marker 5/5, with the tool's name before it 5/5 | puzzle: 939 tokens at 26.4 tok/s, prompt at 125 tok/s

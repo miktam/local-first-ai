@@ -4,6 +4,8 @@
 
 **Everything here is provisional.** The faster build is the head of a draft pull request, llama.cpp #32825 at commit `7b43c773`, unmerged on 2026-11-23.
 
+> **Note, 2026-11-24: the result holds on a release.** #32825 was merged on 2026-11-23 (`51831d47`). On llama.cpp release `b12676` the Unsloth file generates at 25.90 tokens a second (Short workload) and prefills at 249.3, with all 96 expert products on the GPU. Its tokens are identical to the draft head's on all 8 texts. HD3, HD1 and HD1b pass, and four watchers give 1.20 times one (HD4 fails, as HC4 did). The tool-call parser fix (#32833) is in the same release, and llama-server now returns the research model's calls on 5 of 5 prompts, against 0 of 5 on `b12631`. [ADDENDUM_C_AMENDMENT_1_RESULT.md](ADDENDUM_C_AMENDMENT_1_RESULT.md).
+
 ## Checks
 
 - The three builds' commits, both files' sizes and hashes and the kit files' hashes matched before the start.

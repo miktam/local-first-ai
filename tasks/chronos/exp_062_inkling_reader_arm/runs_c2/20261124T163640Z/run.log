@@ -1,0 +1,47 @@
+hashing file U (about half a minute) ...
+hashing file N (about half a minute) ...
+U3 long 1 247.9682765272479 24.822103391945294
+U3 long 2 249.22060757501654 24.92584073638949
+U3 long 3 249.41330634603415 25.314653700004676
+U3 long 4 249.33107928947462 24.581113723028498
+U3 long 5 249.3285598926037 24.905556664097
+U3 long 6 249.26465102279445 24.621787617094704
+U3 short 1 209.17015011226553 24.63807107529028
+U3 short 2 209.02122545225333 25.915647761615805
+U3 short 3 208.24656393169514 25.91174085825162
+U3 short 4 210.53982081087437 25.913876170720208
+U3 short 5 208.1229746626538 25.883676831505674
+U3 short 6 208.10740943669552 25.883842029341842
+U3 text P1 256 tokens
+U3 text P2 256 tokens
+U3 text P3 256 tokens
+U3 text P4 256 tokens
+U3 text P5 256 tokens
+U3 text P6 256 tokens
+U3 text P7 256 tokens
+U3 text P8 256 tokens
+N3 long 1 242.37257185110042 25.840133679624902
+N3 long 2 245.61287788614618 25.619767288118496
+N3 long 3 252.5893180125414 25.79097637455537
+N3 long 4 254.25252241345234 25.84343862456963
+N3 long 5 255.03590053699503 25.786933790985678
+N3 long 6 254.9212370550921 25.850179456000713
+N3 short 1 212.8126517121443 26.665511682990374
+N3 short 2 212.77550687946436 26.626541701515215
+N3 short 3 211.40601516177514 26.627640585214053
+N3 short 4 207.83303213780627 26.634023396035
+N3 short 5 208.23267398409297 26.661603570755695
+N3 short 6 211.6710103321912 26.682640743880697
+N3 text P1 256 tokens
+N3 text P2 256 tokens
+N3 text P3 256 tokens
+N3 text P4 256 tokens
+N3 text P5 256 tokens
+N3 text P6 256 tokens
+N3 text P7 256 tokens
+N3 text P8 256 tokens
+placement {"name": "P-U3", "build": "tag", "file": "U", "raw_log": "~/models/exp062c/20261124T163640Z-P-U3.log", "log_bytes": 33106130, "graphs_printed": 19, "splits_in_last_graph": 2, "splits_by_backend_last_graph": {"CPU": 1, "MTL0": 1}, "mul_mat_nodes_by_op_and_backend_last_graph": {"MUL_MAT": {"MTL0": 977}, "MUL_MAT_ID": {"MTL0": 96}}}
+capacity C-U3 {'at_once': 1, 'jobs': 12, 'wall_s': 125.8, 'jobs_per_minute': 5.73, 'median_job_s': 11.4, 'max_job_s': 25.2, 'right': 12, 'completion_tokens': 2671, 'server_rss_kb': '20103248', 'thermal': {'level': '0', 'waited_s': 0, 'flagged': False}, 'thermal_after': '0', 'tokens_per_second': 21.2}
+capacity C-U3 {'at_once': 2, 'jobs': 12, 'wall_s': 123.9, 'jobs_per_minute': 5.81, 'median_job_s': 16.28, 'max_job_s': 48.08, 'right': 12, 'completion_tokens': 3311, 'server_rss_kb': '20816912', 'thermal': {'level': '0', 'waited_s': 0, 'flagged': False}, 'thermal_after': '0', 'tokens_per_second': 26.7}
+capacity C-U3 {'at_once': 4, 'jobs': 12, 'wall_s': 105.0, 'jobs_per_minute': 6.86, 'median_job_s': 28.74, 'max_job_s': 54.47, 'right': 12, 'completion_tokens': 3318, 'server_rss_kb': '23325856', 'thermal': {'level': '0', 'waited_s': 0, 'flagged': False}, 'thermal_after': '0', 'tokens_per_second': 31.6}
+all done /Users/miktam02/REPOS/local-first-ai/tasks/chronos/exp_062_inkling_reader_arm/runs_c2/20261124T163640Z
