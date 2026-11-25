@@ -28,7 +28,7 @@ Share of selections on the *b* half (columns) when the hot set was ranked on the
 
 - A hot set ranked on prose serves code **worse than 64 experts chosen at random would** (0.33–0.41 against 0.50), in both models. Inkling's code set is also worse than random on prose (0.31–0.42); gemma's is slightly better (0.54–0.63).
 - Keeping 75 %, the mixed set covers prose at 0.94–0.97 and code at 0.88 (gemma) and 0.79 (Inkling).
-- The hot set learned from other text is close to the best fixed set for that text: the oracle at 50 % is 0.88–0.95.
+- The set ranked on a related text is 0.01–0.08 below the best fixed set for the scored text (the oracle, 0.88–0.95 at 50 %); the widest gap is Inkling on code.
 
 Written after scoring, descriptive: leaving code out, the drop between the three prose classes is 0.128 (gemma) and 0.137 (Inkling), so H2 does not rest on code alone.
 
