@@ -51,3 +51,4 @@ Written after scoring, descriptive: leaving code out, the drop between the three
 - "One start" was wrong: two invocations.
 - The SO WHAT said a single-prompt speed "says little about a mixed day" and that Magnitude's table gives no prompt. The first is not measured; the second rested on a page read by a subagent and not filed. Both removed. The same goes for the model's 512 experts, and for the 70.1 GB in HYPOTHESIS.md, which stays as registered.
 - The registration's reason for not running Magnitude reads as if 70.1 GB did not fit in 85 GB. The reason is that it needs a self-updating engine installed and a download of that size, a decision of the owner's.
+- Added on the same day after reading Magnitude's source at commit `78c92e4`: its cache is not a fixed set. It re-ranks by recent reads, so a fixed set's failure across kinds of text does not show that its cache fails.
