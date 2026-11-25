@@ -1,0 +1,344 @@
+{
+ "gemma": {
+  "0.25": {
+   "matrix_rank_a_score_b": {
+    "en_book": {
+     "en_book": 0.7478,
+     "ru_lecture": 0.6362,
+     "es_site": 0.4832,
+     "cpp_code": 0.2002
+    },
+    "ru_lecture": {
+     "en_book": 0.6946,
+     "ru_lecture": 0.7223,
+     "es_site": 0.551,
+     "cpp_code": 0.1834
+    },
+    "es_site": {
+     "en_book": 0.5181,
+     "ru_lecture": 0.4722,
+     "es_site": 0.7631,
+     "cpp_code": 0.2058
+    },
+    "cpp_code": {
+     "en_book": 0.2492,
+     "ru_lecture": 0.2637,
+     "es_site": 0.3189,
+     "cpp_code": 0.6742
+    }
+   },
+   "mixed": {
+    "en_book": 0.6494,
+    "ru_lecture": 0.6618,
+    "es_site": 0.6729,
+    "cpp_code": 0.347
+   },
+   "leave_one_out": {
+    "en_book": 0.5615,
+    "ru_lecture": 0.5201,
+    "es_site": 0.5034,
+    "cpp_code": 0.1897
+   },
+   "oracle": {
+    "en_book": 0.7734,
+    "ru_lecture": 0.7701,
+    "es_site": 0.7712,
+    "cpp_code": 0.7907
+   },
+   "null": 0.25
+  },
+  "0.5": {
+   "matrix_rank_a_score_b": {
+    "en_book": {
+     "en_book": 0.9307,
+     "ru_lecture": 0.8473,
+     "es_site": 0.7252,
+     "cpp_code": 0.3438
+    },
+    "ru_lecture": {
+     "en_book": 0.8913,
+     "ru_lecture": 0.8948,
+     "es_site": 0.7982,
+     "cpp_code": 0.3304
+    },
+    "es_site": {
+     "en_book": 0.7709,
+     "ru_lecture": 0.7005,
+     "es_site": 0.9251,
+     "cpp_code": 0.4095
+    },
+    "cpp_code": {
+     "en_book": 0.5368,
+     "ru_lecture": 0.5462,
+     "es_site": 0.633,
+     "cpp_code": 0.8874
+    }
+   },
+   "mixed": {
+    "en_book": 0.8551,
+    "ru_lecture": 0.8573,
+    "es_site": 0.8713,
+    "cpp_code": 0.6927
+   },
+   "leave_one_out": {
+    "en_book": 0.7973,
+    "ru_lecture": 0.7725,
+    "es_site": 0.7558,
+    "cpp_code": 0.3516
+   },
+   "oracle": {
+    "en_book": 0.9406,
+    "ru_lecture": 0.9347,
+    "es_site": 0.9311,
+    "cpp_code": 0.9455
+   },
+   "null": 0.5
+  },
+  "0.75": {
+   "matrix_rank_a_score_b": {
+    "en_book": {
+     "en_book": 0.9884,
+     "ru_lecture": 0.9516,
+     "es_site": 0.9182,
+     "cpp_code": 0.5494
+    },
+    "ru_lecture": {
+     "en_book": 0.9731,
+     "ru_lecture": 0.9713,
+     "es_site": 0.9392,
+     "cpp_code": 0.5284
+    },
+    "es_site": {
+     "en_book": 0.9165,
+     "ru_lecture": 0.8636,
+     "es_site": 0.9883,
+     "cpp_code": 0.6578
+    },
+    "cpp_code": {
+     "en_book": 0.7872,
+     "ru_lecture": 0.798,
+     "es_site": 0.873,
+     "cpp_code": 0.9769
+    }
+   },
+   "mixed": {
+    "en_book": 0.9622,
+    "ru_lecture": 0.9594,
+    "es_site": 0.9686,
+    "cpp_code": 0.8839
+   },
+   "leave_one_out": {
+    "en_book": 0.9396,
+    "ru_lecture": 0.9112,
+    "es_site": 0.9092,
+    "cpp_code": 0.5525
+   },
+   "oracle": {
+    "en_book": 0.9918,
+    "ru_lecture": 0.9905,
+    "es_site": 0.9901,
+    "cpp_code": 0.9915
+   },
+   "null": 0.75
+  },
+  "H1": {
+   "same": {
+    "en_book": 0.9307,
+    "ru_lecture": 0.8948,
+    "es_site": 0.9251,
+    "cpp_code": 0.8874
+   },
+   "pass": true
+  },
+  "H2": {
+   "drop": {
+    "en_book": 0.1977,
+    "ru_lecture": 0.1968,
+    "es_site": 0.2063,
+    "cpp_code": 0.5262
+   },
+   "mean_drop": 0.2817,
+   "pass": true
+  },
+  "H3": {
+   "mixed": {
+    "en_book": 0.8551,
+    "ru_lecture": 0.8573,
+    "es_site": 0.8713,
+    "cpp_code": 0.6927
+   },
+   "pass": false
+  }
+ },
+ "inkling": {
+  "0.25": {
+   "matrix_rank_a_score_b": {
+    "en_book": {
+     "en_book": 0.7354,
+     "ru_lecture": 0.5462,
+     "es_site": 0.4195,
+     "cpp_code": 0.1335
+    },
+    "ru_lecture": {
+     "en_book": 0.6659,
+     "ru_lecture": 0.6499,
+     "es_site": 0.4414,
+     "cpp_code": 0.142
+    },
+    "es_site": {
+     "en_book": 0.4515,
+     "ru_lecture": 0.4263,
+     "es_site": 0.6552,
+     "cpp_code": 0.1644
+    },
+    "cpp_code": {
+     "en_book": 0.1411,
+     "ru_lecture": 0.1672,
+     "es_site": 0.2095,
+     "cpp_code": 0.5623
+    }
+   },
+   "mixed": {
+    "en_book": 0.6226,
+    "ru_lecture": 0.5843,
+    "es_site": 0.5492,
+    "cpp_code": 0.2729
+   },
+   "leave_one_out": {
+    "en_book": 0.4871,
+    "ru_lecture": 0.4549,
+    "es_site": 0.4007,
+    "cpp_code": 0.1289
+   },
+   "oracle": {
+    "en_book": 0.762,
+    "ru_lecture": 0.6989,
+    "es_site": 0.6646,
+    "cpp_code": 0.7054
+   },
+   "null": 0.25
+  },
+  "0.5": {
+   "matrix_rank_a_score_b": {
+    "en_book": {
+     "en_book": 0.9202,
+     "ru_lecture": 0.7874,
+     "es_site": 0.6939,
+     "cpp_code": 0.3442
+    },
+    "ru_lecture": {
+     "en_book": 0.8788,
+     "ru_lecture": 0.8661,
+     "es_site": 0.727,
+     "cpp_code": 0.3607
+    },
+    "es_site": {
+     "en_book": 0.7143,
+     "ru_lecture": 0.6919,
+     "es_site": 0.8712,
+     "cpp_code": 0.3735
+    },
+    "cpp_code": {
+     "en_book": 0.3128,
+     "ru_lecture": 0.3751,
+     "es_site": 0.4157,
+     "cpp_code": 0.8205
+    }
+   },
+   "mixed": {
+    "en_book": 0.8567,
+    "ru_lecture": 0.8148,
+    "es_site": 0.8026,
+    "cpp_code": 0.5316
+   },
+   "leave_one_out": {
+    "en_book": 0.7516,
+    "ru_lecture": 0.7049,
+    "es_site": 0.6588,
+    "cpp_code": 0.3298
+   },
+   "oracle": {
+    "en_book": 0.932,
+    "ru_lecture": 0.9067,
+    "es_site": 0.8788,
+    "cpp_code": 0.9035
+   },
+   "null": 0.5
+  },
+  "0.75": {
+   "matrix_rank_a_score_b": {
+    "en_book": {
+     "en_book": 0.9839,
+     "ru_lecture": 0.9166,
+     "es_site": 0.8988,
+     "cpp_code": 0.6551
+    },
+    "ru_lecture": {
+     "en_book": 0.9681,
+     "ru_lecture": 0.9585,
+     "es_site": 0.9022,
+     "cpp_code": 0.6404
+    },
+    "es_site": {
+     "en_book": 0.8668,
+     "ru_lecture": 0.8636,
+     "es_site": 0.9687,
+     "cpp_code": 0.638
+    },
+    "cpp_code": {
+     "en_book": 0.5554,
+     "ru_lecture": 0.6434,
+     "es_site": 0.6787,
+     "cpp_code": 0.9563
+    }
+   },
+   "mixed": {
+    "en_book": 0.9582,
+    "ru_lecture": 0.9421,
+    "es_site": 0.9374,
+    "cpp_code": 0.7938
+   },
+   "leave_one_out": {
+    "en_book": 0.9159,
+    "ru_lecture": 0.8603,
+    "es_site": 0.8585,
+    "cpp_code": 0.6135
+   },
+   "oracle": {
+    "en_book": 0.9876,
+    "ru_lecture": 0.9822,
+    "es_site": 0.9722,
+    "cpp_code": 0.9778
+   },
+   "null": 0.75
+  },
+  "H1": {
+   "same": {
+    "en_book": 0.9202,
+    "ru_lecture": 0.8661,
+    "es_site": 0.8712,
+    "cpp_code": 0.8205
+   },
+   "pass": true
+  },
+  "H2": {
+   "drop": {
+    "en_book": 0.2849,
+    "ru_lecture": 0.248,
+    "es_site": 0.259,
+    "cpp_code": 0.461
+   },
+   "mean_drop": 0.3132,
+   "pass": true
+  },
+  "H3": {
+   "mixed": {
+    "en_book": 0.8567,
+    "ru_lecture": 0.8148,
+    "es_site": 0.8026,
+    "cpp_code": 0.5316
+   },
+   "pass": false
+  }
+ }
+}

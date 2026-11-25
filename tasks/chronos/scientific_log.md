@@ -2956,3 +2956,16 @@ SO WHAT, Addendum C:
 SO WHAT, Amendment 1: Addendum C is no longer provisional. On a release, the Unsloth file is as fast as the ggml-org file, and the server parses the research model's calls. Several watchers on one mini are still a queue. Nothing changes in the stack. The blog line, and the comment or the closing on #32802, are Andrei's.
 
 *Evidence: `exp_062_inkling_reader_arm/`. Status: Complete (2026-11-22); the line stops (0.645 against 0.882); H1, H2, H3 fail; Amendments 1 and 2; Addendum A complete (a tie at the ceiling); Addendum B complete (HB1 and HB2 pass, HB3 and HB4 fail); Addendum C complete, 2026-11-23 (HC3, HC1, HC1b and HC2 pass, HC4 fails); Amendment 1, 2026-11-24, on release `b12676` (HD3, HD1, HD1b, HD5 pass, HD4 fails): no longer provisional.*
+
+## Experiment 063 — Is there a stable hot set of experts to cache? (registered 2026-11-25)
+
+Prompted by a post on an engine that keeps the "most used experts" of a mixture-of-experts model in memory and streams the rest from SSD. Two local models, gemma4 26b QAT and Inkling 2 Mini UD-Q4_K_M, llama.cpp `b12676` per-expert selection counts, four text classes, 6,144 tokens per half; rank on one half, score on the other. Registered before the texts were run; a smoke on one degenerate text was seen first.
+
+- **H1 pass:** half the experts, ranked on related text, cover 0.89–0.93 (gemma) and 0.82–0.92 (Inkling) of selections; uniform use gives 0.50.
+- **H2 pass:** the set is class-specific; mean drop 0.282 and 0.313 against the other classes' rankings.
+- **H3 fail:** one mixed set covers prose at 0.80 or more but code at 0.69 (gemma) and 0.53 (Inkling). A prose-ranked set covers code worse than chance (0.33–0.41).
+- Not tested: the engine itself, prediction and prefetch, speed, generation, or a new author or code base within a class.
+
+SO WHAT: the caching premise holds, per kind of text. A streaming benchmark on one kind of prompt says little about a mixed day. Nothing changes in the stack.
+
+*Evidence: `exp_063_expert_hot_set/`. Status: Complete (2026-11-25).*

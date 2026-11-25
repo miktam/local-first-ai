@@ -1,0 +1,206 @@
+0.00.342.619 W load: special_eos_id is not in special_eog_ids - the tokenizer config may be incorrect
+0.01.054.121 I cmn          init: llama threadpool init, n_threads = 10
+0.01.054.210 I 
+0.01.054.231 I system_info: n_threads = 10 (n_threads_batch = 10) / 14 | MTL : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | MATMUL_INT8 = 1 | DOTPROD = 1 | SME = 1 | SME2 = 1 | ACCELERATE = 1 | REPACK = 1 | 
+0.01.054.232 I compute_imatrix: tokenizing the input ..
+0.01.079.865 I compute_imatrix: tokenization took 25.632 ms
+0.01.079.868 I compute_imatrix: computing over 12 chunks, n_ctx=512, batch_size=2048, n_seq=4
+0.08.648.131 I 
+0.08.648.134 W save_imatrix: entry '          blk.23.ffn_gate_up_exps.weight' has partial data (96.09%)
+0.08.648.136 W save_imatrix: entry '             blk.22.ffn_down_exps.weight' has partial data (92.97%)
+0.08.648.137 W save_imatrix: entry '             blk.20.ffn_down_exps.weight' has partial data (90.62%)
+0.08.648.138 W save_imatrix: entry '             blk.19.ffn_down_exps.weight' has partial data (90.62%)
+0.08.648.139 W save_imatrix: entry '          blk.18.ffn_gate_up_exps.weight' has partial data (85.16%)
+0.08.648.140 W save_imatrix: entry '          blk.19.ffn_gate_up_exps.weight' has partial data (90.62%)
+0.08.648.141 W save_imatrix: entry '          blk.20.ffn_gate_up_exps.weight' has partial data (90.62%)
+0.08.648.144 W save_imatrix: entry '          blk.22.ffn_gate_up_exps.weight' has partial data (92.97%)
+0.08.648.149 W save_imatrix: entry '          blk.17.ffn_gate_up_exps.weight' has partial data (97.66%)
+0.08.648.150 W save_imatrix: entry '             blk.16.ffn_down_exps.weight' has partial data (98.44%)
+0.08.648.151 W save_imatrix: entry '             blk.15.ffn_down_exps.weight' has partial data (95.31%)
+0.08.648.151 W save_imatrix: entry '          blk.15.ffn_gate_up_exps.weight' has partial data (95.31%)
+0.08.648.152 W save_imatrix: entry '             blk.14.ffn_down_exps.weight' has partial data (93.75%)
+0.08.648.152 W save_imatrix: entry '          blk.14.ffn_gate_up_exps.weight' has partial data (93.75%)
+0.08.648.153 W save_imatrix: entry '             blk.13.ffn_down_exps.weight' has partial data (95.31%)
+0.08.648.153 W save_imatrix: entry '          blk.13.ffn_gate_up_exps.weight' has partial data (95.31%)
+0.08.648.153 W save_imatrix: entry '             blk.17.ffn_down_exps.weight' has partial data (97.66%)
+0.08.648.154 W save_imatrix: entry '             blk.12.ffn_down_exps.weight' has partial data (99.22%)
+0.08.648.154 W save_imatrix: entry '          blk.11.ffn_gate_up_exps.weight' has partial data (96.88%)
+0.08.648.155 W save_imatrix: entry '             blk.10.ffn_down_exps.weight' has partial data (96.09%)
+0.08.648.155 W save_imatrix: entry '          blk.10.ffn_gate_up_exps.weight' has partial data (96.09%)
+0.08.648.156 W save_imatrix: entry '           blk.9.ffn_gate_up_exps.weight' has partial data (96.09%)
+0.08.648.156 W save_imatrix: entry '           blk.8.ffn_gate_up_exps.weight' has partial data (96.09%)
+0.08.648.157 W save_imatrix: entry '          blk.21.ffn_gate_up_exps.weight' has partial data (92.19%)
+0.08.648.157 W save_imatrix: entry '           blk.7.ffn_gate_up_exps.weight' has partial data (97.66%)
+0.08.648.158 W save_imatrix: entry '             blk.11.ffn_down_exps.weight' has partial data (96.88%)
+0.08.648.158 W save_imatrix: entry '          blk.16.ffn_gate_up_exps.weight' has partial data (98.44%)
+0.08.648.159 W save_imatrix: entry '             blk.21.ffn_down_exps.weight' has partial data (92.19%)
+0.08.648.160 W save_imatrix: entry '             blk.18.ffn_down_exps.weight' has partial data (85.16%)
+0.08.648.161 W save_imatrix: entry '              blk.7.ffn_down_exps.weight' has partial data (97.66%)
+0.08.648.161 W save_imatrix: entry '          blk.12.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.08.648.162 W save_imatrix: entry '              blk.9.ffn_down_exps.weight' has partial data (96.09%)
+0.08.648.162 W save_imatrix: entry '              blk.8.ffn_down_exps.weight' has partial data (96.09%)
+0.08.648.163 W save_imatrix: entry '             blk.23.ffn_down_exps.weight' has partial data (96.09%)
+0.08.784.481 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_ffn_ctrl_gain.weight'
+0.08.784.493 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_ffn_ctrl_forget.weight'
+0.08.784.501 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_q_ctrl_forget.weight'
+0.08.785.258 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_k_ctrl_down.weight'
+0.08.786.786 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_k_ctrl_forget.weight'
+0.08.787.530 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_v_ctrl_gain.weight'
+0.08.789.448 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_q_ctrl_gain.weight'
+0.08.791.783 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_v_ctrl_down.weight'
+0.08.801.126 W compute_tensor_statistics: no preceding-layer tensor for 'blk.5.attn_v_conv_proj.weight'
+0.08.801.129 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_ffn_ctrl_down.weight'
+0.08.802.254 W compute_tensor_statistics: no preceding-layer tensor for 'blk.5.attn_k_conv_proj.weight'
+0.08.803.421 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_v_ctrl_forget.weight'
+0.08.804.684 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_k_ctrl_gain.weight'
+0.08.805.903 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_q_ctrl_down.weight'
+
+0.11.133.909 I compute_imatrix: 10.05 seconds per pass - ETA 0.50 minutes
+0.16.428.264 I 
+0.16.428.267 W save_imatrix: entry '          blk.23.ffn_gate_up_exps.weight' has partial data (97.66%)
+0.16.428.269 W save_imatrix: entry '             blk.22.ffn_down_exps.weight' has partial data (96.09%)
+0.16.428.270 W save_imatrix: entry '             blk.20.ffn_down_exps.weight' has partial data (93.75%)
+0.16.428.273 W save_imatrix: entry '             blk.19.ffn_down_exps.weight' has partial data (93.75%)
+0.16.428.273 W save_imatrix: entry '          blk.18.ffn_gate_up_exps.weight' has partial data (91.41%)
+0.16.428.274 W save_imatrix: entry '          blk.19.ffn_gate_up_exps.weight' has partial data (93.75%)
+0.16.428.275 W save_imatrix: entry '          blk.20.ffn_gate_up_exps.weight' has partial data (93.75%)
+0.16.428.278 W save_imatrix: entry '          blk.22.ffn_gate_up_exps.weight' has partial data (96.09%)
+0.16.428.280 W save_imatrix: entry '          blk.17.ffn_gate_up_exps.weight' has partial data (98.44%)
+0.16.428.281 W save_imatrix: entry '             blk.16.ffn_down_exps.weight' has partial data (99.22%)
+0.16.428.282 W save_imatrix: entry '             blk.15.ffn_down_exps.weight' has partial data (96.09%)
+0.16.428.282 W save_imatrix: entry '          blk.15.ffn_gate_up_exps.weight' has partial data (96.09%)
+0.16.428.284 W save_imatrix: entry '             blk.14.ffn_down_exps.weight' has partial data (96.88%)
+0.16.428.284 W save_imatrix: entry '          blk.14.ffn_gate_up_exps.weight' has partial data (96.88%)
+0.16.428.285 W save_imatrix: entry '             blk.13.ffn_down_exps.weight' has partial data (99.22%)
+0.16.428.285 W save_imatrix: entry '          blk.13.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.16.428.286 W save_imatrix: entry '             blk.17.ffn_down_exps.weight' has partial data (98.44%)
+0.16.428.286 W save_imatrix: entry '             blk.12.ffn_down_exps.weight' has partial data (99.22%)
+0.16.428.287 W save_imatrix: entry '          blk.11.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.16.428.288 W save_imatrix: entry '             blk.10.ffn_down_exps.weight' has partial data (96.88%)
+0.16.428.288 W save_imatrix: entry '          blk.10.ffn_gate_up_exps.weight' has partial data (96.88%)
+0.16.428.289 W save_imatrix: entry '           blk.9.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.16.428.289 W save_imatrix: entry '           blk.8.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.16.428.290 W save_imatrix: entry '          blk.21.ffn_gate_up_exps.weight' has partial data (93.75%)
+0.16.428.290 W save_imatrix: entry '           blk.7.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.16.428.291 W save_imatrix: entry '             blk.11.ffn_down_exps.weight' has partial data (99.22%)
+0.16.428.292 W save_imatrix: entry '          blk.16.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.16.428.292 W save_imatrix: entry '             blk.21.ffn_down_exps.weight' has partial data (93.75%)
+0.16.428.293 W save_imatrix: entry '             blk.18.ffn_down_exps.weight' has partial data (91.41%)
+0.16.428.294 W save_imatrix: entry '              blk.7.ffn_down_exps.weight' has partial data (99.22%)
+0.16.428.295 W save_imatrix: entry '          blk.12.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.16.428.295 W save_imatrix: entry '              blk.9.ffn_down_exps.weight' has partial data (99.22%)
+0.16.428.295 W save_imatrix: entry '              blk.8.ffn_down_exps.weight' has partial data (99.22%)
+0.16.428.297 W save_imatrix: entry '             blk.23.ffn_down_exps.weight' has partial data (97.66%)
+0.16.564.099 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_ffn_ctrl_gain.weight'
+0.16.564.115 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_ffn_ctrl_forget.weight'
+0.16.564.123 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_q_ctrl_forget.weight'
+0.16.564.857 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_k_ctrl_down.weight'
+0.16.566.371 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_k_ctrl_forget.weight'
+0.16.567.112 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_v_ctrl_gain.weight'
+0.16.569.037 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_q_ctrl_gain.weight'
+0.16.571.364 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_v_ctrl_down.weight'
+0.16.580.566 W compute_tensor_statistics: no preceding-layer tensor for 'blk.5.attn_v_conv_proj.weight'
+0.16.580.569 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_ffn_ctrl_down.weight'
+0.16.581.667 W compute_tensor_statistics: no preceding-layer tensor for 'blk.5.attn_k_conv_proj.weight'
+0.16.582.833 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_v_ctrl_forget.weight'
+0.16.584.125 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_k_ctrl_gain.weight'
+0.16.585.373 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_q_ctrl_down.weight'
+
+0.24.137.128 I 
+0.24.137.132 W save_imatrix: entry '          blk.23.ffn_gate_up_exps.weight' has partial data (97.66%)
+0.24.137.134 W save_imatrix: entry '             blk.22.ffn_down_exps.weight' has partial data (96.88%)
+0.24.137.135 W save_imatrix: entry '             blk.20.ffn_down_exps.weight' has partial data (96.09%)
+0.24.137.136 W save_imatrix: entry '             blk.19.ffn_down_exps.weight' has partial data (95.31%)
+0.24.137.137 W save_imatrix: entry '          blk.18.ffn_gate_up_exps.weight' has partial data (92.97%)
+0.24.137.138 W save_imatrix: entry '          blk.19.ffn_gate_up_exps.weight' has partial data (95.31%)
+0.24.137.139 W save_imatrix: entry '          blk.20.ffn_gate_up_exps.weight' has partial data (96.09%)
+0.24.137.142 W save_imatrix: entry '          blk.22.ffn_gate_up_exps.weight' has partial data (96.88%)
+0.24.137.144 W save_imatrix: entry '          blk.17.ffn_gate_up_exps.weight' has partial data (98.44%)
+0.24.137.145 W save_imatrix: entry '             blk.16.ffn_down_exps.weight' has partial data (99.22%)
+0.24.137.146 W save_imatrix: entry '             blk.15.ffn_down_exps.weight' has partial data (97.66%)
+0.24.137.146 W save_imatrix: entry '          blk.15.ffn_gate_up_exps.weight' has partial data (97.66%)
+0.24.137.147 W save_imatrix: entry '             blk.14.ffn_down_exps.weight' has partial data (98.44%)
+0.24.137.148 W save_imatrix: entry '          blk.14.ffn_gate_up_exps.weight' has partial data (98.44%)
+0.24.137.149 W save_imatrix: entry '             blk.17.ffn_down_exps.weight' has partial data (98.44%)
+0.24.137.149 W save_imatrix: entry '             blk.12.ffn_down_exps.weight' has partial data (99.22%)
+0.24.137.150 W save_imatrix: entry '          blk.11.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.24.137.151 W save_imatrix: entry '             blk.10.ffn_down_exps.weight' has partial data (96.88%)
+0.24.137.152 W save_imatrix: entry '          blk.10.ffn_gate_up_exps.weight' has partial data (96.88%)
+0.24.137.152 W save_imatrix: entry '           blk.9.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.24.137.153 W save_imatrix: entry '           blk.8.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.24.137.153 W save_imatrix: entry '          blk.21.ffn_gate_up_exps.weight' has partial data (96.09%)
+0.24.137.154 W save_imatrix: entry '           blk.7.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.24.137.155 W save_imatrix: entry '             blk.11.ffn_down_exps.weight' has partial data (99.22%)
+0.24.137.155 W save_imatrix: entry '          blk.16.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.24.137.156 W save_imatrix: entry '             blk.21.ffn_down_exps.weight' has partial data (96.09%)
+0.24.137.157 W save_imatrix: entry '             blk.18.ffn_down_exps.weight' has partial data (92.97%)
+0.24.137.158 W save_imatrix: entry '              blk.7.ffn_down_exps.weight' has partial data (99.22%)
+0.24.137.158 W save_imatrix: entry '          blk.12.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.24.137.159 W save_imatrix: entry '              blk.9.ffn_down_exps.weight' has partial data (99.22%)
+0.24.137.159 W save_imatrix: entry '              blk.8.ffn_down_exps.weight' has partial data (99.22%)
+0.24.137.160 W save_imatrix: entry '             blk.23.ffn_down_exps.weight' has partial data (97.66%)
+0.24.277.382 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_ffn_ctrl_gain.weight'
+0.24.277.392 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_ffn_ctrl_forget.weight'
+0.24.277.400 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_q_ctrl_forget.weight'
+0.24.278.147 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_k_ctrl_down.weight'
+0.24.279.660 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_k_ctrl_forget.weight'
+0.24.280.402 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_v_ctrl_gain.weight'
+0.24.282.338 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_q_ctrl_gain.weight'
+0.24.284.685 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_v_ctrl_down.weight'
+0.24.294.387 W compute_tensor_statistics: no preceding-layer tensor for 'blk.5.attn_v_conv_proj.weight'
+0.24.294.390 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_ffn_ctrl_down.weight'
+0.24.295.624 W compute_tensor_statistics: no preceding-layer tensor for 'blk.5.attn_k_conv_proj.weight'
+0.24.296.910 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_v_ctrl_forget.weight'
+0.24.298.277 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_k_ctrl_gain.weight'
+0.24.299.557 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_q_ctrl_down.weight'
+
+
+0.29.938.845 I 
+0.29.938.851 W save_imatrix: entry '          blk.23.ffn_gate_up_exps.weight' has partial data (98.44%)
+0.29.938.857 W save_imatrix: entry '             blk.22.ffn_down_exps.weight' has partial data (96.88%)
+0.29.938.859 W save_imatrix: entry '             blk.20.ffn_down_exps.weight' has partial data (96.88%)
+0.29.938.861 W save_imatrix: entry '             blk.19.ffn_down_exps.weight' has partial data (95.31%)
+0.29.938.862 W save_imatrix: entry '          blk.18.ffn_gate_up_exps.weight' has partial data (92.97%)
+0.29.938.864 W save_imatrix: entry '          blk.19.ffn_gate_up_exps.weight' has partial data (95.31%)
+0.29.938.866 W save_imatrix: entry '          blk.20.ffn_gate_up_exps.weight' has partial data (96.88%)
+0.29.938.873 W save_imatrix: entry '          blk.22.ffn_gate_up_exps.weight' has partial data (96.88%)
+0.29.938.878 W save_imatrix: entry '          blk.17.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.29.938.879 W save_imatrix: entry '             blk.16.ffn_down_exps.weight' has partial data (99.22%)
+0.29.938.880 W save_imatrix: entry '             blk.15.ffn_down_exps.weight' has partial data (98.44%)
+0.29.938.882 W save_imatrix: entry '          blk.15.ffn_gate_up_exps.weight' has partial data (98.44%)
+0.29.938.883 W save_imatrix: entry '             blk.14.ffn_down_exps.weight' has partial data (99.22%)
+0.29.938.883 W save_imatrix: entry '          blk.14.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.29.938.885 W save_imatrix: entry '             blk.17.ffn_down_exps.weight' has partial data (99.22%)
+0.29.938.885 W save_imatrix: entry '             blk.12.ffn_down_exps.weight' has partial data (99.22%)
+0.29.938.887 W save_imatrix: entry '          blk.11.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.29.938.890 W save_imatrix: entry '             blk.10.ffn_down_exps.weight' has partial data (96.88%)
+0.29.938.892 W save_imatrix: entry '          blk.10.ffn_gate_up_exps.weight' has partial data (96.88%)
+0.29.938.892 W save_imatrix: entry '           blk.9.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.29.938.893 W save_imatrix: entry '           blk.8.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.29.938.894 W save_imatrix: entry '          blk.21.ffn_gate_up_exps.weight' has partial data (96.09%)
+0.29.938.894 W save_imatrix: entry '           blk.7.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.29.938.897 W save_imatrix: entry '             blk.11.ffn_down_exps.weight' has partial data (99.22%)
+0.29.938.897 W save_imatrix: entry '          blk.16.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.29.938.898 W save_imatrix: entry '             blk.21.ffn_down_exps.weight' has partial data (96.09%)
+0.29.938.899 W save_imatrix: entry '             blk.18.ffn_down_exps.weight' has partial data (92.97%)
+0.29.938.900 W save_imatrix: entry '              blk.7.ffn_down_exps.weight' has partial data (99.22%)
+0.29.938.901 W save_imatrix: entry '          blk.12.ffn_gate_up_exps.weight' has partial data (99.22%)
+0.29.938.901 W save_imatrix: entry '              blk.9.ffn_down_exps.weight' has partial data (99.22%)
+0.29.938.902 W save_imatrix: entry '              blk.8.ffn_down_exps.weight' has partial data (99.22%)
+0.29.938.903 W save_imatrix: entry '             blk.23.ffn_down_exps.weight' has partial data (98.44%)
+0.30.077.867 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_ffn_ctrl_gain.weight'
+0.30.077.877 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_ffn_ctrl_forget.weight'
+0.30.077.885 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_q_ctrl_forget.weight'
+0.30.078.619 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_k_ctrl_down.weight'
+0.30.080.155 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_k_ctrl_forget.weight'
+0.30.080.912 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_v_ctrl_gain.weight'
+0.30.082.863 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_q_ctrl_gain.weight'
+0.30.085.175 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_v_ctrl_down.weight'
+0.30.094.521 W compute_tensor_statistics: no preceding-layer tensor for 'blk.5.attn_v_conv_proj.weight'
+0.30.094.524 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_ffn_ctrl_down.weight'
+0.30.095.623 W compute_tensor_statistics: no preceding-layer tensor for 'blk.5.attn_k_conv_proj.weight'
+0.30.096.764 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_v_ctrl_forget.weight'
+0.30.098.006 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_k_ctrl_gain.weight'
+0.30.099.199 W compute_tensor_statistics: no preceding-layer tensor for 'blk.6.loop_q_ctrl_down.weight'
+
+
