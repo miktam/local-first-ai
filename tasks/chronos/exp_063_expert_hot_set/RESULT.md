@@ -1,6 +1,6 @@
 # exp_063 — result
 
-**Run `runs/20261125T082826Z`, 2026-11-25, on the Mac mini (M4 Pro, 64 GB).** Sixteen texts-by-model runs, one start, no failure; every block counted exactly 8 selections per token (24 in Inkling's looped blocks 6–17), 6,144 tokens per text. The futility stop did not fire (0.931 against 0.55). Scored by `kit/score63.py` as registered.
+**Run `runs/20261125T082826Z`, 2026-11-25, on the Mac mini (M4 Pro, 64 GB).** Sixteen text-by-model runs in one folder, two invocations (the futility pair, then the other fourteen), no failure; every block counted exactly 8 selections per token (24 in Inkling's looped blocks 6–17), 6,144 tokens per text. The futility stop did not fire (0.931 against 0.55). Scored by `kit/score63.py` as registered.
 
 ## Verdicts (half the experts kept, 64 of 128; uniform use would give 0.50)
 
@@ -37,11 +37,17 @@ Written after scoring, descriptive: leaving code out, the drop between the three
 - **"Same class" is near to "same source".** The halves are different files, but two chapters of one book, two sets from one lecture course, two sets of pages from one site and two files from one code base. H1 does not say a set holds for a new author or a new code base.
 - **The mixed set is three parts prose to one part code.** H3's failure is for that mix. A set with more code in it would cover code better and prose worse.
 - Counts over a text, not token by token: nothing here says how often a token finds all its experts present, whether the next token's can be predicted, or how fast anything runs. An adaptive cache would replace its set when the text changes; this measures a fixed one.
-- Reading, not generating. Two models of 128 experts; Magnitude's headline model has 512 (10 used per token) and was not run.
+- Reading, not generating. Two models of 128 experts; Magnitude's own engine and models were not run.
 
 ## SO WHAT
 
 - The premise of "keep the most used experts" holds on both models: half the experts, chosen on related text, took 82–93 % of the selections.
-- The set belongs to the kind of text. A personal agent moves between prose, code and languages, so a speed measured on one kind of prompt says little about a mixed day. On this evidence, ask of any expert-streaming benchmark which prompt it used, and whether the cache was warm on that prompt; Magnitude's streamed-model table, as read on 2026-11-25, does not give its prompt.
+- The set belongs to the kind of text. A fixed set does not transfer between prose and code, and a personal agent moves between them. Whether that slows an engine depends on how fast it re-ranks, which is untested. The question to put to an expert-streaming benchmark is which prompt it used, and whether the cache was warm on it.
 - What the miss rate costs is not measured here. That needs the engine, and the counts per token.
 - Nothing changes in the stack. Every model in use on the mini fits in memory.
+
+## Corrections, 2026-11-25 (same day, before any push)
+
+- "One start" was wrong: two invocations.
+- The SO WHAT said a single-prompt speed "says little about a mixed day" and that Magnitude's table gives no prompt. The first is not measured; the second rested on a page read by a subagent and not filed. Both removed. The same goes for the model's 512 experts, and for the 70.1 GB in HYPOTHESIS.md, which stays as registered.
+- The registration's reason for not running Magnitude reads as if 70.1 GB did not fit in 85 GB. The reason is that it needs a self-updating engine installed and a download of that size, a decision of the owner's.

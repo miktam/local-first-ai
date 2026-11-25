@@ -2966,6 +2966,6 @@ Prompted by a post on an engine that keeps the "most used experts" of a mixture-
 - **H3 fail:** one mixed set covers prose at 0.80 or more but code at 0.69 (gemma) and 0.53 (Inkling). A prose-ranked set covers code worse than chance (0.33–0.41).
 - Not tested: the engine itself, prediction and prefetch, speed, generation, or a new author or code base within a class.
 
-SO WHAT: the caching premise holds, per kind of text. A streaming benchmark on one kind of prompt says little about a mixed day. Nothing changes in the stack.
+SO WHAT: the caching premise holds, per kind of text. A fixed set does not transfer between prose and code; whether that slows an engine that re-ranks is untested. Nothing changes in the stack.
 
 *Evidence: `exp_063_expert_hot_set/`. Status: Complete (2026-11-25).*
