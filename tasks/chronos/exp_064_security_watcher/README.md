@@ -6,4 +6,4 @@ exp_062's Addendum B left one open result: on 40 independent hard watcher jobs I
 |---|---|
 | [HYPOTHESIS.md](HYPOTHESIS.md) | the registration, written before the writer, the kit and any job |
 
-Status: registered 2026-11-27, not run.
+Status: registered 2026-11-27, not run; held until [exp_065](../exp_065_emergency_card/)'s card exists.

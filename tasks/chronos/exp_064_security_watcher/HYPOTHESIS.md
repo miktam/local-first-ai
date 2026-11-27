@@ -141,3 +141,7 @@ One call each, made-up input, `kit/probe64.py`, output in `dev/probe-20261127.tx
 | `gemma4:26b-a4b-it-qat` through llama-server `b12676` (`--jinja`) | one tool call returned, the right tool and argument |
 
 So qwen3.8:27b stays as the third model for the tuning, and the optional arm Q is possible. Whether arm Q runs is Andrei's choice.
+
+## Held (2026-11-27, Andrei's decision the same day)
+
+exp_065, registered after this file, measures every candidate model on both machines first. This experiment stays registered and unsigned until exp_065's card exists. If the card names other models as worth comparing in the watcher's seat, the arms are amended here before the writer is started. The writer has not been started, no job has been generated and no kit has been built.
