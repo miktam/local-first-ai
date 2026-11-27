@@ -130,3 +130,14 @@ From Addendum B's rates (Inkling 25 minutes and gemma 36 minutes for 96 decision
 4. Smoke, tuning with the third model, the one check of both arms, freeze, hash.
 5. Andrei starts the run.
 6. Scoring, the result file, the public log line.
+
+## Probes (2026-11-27, after the registration above was committed as `f4e421a`)
+
+One call each, made-up input, `kit/probe64.py`, output in `dev/probe-20261127.txt`. A sign-in event and three tool definitions; the instruction says to look the device up first.
+
+| Probe | Result |
+|---|---|
+| qwen3.8:27b through Ollama 0.40.2 | one tool call returned, the right tool and argument |
+| `gemma4:26b-a4b-it-qat` through llama-server `b12676` (`--jinja`) | one tool call returned, the right tool and argument |
+
+So qwen3.8:27b stays as the third model for the tuning, and the optional arm Q is possible. Whether arm Q runs is Andrei's choice.
