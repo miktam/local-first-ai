@@ -1,0 +1,33 @@
+{
+ "machine": "mini",
+ "models": {
+  "gemma4 e4b": {
+   "present": true,
+   "file": "sha256-5cd492fc6f08287558371a1ae07453744ea33382d1b3370eaf73ad1a3e1bce28",
+   "bytes": 8620064672,
+   "sha256": "5cd492fc6f08287558371a1ae07453744ea33382d1b3370eaf73ad1a3e1bce28",
+   "template": "gemma4-from-qat.jinja",
+   "n_ctx_train": 131072
+  }
+ },
+ "starts": [
+  {
+   "at": "2026-11-27T17:41:31Z",
+   "parts": [
+    "A",
+    "B",
+    "C"
+   ],
+   "state": {
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "ollama_ps": "NAME    ID    SIZE    PROCESSOR    CONTEXT    RUNNER    UNTIL",
+    "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+    "memory_bytes": 68719476736,
+    "chip": "Apple M4 Pro",
+    "os": "27.2.1",
+    "server_version": "version: 1.0.0-dev (build 1, commit d35dc4d)\nbuilt with AppleClang 21.0.0.21000401 for Darwin arm64"
+   }
+  }
+ ],
+ "tasks_sha256": "0241f6c982fac688e2dd0854de3ef75dfb1c2e9809d9a151c204624c2542de82"
+}

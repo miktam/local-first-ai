@@ -1,0 +1,70 @@
+[
+ {
+  "label": "gemma4 26b (production file)",
+  "kind": "ollama",
+  "ref": "gemma4:26b",
+  "template": "templates/gemma4-from-qat.jinja"
+ },
+ {
+  "label": "gemma4 26b QAT",
+  "kind": "ollama",
+  "ref": "gemma4:26b-a4b-it-qat"
+ },
+ {
+  "label": "gemma4 31b",
+  "kind": "ollama",
+  "ref": "gemma4:31b",
+  "template": "templates/gemma4-from-qat.jinja"
+ },
+ {
+  "label": "gemma4 e4b",
+  "kind": "ollama",
+  "ref": "gemma4:e4b",
+  "template": "templates/gemma4-from-qat.jinja"
+ },
+ {
+  "label": "Qwen3.5 35b",
+  "kind": "ollama",
+  "ref": "qwen3.5:35b"
+ },
+ {
+  "label": "Qwen3.6 35b",
+  "kind": "ollama",
+  "ref": "qwen3.6:35b"
+ },
+ {
+  "label": "Qwen3.8 27b (Ollama library file)",
+  "kind": "ollama",
+  "ref": "qwen3.8:27b"
+ },
+ {
+  "label": "Qwen3.8 27B Q4_K_M (bartowski)",
+  "kind": "ollama",
+  "ref": "hf.co/bartowski/Qwen3.8-27B-GGUF:Q4_K_M"
+ },
+ {
+  "label": "Arete 27B Q4_K_M (bartowski)",
+  "kind": "ollama",
+  "ref": "hf.co/bartowski/NousResearch_Arete-27B-GGUF:Q4_K_M"
+ },
+ {
+  "label": "Inkling 2 Mini IQ4_NL (ggml-org)",
+  "kind": "path",
+  "ref": "~/models/inkling2-ggml/Inkling-2-Mini-IQ4_NL.gguf"
+ },
+ {
+  "label": "Inkling 2 Mini UD-Q4_K_M (Unsloth)",
+  "kind": "path",
+  "ref": "~/models/inkling2/Inkling-2-Mini-UD-Q4_K_M.gguf"
+ },
+ {
+  "label": "Nanbeige4.3 33B Q4_K_M (bartowski)",
+  "kind": "path",
+  "ref": "~/models/exp065/Nanbeige_Nanbeige4.3-33B-Q4_K_M.gguf"
+ },
+ {
+  "label": "Ling-3.2-air Q4_K_M (bartowski)",
+  "kind": "path",
+  "ref": "~/models/exp065/Ling-3.2-air-Q4_K_M/Ling-3.2-air-Q4_K_M-00001-of-00003.gguf"
+ }
+]

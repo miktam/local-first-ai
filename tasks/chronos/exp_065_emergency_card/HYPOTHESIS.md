@@ -169,3 +169,15 @@ One page per machine, dated: for each model its usable context, its speed, the t
 
 So all eleven files on the mini are candidates. The three run with the borrowed template, and the card says so on their rows.
 
+## Kit (2026-11-27, before any task of the test exists)
+
+- `kit/card65.py` is the driver: per model file it starts `llama-server` on the loopback address, runs Part C, Part B and Part A, and writes every row when it is complete. `kit/models65.json` lists the files and which run with the borrowed template. `kit/score65.py` builds the blind packets for the judges and prints the tables.
+- **Smoke, made-up inputs only** (`dev/smoke-tasks.json`, two tasks; `dev/smoke-20261127-e4b`, `dev/smoke-20261127-tools`): the small gemma file through all three parts with two context steps, and Part C on five files.
+
+**Two things the smoke showed, settled before the run:**
+
+1. **An answer cut at the cap is not "no answer" when it has text.** The small gemma model answered a question fully and was then cut at 2,048 tokens while adding advice. The registration's wording is "cut at the token cap before it answered", so the code marks only an empty reply as "no answer". A reply with text that ends at the cap goes to the judges flagged as cut, and is judged on what is there.
+2. **With the borrowed chat format, tool calls do not arrive.** The production gemma4:26b file and gemma4:31b returned 0 of 5 tool calls and an empty reply; the QAT gemma file with its own template returned 5 of 5, as did Qwen3.8 27B and Inkling 2 Mini. So for the three files that run on the borrowed template, Part C measures this kit's handling and not the model, and the card says so on their rows. They can still be right on the tasks; under H1's bar they cannot be "emergency-usable" in this kit.
+
+**What is not committed:** the server's own log of each run (`server.log`), which holds paths of this machine.
+

@@ -6,4 +6,9 @@ What can each local model be asked when the cloud cannot be trusted? For every c
 |---|---|
 | [HYPOTHESIS.md](HYPOTHESIS.md) | the registration, written before any task, kit or run |
 
-Status: registered 2026-11-27, not run.
+| `kit/card65.py` | the driver: tool calls, the tasks, the context ladder, per model file |
+| `kit/score65.py` | blind packets for the judges; the tables |
+| `kit/models65.json` | the model files, and which run with the borrowed chat template |
+| `dev/` | probes and the smoke, made-up inputs only |
+
+Status: registered 2026-11-27, not run. The tasks are being written.

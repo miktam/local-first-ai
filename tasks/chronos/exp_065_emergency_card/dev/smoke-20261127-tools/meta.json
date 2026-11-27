@@ -1,0 +1,63 @@
+{
+ "machine": "mini",
+ "models": {
+  "gemma4 26b (production file)": {
+   "present": true,
+   "file": "sha256-d3e5119bb584e50f29fe7b139f7968c8545c2283fd240a9a8f74a8c305ac9fa6",
+   "bytes": 16794511680,
+   "sha256": "d3e5119bb584e50f29fe7b139f7968c8545c2283fd240a9a8f74a8c305ac9fa6",
+   "template": "gemma4-from-qat.jinja",
+   "n_ctx_train": 262144
+  },
+  "gemma4 26b QAT": {
+   "present": true,
+   "file": "sha256-4c856523d61d77922dbc0b26753a6bf6208e5d69d80db0c04dcd776832d054c5",
+   "bytes": 14439361440,
+   "sha256": "4c856523d61d77922dbc0b26753a6bf6208e5d69d80db0c04dcd776832d054c5",
+   "template": "the file's own",
+   "n_ctx_train": 262144
+  },
+  "gemma4 31b": {
+   "present": true,
+   "file": "sha256-3bf4a7778de8cbf7d110fe7ed915c739368fbe35af643707fb876595ddf037e5",
+   "bytes": 18670014016,
+   "sha256": "3bf4a7778de8cbf7d110fe7ed915c739368fbe35af643707fb876595ddf037e5",
+   "template": "gemma4-from-qat.jinja",
+   "n_ctx_train": 262144
+  },
+  "Qwen3.8 27B Q4_K_M (bartowski)": {
+   "present": true,
+   "file": "sha256-880a52af8317974f7b4b064a6bc29ff49e188b91aa218e08eea3078b6b1cc673",
+   "bytes": 17442399968,
+   "sha256": "880a52af8317974f7b4b064a6bc29ff49e188b91aa218e08eea3078b6b1cc673",
+   "template": "the file's own",
+   "n_ctx_train": 262144
+  },
+  "Inkling 2 Mini IQ4_NL (ggml-org)": {
+   "present": true,
+   "file": "Inkling-2-Mini-IQ4_NL.gguf",
+   "bytes": 17627940768,
+   "sha256": "cbdf3fa9dc50a4124977980f37da4f1fa764b0cfe800d275cd43d26ce2a81af4",
+   "template": "the file's own",
+   "n_ctx_train": 1048576
+  }
+ },
+ "starts": [
+  {
+   "at": "2026-11-27T17:44:01Z",
+   "parts": [
+    "C"
+   ],
+   "state": {
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "ollama_ps": "NAME    ID    SIZE    PROCESSOR    CONTEXT    RUNNER    UNTIL",
+    "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+    "memory_bytes": 68719476736,
+    "chip": "Apple M4 Pro",
+    "os": "27.2.1",
+    "server_version": "version: 1.0.0-dev (build 1, commit d35dc4d)\nbuilt with AppleClang 21.0.0.21000401 for Darwin arm64"
+   }
+  }
+ ],
+ "tasks_sha256": "0241f6c982fac688e2dd0854de3ef75dfb1c2e9809d9a151c204624c2542de82"
+}
