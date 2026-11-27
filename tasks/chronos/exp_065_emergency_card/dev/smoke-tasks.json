@@ -6,5 +6,21 @@
  {
   "id": "S2",
   "prompt": "Here is a cron line I found on my home server: 0 3 * * * /usr/bin/rsync -a /srv/photos/ /mnt/backup/photos/ . What does it do, and should I worry?"
+ },
+ {
+  "id": "S3",
+  "prompt": "This is from my home server's SSH log last night:\nNov 12 02:10:01 sshd: Failed password for invalid user admin from 203.0.113.40\nNov 12 02:10:03 sshd: Failed password for invalid user test from 203.0.113.40\nNov 12 02:10:06 sshd: Failed password for root from 203.0.113.40\nNov 12 07:31:12 sshd: Accepted publickey for mara from 192.0.2.14\nI was asleep at 02:10 and I logged in from my laptop (192.0.2.14) at 07:31. Did anybody get in?"
+ },
+ {
+  "id": "S4",
+  "prompt": "My mail account at Tidewater Mail has a strong password from my password manager but no second factor. I own a phone and one hardware security key. What should I change, and in what order?"
+ },
+ {
+  "id": "S5",
+  "prompt": "Ten minutes ago I typed my Tidewater Mail password into a page that turned out to be mail-tidewater.example and not tidewater.example. I am still signed in to the real account on my laptop. What do I do now, in what order?"
+ },
+ {
+  "id": "S6",
+  "prompt": "Someone registered the domain tidewater-billing.example and is mailing my customers invoices in my company's name, Harborlight Studio. The lookup shows the registrar is Larch Names and its abuse address is abuse@larchnames.example. I have two of the mails with full headers. Write the report to the registrar, ready to send."
  }
 ]

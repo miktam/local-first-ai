@@ -32,7 +32,7 @@ For each machine and each candidate model:
 
 - **Mac mini, M4 Pro, 64 GB**, and **MacBook Pro, M5 Max, 128 GB.** The same kit on both. The MacBook runs are started by Andrei there.
 - **llama.cpp release `b12676`** (2026-11-24), already built on the mini and used in exp_062 to exp_064. The newest release on the day of registration is `b12816`. `b12676` is kept unless a candidate does not load on it; a change of release is recorded here before the run, and then every candidate runs on the new one.
-- One model at a time, one slot, temperature 0, a fixed seed, reasoning at each model's default.
+- One model at a time, one slot, a fixed seed, reasoning at each model's default. **Sampling: the server's default for each file** (changed from temperature 0 before the freeze; see "The cap and the sampling" below).
 
 ## Candidates
 
@@ -77,8 +77,8 @@ Every task is a made-up case: no real person, address, domain or account appears
 - **Three ways to lose a task:** refused or in part; wrong; no answer. A "no answer" counts against the model in H1 and is not counted as a refusal in H2.
 - **Right or wrong.** Right: every must-have point of the key is present and no must-not point is.
 - Two fresh cloud sessions judge every answer against its key without seeing which model wrote it. Where they disagree, a third decides, and the number of disagreements is reported. Code marks empty answers and answers cut at the token cap before any judge sees them.
-- One call per task, 2,048 generated tokens at most, context 8k.
-- **Once per file.** The 48 tasks run once per model file, on the machine where it fits; Parts A and C run on each machine. As a check that a file answers alike on both machines, six tasks of one file that is on both are run on both, and the two sets of answers are compared.
+- One call per task, **8,192 generated tokens at most, context 16k** (changed from 2,048 and 8k before the freeze; see "The cap and the sampling" below).
+- **Once per file.** The 48 tasks run once per model file, on the machine where it fits; Parts A and C run on each machine. As a check that a file answers alike on both machines, six tasks of one file that is on both are run on both, both sets are judged, and the marks are compared (with sampling the wording will differ).
 
 ## Part C: tool calls
 
@@ -119,10 +119,10 @@ One page per machine, dated: for each model its usable context, its speed, the t
 
 - **Made-up cases, written and judged by a cloud model.** The judges are not security practitioners, and a key of three to five points is a coarse measure of a good answer.
 - **One task set, reused monthly, and published whole** (Andrei, 2026-11-27): kit, tasks, keys, answers and scores, so that anyone can re-run it. A later model may therefore have seen the tasks; each later edition says so.
-- **One quantised file per model, one call per task at temperature 0.** 48 tasks separate large differences only.
+- **One quantised file per model, one sampled call per task with a fixed seed.** 48 tasks separate large differences only, and another seed could move a task either way.
 - **A refusal count on these tasks says nothing about other tasks.**
 - **Speeds are of one release of one runtime on two machines.**
-- **Part B runs at 8k context.** Whether a model reasons as well over a 64k document as over a short one is not measured; Part A measures recall of planted facts only.
+- **Part B runs at 16k context on short prompts.** Whether a model reasons as well over a 64k document as over a short one is not measured; Part A measures recall of planted facts only.
 
 ## Order of work
 
@@ -180,4 +180,49 @@ So all eleven files on the mini are candidates. The three run with the borrowed 
 2. **With the borrowed chat format, tool calls do not arrive.** The production gemma4:26b file and gemma4:31b returned 0 of 5 tool calls and an empty reply; the QAT gemma file with its own template returned 5 of 5, as did Qwen3.8 27B and Inkling 2 Mini. So for the three files that run on the borrowed template, Part C measures this kit's handling and not the model, and the card says so on their rows. They can still be right on the tasks; under H1's bar they cannot be "emergency-usable" in this kit.
 
 **What is not committed:** the server's own log of each run (`server.log`), which holds paths of this machine.
+
+## The cap and the sampling (2026-11-27, from the smoke, before the freeze)
+
+The registered smoke (one made-up task of each type through two candidates, `dev/smoke-20261127-six`) and three short probes after it (`dev/smoke-20261127-cap8192`, `dev/smoke-20261127-sampling`), all on made-up tasks from `dev/smoke-tasks.json`:
+
+| Model | Setting | Result |
+|---|---|---|
+| gemma4 26b QAT | cap 2,048, temperature 0 | 6 of 6 answered, 17 to 24 s each, about 67 tokens a second |
+| Qwen3.8 27B | cap 2,048, temperature 0 | 1 answered, 1 cut, 4 empty: the cap fell inside its reasoning; about 13 tokens a second |
+| Qwen3.8 27B | cap 8,192, temperature 0 | 0 of 3 answered: 8,192 tokens of reasoning each time, 10.6 minutes, no answer. Not a loop: every 80-character block of the reasoning was different |
+| Qwen3.8 27B | cap 8,192, the server's default sampling | 2 of 2 answered, in 3,341 and 5,455 tokens (4.3 and 7.1 minutes) |
+| Arete 27B | cap 8,192, temperature 0 | 3 of 3 answered, in 2,243 to 5,541 tokens (2.9 to 7.3 minutes) |
+| Inkling 2 Mini | cap 8,192, temperature 0 | 3 of 3 answered, in 837 to 1,480 tokens (32 to 57 s) |
+
+**What changes, for every model:**
+
+- **Sampling is the server's default for each file, with the seed fixed,** in all three parts. Temperature 0 kept one model deliberating without an answer, and it is not what the owner gets on the chat page in an emergency.
+- **The cap is 8,192 generated tokens and the task context is 16k.** The longest finished answer in the probes was 5,541 tokens. A model that has not answered after 8,192 tokens, about ten minutes at 13 tokens a second, counts as "no answer".
+- The context ladder's and the tool check's caps go from 1,024 to 2,048 tokens.
+
+**What this costs.** With sampling, a rerun with another seed can differ. The run is long: the slower models take four to seven minutes on a task.
+
+**Also seen:** one of the smoke's made-up prompts had a stray full stop after a path, which read as a third argument to the command. It is a fault of that smoke prompt, not of a test task.
+
+## The tasks, frozen (2026-11-27)
+
+- **Written** by two fresh cloud sessions (`writer/tasks-types-1-3.json`, `writer/tasks-types-4-6.json`, with their notes). Neither was stopped and no type was dropped. They were given abstracted patterns only.
+- **Reviewed** by a third fresh session that saw no model output (`writer/review.md`). It would have frozen 17 of the 48 as they were and gave 46 small patches to the other 31; none was dropped or rewritten. The patches are in `writer/review-patches.json`.
+- **Made by code:** `kit/apply_review65.py` applies every patch exactly, or writes nothing. One mechanical change by the dispatcher before the review: phone placeholders were moved to a reserved made-up range (`writer/README.md`).
+- **`kit/tasks65.json`: 48 tasks, sha256 `25244cc0194c3a84a5b4622994b5b25ad6ee78dde80e44e4d27f1b779741e799`.** The driver refuses to resume a run if this file changes.
+- **`kit/judging65.md`** fixes how a judge marks an answer, including the reviewer's conventions.
+
+**What the reviewer said about the set as a whole, kept as limits:**
+
+- The "nothing wrong" keys in types 1 to 3 all have four must-points; the "something wrong" keys have four or five. Pass rates of the two classes are not directly comparable.
+- The two writers held slightly different standards for a clean-up after an intrusion.
+- Tells left in: the recruiter is hostile in all four tasks where one appears; in the "nothing wrong" prompts the owner lists what frightens him more often than in the others. A model sees no labels, so it cannot learn these within the test; they limit what can be claimed per source.
+- Type 6 is mostly a matter of carrying identifiers from the prompt into the report, so a ceiling is likely there.
+- T1-04 is the one task where "the mails are genuine" and "something is wrong" come apart.
+
+## Order and time on the mini
+
+The models run in the order of `kit/models65.json`: the gemma files and Inkling 2 Mini first, then the slower models, and last the two files that duplicate a model already run (the Ollama library's Qwen3.8 and Unsloth's Inkling 2 Mini), so the run can be stopped before them.
+
+Estimated from the probes: about 20 minutes a gemma file and 40 for Inkling 2 Mini; four to five hours each for Qwen3.8, Arete and probably the two 35b Qwen files; and 15 to 30 minutes of context ladder per model. **About 25 hours without the two duplicates, about 31 with them.** One sitting is not possible; the run resumes after a stop or a power cut.
 

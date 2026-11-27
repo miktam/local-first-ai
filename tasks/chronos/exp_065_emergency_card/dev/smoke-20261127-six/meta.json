@@ -1,0 +1,40 @@
+{
+ "machine": "mini",
+ "models": {
+  "gemma4 26b QAT": {
+   "present": true,
+   "file": "sha256-4c856523d61d77922dbc0b26753a6bf6208e5d69d80db0c04dcd776832d054c5",
+   "bytes": 14439361440,
+   "sha256": "4c856523d61d77922dbc0b26753a6bf6208e5d69d80db0c04dcd776832d054c5",
+   "template": "the file's own",
+   "n_ctx_train": 262144
+  },
+  "Qwen3.8 27B Q4_K_M (bartowski)": {
+   "present": true,
+   "file": "sha256-880a52af8317974f7b4b064a6bc29ff49e188b91aa218e08eea3078b6b1cc673",
+   "bytes": 17442399968,
+   "sha256": "880a52af8317974f7b4b064a6bc29ff49e188b91aa218e08eea3078b6b1cc673",
+   "template": "the file's own",
+   "n_ctx_train": 262144
+  }
+ },
+ "starts": [
+  {
+   "at": "2026-11-27T18:11:41Z",
+   "parts": [
+    "A",
+    "B"
+   ],
+   "state": {
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "ollama_ps": "NAME    ID    SIZE    PROCESSOR    CONTEXT    RUNNER    UNTIL",
+    "swap": "total = 0.00M  used = 0.00M  free = 0.00M  (encrypted)",
+    "memory_bytes": 68719476736,
+    "chip": "Apple M4 Pro",
+    "os": "27.2.1",
+    "server_version": "version: 1.0.0-dev (build 1, commit d35dc4d)\nbuilt with AppleClang 21.0.0.21000401 for Darwin arm64"
+   }
+  }
+ ],
+ "tasks_sha256": "26ad828f79b5b4278eb49b7bd8b2d4e78317ee2be35893c3b13bcab73277b40e"
+}

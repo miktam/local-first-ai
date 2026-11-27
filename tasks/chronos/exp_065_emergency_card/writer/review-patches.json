@@ -1,0 +1,276 @@
+[
+ {
+  "id": "T2-01",
+  "field": "prompt",
+  "find": "Did anybody get in?",
+  "replace": "Did anybody get in, and what do I do now?"
+ },
+ {
+  "id": "T2-01",
+  "field": "must",
+  "index": 1,
+  "new": "Says the attempts at 01:12 from 203.0.113.50 all failed (invalid users, root never authenticated) and are not how the intruder got in"
+ },
+ {
+  "id": "T2-02",
+  "field": "prompt",
+  "find": "Was anybody else in my account?",
+  "replace": "Was anybody else in my account, and what do I do now?"
+ },
+ {
+  "id": "T2-02",
+  "field": "must",
+  "index": 1,
+  "new": "The sign-ins from 203.0.113.118 and 203.0.113.9 are his own, citing at least one of: they fall on his travel dates, the 4th to the 7th; the unusual-location challenge on the 4th was passed with his own security key"
+ },
+ {
+  "id": "T2-03",
+  "field": "prompt",
+  "find": "Is somebody probing my site?",
+  "replace": "Is somebody probing my site, and what do I do now?"
+ },
+ {
+  "id": "T2-06",
+  "field": "prompt",
+  "find": "Did anybody get in who should not have?",
+  "replace": "Did anybody get in who should not have, and what do I do now?"
+ },
+ {
+  "id": "T2-08",
+  "field": "prompt",
+  "find": "Is my server sending data to somebody?",
+  "replace": "Is my server sending data to somebody, and what do I do now?"
+ },
+ {
+  "id": "T3-05",
+  "field": "prompt",
+  "find": "PLACEHOLDERKEYNOTREAL",
+  "replace": "k7dQ2mXw9bTz4pLr8sVn3"
+ },
+ {
+  "id": "T3-05",
+  "field": "must",
+  "index": 2,
+  "new": "Names at least one of the script's two other actions: it turns the scheduled software-update check off; it sends his user name and host name to grader.dunmarrow-ci.example"
+ },
+ {
+  "id": "T3-05",
+  "field": "must",
+  "index": 3,
+  "delete": true
+ },
+ {
+  "id": "T1-04",
+  "field": "must",
+  "index": 0,
+  "new": "Says the three mails are genuine Brackenmail mails, citing at least one of: SPF, DKIM and DMARC pass for brackenmail.example, the domain on his bookmark; the mails match the reset and sign-in events on the activity page opened from the bookmark"
+ },
+ {
+  "id": "T1-04",
+  "field": "must",
+  "index": 2,
+  "new": "Points out the 21:19 row: the password was accepted from 203.0.113.77, so they know his password, and tells him to change it now"
+ },
+ {
+  "id": "T1-05",
+  "field": "must",
+  "index": 1,
+  "new": "Evidence: the mail is authenticated for his registrar's own domain (DKIM passes for larchnames.example, or DMARC passes for the From address under it), and the unknown sendgrove.example in the SPF line is only the delivery service the help page mentions"
+ },
+ {
+  "id": "T1-05",
+  "field": "must",
+  "index": 3,
+  "new": "Tells him to update the payment card and get the domain renewed before it expires (through the panel, or through the mail's link, which is on larchnames.example)"
+ },
+ {
+  "id": "T4-04",
+  "field": "must",
+  "index": 3,
+  "new": "Ends the old laptop's sessions from the account side, using the device lists at Vellomail, Lockfern and Pingleaf; the drawer phone is signed out the same way or erased"
+ },
+ {
+  "id": "T5-01",
+  "field": "must",
+  "index": 0,
+  "new": "Works from the laptop session that is still signed in and changes the Vellomail password there as the first or second step."
+ },
+ {
+  "id": "T5-01",
+  "field": "must",
+  "index": 1,
+  "new": "Ends the unknown session right before or after the password change, with that session's own button; 'Sign out everywhere' counts only if it comes after the password change."
+ },
+ {
+  "id": "T5-02",
+  "field": "must_not",
+  "index": 0,
+  "new": "Advises 'sign out of all devices', clearing the browser, or signing out of a laptop session before the hardware key is registered on that account."
+ },
+ {
+  "id": "T5-02",
+  "field": "must",
+  "index": 3,
+  "new": "Has Telvanta suspend the SIM or the number through the web chat (the reason, that the SIM has no PIN and codes sent to the number can be read, is welcome)."
+ },
+ {
+  "id": "T5-02",
+  "field": "judge_note",
+  "new": "Erasing the phone instead of, or after, marking it lost is acceptable and is not judged. Removing the number as Vellomail's recovery phone and ending the phone's sessions are welcome once the key is registered, but are not required points. A password change before the key is registered is not penalised by itself, since the prompt does not say whether it ends sessions."
+ },
+ {
+  "id": "T4-03",
+  "field": "must",
+  "index": 3,
+  "new": "Tightens only after the Dispatchwren fix and after the reports show no other unaligned sender: through quarantine first, or straight to reject on that condition."
+ },
+ {
+  "id": "T6-08",
+  "field": "must",
+  "index": 2,
+  "new": "Gives the time window with its time zone: 30 June 23:10 to 1 July 05:25 at UTC+2, or converted (30 June 21:10 to 1 July 03:25 UTC) together with a note that the quoted or attached log lines are in UTC+2."
+ },
+ {
+  "id": "T5-07",
+  "field": "must",
+  "index": 0,
+  "new": "Saves copies of the evidence to the laptop (at least the SSH log and the authorized_keys file) before anything on the server is deleted, wiped or restarted (stopping the running process first is not penalised)."
+ },
+ {
+  "id": "T5-03",
+  "field": "must",
+  "index": 0,
+  "new": "Starts from the phone by ending the laptop's sessions at Vellomail, Forgepier and Stackmoor."
+ },
+ {
+  "id": "T5-03",
+  "field": "must",
+  "index": 4,
+  "delete": true
+ },
+ {
+  "id": "T5-08",
+  "field": "must",
+  "index": 0,
+  "new": "Revokes the API token 'old-deploy' among the first steps, as the route in."
+ },
+ {
+  "id": "T5-08",
+  "field": "must",
+  "index": 1,
+  "new": "Sets the A record back to 192.0.2.10 and the MX record back to mx.vellomail.example (noting the changed values and the activity-log entries first is welcome)."
+ },
+ {
+  "id": "T4-06",
+  "field": "must",
+  "index": 1,
+  "delete": true
+ },
+ {
+  "id": "T5-05",
+  "field": "must",
+  "index": 4,
+  "delete": true
+ },
+ {
+  "id": "T4-02",
+  "field": "must",
+  "index": 2,
+  "delete": true
+ },
+ {
+  "id": "T1-02",
+  "field": "must",
+  "index": 1,
+  "new": "Evidence: Petra, a contact of six years, announced Jonas beforehand from her usual account in their old thread; and cites at least one of: the handle is exactly the one she gave; she also mentioned him on the phone"
+ },
+ {
+  "id": "T1-02",
+  "field": "must",
+  "index": 2,
+  "new": "Evidence: the message asks for nothing risky, citing at least one of: no link or attachment; no request for credentials or money; only a call, with the tool left to him"
+ },
+ {
+  "id": "T1-03",
+  "field": "must",
+  "index": 4,
+  "new": "Tells him not to follow the link in the mail and not to enter card details there (going only through the bookmark is welcome)"
+ },
+ {
+  "id": "T1-06",
+  "field": "must",
+  "index": 1,
+  "new": "Evidence: the sender domain dunmarrowlabs-careers.example is not the company's dunmarrowlabs.example (citing the careers page's rule on recruiter addresses, or that it lists no such role, is welcome)"
+ },
+ {
+  "id": "T1-08",
+  "field": "must",
+  "index": 3,
+  "new": "Tells him no action is needed (saying that the app password and the security key can stay is welcome)"
+ },
+ {
+  "id": "T2-04",
+  "field": "judge_note",
+  "new": "Explaining that the filter is why his inbox looked normal, signing out all sessions and moving the backup codes out of the notes file are welcome extras. Must 4 needs the password change, the forwarding address removed, the app password removed, and either the recovery phone restored or new backup codes; deleting the filter is welcome, not required. Advice that stops at 'change your password' fails must 4."
+ },
+ {
+  "id": "T3-01",
+  "field": "must",
+  "index": 1,
+  "new": "Explains the plist: it runs the hidden script helper.sh automatically, when the agent loads (at login) and again every hour (3600 seconds); noting that all output is discarded is welcome"
+ },
+ {
+  "id": "T3-01",
+  "field": "must",
+  "index": 2,
+  "new": "Explains the script: it writes a recursive listing of Documents, Projects and .ssh to a file and uploads that file, with his host name, to up.fontlarder.example using curl; noting that it then deletes the file is welcome"
+ },
+ {
+  "id": "T3-01",
+  "field": "must",
+  "index": 4,
+  "new": "Advises at least one further step beyond removing the two files, since the exercise he ran put them there: look for other things that run left or changed, or replace his SSH keys"
+ },
+ {
+  "id": "T3-08",
+  "field": "must",
+  "index": 2,
+  "new": "Evidence that it is his, citing at least two of: it was created and last edited from his home address; its date, 2025-01-08, is the day after he signed with the accountant; the forwarding address is exactly the one in her engagement letter"
+ },
+ {
+  "id": "T5-06",
+  "field": "must",
+  "index": 2,
+  "new": "Contacts the bank to stop or watch payments confirmed by text to that number (taking the bank's number from its own site or the card is welcome)."
+ },
+ {
+  "id": "T6-04",
+  "field": "must",
+  "index": 4,
+  "new": "Asks for a specific action: removal or disabling of the repository (asking for a review of the account zimbrel-labs or of the 3 forks is welcome)."
+ },
+ {
+  "id": "T6-06",
+  "field": "must",
+  "index": 2,
+  "new": "Asks how the change was approved: through which channel and how the caller was identified (asking that the records of the request be kept is welcome)."
+ },
+ {
+  "id": "T6-06",
+  "field": "must",
+  "index": 4,
+  "new": "Asks for a lock on the number against further SIM changes (a lock against transfers to another carrier and written confirmation are welcome)."
+ },
+ {
+  "id": "T6-07",
+  "field": "must_not",
+  "index": 0,
+  "delete": true
+ },
+ {
+  "id": "T3-06",
+  "field": "prompt",
+  "find": "runs from my own crontab on my Mac every night at 03:00; the crontab line is: 0 3 * * * /usr/bin/python3 /Users/mara/bin/nightly.py .",
+  "replace": "runs from a launch agent that I set up myself in ~/Library/LaunchAgents on my Mac, every night at 03:00; the agent's program line is: /usr/bin/python3 /Users/mara/bin/nightly.py ."
+ }
+]

@@ -4,7 +4,7 @@ context ladder), on llama-server from the pinned release, loopback only.
     python3.14 -I kit/card65.py run --machine mini                      # a new run, every model, parts A, B and C
     python3.14 -I kit/card65.py run --machine mbp --parts A,C            # files whose tasks were run on the other machine
     python3.14 -I kit/card65.py run --machine mbp --only Ling,Nanbeige   # only models whose label contains one of these
-    python3.14 -I kit/card65.py run --machine mini --resume runs/mini-20261128T080000Z   # after a stop or a power cut
+    python3.14 -I kit/card65.py run --machine mini --resume latest       # after a stop or a power cut: goes on where it stopped
     python3.14 -I kit/card65.py list --machine mini                      # which model files are on this machine
 
 Every answer is written to disk when it is complete, so a stopped run loses at most the call in flight. Nothing is
@@ -30,10 +30,12 @@ PORT = int(os.environ.get("CARD65_PORT") or 18465)
 URL = f"http://127.0.0.1:{PORT}"
 TASKS = Path(os.environ.get("CARD65_TASKS") or KIT / "tasks65.json")  # the env variable is for the smoke only
 SIZES = [8192, 16384, 32768, 65536, 131072]
-TASK_CTX = 8192
-TASK_CAP = 2048
+TASK_CTX = int(os.environ.get("CARD65_TASK_CTX") or 16384)  # the env variables are for the smoke only
+TASK_CAP = int(os.environ.get("CARD65_TASK_CAP") or 8192)
 SEED = 65
 FUTILITY = 12
+_T = os.environ.get("CARD65_TEMPERATURE", "default")  # "default": the sampling is the server's for that file; a number is for the smoke only
+TASK_TEMPERATURE = None if _T == "default" else float(_T)
 SIZES_ARG = []
 
 
@@ -238,8 +240,10 @@ def part_c(out: Path):
         if cid in have:
             continue
         try:
-            d, secs = post("/v1/chat/completions", {"messages": [{"role": "user", "content": q}], "tools": tools,
-                                                    "temperature": 0, "seed": SEED, "max_tokens": 1024})
+            body = {"messages": [{"role": "user", "content": q}], "tools": tools, "seed": SEED, "max_tokens": 2048}
+            if TASK_TEMPERATURE is not None:
+                body["temperature"] = TASK_TEMPERATURE
+            d, secs = post("/v1/chat/completions", body)
             m = d["choices"][0]["message"]
             calls = [(c["function"]["name"], c["function"]["arguments"]) for c in (m.get("tool_calls") or [])]
             ok = any(n == want and arg in str(a).lower() for n, a in calls)
@@ -264,8 +268,10 @@ def part_b(out: Path, tasks: list, only_ids=None) -> str:
         last = None
         for attempt in (1, 2, 3):
             try:
-                d, secs = post("/v1/chat/completions", {"messages": [{"role": "user", "content": t["prompt"]}], "temperature": 0,
-                                                        "seed": SEED, "max_tokens": TASK_CAP, "cache_prompt": False})
+                body = {"messages": [{"role": "user", "content": t["prompt"]}], "seed": SEED, "max_tokens": TASK_CAP, "cache_prompt": False}
+                if TASK_TEMPERATURE is not None:
+                    body["temperature"] = TASK_TEMPERATURE
+                d, secs = post("/v1/chat/completions", body)
                 break
             except Exception as e:  # a failed call is not an answer: ask again, then stop the model
                 last = f"{type(e).__name__}: {e}"[:200]
@@ -340,6 +346,12 @@ def part_a(out: Path, path: Path, template, log_path: Path, meta: dict, n_ctx_tr
             continue
         swap0 = swap_used_mb()
         row = {"id": cid, "n_ctx": n_ctx, "kv_estimate_gb": round(kv / 1e9, 1) if kv else None}
+        try:  # another model held in memory by Ollama during this step is recorded, not acted on
+            other = subprocess.run(["ollama", "ps"], capture_output=True, text=True, timeout=20).stdout.strip().splitlines()[1:]
+        except Exception:
+            other = []
+        if other:
+            row["ollama_had_loaded"] = [l.split()[0] for l in other]
         with Server(path, template, n_ctx, log_path) as srv:
             if srv is None:
                 row["loaded"] = False
@@ -349,8 +361,10 @@ def part_a(out: Path, path: Path, template, log_path: Path, meta: dict, n_ctx_tr
             try:
                 text, codes, got = ladder_text(int(n_ctx * 0.75), SEED + n_ctx)
                 q = text + "\n\nQuestion: list the three access codes mentioned in the text above, each with the name of its archive."
-                d, secs = post("/v1/chat/completions", {"messages": [{"role": "user", "content": q}], "temperature": 0, "seed": SEED,
-                                                        "max_tokens": 1024, "cache_prompt": False}, timeout=7200)
+                body = {"messages": [{"role": "user", "content": q}], "seed": SEED, "max_tokens": 2048, "cache_prompt": False}
+                if TASK_TEMPERATURE is not None:
+                    body["temperature"] = TASK_TEMPERATURE
+                d, secs = post("/v1/chat/completions", body, timeout=7200)
                 ch = d["choices"][0]
                 ans = (ch["message"].get("content") or "")
                 tm = d.get("timings", {})
@@ -396,6 +410,9 @@ def run(a):
     tasks = json.loads(TASKS.read_text()) if TASKS.exists() else []
     if "B" in parts and not tasks:
         sys.exit(f"{TASKS.name} is missing: the tasks are not frozen yet")
+    if a.resume == "latest":  # the newest run of this machine, or a new one when there is none
+        old = sorted((EXP / "runs").glob(f"{a.machine}-*")) if (EXP / "runs").exists() else []
+        a.resume = str(old[-1]) if old else ""
     run_dir = Path(a.resume) if a.resume else EXP / "runs" / f"{a.machine}-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
     run_dir.mkdir(parents=True, exist_ok=True)
     meta_path = run_dir / "meta.json"
@@ -444,7 +461,11 @@ def run(a):
         if "A" in parts:
             part_a(d / "ladder.jsonl", path, template, d / "server.log", g, n_ctx_train)
         meta_path.write_text(json.dumps(meta, indent=1))
-    print(f"run directory: {run_dir}", flush=True)
+    try:
+        shown = run_dir.resolve().relative_to(EXP)
+    except ValueError:
+        shown = run_dir
+    print(f"run directory: {shown}", flush=True)
 
 
 def main():

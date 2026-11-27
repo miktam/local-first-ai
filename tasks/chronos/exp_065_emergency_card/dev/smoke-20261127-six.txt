@@ -1,0 +1,19 @@
+[gemma4 26b QAT] hashing 14.4 GB
+[gemma4 26b QAT] parts A,B
+      S1: 1254 tokens in 17.4 s
+      S2: 1602 tokens in 22.2 s
+      S3: 1417 tokens in 20.0 s
+      S4: 1725 tokens in 24.0 s
+      S5: 1279 tokens in 17.8 s
+      S6: 1328 tokens in 18.5 s
+      A-8192: {"kv_estimate_gb": 2.8, "loaded": true, "prompt_tokens": 6166, "filler_tokens": 6128, "seconds_to_first_token": 8.7, "tokens_per_second": 66.6, "facts_found": [true, true, true], "finish": "stop", "seconds": 14.1, "swap_grew_mb": 0.0, "usable": true}
+[Qwen3.8 27B Q4_K_M (bartowski)] hashing 17.4 GB
+[Qwen3.8 27B Q4_K_M (bartowski)] parts A,B
+      S1: 1172 tokens in 91.8 s
+      S2: 2048 tokens in 157.8 s | NO ANSWER
+      S3: 2048 tokens in 159.3 s | cut at the cap
+      S4: 2048 tokens in 158.0 s | NO ANSWER
+      S5: 2048 tokens in 157.9 s | NO ANSWER
+      S6: 2048 tokens in 158.0 s | NO ANSWER
+      A-8192: {"kv_estimate_gb": 1.8, "loaded": true, "prompt_tokens": 6188, "filler_tokens": 6114, "seconds_to_first_token": 52.1, "tokens_per_second": 12.7, "facts_found": [true, true, true], "finish": "stop", "seconds": 62.9, "swap_grew_mb": 0.0, "usable": true}
+run directory: runs/mini-20261127T181141Z
