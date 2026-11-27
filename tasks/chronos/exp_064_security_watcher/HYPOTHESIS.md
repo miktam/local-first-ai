@@ -145,3 +145,8 @@ So qwen3.8:27b stays as the third model for the tuning, and the optional arm Q i
 ## Held (2026-11-27, Andrei's decision the same day)
 
 exp_065, registered after this file, measures every candidate model on both machines first. This experiment stays registered and unsigned until exp_065's card exists. If the card names other models as worth comparing in the watcher's seat, the arms are amended here before the writer is started. The writer has not been started, no job has been generated and no kit has been built.
+
+## Correction (2026-11-27)
+
+This file says above that llama.cpp does not load the production gemma4:26b file. On release `b12676` it loads (exp_065, load check of 2026-11-27). What fails from that file alone is the chat format; with the template of the QAT file it chats cleanly, but its tool calls then do not arrive through `llama-server` (0 of 5 in exp_065's smoke). So arm G still cannot move to llama.cpp as it is, for that reason and not the one given.
+

@@ -200,10 +200,41 @@ def port_busy() -> bool:
 
 # ---------- rows on disk ----------
 
-def done_ids(path: Path) -> set:
+def read_rows(path: Path) -> list:
+    """The rows of a file. A last line torn by a power cut is dropped (and cut from the file), so that call is asked again."""
     if not path.exists():
-        return set()
-    return {json.loads(l)["id"] for l in path.read_text().splitlines() if l.strip()}
+        return []
+    lines = [l for l in path.read_text().splitlines() if l.strip()]
+    out = []
+    for i, l in enumerate(lines):
+        try:
+            out.append(json.loads(l))
+        except json.JSONDecodeError:
+            if i != len(lines) - 1:
+                raise
+            path.write_text("".join(x + "\n" for x in lines[:-1]))
+    return out
+
+
+def done_ids(path: Path) -> set:
+    return {r["id"] for r in read_rows(path)}
+
+
+def ollama_loaded_bytes() -> tuple:
+    """What Ollama holds in memory right now: (bytes, names). The bot on the mini can load its model at any time."""
+    try:
+        lines = subprocess.run(["ollama", "ps"], capture_output=True, text=True, timeout=20).stdout.strip().splitlines()[1:]
+    except Exception:
+        return 0, []
+    total, names = 0, []
+    for l in lines:
+        parts = l.split()
+        names.append(parts[0])
+        for i, tok in enumerate(parts[:-1]):
+            if parts[i + 1] in ("GB", "MB") and tok.replace(".", "", 1).isdigit():
+                total += float(tok) * (1e9 if parts[i + 1] == "GB" else 1e6)
+                break
+    return int(total), names
 
 
 def append(path: Path, row: dict):
@@ -257,7 +288,7 @@ def part_c(out: Path):
 
 def part_b(out: Path, tasks: list, only_ids=None) -> str:
     have = done_ids(out)
-    rows = [json.loads(l) for l in out.read_text().splitlines()] if out.exists() else []
+    rows = read_rows(out)
     for t in tasks:
         if only_ids and t["id"] not in only_ids:
             continue
@@ -331,6 +362,8 @@ def ladder_text(n_tokens_target: int, seed: int):
 
 def part_a(out: Path, path: Path, template, log_path: Path, meta: dict, n_ctx_train):
     have = done_ids(out)
+    if any(h.startswith("A-stop-after-") for h in have):
+        return  # the ladder was stopped in an earlier start of this run; a resume does not climb further
     mem = physical_memory()
     size = file_size(path)
     for n_ctx in (SIZES_ARG or SIZES):
@@ -341,21 +374,20 @@ def part_a(out: Path, path: Path, template, log_path: Path, meta: dict, n_ctx_tr
             append(out, {"id": cid, "n_ctx": n_ctx, "skipped": f"above the model's trained context of {n_ctx_train}"})
             continue
         kv = kv_estimate(meta, n_ctx)
-        if kv is not None and size + kv + 6e9 > mem * 0.9:
-            append(out, {"id": cid, "n_ctx": n_ctx, "skipped": f"estimated memory {(size + kv) / 1e9:.0f} GB of {mem / 1e9:.0f} GB"})
+        held, held_names = ollama_loaded_bytes()
+        if kv is not None and size + kv + held + 6e9 > mem * 0.9:
+            append(out, {"id": cid, "n_ctx": n_ctx, "skipped": f"estimated memory {(size + kv) / 1e9:.0f} GB, plus {held / 1e9:.0f} GB held by "
+                                                              f"Ollama, of {mem / 1e9:.0f} GB", "ollama_had_loaded": held_names})
             continue
         swap0 = swap_used_mb()
         row = {"id": cid, "n_ctx": n_ctx, "kv_estimate_gb": round(kv / 1e9, 1) if kv else None}
-        try:  # another model held in memory by Ollama during this step is recorded, not acted on
-            other = subprocess.run(["ollama", "ps"], capture_output=True, text=True, timeout=20).stdout.strip().splitlines()[1:]
-        except Exception:
-            other = []
-        if other:
-            row["ollama_had_loaded"] = [l.split()[0] for l in other]
+        if held_names:
+            row["ollama_had_loaded"] = held_names
         with Server(path, template, n_ctx, log_path) as srv:
             if srv is None:
                 row["loaded"] = False
                 append(out, row)
+                append(out, {"id": f"A-stop-after-{n_ctx}", "n_ctx": n_ctx, "skipped": "the ladder stops here: the server did not start at this size"})
                 break
             row["loaded"] = True
             try:
@@ -422,7 +454,10 @@ def run(a):
         if meta.get("tasks_sha256") not in (None, digest):
             sys.exit("the task file changed since this run started")
         meta["tasks_sha256"] = digest
-    meta["starts"].append({"at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "parts": sorted(parts), "state": machine_state()})
+    meta["starts"].append({"at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "parts": sorted(parts), "state": machine_state(),
+                           "settings": {"task_context": TASK_CTX, "task_cap": TASK_CAP, "seed": SEED, "ladder_and_tool_cap": 2048,
+                                        "temperature": "the server's default for the file" if TASK_TEMPERATURE is None else TASK_TEMPERATURE,
+                                        "ladder_sizes": SIZES_ARG or SIZES}})
     only = [o.lower() for o in a.only.split(",")] if a.only else []
     check_ids = set(a.task_ids.split(",")) if a.task_ids else None
     for label, (path, template) in models_on_this_machine().items():
@@ -451,6 +486,12 @@ def run(a):
                     info["note"] = "did not start at 8k"
                     print("      the server did not start", flush=True)
                 else:
+                    try:  # what "the server's default sampling for this file" was, so the run can be repeated
+                        props = get("/props")
+                        (d / "props.json").write_text(json.dumps({k: props.get(k) for k in ("default_generation_settings", "model_path", "build_info")
+                                                                   if k != "model_path"}, indent=1))
+                    except Exception as e:
+                        info["props_error"] = f"{type(e).__name__}"
                     if "C" in parts:
                         part_c(d / "tools.jsonl")
                     if "B" in parts:

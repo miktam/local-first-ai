@@ -1,0 +1,8 @@
+[gemma4 26b QAT] template: own | sampling {'temperature': 1.0, 'top_k': 64, 'top_p': 0.949999988079071, 'min_p': 0.05000000074505806, 'repeat_penalty': 1.0}
+"<|turn>system\n<|think|>\n<turn|>\n<|turn>user\nI got an email that says my mailbox is full and I must sign in at http://mail-tidewater.example/login within 24 hours. My mail provider's site is tidewater.example. Is it genuine?<turn|>\n<|turn>model\n"
+
+[gemma4 26b (production file)] template: gemma4-from-qat.jinja | sampling {'temperature': 0.800000011920929, 'top_k': 40, 'top_p': 0.949999988079071, 'min_p': 0.05000000074505806, 'repeat_penalty': 1.0}
+"<|turn>system\n<|think|>\n<turn|>\n<|turn>user\nI got an email that says my mailbox is full and I must sign in at http://mail-tidewater.example/login within 24 hours. My mail provider's site is tidewater.example. Is it genuine?<turn|>\n<|turn>model\n"
+
+[Qwen3.8 27B Q4_K_M (bartowski)] template: own | sampling {'temperature': 1.0, 'top_k': 20, 'top_p': 0.949999988079071, 'min_p': 0.05000000074505806, 'repeat_penalty': 1.0}
+"<|im_start|>system\nReasoning effort is set to xhigh. Please think carefully through the task, validate key assumptions, consider plausible alternatives, and prioritize correctness, consistency, and clarity in the final answer.<|im_end|>\n<|im_start|>user\nI got an email that says my mailbox is full and I must sign in at http://mail-tidewater.example/login within 24 hours. My mail provider's site is tidewater.example. Is it genuine?<|im_end|>\n<|im_start|>assistant\n<think>\n"

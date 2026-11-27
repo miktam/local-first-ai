@@ -226,3 +226,9 @@ The models run in the order of `kit/models65.json`: the gemma files and Inkling 
 
 Estimated from the probes: about 20 minutes a gemma file and 40 for Inkling 2 Mini; four to five hours each for Qwen3.8, Arete and probably the two 35b Qwen files; and 15 to 30 minutes of context ladder per model. **About 25 hours without the two duplicates, about 31 with them.** One sitting is not possible; the run resumes after a stop or a power cut.
 
+## Before the run: the rendered prompt, and what resume does (2026-11-27)
+
+- **One rendered prompt read by eye,** as the smoke requires (`dev/rendered-prompts-20261127.txt`, one made-up prompt through three files). The QAT gemma file with its own template and the production gemma file with the borrowed one render the same prompt, with thinking switched on. Qwen3.8's own template adds a system line that sets its reasoning effort to "xhigh" by default, which explains the length of its reasoning. That is the file's default, so it is what this edition measures.
+- **Default sampling differs per file** and is saved per model in the run (`props.json`): the QAT gemma file carries its own values (temperature 1.0, top-k 64), the production gemma file has none and gets the server's (0.8, top-k 40), Qwen3.8 carries 1.0 and top-k 20.
+- **The driver, hardened before the run:** a last line torn by a power cut is dropped and that call is asked again; a context ladder that was stopped is not climbed further on resume; the memory estimate for a context step adds what Ollama holds at that moment; the settings of each start (context, cap, seed, sampling, sizes) are written to `meta.json`.
+
