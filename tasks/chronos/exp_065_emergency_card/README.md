@@ -16,4 +16,4 @@ What can each local model be asked when the cloud cannot be trusted? For every c
 | `kit/apply_review65.py` | makes the task file from the writers' output and the reviewer's patches |
 | `writer/` | the writers' output as returned, their notes, the review and its patches |
 
-Status: registered 2026-11-27; tasks frozen; not run.
+Status: registered and signed 2026-11-27; tasks frozen; the run on the mini started the same evening.

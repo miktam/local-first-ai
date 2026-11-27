@@ -232,3 +232,7 @@ Estimated from the probes: about 20 minutes a gemma file and 40 for Inkling 2 Mi
 - **Default sampling differs per file** and is saved per model in the run (`props.json`): the QAT gemma file carries its own values (temperature 1.0, top-k 64), the production gemma file has none and gets the server's (0.8, top-k 40), Qwen3.8 carries 1.0 and top-k 20.
 - **The driver, hardened before the run:** a last line torn by a power cut is dropped and that call is asked again; a context ladder that was stopped is not climbed further on resume; the memory estimate for a context step adds what Ollama holds at that moment; the settings of each start (context, cap, seed, sampling, sizes) are written to `meta.json`.
 
+## Signed (2026-11-27)
+
+Andrei, on the evening of 2026-11-27, after reading the three changed settings, the run length and the consequence of the 60-second rule for the slow models on the mini: "keep it and start it". The bars stand as written above, and the run on the mini was started on his word the same evening. The MacBook's runs are started by him there.
+
