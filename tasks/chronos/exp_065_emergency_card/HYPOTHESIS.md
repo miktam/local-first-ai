@@ -236,3 +236,7 @@ Estimated from the probes: about 20 minutes a gemma file and 40 for Inkling 2 Mi
 
 Andrei, on the evening of 2026-11-27, after reading the three changed settings, the run length and the consequence of the 60-second rule for the slow models on the mini: "keep it and start it". The bars stand as written above, and the run on the mini was started on his word the same evening. The MacBook's runs are started by him there.
 
+## The scorer, tested before any judge (2026-11-27, while the mini run was going)
+
+`kit/score65.py` now prints every registered bar (H1 with the first model to open and the model for long documents, H2, H3, H4, the too-easy-or-too-hard declaration and the judges' disagreement rate), and shows a model's task result on each machine that holds the file, since the tasks run once per file. `kit/test_score65.py` builds two made-up runs with three made-up models and made-up judges' files and checks the printed bars against values worked out in the test: 13 of 13. No answer of the running test was read for this.
+
