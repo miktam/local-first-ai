@@ -157,3 +157,15 @@ One page per machine, dated: for each model its usable context, its speed, the t
 - **Before the run, for these three:** the kit may pass a chat template taken from the same maker's file that is already on the disk and chats cleanly (the QAT file), with `--chat-template-file`. If the reply is then clean, the file is a candidate and the card says which template it ran with. If not, the card lists it as "loads, no usable chat format in this kit". Nothing is downloaded for this in the November edition unless Andrei says so.
 - Full hashes are written by the kit at the run.
 
+## The borrowed chat format (2026-11-27, Andrei's yes the same day)
+
+`kit/template65.py`, output in `dev/template-20261127.txt`. The chat template that `llama-server` reports for the QAT gemma file was saved as `kit/templates/gemma4-from-qat.jinja` and passed with `--chat-template-file` to the three files that did not chat cleanly. Two made-up prompts each (the word "ready"; 17 times 23).
+
+| File | With the borrowed template |
+|---|---|
+| gemma4:26b (production) | "ready" and "391"; the reasoning is separated from the answer |
+| gemma4:31b | "ready" and "391"; the reasoning is separated; the reply stops at the end of its turn |
+| gemma4:e4b | "ready" and "391"; the reply stops at the end of its turn; it wrote no reasoning |
+
+So all eleven files on the mini are candidates. The three run with the borrowed template, and the card says so on their rows.
+
