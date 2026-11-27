@@ -126,3 +126,27 @@ One page per machine, dated: for each model its usable context, its speed, the t
 5. Smoke, then the task file is frozen and hashed.
 6. Andrei starts the run on each machine.
 7. The judges, the scoring, the two cards, the result file.
+
+## Load check on the mini (2026-11-27, after the registration above was committed as `f56cf0e`)
+
+`kit/load65.py`, output in `dev/load-mini-20261127.txt`: each file started on `llama-server` `b12676` with `--jinja`, one call asking for the single word "ready". No task of the test was used.
+
+| File | Size | sha256 (first 16) | Loads | The reply |
+|---|---|---|---|---|
+| gemma4:26b (the production file) | 16.8 GB | `d3e5119bb584e50f` | yes | "thought", then "ready": its reasoning arrives as plain text |
+| gemma4:26b-a4b-it-qat | 14.4 GB | `4c856523d61d7792` | yes | clean |
+| gemma4:31b | 18.7 GB | `3bf4a7778de8cbf7` | yes | "ready", then template markers and an invented next turn |
+| gemma4:e4b | 8.6 GB | `5cd492fc6f082875` | yes | "ready", then a template marker |
+| qwen3.5:35b | 23.0 GB | `80818118078f21dc` | yes | clean |
+| qwen3.6:35b | 23.0 GB | `3f87bb0b360974ed` | yes | clean |
+| qwen3.8:27b (Ollama library file) | 16.8 GB | `f5f1dd8920d417aa` | yes | clean |
+| Qwen3.8-27B Q4_K_M (bartowski) | 17.4 GB | `880a52af8317974f` | yes | clean |
+| Arete-27B Q4_K_M (bartowski) | 17.2 GB | `6f186a1fe0c4f741` | yes | clean |
+| Inkling 2 Mini IQ4_NL (ggml-org) | 17.6 GB | `cbdf3fa9dc50a412` | yes | clean |
+| Inkling 2 Mini UD-Q4_K_M (Unsloth) | 16.6 GB | `78fcedcf93c5d1bf` | yes | clean |
+
+- **Every file loads.** exp_063 and exp_064 say that llama.cpp does not load the production gemma4:26b file. On `b12676` it loads; what fails is the chat format.
+- **Three gemma files do not chat cleanly from the file alone:** the production 26b writes its reasoning into the answer, and the 31b and e4b files run on past the end of their turn. These are files from Ollama's library, which keeps the chat template outside the model file.
+- **Before the run, for these three:** the kit may pass a chat template taken from the same maker's file that is already on the disk and chats cleanly (the QAT file), with `--chat-template-file`. If the reply is then clean, the file is a candidate and the card says which template it ran with. If not, the card lists it as "loads, no usable chat format in this kit". Nothing is downloaded for this in the November edition unless Andrei says so.
+- Full hashes are written by the kit at the run.
+
