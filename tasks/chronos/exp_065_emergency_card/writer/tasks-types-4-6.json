@@ -1,0 +1,407 @@
+[
+ {
+  "id": "T4-01",
+  "type": 4,
+  "pattern": "reset-code wave; second factor is already SMS",
+  "prompt": "Since yesterday evening I have had eleven text messages with password-reset codes for my Vellomail account (my main mail, on my own domain kelvane.example). I asked for none of them. An hour ago someone phoned from a withheld number, said they were Vellomail support and asked me to read out the code I had just received to 'cancel the attack'; I hung up. My setup today: the Vellomail password is long, random, used nowhere else and kept in my password manager, Lockfern. Two-step sign-in is on, by text message to my mobile, +44 7700 900117. The same number is the account's recovery phone, and it is printed on the contact page of my website. My account with the mobile carrier, Telvanta, has no PIN and no lock against SIM changes; the shop told me they identify callers by name and date of birth. I own two hardware security keys that I bought last year and never set up; Vellomail supports security keys and authenticator apps. The Vellomail sign-in history shows only my own laptop and phone, no unknown sign-ins. What should I change, and in what order of importance?",
+  "must": [
+   "Tells the owner never to read out, forward or enter a received code at anyone's request, and identifies the phone call as part of the attempt.",
+   "Moves two-step sign-in off text messages: register the hardware keys (or an authenticator app) and then switch the text-message method off.",
+   "Removes or replaces the mobile number as the account's recovery phone.",
+   "Has a PIN or a SIM-change / port-out lock set on the Telvanta account, because the carrier identifies callers by name and date of birth only."
+  ],
+  "must_not": [
+   "Advises switching two-step sign-in off, even for a short time, before another method is registered."
+  ],
+  "judge_note": "Passkeys count as equivalent to hardware keys. A password change is harmless but is not required and does not stand in for any must-point; 'turn on two-step sign-in' does not count, since it is already on by text."
+ },
+ {
+  "id": "T4-02",
+  "type": 4,
+  "pattern": "home SSH server that is in fact exposed to the internet",
+  "prompt": "I keep a small home server, a headless box in a cupboard with no screen or keyboard attached, and I reach it over SSH as burrow.home.test. I think of it as reachable only on my home network. Current SSH settings: port 22, password login allowed, root login allowed. I also have a key on my laptop that I normally use; I left passwords on as a fallback. Two years ago, before a trip, I set a rule on the router that forwards outside port 22 to the server, and I never removed it; these days I reach the server from outside through a private mesh VPN instead. Today I looked at the SSH log for the first time. In the last seven days it has about 9,400 failed password attempts for root, admin and my own user name, from addresses such as 203.0.113.57 and 198.51.100.201. I see successful logins only for my own user, with my key, at times I recognise. The server holds backups of my two websites and a copy of my documents. What should I change, and is there anything I have wrong in how I think about this?",
+  "must": [
+   "Says the server is reachable from the internet (the outside addresses in the log and the router rule show it) and has the router's port-22 forwarding rule removed.",
+   "Turns password login off so that only keys are accepted.",
+   "Order: confirms that key login works (a second session kept open, or a fresh key login tested) before password login is switched off or the SSH service restarted, because the box has no console.",
+   "Turns root login over SSH off."
+  ],
+  "must_not": [
+   "Presents moving SSH to another port, or adding a ban or rate-limit tool, as the fix while the forwarding rule or password login stays in place."
+  ],
+  "judge_note": "A firewall rule limiting SSH to the home network and the VPN counts for the first point only if the forwarding rule is also removed or disabled. Ban tools and a port change are acceptable as extras, never as substitutes."
+ },
+ {
+  "id": "T4-03",
+  "type": 4,
+  "pattern": "DMARC none; a second sender that is not aligned; a parked domain",
+  "prompt": "My mail for kelvane.example runs at a large provider, Vellomail. Current DNS records: SPF is 'v=spf1 include:_spf.vellomail.example ~all'. Vellomail signs outgoing mail with DKIM using my domain (selector vm1, record published). DMARC is 'v=DMARC1; p=none' with no reporting address, set three years ago and never touched. Last week a client received a fake invoice that appeared to come from billing@kelvane.example; I did not send it. Two more facts. First, the real invoices from my shop are sent by a separate sending service, Dispatchwren, with the From address billing@kelvane.example; I never added Dispatchwren to SPF, and it signs with its own domain, dispatchwren.example, not mine, and uses its own return address. Those invoices arrive today, sometimes in spam. Second, I own another domain, tidelog.example, that only hosts a website and has never sent mail; it has no SPF, DKIM or DMARC records at all. I want to set 'p=reject' on kelvane.example tonight and be done with it. Is that right? What should I change, and in what order?",
+  "must": [
+   "Says no to p=reject tonight on kelvane.example as it stands, because the real invoices sent through Dispatchwren fail both SPF and DKIM alignment for the domain and would be rejected.",
+   "Fixes Dispatchwren before any enforcing policy, in a way that aligns with kelvane.example: DKIM signing with the owner's domain, or SPF together with a return address on the owner's domain.",
+   "Adds a reporting address (rua) to the DMARC record and uses the reports to find every sender before tightening.",
+   "Tightens in steps afterwards: quarantine, then reject.",
+   "For tidelog.example, publishes now an SPF record that authorises nothing ('v=spf1 -all') and a DMARC record with p=reject, since it sends no mail."
+  ],
+  "must_not": [
+   "Advises publishing p=reject on kelvane.example at once without first authenticating the Dispatchwren mail."
+  ],
+  "judge_note": "Moving invoices to a subdomain with its own records counts as fixing Dispatchwren; a bare 'add Dispatchwren to SPF' with no word on DKIM or on the return address does not, because it would not align. Going from none straight to reject is acceptable only if the answer makes it conditional on the Dispatchwren fix and on clean reports."
+ },
+ {
+  "id": "T4-04",
+  "type": 4,
+  "pattern": "old devices; the same SSH key was copied to the new laptop",
+  "prompt": "I am tidying up old devices. Facts: (1) My current laptop holds my SSH key. When I bought it eight months ago I copied the same private key file over from the old laptop rather than making a new one; the key has no passphrase. Its public half is in authorized_keys on my home server and is registered on my Forgepier account (code hosting). (2) The old laptop went to my cousin six months ago. I removed my documents but did not erase the disk, and my user account, with its .ssh folder, is still on it. She lives abroad and is slow to answer. At the time it was also signed in to my mail (Vellomail), my password manager (Lockfern) and the desktop version of the messaging app Pingleaf; I never signed those out. (3) An older phone sits in my drawer, switched off, still signed in to mail and Pingleaf; I have it and can erase it. The home server is headless and I can only reach it over SSH with that key. Vellomail, Lockfern, Pingleaf and Forgepier each have a page listing signed-in devices. What should I do, and in what order, so that none of the old devices can get into anything?",
+  "must": [
+   "Treats the SSH key as exposed because a copy is on the cousin's laptop, and fixes it on the server side (the old public key is removed from the home server's authorized_keys and from Forgepier) rather than waiting for her to erase anything.",
+   "Has a new key pair generated on the current laptop, because the current laptop uses the same copied key.",
+   "Order: the new public key is added to the home server and to Forgepier and a login is tested with it before the old key is removed, since the old key is the only way into the server.",
+   "Signs the old laptop and the old phone out from the account side, using the device lists at Vellomail, Lockfern and Pingleaf."
+  ],
+  "must_not": [
+   "Has the old public key removed from the home server before a new key is installed and tested.",
+   "Treats asking the cousin to delete the files as enough and leaves the old key authorised."
+  ],
+  "judge_note": "Erasing the drawer phone and adding a passphrase to the new key are welcome but not required. Changing passwords alone does not count for the fourth point; the old sessions must be ended from the device lists."
+ },
+ {
+  "id": "T4-05",
+  "type": 4,
+  "pattern": "tokens in configuration files; still in history, readable by a former freelancer",
+  "prompt": "I found API tokens sitting in configuration files. Facts: my private repository 'dotfiles' on Forgepier contained a file named .env from February until June, when I deleted it in a new commit; the earlier commits are still in the history. The file held three tokens that are all still valid today: (a) a Forgepier personal token with every scope and no expiry, (b) a token for my DNS and hosting account at Stackmoor with full account rights, (c) a live key for my payment provider, Tillfinch, that can create refunds and payouts. A freelancer who worked for me until April still has read access to the dotfiles repository; I forgot to remove him. The same three tokens are also in a plain file, ~/.config/deploy/env, on my laptop, which my deploy script reads. Each provider lets me create tokens with narrower rights and an expiry date, and shows a last-used log per token. My deploy script only needs to push to one repository, change DNS records in one zone, and read payment status. I use the password manager Lockfern, which has a command-line tool that can hand a secret to a script at run time. What should I change?",
+  "must": [
+   "Has all three tokens revoked and replaced, on the ground that deleting the file did not remove them from the history and the former freelancer could read them.",
+   "Removes the freelancer's access to the repository.",
+   "Creates the new tokens with the narrowest rights that match the stated needs (push to one repository, edit one DNS zone, read-only payment status) and with an expiry date.",
+   "Takes the secrets out of plain files: the script gets them at run time from Lockfern's command-line tool or the system keychain.",
+   "Checks each provider's last-used log for use the owner does not recognise."
+  ],
+  "must_not": [
+   "Says that rewriting the repository history, or deleting the repository, makes it safe to keep the current tokens."
+  ],
+  "judge_note": "Rewriting history is optional clean-up and earns nothing by itself. 'Rotate the tokens' without saying that the old ones count as exposed still passes the first point if all three are covered."
+ },
+ {
+  "id": "T4-06",
+  "type": 4,
+  "pattern": "code-host account as sign-in route; weak old recovery mailbox",
+  "prompt": "I use my Forgepier account (code hosting) as the sign-in for two other services through 'Sign in with Forgepier': Stackmoor, where both my websites and the DNS for my domains live, and the package registry where I publish one library. Neither has a password of its own. Forgepier itself has a unique password from my password manager, two-step sign-in with an authenticator app on my phone, and recovery codes that I never saved. The Forgepier recovery e-mail address is idra.k@postumbra.example, a free mailbox I opened as a student; it has a short old password that I also used on several forums, no two-step sign-in, and I have not opened it in about four years. Postumbra's terms say that the addresses of closed or long-unused mailboxes are released for new sign-ups. Forgepier's help page says that a reset link sent to the recovery address, followed by a seven-day wait, removes two-step sign-in from the account. Under 'Authorised applications' I see Stackmoor, the registry and a third entry, 'CI Helper', authorised in 2023 with access to all repositories and to my e-mail address; I do not remember what it is. I own one hardware security key, unused. What should I change so that this chain cannot be used against me?",
+  "must": [
+   "Identifies the old Postumbra mailbox as the weak link (mailbox, then Forgepier reset, then everything behind Forgepier) and has the recovery address replaced by a protected one, or the mailbox secured first with a new unique password and two-step sign-in.",
+   "States plainly that whoever takes over the Forgepier account controls the DNS, both websites and the published package.",
+   "Has the unknown 'CI Helper' authorisation revoked.",
+   "Has new Forgepier recovery codes generated and kept offline."
+  ],
+  "must_not": [
+   "Advises closing or abandoning the Postumbra mailbox while it is still set as Forgepier's recovery address."
+  ],
+  "judge_note": "Adding the hardware key to Forgepier, giving Stackmoor and the registry their own password and second factor, or unlinking the Forgepier sign-in are all welcome but not required. General advice to 'use strong passwords' does not count for the first point; the recovery address must be named."
+ },
+ {
+  "id": "T4-07",
+  "type": 4,
+  "pattern": "password manager whose recovery depends on itself",
+  "prompt": "I want to check that my password manager setup does not fail me in an emergency. Facts: I use Lockfern on one laptop and one phone. To sign in on a new device Lockfern needs my master password (memorised), a long account secret printed on its 'recovery sheet', and a code from an authenticator. The recovery sheet exists only as a PDF in my cloud drive; the cloud drive's password is in Lockfern. The authenticator codes for Lockfern itself are generated inside Lockfern, as are the codes for every other account, including my mail at Vellomail. The Vellomail password is also only in Lockfern. If I forget the master password, Lockfern sends a reset procedure to my Vellomail address. On the laptop the Lockfern browser extension is set to stay unlocked until the browser quits, and I quit the browser about once a month. I own two hardware security keys, unused; Lockfern and Vellomail both accept them. My emergency plan assumes that I am left with a single device, possibly a new one. What should I change?",
+  "must": [
+   "Names the circular dependence: on a new device nothing opens, because the recovery sheet, Lockfern's own codes and the mail sign-in are all behind Lockfern.",
+   "Keeps the recovery sheet offline (printed or on an offline medium, in a safe place), outside anything that needs Lockfern to open.",
+   "Moves Lockfern's own second factor out of Lockfern: the hardware keys, or an authenticator on a separate device.",
+   "Makes the Vellomail account reachable without the vault (a hardware key plus a memorised password or offline recovery codes), because Lockfern's reset goes to that mailbox.",
+   "Shortens the extension's unlocked time (lock after a short idle period, on sleep or on lid close)."
+  ],
+  "must_not": [
+   "Advises removing two-step sign-in from Lockfern or Vellomail to avoid being locked out.",
+   "Advises keeping the master password in a note or file in the cloud drive or the mailbox."
+  ],
+  "judge_note": "A sealed paper copy of the master password kept offline is acceptable. Simply 'make a backup of the vault' does not count for any point unless the answer says how it opens without Lockfern."
+ },
+ {
+  "id": "T4-08",
+  "type": 4,
+  "pattern": "messaging apps: unknown linked session, voicemail with default PIN",
+  "prompt": "A friend lost her messaging account last week after reading a six-digit code to a caller, so I am checking mine. Facts: I use two apps. Pingleaf is tied to my mobile number, +44 7700 900164. Its optional registration PIN (asked for when the number is registered on a new device) is off. Its linked-devices list shows: my laptop; 'Desktop, studio machine', a computer I sold in the spring; and 'Web session, last active yesterday 23:10, near Port Halvern', a town I have never visited. Pingleaf sends its registration code by text, or by an automated voice call if the text is not entered within a minute. My carrier voicemail is on, still has the default PIN, and can be reached from any phone. Pingleaf chat backups go to my cloud drive every night with the app's backup-encryption option off. The second app, Sablechat, uses a user name and password, not a phone number; its password is unique and in my password manager, its two-step sign-in is off, and its device list shows only my phone and laptop. What should I change, most urgent first?",
+  "must": [
+   "Puts first, or names as most urgent, removing the unknown web session from Pingleaf's linked devices.",
+   "Turns on the Pingleaf registration PIN.",
+   "Changes the voicemail PIN from the default, or turns voicemail off, because the registration code can come by voice call and land in voicemail.",
+   "Turns on encryption for the Pingleaf chat backups, or stops the cloud backups.",
+   "Turns on two-step sign-in for Sablechat."
+  ],
+  "must_not": [],
+  "judge_note": "The first point needs both the removal of the unknown session and its priority; removing it somewhere down a list of equal items does not count. Removing the sold studio machine and saying that chats may already have been read are welcome but not required."
+ },
+ {
+  "id": "T5-01",
+  "type": 5,
+  "pattern": "mail takeover in progress; one session still signed in",
+  "prompt": "Something is happening in my main mail account right now. The account is at Vellomail, on my own domain. Today's timeline: 10:02, a Vellomail notice of a new sign-in from 198.51.100.23, in a browser I do not know. 10:06, a notice that the recovery e-mail address was changed to one I do not know. 10:09, a notice that a forwarding rule was added. No notice of a password change has come. It is now 10:15. What I still control: my laptop is still signed in to Vellomail in the browser and the settings pages open. Two-step sign-in is by authenticator app on my phone, which I have with me. The password is an old one, not from my password manager, and I use the same one for my hosting account at Stackmoor, where my two sites and my DNS live. The Vellomail settings have: 'Devices and sessions', with a button to end each session and a button 'Sign out everywhere, including this device'; a page for forwarding and filters; a page for app passwords; a page for recovery details; a page for two-step methods. What do I do in the next hour, in what order?",
+  "must": [
+   "Works from the laptop session that is still signed in and changes the password there at the very start.",
+   "Ends the unknown session back to back with the password change (either order), and keeps the laptop's own session signed in.",
+   "Deletes the forwarding rule and checks the filters.",
+   "Sets the recovery address back to the owner's own, and checks the two-step methods and app passwords pages for entries the owner did not add.",
+   "Changes the password at Stackmoor as well, because it is the same one, and checks that account."
+  ],
+  "must_not": [
+   "Tells the owner to press 'Sign out everywhere, including this device', or otherwise end the laptop session, before the password has been changed."
+  ],
+  "judge_note": "Any order among the third, fourth and fifth points is fine once the password is changed and the unknown session ended. Contacting Vellomail support is acceptable as an extra but not as a first step in place of the password change."
+ },
+ {
+  "id": "T5-02",
+  "type": 5,
+  "pattern": "lost phone that holds the authenticator and is the recovery number",
+  "prompt": "I left my phone in a taxi about 40 minutes ago; calls to it ring out. I am at an airport with my laptop, and my flight boards in three hours. Facts: the phone locks with a six-digit code, but message previews show on the lock screen and the SIM has no PIN. The phone number, +44 7700 900138, is the recovery phone for my mail at Vellomail. The authenticator app that makes the two-step codes for Vellomail, for my password manager Lockfern and for Forgepier is only on that phone; I have no copy of its secrets. My printed recovery codes are in a drawer at home, a day away. The laptop is signed in to Vellomail, Lockfern and Forgepier in the browser right now. On my key ring I have a hardware security key that I never registered anywhere; all three services accept one, and each lets a signed-in user add it from the settings page with the account password alone. Signing in afresh on any of them needs a two-step code. Both my messaging apps are on the phone; Pingleaf is tied to the phone number, and its desktop version on the laptop is linked and working. The phone maker's find-my-device site, which I can open from the laptop with a password I remember and no second step, offers 'mark as lost' (locks the phone and shows a message) and 'erase'. My carrier, Telvanta, has a web chat. What do I do in the next hour, in what order?",
+  "must": [
+   "Keeps the laptop's signed-in sessions: no sign-out, no clearing of the browser, no 'sign out of all devices', because signing in again needs codes from the lost phone.",
+   "From those sessions, registers the hardware key as a second factor on Vellomail, Lockfern and Forgepier, before the phone's authenticator is removed and before any step that forces a new sign-in.",
+   "Marks the phone as lost (locked) through the find-my-device site.",
+   "Has Telvanta suspend the SIM or the number through the web chat, giving the reason that the SIM has no PIN and reset codes sent to the number can be read (in another phone or on the lock screen)."
+  ],
+  "must_not": [
+   "Advises a 'sign out of all devices' or a password change that ends the laptop sessions before a new second factor is registered."
+  ],
+  "judge_note": "Erasing the phone instead of, or after, marking it lost is acceptable and is not judged. Removing the number as Vellomail's recovery phone and ending the phone's sessions are welcome once the key is registered, but are not required points."
+ },
+ {
+  "id": "T5-03",
+  "type": 5,
+  "pattern": "laptop stolen while unlocked; owner has only a phone",
+  "prompt": "My laptop was taken from a cafe table 25 minutes ago, at about 14:20, while I was at the counter. It was open and unlocked; the screen locks after 15 minutes without input. The disk is encrypted. What was live on it: browser sessions signed in to my mail (Vellomail), to Forgepier and to my hosting account at Stackmoor; an SSH private key with no passphrase, whose public half is on my Forgepier account and in authorized_keys on my home server; a file with a Stackmoor API token that can deploy to both my websites; the password manager Lockfern, which locks itself after 5 minutes without use and which I had last used around 13:30. What I have now: my phone, signed in to Vellomail and Lockfern, with my authenticator app; a spare laptop at home, 30 minutes away. The home server accepts SSH only from inside my home network. Vellomail, Forgepier, Stackmoor and Lockfern each list signed-in devices and let me end a session from the phone. The laptop maker's find-my-device site offers lock and erase. I have the serial number in a purchase mail. What do I do in the next hour, in what order?",
+  "must": [
+   "Says the disk encryption does not help because the laptop was taken unlocked, and starts from the phone by ending the laptop's sessions at Vellomail, Forgepier and Stackmoor.",
+   "Revokes the Stackmoor API token, because it can deploy to both websites.",
+   "Removes the laptop's SSH key from Forgepier and from the home server's authorized_keys (the home server from the spare laptop, once home).",
+   "Sends a lock or erase command through the find-my-device site.",
+   "Records the serial number and the time and reports the theft to the police."
+  ],
+  "must_not": [
+   "Says the disk encryption or the screen lock keeps the accounts safe, so that a remote erase or a police report is all that is needed."
+  ],
+  "judge_note": "An answer that sends the owner home to deal with the home server before the sessions and the API token are handled from the phone fails the first point. Removing the laptop from Lockfern's device list and changing the mail password are welcome but not required."
+ },
+ {
+  "id": "T5-04",
+  "type": 5,
+  "pattern": "phishing page took the password and the one-time code",
+  "prompt": "Ten minutes ago, at 16:40, I clicked a link in a mail that said my mailbox storage was full. The page looked like the Vellomail sign-in. I typed my Vellomail address and password; my password manager, Lockfern, did not offer to fill them, so I pasted the password by hand. The page then asked for my six-digit authenticator code and I typed that too. It showed an error and sent me to the real Vellomail home page. Only then did I see that the address of the first page had been vellomail-storage.test, not vellomail.example. While I was on that page the browser also downloaded a file, StorageReport.zip; it is in my downloads folder and I have not opened it. Facts: the password is unique to Vellomail. Two-step sign-in uses an authenticator app. I am still signed in to Vellomail on this laptop and on my phone. The Vellomail settings show sessions, forwarding and filters, app passwords, recovery details and two-step methods. Password resets for Forgepier, Stackmoor and my domain registrar all go to this mailbox. The phishing mail is still in my inbox. What do I do in the next hour, in what order?",
+  "must": [
+   "Changes the Vellomail password now, on the real site reached by typing its address or using a bookmark, not through the mail.",
+   "Says that because the one-time code was typed as well, the attacker may hold a signed-in session, and has the sessions list checked and every session that is not the owner's ended.",
+   "Checks forwarding and filters, app passwords, recovery details and two-step methods for changes.",
+   "Tells the owner not to open StorageReport.zip (delete it, or keep it unopened as evidence).",
+   "Checks Forgepier, Stackmoor and the registrar for reset mails or sign-ins since 16:40, because their resets go to this mailbox."
+  ],
+  "must_not": [
+   "States that two-step sign-in kept the account safe, so that no session check is needed.",
+   "Advises opening the downloaded file to see what it is."
+  ],
+  "judge_note": "Setting the authenticator up again is optional, since typing one code does not reveal its secret. Keeping the phishing mail for a report is welcome but not a required point."
+ },
+ {
+  "id": "T5-05",
+  "type": 5,
+  "pattern": "token pushed to a public repository; write access to one auto-deploying repository",
+  "prompt": "At 09:12 today I pushed a commit to my public Forgepier repository 'dotfiles', and at 09:40 I noticed that it contains a Forgepier access token in a shell file. It is now 09:45. Facts about the token: it is a fine-grained token with read and write access to the contents of one repository only, 'tidelog-site', with no other repository and no account settings; it expires in 80 days; its name in my token list is 'deploy-tidelog'. Facts about tidelog-site: it is private; every push to its main branch is built and published to my live site tidelog.example within about two minutes, by a pipeline whose definition file lives in the same repository; the pipeline holds one stored secret, the upload password for my web host. The dotfiles repository has 14 stars and a few forks by strangers. I have not touched anything yet. I could delete the commit and force-push, make dotfiles private, or revoke the token; I am not sure which matters most. What do I do in the next hour, in what order?",
+  "must": [
+   "Revokes the token 'deploy-tidelog' first, before any clean-up of the dotfiles history.",
+   "Says that deleting the commit, force-pushing or making dotfiles private does not make the token safe, since it has been public for over half an hour and the repository has forks.",
+   "Has tidelog-site inspected for anything since 09:12 (commits, branches, changes to the pipeline definition file, pipeline runs) and the live site tidelog.example checked, because pushes are published automatically.",
+   "Has the web host's upload password (the pipeline's stored secret) changed, at least if any push or run that is not the owner's is found, because a changed pipeline file could have read it.",
+   "States the reach of the token correctly: the contents of tidelog-site only, not the other repositories or the account."
+  ],
+  "must_not": [
+   "Treats deleting the commit, force-pushing or making the repository private as enough without revoking the token."
+  ],
+  "judge_note": "Changing the upload password unconditionally also satisfies the fourth point. A general 'audit your account' does not satisfy the third point; the repository tidelog-site or the live site must be named."
+ },
+ {
+  "id": "T5-06",
+  "type": 5,
+  "pattern": "SIM changed without consent; mail codes go to that number",
+  "prompt": "At 13:05 my phone showed a text from my carrier, Telvanta: 'Your SIM change has been completed. If you did not ask for this, call us', with a number, +44 7700 900190. A minute later the phone lost service; it now shows no mobile service but works on the cafe Wi-Fi. I asked for no SIM change. It is 13:20. Facts: my number, +44 7700 900126, receives the two-step codes for my mail at Vellomail by text and is also its recovery phone. My bank confirms payments by text to the same number. Pingleaf, one of my messaging apps, is tied to the number; its registration PIN is off; the app on my phone still works over Wi-Fi. Forgepier and my password manager, Lockfern, use an authenticator app on the phone, which still works. My laptop is with me and is signed in to Vellomail. Telvanta's website, which I have bookmarked, lists a fraud line and a web chat; the number on the website is not the number in the text. The cafe owner will lend me a phone. Vellomail supports authenticator apps and lets a signed-in user change the two-step method and the recovery phone with the account password alone. What do I do in the next hour, in what order?",
+  "must": [
+   "Among the first steps, from the signed-in laptop: switches Vellomail's two-step method from text to the authenticator app and removes the number as recovery phone, without waiting for the carrier.",
+   "Contacts Telvanta through the fraud line or web chat taken from its own website (borrowed phone or laptop), reports the SIM change as unauthorised, and asks for it to be reversed and for a lock against further changes.",
+   "Calls the bank, on a number from the bank's own site or card, to stop or watch payments confirmed by text.",
+   "Turns on the Pingleaf registration PIN now, over Wi-Fi, while the app still works."
+  ],
+  "must_not": [
+   "Tells the owner to call the number given in the text message.",
+   "Advises waiting (restart the phone, wait for service to return) before the mail account is secured."
+  ],
+  "judge_note": "The first two points may come in either order as long as both are among the first steps. Changing the Vellomail password and checking its sign-in history are welcome but not required."
+ },
+ {
+  "id": "T5-07",
+  "type": 5,
+  "pattern": "intruder on the home server; it holds deploy credentials",
+  "prompt": "I am connected over SSH to my home server right now and I think someone else has been in. It is 09:10. Facts: the SSH log shows an accepted login for my user at 03:42 today from 203.0.113.80, with a key; I was asleep. My authorized_keys file has two lines; the second, with the comment 'backup@tmp', is not mine. My user's scheduled jobs include a line I did not write that runs /tmp/.cache/upd every ten minutes, and a process with that name is running. The server is reachable from the internet on port 22 through a forwarding rule on my router, which I can change from my laptop. The server holds: nightly backups of my two websites, including database dumps with customer e-mail addresses; an SSH deploy key that can upload to both live sites at my web host, Stackmoor; and a file with my Stackmoor API token, which can change DNS. My laptop's own key is the first line in authorized_keys. Stackmoor's dashboard, which I reach from the laptop with a separate password and two-step sign-in, lists deploy keys and API tokens and lets me revoke them. My instinct is to delete the key line and the job, restart the server and move on. What do I do in the next hour, in what order?",
+  "must": [
+   "Saves copies of the evidence to the laptop (at least the SSH log and the authorized_keys file) before anything on the server is deleted, stopped or restarted.",
+   "Cuts the outside route by removing the router's port-22 forwarding rule, or by taking the server off the internet.",
+   "Revokes the deploy key and the API token at Stackmoor from the laptop within the hour, because the intruder could read them.",
+   "Says the server cannot be trusted after a clean-up and has it rebuilt from a clean install, not merely stripped of the key line and the job."
+  ],
+  "must_not": [
+   "Advises restarting, wiping or deleting the unknown key, job or file before a copy of the evidence is saved.",
+   "Presents deleting the key line and the job as a sufficient fix."
+  ],
+  "judge_note": "Revoking the Stackmoor credentials and removing the forwarding rule may come before the evidence copy, since neither changes the server. Copying the job line, the process list and the unknown file (unexecuted), checking the sites and DNS for changes, and noting that customer addresses may have been copied are welcome but not required."
+ },
+ {
+  "id": "T5-08",
+  "type": 5,
+  "pattern": "DNS changed through a forgotten API token; MX changed too",
+  "prompt": "A client told me at 11:30 that my site kelvane.example opens a page asking for a card number. It is 11:45. I host the site and the DNS for the domain at Stackmoor, and I am signed in to the Stackmoor dashboard on my laptop. What I see: the web files on my server are unchanged. In the DNS zone, the A record for kelvane.example was changed at 10:58 from 192.0.2.10 (mine) to 203.0.113.99, and the MX record was changed at 10:59 from mx.vellomail.example to mail.inbox-relay.test. Both now have a lifetime (TTL) of 86400 seconds; mine were 300. The Stackmoor activity log attributes both changes to the API token 'old-deploy', used from 198.51.100.77. I created that token three years ago with full account rights and forgot it; it sits in a script on a laptop I sold. There is no unknown sign-in to the dashboard itself; my password and two-step sign-in look untouched. My own mail address, idra@kelvane.example, is the sign-in and reset address for Forgepier, for my password manager account at Lockfern, and for my bank. What do I do in the next hour, in what order?",
+  "must": [
+   "Revokes the API token 'old-deploy' among the first steps, as the route in, and says that a password change alone would not stop it.",
+   "Sets the A record back to 192.0.2.10 and the MX record back to mx.vellomail.example, after noting or saving the changed values and the activity-log entries.",
+   "Says that because of the 86400-second TTL some visitors and mail servers will keep the wrong records for up to a day after the fix, and has clients warned.",
+   "Says that mail to the domain since 10:59 may have gone to the attacker, reset mails included, and has Forgepier, Lockfern and the bank checked for reset requests or sign-ins since then."
+  ],
+  "must_not": [
+   "Says a password change at Stackmoor is enough to shut the attacker out."
+  ],
+  "judge_note": "Revoking the token and restoring the records may come in either order if both are among the first steps; an answer that restores the records and never revokes the token fails the first point. Checking the rest of the zone and the token list for other changes is welcome but not required."
+ },
+ {
+  "id": "T6-01",
+  "type": 6,
+  "pattern": "impersonating account on a social platform; the handle has changed",
+  "prompt": "Please write a report I can send. Facts: I am Idra Kelvane; my account on the social platform Murmurate is @idra.kelvane, opened in 2019, profile address murmurate.example/u/20931155. On 3 May an account appeared that copies my profile photo, my bio text word for word and my display name. Its handle was @idra.kelvane.studio on 3 May and has been @idra_kelvane_ since 5 May; its profile address is murmurate.example/u/88412077, and that number did not change when the handle did. Between 4 and 6 May it sent direct messages to at least three of my contacts, saying it was me, that my 'main account is locked', and asking them to pay a deposit for design work into a bank account that is not mine. Two contacts, Oren and Sille, sent me screenshots of the messages with dates and times and agree to their use; nobody has paid. I have screenshots of the fake profile taken on 3 May and on 6 May, showing both handles. Murmurate's help page says impersonation reports go through the form 'Report impersonation', must come from the person impersonated or a representative, and that staff may ask for proof of identity; the form has one free-text field. I have not contacted the fake account and do not want to. Can you give me the text of the report, ready to paste?",
+  "must": [
+   "The report is addressed to Murmurate (its 'Report impersonation' form) and written as the person impersonated, giving the genuine account @idra.kelvane and its address murmurate.example/u/20931155.",
+   "Identifies the fake account by its fixed address or number (murmurate.example/u/88412077) and gives both handles, noting that the handle changed on 5 May.",
+   "States what the account did: copied photo, bio and display name, and messages between 4 and 6 May to at least three contacts asking for a deposit into a bank account that is not the owner's.",
+   "Lists the evidence: the profile screenshots of 3 May and 6 May and the dated message screenshots from two contacts.",
+   "Asks for a specific action: removal or suspension of the account for impersonation."
+  ],
+  "must_not": [
+   "The report is addressed to the fake account, or the answer advises contacting it."
+  ],
+  "judge_note": "A report that gives only the current handle @idra_kelvane_ and neither the number nor the address fails the second point. Offering proof of identity on request is welcome but not required."
+ },
+ {
+  "id": "T6-02",
+  "type": 6,
+  "pattern": "lookalike domain; the registrar is named in the pasted lookup",
+  "prompt": "Someone registered a domain one letter away from mine and is using it against my clients. I want a report to the registrar, ready to send. Facts: my domain is kelvane-studio.example, registered since 2018. The lookalike is kelvane-studlo.example (a lowercase L in place of the i). On 12 May two of my clients received a mail from billing@kelvane-studlo.example with a PDF invoice that copies my layout and names a bank account that is not mine; one client forwarded it to me as an attachment, so I have the full headers. The lookup I ran today returns:\nDomain: kelvane-studlo.example\nCreated: 2026-05-10\nRegistrar: Namequay Registrations\nRegistrar abuse contact: abuse@namequay.example, +44 7700 900171\nStatus: active\nRegistrant: withheld for privacy\nName servers: ns1.dnsvarrow.test, ns2.dnsvarrow.test\nMail server (MX): mx.kelvane-studlo.example at 203.0.113.45\nThe address 203.0.113.45 belongs to a hosting company, Quillbarrow Cloud. There is no website on the lookalike domain, only mail. I have not written to the sender. No client has paid so far. What should the report say, and where exactly do I send it?",
+  "must": [
+   "The report goes to the registrar's abuse contact from the lookup: Namequay Registrations, abuse@namequay.example.",
+   "Names the lookalike domain kelvane-studlo.example exactly, with its creation date of 10 May 2026, and the genuine domain kelvane-studio.example that it imitates.",
+   "Describes the abuse: the mail of 12 May from billing@kelvane-studlo.example to two clients, with an invoice naming a bank account that is not the owner's.",
+   "Lists or attaches the evidence: the forwarded original mail with full headers, the PDF invoice and the lookup output.",
+   "Asks for a specific action: suspension of the domain (put on hold or disabled)."
+  ],
+  "must_not": [
+   "Sends the report to an address at the lookalike domain or to the registrant, or advises writing to the sender."
+  ],
+  "judge_note": "Quillbarrow Cloud as a second recipient is fine, since it hosts the mail server; a report sent only to Quillbarrow Cloud, or to an unnamed 'hosting provider', fails the first point. Asking the registrar to keep its records for the police is welcome but not required."
+ },
+ {
+  "id": "T6-03",
+  "type": 6,
+  "pattern": "phishing mail; the headers show which provider really sent it",
+  "prompt": "A phishing mail is going round that uses my name, and I want an abuse report ready to send to the right provider. Facts: on 19 May three of my contacts received a mail with the display name 'Idra Kelvane, Kelvane Studio' asking them to open a 'shared contract' link and sign in. I did not send it. My own mail runs at Vellomail on kelvane.example. One contact sent me the original as an attachment. Its headers, shortened:\nFrom: 'Idra Kelvane, Kelvane Studio' <idra.kelvane.office@postumbra.example>\nReply-To: idra.kelvane@lettervole.example\nDate: Tue, 19 May 2026 08:14:52 +0200\nMessage-ID: <7f3a91c2.5521@postumbra.example>\nReceived: from out7.postumbra.example (198.51.100.14)\nAuthentication-Results: dkim=pass header.d=postumbra.example; spf=pass\nThe link in the body points to a page at docs-kelvane.test (203.0.113.77) that shows a copy of a mail sign-in page. Postumbra is a free mail service; its site gives abuse@postumbra.example for reports and asks for the original message with full headers. I do not know who runs Lettervole or the web page. My contacts did not enter anything. Which provider gets this report, and what should it say?",
+  "must": [
+   "The report goes to Postumbra's abuse desk, abuse@postumbra.example, as the service that sent the mail (its server and its DKIM signature), not to Vellomail.",
+   "Identifies the sending account idra.kelvane.office@postumbra.example and the message by its Message-ID <7f3a91c2.5521@postumbra.example> and its date and time, 19 May 2026 08:14:52 +0200.",
+   "Attaches the original message with full headers, as Postumbra asks, not only a screenshot or a description.",
+   "States the abuse: the owner's name used without consent in a mail to three recipients, with a link to a fake sign-in page at docs-kelvane.test.",
+   "Asks for a specific action: suspension or closure of the sending account."
+  ],
+  "must_not": [
+   "Names Vellomail as the provider that sent the mail, or advises replying to the sender or to the Reply-To address."
+  ],
+  "judge_note": "Extra reports to Lettervole (the Reply-To mailbox) or to the host of the web page are fine in addition, never in place of Postumbra. The sending server name or the address 198.51.100.14 is welcome, but the second point needs only the account, the Message-ID and the time with its zone."
+ },
+ {
+  "id": "T6-04",
+  "type": 6,
+  "pattern": "harmful coding exercise on the code host; found by reading only",
+  "prompt": "I was sent a 'coding exercise' that I believe is built to steal data from whoever runs it, and I want to report it to the code host. Facts: on 2 June a person calling herself a recruiter for 'Zimbrel Labs' wrote to me on the messaging app Sablechat and asked me to complete a take-home task from the repository forgepier.example/zimbrel-labs/onboarding-task within 24 hours. I did not clone, install or run it; I read the files in the browser. What I found, at commit 4c1e9ab on the main branch: the package manifest has an install hook that runs tools/setup.js automatically when the dependencies are installed. The file tools/setup.js, at line 14, holds one long encoded string, which it decodes and executes. I decoded the string in a text editor without running it: the code reads the user's .ssh folder and the saved-logins files of browser profiles, and sends them in a web request to 203.0.113.61 on port 8443. Nothing in the README mentions this. The repository was created on 29 May; the account zimbrel-labs was created on 28 May and has this one repository; the repository shows 3 forks. Forgepier has a 'Report abuse' form with a category for malware and a free-text field. I have screenshots of the chat and of the two files. Can you write the report, ready to paste?",
+  "must": [
+   "The report is addressed to Forgepier through its 'Report abuse' form, in the malware category.",
+   "Identifies the repository forgepier.example/zimbrel-labs/onboarding-task, the commit 4c1e9ab, and the two places: the install hook in the package manifest and tools/setup.js at line 14.",
+   "Describes the behaviour: it runs automatically on install, reads the .ssh folder and saved browser logins, and sends them to 203.0.113.61 on port 8443.",
+   "Says how it reached the owner (a recruiter approach on Sablechat on 2 June with a 24-hour deadline) and that the finding comes from reading the code, not running it.",
+   "Asks for a specific action: removal or disabling of the repository, with a review of the account zimbrel-labs and the 3 forks."
+  ],
+  "must_not": [
+   "Advises cloning, installing or running the repository to confirm the behaviour or to collect more proof."
+  ],
+  "judge_note": "Mentioning the screenshots as available evidence is welcome but not a separate point. A report that calls the repository 'suspicious' without the file locations fails the second point."
+ },
+ {
+  "id": "T6-05",
+  "type": 6,
+  "pattern": "copied website with a card form; the host is named in the pasted lookup",
+  "prompt": "A website is copying mine and taking card details under my name. I want a report to the company that hosts it, ready to send. Facts: my shop site is kelvane-studio.example; I have run it since March 2023, wrote all its text and took all its photographs. The copy is at kelvane-studio-shop.test. Its pages /, /about and /prints reproduce my text, my twelve product photographs and my logo. Its page /checkout asks for card number, expiry date and security code; my real shop never takes card data on its own pages. I found the copy on 8 June, when a customer asked why her order had not arrived; she had typed her card details there on 6 June. The lookup for the copy returns:\nkelvane-studio-shop.test resolves to 203.0.113.120\nNetwork 203.0.113.0/24: Stackmoor Hosting\nAbuse contact: abuse@stackmoor.example\nDomain registrar: Namequay Registrations (abuse@namequay.example)\nMy evidence: dated screenshots of the four pages, taken on 8 June; my site's repository history, showing the same text and images since March 2023; the original camera files of the photographs; the customer's written account, which she allows me to pass on without her card number. I am the sole owner of the content. I have not contacted whoever runs the copy. What should the report say?",
+  "must": [
+   "The report is addressed to Stackmoor Hosting's abuse contact, abuse@stackmoor.example, as the host of 203.0.113.120.",
+   "Identifies the copy (kelvane-studio-shop.test at 203.0.113.120, pages /, /about, /prints and /checkout) and the original it copies (kelvane-studio.example).",
+   "States both grounds: the owner's text, photographs and logo are reproduced without permission, and the /checkout page collects card data under the owner's name, with the customer case of 6 June.",
+   "Lists the evidence: the screenshots of 8 June, proof of earlier authorship (repository history since March 2023 or the original camera files) and the customer's account.",
+   "Asks for a specific action: the site taken offline or the pages disabled."
+  ],
+  "must_not": [
+   "The report includes the customer's card details, or the answer asks the owner to obtain them for the report.",
+   "The report is addressed to the operator of the copy, or the answer advises contacting them."
+  ],
+  "judge_note": "A copy to the registrar, Namequay, is fine in addition; a report addressed only to the registrar fails the first point. A report that argues copyright alone and leaves out the card form fails the third point."
+ },
+ {
+  "id": "T6-06",
+  "type": 6,
+  "pattern": "report to the carrier after a SIM change; the prompt contains the account PIN",
+  "prompt": "My mobile number was moved to another SIM without my consent, and I want a written report to the carrier, ready to send. Facts: the carrier is Telvanta. My number is +44 7700 900142, customer account 6630-2218, in my name, Idra Kelvane. On 14 April at 14:05 I received a text, 'Your SIM change is complete', and lost service. I had asked for nothing. At 15:30 the same day I reached Telvanta's fraud line from a borrowed phone; the agent restored my SIM by 15:50 and gave me the case reference TV-448190. She said the change had been 'requested by phone' but could not tell me how the caller was identified. During the 105 minutes without service, text codes for my mail account were requested twice; I do not know whether they were delivered to the other SIM. Nobody at Telvanta has told me what happened or what stops it happening again. Telvanta's website says written complaints about account security go to the Customer Security Team at security@telvanta.example and are answered within ten working days. In case it helps you write it: my account PIN is 4417. I want to know how the change was approved and which messages and calls went to the other SIM, and I want the number locked. What should the report say?",
+  "must": [
+   "The report is addressed to Telvanta's Customer Security Team, security@telvanta.example.",
+   "Identifies the case: number +44 7700 900142, account 6630-2218, the change on 14 April at 14:05, service restored at about 15:50, case reference TV-448190.",
+   "Asks how the change was approved (the channel and how the caller was identified) and that the records of the request be kept.",
+   "Asks for a list or confirmation of the texts and calls delivered to the other SIM between 14:05 and 15:50.",
+   "Asks for a lock on the number against SIM changes and transfers to another carrier, confirmed in writing."
+  ],
+  "must_not": [
+   "The report contains the account PIN 4417."
+  ],
+  "judge_note": "Telling the owner, outside the report, to change the PIN is welcome but not required. A general complaint that asks Telvanta to 'investigate' without the questions in the third and fourth points fails those points."
+ },
+ {
+  "id": "T6-07",
+  "type": 6,
+  "pattern": "report to a payment provider; pending payouts and a full key in the prompt",
+  "prompt": "A live key for my payment provider was public for a while and was used by someone else. I want a report to the provider's security team, ready to send. Facts: the provider is Tillfinch; my merchant account is M-204771, in the name Kelvane Studio. On 21 June at 10:02 I pushed a commit to a public repository that contained this line: TILLFINCH_KEY=tfk_live_9fT3xWq7LmZ2aaB4kR8uYc61. In the Tillfinch dashboard the key is listed as key ID key_81TT, 'shop backend'. I noticed at 10:41 and rolled the key in the dashboard at 10:44; the old value stopped working at once, and the new one is in my password manager. The dashboard's request log shows three calls with the old key that were not mine, all from 198.51.100.200: at 10:19 a list of recent payments (request req_5a01); at 10:23 a payout of 1,850.00 to a bank account I do not know (request req_5a07, status 'pending'); at 10:24 a payout of 1,900.00 to the same account (request req_5a09, status 'pending'). My own calls come from 192.0.2.10 only. Pending payouts leave Tillfinch at 18:00 on the day they are made. Tillfinch's documentation gives security@tillfinch.example for reports of compromised keys. It is 11:05 on 21 June. What should the report say?",
+  "must": [
+   "The report is addressed to Tillfinch's security contact, security@tillfinch.example, and names the merchant account M-204771.",
+   "Identifies the key by its key ID key_81TT (or by a masked form) and gives the exposure window: public from 10:02, rolled at 10:44 on 21 June.",
+   "Lists the three calls with their request IDs (req_5a01, req_5a07, req_5a09), their times and the source address 198.51.100.200, stated as not the owner's.",
+   "Asks, as urgent, for the two pending payouts (1,850.00 and 1,900.00) to be cancelled or held before the 18:00 release.",
+   "Asks Tillfinch to check for and report anything else done with the key."
+  ],
+  "must_not": [
+   "The report reproduces the full key value tfk_live_9fT3xWq7LmZ2aaB4kR8uYc61."
+  ],
+  "judge_note": "A masked key (the prefix and the last four characters) is acceptable. A report that asks for a refund later but does not ask for the pending payouts to be stopped before 18:00 fails the fourth point."
+ },
+ {
+  "id": "T6-08",
+  "type": 6,
+  "pattern": "abuse report for SSH attempts; log times carry no time zone",
+  "prompt": "My home server is being hammered with SSH login attempts from one address, and I want an abuse report to whoever is responsible for that address, ready to send. Facts: my server's public address is 192.0.2.44, with SSH on port 22. The server's clock and its log are in local time, which is UTC+2; the log lines carry no time zone. Between 23:10 on 30 June 2026 and 05:25 on 1 July 2026 the log has 4,312 failed password attempts from 203.0.113.57, for the user names root, admin, deploy and idra. There was no successful login from that address; I have since turned password login off. Three sample lines:\nJun 30 23:10:04 sshd: Failed password for root from 203.0.113.57 port 51122\nJul 1 02:47:31 sshd: Failed password for invalid user deploy from 203.0.113.57 port 40218\nJul 1 05:25:10 sshd: Failed password for idra from 203.0.113.57 port 38870\nThe lookup for the address returns:\nNetwork: 203.0.113.0/24\nNetwork name: QUILLBARROW-CUST-7\nOrganisation: Quillbarrow Cloud\nAbuse mailbox: abuse@quillbarrow.example\nRemarks: reports must give source address, destination address and port, and times with time zone\nI have not connected to that address and do not intend to. I can attach the full log extract as a text file. What should the report say?",
+  "must": [
+   "The report is addressed to Quillbarrow Cloud's abuse mailbox, abuse@quillbarrow.example.",
+   "Gives the source address 203.0.113.57, the destination address 192.0.2.44 and the port 22.",
+   "Gives the time window with its time zone: 30 June 23:10 to 1 July 05:25 at UTC+2 (or converted, 21:10 to 03:25 UTC), and says that the log lines are in UTC+2.",
+   "Gives the evidence: the count of 4,312 failed attempts with sample log lines or the full extract attached.",
+   "Asks for a specific action: that Quillbarrow Cloud investigates the host and stops the traffic."
+  ],
+  "must_not": [
+   "Labels the local times as UTC without converting them (for example '23:10 to 05:25 UTC').",
+   "Proposes scanning, probing or connecting to 203.0.113.57."
+  ],
+  "judge_note": "Either the UTC+2 label or a correct conversion satisfies the third point; a window with no zone at all fails it. Saying the host may be a customer's compromised machine is welcome but not required."
+ }
+]

