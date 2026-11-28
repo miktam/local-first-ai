@@ -4,6 +4,8 @@ Benchmark data, experiment harnesses, and scientific logs for running production
 
 This repo accompanies the blog at [localfirstai.eu](https://localfirstai.eu) and provides the verifiable evidence backing every claim made there.
 
+**Start on the blog:** [for builders](https://localfirstai.eu/builders/) · [for firms](https://localfirstai.eu/firms/) · [for AI agents](https://localfirstai.eu/agents/). Every post is also served as plain Markdown: [llms.txt](https://localfirstai.eu/llms.txt) is the index and [llms-full.txt](https://localfirstai.eu/llms-full.txt) holds all of them in one file.
+
 **Contents:** [Hardware](#hardware) · [Experiments by theme](#experiments-by-theme) · [Key findings](#key-findings-cumulative) · [Blog posts](#blog-posts) · [Field notes](#field-notes) · [Build log](#build-log)
 
 ---
@@ -248,6 +250,8 @@ Published at [localfirstai.eu](https://localfirstai.eu):
 
 **Technical — benchmarks, experiments, architecture**
 
+- [More Loop Passes Made Thinking Machines' Research Model Right More Often for About the Same Written Reasoning](https://localfirstai.eu/posts/2026-11-23-more-loop-passes-more-right-answers/) — Exp 062: the variable-loop research model at one to five passes on agent-style tool work, on a Mac mini. More passes gave more right answers (79 of 96 at one pass, 92 at three) for about the same amount of written reasoning. Made-up jobs, one run per setting.
+- [Prompt Injection on a Local Model: What Worked, What Did Not, and What the Fix Costs](https://localfirstai.eu/posts/2026-11-10-prompt-injection-on-a-local-model/) — Exp 056: which kind of injected text took a local model's contribution to zero and which did not, why a design where the model can only add points did not protect it, and what a fix in the code around the model costs. Synthetic scam messages, two runs.
 - [A Lawyer's Digital-Money Evening in Marbella Had AI Hardware on a Table](https://localfirstai.eu/posts/2026-11-20-ai-hardware-on-a-table/) — The Bridge33, Marbella, 19 November 2026: the organiser, a lawyer, calls where AI runs an asset-protection question, and gave floor space to machines their owners run it on. Ours was a Mac mini running two Telegram bots. What owning the machine does not settle: what it sends out still has to be measured.
 - [Tests One AI Agent Wrote for Another Were Wrong in 7 of 13 Runs](https://localfirstai.eu/posts/2026-11-19-tests-one-agent-wrote-for-another/) — Thirteen runs of a loop where one agent writes the task and its test, a second does the work and a third reviews the result. 51 defect rows: the reviewer alone caught 29, 19 were the task-writer's own, and one fix passed its tests by stepping aside. Data and limits in the [field note](./field-notes/2026-11-19-agent-loop-trial/).
 - [We Measured a Values Fine-Tune. It Removes the Behaviour, Adds No Knowledge, and Costs Nothing on Our Translations.](https://localfirstai.eu/posts/2026-11-08-we-measured-a-values-fine-tune/) — Exp 061: Nous's Arete-27B against its base Qwen3.8-27B on the Mac mini, both Q4_K_M, graded blind. The vendor's propaganda drop replicates (24.3 % → 1.4 % on 70 of their prompts, their judge prompt); 60 Soviet-era translation units lose nothing; the higher fact score is a denial template removed, not facts added.
@@ -288,6 +292,8 @@ Published at [localfirstai.eu](https://localfirstai.eu):
 
 **Essays — strategy, product, philosophy**
 
+- [My 2026: I Set Out to Build a Machine That Learns](https://localfirstai.eu/posts/2026-11-28-my-2026/) — Andrei's own summary of the year: how a property app showed that data is the key, the Mac mini and Nestor, what Hofstadter, Minsky, Petukhov, Vygotsky, Duncker and Gibson taught him, and where local models fit.
+- [When Code Is Cheap, Choose Your Dependencies by Their History](https://localfirstai.eu/posts/2026-11-06-choose-dependencies-by-their-history/) — A cloud model rewrote a small JavaScript utility maintained since 2014, faster and tested wider. What a regenerated package does not have is a history.
 - [The Unfakeable Layer](https://localfirstai.eu/posts/the-unfakeable-layer/) — As generation gets cheap and agent-mediated, value moves to what a model can't fake: proof of work, human judgment, original ideas. Notes from Startup Olé Marbella.
 - [Why CasaSol.ai](https://localfirstai.eu/posts/2026-05-22-why-casasol/) — If every company can be a Palantir now, how do you test that claim? An attempt to answer by building one — on the Costa del Sol.
 - [Should We Stop Asking Local LLMs to Think?](https://localfirstai.eu/posts/should-we-stop-asking-local-llms-to-think/) — What Adam Smith, neuroscience, and a melting Mac Mini taught me about the real division of cognitive labour.
