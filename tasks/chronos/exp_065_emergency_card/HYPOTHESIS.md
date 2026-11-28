@@ -240,3 +240,12 @@ Andrei, on the evening of 2026-11-27, after reading the three changed settings, 
 
 `kit/score65.py` now prints every registered bar (H1 with the first model to open and the model for long documents, H2, H3, H4, the too-easy-or-too-hard declaration and the judges' disagreement rate), and shows a model's task result on each machine that holds the file, since the tasks run once per file. `kit/test_score65.py` builds two made-up runs with three made-up models and made-up judges' files and checks the printed bars against values worked out in the test: 13 of 13. No answer of the running test was read for this.
 
+## A cut during the run: the duplicate Qwen3.8 file does no tasks (2026-11-28)
+
+At 06:34 on 2026-11-28, nine and a half hours into the mini run, five models had finished their 48 tasks with no empty answer. Qwen3.8 27B (bartowski's file) had done 26 tasks: in 18 of them it reasoned to the 8,192-token cap and wrote no answer, at about 638 seconds a task. These are counts by code; no answer had been read or judged. Andrei, told that the Ollama library's file of the same model would probably spend about eight more hours the same way: "Cut qwen".
+
+**What changes.** The Ollama library's Qwen3.8 27b file runs Part A (the context ladder) and Part C (the tool calls), and not Part B (the 48 tasks). It had produced no row when this was written. Its entry in `kit/models65.json` carries `"parts": "A,C"`, and `kit/card65.py` reads that; the task file is unchanged (sha256 `25244cc0194c3a84a5b4622994b5b25ad6ee78dde80e44e4d27f1b779741e799`), and so are the cap, the sampling and the seed. The driver reads the model list once at its start, so the run was stopped and resumed with the same command for the change to take effect; the task that was in progress at the stop is asked again.
+
+**What does not change.** Bartowski's Qwen3.8 27B file runs to its 48 tasks and stays a candidate for every bar. Arete, Qwen3.6 35b, Qwen3.5 35b and Unsloth's Inkling 2 Mini file run as registered. The order section above already put the two duplicate files last "so the run can be stopped before them". On the MacBook nothing changes: a file already run on the mini runs Parts A and C there.
+
+**What it costs.** Whether the same model from another source answers the tasks differently is not measured for Qwen3.8; its speed, its usable context and its tool calls from the second file still are. The cut was decided after bartowski's file's counts were seen, and is recorded here as such.

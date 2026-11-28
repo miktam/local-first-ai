@@ -62,6 +62,11 @@ def models_on_this_machine():
     return out
 
 
+def parts_limit() -> dict:
+    """label -> the parts this file is limited to, for the files whose entry in models65.json carries "parts"."""
+    return {m["label"]: set(m["parts"].upper().split(",")) for m in json.loads((KIT / "models65.json").read_text()) if m.get("parts")}
+
+
 def file_size(path: Path) -> int:
     """A split GGUF is given by its first part; the size is of all parts."""
     if "-00001-of-" in path.name:
@@ -460,7 +465,9 @@ def run(a):
                                         "ladder_sizes": SIZES_ARG or SIZES}})
     only = [o.lower() for o in a.only.split(",")] if a.only else []
     check_ids = set(a.task_ids.split(",")) if a.task_ids else None
+    asked, limit = parts, parts_limit()
     for label, (path, template) in models_on_this_machine().items():
+        parts = asked & limit.get(label, asked)  # a file limited in models65.json runs only those parts
         if only and not any(o in label.lower() for o in only):
             continue
         if path is None:
@@ -478,6 +485,8 @@ def run(a):
         arch = g.get("general.architecture")
         n_ctx_train = g.get(f"{arch}.context_length")
         info["n_ctx_train"] = n_ctx_train
+        if label in limit:
+            info["limited_to_parts"] = sorted(limit[label])
         meta_path.write_text(json.dumps(meta, indent=1))
         print(f"[{label}] parts {','.join(sorted(parts))}", flush=True)
         if parts & {"B", "C"}:
@@ -524,7 +533,8 @@ def main():
     a = ap.parse_args()
     if a.cmd == "list":
         for label, (path, template) in models_on_this_machine().items():
-            print(f"{'yes' if path else 'no ':3} {label}" + (f"  ({file_size(path) / 1e9:.1f} GB)" if path else ""))
+            print(f"{'yes' if path else 'no ':3} {label}" + (f"  ({file_size(path) / 1e9:.1f} GB)" if path else "")
+                  + (f"  parts {','.join(sorted(parts_limit()[label]))} only" if label in parts_limit() else ""))
         return
     if a.sizes:
         SIZES_ARG.extend(int(s) for s in a.sizes.split(","))
